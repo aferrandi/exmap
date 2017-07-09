@@ -1,4 +1,4 @@
-module FormulaParser where
+module FormulaParser (parseFormula) where
 
 import qualified Data.Attoparsec.Text as P
 import Control.Applicative ((<|>))
@@ -7,12 +7,12 @@ import qualified Data.Char as C
 import Control.Monad (fail)
 import Text.Read (readEither)
 import Debug.Trace
-import Data.List (find)
 
 import Formula
 import Operations
 import Applications
 import XMapTypes
+import TextEnums
 
 parseFormula :: String -> Either String XFormula
 parseFormula s = P.parseOnly (parseFormulaRootNode <* P.endOfInput) (T.pack s)
@@ -77,7 +77,7 @@ parseVar = do
     c <- P.letter
     t <- P.takeWhile C.isAlphaNum
     let s = c:T.unpack t
-    traceM $ "var: " ++ show s
+--    traceM $ "var: " ++ show s
     return s
 
 
@@ -96,13 +96,6 @@ parseApplicationName = do
         Just n -> return n
         Nothing -> fail $ "not an application name " ++ s
 
-enumValues:: (Enum a, Bounded a) => [a]
-enumValues = enumFrom minBound
-
-enumWithTextCI :: (Enum a, Show a) => [a] -> String -> Maybe a
-enumWithTextCI es s = find (\e -> tolowerEnum e == toLowerText s) es
-    where tolowerEnum e = toLowerText $ show e
-          toLowerText = map C.toLower
 
 parseOperation :: P.Parser XFormula
 parseOperation = do
