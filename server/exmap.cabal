@@ -1,0 +1,71 @@
+name:                exmap
+version:             0.1.0.0
+synopsis:            Simple project template from stack
+description:         Please see README.md
+homepage:            https://github.com/aferrandi/exmap
+license:             BSD3
+license-file:        LICENSE
+author:              Andrea Ferrandi
+maintainer:          ferrandi.andrea@gmail.com
+copyright:           2017 Andrea Ferandi
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable exmap
+  hs-source-dirs:      src src/maps src/functions src/formula src/parse src/state src/views
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , text
+                     , wai
+                     , wai-websockets
+                     , warp
+                     , websockets
+                     , http-types
+                     , safe
+                     , containers
+                     , attoparsec
+                     , aeson
+  other-modules:
+                       Formula
+                     , ExecFormula
+                     , Operations
+                     , Applications
+                     , XFunction
+                     , XMapTypes
+                     , XValues
+                     , FormulaParser
+                     , TextEnums
+                     , View
+                     , State
+test-suite exmap-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test test/maps test/parse src/maps src/functions src/formula src/parse
+  main-is:             Main.hs
+  build-depends:       base
+                     , test-framework
+                     , test-framework-hunit
+                     , HUnit
+                     , containers
+                     , attoparsec
+                     , aeson
+                     , text
+  other-modules:
+                       Formula
+                     , ExecFormula
+                     , Operations
+                     , Applications
+                     , XFunction
+                     , XMapTypes
+                     , XValues
+                     , FormulaParser
+                     , TextEnums
+                     , FormulaTest
+                     , FormulaParserTest
+                     , TextEnumsTest
+
+--  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+
