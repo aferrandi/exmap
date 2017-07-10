@@ -1,7 +1,6 @@
 module XValues(XValue, defaultValue, extractMap, extractMapFirst, extractMapSecond, buildMap, UnaryXMapFun, BinaryXMapFun) where
 
 import XMapTypes
-{-# ANN module ("HLint: ignore Eta reduce"::String) #-}
 
 type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
