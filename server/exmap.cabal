@@ -38,6 +38,7 @@ executable exmap
                      , FormulaParser
                      , TextEnums
                      , View
+                     , Project
                      , State
 test-suite exmap-test
   type:                exitcode-stdio-1.0

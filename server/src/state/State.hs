@@ -5,32 +5,22 @@ import Formula
 import XMapTypes
 import View
 import XFunction
-
-newtype CalculationName = CalculationName String
+import Project
 
 newtype MapRepository = MapRepository (Map.Map XMapName (Maybe XMap))
 
-
-data Calculation = Calculation {
-    calculationName :: CalculationName,
-    formula :: XFormula,
-    maps :: MapRepository,
-    operationMode :: OperationMode
+data RuntimeCalculation = RuntimeCalculation {
+    calculation :: Calculation,
+    repository :: MapRepository
 }
 
-newtype CalculationByMap = CalculationByMap ( Map.Map XMapName Calculation)
-
-newtype ProjectName = ProjectName String
-
-data Project = Project {
-    projectName :: ProjectName,
-    calculations :: [Calculation],
-    views :: [View],
+data RuntimeProject = RuntimeProject {
+    project :: Project,
     calculationByMap :: CalculationByMap
 }
 
-newtype ProjectByName = ProjectByName ( Map.Map ProjectName Project)
+newtype RuntimeProjectByName = ProjectByName ( Map.Map ProjectName RuntimeProject)
 
 data System = System {
-    projectByName :: ProjectByName
+    projectByName :: RuntimeProjectByName
 }
