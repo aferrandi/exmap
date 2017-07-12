@@ -2,11 +2,12 @@ module FormulaParser (parseFormula) where
 
 import qualified Data.Attoparsec.Text as P
 import Control.Applicative ((<|>))
-import qualified Data.Text as T (Text, pack, unpack, split)
+import qualified Data.Text as T
 import qualified Data.Char as C
 import Control.Monad (fail)
 import Text.Read (readEither)
 import Debug.Trace
+import Data.Monoid ((<>))
 
 import Formula
 import Operations
@@ -14,8 +15,8 @@ import Applications
 import XMapTypes
 import TextEnums
 
-parseFormula :: String -> Either String XFormula
-parseFormula s = P.parseOnly (parseFormulaRootNode <* P.endOfInput) (T.pack s)
+parseFormula :: T.Text -> Either String XFormula
+parseFormula s = P.parseOnly (parseFormulaRootNode <* P.endOfInput) s
 
 parseFormulaRootNode :: P.Parser XFormula
 parseFormulaRootNode = do
@@ -62,21 +63,21 @@ parseMap = do
 splitPath :: T.Text -> [T.Text]
 splitPath = T.split (== '/')
 
-parsePath :: P.Parser [String]
+parsePath :: P.Parser [T.Text]
 parsePath = do
     P.skipSpace
     P.sepBy1 parseVar (P.char '/')
 
-parseName :: P.Parser String
+parseName :: P.Parser T.Text
 parseName = do
     P.skipSpace
     parseVar
 
-parseVar :: P.Parser String
+parseVar :: P.Parser T.Text
 parseVar = do
     c <- P.letter
     t <- P.takeWhile C.isAlphaNum
-    let s = c:T.unpack t
+    let s = T.cons c t
 --    traceM $ "var: " ++ show s
     return s
 
@@ -86,7 +87,7 @@ parseOperationName = do
     s <- parseName
     case enumWithTextCI enumValues s of
         Just n -> return n
-        Nothing -> fail $ "not an operation name " ++ s
+        Nothing -> fail $ "not an operation name " ++ (T.unpack s)
 
 
 parseApplicationName :: P.Parser ApplicationName
@@ -94,7 +95,7 @@ parseApplicationName = do
     s <- parseName
     case enumWithTextCI enumValues s of
         Just n -> return n
-        Nothing -> fail $ "not an application name " ++ s
+        Nothing -> fail $ "not an application name " ++ (T.unpack s)
 
 
 parseOperation :: P.Parser XFormula

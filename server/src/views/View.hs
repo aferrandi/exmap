@@ -1,8 +1,9 @@
 module View where
 
+import qualified Data.Text as T
 import XMapTypes
 
-newtype Label = Label String
+newtype Label = Label T.Text
 
 data ViewItem = MapItem XMapName|
                 LabelItem Label

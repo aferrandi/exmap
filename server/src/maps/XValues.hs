@@ -1,15 +1,19 @@
+{-# LANGUAGE OverloadedStrings   #-}
+
 module XValues(XValue, defaultValue, extractMap, extractMapFirst, extractMapSecond, buildMap, UnaryXMapFun, BinaryXMapFun) where
 
 import XMapTypes
+import qualified Data.Text as T
 
 type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
 type AggregateXMapFun a r = a -> r
 
+
 class XValue a where
-    extractMap :: XMap -> UnaryXMapFun a r -> Either String (MapValue a)
-    extractMapFirst :: XMap -> BinaryXMapFun a s r -> Either String (MapValue a)
-    extractMapSecond :: XMap -> BinaryXMapFun s a r -> Either String (MapValue a)
+    extractMap :: XMap -> UnaryXMapFun a r -> Either T.Text (MapValue a)
+    extractMapFirst :: XMap -> BinaryXMapFun a s r -> Either T.Text (MapValue a)
+    extractMapSecond :: XMap -> BinaryXMapFun s a r -> Either T.Text (MapValue a)
     buildMap :: MapValue a -> XMap
     defaultValue :: a
 
@@ -34,7 +38,7 @@ instance XValue Int where
     buildMap = XMapInt
     defaultValue = 0
 
-instance XValue Text where
+instance XValue T.Text where
     extractMap (XMapString m) _ = Right m
     extractMap _ _ = Left "The map must be of type string"
     extractMapFirst (XMapString m) _ = Right m
@@ -42,7 +46,7 @@ instance XValue Text where
     extractMapSecond (XMapString m) _ = Right m
     extractMapSecond _ _ = Left "The map must be of type double"
     buildMap = XMapString
-    defaultValue = Text ""
+    defaultValue = ""
 
 instance XValue Bool where
     extractMap (XMapBool m) _ = Right m
