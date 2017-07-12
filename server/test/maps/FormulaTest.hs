@@ -1,6 +1,6 @@
 module FormulaTest(apply_trivialFormula_originalMap, apply_operationFormula_expectedMap, apply_applicationFormula_expectedMap) where
 
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 
 import Test.HUnit
@@ -21,19 +21,19 @@ import TestTypes
 apply_trivialFormula_originalMap = TestCase (assertEqual "trivial formula" (Right r) (execFormula f m XFunction.Intersection))
     where r = singletonXMap "k" 13.3
           ka = mapName ["a"]
-          m = Map.singleton ka r
+          m = M.singleton ka r
           f = XFMap ka
 
 apply_operationFormula_expectedMap = TestCase (assertEqual "operation formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
-          m = Map.fromList [(ka ,singletonXMap "k" 13), (kb ,singletonXMap "k" 12)]
+          m = M.fromList [(ka ,singletonXMap "k" 13), (kb ,singletonXMap "k" 12)]
           r = singletonXMap "k" 25
           f = XFOperation Ops.Add (XFMap ka) (XFMap kb)
 
 apply_applicationFormula_expectedMap = TestCase (assertEqual "application formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
-          m = Map.fromList [(ka ,singletonXMap "k" 13), (kb ,singletonXMap "k" 12)]
+          m = M.fromList [(ka ,singletonXMap "k" 13), (kb ,singletonXMap "k" 12)]
           r = singletonXMap "k" (-13)
           f = XFApplication Apps.Negate (XFMap ka)

@@ -6,7 +6,7 @@ import Test.Framework.Providers.HUnit
 import Data.Monoid
 import Control.Monad
 
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 
 

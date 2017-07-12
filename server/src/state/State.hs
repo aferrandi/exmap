@@ -1,13 +1,13 @@
 module State where
 
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M
 import Formula
 import XMapTypes
 import View
 import XFunction
 import Project
 
-newtype MapRepository = MapRepository (Map.Map XMapName (Maybe XMap))
+newtype MapRepository = MapRepository (M.Map XMapName (Maybe XMap))
 
 data RuntimeCalculation = RuntimeCalculation {
     calculation :: Calculation,
@@ -19,7 +19,7 @@ data RuntimeProject = RuntimeProject {
     calculationByMap :: CalculationByMap
 }
 
-newtype RuntimeProjectByName = ProjectByName ( Map.Map ProjectName RuntimeProject)
+newtype RuntimeProjectByName = ProjectByName ( M.Map ProjectName RuntimeProject)
 
 data System = System {
     projectByName :: RuntimeProjectByName

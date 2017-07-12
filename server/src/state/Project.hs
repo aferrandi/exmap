@@ -2,7 +2,7 @@ module Project where
 
 -- strucure of a project that can be stored and read from a file
 
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import Formula
 import XMapTypes
@@ -18,7 +18,7 @@ data Calculation = Calculation {
     operationMode :: OperationMode
 }
 
-newtype CalculationByMap = CalculationByMap ( Map.Map XMapName Calculation)
+newtype CalculationByMap = CalculationByMap ( M.Map XMapName Calculation)
 
 newtype ProjectName = ProjectName T.Text
 

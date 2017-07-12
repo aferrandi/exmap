@@ -1,6 +1,6 @@
 module ExecFormula (execFormula) where
 
-import qualified Data.Map.Strict as Map
+import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 
 import XMapTypes
@@ -12,7 +12,7 @@ import Formula
 
 execFormula :: XFormula ->  XMapByName -> OperationMode -> XMapErr
 execFormula xf rm m = case xf of
-    (XFMap n) -> case Map.lookup n rm of
+    (XFMap n) -> case M.lookup n rm of
         Just om -> Right om
         Nothing -> Left (T.pack "map not found")
     (XFOperation f a b) -> do
