@@ -1,4 +1,4 @@
-module TextEnums (enumValues, enumWithTextCI) where
+module TextEnums (enumValues, enumWithTextCI, showT, readT) where
 
 import qualified Data.Char as C
 import qualified Data.Text as T
@@ -10,3 +10,9 @@ enumValues = enumFrom minBound
 enumWithTextCI :: (Enum a, Show a) => [a] -> T.Text -> Maybe a
 enumWithTextCI es s = find (\e -> toLowerEnum e == T.toLower s) es
     where toLowerEnum e = T.toLower $ T.pack (show e)
+
+showT :: Show a => a -> T.Text
+showT = T.pack . show
+
+readT :: Read a => T.Text -> a
+readT = read . T.unpack

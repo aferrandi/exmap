@@ -27,6 +27,7 @@ executable exmap
                      , containers
                      , attoparsec
                      , aeson
+                     , unordered-containers
   other-modules:
                        Formula
                      , ExecFormula
@@ -34,6 +35,8 @@ executable exmap
                      , Applications
                      , XFunction
                      , XMapTypes
+                     , OperationTypes
+                     , ApplicationTypes
                      , XValues
                      , FormulaParser
                      , TextEnums
@@ -41,6 +44,7 @@ executable exmap
                      , Project
                      , State
                      , WebApp
+                     , ProjectJson
 test-suite exmap-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test test/maps test/parse src/maps src/functions src/formula src/parse
@@ -60,6 +64,8 @@ test-suite exmap-test
                      , Applications
                      , XFunction
                      , XMapTypes
+                     , ApplicationTypes
+                     , OperationTypes
                      , XValues
                      , FormulaParser
                      , TextEnums

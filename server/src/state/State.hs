@@ -14,9 +14,11 @@ data RuntimeCalculation = RuntimeCalculation {
     repository :: MapRepository
 }
 
+newtype RuntimeCalculationByMap = RuntimeCalculationByMap ( M.Map XMapName RuntimeCalculation)
+
 data RuntimeProject = RuntimeProject {
     project :: Project,
-    calculationByMap :: CalculationByMap
+    calculationByMap :: RuntimeCalculationByMap
 }
 
 newtype RuntimeProjectByName = ProjectByName ( M.Map ProjectName RuntimeProject)

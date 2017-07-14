@@ -3,14 +3,9 @@ module Operations(OperationName(..), OperationFun, operationRepository) where
 import XFunction
 import XMapTypes
 import XValues
+import OperationTypes
 
 type OperationFun = OperationMode -> XMap -> XMap -> XMapErr
-
-data OperationName =
-      Add
-    | Subtract
-    deriving (Bounded, Enum, Show, Eq, Read)
-
 
 add :: OperationMode -> XMap -> XMap -> XMapErr
 add om = operate om add

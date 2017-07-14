@@ -7,6 +7,7 @@ import qualified Data.Set as Set
 import Data.Maybe
 
 data OperationMode = Union | Intersection
+    deriving (Show, Eq, Read)
 
 unionWith3 :: (XValue a, XValue b) => Ord k => (a -> b -> c) -> M.Map k a -> M.Map k b -> M.Map k c
 unionWith3 f a b = Set.foldr addKey M.empty keys

@@ -3,9 +3,8 @@ module Applications(ApplicationName(..), ApplicationFun, applicationRepository) 
 import XFunction
 import XMapTypes
 import XValues
+import ApplicationTypes
 
-data ApplicationName = Negate
-    deriving (Bounded, Enum, Show, Eq, Read)
 
 type ApplicationFun = XMap -> XMapErr
 

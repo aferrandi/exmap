@@ -2,8 +2,8 @@
 module Formula(XFormula(..)) where
 
 import XMapTypes
-import Operations
-import Applications
+import OperationTypes
+import ApplicationTypes
 
 data XFormula = XFMap XMapName
             | XFOperation OperationName XFormula XFormula
