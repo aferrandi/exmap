@@ -13,7 +13,7 @@ import XFunction
 import TextEnums
 import OperationTypes
 import ApplicationTypes
-
+import View
 
 instance FromJSON XMapName where
    parseJSON (String v) = return $ XMapName (T.splitOn "/" v)
@@ -83,4 +83,81 @@ instance ToJSON Calculation  where
                , "operationMode" .= operationMode
                  ]
 
+instance FromJSON SourceType where
+   parseJSON (Object v) = case HML.lookup "type" v of
+      Just (String "internalSource") -> return InternalSource
+      Just (String "odbcSource") ->  OdbcSource <$> v .: "connectionString" <*> v .: "sqlQuery"
+      Just (String "httpSource") ->  HttpSource <$> v .: "url"
 
+
+instance ToJSON SourceType where
+     toJSON InternalSource = object [ "type"  .= T.pack "internalSource"                              ]
+     toJSON (OdbcSource connectionString sqlQuery) = object [ "type"  .=  T.pack "odbcSource"
+                                            , "connectionString"   .= connectionString
+                                            , "sqlQuery" .= sqlQuery
+                                            ]
+     toJSON (HttpSource url) = object [ "type"  .=  T.pack "httpSource"
+                                            , "url"   .= url
+                                        ]
+instance FromJSON Source where
+   parseJSON (Object v) =
+      Source  <$> v .: "sourceType"
+             <*> v .: "sourceOfMaps"
+
+instance ToJSON Source where
+     toJSON (Source sourceType sourceOfMaps) =
+        object [ "sourceType"  .= sourceType
+                , "sourceOfMaps"   .= sourceOfMaps
+                 ]
+
+instance FromJSON ViewLabel where
+   parseJSON (String v) = return $ ViewLabel v
+
+instance ToJSON ViewLabel where
+   toJSON (ViewLabel v) = String v
+
+instance FromJSON ViewItem where
+   parseJSON (Object v) = case HML.lookup "type" v of
+      Just (String "map") ->  MapItem <$> v .: "mapName"
+      Just (String "label") ->  LabelItem <$> v .: "label"
+
+instance ToJSON ViewItem where
+     toJSON (MapItem mapName) = object [ "type"  .=  T.pack "map"
+                                            , "mapName"   .= mapName
+                                            ]
+     toJSON (LabelItem label) = object [ "type"  .=  T.pack "label"
+                                            , "label"   .= label
+                                        ]
+
+instance FromJSON ViewRow where
+   parseJSON (Object v) = ViewRow <$> v .: "items"
+
+instance ToJSON ViewRow where
+     toJSON (ViewRow is) = object [ "items" .= is]
+
+instance FromJSON View where
+   parseJSON (Object v) = View <$> v .: "rows"
+
+instance ToJSON View where
+     toJSON (View rs) = object [ "rows" .= rs]
+
+instance FromJSON ProjectName where
+   parseJSON (String v) = return $ ProjectName v
+
+instance ToJSON ProjectName where
+   toJSON (ProjectName v) = String v
+
+instance FromJSON Project where
+   parseJSON (Object v) =
+      Project  <$> v .: "projectName"
+             <*> v .: "calculations"
+             <*> v .: "views"
+             <*> v .: "sources"
+
+instance ToJSON Project where
+     toJSON (Project projectName calculations views sources) =
+        object [ "projectName"  .= projectName
+                , "calculations"   .= calculations
+                , "views"   .= views
+                , "sources"   .= sources
+                 ]

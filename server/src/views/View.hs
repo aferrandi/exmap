@@ -3,11 +3,11 @@ module View where
 import qualified Data.Text as T
 import XMapTypes
 
-newtype Label = Label T.Text
+newtype ViewLabel = ViewLabel T.Text
     deriving (Show, Eq)
 
 data ViewItem = MapItem XMapName|
-                LabelItem Label
+                LabelItem ViewLabel
     deriving (Show, Eq)
 
 -- horizontal on the screen

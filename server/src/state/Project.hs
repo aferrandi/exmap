@@ -21,6 +21,7 @@ data Calculation = Calculation {
 
 newtype CalculationByMap = CalculationByMap ( M.Map XMapName Calculation)
     deriving (Show, Eq)
+
 newtype ProjectName = ProjectName T.Text
     deriving (Show, Eq)
 
