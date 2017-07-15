@@ -3,15 +3,15 @@ module XFunction (XMapErr, OperationMode(..), operate, apply) where
 import XMapTypes
 import XValues
 import qualified Data.Map.Strict as M
-import qualified Data.Set as Set
+import qualified Data.Set as S
 import Data.Maybe
 
 data OperationMode = Union | Intersection
     deriving (Show, Eq, Read)
 
 unionWith3 :: (XValue a, XValue b) => Ord k => (a -> b -> c) -> M.Map k a -> M.Map k b -> M.Map k c
-unionWith3 f a b = Set.foldr addKey M.empty keys
-    where keys = Set.union (M.keysSet a) (M.keysSet b)
+unionWith3 f a b = S.foldr addKey M.empty keys
+    where keys = S.union (M.keysSet a) (M.keysSet b)
           getOrDefault k m = fromMaybe defaultValue (M.lookup k m)
           newValue k m = f (getOrDefault k a) (getOrDefault k b)
           addKey k m = M.insert k (newValue k m) m

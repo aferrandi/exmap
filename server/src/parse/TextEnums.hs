@@ -9,7 +9,7 @@ enumValues = enumFrom minBound
 
 enumWithTextCI :: (Enum a, Show a) => [a] -> T.Text -> Maybe a
 enumWithTextCI es s = find (\e -> toLowerEnum e == T.toLower s) es
-    where toLowerEnum e = T.toLower $ T.pack (show e)
+    where toLowerEnum = T.toLower . showT
 
 showT :: Show a => a -> T.Text
 showT = T.pack . show

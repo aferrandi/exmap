@@ -9,6 +9,7 @@ import Control.Monad
 import qualified FormulaTest
 import qualified FormulaParserTest
 import qualified TextEnumsTest
+import qualified ProjectJsonTest
 
 main :: IO Counts
 main = runTestTT tests
@@ -22,4 +23,5 @@ main = runTestTT tests
                                TextEnumsTest.enumValues_ApplicationName_containNegate,
                                TextEnumsTest.enumWithTextCI_ApplicationName_containNegate,
                                TextEnumsTest.enumWithTextCI_ApplicationName_notContainNegate,
-                               FormulaParserTest.parseFormula_formulaWrongApplicationName_error]
+                               FormulaParserTest.parseFormula_formulaWrongApplicationName_error,
+                               ProjectJsonTest.toParseJSON_calculation_same]

@@ -15,25 +15,6 @@ import OperationTypes
 import ApplicationTypes
 
 
-{-
-instance FromJSON CalculationName where
- parseJSON (Object v) =
-    Person <$> v .: "firstName"
-           <*> v .: "lastName"
-           <*> v .: "age"
-           <*> v .: "likesPizza"
- parseJSON _ = mzero
-
-instance ToJSON Person where
- toJSON (Person firstName lastName age likesPizza) =
-    object [ "firstName"  .= firstName
-           , "lastName"   .= lastName
-           , "age"        .= age
-           , "likesPizza" .= likesPizza
-             ]
--}
-
-
 instance FromJSON XMapName where
    parseJSON (String v) = return $ XMapName (T.splitOn "/" v)
 
@@ -84,7 +65,7 @@ instance FromJSON CalculationName where
    parseJSON (String v) = return $ CalculationName v
 
 instance ToJSON CalculationName where
-   toJSON (CalculationName v) = String $ showT v
+   toJSON (CalculationName v) = String v
 
 
 instance FromJSON Calculation  where
@@ -101,4 +82,5 @@ instance ToJSON Calculation  where
                , "maps"        .= maps
                , "operationMode" .= operationMode
                  ]
+
 
