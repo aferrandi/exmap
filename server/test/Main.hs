@@ -24,4 +24,5 @@ main = runTestTT tests
                                TextEnumsTest.enumWithTextCI_ApplicationName_containNegate,
                                TextEnumsTest.enumWithTextCI_ApplicationName_notContainNegate,
                                FormulaParserTest.parseFormula_formulaWrongApplicationName_error,
-                               ProjectJsonTest.toParseJSON_calculation_same]
+                               ProjectJsonTest.toParseJSON_calculation_same,
+                               ProjectJsonTest.toParseJSON_project_same]

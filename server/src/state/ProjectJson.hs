@@ -161,3 +161,15 @@ instance ToJSON Project where
                 , "views"   .= views
                 , "sources"   .= sources
                  ]
+
+instance FromJSON User where
+   parseJSON (Object v) =
+      User <$> v .: "userId"
+             <*> v .: "accessToProjects"
+
+
+instance ToJSON User where
+     toJSON (User userId accessToProjects) =
+        object [ "userId"  .= userId
+                , "accessToProjects"   .= accessToProjects
+                 ]
