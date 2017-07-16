@@ -1,4 +1,4 @@
-module ProjectJsonTest (toParseJSON_calculation_same, toParseJSON_project_same) where
+module ProjectJsonTest (toParseJSON_calculation_same, toParseJSON_project_same, toParseJSON_user_same) where
 
 import Data.Aeson
 import Test.HUnit
@@ -17,20 +17,11 @@ import XFunction
 import OperationTypes
 import Debug.Trace
 
-toParseJSON_calculation_same = TestCase (assertEqual "calculation -> json -> calculation" (Just calculationExample) (decode json) )
-        where json = encode calculationExample
+toParseJSON_calculation_same = TestCase (assertEqual "calculation -> json -> calculation" (Just calculationExample) (decode . encode $ calculationExample) )
 
-
-calculationExample = Calculation {
-        calculationName = CalculationName (T.pack "calc"),
-        formula = XFOperation Subtract (XFMap (mapName ["one"])) (XFMap (mapName ["two"])),
-        maps = [mapName ["one"], mapName ["two"]],
-        operationMode = Intersection
-        }
-
-toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (Just original) (decode json) )
+toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (Just original)  (decode . encode $ original) )
     where original = Project {
-            projectName = ProjectName (T.pack "proj"),
+            projectName = makeProjectName "proj",
             calculations = [calculationExample],
             views = [view],
             sources = [source]
@@ -41,8 +32,24 @@ toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (J
                         LabelItem (ViewLabel (T.pack "label"))
                         ]
                     ]
-          json = encode original
           source = Source {
               sourceType = InternalSource,
               sourceOfMaps = [mapName ["one"],mapName ["two"]]
           }
+
+toParseJSON_user_same = TestCase (assertEqual "user -> json -> user" (Just original) (decode . encode $ original) )
+    where original =  User {
+        userId = T.pack "user",
+        accessToProjects = [makeProjectName "proj1", makeProjectName "proj2"]
+    }
+
+calculationExample = Calculation {
+        calculationName = CalculationName (T.pack "calc"),
+        formula = XFOperation Subtract (XFMap . mapName $ ["one"]) (XFMap . mapName $ ["two"]),
+        maps = [mapName ["one"], mapName ["two"]],
+        operationMode = Intersection
+        }
+
+makeProjectName :: String -> ProjectName
+makeProjectName = ProjectName . T.pack
+
