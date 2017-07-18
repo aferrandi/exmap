@@ -21,7 +21,7 @@ data RuntimeProject = RuntimeProject {
     calculationByMap :: RuntimeCalculationByMap
 }
 
-newtype RuntimeProjectByName = ProjectByName ( M.Map ProjectName RuntimeProject)
+newtype RuntimeProjectByName = ProjectByName (M.Map ProjectName  (Maybe RuntimeProject))
 
 data System = System {
     projectByName :: RuntimeProjectByName

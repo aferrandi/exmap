@@ -10,6 +10,7 @@ import FormulaParser
 import View
 import State
 import ProjectJson
+import Load
 
 main :: IO ()
 main = WebApp.runWebApp

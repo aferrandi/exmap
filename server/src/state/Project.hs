@@ -47,3 +47,5 @@ data User = User {
     userId :: T.Text,
     accessToProjects :: [ProjectName]
 }  deriving (Show, Eq)
+
+newtype AllProjects = AllProjects [ProjectName]

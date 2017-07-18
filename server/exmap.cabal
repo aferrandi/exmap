@@ -13,7 +13,7 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 executable exmap
-  hs-source-dirs:      src src/maps src/functions src/formula src/parse src/state  src/views src/web
+  hs-source-dirs:      src src/maps src/functions src/formula src/parse src/state  src/views src/web src/storage
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
@@ -28,6 +28,8 @@ executable exmap
                      , attoparsec
                      , aeson
                      , unordered-containers
+                     , filepath
+                     , bytestring
   other-modules:
                        Formula
                      , ExecFormula
@@ -45,9 +47,11 @@ executable exmap
                      , State
                      , WebApp
                      , ProjectJson
+                     , Load
+                     , Store
 test-suite exmap-test
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      test test/maps test/parse test/state src/maps src/functions src/formula src/state src/parse src/views
+  hs-source-dirs:      test test/maps test/parse test/state src/maps src/functions src/formula src/state src/parse src/views src/storage
   main-is:             Main.hs
   build-depends:       base
                      , test-framework

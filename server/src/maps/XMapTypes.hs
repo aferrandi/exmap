@@ -10,6 +10,7 @@ newtype XMapKey = XMapKey T.Text deriving (Show, Eq, Ord)
 newtype XMapName = XMapName [T.Text] deriving (Show, Eq, Ord)
 
 type MapValue a = M.Map XMapKey a
+
 data XMap = XMapDouble (MapValue Double) |
             XMapInt (MapValue Int) |
             XMapString (MapValue T.Text) |
@@ -19,7 +20,7 @@ data XMap = XMapDouble (MapValue Double) |
 type XMapErr = Either T.Text XMap
 
 data XNamedMap = XNamedMap {
-    name :: XMapName,
+    xmapName :: XMapName,
     xmap :: XMap
 } deriving Show
 
