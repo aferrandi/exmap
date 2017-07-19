@@ -47,6 +47,7 @@ executable exmap
                      , State
                      , WebApp
                      , ProjectJson
+                     , Paths
                      , Load
                      , Store
 test-suite exmap-test
@@ -63,6 +64,7 @@ test-suite exmap-test
                      , aeson
                      , text
                      , json
+                     , bytestring
   other-modules:
                        Formula
                      , ExecFormula

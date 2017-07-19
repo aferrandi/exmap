@@ -36,17 +36,17 @@ instance FromJSON XMap where
       Just (String "bool") ->  XMapBool . M.fromList <$> v .: "values"
 
 instance ToJSON XMap where
-     toJSON (XMapDouble values) = object [ "type"  .= T.pack "double"
-                                          , "values"   .= M.toList values
+     toJSON (XMapDouble values) = object [ "type" .= T.pack "double"
+                                          , "values" .= M.toList values
                                           ]
-     toJSON (XMapInt values) = object [ "type"  .=  T.pack "int"
-                                          , "values"   .= M.toList values
+     toJSON (XMapInt values) = object [ "type" .= T.pack "int"
+                                       , "values" .= M.toList values
+                                       ]
+     toJSON (XMapString values) = object [ "type" .=  T.pack "application"
+                                          , "values" .= M.toList values
                                           ]
-     toJSON (XMapString values) = object [ "type"  .=  T.pack "application"
-                                          , "values"   .= M.toList values
-                                          ]
-     toJSON (XMapBool values) = object [ "type"  .=  T.pack "application"
-                                          , "values"   .= M.toList values
+     toJSON (XMapBool values) = object [ "type" .=  T.pack "application"
+                                          , "values" .= M.toList values
                                           ]
 
 instance FromJSON XNamedMap where
@@ -70,13 +70,13 @@ instance ToJSON XFormula where
      toJSON (XFMap n) = object [ "type"  .= T.pack "map"
                               , "name"   .= n
                               ]
-     toJSON (XFOperation n f1 f2) = object [ "type"  .=  T.pack "operation"
-                                            , "name"   .= n
+     toJSON (XFOperation n f1 f2) = object [ "type" .=  T.pack "operation"
+                                            , "name" .= n
                                             , "formula1" .= f1
                                             , "formula2" .= f2
                                             ]
      toJSON (XFApplication n f) = object [ "type"  .=  T.pack "application"
-                                            , "name"   .= n
+                                            , "name" .= n
                                             , "formula" .= f
                                             ]
 
@@ -116,9 +116,9 @@ instance FromJSON Calculation  where
 
 instance ToJSON Calculation  where
      toJSON (Calculation calculationName formula maps operationMode) =
-        object [ "calculationName"  .= calculationName
-               , "formula"   .= formula
-               , "maps"        .= maps
+        object [ "calculationName" .= calculationName
+               , "formula" .= formula
+               , "maps" .= maps
                , "operationMode" .= operationMode
                  ]
 
@@ -131,12 +131,12 @@ instance FromJSON SourceType where
 
 instance ToJSON SourceType where
      toJSON InternalSource = object [ "type"  .= T.pack "internalSource"                              ]
-     toJSON (OdbcSource connectionString sqlQuery) = object [ "type"  .=  T.pack "odbcSource"
-                                            , "connectionString"   .= connectionString
+     toJSON (OdbcSource connectionString sqlQuery) = object ["type" .= T.pack "odbcSource"
+                                            , "connectionString" .= connectionString
                                             , "sqlQuery" .= sqlQuery
                                             ]
-     toJSON (HttpSource url) = object [ "type"  .=  T.pack "httpSource"
-                                            , "url"   .= url
+     toJSON (HttpSource url) = object [ "type" .= T.pack "httpSource"
+                                       , "url" .= url
                                         ]
 instance FromJSON Source where
    parseJSON (Object v) =
@@ -145,8 +145,8 @@ instance FromJSON Source where
 
 instance ToJSON Source where
      toJSON (Source sourceType sourceOfMaps) =
-        object [ "sourceType"  .= sourceType
-                , "sourceOfMaps"   .= sourceOfMaps
+        object [ "sourceType" .= sourceType
+                , "sourceOfMaps" .= sourceOfMaps
                  ]
 
 instance FromJSON ViewLabel where
@@ -161,11 +161,11 @@ instance FromJSON ViewItem where
       Just (String "label") ->  LabelItem <$> v .: "label"
 
 instance ToJSON ViewItem where
-     toJSON (MapItem mapName) = object [ "type"  .=  T.pack "map"
-                                            , "mapName"   .= mapName
-                                            ]
-     toJSON (LabelItem label) = object [ "type"  .=  T.pack "label"
-                                            , "label"   .= label
+     toJSON (MapItem mapName) = object [ "type" .=  T.pack "map"
+                                        , "mapName" .= mapName
+                                        ]
+     toJSON (LabelItem label) = object [ "type" .=  T.pack "label"
+                                        , "label" .= label
                                         ]
 
 instance FromJSON ViewRow where
@@ -196,9 +196,9 @@ instance FromJSON Project where
 instance ToJSON Project where
      toJSON (Project projectName calculations views sources) =
         object [ "projectName"  .= projectName
-                , "calculations"   .= calculations
-                , "views"   .= views
-                , "sources"   .= sources
+                , "calculations" .= calculations
+                , "views" .= views
+                , "sources" .= sources
                  ]
 
 instance FromJSON User where
@@ -209,8 +209,8 @@ instance FromJSON User where
 
 instance ToJSON User where
      toJSON (User userId accessToProjects) =
-        object [ "userId"  .= userId
-                , "accessToProjects"   .= accessToProjects
+        object [ "userId" .= userId
+                , "accessToProjects" .= accessToProjects
                  ]
 
 instance FromJSON AllProjects where
@@ -220,5 +220,5 @@ instance FromJSON AllProjects where
 
 instance ToJSON AllProjects where
      toJSON (AllProjects projectNames) =
-        object [ "projectNames"  .= projectNames
+        object [ "projectNames" .= projectNames
                  ]

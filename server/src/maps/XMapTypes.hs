@@ -22,7 +22,7 @@ type XMapErr = Either T.Text XMap
 data XNamedMap = XNamedMap {
     xmapName :: XMapName,
     xmap :: XMap
-} deriving Show
+} deriving (Show, Eq)
 
 type XMapByName = M.Map XMapName XMap
 
