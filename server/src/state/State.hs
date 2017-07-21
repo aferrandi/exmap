@@ -1,28 +1,41 @@
 module State where
 
 import qualified Data.Map.Strict as M
+import Control.Concurrent.STM.TVar (TVar)
+import Control.Concurrent.STM.TChan (TChan)
+
 import Formula
 import XMapTypes
 import View
 import XFunction
 import Project
 
-newtype MapRepository = MapRepository (M.Map XMapName (Maybe XMap))
+data CalculationMessage = CMMap XNamedMap |
+                          CMStop
+
+data ProjectMessage = PMMap XNamedMap |
+                      PMStop
+
+type MapRepository = M.Map XMapName (Maybe XMap)
 
 data RuntimeCalculation = RuntimeCalculation {
     calculation :: Calculation,
-    repository :: MapRepository
+    repository :: TVar MapRepository
 }
 
-newtype RuntimeCalculationByMap = RuntimeCalculationByMap ( M.Map XMapName (Maybe RuntimeCalculation))
+type CalculationChan = TChan CalculationMessage
+type CalculationChansByMap = M.Map XMapName [CalculationChan]
 
 data RuntimeProject = RuntimeProject {
     project :: Project,
-    calculationByMap :: RuntimeCalculationByMap
+    calculationByMap :: TVar CalculationChansByMap
 }
 
-newtype RuntimeProjectByName = ProjectByName (M.Map ProjectName  (Maybe RuntimeProject))
+type ProjectChan = TChan ProjectMessage
+type ProjectChanByName = M.Map ProjectName (Maybe ProjectChan)
+type ProjectChansByMapName = M.Map XMapName [ProjectChan]
 
-data System = System {
-    projectByName :: RuntimeProjectByName
+data XSystem = XSystem {
+    projectByName :: TVar ProjectChanByName,
+    projectByMapName :: TVar ProjectChansByMapName
 }

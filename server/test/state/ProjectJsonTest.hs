@@ -41,7 +41,6 @@ toParseJSON_user_same = TestCase (assertEqual "user -> json -> user" (Just origi
 calculationExample = Calculation {
         calculationName = CalculationName (T.pack "calc"),
         formula = XFOperation Subtract (XFMap . mapName $ ["one"]) (XFMap . mapName $ ["two"]),
-        maps = [mapName ["one"], mapName ["two"]],
         operationMode = Intersection
         }
 

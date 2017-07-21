@@ -30,6 +30,8 @@ executable exmap
                      , unordered-containers
                      , filepath
                      , bytestring
+                     , stm
+                     , base
   other-modules:
                        Formula
                      , ExecFormula
@@ -45,6 +47,7 @@ executable exmap
                      , View
                      , Project
                      , State
+                     , Actors
                      , WebApp
                      , ProjectJson
                      , Paths

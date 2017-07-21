@@ -111,14 +111,12 @@ instance FromJSON Calculation  where
    parseJSON (Object v) =
       Calculation  <$> v .: "calculationName"
              <*> v .: "formula"
-             <*> v .: "maps"
              <*> v .: "operationMode"
 
 instance ToJSON Calculation  where
-     toJSON (Calculation calculationName formula maps operationMode) =
+     toJSON (Calculation calculationName formula operationMode) =
         object [ "calculationName" .= calculationName
                , "formula" .= formula
-               , "maps" .= maps
                , "operationMode" .= operationMode
                  ]
 
