@@ -9,11 +9,8 @@ import XMapTypes
 import View
 import XFunction
 
-newtype CalculationName = CalculationName T.Text
-    deriving (Show, Eq)
-
 data Calculation = Calculation {
-    calculationName :: CalculationName,
+    resultName :: XMapName,
     formula :: XFormula,
     operationMode :: OperationMode
 } deriving (Show, Eq)

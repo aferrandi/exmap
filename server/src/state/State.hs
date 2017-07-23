@@ -3,6 +3,7 @@ module State where
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar (TVar)
 import Control.Concurrent.STM.TChan (TChan)
+import qualified Data.Text as T
 
 import Formula
 import XMapTypes
@@ -16,14 +17,19 @@ data CalculationMessage = CMMap XNamedMap |
 data ProjectMessage = PMMap XNamedMap |
                       PMStop
 
+data LogMessage = LLog T.Text |
+                  LStop
+
 type MapRepository = M.Map XMapName (Maybe XMap)
+
+type CalculationChan = TChan CalculationMessage
 
 data RuntimeCalculation = RuntimeCalculation {
     calculation :: Calculation,
-    repository :: TVar MapRepository
+    repository :: TVar MapRepository,
+    dependentCalculations :: [CalculationChan]
 }
 
-type CalculationChan = TChan CalculationMessage
 type CalculationChansByMap = M.Map XMapName [CalculationChan]
 
 data RuntimeProject = RuntimeProject {

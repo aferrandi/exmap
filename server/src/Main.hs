@@ -18,7 +18,8 @@ import State
 import Project
 import ProjectJson
 import Load
-import Actors
+import CalculationActor
+import LogActor
 
 main :: IO ()
 main = do
