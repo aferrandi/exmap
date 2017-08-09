@@ -1,8 +1,7 @@
-module ExecFormula (execFormula, dependencies) where
+module ExecFormula (execFormula) where
 
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import Data.List (union)
 
 import XMapTypes
 import XFunction
@@ -26,8 +25,4 @@ execFormula xf rm m = case xf of
         let rf = applicationRepository f
         rf oa
 
-dependencies :: XFormula -> [XMapName]
-dependencies (XFMap n) = [n]
-dependencies (XFOperation _ a b) = union (dependencies a) (dependencies b)
-dependencies (XFApplication _ a) = dependencies a
 

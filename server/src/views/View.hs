@@ -17,3 +17,5 @@ newtype ViewRow = ViewRow [ViewItem]
 -- vertical on the screen
 newtype View = View [ViewRow]
     deriving (Show, Eq)
+
+

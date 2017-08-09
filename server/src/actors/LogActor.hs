@@ -5,12 +5,12 @@ import Control.Concurrent.STM
 import State
 import qualified Data.Text.IO as TIO
 
-actorLog :: TChan LogMessage -> IO ()
+actorLog :: LogChan -> IO ()
 actorLog chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
-                (LLog m) -> do
+                LMLog m -> do
                     TIO.putStrLn m
                     loop
-                LStop -> return ()
+                LMStop -> return ()

@@ -13,18 +13,27 @@ import Project
 import ExecFormula
 
 
-actorCalculation :: TChan CalculationMessage -> RuntimeCalculation -> TChan LogMessage -> STM ()
-actorCalculation chan rtCalc logChan = loop
+actorCalculation :: CalculationChan -> RuntimeCalculation -> STM ()
+actorCalculation chan rtCalc = loop
     where loop = do
             msg <- readTChan chan
             case msg of
-                (CMMap m) -> do
+                CMMap m -> do
                     ers <- handleMap rtCalc m
                     case ers of
                         Right () -> return ()
-                        Left err -> writeTChan logChan (LLog err)
+                        Left err -> logToAll rtCalc err
                     loop
+                CMLog t -> logToAll rtCalc t
                 CMStop -> return ()
+
+logToAll :: RuntimeCalculation -> T.Text -> STM ()
+logToAll rtCalc  t = do
+    let cs = calculationsToNotify rtCalc
+    let vs = viewsToNotify rtCalc
+    sendToAll cs (CMLog t)
+    sendToAll vs (VMLog t)
+    return ()
 
 handleMap :: RuntimeCalculation -> XNamedMap -> STM (Either T.Text ())
 handleMap rtCalc m = do
@@ -32,9 +41,10 @@ handleMap rtCalc m = do
        modifyTVar trm (updateRepository m)
        rm <- readTVar trm
        let calc = calculation rtCalc
-       let chs = dependentCalculations rtCalc
+       let chs = calculationsToNotify rtCalc
+       let vs = viewsToNotify rtCalc
        case repositoryIfFull rm of
-            Just xm -> execAndSend calc chs xm
+            Just xm -> execAndSend calc chs vs xm
             Nothing -> return $ Right ()
     where updateRepository m r = M.insert (xmapName m) (Just (xmap m)) r
 
@@ -45,13 +55,20 @@ repositoryIfFull rm = do
     where expandToKey (k, mv) = do v <- mv
                                    return (k, v)
 
-execAndSend :: Calculation -> [CalculationChan] -> XMapByName -> STM (Either T.Text ())
-execAndSend calc chs xm = do
+execAndSend :: Calculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either T.Text ())
+execAndSend calc cs vs xm = do
     let ers = execFormula (formula calc) xm  (operationMode calc)
-    mapM (\rs -> sendToDependents calc chs rs) ers
+    mapM (sendToDependents calc cs vs) ers
+
+sendToDependents :: Calculation -> [CalculationChan]  -> [ViewChan] -> XMap -> STM ()
+sendToDependents calc cs vs rs = do
+    let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
+    sendToAll cs (CMMap rsn)
+    sendToAll vs (VMMap rsn)
+    return ()
 
 
-sendToDependents :: Calculation -> [CalculationChan] -> XMap -> STM ()
-sendToDependents calc chs xm = mapM_ sendToOne chs
-    where sendToOne ch = writeTChan ch (CMMap resultWithName)
-          resultWithName = XNamedMap { xmapName = resultName calc, xmap = xm }
+sendToAll :: [TChan a] -> a -> STM ()
+sendToAll chs xm = mapM_ sendToOne chs
+    where sendToOne ch = writeTChan ch xm
+

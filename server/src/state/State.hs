@@ -12,36 +12,56 @@ import XFunction
 import Project
 
 data CalculationMessage = CMMap XNamedMap |
+                          CMLog T.Text |
                           CMStop
 
 data ProjectMessage = PMMap XNamedMap |
+                      PMLog T.Text |
                       PMStop
 
-data LogMessage = LLog T.Text |
-                  LStop
+data ViewMessage = VMMap XNamedMap |
+                   VMLog T.Text |
+                   VMStop
 
-type MapRepository = M.Map XMapName (Maybe XMap)
+data LogMessage = LMLog T.Text |
+                  LMStop
+
+
+type LogChan = TChan LogMessage
 
 type CalculationChan = TChan CalculationMessage
+
+data RuntimeView =  RuntimeView {
+    view :: View
+}
+
+type ViewChan = TChan ViewMessage
+
+type MapRepository = M.Map XMapName (Maybe XMap)
 
 data RuntimeCalculation = RuntimeCalculation {
     calculation :: Calculation,
     repository :: TVar MapRepository,
-    dependentCalculations :: [CalculationChan]
+    calculationsToNotify :: [CalculationChan],
+    viewsToNotify ::[ViewChan]
 }
 
-type CalculationChansByMap = M.Map XMapName [CalculationChan]
+type CalculationChanByMap = M.Map XMapName [CalculationChan]
+type ViewChanByMap = M.Map XMapName [ViewChan]
 
 data RuntimeProject = RuntimeProject {
     project :: Project,
-    calculationByMap :: TVar CalculationChansByMap
+    calculationByMap :: TVar CalculationChanByMap,
+    viewByMap :: TVar ViewChanByMap,
+    logForViews :: LogChan
 }
 
 type ProjectChan = TChan ProjectMessage
 type ProjectChanByName = M.Map ProjectName (Maybe ProjectChan)
 type ProjectChansByMapName = M.Map XMapName [ProjectChan]
 
-data XSystem = XSystem {
+data RuntimeSystem = RuntimeSystem {
     projectByName :: TVar ProjectChanByName,
-    projectByMapName :: TVar ProjectChansByMapName
+    projectByMapName :: TVar ProjectChansByMapName,
+    logForProjects :: LogChan
 }

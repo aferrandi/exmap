@@ -19,14 +19,14 @@ newtype ProjectName = ProjectName T.Text
     deriving (Show, Eq, Ord)
 
 data SourceType = InternalSource |
-              OdbcSource { connectionString :: T.Text, sqlQuery :: T.Text } |
-              HttpSource { url :: T.Text }
-        deriving (Show, Eq)
+      OdbcSource { connectionString :: T.Text, sqlQuery :: T.Text } |
+      HttpSource { url :: T.Text }
+    deriving (Show, Eq)
 
 data Source = Source {
     sourceType :: SourceType,
     sourceOfMaps :: [XMapName]
-    } deriving (Show, Eq)
+} deriving (Show, Eq)
 
 data Project = Project {
     projectName :: ProjectName,
