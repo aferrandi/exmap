@@ -15,24 +15,18 @@ import ProjectJson
 tryReadFile :: FilePath -> IO (Either IOError B.ByteString)
 tryReadFile p = try $ B.readFile p
 
-loadAvailableProjects :: FilePath -> IO (Either String AllProjects)
-loadAvailableProjects root = do
-     strOrExc <- tryReadFile (allProjectsPath root)
+tryReadAndDecode ::  FromJSON a => FilePath -> IO (Either String a)
+tryReadAndDecode p = do
+     strOrExc <- tryReadFile p
      return $ case strOrExc of
         Left ex -> Left (show ex)
         Right json -> eitherDecode json
 
+loadAvailableProjects :: FilePath -> IO (Either String AllProjects)
+loadAvailableProjects root = tryReadAndDecode (allProjectsPath root)
 
 loadProject :: FilePath -> ProjectName -> IO (Either String Project)
-loadProject root pr = do
-     strOrExc <- tryReadFile (projectPath root pr)
-     return $ case strOrExc of
-        Left ex -> Left (show ex)
-        Right json -> eitherDecode json
+loadProject root pr = tryReadAndDecode (projectPath root pr)
 
-loadXMap :: FilePath -> XMapName -> IO (Either String XNamedMap)
-loadXMap root m = do
-     strOrExc <- tryReadFile (xMapPath root m)
-     return $ case strOrExc of
-        Left ex -> Left (show ex)
-        Right json -> eitherDecode json
+loadXMap :: FilePath -> ProjectName -> XMapName -> IO (Either String XNamedMap)
+loadXMap root p m = tryReadAndDecode (xMapPath root p m)

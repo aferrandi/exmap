@@ -9,8 +9,11 @@ import qualified Data.Text as T
 allProjectsPath :: FilePath -> FilePath
 allProjectsPath root = root </> "allprojects.txt"
 
-projectPath :: FilePath -> ProjectName -> FilePath
-projectPath root (ProjectName projectName) = root </> T.unpack projectName <.> "txt"
+projectDir :: FilePath -> ProjectName -> FilePath
+projectDir root (ProjectName projectName) = root </> T.unpack projectName
 
-xMapPath :: FilePath -> XMapName -> FilePath
-xMapPath root (XMapName mapName) = root </> joinPath (map T.unpack mapName) <.> "txt"
+projectPath :: FilePath -> ProjectName -> FilePath
+projectPath root projectName = (projectPath root projectName) </> "project.txt"
+
+xMapPath :: FilePath -> ProjectName -> XMapName -> FilePath
+xMapPath root projectName (XMapName mapName) = (projectPath root projectName) </> joinPath (map T.unpack mapName) <.> "txt"

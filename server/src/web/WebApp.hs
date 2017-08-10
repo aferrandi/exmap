@@ -48,10 +48,10 @@ disconnectClient clientId stateRef = Concurrent.modifyMVar_ stateRef $ \state ->
 
 listen :: WS.Connection -> ClientId -> Concurrent.MVar State -> IO ()
 listen conn clientId stateRef = Monad.forever $ do
-  WS.receiveData conn >>= broadcast clientId stateRef
+  WS.receiveData conn >>= handleRequest clientId stateRef
 
-broadcast :: ClientId -> Concurrent.MVar State -> Text.Text -> IO ()
-broadcast clientId stateRef msg = do
+handleRequest :: ClientId -> Concurrent.MVar State -> Text.Text -> IO ()
+handleRequest clientId stateRef msg = do
   clients <- Concurrent.readMVar stateRef
   let otherClients = withoutClient clientId clients
   Monad.forM_ otherClients $ \(_, conn) ->
