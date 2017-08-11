@@ -1,4 +1,10 @@
-module DependenciesTest (formulaDependencies_trivialFormula_originalMap, formulaDependencies_complexFormula_maps, formulaDependencies_duplicates_onlyOnce) where
+module DependenciesTest (
+    formulaDependencies_trivialFormula_originalMap,
+    formulaDependencies_complexFormula_maps,
+    formulaDependencies_duplicates_onlyOnce,
+    viewDependencies_complex_maps,
+    viewDependencies_empty_empty
+    ) where
 
 import Test.HUnit
 import Test.Framework
@@ -13,7 +19,7 @@ import TestTypes
 import qualified Operations as Ops
 import qualified Applications as Apps
 import Formula
-
+import View
 
 formulaDependencies_trivialFormula_originalMap = TestCase (assertEqual "dependencies trivial formula" [ka] (formulaDependencies f))
     where ka = mapName ["a"]
@@ -27,3 +33,21 @@ formulaDependencies_complexFormula_maps = TestCase (assertEqual "dependencies co
 formulaDependencies_duplicates_onlyOnce = TestCase (assertEqual "dependencies formula with duplicates" [ka] (formulaDependencies f))
     where ka = mapName ["a"]
           f = XFOperation Ops.Add (XFMap ka) (XFApplication Apps.Negate(XFMap ka))
+
+viewDependencies_empty_empty = TestCase (assertEqual "dependencies empty view" [] (viewDependencies v))
+    where v = View {
+                viewName = ViewName (T.pack "v"),
+                rows = []
+            }
+
+viewDependencies_complex_maps = TestCase (assertEqual "dependencies complex view" [ka, kb] (viewDependencies v))
+    where ka = mapName ["a"]
+          kb = mapName ["b"]
+          label s = ViewLabel (T.pack s)
+          v = View {
+                viewName = ViewName (T.pack "v"),
+                rows = [
+                    ViewRow [ MapItem ka, MapItem kb],
+                    ViewRow [ LabelItem (label "l1"), LabelItem (label "l2")]
+                ]
+            }

@@ -38,7 +38,7 @@ toParseJSON_user_same = TestCase (assertEqual "user -> json -> user" (Just origi
     }
 
 calculationExample = Calculation {
-        resultName = mapName $ ["res"],
+        resultName = mapName ["res"],
         formula = XFOperation Subtract (XFMap . mapName $ ["one"]) (XFMap . mapName $ ["two"]),
         operationMode = Intersection
         }
@@ -47,10 +47,10 @@ calculationExample = Calculation {
 viewExample = View {
       viewName = ViewName (T.pack "view"),
       rows = [
-      ViewRow [
-          MapItem (mapName ["one"]),
-          LabelItem (ViewLabel (T.pack "label"))
-          ]
+          ViewRow [
+              MapItem (mapName ["one"]),
+              LabelItem (ViewLabel (T.pack "label"))
+              ]
       ]
 }
 
