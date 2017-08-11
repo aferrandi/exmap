@@ -17,7 +17,6 @@ import View
 import XMapTypes
 import XFunction
 import OperationTypes
-import TestTypes
 import Debug.Trace
 
 toParseJSON_calculation_same = TestCase (assertEqual "calculation -> json -> calculation" (Just calculationExample) (decode . encodeTrace $ calculationExample) )
@@ -45,12 +44,15 @@ calculationExample = Calculation {
         }
 
 
-viewExample = View [
-                  ViewRow [
-                      MapItem (mapName ["one"]),
-                      LabelItem (ViewLabel (T.pack "label"))
-                      ]
-                  ]
+viewExample = View {
+      viewName = ViewName (T.pack "view"),
+      rows = [
+      ViewRow [
+          MapItem (mapName ["one"]),
+          LabelItem (ViewLabel (T.pack "label"))
+          ]
+      ]
+}
 
 sourceExample = Source {
                   sourceType = InternalSource,

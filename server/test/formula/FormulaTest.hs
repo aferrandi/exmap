@@ -1,4 +1,4 @@
-module FormulaTest(execFormula_trivialFormula_originalMap, execFormula_operationFormula_expectedMap, execFormula_applicationFormula_expectedMap, dependencies_trivialFormula_originalMap, dependencies_complexFormula_maps, dependencies_duplicates_onlyOnce) where
+module FormulaTest(execFormula_trivialFormula_originalMap, execFormula_operationFormula_expectedMap, execFormula_applicationFormula_expectedMap) where
 
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
@@ -38,15 +38,3 @@ execFormula_applicationFormula_expectedMap = TestCase (assertEqual "exec applica
           r = singletonXMap "k" (-13)
           f = XFApplication Apps.Negate (XFMap ka)
 
-dependencies_trivialFormula_originalMap = TestCase (assertEqual "dependencies trivial formula" [ka] (dependencies f))
-    where ka = mapName ["a"]
-          f = XFMap ka
-
-dependencies_complexFormula_maps = TestCase (assertEqual "dependencies complex formula" [ka, kb] (dependencies f))
-    where ka = mapName ["a"]
-          kb = mapName ["b"]
-          f = XFApplication Apps.Negate (XFOperation Ops.Add (XFMap ka) (XFMap kb))
-
-dependencies_duplicates_onlyOnce = TestCase (assertEqual "dependencies formula with duplicates" [ka] (dependencies f))
-    where ka = mapName ["a"]
-          f = XFOperation Ops.Add (XFMap ka) (XFApplication Apps.Negate(XFMap ka))

@@ -10,6 +10,7 @@ import qualified FormulaTest
 import qualified FormulaParserTest
 import qualified TextEnumsTest
 import qualified ProjectJsonTest
+import qualified DependenciesTest
 
 main :: IO Counts
 main = runTestTT tests
@@ -17,9 +18,6 @@ main = runTestTT tests
                 FormulaTest.execFormula_trivialFormula_originalMap,
                 FormulaTest.execFormula_operationFormula_expectedMap,
                 FormulaTest.execFormula_applicationFormula_expectedMap,
-                FormulaTest.dependencies_trivialFormula_originalMap,
-                FormulaTest.dependencies_complexFormula_maps,
-                FormulaTest.dependencies_duplicates_onlyOnce,
 
                 FormulaParserTest.parseFormula_formulaWithMap_map,
                 FormulaParserTest.parseFormula_formulaApplication_application,
@@ -35,5 +33,9 @@ main = runTestTT tests
                 ProjectJsonTest.toParseJSON_calculation_same,
                 ProjectJsonTest.toParseJSON_project_same,
                 ProjectJsonTest.toParseJSON_user_same,
-                ProjectJsonTest.toParseJSON_map_same
+                ProjectJsonTest.toParseJSON_map_same,
+
+                DependenciesTest.formulaDependencies_trivialFormula_originalMap,
+                DependenciesTest.formulaDependencies_complexFormula_maps,
+                DependenciesTest.formulaDependencies_duplicates_onlyOnce
                 ]
