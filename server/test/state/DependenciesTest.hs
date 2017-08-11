@@ -3,7 +3,8 @@ module DependenciesTest (
     formulaDependencies_complexFormula_maps,
     formulaDependencies_duplicates_onlyOnce,
     viewDependencies_complex_maps,
-    viewDependencies_empty_empty
+    viewDependencies_empty_empty,
+    calculationDependencies_simpleCalculation_originalMap
     ) where
 
 import Test.HUnit
@@ -20,6 +21,8 @@ import qualified Operations as Ops
 import qualified Applications as Apps
 import Formula
 import View
+import XFunction
+import Project
 
 formulaDependencies_trivialFormula_originalMap = TestCase (assertEqual "dependencies trivial formula" [ka] (formulaDependencies f))
     where ka = mapName ["a"]
@@ -51,3 +54,12 @@ viewDependencies_complex_maps = TestCase (assertEqual "dependencies complex view
                     ViewRow [ LabelItem (label "l1"), LabelItem (label "l2")]
                 ]
             }
+
+calculationDependencies_simpleCalculation_originalMap = TestCase (assertEqual "dependencies simple calculatiom" [ka] (calculationDependencies c))
+    where ka = mapName ["a"]
+          kr = mapName ["r"]
+          c = Calculation {
+                resultName = kr,
+                formula = XFMap ka,
+                operationMode = Intersection
+          }

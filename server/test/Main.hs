@@ -39,5 +39,6 @@ main = runTestTT tests
                 DependenciesTest.formulaDependencies_complexFormula_maps,
                 DependenciesTest.formulaDependencies_duplicates_onlyOnce,
                 DependenciesTest.viewDependencies_empty_empty,
-                DependenciesTest.viewDependencies_complex_maps
+                DependenciesTest.viewDependencies_complex_maps,
+                DependenciesTest.calculationDependencies_simpleCalculation_originalMap
                 ]
