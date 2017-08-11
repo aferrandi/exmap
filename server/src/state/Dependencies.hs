@@ -14,7 +14,7 @@ formulaDependencies (XFOperation _ a b) = union (formulaDependencies a) (formula
 formulaDependencies (XFApplication _ a) = formulaDependencies a
 
 viewDependencies :: View -> [XMapName]
-viewDependencies (View rows)= concatMap rowDependencies rows
+viewDependencies (View _ rows)= concatMap rowDependencies rows
     where rowDependencies (ViewRow items)  = mapMaybe itemDependencies items
           itemDependencies (MapItem m) = Just m
           itemDependencies (LabelItem _) = Nothing

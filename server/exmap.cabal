@@ -57,6 +57,9 @@ executable exmap
                      , Load
                      , Store
                      , Dependencies
+                     , MessageJson
+                     , Messages
+                     , RequestsHandler
 test-suite exmap-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test test/maps test/parse test/state test/formula src/maps src/functions src/formula src/state src/parse src/views src/storage

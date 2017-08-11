@@ -21,18 +21,17 @@ tryWriteFile p c = do
     where tryWriteFileAsEither :: IO (Either IOError ())
           tryWriteFileAsEither = try $ B.writeFile p c
 
-
-saveAvailableProjects :: FilePath -> AllProjects -> IO (Maybe String)
-saveAvailableProjects root ap = do
+storeAvailableProjects :: FilePath -> AllProjects -> IO (Maybe String)
+storeAvailableProjects root ap = do
     let path = allProjectsPath root
     tryWriteFile path (encode ap)
 
-saveProject :: FilePath -> Project -> IO (Maybe String)
-saveProject root pr = do
+storeProject :: FilePath -> Project -> IO (Maybe String)
+storeProject root pr = do
     let path = projectPath root (projectName pr)
     tryWriteFile path (encode pr)
 
-saveXMap :: FilePath -> ProjectName -> XNamedMap -> IO (Maybe String)
-saveXMap root pn m = do
+storeXMap :: FilePath -> ProjectName -> XNamedMap -> IO (Maybe String)
+storeXMap root pn m = do
     let path = xMapPath root pn (xmapName m)
     tryWriteFile path (encode m)

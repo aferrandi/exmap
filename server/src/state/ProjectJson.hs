@@ -165,11 +165,19 @@ instance FromJSON ViewRow where
 instance ToJSON ViewRow where
      toJSON (ViewRow is) = object [ "items" .= is]
 
+instance FromJSON ViewName where
+   parseJSON (String v) = return $ ViewName v
+
+instance ToJSON ViewName where
+   toJSON (ViewName v) = String v
+
 instance FromJSON View where
-   parseJSON (Object v) = View <$> v .: "rows"
+   parseJSON (Object v) = View <$> v .: "name" <*> v .: "rows"
 
 instance ToJSON View where
-     toJSON (View rs) = object [ "rows" .= rs]
+     toJSON (View n rs) = object [ "name" .= n
+                                 , "rows" .= rs
+                                 ]
 
 instance FromJSON ProjectName where
    parseJSON (String v) = return $ ProjectName v

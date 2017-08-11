@@ -15,6 +15,13 @@ import qualified Network.Wai.Handler.Warp       as Warp
 import qualified Network.Wai.Handler.WebSockets as WS
 import qualified Network.WebSockets             as WS
 import qualified Safe
+import Data.Aeson
+import Data.Text.Lazy.Encoding
+import Data.Text.Lazy (fromStrict)
+
+
+import MessageJson
+import RequestsHandler
 
 runWebApp :: IO ()
 runWebApp = do
@@ -42,20 +49,32 @@ connectClient conn stateRef = Concurrent.modifyMVar stateRef $ \state -> do
 withoutClient :: ClientId -> State -> State
 withoutClient clientId = List.filter ((/=) clientId . fst)
 
+connectionForClientId :: ClientId -> State -> Maybe WS.Connection
+connectionForClientId clientId clients = snd <$> List.find ((==) clientId . fst) clients
+
 disconnectClient :: ClientId -> Concurrent.MVar State -> IO ()
 disconnectClient clientId stateRef = Concurrent.modifyMVar_ stateRef $ \state ->
   return $ withoutClient clientId state
 
 listen :: WS.Connection -> ClientId -> Concurrent.MVar State -> IO ()
 listen conn clientId stateRef = Monad.forever $ do
-  WS.receiveData conn >>= handleRequest clientId stateRef
+  WS.receiveData conn >>= handleMessage clientId stateRef
 
-handleRequest :: ClientId -> Concurrent.MVar State -> Text.Text -> IO ()
-handleRequest clientId stateRef msg = do
+sendErrorToClient :: ClientId -> State -> String -> IO ()
+sendErrorToClient clientId clients err = case connectionForClientId clientId clients of
+                                        Just c -> WS.sendTextData c (Text.pack err)
+                                        Nothing -> print $ "clientId not found " ++ show clientId -- nothing else to do.
+
+handleMessage :: ClientId -> Concurrent.MVar State -> Text.Text -> IO ()
+handleMessage clientId stateRef json = do
   clients <- Concurrent.readMVar stateRef
-  let otherClients = withoutClient clientId clients
-  Monad.forM_ otherClients $ \(_, conn) ->
-    WS.sendTextData conn msg
+  case eitherDecode (encodeUtf8 (fromStrict json)) of
+    Right r -> handleRequest r
+    Left e -> sendErrorToClient clientId clients e
+  return ()
+  -- let otherClients = withoutClient clientId clients
+  -- Monad.forM_ otherClients $ \(_, conn) ->
+    -- WS.sendTextData conn msg
 
 wsApp :: Concurrent.MVar State -> WS.ServerApp
 wsApp stateRef pendingConn = do

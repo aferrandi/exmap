@@ -14,8 +14,14 @@ data ViewItem = MapItem XMapName|
 newtype ViewRow = ViewRow [ViewItem]
     deriving (Show, Eq)
 
+newtype ViewName = ViewName T.Text
+    deriving (Show, Eq)
+
 -- vertical on the screen
-newtype View = View [ViewRow]
+data View = View {
+    viewName :: ViewName,
+    rows :: [ViewRow]
+    }
     deriving (Show, Eq)
 
 
