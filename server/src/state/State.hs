@@ -63,5 +63,6 @@ type ProjectChansByMapName = M.Map XMapName [ProjectChan]
 data RuntimeSystem = RuntimeSystem {
     projectByName :: TVar ProjectChanByName,
     projectByMapName :: TVar ProjectChansByMapName,
-    logForProjects :: LogChan
+    logForProjects :: LogChan,
+    root :: FilePath
 }

@@ -51,6 +51,7 @@ executable exmap
                      , CalculationActor
                      , ViewActor
                      , LogActor
+                     , WebAppState
                      , WebApp
                      , ProjectJson
                      , Paths

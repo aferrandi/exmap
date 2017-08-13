@@ -2,8 +2,9 @@ module RequestsHandler where
 
 import Store
 import Messages
+import WebAppState
 
-handleRequest :: Request -> IO ()
-handleRequest r = return ()
+handleRequest :: WAClientId-> WAState -> Request -> IO ()
+handleRequest id s r = return ()
 
 

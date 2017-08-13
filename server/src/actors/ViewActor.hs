@@ -14,7 +14,7 @@ actorView chan rtView logChan = loop
                     loop
                 VMLog t -> do
                     writeTChan logChan (LMLog t)
-                    return ()
+                    loop
                 VMStop -> return ()
 
 

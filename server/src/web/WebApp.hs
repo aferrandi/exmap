@@ -22,10 +22,16 @@ import Data.Text.Lazy (fromStrict)
 
 import MessageJson
 import RequestsHandler
+import WebAppState
+import State (RuntimeSystem)
 
-runWebApp :: IO ()
-runWebApp = do
-  state <- Concurrent.newMVar []
+
+runWebApp :: RuntimeSystem -> IO ()
+runWebApp system = do
+  state <- Concurrent.newMVar WAState {
+   system = system,
+   clients = []
+   }
   Warp.run 3000 $ WS.websocketsOr
     WS.defaultConnectionOptions
     (wsApp state)
@@ -34,49 +40,54 @@ runWebApp = do
 httpApp :: Wai.Application
 httpApp _ respond = respond $ Wai.responseLBS Http.status400 [] "Not a websocket request"
 
-type ClientId = Int
-type Client   = (ClientId, WS.Connection)
-type State    = [Client]
 
-nextId :: State -> ClientId
+
+nextId :: WAClients -> WAClientId
 nextId = Maybe.maybe 0 ((+) 1) . Safe.maximumMay . List.map fst
 
-connectClient :: WS.Connection -> Concurrent.MVar State -> IO ClientId
+connectClient :: WS.Connection -> Concurrent.MVar WAState -> IO WAClientId
 connectClient conn stateRef = Concurrent.modifyMVar stateRef $ \state -> do
-  let clientId = nextId state
-  return ((clientId, conn) : state, clientId)
+  let clientId = nextId (clients state)
+  return (
+    WAState{
+        system = system state,
+        clients = (clientId, conn) : (clients state)
+    }, clientId)
 
-withoutClient :: ClientId -> State -> State
+withoutClient :: WAClientId -> WAClients -> WAClients
 withoutClient clientId = List.filter ((/=) clientId . fst)
 
-connectionForClientId :: ClientId -> State -> Maybe WS.Connection
+connectionForClientId :: WAClientId -> WAClients -> Maybe WS.Connection
 connectionForClientId clientId clients = snd <$> List.find ((==) clientId . fst) clients
 
-disconnectClient :: ClientId -> Concurrent.MVar State -> IO ()
+disconnectClient :: WAClientId -> Concurrent.MVar WAState -> IO ()
 disconnectClient clientId stateRef = Concurrent.modifyMVar_ stateRef $ \state ->
-  return $ withoutClient clientId state
+  return WAState {
+    system = system state,
+    clients = withoutClient clientId (clients state)
+  }
 
-listen :: WS.Connection -> ClientId -> Concurrent.MVar State -> IO ()
+listen :: WS.Connection -> WAClientId -> Concurrent.MVar WAState -> IO ()
 listen conn clientId stateRef = Monad.forever $ do
   WS.receiveData conn >>= handleMessage clientId stateRef
 
-sendErrorToClient :: ClientId -> State -> String -> IO ()
+sendErrorToClient :: WAClientId -> WAClients -> String -> IO ()
 sendErrorToClient clientId clients err = case connectionForClientId clientId clients of
                                         Just c -> WS.sendTextData c (Text.pack err)
                                         Nothing -> print $ "clientId not found " ++ show clientId -- nothing else to do.
 
-handleMessage :: ClientId -> Concurrent.MVar State -> Text.Text -> IO ()
+handleMessage :: WAClientId -> Concurrent.MVar WAState -> Text.Text -> IO ()
 handleMessage clientId stateRef json = do
-  clients <- Concurrent.readMVar stateRef
+  state <- Concurrent.readMVar stateRef
   case eitherDecode (encodeUtf8 (fromStrict json)) of
-    Right r -> handleRequest r
-    Left e -> sendErrorToClient clientId clients e
+        Right r -> handleRequest clientId state r
+        Left e -> sendErrorToClient clientId (clients state) e
   return ()
   -- let otherClients = withoutClient clientId clients
   -- Monad.forM_ otherClients $ \(_, conn) ->
     -- WS.sendTextData conn msg
 
-wsApp :: Concurrent.MVar State -> WS.ServerApp
+wsApp :: Concurrent.MVar WAState -> WS.ServerApp
 wsApp stateRef pendingConn = do
   conn <- WS.acceptRequest pendingConn
   clientId <- connectClient conn stateRef

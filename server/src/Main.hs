@@ -21,7 +21,7 @@ main = do
             system <- startSystem root
             ps <- readTVarIO (projectByName system)
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
-            WebApp.runWebApp
+            WebApp.runWebApp system
         Nothing -> do
             print "exmap <rootPath>"
             return ()

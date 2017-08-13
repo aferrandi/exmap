@@ -28,10 +28,10 @@ mapWithNothingValues = M.fromList . map (\p -> (p, Nothing))
 startSystem :: FilePath -> IO RuntimeSystem
 startSystem root = do
     ps <- loadSystem root
-    atomically $ systemToRuntime ps
+    atomically $ systemToRuntime root ps
 
-systemToRuntime :: [ProjectName] -> STM RuntimeSystem
-systemToRuntime ps = do
+systemToRuntime :: FilePath -> [ProjectName] -> STM RuntimeSystem
+systemToRuntime root ps = do
     let psMap = mapWithNothingValues ps
     emptyByName <- newTVar psMap
     emptyByMapName <- newTVar M.empty
@@ -39,7 +39,8 @@ systemToRuntime ps = do
     return RuntimeSystem {
         projectByName = emptyByName,
         projectByMapName = emptyByMapName,
-        logForProjects = log
+        logForProjects = log,
+        root = root
     }
 
 
