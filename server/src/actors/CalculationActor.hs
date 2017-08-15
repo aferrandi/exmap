@@ -7,10 +7,12 @@ import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 
 import XMapTypes
-import State
+import CalculationState
+import ViewState
 import Formula
 import Project
 import ExecFormula
+import ActorMessages
 
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> STM ()

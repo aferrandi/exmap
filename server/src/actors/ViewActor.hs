@@ -3,7 +3,9 @@ module ViewActor(actorView) where
 import Control.Concurrent.STM
 import Control.Concurrent.STM.TChan
 
-import State
+import ViewState
+import ProjectState
+import ActorMessages
 
 actorView :: ViewChan -> RuntimeView -> LogChan -> STM ()
 actorView chan rtView logChan = loop

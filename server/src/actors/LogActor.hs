@@ -2,8 +2,10 @@ module LogActor where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
-import State
 import qualified Data.Text.IO as TIO
+
+import ActorMessages
+import ProjectState
 
 actorLog :: LogChan -> IO ()
 actorLog chan = loop
