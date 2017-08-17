@@ -2,7 +2,7 @@ module WebRequestsHandler where
 
 import Store
 import WebMessages
-import WebAppState
+import WebClients
 import SystemState
 
 data WAState    =  WAState {

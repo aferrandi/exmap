@@ -59,7 +59,7 @@ executable exmap
                      , SystemActor
                      , ViewActor
                      , LogActor
-                     , WebAppState
+                     , WebClients
                      , WebApp
                      , ProjectJson
                      , Paths

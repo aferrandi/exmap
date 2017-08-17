@@ -4,7 +4,7 @@ import qualified Data.Text as T
 
 import XMapTypes
 import Project
-import WebAppState
+import WebClients
 
 data CalculationMessage = CMMap XNamedMap |
                           CMLog T.Text |

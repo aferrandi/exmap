@@ -5,9 +5,19 @@ import Project
 import View
 
 data WebRequest =
-    WLoadProject ProjectName
-    | WStoreProject Project
-    | WLoadMap ProjectName XMapName
-    | WStoreMap ProjectName XNamedMap
-    | WSubscribeToView ProjectName ViewName
-    | WUnSubscribeFromView ProjectName ViewName
+    WRLoadProject ProjectName
+    | WRStoreProject Project
+    | WRLoadMap ProjectName XMapName
+    | WRStoreMap ProjectName XNamedMap
+    | WRSubscribeToView ProjectName ViewName
+    | WRUnSubscribeFromView ProjectName ViewName
+
+data WebEvent =
+    WEViewChanged XNamedMap
+    | WEProjectContent Project
+    | WEProjectStored ProjectName
+    | WEMapStored XMapName
+    | WEMapContent XNamedMap
+    | WESubscribedToView ProjectName ViewName
+    | WEUnsubscribedToView ProjectName ViewName
+

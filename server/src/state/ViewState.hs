@@ -7,10 +7,12 @@ import Control.Concurrent.STM.TChan (TChan)
 import ActorMessages
 import View
 import XMapTypes
+import WebClients
 
 
 data RuntimeView =  RuntimeView {
-    view :: View
+    view :: View,
+    subscribedClients :: [WAClient]
 }
 
 type ViewChan = TChan ViewMessage

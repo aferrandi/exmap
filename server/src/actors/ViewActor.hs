@@ -13,6 +13,7 @@ actorView chan rtView logChan = loop
             msg <- readTChan chan
             case msg of
                 VMMap m -> do
+
                     loop
                 VMLog t -> do
                     writeTChan logChan (LMLog t)

@@ -20,7 +20,8 @@ viewToChan l v = do
 
 viewToRuntime :: View -> STM RuntimeView
 viewToRuntime v = return RuntimeView {
-    view = v
+    view = v,
+    subscribedClients = []
 }
 
 viewChansByNames :: LogChan -> [View] -> STM ViewChanByMap

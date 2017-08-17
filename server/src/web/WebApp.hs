@@ -22,7 +22,7 @@ import Data.Text.Lazy (fromStrict)
 
 import WebMessageJson
 import WebRequestsHandler
-import WebAppState
+import WebClients
 import SystemState (SystemChan)
 
 

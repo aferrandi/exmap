@@ -1,4 +1,4 @@
-module WebAppState where
+module WebClients where
 
 import qualified Network.Wai.Handler.WebSockets as WS
 import qualified Network.WebSockets             as WS
