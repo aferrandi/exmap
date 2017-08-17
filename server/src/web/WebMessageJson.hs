@@ -18,3 +18,27 @@ instance FromJSON WebRequest where
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unSubscribeFromView") ->  WRUnSubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
 
+instance ToJSON WebEvent where
+     toJSON (WEViewChanged m) = object [ "type" .= T.pack "viewChanged"
+                                          , "map" .= m
+                                          ]
+     toJSON (WEProjectContent p) = object [ "type" .= T.pack "projectContent"
+                                       , "project" .= p
+                                       ]
+     toJSON (WEProjectStored pn) = object [ "type" .=  T.pack "projectStored"
+                                          , "projectName" .= pn
+                                          ]
+     toJSON (WEMapStored mn) = object [ "type" .=  T.pack "mapStored"
+                                          , "mapName" .= mn
+                                          ]
+     toJSON (WEMapContent m) = object [ "type" .=  T.pack "mapContent"
+                                          , "map" .= m
+                                          ]
+     toJSON (WESubscribedToView pn vn) = object [ "type" .=  T.pack "subscribedToView"
+                                          , "projectName" .= pn
+                                          , "viewName" .= pn
+                                          ]
+     toJSON (WEUnsubscribedFromView pn vn) = object [ "type" .=  T.pack "unsubscribedFromView"
+                                          , "projectName" .= pn
+                                          , "viewName" .= pn
+                                          ]

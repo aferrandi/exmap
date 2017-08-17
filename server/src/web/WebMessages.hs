@@ -19,5 +19,5 @@ data WebEvent =
     | WEMapStored XMapName
     | WEMapContent XNamedMap
     | WESubscribedToView ProjectName ViewName
-    | WEUnsubscribedToView ProjectName ViewName
+    | WEUnsubscribedFromView ProjectName ViewName
 
