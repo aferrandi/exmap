@@ -23,5 +23,6 @@ data LogMessage = LMLog T.Text |
                   LMStop
 
 data SystemMessage = SMLoadProject WAClient ProjectName |
+                     SMNewProject WAClient Project |
                      SMStop
 

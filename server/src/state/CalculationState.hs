@@ -20,6 +20,4 @@ data RuntimeCalculation = RuntimeCalculation {
     viewsToNotify ::[ViewChan]
 }
 
-type CalculationChanByMap = M.Map XMapName [CalculationChan]
-
 

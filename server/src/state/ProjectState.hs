@@ -11,6 +11,8 @@ import Project
 import XMapTypes
 
 type LogChan = TChan LogMessage
+type ViewChanByMap = M.Map XMapName [ViewChan]
+type CalculationChanByMap = M.Map XMapName [CalculationChan]
 
 data RuntimeProject = RuntimeProject {
     project :: Project,
@@ -20,5 +22,4 @@ data RuntimeProject = RuntimeProject {
 }
 
 type ProjectChan = TChan ProjectMessage
-type ProjectChanByName = M.Map ProjectName (Maybe ProjectChan)
-type ProjectChansByMapName = M.Map XMapName [ProjectChan]
+

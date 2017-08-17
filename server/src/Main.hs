@@ -7,6 +7,7 @@ import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
+import Control.Concurrent
 
 import SystemState
 import SystemBuild
@@ -25,7 +26,7 @@ main = do
             ps <- atomically $ readTVar (projectByName system)
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
             chanSystem <- newTChanIO
-            actorSystem chanSystem system
+            forkIO $ actorSystem chanSystem system
             WebApp.runWebApp chanSystem
         Nothing -> do
             print "exmap <rootPath>"

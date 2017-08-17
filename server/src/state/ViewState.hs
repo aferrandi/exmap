@@ -15,7 +15,6 @@ data RuntimeView =  RuntimeView {
 
 type ViewChan = TChan ViewMessage
 
-type ViewChanByMap = M.Map XMapName [ViewChan]
 
 
 

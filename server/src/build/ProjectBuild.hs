@@ -1,4 +1,4 @@
-module ProjectBuild (startProject) where
+module ProjectBuild where
 
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
