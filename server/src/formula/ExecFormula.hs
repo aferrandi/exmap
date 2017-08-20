@@ -14,7 +14,7 @@ execFormula :: XFormula ->  XMapByName -> OperationMode -> XMapErr
 execFormula xf rm m = case xf of
     (XFMap n) -> case M.lookup n rm of
         Just om -> Right om
-        Nothing -> Left (T.pack "map not found")
+        Nothing -> Left (Error $ T.pack "map not found")
     (XFOperation f a b) -> do
         oa <- execFormula a rm m
         ob <- execFormula b rm m

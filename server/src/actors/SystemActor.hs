@@ -6,12 +6,13 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import Control.Concurrent
 import qualified Data.Text as T
-import qualified Network.WebSockets             as WS
+import qualified Network.WebSockets as WS
 
 import SystemState
 import ProjectBuild
 import ProjectActor
-import ActorMessages
+import SystemMessages
+import EventMessages
 import WebClients
 import Project
 import ProjectState
@@ -47,9 +48,9 @@ newProject sys c p = do
     merr <- storeProject (root sys) p
     case merr of
        Nothing -> do
-                    rp <- atomically $ projectToRuntime (logForProjects sys) p
+                    rp <- atomically $ projectToRuntime (eventChan sys) p
                     runProject sys rp pn
-       Just err -> sendError c $ "storing the project "  ++ " got " ++ err
+       Just err -> sendError c $ "storing the project "  ++ " got " ++ (show err)
 
 
 loadProjectIfNotAlreadyRunning :: RuntimeSystem -> WAClient -> ProjectName -> IO ()
@@ -63,7 +64,7 @@ loadProjectIfNotAlreadyRunning sys c pn= do
 
 loadAndRunProject :: RuntimeSystem -> ProjectName -> WAClient -> IO ()
 loadAndRunProject sys pn c = do
-  prjOrErr <- startProject (logForProjects sys) (root sys) pn
+  prjOrErr <- startProject (eventChan sys) (root sys) pn
   case prjOrErr of
     Right p -> runProject sys p pn
     Left err -> sendError c  $ "adding the project " ++ show pn ++ " got " ++ show err
@@ -71,6 +72,6 @@ loadAndRunProject sys pn c = do
 runProject ::RuntimeSystem -> RuntimeProject -> ProjectName -> IO ()
 runProject sys rp pn= do
     projectChan <- newTChanIO
-    forkIO $ actorProject projectChan rp
+    forkIO $ actorProject projectChan rp (eventChan sys)
     atomically $ modifyTVar (projectByName sys) (M.insert pn (Just projectChan))
 

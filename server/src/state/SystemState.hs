@@ -7,7 +7,8 @@ import Control.Concurrent.STM.TChan (TChan)
 import Project
 import XMapTypes
 import ProjectState
-import ActorMessages
+import ProjectMessages
+import EventMessages
 
 type ProjectChanByName = M.Map ProjectName (Maybe ProjectChan)
 type ProjectChansByMapName = M.Map XMapName [ProjectChan]
@@ -15,8 +16,6 @@ type ProjectChansByMapName = M.Map XMapName [ProjectChan]
 data RuntimeSystem = RuntimeSystem {
     projectByName :: TVar ProjectChanByName,
     projectByMapName :: TVar ProjectChansByMapName,
-    logForProjects :: LogChan,
+    eventChan :: EventChan,
     root :: FilePath
 }
-
-type SystemChan = TChan SystemMessage

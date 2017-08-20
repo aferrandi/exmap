@@ -5,10 +5,11 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 
 import ProjectState
-import ActorMessages
+import ProjectMessages
+import EventMessages
 
-actorProject :: ProjectChan -> RuntimeProject -> IO ()
-actorProject chan project = loop
+actorProject :: ProjectChan -> RuntimeProject -> EventChan -> IO ()
+actorProject chan project evtChan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of

@@ -1,8 +1,12 @@
-module XMapTypes (XMapName(XMapName), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
+module XMapTypes (Error(Error), XMapName(XMapName), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
 
 
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
+
+import Errors
+
+
 
 -- always a string. Do not complicate our life too much. You need integers? Convert them to strings
 newtype XMapKey = XMapKey T.Text deriving (Show, Eq, Ord)
@@ -17,7 +21,7 @@ data XMap = XMapDouble (MapValue Double) |
             XMapBool (MapValue Bool)
             deriving (Show, Eq)
 
-type XMapErr = Either T.Text XMap
+type XMapErr = Either Error XMap
 
 data XNamedMap = XNamedMap {
     xmapName :: XMapName,

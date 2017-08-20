@@ -15,21 +15,21 @@ import LogActor
 import Dependencies
 import CalculationBuild
 import ViewBuild
+import EventMessages
 
-projectToRuntime :: LogChan -> Project -> STM RuntimeProject
-projectToRuntime log p = do
+projectToRuntime :: EventChan -> Project -> STM RuntimeProject
+projectToRuntime evtChan p = do
         cs <- calculationChansByNames (calculations p)
-        vs <- viewChansByNames log (views p)
+        vs <- viewChansByNames evtChan (views p)
         csv <- newTVar cs
         vsv <- newTVar vs
         return RuntimeProject {
             project = p,
             calculationByMap = csv,
-            viewByMap = vsv,
-            logForViews = log
+            viewByMap = vsv
        }
 
-startProject :: LogChan -> FilePath -> ProjectName -> IO (Either String RuntimeProject)
+startProject :: EventChan -> FilePath -> ProjectName -> IO (Either String RuntimeProject)
 startProject log root n = do
     pe <- loadProject root n
     atomically $ mapM (projectToRuntime log) pe

@@ -6,18 +6,20 @@ import View
 
 data WebRequest =
     WRLoadProject ProjectName
-    | WRStoreProject Project
+    | WRNewProject Project
+    | WRUpdateProject Project
     | WRLoadMap ProjectName XMapName
     | WRStoreMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
-    | WRUnSubscribeFromView ProjectName ViewName
+    | WRUnsubscribeFromView ProjectName ViewName
 
 data WebEvent =
     WEViewChanged XNamedMap
     | WEProjectContent Project
     | WEProjectStored ProjectName
     | WEMapStored XMapName
-    | WEMapContent XNamedMap
+    | WEViewContent ViewName XNamedMap
     | WESubscribedToView ProjectName ViewName
     | WEUnsubscribedFromView ProjectName ViewName
+    | WEError Error
 

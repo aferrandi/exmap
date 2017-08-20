@@ -12,7 +12,9 @@ import ViewState
 import Formula
 import Project
 import ExecFormula
-import ActorMessages
+import CalculationMessages
+import ViewMessages
+import LogTypes
 
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> STM ()
@@ -24,20 +26,20 @@ actorCalculation chan rtCalc = loop
                     ers <- handleMap rtCalc m
                     case ers of
                         Right () -> return ()
-                        Left err -> logToAll rtCalc err
+                        Left err -> errorToAll rtCalc err
                     loop
-                CMLog t -> logToAll rtCalc t
+                CMError e -> errorToAll rtCalc e
                 CMStop -> return ()
 
-logToAll :: RuntimeCalculation -> T.Text -> STM ()
-logToAll rtCalc  t = do
+errorToAll :: RuntimeCalculation -> Error -> STM ()
+errorToAll rtCalc e = do
     let cs = calculationsToNotify rtCalc
     let vs = viewsToNotify rtCalc
-    sendToAll cs (CMLog t)
-    sendToAll vs (VMLog t)
+    sendToAll cs (CMError e)
+    sendToAll vs (VMError e)
     return ()
 
-handleMap :: RuntimeCalculation -> XNamedMap -> STM (Either T.Text ())
+handleMap :: RuntimeCalculation -> XNamedMap -> STM (Either Error ())
 handleMap rtCalc m = do
        let trm = repository rtCalc
        modifyTVar trm (updateRepository m)
@@ -57,7 +59,7 @@ repositoryIfFull rm = do
     where expandToKey (k, mv) = do v <- mv
                                    return (k, v)
 
-execAndSend :: Calculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either T.Text ())
+execAndSend :: Calculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
 execAndSend calc cs vs xm = do
     let ers = execFormula (formula calc) xm  (operationMode calc)
     mapM (sendToDependents calc cs vs) ers

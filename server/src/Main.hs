@@ -13,6 +13,7 @@ import SystemState
 import SystemBuild
 import Store
 import SystemActor
+import LogActor
 import qualified WebApp
 
 
@@ -25,9 +26,11 @@ main = do
             system <- startSystem root
             ps <- atomically $ readTVar (projectByName system)
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
-            chanSystem <- newTChanIO
-            forkIO $ actorSystem chanSystem system
-            WebApp.runWebApp chanSystem
+            systemChan <- newTChanIO
+            logChan <- newTChanIO
+            forkIO $ actorSystem systemChan system
+            forkIO $ actorLog logChan
+            WebApp.runWebApp systemChan logChan
         Nothing -> do
             print "exmap <rootPath>"
             return ()

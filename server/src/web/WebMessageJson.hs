@@ -12,11 +12,12 @@ import WebMessages
 instance FromJSON WebRequest where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "loadProject") ->  WRLoadProject <$> v .: "projectName"
-      Just (String "storeProject") -> WRStoreProject <$> v .: "project"
+      Just (String "newProject") -> WRNewProject <$> v .: "project"
+      Just (String "storeProject") -> WRUpdateProject <$> v .: "project"
       Just (String "loadMap") ->  WRLoadMap <$> v .: "projectName" <*> v .: "mapName"
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
-      Just (String "unSubscribeFromView") ->  WRUnSubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
+      Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
 
 instance ToJSON WebEvent where
      toJSON (WEViewChanged m) = object [ "type" .= T.pack "viewChanged"
@@ -31,7 +32,8 @@ instance ToJSON WebEvent where
      toJSON (WEMapStored mn) = object [ "type" .=  T.pack "mapStored"
                                           , "mapName" .= mn
                                           ]
-     toJSON (WEMapContent m) = object [ "type" .=  T.pack "mapContent"
+     toJSON (WEViewContent vn m) = object [ "type" .=  T.pack "viewContent"
+                                          ,"viewName" .= vn
                                           , "map" .= m
                                           ]
      toJSON (WESubscribedToView pn vn) = object [ "type" .=  T.pack "subscribedToView"

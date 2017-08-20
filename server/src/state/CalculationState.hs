@@ -6,12 +6,10 @@ import Control.Concurrent.STM.TChan (TChan)
 
 import Project
 import XMapTypes
-import ViewState
-import ActorMessages
+import CalculationMessages
+import ViewMessages
 
 type MapRepository = M.Map XMapName (Maybe XMap)
-
-type CalculationChan = TChan CalculationMessage
 
 data RuntimeCalculation = RuntimeCalculation {
     calculation :: Calculation,

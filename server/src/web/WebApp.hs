@@ -6,7 +6,9 @@ module WebApp (runWebApp) where
 import qualified Control.Concurrent             as Concurrent
 import qualified Control.Exception              as Exception
 import qualified Control.Monad                  as Monad
-import qualified Data.List                      as List
+import Control.Monad.STM
+import qualified Data.List                      as L
+import qualified Data.Map.Strict as M
 import qualified Data.Maybe                     as Maybe
 import qualified Data.Text                      as Text
 import qualified Network.HTTP.Types             as Http
@@ -16,21 +18,24 @@ import qualified Network.Wai.Handler.WebSockets as WS
 import qualified Network.WebSockets             as WS
 import qualified Safe
 import Data.Aeson
-import Data.Text.Lazy.Encoding
-import Data.Text.Lazy (fromStrict)
+import qualified Data.ByteString.Lazy as B
 
 
+import WebMessages
 import WebMessageJson
 import WebRequestsHandler
 import WebClients
-import SystemState (SystemChan)
+import SystemMessages
+import LogMessages
+import Errors
 
 
-runWebApp :: SystemChan -> IO ()
-runWebApp systemChan = do
+runWebApp :: SystemChan -> LogChan -> IO ()
+runWebApp systemChan logChan = do
   state <- Concurrent.newMVar WAState {
    systemChan = systemChan,
-   clients = []
+   logChan = logChan,
+   clients = M.empty
    }
   Warp.run 3000 $ WS.websocketsOr
     WS.defaultConnectionOptions
@@ -40,52 +45,46 @@ runWebApp systemChan = do
 httpApp :: Wai.Application
 httpApp _ respond = respond $ Wai.responseLBS Http.status400 [] "Not a websocket request"
 
-
-
-nextId :: WAClients -> WAClientId
-nextId = Maybe.maybe 0 ((+) 1) . Safe.maximumMay . List.map clientId
+nextId :: WAClientById -> WAClientId
+nextId = Maybe.maybe (WAClientId 0) succ . Safe.maximumMay . M.keys
+    where succ (WAClientId n) = WAClientId (n + 1)
 
 connectClient :: WS.Connection -> Concurrent.MVar WAState -> IO WAClientId
 connectClient conn stateRef = Concurrent.modifyMVar stateRef $ \state -> do
   let cid = nextId (clients state)
+  let c = WAClient { clientId = cid, connection = conn }
   return (
     WAState{
         systemChan = systemChan state,
-        clients = WAClient { clientId = cid, connection = conn } : clients state
+        logChan = logChan state,
+        clients = M.insert cid c (clients state)
     }, cid)
 
-withoutClient :: WAClientId -> WAClients -> WAClients
-withoutClient cid = List.filter ((/=)  cid . clientId)
-
-connectionForClientId :: WAClientId -> WAClients -> Maybe WS.Connection
-connectionForClientId cid clients = connection <$> List.find ((==) cid . clientId) clients
 
 disconnectClient :: WAClientId -> Concurrent.MVar WAState -> IO ()
 disconnectClient clientId stateRef = Concurrent.modifyMVar_ stateRef $ \state ->
   return WAState {
     systemChan = systemChan state,
-    clients = withoutClient clientId (clients state)
+    logChan = logChan state,
+    clients = M.delete clientId (clients state)
   }
 
 listen :: WS.Connection -> WAClientId -> Concurrent.MVar WAState -> IO ()
 listen conn cid stateRef = Monad.forever $ do
   WS.receiveData conn >>= handleMessage cid stateRef
 
-sendErrorToClient :: WAClientId -> WAClients -> String -> IO ()
-sendErrorToClient clientId clients err = case connectionForClientId clientId clients of
-                                        Just c -> WS.sendTextData c (Text.pack err)
+sendErrorToClient :: WAClientId -> WAClientById -> Error -> IO ()
+sendErrorToClient clientId clients err = case M.lookup  clientId clients of
+                                        Just c -> sendToClient c (WEError err)
                                         Nothing -> print $ "clientId not found " ++ show clientId -- nothing else to do.
 
-handleMessage :: WAClientId -> Concurrent.MVar WAState -> Text.Text -> IO ()
+handleMessage :: WAClientId -> Concurrent.MVar WAState -> B.ByteString -> IO ()
 handleMessage cid stateRef json = do
   state <- Concurrent.readMVar stateRef
-  case eitherDecode (encodeUtf8 (fromStrict json)) of
-        Right r -> handleWebRequest cid state r
-        Left e -> sendErrorToClient cid (clients state) e
+  case eitherDecode json of
+        Right r -> atomically $ handleWebRequest cid state r
+        Left e -> sendErrorToClient cid (clients state) (mkError e)
   return ()
-  -- let otherClients = withoutClient clientId clients
-  -- Monad.forM_ otherClients $ \(_, conn) ->
-    -- WS.sendTextData conn msg
 
 wsApp :: Concurrent.MVar WAState -> WS.ServerApp
 wsApp stateRef pendingConn = do

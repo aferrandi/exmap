@@ -11,7 +11,7 @@ import Project
 import AssocList
 import Dependencies
 import CalculationActor
-
+import CalculationMessages
 
 
 calculationToRuntime :: Calculation -> STM RuntimeCalculation
