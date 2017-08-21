@@ -17,12 +17,12 @@ import CalculationBuild
 import ViewBuild
 import EventMessages
 
-projectToRuntime :: EventChan -> Project -> STM RuntimeProject
+projectToRuntime :: EventChan -> Project -> IO RuntimeProject
 projectToRuntime evtChan p = do
         cs <- calculationChansByNames (calculations p)
         vs <- viewChansByNames evtChan (views p)
-        csv <- newTVar cs
-        vsv <- newTVar vs
+        csv <- newTVarIO cs
+        vsv <- newTVarIO vs
         return RuntimeProject {
             project = p,
             calculationByMap = csv,
@@ -32,5 +32,5 @@ projectToRuntime evtChan p = do
 startProject :: EventChan -> FilePath -> ProjectName -> IO (Either String RuntimeProject)
 startProject log root n = do
     pe <- loadProject root n
-    atomically $ mapM (projectToRuntime log) pe
+    mapM (projectToRuntime log) pe
 

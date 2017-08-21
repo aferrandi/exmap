@@ -3,6 +3,7 @@ module ViewBuild (viewChansByNames) where
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
+import Control.Concurrent
 import qualified Data.Traversable as T
 
 import ProjectState
@@ -15,35 +16,39 @@ import ViewMessages
 import EventMessages
 import XMapTypes
 
-viewToChan :: EventChan -> RuntimeView -> STM ViewChan
+viewToChan :: EventChan -> RuntimeView -> IO ViewChan
 viewToChan ec v = do
-        ch <- newTChan
-        actorView ch v ec
+        ch <- newTChanIO
+        forkIO $ atomically (actorView ch v ec)
         return ch
 
-viewToRuntime :: View -> STM RuntimeView
+viewToRuntime :: View -> IO RuntimeView
 viewToRuntime v = do
-    view <- newTVar v
-    subscribedClients <- newTVar []
+    view <- newTVarIO v
+    subscribedClients <- newTVarIO []
     return RuntimeView {
         view = view ,
         subscribedClients = subscribedClients
     }
 
-viewChansByNames :: EventChan -> [View] -> STM ViewChanByMap
+viewChansByNames :: EventChan -> [View] -> IO ViewChanByMap
 viewChansByNames evtChan vs = do
         rs <- mapM viewToRuntime vs
-        dc <- chanByDeps rs
+        cs <- mapM (viewToChan evtChan) rs
+        atomically $ chansByNames evtChan (zip rs cs)
+
+chansByNames :: EventChan -> [(RuntimeView, ViewChan)] -> STM ViewChanByMap
+chansByNames evtChan rcs = do
+        dc <- chanByDeps rcs
         let cs = M.fromList $ groupAssocListByKey dc
         return cs
-     where chanByDeps :: [RuntimeView] -> STM [(XMapName, ViewChan)]
-           chanByDeps rs = do
-                        cd <- mapM chansByDep rs
+     where chanByDeps :: [(RuntimeView,ViewChan)] -> STM [(XMapName, ViewChan)]
+           chanByDeps rcs = do
+                        cd <- mapM chansByDep rcs
                         return $ concat cd
-           chansByDep :: RuntimeView -> STM [(XMapName, ViewChan)]
-           chansByDep vr = do
+           chansByDep :: (RuntimeView,ViewChan) -> STM [(XMapName, ViewChan)]
+           chansByDep (vr, ch) = do
                         deps <- runtimeDependencies vr
-                        ch <- viewToChan evtChan vr
                         return $ map (\dp -> (dp, ch)) deps
 
 

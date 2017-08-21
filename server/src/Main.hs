@@ -28,7 +28,7 @@ main = do
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
             systemChan <- newTChanIO
             logChan <- newTChanIO
-            forkIO $ actorSystem systemChan system
+            forkIO $ actorSystem systemChan system logChan
             forkIO $ actorLog logChan
             WebApp.runWebApp systemChan logChan
         Nothing -> do

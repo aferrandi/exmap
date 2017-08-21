@@ -13,6 +13,7 @@ import ProjectBuild
 import ProjectActor
 import SystemMessages
 import EventMessages
+import LogMessages
 import WebClients
 import Project
 import ProjectState
@@ -21,8 +22,8 @@ import Store
 sendError :: WAClient -> String -> IO ()
 sendError c s = WS.sendTextData (connection c) (T.pack s)
 
-actorSystem :: SystemChan -> RuntimeSystem -> IO ()
-actorSystem chan sys = loop
+actorSystem :: SystemChan -> RuntimeSystem -> LogChan -> IO ()
+actorSystem chan sys logChan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
@@ -48,7 +49,7 @@ newProject sys c p = do
     merr <- storeProject (root sys) p
     case merr of
        Nothing -> do
-                    rp <- atomically $ projectToRuntime (eventChan sys) p
+                    rp <- projectToRuntime (eventChan sys) p
                     runProject sys rp pn
        Just err -> sendError c $ "storing the project "  ++ " got " ++ (show err)
 

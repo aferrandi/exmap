@@ -3,6 +3,7 @@ module CalculationBuild where
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
+import Control.Concurrent
 import qualified Data.Traversable as T
 
 import ProjectState
@@ -26,15 +27,15 @@ calculationToRuntime c = do
     where deps = formulaDependencies (formula c)
 
 
-calculationToChan :: RuntimeCalculation -> STM CalculationChan
+calculationToChan :: RuntimeCalculation -> IO CalculationChan
 calculationToChan c = do
-        ch <- newTChan
-        actorCalculation ch c
+        ch <- newTChanIO
+        forkIO $ atomically (actorCalculation ch c)
         return ch
 
-calculationChansByNames :: [Calculation] -> STM CalculationChanByMap
+calculationChansByNames :: [Calculation] -> IO CalculationChanByMap
 calculationChansByNames c = do
-        rs <- mapM calculationToRuntime c
+        rs <- atomically $ mapM calculationToRuntime c
         let cs = M.fromList $ groupAssocListByKey (chanByDeps rs)
         T.mapM sequence cs
     where deps = calculationDependencies . calculation
