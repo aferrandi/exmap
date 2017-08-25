@@ -1,36 +1,34 @@
 module ProjectBuild where
 
+import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 
 import CalculationState
 import ProjectState
 import ViewState
+import CommonChannels
 import Project
 import ProjectJson
 import Load
 import CalculationActor
-import ViewActor
-import LogActor
 import Dependencies
 import CalculationBuild
 import ViewBuild
-import EventMessages
+import Errors
 
-projectToRuntime :: EventChan -> Project -> IO RuntimeProject
-projectToRuntime evtChan p = do
+projectToRuntime :: CommonChans -> Project -> IO RuntimeProject
+projectToRuntime chans p = do
         cs <- calculationChansByNames (calculations p)
-        vs <- viewChansByNames evtChan (views p)
-        csv <- newTVarIO cs
-        vsv <- newTVarIO vs
+        cbm <- newTVarIO cs
+        vbm <- newTVarIO M.empty
+        vbn <- newTVarIO M.empty
         return RuntimeProject {
             project = p,
-            calculationByMap = csv,
-            viewByMap = vsv
+            calculationByMap = cbm,
+            viewChanByMap = vbm,
+            viewChanByName = vbn,
+            chans = chans
        }
 
-startProject :: EventChan -> FilePath -> ProjectName -> IO (Either String RuntimeProject)
-startProject log root n = do
-    pe <- loadProject root n
-    mapM (projectToRuntime log) pe
 

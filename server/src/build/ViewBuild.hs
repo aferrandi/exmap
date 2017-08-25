@@ -1,4 +1,4 @@
-module ViewBuild (viewChansByNames) where
+module ViewBuild where
 
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
@@ -15,6 +15,7 @@ import Dependencies
 import ViewMessages
 import EventMessages
 import XMapTypes
+import Project
 
 viewToChan :: EventChan -> RuntimeView -> IO ViewChan
 viewToChan ec v = do
@@ -22,34 +23,18 @@ viewToChan ec v = do
         forkIO $ atomically (actorView ch v ec)
         return ch
 
-viewToRuntime :: View -> IO RuntimeView
-viewToRuntime v = do
-    view <- newTVarIO v
-    subscribedClients <- newTVarIO []
+viewToRuntime :: ProjectName -> View -> STM RuntimeView
+viewToRuntime pn v = do
+    view <- newTVar v
+    subscribedClients <- newTVar []
+    status <- newTVar M.empty
     return RuntimeView {
+        runtimeViewName = viewName v,
         view = view ,
-        subscribedClients = subscribedClients
+        subscribedClients = subscribedClients,
+        ownerProjectName = pn,
+        status = status
     }
-
-viewChansByNames :: EventChan -> [View] -> IO ViewChanByMap
-viewChansByNames evtChan vs = do
-        rs <- mapM viewToRuntime vs
-        cs <- mapM (viewToChan evtChan) rs
-        atomically $ chansByNames evtChan (zip rs cs)
-
-chansByNames :: EventChan -> [(RuntimeView, ViewChan)] -> STM ViewChanByMap
-chansByNames evtChan rcs = do
-        dc <- chanByDeps rcs
-        let cs = M.fromList $ groupAssocListByKey dc
-        return cs
-     where chanByDeps :: [(RuntimeView,ViewChan)] -> STM [(XMapName, ViewChan)]
-           chanByDeps rcs = do
-                        cd <- mapM chansByDep rcs
-                        return $ concat cd
-           chansByDep :: (RuntimeView,ViewChan) -> STM [(XMapName, ViewChan)]
-           chansByDep (vr, ch) = do
-                        deps <- runtimeDependencies vr
-                        return $ map (\dp -> (dp, ch)) deps
 
 
 runtimeDependencies :: RuntimeView  -> STM [XMapName]

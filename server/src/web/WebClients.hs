@@ -25,3 +25,6 @@ sendToClient c e = sendTextToClient c (encode e)
 
 sendToClients :: [WAClient] -> WebEvent -> IO ()
 sendToClients cs e = mapM_ (flip sendTextToClient (encode e)) cs
+
+sameClientId :: WAClient -> WAClient -> Bool
+sameClientId a b = (clientId a) == (clientId b)

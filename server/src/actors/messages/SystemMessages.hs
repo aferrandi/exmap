@@ -7,14 +7,25 @@ import Project
 import WebClients
 import View
 import LogTypes
+import Errors
 
-data SystemMessage = SMLoadProject WAClient ProjectName
-                    | SMNewProject WAClient Project
-                    | SMUpdateProject WAClient Project
-                    | SMLoadMap WAClient ProjectName XMapName
-                    | SMStoreMap WAClient ProjectName XNamedMap
-                    | SMSubscribeToView WAClient ProjectName ViewName
-                    | SMUnsubscribeFromView WAClient ProjectName ViewName
+data SystemRequest = SRLoadProject WAClient ProjectName
+                    | SRNewProject WAClient Project
+                    | SRUpdateProject WAClient Project
+                    | SRLoadMap WAClient ProjectName XMapName
+                    | SRStoreMap WAClient ProjectName XNamedMap
+                    | SRSubscribeToView WAClient ProjectName ViewName
+                    | SRUnsubscribeFromView WAClient ProjectName ViewName
+
+
+data SystemEvent = SEProjectLoaded WAClient Project
+                    | SEProjectLoadError WAClient ProjectName Error
+                    | SEProjectStored WAClient Project
+                    | SEProjectStoreError WAClient Project Error
+
+
+data SystemMessage = SMRequest SystemRequest
+                    | SMEvent SystemEvent
                     | SMStop
 
 type SystemChan = TChan SystemMessage

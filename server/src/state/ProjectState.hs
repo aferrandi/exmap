@@ -6,17 +6,22 @@ import Control.Concurrent.STM.TChan (TChan)
 
 import ViewMessages
 import CalculationMessages
-import EventMessages
+import CommonChannels
 import Project
 import XMapTypes
+import View
 
-type ViewChanByMap = M.Map XMapName [ViewChan]
-type CalculationChanByMap = M.Map XMapName [CalculationChan]
+-- because not all views of the project are necessarily been viewed
+type ViewChanByName = M.Map ViewName (Maybe ViewChan)
+type ViewChanByMapName = M.Map XMapName [ViewChan]
+type CalculationChanByMapName = M.Map XMapName [CalculationChan]
 
 data RuntimeProject = RuntimeProject {
     project :: Project,
-    calculationByMap :: TVar CalculationChanByMap,
-    viewByMap :: TVar ViewChanByMap
+    calculationByMap :: TVar CalculationChanByMapName,
+    viewChanByMap :: TVar ViewChanByMapName,
+    viewChanByName :: TVar ViewChanByName,
+    chans :: CommonChans
 }
 
 

@@ -14,12 +14,11 @@ data WebRequest =
     | WRUnsubscribeFromView ProjectName ViewName
 
 data WebEvent =
-    WEViewChanged XNamedMap
+    WEViewChanged ProjectName ViewName XNamedMap
     | WEProjectContent Project
     | WEProjectStored ProjectName
-    | WEMapStored XMapName
-    | WEViewContent ViewName XNamedMap
-    | WESubscribedToView ProjectName ViewName
+    | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName
+    | WEViewStatus ProjectName View [XNamedMap]
     | WEError Error
 

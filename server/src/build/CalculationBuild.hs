@@ -33,7 +33,7 @@ calculationToChan c = do
         forkIO $ atomically (actorCalculation ch c)
         return ch
 
-calculationChansByNames :: [Calculation] -> IO CalculationChanByMap
+calculationChansByNames :: [Calculation] -> IO CalculationChanByMapName
 calculationChansByNames c = do
         rs <- atomically $ mapM calculationToRuntime c
         let cs = M.fromList $ groupAssocListByKey (chanByDeps rs)

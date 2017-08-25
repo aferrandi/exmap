@@ -28,17 +28,17 @@ handleWebRequest id s r = do
     let mc = M.lookup id (clients s)
     case mc of
         Just c -> handleClientRequest c (systemChan s) r
-        Nothing -> writeTChan (logChan s) (LMLog $ mkError ("Client with id " ++ show id ++ " not found"))
+        Nothing -> writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show id ++ " not found"))
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of
-                                WRLoadProject pn -> writeTChan sc $ SMLoadProject c pn
-                                WRNewProject p -> writeTChan sc $ SMNewProject c p
-                                WRUpdateProject p -> writeTChan sc $ SMUpdateProject c p
-                                WRLoadMap pn mn -> writeTChan sc $ SMLoadMap c pn mn
-                                WRStoreMap pn m ->writeTChan sc $ SMStoreMap c pn m
-                                WRSubscribeToView pn vn -> writeTChan sc $ SMSubscribeToView c pn vn
-                                WRUnsubscribeFromView pn vn -> writeTChan sc $ SMUnsubscribeFromView c pn vn
-
+                                WRLoadProject pn -> sendRequest $ SRLoadProject c pn
+                                WRNewProject p -> sendRequest $ SRNewProject c p
+                                WRUpdateProject p -> sendRequest $ SRUpdateProject c p
+                                WRLoadMap pn mn -> sendRequest $ SRLoadMap c pn mn
+                                WRStoreMap pn m -> sendRequest$ SRStoreMap c pn m
+                                WRSubscribeToView pn vn -> sendRequest $ SRSubscribeToView c pn vn
+                                WRUnsubscribeFromView pn vn -> sendRequest $ SRUnsubscribeFromView c pn vn
+    where sendRequest r = writeTChan sc $ SMRequest r
 
 

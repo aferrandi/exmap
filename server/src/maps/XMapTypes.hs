@@ -6,8 +6,6 @@ import qualified Data.Text as T
 
 import Errors
 
-
-
 -- always a string. Do not complicate our life too much. You need integers? Convert them to strings
 newtype XMapKey = XMapKey T.Text deriving (Show, Eq, Ord)
 -- can be a path

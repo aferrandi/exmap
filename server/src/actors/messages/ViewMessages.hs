@@ -4,9 +4,12 @@ import Control.Concurrent.STM.TChan (TChan)
 
 import XMapTypes
 import Errors
+import WebClients
 
 data ViewMessage = VMMap XNamedMap
-                   | VMError Error
-                   | VMStop
+                      | VMSubscribeToView WAClient
+                      | VMUnsubscribeFromView WAClient
+                      | VMError Error
+                      | VMStop
 
 type ViewChan = TChan ViewMessage

@@ -15,7 +15,7 @@ newtype ViewRow = ViewRow [ViewItem]
     deriving (Show, Eq)
 
 newtype ViewName = ViewName T.Text
-    deriving (Show, Eq)
+    deriving (Show, Eq, Ord)
 
 -- vertical on the screen
 data View = View {

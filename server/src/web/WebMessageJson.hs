@@ -20,7 +20,9 @@ instance FromJSON WebRequest where
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
 
 instance ToJSON WebEvent where
-     toJSON (WEViewChanged m) = object [ "type" .= T.pack "viewChanged"
+     toJSON (WEViewChanged pn vn m) = object [ "type" .= T.pack "viewChanged"
+                                          , "projectName" .= pn
+                                          , "viewName" .= vn
                                           , "map" .= m
                                           ]
      toJSON (WEProjectContent p) = object [ "type" .= T.pack "projectContent"
@@ -29,18 +31,16 @@ instance ToJSON WebEvent where
      toJSON (WEProjectStored pn) = object [ "type" .=  T.pack "projectStored"
                                           , "projectName" .= pn
                                           ]
-     toJSON (WEMapStored mn) = object [ "type" .=  T.pack "mapStored"
+     toJSON (WEMapStored pn mn) = object [ "type" .=  T.pack "mapStored"
+                                          , "projectName" .= pn
                                           , "mapName" .= mn
                                           ]
-     toJSON (WEViewContent vn m) = object [ "type" .=  T.pack "viewContent"
-                                          ,"viewName" .= vn
-                                          , "map" .= m
-                                          ]
-     toJSON (WESubscribedToView pn vn) = object [ "type" .=  T.pack "subscribedToView"
+     toJSON (WEViewStatus pn v ms) = object [ "type" .=  T.pack "subscribedToView"
                                           , "projectName" .= pn
-                                          , "viewName" .= pn
+                                          , "view" .= v
+                                          , "maps" .= ms
                                           ]
      toJSON (WEUnsubscribedFromView pn vn) = object [ "type" .=  T.pack "unsubscribedFromView"
                                           , "projectName" .= pn
-                                          , "viewName" .= pn
+                                          , "viewName" .= vn
                                           ]

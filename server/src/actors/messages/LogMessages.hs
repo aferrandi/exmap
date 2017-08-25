@@ -4,7 +4,7 @@ import Control.Concurrent.STM.TChan (TChan)
 
 import Errors
 
-data LogMessage = LMLog Error
-                  | LMStop
+data LogMessage = LogMLog Error
+                  | LogMStop
 
 type LogChan = TChan LogMessage

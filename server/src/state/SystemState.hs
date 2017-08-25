@@ -8,7 +8,7 @@ import Project
 import XMapTypes
 import ProjectState
 import ProjectMessages
-import EventMessages
+import CommonChannels
 
 type ProjectChanByName = M.Map ProjectName (Maybe ProjectChan)
 type ProjectChansByMapName = M.Map XMapName [ProjectChan]
@@ -16,6 +16,6 @@ type ProjectChansByMapName = M.Map XMapName [ProjectChan]
 data RuntimeSystem = RuntimeSystem {
     projectByName :: TVar ProjectChanByName,
     projectByMapName :: TVar ProjectChansByMapName,
-    eventChan :: EventChan,
+    chans :: CommonChans,
     root :: FilePath
 }

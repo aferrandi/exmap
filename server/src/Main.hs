@@ -23,13 +23,13 @@ main = do
     case B.listToMaybe args of
         Just root -> do
             print $ "loading system from " ++ root
-            system <- startSystem root
+            logChan <- newTChanIO
+            forkIO $ actorLog logChan
+            system <- startSystem root logChan
             ps <- atomically $ readTVar (projectByName system)
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
             systemChan <- newTChanIO
-            logChan <- newTChanIO
-            forkIO $ actorSystem systemChan system logChan
-            forkIO $ actorLog logChan
+            forkIO $ actorSystem systemChan system
             WebApp.runWebApp systemChan logChan
         Nothing -> do
             print "exmap <rootPath>"

@@ -11,6 +11,7 @@ import Paths
 import XMapTypes
 import Project
 import ProjectJson
+import View
 import Errors
 
 tryWriteFile :: FilePath -> B.ByteString -> IO (Maybe Error)
@@ -36,3 +37,8 @@ storeXMap :: FilePath -> ProjectName -> XNamedMap -> IO (Maybe Error)
 storeXMap root pn m = do
     let path = xMapPath root pn (xmapName m)
     tryWriteFile path (encode m)
+
+storeView :: FilePath -> ProjectName -> View -> IO (Maybe Error)
+storeView root pn v = do
+    let path = viewPath root pn (viewName v)
+    tryWriteFile path (encode v)

@@ -5,10 +5,20 @@ import Control.Concurrent.STM.TChan (TChan)
 import XMapTypes
 import LogTypes
 import Project
+import WebClients
+import View
+import Errors
 
-data ProjectMessage = PMMap XNamedMap
-                      | PNUpdateProject Project
-                      | PMLog Log
+data ProjectRequest = PRMap XNamedMap
+                        | PRUpdateProject Project
+                        | PRSubscribeToView WAClient ViewName
+                        | PRUnsubscribeFromView WAClient ViewName
+
+data ProjectEvent =  PEViewLoaded WAClient View
+                        | PEViewLoadError WAClient ViewName Error
+
+data ProjectMessage = PMRequest ProjectRequest
+                      | PMEvent ProjectEvent
                       | PMStop
 
 type ProjectChan = TChan ProjectMessage
