@@ -25,7 +25,7 @@ toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (J
     where original = Project {
             projectName = makeProjectName "proj",
             calculations = [calculationExample],
-            views = [view],
+            viewNames = [viewNameExample],
             sources = [source]
             }
           view = viewExample
@@ -45,7 +45,7 @@ calculationExample = Calculation {
 
 
 viewExample = View {
-      viewName = ViewName (T.pack "view"),
+      viewName = viewNameExample,
       rows = [
           ViewRow [
               MapItem (mapName ["one"]),
@@ -53,6 +53,8 @@ viewExample = View {
               ]
       ]
 }
+
+viewNameExample = ViewName (T.pack "view")
 
 sourceExample = Source {
                   sourceType = InternalSource,
