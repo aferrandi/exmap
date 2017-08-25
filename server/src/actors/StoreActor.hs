@@ -1,4 +1,4 @@
-module StoreActor where
+module StoreActor (actorStore) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
@@ -22,6 +22,9 @@ actorStore root chan = loop
                 StMStoreProject source c p -> do
                     storeProjectInActor root source c p
                     loop
+                StMStoreMap source c pn m -> do
+                    storeMapInActor root source c pn m
+                    loop
                 StMStop -> return ()
 
 storeProjectInActor :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
@@ -30,3 +33,10 @@ storeProjectInActor root source c p = do
        case mp of
            Nothing -> atomically $ writeTChan source (SMEvent $ SEProjectStored c p)
            Just err -> atomically $ writeTChan source (SMEvent $ SEProjectStoreError c p err)
+
+storeMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XNamedMap ->  IO ()
+storeMapInActor root source c pn m = do
+       mp <- storeXMap root pn m
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEMapStored c m)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEMapStoreError c m err)

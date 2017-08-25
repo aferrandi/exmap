@@ -14,6 +14,7 @@ import ViewMessages
 import EventMessages
 import WebMessages
 import LoadMessages
+import StoreMessages
 import CommonChannels
 import WebClients
 import View
@@ -29,28 +30,35 @@ actorProject chan rp = loop
             msg <- atomically $ readTChan chan
             case msg of
                 PMRequest r -> do
-                        handleRequests chan rp r
+                        atomically $ handleRequests chan rp r
                         loop
                 PMEvent e -> do
                         handleEvent chan rp e
                         loop
                 PMStop -> return ()
 
-handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> IO ()
+handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
-    PRSubscribeToView c vn -> atomically $ subscribeToView c vn rp chan
-    PRUnsubscribeFromView c vn -> atomically $ unsubscribeFromView c vn rp
+    PRSubscribeToView c vn -> subscribeToView c vn rp chan
+    PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
+    PRLoadMap c mn -> writeTChan (loadChan $ chans rp)  $ LMLoadMap chan c prjName mn
+    PRStoreMap c m -> writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c prjName m
+    where prjName = projectName $ project rp
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
-    PEViewLoaded c v -> do
-        rv <- atomically $ viewToRuntime (projectName $ project rp) v
-        vChan <- viewToChan evtChan rv
-        forkIO $ atomically (actorView vChan rv evtChan)
-        atomically $ modifyTVar (viewChanByName rp) (M.insert (viewName v) (Just vChan))
-        atomically $ sendSubscriptionToView vChan c
+    PEViewLoaded c v -> viewLoaded rp c v
     PEViewLoadError c vn err -> atomically $ sendError evtChan [c] err
     where evtChan = eventChan $ chans rp
+
+viewLoaded :: RuntimeProject -> WAClient -> View -> IO ()
+viewLoaded rp c v = do
+     let evtChan  = eventChan $ chans rp
+     rv <- atomically $ viewToRuntime (projectName $ project rp) v
+     vChan <- viewToChan evtChan rv
+     forkIO $ atomically (actorView vChan rv evtChan)
+     atomically $ modifyTVar (viewChanByName rp) (M.insert (viewName v) (Just vChan))
+     atomically $ sendSubscriptionToView vChan c
 
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
 sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
