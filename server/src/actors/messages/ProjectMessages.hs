@@ -14,8 +14,10 @@ data ProjectRequest = PRMap XNamedMap
                         | PRSubscribeToView WAClient ViewName
                         | PRUnsubscribeFromView WAClient ViewName
 
-data ProjectEvent =  PEViewLoaded WAClient View
-                        | PEViewLoadError WAClient ViewName Error
+data ProjectEvent = PEViewLoaded WAClient View
+                    | PEViewLoadError WAClient ViewName Error
+                    | PEMapLoaded WAClient XNamedMap
+                    | PEMapLoadError WAClient XMapName Error
 
 data ProjectMessage = PMRequest ProjectRequest
                       | PMEvent ProjectEvent

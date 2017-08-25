@@ -7,9 +7,11 @@ import Project
 import ProjectMessages
 import SystemMessages
 import WebClients
+import XMapTypes
 
 data LoadMessage = LMLoadView ProjectChan WAClient ProjectName ViewName
                   | LMLoadProject SystemChan WAClient ProjectName
+                  | LMLoadMap ProjectChan WAClient ProjectName XMapName
                   | LMStop
 
 type LoadChan = TChan LoadMessage

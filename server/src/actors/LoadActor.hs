@@ -3,8 +3,8 @@ module LoadActor where
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
-import XMapTypes
 
+import XMapTypes
 import LoadMessages
 import ProjectMessages
 import SystemMessages
@@ -24,6 +24,9 @@ actorLoad root chan = loop
                 LMLoadProject source c pn -> do
                     loadProjectInActor root source c pn
                     loop
+                LMLoadMap source c pn mn -> do
+                    loadMapInActor root source c pn mn
+                    loop
                 LMStop -> return ()
 
 loadViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
@@ -39,4 +42,11 @@ loadProjectInActor root source c pn = do
        case mp of
            Right p -> atomically $ writeTChan source (SMEvent $ SEProjectLoaded c p)
            Left err -> atomically $ writeTChan source (SMEvent $ SEProjectLoadError c pn err)
+
+loadMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XMapName -> IO ()
+loadMapInActor root source c pn mn = do
+       mm <- loadXMap root pn mn
+       case mm of
+           Right m -> atomically $ writeTChan source (PMEvent $ PEMapLoaded c m)
+           Left err -> atomically $ writeTChan source (PMEvent $ PEMapLoadError c mn err)
 
