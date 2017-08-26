@@ -12,6 +12,7 @@ import System.Exit (die)
 import SystemState
 import ProjectBuild
 import SystemMessages
+import ProjectMessages
 import EventMessages
 import ProjectActor (actorProject)
 import LogMessages
@@ -28,7 +29,7 @@ actorSystem chan sys = loop
             msg <- atomically $ readTChan chan
             case msg of
                 SMRequest r -> do
-                    handleRequest chan sys r
+                    atomically $ handleRequest chan sys r
                     loop
                 SMEvent e -> do
                     handleEvent chan sys e
@@ -37,12 +38,12 @@ actorSystem chan sys = loop
                 otherwise -> die $ "Unexpected message " ++ show msg ++ " in system actor"
 
 
-handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> IO ()
+handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> STM ()
 handleRequest chan sys r = case r of
-        SRLoadProject c pn ->
-            loadProjectIfNotAlreadyRunning chan  sys c pn
-        SRNewProject c p ->
-            newProjectIfNotAlreadyRunning chan sys c p
+        SRLoadProject c pn -> loadProjectIfNotAlreadyRunning chan  sys c pn
+        SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
+        SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
+        SRLoadMap c pn mn -> pipeToProject c pn sys (PMRequest $ PRLoadMap c mn)
 
 handleEvent :: SystemChan -> RuntimeSystem -> SystemEvent -> IO ()
 handleEvent chan sys e = case e of
@@ -51,13 +52,23 @@ handleEvent chan sys e = case e of
         SEProjectStored c p -> projectCreated sys c p
         SEProjectStoreError c p err -> atomically $ sendSysError sys c ("storing the project "  ++ show (projectName p) ++ " got " ++ show err)
 
-newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> IO ()
+pipeToProject :: WAClient -> ProjectName  -> RuntimeSystem-> ProjectMessage -> STM()
+pipeToProject c pn sys msg = do
+    pbn <- readTVar $ projectByName sys
+    case M.lookup pn pbn of
+        Just mprjChan -> case mprjChan of
+            Just prjChan -> writeTChan prjChan msg
+            Nothing -> sendSysError sys c ("the project " ++ show pn ++ " was not loaded")
+        Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist")
+
+
+newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()
 newProjectIfNotAlreadyRunning chan sys c p = do
     let pn = projectName p
-    pbn <- atomically $ readTVar (projectByName sys)
+    pbn <- readTVar $ projectByName sys
     case M.lookup pn pbn of
-        Just p -> atomically $ sendSysError sys c ("the project " ++ show pn ++ " exists already ")
-        Nothing -> atomically $ writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
+        Just prjChan -> sendSysError sys c ("the project " ++ show pn ++ " exists already ")
+        Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
 
 projectCreated :: RuntimeSystem -> WAClient -> Project -> IO ()
 projectCreated sys c p = do
@@ -65,21 +76,20 @@ projectCreated sys c p = do
             rp <- projectToRuntime (chans sys) p
             runProject sys rp pn
 
-loadProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> ProjectName -> IO ()
+loadProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> ProjectName -> STM ()
 loadProjectIfNotAlreadyRunning chan sys c pn= do
-  pbn <- atomically $ readTVar (projectByName sys)
+  pbn <- readTVar (projectByName sys)
   case M.lookup pn pbn of
       Just mp -> case mp of
-                     Just p -> atomically $ sendSysError sys c ("the project " ++ show pn ++ " is already running")
-                     Nothing -> atomically $ writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
-      Nothing -> atomically $ sendSysError sys c ("the project " ++ show pn ++ " does not exist in the sys")
+                     Just p -> sendSysError sys c ("the project " ++ show pn ++ " is already running")
+                     Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
+      Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist in the sys")
 
 projectLoaded :: RuntimeSystem -> WAClient -> Project -> IO ()
 projectLoaded sys c p = do
             let pn = projectName p
             rp <- projectToRuntime (chans sys) p
             runProject sys rp pn
-
 
 
 runProject ::RuntimeSystem -> PS.RuntimeProject -> ProjectName -> IO ()
