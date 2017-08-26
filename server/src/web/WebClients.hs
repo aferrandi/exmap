@@ -16,6 +16,12 @@ data WAClient   = WAClient {
     connection :: WS.Connection
     }
 
+instance Show WAClient where
+  show = show . clientId
+
+instance Eq WAClient where
+  a == b = clientId a == clientId b
+
 
 sendTextToClient :: WAClient -> B.ByteString -> IO ()
 sendTextToClient c = WS.sendTextData (connection c)

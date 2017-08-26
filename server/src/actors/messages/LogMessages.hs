@@ -6,5 +6,6 @@ import Errors
 
 data LogMessage = LogMLog Error
                   | LogMStop
+    deriving (Eq, Show)
 
 type LogChan = TChan LogMessage

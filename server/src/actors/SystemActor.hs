@@ -7,6 +7,7 @@ import Control.Concurrent.STM
 import Control.Concurrent
 import qualified Data.Text as T
 import qualified Network.WebSockets as WS
+import System.Exit (die)
 
 import SystemState
 import ProjectBuild
@@ -33,6 +34,7 @@ actorSystem chan sys = loop
                     handleEvent chan sys e
                     loop
                 SMStop -> return ()
+                otherwise -> die $ "Unexpected message " ++ show msg ++ " in system actor"
 
 
 handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> IO ()

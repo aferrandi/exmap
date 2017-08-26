@@ -15,6 +15,7 @@ data ProjectRequest = PRMap XNamedMap
                         | PRUnsubscribeFromView WAClient ViewName
                         | PRLoadMap WAClient XMapName
                         | PRStoreMap WAClient XNamedMap
+    deriving (Show, Eq)
 
 data ProjectEvent = PEViewLoaded WAClient View
                     | PEViewLoadError WAClient ViewName Error
@@ -22,9 +23,11 @@ data ProjectEvent = PEViewLoaded WAClient View
                     | PEMapLoadError WAClient XMapName Error
                     | PEMapStored WAClient XNamedMap
                     | PEMapStoreError WAClient XNamedMap Error
+    deriving (Show, Eq)
 
 data ProjectMessage = PMRequest ProjectRequest
                       | PMEvent ProjectEvent
                       | PMStop
+    deriving (Show, Eq)
 
 type ProjectChan = TChan ProjectMessage

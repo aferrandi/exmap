@@ -16,16 +16,17 @@ data SystemRequest = SRLoadProject WAClient ProjectName
                     | SRStoreMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName
-
+    deriving (Show, Eq)
 
 data SystemEvent = SEProjectLoaded WAClient Project
                     | SEProjectLoadError WAClient ProjectName Error
                     | SEProjectStored WAClient Project
                     | SEProjectStoreError WAClient Project Error
-
+    deriving (Show, Eq)
 
 data SystemMessage = SMRequest SystemRequest
                     | SMEvent SystemEvent
                     | SMStop
+    deriving (Show, Eq)
 
 type SystemChan = TChan SystemMessage

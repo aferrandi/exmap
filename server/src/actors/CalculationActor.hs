@@ -5,6 +5,7 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
+import System.Exit (die)
 
 import XMapTypes
 import CalculationState
@@ -17,19 +18,20 @@ import ViewMessages
 import LogTypes
 
 
-actorCalculation :: CalculationChan -> RuntimeCalculation -> STM ()
+actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rtCalc = loop
     where loop = do
-            msg <- readTChan chan
+            msg <- atomically $ readTChan chan
             case msg of
                 CMMap m -> do
-                    ers <- handleMap rtCalc m
+                    ers <- atomically $ handleMap rtCalc m
                     case ers of
                         Right () -> return ()
-                        Left err -> errorToAll rtCalc err
+                        Left err -> atomically $ errorToAll rtCalc err
                     loop
-                CMError e -> errorToAll rtCalc e
+                CMError e -> atomically $ errorToAll rtCalc e
                 CMStop -> return ()
+                otherwise -> die $ "Unexpected message " ++ show msg ++ " in calculation actor"
 
 errorToAll :: RuntimeCalculation -> Error -> STM ()
 errorToAll rtCalc e = do

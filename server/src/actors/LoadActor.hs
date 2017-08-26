@@ -1,13 +1,15 @@
-module LoadActor where
+module LoadActor (actorLoad) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
+import System.Exit (die)
 
 import XMapTypes
 import LoadMessages
 import ProjectMessages
 import SystemMessages
+import LogMessages
 import Project
 import View
 import WebClients
@@ -28,6 +30,8 @@ actorLoad root chan = loop
                     loadMapInActor root source c pn mn
                     loop
                 LMStop -> return ()
+                otherwise -> die $ "unexpected message  in load actor"
+
 
 loadViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
 loadViewInActor root source c pn vn = do

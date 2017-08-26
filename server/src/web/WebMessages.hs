@@ -12,6 +12,7 @@ data WebRequest =
     | WRStoreMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
+    deriving (Show, Eq)
 
 data WebEvent =
     WEViewChanged ProjectName ViewName XNamedMap
@@ -21,4 +22,5 @@ data WebEvent =
     | WEUnsubscribedFromView ProjectName ViewName
     | WEViewStatus ProjectName View [XNamedMap]
     | WEError Error
+    deriving (Show, Eq)
 

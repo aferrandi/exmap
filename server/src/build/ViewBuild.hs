@@ -20,7 +20,7 @@ import Project
 viewToChan :: EventChan -> RuntimeView -> IO ViewChan
 viewToChan ec v = do
         ch <- newTChanIO
-        forkIO $ atomically (actorView ch v ec)
+        forkIO $ actorView ch v ec
         return ch
 
 viewToRuntime :: ProjectName -> View -> STM RuntimeView

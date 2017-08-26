@@ -1,4 +1,4 @@
-module ProjectActor where
+module ProjectActor (actorProject) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
@@ -6,6 +6,7 @@ import Control.Concurrent.STM
 import Control.Concurrent
 import Control.Monad (join)
 import qualified Data.Map.Strict as M
+import System.Exit (die)
 
 
 import ProjectState
@@ -36,6 +37,7 @@ actorProject chan rp = loop
                         handleEvent chan rp e
                         loop
                 PMStop -> return ()
+                otherwise -> die $ "Unexpected message " ++ show msg ++ " in project actor"
 
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
@@ -56,7 +58,7 @@ viewLoaded rp c v = do
      let evtChan  = eventChan $ chans rp
      rv <- atomically $ viewToRuntime (projectName $ project rp) v
      vChan <- viewToChan evtChan rv
-     forkIO $ atomically (actorView vChan rv evtChan)
+     forkIO $ actorView vChan rv evtChan
      atomically $ modifyTVar (viewChanByName rp) (M.insert (viewName v) (Just vChan))
      atomically $ sendSubscriptionToView vChan c
 

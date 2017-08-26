@@ -1,10 +1,11 @@
-module EventActor where
+module EventActor (actorEvent) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
-import XMapTypes
+import System.Exit (die)
 
+import XMapTypes
 import EventMessages
 import ProjectState
 import WebClients
@@ -18,3 +19,4 @@ actorEvent chan = loop
                     sendToClients cs e
                     loop
                 EMStop -> return ()
+                otherwise -> die $ "Unexpected message " ++ show msg ++ " in event actor"

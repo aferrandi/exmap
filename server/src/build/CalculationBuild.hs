@@ -30,7 +30,7 @@ calculationToRuntime c = do
 calculationToChan :: RuntimeCalculation -> IO CalculationChan
 calculationToChan c = do
         ch <- newTChanIO
-        forkIO $ atomically (actorCalculation ch c)
+        forkIO $ actorCalculation ch c
         return ch
 
 calculationChansByNames :: [Calculation] -> IO CalculationChanByMapName

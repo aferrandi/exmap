@@ -4,6 +4,7 @@ import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
 import XMapTypes
+import System.Exit (die)
 
 import StoreMessages
 import ProjectMessages
@@ -26,6 +27,7 @@ actorStore root chan = loop
                     storeMapInActor root source c pn m
                     loop
                 StMStop -> return ()
+                otherwise -> die $ "Unexpected message in store actor"
 
 storeProjectInActor :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
 storeProjectInActor root source c p = do

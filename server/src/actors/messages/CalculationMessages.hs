@@ -8,5 +8,6 @@ import Errors
 data CalculationMessage = CMMap XNamedMap
                           | CMError Error
                           | CMStop
+    deriving (Show, Eq)
 
 type CalculationChan = TChan CalculationMessage

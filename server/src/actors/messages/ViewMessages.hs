@@ -11,5 +11,6 @@ data ViewMessage = VMMap XNamedMap
                       | VMUnsubscribeFromView WAClient
                       | VMError Error
                       | VMStop
+    deriving (Show, Eq)
 
 type ViewChan = TChan ViewMessage

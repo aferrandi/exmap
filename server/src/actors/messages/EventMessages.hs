@@ -9,6 +9,7 @@ import Errors
 
 data EventMessage = EMWebEvent [WAClient] WebEvent
                     | EMStop
+    deriving (Show, Eq)
 
 type EventChan = TChan EventMessage
 

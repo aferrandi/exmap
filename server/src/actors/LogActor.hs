@@ -1,8 +1,9 @@
-module LogActor where
+module LogActor (actorLog) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
+import System.Exit (die)
 
 import Errors
 import LogMessages
@@ -16,3 +17,4 @@ actorLog chan = loop
                     TIO.putStrLn m
                     loop
                 LogMStop -> return ()
+                otherwise -> die $ "Unexpected message " ++ show msg ++ " in log actor"
