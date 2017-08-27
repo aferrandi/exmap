@@ -43,12 +43,20 @@ actorProject chan rp = loop
                 otherwise -> die $ "Unexpected message " ++ show msg ++ " in project actor"
 
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
-handleRequests chan rp r= case r of
-    PRSubscribeToView c vn -> subscribeToView c vn rp chan
-    PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
-    PRLoadMap c mn -> writeTChan (loadChan $ chans rp)  $ LMLoadMap chan c prjName mn
-    PRStoreMap c m -> writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c prjName m
-    where prjName = projectName $ project rp
+handleRequests chan rp r= do
+    pn <- prjName rp
+    case r of
+        PRSubscribeToView c vn -> subscribeToView c vn rp chan
+        PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
+        PRLoadMap c mn -> writeTChan (loadChan $ chans rp)  $ LMLoadMap chan c pn mn
+        PRStoreMap c m -> writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn  m
+
+prjName :: RuntimeProject -> STM ProjectName
+prjName rp = do
+    p <- readTVar (project rp)
+    return $ projectName p
+
+
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
@@ -63,7 +71,8 @@ handleEvent chan rp e = case e of
 viewLoaded :: RuntimeProject -> WAClient -> View -> IO ()
 viewLoaded rp c v = do
      let evtChan  = eventChan $ chans rp
-     rv <- atomically $ viewToRuntime (projectName $ project rp) v
+     pn <- atomically $ prjName rp
+     rv <- atomically $ viewToRuntime pn v
      vChan <- viewToChan evtChan rv
      forkIO $ actorView vChan rv evtChan
      atomically $ modifyTVar (viewChanByName rp) (M.insert (viewName v) (Just vChan))
@@ -75,29 +84,33 @@ sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 subscribeToView :: WAClient -> ViewName -> RuntimeProject -> ProjectChan -> STM ()
 subscribeToView c vn rp chan = do
     vs <- readTVar $ viewChanByName rp
+    pn <- prjName rp
     case M.lookup vn vs of
         Just maybeVChan -> case maybeVChan of
             Just vChan -> sendSubscriptionToView vChan c
-            Nothing -> writeTChan (loadChan $ chans rp) (LMLoadView chan c (projectName $ project rp) vn)
-        Nothing -> sendStringError (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to subscribe to not found in project " ++ show (projectName $ project rp))
+            Nothing -> writeTChan (loadChan $ chans rp) (LMLoadView chan c pn vn)
+        Nothing -> sendStringError (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to subscribe to not found in project " ++ show pn)
 
 unsubscribeFromView :: WAClient -> ViewName -> RuntimeProject -> STM ()
 unsubscribeFromView c vn rp = do
     vs <- readTVar $ viewChanByName rp
+    pn <- prjName rp
     let maybeVChan = M.lookup vn vs
     case join maybeVChan of
         Just vChan -> writeTChan vChan (VMUnsubscribeFromView c)
-        Nothing -> sendStringError  (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show (projectName $ project rp))
+        Nothing -> sendStringError  (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show pn)
 
 mapLoaded :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapLoaded rp c m = do
      let evtChan  = eventChan $ chans rp
-     writeTChan evtChan (EMWebEvent [c] $ WEMapLoaded (projectName $ project rp) m)
+     pn <- prjName rp
+     writeTChan evtChan (EMWebEvent [c] $ WEMapLoaded pn m)
 
 mapStored :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored rp c m = do
      let mn = xmapName m
+     pn <- prjName rp
      cbm <- readTVar $ calculationChanByMapName rp
      mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
      let evtChan  = eventChan $ chans rp
-     writeTChan evtChan (EMWebEvent [c] $ WEMapStored (projectName $ project rp) mn)
+     writeTChan evtChan (EMWebEvent [c] $ WEMapStored pn mn)

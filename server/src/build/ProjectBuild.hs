@@ -21,10 +21,11 @@ projectToRuntime :: CommonChans -> Project -> IO RuntimeProject
 projectToRuntime chans p = do
         cs <- calculationChansByNames (calculations p)
         cbm <- newTVarIO cs
+        rp <- newTVarIO p
         vbm <- newTVarIO M.empty
         vbn <- newTVarIO M.empty
         return RuntimeProject {
-            project = p,
+            project = rp,
             calculationChanByMapName = cbm,
             viewChanByMap = vbm,
             viewChanByName = vbn,
