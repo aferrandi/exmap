@@ -9,6 +9,7 @@ import qualified Data.Map.Strict as M
 import System.Exit (die)
 
 
+import TChans
 import ProjectState
 import ProjectMessages
 import ViewMessages
@@ -17,7 +18,9 @@ import WebMessages
 import LoadMessages
 import StoreMessages
 import CommonChannels
+import CalculationMessages
 import WebClients
+import XMapTypes
 import View
 import Project
 import Errors
@@ -31,11 +34,11 @@ actorProject chan rp = loop
             msg <- atomically $ readTChan chan
             case msg of
                 PMRequest r -> do
-                        atomically $ handleRequests chan rp r
-                        loop
+                    atomically $ handleRequests chan rp r
+                    loop
                 PMEvent e -> do
-                        handleEvent chan rp e
-                        loop
+                    handleEvent chan rp e
+                    loop
                 PMStop -> return ()
                 otherwise -> die $ "Unexpected message " ++ show msg ++ " in project actor"
 
@@ -51,7 +54,11 @@ handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
     PEViewLoaded c v -> viewLoaded rp c v
     PEViewLoadError c vn err -> atomically $ sendError evtChan [c] err
-    where evtChan = eventChan $ chans rp
+    PEMapLoaded c m -> atomically $ mapLoaded rp c m
+    PEMapLoadError c mn err -> atomically $ sendError evtChan [c] err
+    PEMapStored c m -> atomically $ mapStored rp c m
+    PEMapStoreError c m err -> atomically $ sendError evtChan [c] err
+    where evtChan  = eventChan $ chans rp
 
 viewLoaded :: RuntimeProject -> WAClient -> View -> IO ()
 viewLoaded rp c v = do
@@ -67,17 +74,30 @@ sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 
 subscribeToView :: WAClient -> ViewName -> RuntimeProject -> ProjectChan -> STM ()
 subscribeToView c vn rp chan = do
-                vs <- readTVar $ viewChanByName rp
-                case M.lookup vn vs of
-                    Just maybeVChan -> case maybeVChan of
-                                            Just vChan -> sendSubscriptionToView vChan c
-                                            Nothing -> writeTChan (loadChan $ chans rp) (LMLoadView chan c (projectName $ project rp) vn)
-                    Nothing -> sendStringError (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to subscribe to not found in project " ++ show (projectName $ project rp))
+    vs <- readTVar $ viewChanByName rp
+    case M.lookup vn vs of
+        Just maybeVChan -> case maybeVChan of
+            Just vChan -> sendSubscriptionToView vChan c
+            Nothing -> writeTChan (loadChan $ chans rp) (LMLoadView chan c (projectName $ project rp) vn)
+        Nothing -> sendStringError (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to subscribe to not found in project " ++ show (projectName $ project rp))
 
 unsubscribeFromView :: WAClient -> ViewName -> RuntimeProject -> STM ()
 unsubscribeFromView c vn rp = do
-                vs <- readTVar $ viewChanByName rp
-                let maybeVChan = M.lookup vn vs
-                case join maybeVChan of
-                    Just vChan -> writeTChan vChan (VMUnsubscribeFromView c)
-                    Nothing -> sendStringError  (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show (projectName $ project rp))
+    vs <- readTVar $ viewChanByName rp
+    let maybeVChan = M.lookup vn vs
+    case join maybeVChan of
+        Just vChan -> writeTChan vChan (VMUnsubscribeFromView c)
+        Nothing -> sendStringError  (eventChan $ chans rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show (projectName $ project rp))
+
+mapLoaded :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapLoaded rp c m = do
+     let evtChan  = eventChan $ chans rp
+     writeTChan evtChan (EMWebEvent [c] $ WEMapLoaded (projectName $ project rp) m)
+
+mapStored :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapStored rp c m = do
+     let mn = xmapName m
+     cbm <- readTVar $ calculationChanByMapName rp
+     mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
+     let evtChan  = eventChan $ chans rp
+     writeTChan evtChan (EMWebEvent [c] $ WEMapStored (projectName $ project rp) mn)

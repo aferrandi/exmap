@@ -7,6 +7,7 @@ import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import System.Exit (die)
 
+import TChans
 import XMapTypes
 import CalculationState
 import ViewState
@@ -74,7 +75,5 @@ sendToDependents calc cs vs rs = do
     return ()
 
 
-sendToAll :: [TChan a] -> a -> STM ()
-sendToAll chs xm = mapM_ sendToOne chs
-    where sendToOne ch = writeTChan ch xm
+
 

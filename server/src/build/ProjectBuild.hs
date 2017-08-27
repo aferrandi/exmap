@@ -25,7 +25,7 @@ projectToRuntime chans p = do
         vbn <- newTVarIO M.empty
         return RuntimeProject {
             project = p,
-            calculationByMap = cbm,
+            calculationChanByMapName = cbm,
             viewChanByMap = vbm,
             viewChanByName = vbn,
             chans = chans

@@ -18,7 +18,7 @@ type CalculationChanByMapName = M.Map XMapName [CalculationChan]
 
 data RuntimeProject = RuntimeProject {
     project :: Project,
-    calculationByMap :: TVar CalculationChanByMapName,
+    calculationChanByMapName :: TVar CalculationChanByMapName,
     viewChanByMap :: TVar ViewChanByMapName,
     viewChanByName :: TVar ViewChanByName,
     chans :: CommonChans
