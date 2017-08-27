@@ -214,10 +214,10 @@ instance ToJSON User where
 
 instance FromJSON AllProjects where
    parseJSON (Object v) =
-      AllProjects <$> v .: "projectNames"
+      AllProjects <$> v .: "projects"
 
 
 instance ToJSON AllProjects where
      toJSON (AllProjects projectNames) =
-        object [ "projectNames" .= projectNames
+        object [ "projects" .= projectNames
                  ]
