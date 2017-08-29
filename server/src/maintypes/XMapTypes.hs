@@ -19,12 +19,12 @@ data XMap = XMapDouble (MapValue Double) |
             XMapBool (MapValue Bool)
             deriving (Show, Eq)
 
-type XMapErr = Either Error XMap
-
 data XNamedMap = XNamedMap {
     xmapName :: XMapName,
     xmap :: XMap
 } deriving (Show, Eq)
+
+type XMapErr = Either Error XMap
 
 type XMapByName = M.Map XMapName XMap
 
