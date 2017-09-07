@@ -1,5 +1,7 @@
 module WebMessages where
 
+import qualified Data.Text as T
+
 import XMapTypes
 import Project
 import View
@@ -22,6 +24,7 @@ data WebEvent =
     | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName
     | WEViewStatus ProjectName View [XNamedMap]
+    | WEInfo T.Text
     | WEError Error
     deriving (Show, Eq)
 

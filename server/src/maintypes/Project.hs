@@ -9,7 +9,12 @@ import XMapTypes
 import View
 import XFunction
 
+
+newtype CalculationName = CalculationName T.Text
+    deriving (Show, Eq, Ord)
+
 data Calculation = Calculation {
+    calculationName :: CalculationName,
     resultName :: XMapName,
     formula :: XFormula,
     operationMode :: OperationMode
@@ -30,7 +35,7 @@ data Source = Source {
 
 data Project = Project {
     projectName :: ProjectName,
-    calculations :: [Calculation],
+    calculations :: [CalculationName],
     viewNames :: [ViewName],
     sources :: [Source] -- maps could come from different sources
 } deriving (Show, Eq)

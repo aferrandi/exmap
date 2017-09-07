@@ -12,6 +12,8 @@ import XMapTypes
 data StoreMessage =
                   StMStoreProject SystemChan WAClient Project
                   | StMStoreMap ProjectChan WAClient ProjectName XNamedMap
+                  | StMStoreCalculation ProjectChan WAClient ProjectName Calculation
+                  | StMStoreView ProjectChan WAClient ProjectName View
                   | StMStop
 
 type StoreChan = TChan StoreMessage

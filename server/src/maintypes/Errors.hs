@@ -7,3 +7,7 @@ newtype Error =  Error T.Text
 
 mkError :: String -> Error
 mkError s = Error (T.pack s)
+
+compose :: [Error] -> Error
+compose es = Error $ T.concat (map text es)
+    where text (Error t) = t

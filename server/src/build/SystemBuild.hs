@@ -1,4 +1,4 @@
-module SystemBuild where
+module SystemBuild (startSystem) where
 
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
@@ -30,27 +30,28 @@ systemToRuntime root ps logChan  = do
     let psMap = mapWithNothingValues ps
     emptyByName <- newTVarIO psMap
     emptyByMapName <- newTVarIO M.empty
-    chans <- buildChans
+    chans <- buildChans root logChan
     return RuntimeSystem {
         projectByName = emptyByName,
         projectByMapName = emptyByMapName,
         chans = chans,
         root = root
     }
-    where buildChans :: IO CommonChans
-          buildChans = do
-            eventChan <- newTChanIO
-            loadChan <- newTChanIO
-            storeChan <- newTChanIO
-            forkIO $ actorEvent eventChan
-            forkIO $ actorLoad root loadChan
-            forkIO $ actorStore root storeChan
-            return CommonChans {
-                eventChan = eventChan,
-                loadChan = loadChan,
-                storeChan = storeChan,
-                logChan = logChan
-            }
+
+buildChans :: FilePath -> LogChan -> IO CommonChans
+buildChans root logChan = do
+    eventChan <- newTChanIO
+    loadChan <- newTChanIO
+    storeChan <- newTChanIO
+    forkIO $ actorEvent eventChan
+    forkIO $ actorLoad root loadChan
+    forkIO $ actorStore root storeChan
+    return CommonChans {
+        eventChan = eventChan,
+        loadChan = loadChan,
+        storeChan = storeChan,
+        logChan = logChan
+    }
 
 
 loadSystem :: FilePath -> IO [ProjectName]

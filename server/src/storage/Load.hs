@@ -28,11 +28,14 @@ tryReadAndDecode p = do
 loadAvailableProjects :: FilePath -> IO (Either Error AllProjects)
 loadAvailableProjects root = tryReadAndDecode (allProjectsPath root)
 
+loadCalculation :: FilePath -> ProjectName -> CalculationName -> IO (Either Error Calculation)
+loadCalculation root pn cn = tryReadAndDecode $ calculationPath root pn cn
+
 loadProject :: FilePath -> ProjectName -> IO (Either Error Project)
-loadProject root pr = tryReadAndDecode (projectPath root pr)
+loadProject root pn = tryReadAndDecode $ projectPath root pn
 
 loadXMap :: FilePath -> ProjectName -> XMapName -> IO (Either Error XNamedMap)
-loadXMap root p m = tryReadAndDecode (xMapPath root p m)
+loadXMap root pn mn = tryReadAndDecode $ xMapPath root pn mn
 
 loadView :: FilePath -> ProjectName -> ViewName -> IO (Either Error View)
-loadView root p n = tryReadAndDecode (viewPath root p n)
+loadView root pn vn = tryReadAndDecode $ viewPath root pn vn

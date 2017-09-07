@@ -26,6 +26,12 @@ actorStore root chan = loop
                 StMStoreMap source c pn m -> do
                     storeMapInActor root source c pn m
                     loop
+                StMStoreCalculation source c pn clc -> do
+                    storeCalculationInActor root source c pn clc
+                    loop
+                StMStoreView source c pn v -> do
+                    storeViewInActor root source c pn v
+                    loop
                 StMStop -> return ()
                 otherwise -> die $ "Unexpected message in store actor"
 
@@ -42,3 +48,17 @@ storeMapInActor root source c pn m = do
        case mp of
            Nothing -> atomically $ writeTChan source (PMEvent $ PEMapStored c m)
            Just err -> atomically $ writeTChan source (PMEvent $ PEMapStoreError c m err)
+
+storeCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> Calculation ->  IO ()
+storeCalculationInActor root source c pn clc = do
+       mp <- storeCalculation root pn clc
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PECalculationStored c clc)
+           Just err -> atomically $ writeTChan source (PMEvent $ PECalculationStoreError c clc err)
+
+storeViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> View ->  IO ()
+storeViewInActor root source c pn v = do
+       mp <- storeView root pn v
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEViewStored c v)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEViewStoreError c v err)

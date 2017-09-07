@@ -15,10 +15,12 @@ import View
 type ViewChanByName = M.Map ViewName (Maybe ViewChan)
 type ViewChanByMapName = M.Map XMapName [ViewChan]
 type CalculationChanByMapName = M.Map XMapName [CalculationChan]
+type CalculationChanByName = M.Map CalculationName CalculationChan
 
 data RuntimeProject = RuntimeProject {
     project :: TVar Project,
-    calculationChanByMapName :: TVar CalculationChanByMapName,
+    calculationChanByName :: TVar CalculationChanByName,
+    calculationChanByMap :: TVar CalculationChanByMapName,
     viewChanByMap :: TVar ViewChanByMapName,
     viewChanByName :: TVar ViewChanByName,
     chans :: CommonChans

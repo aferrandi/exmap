@@ -11,13 +11,16 @@ allProjectsPath :: FilePath -> FilePath
 allProjectsPath root = root </> "allprojects.ex"
 
 projectDir :: FilePath -> ProjectName -> FilePath
-projectDir root (ProjectName projectName) = root </> T.unpack projectName
+projectDir root (ProjectName pn) = root </> T.unpack pn
 
 projectPath :: FilePath -> ProjectName -> FilePath
-projectPath root projectName = projectDir root projectName </> "project.ex"
+projectPath root pn = projectDir root pn </> "project.ex"
 
 xMapPath :: FilePath -> ProjectName -> XMapName -> FilePath
-xMapPath root projectName (XMapName mapName) = projectDir root projectName </> joinPath (map T.unpack mapName) <.> "mp"
+xMapPath root pn (XMapName mn) = projectDir root pn </> joinPath (map T.unpack mn) <.> "map"
 
 viewPath :: FilePath -> ProjectName -> ViewName -> FilePath
-viewPath root projectName (ViewName viewName) = projectDir root projectName </> T.unpack viewName <.> "vw"
+viewPath root pn (ViewName vn) = projectDir root pn </> T.unpack vn <.> "vew"
+
+calculationPath :: FilePath -> ProjectName -> CalculationName -> FilePath
+calculationPath root pn (CalculationName cn) = projectDir root pn </> T.unpack cn <.> "clc"

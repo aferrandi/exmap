@@ -110,7 +110,7 @@ mapStored :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored rp c m = do
      let mn = xmapName m
      pn <- prjName rp
-     cbm <- readTVar $ calculationChanByMapName rp
+     cbm <- readTVar $ calculationChanByMap rp
      mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
      let evtChan  = eventChan $ chans rp
      writeTChan evtChan (EMWebEvent [c] $ WEMapStored pn mn)

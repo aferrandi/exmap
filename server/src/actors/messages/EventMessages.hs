@@ -1,5 +1,6 @@
 module EventMessages where
 
+import qualified Data.Text as T
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 
@@ -21,3 +22,6 @@ sendError chan cs err = writeTChan chan $ EMWebEvent cs (WEError err)
 
 sendStringError :: EventChan -> [WAClient] -> String -> STM ()
 sendStringError chan cs s = sendError chan cs (mkError s)
+
+sendInfo :: EventChan -> [WAClient] -> String -> STM ()
+sendInfo chan cs s = writeTChan chan $ EMWebEvent cs (WEInfo (T.pack s))

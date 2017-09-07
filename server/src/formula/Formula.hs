@@ -1,4 +1,3 @@
-{-# LANGUAGE ExistentialQuantification #-}
 module Formula(XFormula(..)) where
 
 import XMapTypes

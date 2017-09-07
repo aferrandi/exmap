@@ -99,16 +99,23 @@ instance FromJSON ApplicationName where
 instance ToJSON ApplicationName where
    toJSON v = String $ showT v
 
+instance FromJSON CalculationName where
+   parseJSON (String v) = return $ CalculationName v
+
+instance ToJSON CalculationName where
+   toJSON (CalculationName v) = String v
 
 instance FromJSON Calculation  where
    parseJSON (Object v) =
-      Calculation  <$> v .: "resultName"
+      Calculation  <$> v .: "calculationName"
+             <*> v .: "resultName"
              <*> v .: "formula"
              <*> v .: "operationMode"
 
 instance ToJSON Calculation  where
-     toJSON (Calculation resultName formula operationMode) =
-        object [ "resultName" .= resultName
+     toJSON (Calculation calculationName resultName formula operationMode) =
+        object [ "calculationName" .= calculationName
+               , "resultName" .= resultName
                , "formula" .= formula
                , "operationMode" .= operationMode
                  ]

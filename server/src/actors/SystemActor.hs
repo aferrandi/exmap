@@ -47,9 +47,9 @@ handleRequest chan sys r = case r of
 
 handleEvent :: SystemChan -> RuntimeSystem -> SystemEvent -> IO ()
 handleEvent chan sys e = case e of
-        SEProjectLoaded c p -> projectLoaded sys c p
+        SEProjectLoaded c p cs -> projectLoaded sys c p cs
         SEProjectLoadError c pn err -> atomically $ sendSysError sys c ("loading the project "  ++ show pn ++ " got " ++ show err)
-        SEProjectStored c p -> projectCreated sys c p
+        SEProjectStored c p -> atomically $ sendInfo (eventChan $ chans sys) [c] ("Project " ++ show (projectName p) ++ " loaded")
         SEProjectStoreError c p err -> atomically $ sendSysError sys c ("storing the project "  ++ show (projectName p) ++ " got " ++ show err)
 
 pipeToProject :: WAClient -> ProjectName  -> RuntimeSystem-> ProjectMessage -> STM()
@@ -70,12 +70,6 @@ newProjectIfNotAlreadyRunning chan sys c p = do
         Just prjChan -> sendSysError sys c ("the project " ++ show pn ++ " exists already ")
         Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
 
-projectCreated :: RuntimeSystem -> WAClient -> Project -> IO ()
-projectCreated sys c p = do
-            let pn = projectName p
-            rp <- projectToRuntime (chans sys) p
-            runProject sys rp pn
-
 loadProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> ProjectName -> STM ()
 loadProjectIfNotAlreadyRunning chan sys c pn= do
   pbn <- readTVar (projectByName sys)
@@ -85,10 +79,10 @@ loadProjectIfNotAlreadyRunning chan sys c pn= do
                      Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
       Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist in the sys")
 
-projectLoaded :: RuntimeSystem -> WAClient -> Project -> IO ()
-projectLoaded sys c p = do
+projectLoaded :: RuntimeSystem -> WAClient -> Project -> [Calculation] -> IO ()
+projectLoaded sys c p cs = do
             let pn = projectName p
-            rp <- projectToRuntime (chans sys) p
+            rp <- projectToRuntime (chans sys) p cs
             runProject sys rp pn
 
 

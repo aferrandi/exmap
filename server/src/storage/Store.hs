@@ -42,3 +42,8 @@ storeView :: FilePath -> ProjectName -> View -> IO (Maybe Error)
 storeView root pn v = do
     let path = viewPath root pn (viewName v)
     tryWriteFile path (encode v)
+
+storeCalculation :: FilePath -> ProjectName -> Calculation -> IO (Maybe Error)
+storeCalculation root pn c = do
+    let path = calculationPath root pn (calculationName c)
+    tryWriteFile path (encode c)

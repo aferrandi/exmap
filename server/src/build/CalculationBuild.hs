@@ -4,7 +4,7 @@ import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import Control.Concurrent
-import qualified Data.Traversable as T
+
 
 import ProjectState
 import CalculationState
@@ -29,15 +29,7 @@ calculationToRuntime c = do
 
 calculationToChan :: RuntimeCalculation -> IO CalculationChan
 calculationToChan c = do
-        ch <- newTChanIO
-        forkIO $ actorCalculation ch c
-        return ch
+    ch <- newTChanIO
+    forkIO $ actorCalculation ch c
+    return ch
 
-calculationChansByNames :: [Calculation] -> IO CalculationChanByMapName
-calculationChansByNames c = do
-        rs <- atomically $ mapM calculationToRuntime c
-        let cs = M.fromList $ groupAssocListByKey (chanByDeps rs)
-        T.mapM sequence cs
-    where deps = calculationDependencies . calculation
-          chansByDep cr = map (\dp -> (dp, calculationToChan cr)) (deps cr)
-          chanByDeps rs =  concatMap chansByDep rs

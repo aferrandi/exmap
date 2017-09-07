@@ -18,7 +18,7 @@ data SystemRequest = SRLoadProject WAClient ProjectName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName
     deriving (Show, Eq)
 
-data SystemEvent = SEProjectLoaded WAClient Project
+data SystemEvent = SEProjectLoaded WAClient Project [Calculation]
                     | SEProjectLoadError WAClient ProjectName Error
                     | SEProjectStored WAClient Project
                     | SEProjectStoreError WAClient Project Error

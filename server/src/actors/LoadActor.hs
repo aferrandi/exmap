@@ -3,6 +3,7 @@ module LoadActor (actorLoad) where
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
+import qualified Data.Either as E
 import System.Exit (die)
 
 import XMapTypes
@@ -14,6 +15,7 @@ import Project
 import View
 import WebClients
 import Load
+import Errors
 
 actorLoad :: FilePath -> LoadChan -> IO ()
 actorLoad root chan = loop
@@ -44,8 +46,17 @@ loadProjectInActor :: FilePath -> SystemChan -> WAClient -> ProjectName -> IO ()
 loadProjectInActor root source c pn = do
        mp <- loadProject root pn
        case mp of
-           Right p -> atomically $ writeTChan source (SMEvent $ SEProjectLoaded c p)
+           Right p -> loadCalculationsInProject root source c p
            Left err -> atomically $ writeTChan source (SMEvent $ SEProjectLoadError c pn err)
+
+loadCalculationsInProject :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
+loadCalculationsInProject root source c p = do
+       cs <- mapM loadCalculationInProject (calculations p)
+       case E.lefts cs of
+        [] -> atomically $ writeTChan source (SMEvent $ SEProjectLoaded c p (E.rights cs))
+        errs-> atomically $ writeTChan source (SMEvent $ SEProjectLoadError c (projectName p) (compose errs))
+     where loadCalculationInProject = loadCalculation root (projectName p)
+
 
 loadMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XMapName -> IO ()
 loadMapInActor root source c pn mn = do

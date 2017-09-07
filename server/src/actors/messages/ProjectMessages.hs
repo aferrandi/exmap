@@ -23,6 +23,10 @@ data ProjectEvent = PEViewLoaded WAClient View
                     | PEMapLoadError WAClient XMapName Error
                     | PEMapStored WAClient XNamedMap
                     | PEMapStoreError WAClient XNamedMap Error
+                    | PECalculationStored WAClient Calculation
+                    | PECalculationStoreError WAClient Calculation Error
+                    | PEViewStored WAClient View
+                    | PEViewStoreError WAClient View Error
     deriving (Show, Eq)
 
 data ProjectMessage = PMRequest ProjectRequest
