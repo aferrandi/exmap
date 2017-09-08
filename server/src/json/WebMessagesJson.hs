@@ -46,3 +46,12 @@ instance ToJSON WebEvent where
                                         , "info" .= info
                                         ]
 
+instance FromJSON WebRequest where
+   parseJSON (Object v) = case HML.lookup "type" v of
+      Just (String "loadProject") ->  WRLoadProject <$> v .: "projectName"
+      Just (String "newProject") -> WRNewProject <$> v .: "project"
+      Just (String "updateProject") -> WRUpdateProject <$> v .: "project"
+      Just (String "loadMap") ->  WRLoadMap <$> v .: "projectName" <*> v .: "mapName"
+      Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
+      Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
+      Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"

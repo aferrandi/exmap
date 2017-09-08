@@ -67,7 +67,7 @@ executable exmap
                      , Load
                      , Store
                      , Dependencies
-                     , WebMessageJson
+                     , WebMessagesJson
                      , WebMessages
                      , WebRequestsHandler
                      , CalculationMessages

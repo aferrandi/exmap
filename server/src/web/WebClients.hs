@@ -6,7 +6,7 @@ import qualified Data.ByteString.Lazy as B
 import Data.Aeson
 
 import WebMessages
-import WebMessageJson
+import WebMessagesJson
 
 newtype WAClientId = WAClientId Int
     deriving (Show, Eq, Ord)

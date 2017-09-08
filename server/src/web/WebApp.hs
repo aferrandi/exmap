@@ -22,7 +22,7 @@ import qualified Data.ByteString.Lazy as B
 
 
 import WebMessages
-import WebMessageJson
+import WebMessagesJson
 import WebRequestsHandler
 import WebClients
 import SystemMessages
