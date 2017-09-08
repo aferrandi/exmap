@@ -9,11 +9,6 @@ import XMapTypes exposing (..)
 import Project exposing (..)
 import Views exposing (..)
 
-arrayAsTuple2 : Decoder a -> Decoder b -> Decoder (a, b)
-arrayAsTuple2 a b =
-    index 0 a
-        |> andThen (\aVal -> index 1 b
-        |> andThen (\bVal -> succeed (aVal, bVal)))
 
 xmapNameDecoder : Decoder XMapName
 xmapNameDecoder = string |> andThen (\s -> succeed (XMapName (split s "/")))
@@ -30,14 +25,14 @@ xmapDecoder =
     let decodeFromType d = case d of
                             "double" -> field "values" (keyValuePairs float) |> andThen (\s -> succeed (XMapDouble (buildMapContent s)))
                             "int" -> (field "values" (keyValuePairs int))|> andThen (\s -> succeed (XMapInt (buildMapContent s)))
-                            "sring" -> (field "values" (keyValuePairs string))|> andThen (\s -> succeed (XMapString (buildMapContent s)))
+                            "string" -> (field "values" (keyValuePairs string))|> andThen (\s -> succeed (XMapString (buildMapContent s)))
                             "bool" -> (field "values" (keyValuePairs bool))|> andThen (\s -> succeed (XMapBool (buildMapContent s)))
                             otherwise -> fail ("map type " ++ d ++ " not recognized")
     in decodeType decodeFromType
 
 xNamedMapDecoder : Decoder XNamedMap
 xNamedMapDecoder = decode XNamedMap
-                   |> required "xmapName" xmapNameDecoder
+                   |> required "mapName" xmapNameDecoder
                    |> required "xmap" xmapDecoder
 
 

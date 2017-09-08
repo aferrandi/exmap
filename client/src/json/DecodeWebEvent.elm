@@ -29,7 +29,10 @@ webEventDecoder =
                                                 |> required "projectName" string
                                                 |> required "view" viewDecoder
                                                 |> required "maps" (list xNamedMapDecoder)
+                            "info" -> decode WEInfo
+                                                |> required "info" string
                             "error" -> decode WEError
                                                 |> required "error" string
+
                             otherwise -> fail ("webEvent type " ++ t ++ " not recognized")
     in decodeType decodeFromType

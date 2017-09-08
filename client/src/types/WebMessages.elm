@@ -21,4 +21,5 @@ type WebEvent =
         | WEMapStored ProjectName XMapName
         | WEUnsubscribedFromView ProjectName ViewName
         | WEViewStatus ProjectName View (List XNamedMap)
+        | WEInfo String
         | WEError Error

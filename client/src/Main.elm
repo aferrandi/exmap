@@ -15,6 +15,7 @@ import XMapTypes exposing (..)
 import Project exposing (..)
 import Views exposing (..)
 import DecodeWebEvent exposing (..)
+import EncodeWebRequest exposing (..)
 import WebMessages exposing (..)
 
 main = Html.program
