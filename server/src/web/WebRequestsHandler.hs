@@ -32,6 +32,7 @@ handleWebRequest id s r = do
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of
+                                WRAllProjects -> sendRequest  $ SRAllProjects c
                                 WRLoadProject pn -> sendRequest $ SRLoadProject c pn
                                 WRNewProject p -> sendRequest $ SRNewProject c p
                                 WRUpdateProject p -> sendRequest $ SRUpdateProject c p

@@ -14,6 +14,7 @@ import ProjectBuild
 import SystemMessages
 import ProjectMessages
 import EventMessages
+import WebMessages
 import ProjectActor (actorProject)
 import LogMessages
 import LoadMessages
@@ -40,6 +41,7 @@ actorSystem chan sys = loop
 
 handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> STM ()
 handleRequest chan sys r = case r of
+        SRAllProjects c -> allProjects c sys
         SRLoadProject c pn -> loadProjectIfNotAlreadyRunning chan  sys c pn
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
@@ -51,6 +53,13 @@ handleEvent chan sys e = case e of
         SEProjectLoadError c pn err -> atomically $ sendSysError sys c ("loading the project "  ++ show pn ++ " got " ++ show err)
         SEProjectStored c p -> atomically $ sendInfo (eventChan $ chans sys) [c] ("Project " ++ show (projectName p) ++ " loaded")
         SEProjectStoreError c p err -> atomically $ sendSysError sys c ("storing the project "  ++ show (projectName p) ++ " got " ++ show err)
+
+allProjects :: WAClient -> RuntimeSystem -> STM ()
+allProjects c sys = do
+    pbn <- readTVar $ projectByName sys
+    let ps = M.keys pbn
+    let evtChan  = eventChan $ chans sys
+    writeTChan evtChan (EMWebEvent [c] $ WEAllProjects ps)
 
 pipeToProject :: WAClient -> ProjectName  -> RuntimeSystem-> ProjectMessage -> STM()
 pipeToProject c pn sys msg = do

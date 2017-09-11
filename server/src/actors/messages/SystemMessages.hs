@@ -12,6 +12,7 @@ import Errors
 data SystemRequest = SRLoadProject WAClient ProjectName
                     | SRNewProject WAClient Project
                     | SRUpdateProject WAClient Project
+                    | SRAllProjects WAClient
                     | SRLoadMap WAClient ProjectName XMapName
                     | SRStoreMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
