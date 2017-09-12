@@ -23,11 +23,11 @@ buildMapContent l = MapValue (fromList l)
 xmapDecoder : Decoder XMap
 xmapDecoder =
     let decodeFromType d = case d of
-                            "double" -> field "values" (keyValuePairs float) |> andThen (\s -> succeed (XMapDouble (buildMapContent s)))
-                            "int" -> (field "values" (keyValuePairs int))|> andThen (\s -> succeed (XMapInt (buildMapContent s)))
-                            "string" -> (field "values" (keyValuePairs string))|> andThen (\s -> succeed (XMapString (buildMapContent s)))
-                            "bool" -> (field "values" (keyValuePairs bool))|> andThen (\s -> succeed (XMapBool (buildMapContent s)))
-                            otherwise -> fail ("map type " ++ d ++ " not recognized")
+            "double" -> field "values" (keyValuePairs float) |> andThen (\s -> succeed (XMapDouble (buildMapContent s)))
+            "int" -> (field "values" (keyValuePairs int))|> andThen (\s -> succeed (XMapInt (buildMapContent s)))
+            "string" -> (field "values" (keyValuePairs string))|> andThen (\s -> succeed (XMapString (buildMapContent s)))
+            "bool" -> (field "values" (keyValuePairs bool))|> andThen (\s -> succeed (XMapBool (buildMapContent s)))
+            otherwise -> fail ("map type " ++ d ++ " not recognized")
     in decodeType decodeFromType
 
 xNamedMapDecoder : Decoder XNamedMap
@@ -103,3 +103,6 @@ viewDecoder : Decoder View
 viewDecoder = decode View
                    |> required "viewName" string
                    |> required "rows" (list viewRowDecoder)
+
+allProjectsDecoder : Decoder AllProjects
+allProjectsDecoder = list string

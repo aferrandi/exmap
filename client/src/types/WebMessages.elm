@@ -5,7 +5,8 @@ import Views exposing (..)
 import Project exposing (..)
 
 type WebRequest =
-        WRLoadProject ProjectName
+        WRAllProjects
+        | WRLoadProject ProjectName
         | WRNewProject Project
         | WRUpdateProject Project
         | WRLoadMap ProjectName XMapName
@@ -14,7 +15,8 @@ type WebRequest =
         | WRUnsubscribeFromView ProjectName ViewName
 
 type WebEvent =
-        WEViewChanged ProjectName ViewName XNamedMap
+        WEAllProjects AllProjects
+        | WEViewChanged ProjectName ViewName XNamedMap
         | WEProjectContent Project
         | WEProjectStored ProjectName
         | WEMapLoaded ProjectName XNamedMap

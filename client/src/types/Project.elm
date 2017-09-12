@@ -32,3 +32,5 @@ type alias Project = {
     calculations : List CalculationName,
     viewNames : List ViewName,
     sources : List Source} -- maps could come from different sources
+
+type alias AllProjects = List ProjectName

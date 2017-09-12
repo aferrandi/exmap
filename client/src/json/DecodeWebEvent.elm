@@ -8,6 +8,8 @@ import DecodeProject exposing (..)
 webEventDecoder : Decoder WebEvent
 webEventDecoder =
     let decodeFromType t = case t of
+                            "allProjects" -> decode WEAllProjects
+                                                |> required "allProjects" allProjectsDecoder
                             "viewChanged" -> decode WEViewChanged
                                                 |> required "projectName" string
                                                 |> required "viewName" string

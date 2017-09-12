@@ -1,40 +1,79 @@
-module ProjectsUI exposing (model)
+module ProjectsUI exposing (..)
 
-import Html
-import Tabs.Model exposing (Model)
-import Tabs.Update exposing (update)
-import Tabs.View exposing (view)
-import List.Zipper as Z
+import Html        exposing (..)
+import Html.Events exposing (..)
+import Html.Attributes exposing (href, class, style)
+import Material
+import Material.Scheme
+import Material.Button as Button
+import Material.Grid exposing (grid, cell, size, Device(..))
+import Material.Options as Options exposing (css)
 
-model : Model
-model =
-    let
-        default =
-            Z.singleton ( 0, Html.text "failed", Html.text "failed" )
+import ProjectModel exposing (..)
 
-        model =
-            [ ( "Tab1", "Panel1" ), ( "Tab2", "Panel2" ), ( "Tab3", "Panel3" ), ( "Tab4", "Panel4" ), ( "Tab5", "Panel5" ) ]
-                |> List.indexedMap toViewTuple
-                |> Z.fromList
-    in
-        { tabPanels = Maybe.withDefault default model
-        , groupId = "test-view-container"
-        }
+viewProjects : Model -> Html a
+viewProjects model = grid []
+                    [ cell [ size Tablet 2, size Desktop 3, size Phone 1 ]
+                        [ h4 [] [text "Cell 1"]
+                        ]
+                    , cell [ size Tablet 6, size Desktop 8, size Phone 3 ]
+                        [ h4 [] [text "Cell 2"]
+                        , p [] [text "This cell is offset by 2"]
+                        ]
+                    ]
+{-
+
+viewProjectTabs :
+Tabs.render Mdl [0] model.mdl
+ [ Tabs.ripple
+ , Tabs.onSelectTab SelectTab
+ , Tabs.activeTab model.tab
+ ]
+ [ Tabs.label
+     [ Options.center ]
+     [ Icon.i "info_outline"
+     , Options.span [ css "width" "4px" ] []
+     , text "About tabs"
+     ]
+ , Tabs.label
+     [ Options.center ]
+     [ Icon.i "code"
+     , Options.span [ css "width" "4px" ] []
+     , text "Example"
+     ]
+ ]
+ [ case model.tab of
+     0 -> aboutTab
+     _ -> exampleTab
+ ]
 
 
-toViewTuple : a -> ( String, String ) -> ( a, Html.Html Never, Html.Html Never )
-toViewTuple index ( tabContent, panelContent ) =
-    ( index, header tabContent, panel panelContent )
-
-
-header : String -> Html.Html msg
-header tabContent =
-    Html.h2 [] [ Html.text tabContent ]
-
-
-panel : String -> Html.Html msg
-panel panelContent =
-    Html.div []
-        [ Html.h3 [] [ Html.text panelContent ]
-        , Html.text panelContent
+ div
+    []
+    [ Lists.ul []
+        [ Lists.li []
+            [ Lists.content
+                [ Options.attribute <| Html.Events.onClick (Click "Elm") ]
+                [ text "Elm" ]
+            ]
+        , Lists.li []
+            [ Lists.content
+                [ Options.attribute <| Html.Events.onClick (Click "F#") ]
+                [ text "F#" ]
+            ]
+        , Lists.li []
+            [ Lists.content
+                [ Options.attribute <| Html.Events.onClick (Click "Lisp") ]
+                [ text "Lisp" ]
+            ]
         ]
+    , p []
+        [ text <| "Try clicking a list item above. " ++
+            if model.str /= "" then
+              "You chose '" ++ model.str ++ "'."
+            else
+              ""
+        ]
+    ]
+
+-}

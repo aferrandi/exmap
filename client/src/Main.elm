@@ -1,15 +1,13 @@
 module Main exposing (main)
-
-{-
-
-client for exmap
-
--}
-
 import Html        exposing (..)
 import Html.Events exposing (..)
+import Html.Attributes exposing (href, class, style)
 import WebSocket exposing (..)
 import Json.Decode exposing (decodeString)
+import Material
+import Material.Scheme
+import Material.Button as Button
+import Material.Options as Options exposing (css)
 
 import XMapTypes exposing (..)
 import Project exposing (..)
@@ -17,6 +15,9 @@ import Views exposing (..)
 import DecodeWebEvent exposing (..)
 import EncodeWebRequest exposing (..)
 import WebMessages exposing (..)
+import ProjectModel exposing (..)
+import ProjectsUI exposing (..)
+
 
 main = Html.program
      { init          = init
@@ -25,23 +26,21 @@ main = Html.program
      , subscriptions = subscriptions
      }
 
-type alias Model
-  = Int
-
 type Msg
   = Receive String
   | Send String
+  | Mdl (Material.Msg Msg)
 
 init : (Model, Cmd Msg)
-init =
-  (0, Cmd.none)
+init = ({ openProjects = []
+       , mdl =Material.model
+       }, Cmd.none)
+
+type alias Mdl = Material.Model
 
 view : Model -> Html Msg
-view model =
-  div []
-    [ p [] [ text <| "Pokes: " ++ toString model ]
-    , button [ onClick (Send "pippo") ] [ text "Project" ]
-    ]
+view model = viewProjects model
+        |> Material.Scheme.top
 
 wsUrl : String
 wsUrl = "ws://localhost:3000"
@@ -52,6 +51,7 @@ update msg model = case msg of
                       Ok evt -> updateEvent evt model
                       Err err -> updateEvent (WEError err) model
     Send req -> model ! [ WebSocket.send wsUrl req ]
+    Mdl msg_ -> Material.update Mdl msg_ model
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

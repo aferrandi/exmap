@@ -6,6 +6,9 @@ import WebMessages exposing (..)
 
 encodeWRLoadProject : WebRequest -> Value
 encodeWRLoadProject ev = case ev of
+    WRAllProjects -> object
+            [ ("type", string "allProjects")
+            ]
     WRLoadProject pn ->  object
             [ ("type", string "loadProject")
             , ("projectName", string pn)
