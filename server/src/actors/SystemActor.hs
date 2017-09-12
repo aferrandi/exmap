@@ -90,9 +90,9 @@ loadProjectIfNotAlreadyRunning chan sys c pn= do
 
 projectLoaded :: RuntimeSystem -> WAClient -> Project -> [Calculation] -> IO ()
 projectLoaded sys c p cs = do
-            let pn = projectName p
-            rp <- projectToRuntime (chans sys) p cs
-            runProject sys rp pn
+    let pn = projectName p
+    rp <- projectToRuntime (chans sys) p cs
+    runProject sys rp pn
 
 
 runProject ::RuntimeSystem -> PS.RuntimeProject -> ProjectName -> IO ()
