@@ -47,3 +47,4 @@ data User = User {
 } deriving (Show, Eq)
 
 newtype AllProjects = AllProjects [ProjectName]
+    deriving (Show, Eq)

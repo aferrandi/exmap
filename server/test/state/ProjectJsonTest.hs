@@ -1,4 +1,9 @@
-module ProjectJsonTest (toParseJSON_calculation_same, toParseJSON_project_same, toParseJSON_user_same, toParseJSON_map_same) where
+module ProjectJsonTest (
+    toParseJSON_calculation_same,
+    toParseJSON_project_same,
+    toParseJSON_allProjects_same,
+    toParseJSON_user_same,
+    toParseJSON_map_same) where
 
 import Data.Aeson
 import Test.HUnit
@@ -24,12 +29,17 @@ toParseJSON_calculation_same = TestCase (assertEqual "calculation -> json -> cal
 toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (Just original)  (decode . encode $ original) )
     where original = Project {
             projectName = makeProjectName "proj",
-            calculations = [calculationExample],
+            calculations = [calculationNameExample],
             viewNames = [viewNameExample],
             sources = [source]
             }
           view = viewExample
           source = sourceExample
+
+
+toParseJSON_allProjects_same = TestCase (assertEqual "allProjects -> json -> allProjects" (Just original) (decode . encodeTrace $ original) )
+    where original = AllProjects [makeProjectName "proj1", makeProjectName "proj2"]
+
 
 toParseJSON_user_same = TestCase (assertEqual "user -> json -> user" (Just original) (decode . encodeTrace $ original) )
     where original =  User {
@@ -37,7 +47,10 @@ toParseJSON_user_same = TestCase (assertEqual "user -> json -> user" (Just origi
         accessToProjects = [makeProjectName "proj1", makeProjectName "proj2"]
     }
 
+calculationNameExample = CalculationName (T.pack "calculation")
+
 calculationExample = Calculation {
+        calculationName = calculationNameExample,
         resultName = mapName ["res"],
         formula = XFOperation Subtract (XFMap . mapName $ ["one"]) (XFMap . mapName $ ["two"]),
         operationMode = Intersection

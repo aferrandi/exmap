@@ -6,6 +6,7 @@ import Data.Aeson
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
+--import qualified Data.Vector as V
 
 import Project
 import XMapTypes
@@ -220,11 +221,8 @@ instance ToJSON User where
                  ]
 
 instance FromJSON AllProjects where
-   parseJSON (Object v) =
-      AllProjects <$> v .: "projects"
+   parseJSON  v = AllProjects <$> parseJSONList v
 
 
 instance ToJSON AllProjects where
-     toJSON (AllProjects projectNames) =
-        object [ "projects" .= projectNames
-                 ]
+     toJSON (AllProjects projectNames) = toJSONList projectNames

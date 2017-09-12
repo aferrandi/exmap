@@ -27,6 +27,7 @@ executable exmap
                      , containers
                      , attoparsec
                      , aeson
+                     , vector
                      , unordered-containers
                      , filepath
                      , bytestring

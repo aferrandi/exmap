@@ -7,9 +7,9 @@ import Project
 import View
 
 data WebRequest =
-    WRLoadProject ProjectName
+    WRAllProjects
+    | WRLoadProject ProjectName
     | WRNewProject Project
-    | WRAllProjects
     | WRUpdateProject Project
     | WRLoadMap ProjectName XMapName
     | WRStoreMap ProjectName XNamedMap
@@ -18,8 +18,8 @@ data WebRequest =
     deriving (Show, Eq)
 
 data WebEvent =
-    WEViewChanged ProjectName ViewName XNamedMap
-    | WEAllProjects [ProjectName]
+    WEAllProjects AllProjects
+    | WEViewChanged ProjectName ViewName XNamedMap
     | WEProjectContent Project
     | WEProjectStored ProjectName
     | WEMapLoaded ProjectName XNamedMap

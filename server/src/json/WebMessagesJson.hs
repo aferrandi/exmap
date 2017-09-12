@@ -11,6 +11,9 @@ import ProjectJson
 import qualified Errors as E
 
 instance ToJSON WebEvent where
+     toJSON (WEAllProjects ps) = object [ "type" .=  T.pack "projectContent"
+                                        , "projectNames" .= ps
+                                        ]
      toJSON (WEViewChanged pn vn m) = object [ "type" .=  T.pack "viewChanged"
                                         , "projectName" .= pn
                                         , "viewName" .= vn
@@ -48,6 +51,7 @@ instance ToJSON WebEvent where
 
 instance FromJSON WebRequest where
    parseJSON (Object v) = case HML.lookup "type" v of
+      Just (String "allProjects") ->  return WRAllProjects
       Just (String "loadProject") ->  WRLoadProject <$> v .: "projectName"
       Just (String "newProject") -> WRNewProject <$> v .: "project"
       Just (String "updateProject") -> WRUpdateProject <$> v .: "project"

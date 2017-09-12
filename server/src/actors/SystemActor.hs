@@ -57,7 +57,7 @@ handleEvent chan sys e = case e of
 allProjects :: WAClient -> RuntimeSystem -> STM ()
 allProjects c sys = do
     pbn <- readTVar $ projectByName sys
-    let ps = M.keys pbn
+    let ps = AllProjects $ M.keys pbn
     let evtChan  = eventChan $ chans sys
     writeTChan evtChan (EMWebEvent [c] $ WEAllProjects ps)
 
