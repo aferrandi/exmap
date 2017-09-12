@@ -5,26 +5,26 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Material
 import Material.Scheme
+import Material.Tabs as Tabs
+import Material.Icon as Icon
 import Material.Button as Button
 import Material.Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
 
 import ProjectModel exposing (..)
 
-viewProjects : Model -> Html a
+viewProjects : Model -> Html Msg
 viewProjects model = grid []
                     [ cell [ size Tablet 2, size Desktop 3, size Phone 1 ]
                         [ h4 [] [text "Cell 1"]
                         ]
                     , cell [ size Tablet 6, size Desktop 8, size Phone 3 ]
-                        [ h4 [] [text "Cell 2"]
-                        , p [] [text "This cell is offset by 2"]
+                        [ viewProjectTabs model
                         ]
                     ]
-{-
 
-viewProjectTabs :
-Tabs.render Mdl [0] model.mdl
+viewProjectTabs : Model -> Html Msg
+viewProjectTabs model = Tabs.render Mdl [0] model.mdl
  [ Tabs.ripple
  , Tabs.onSelectTab SelectTab
  , Tabs.activeTab model.tab
@@ -42,12 +42,13 @@ Tabs.render Mdl [0] model.mdl
      , text "Example"
      ]
  ]
- [ case model.tab of
-     0 -> aboutTab
-     _ -> exampleTab
+ [ showProject model.tab
  ]
 
+showProject : Int -> Html a
+showProject index = div [][]
 
+{-
  div
     []
     [ Lists.ul []

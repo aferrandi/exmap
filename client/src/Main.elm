@@ -26,17 +26,13 @@ main = Html.program
      , subscriptions = subscriptions
      }
 
-type Msg
-  = Receive String
-  | Send String
-  | Mdl (Material.Msg Msg)
+
 
 init : (Model, Cmd Msg)
 init = ({ openProjects = []
        , mdl =Material.model
+       , tab = 0
        }, Cmd.none)
-
-type alias Mdl = Material.Model
 
 view : Model -> Html Msg
 view model = viewProjects model
@@ -52,6 +48,7 @@ update msg model = case msg of
                       Err err -> updateEvent (WEError err) model
     Send req -> model ! [ WebSocket.send wsUrl req ]
     Mdl msg_ -> Material.update Mdl msg_ model
+    SelectTab idx -> ({ model | tab = idx }, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
