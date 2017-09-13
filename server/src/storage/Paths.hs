@@ -8,7 +8,7 @@ import View
 import qualified Data.Text as T
 
 allProjectsPath :: FilePath -> FilePath
-allProjectsPath root = root </> "allprojects.ex"
+allProjectsPath root = root </> "allProjects.ex"
 
 projectDir :: FilePath -> ProjectName -> FilePath
 projectDir root (ProjectName pn) = root </> T.unpack pn

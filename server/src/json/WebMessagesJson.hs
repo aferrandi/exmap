@@ -11,7 +11,7 @@ import ProjectJson
 import qualified Errors as E
 
 instance ToJSON WebEvent where
-     toJSON (WEAllProjects ps) = object [ "type" .=  T.pack "projectContent"
+     toJSON (WEAllProjects ps) = object [ "type" .=  T.pack "allProjects"
                                         , "projectNames" .= ps
                                         ]
      toJSON (WEViewChanged pn vn m) = object [ "type" .=  T.pack "viewChanged"

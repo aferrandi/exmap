@@ -18,6 +18,7 @@ actorEvent chan = loop
             msg <- atomically $ readTChan chan
             case msg of
                 EMWebEvent cs e -> do
+                    print $ "send "++ show e ++ " to clients "++ show cs
                     sendToClients cs e
                     loop
                 EMStop -> return ()

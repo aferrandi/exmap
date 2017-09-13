@@ -80,6 +80,7 @@ sendErrorToClient clientId clients err = case M.lookup  clientId clients of
 
 handleMessage :: WAClientId -> Concurrent.MVar WAState -> B.ByteString -> IO ()
 handleMessage cid stateRef json = do
+  print $ "got request " ++ show json ++ " from " ++ show cid
   state <- Concurrent.readMVar stateRef
   case eitherDecode json of
         Right r -> atomically $ handleWebRequest cid state r
