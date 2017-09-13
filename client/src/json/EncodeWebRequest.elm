@@ -4,8 +4,8 @@ import Json.Encode exposing (..)
 import EncodeProject exposing (..)
 import WebMessages exposing (..)
 
-encodeWRLoadProject : WebRequest -> Value
-encodeWRLoadProject ev = case ev of
+encodeWebRequest : WebRequest -> Value
+encodeWebRequest ev = case ev of
     WRAllProjects -> object
             [ ("type", string "allProjects")
             ]

@@ -4,6 +4,7 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, style)
 import WebSocket exposing (..)
 import Json.Decode exposing (decodeString)
+import Json.Encode exposing (encode)
 import Material
 import Material.Scheme
 import Material.Button as Button
@@ -29,10 +30,11 @@ main = Html.program
 
 
 init : (Model, Cmd Msg)
-init = ({ openProjects = []
+init = let model = { openProjects = []
        , mdl =Material.model
        , tab = 0
-       }, Cmd.none)
+       }
+       in model ! [  sendToServer WRAllProjects ]
 
 view : Model -> Html Msg
 view model = viewProjects model
@@ -40,6 +42,9 @@ view model = viewProjects model
 
 wsUrl : String
 wsUrl = "ws://localhost:3000"
+
+sendToServer : WebRequest -> Cmd Msg
+sendToServer req = WebSocket.send wsUrl (encode 0 (encodeWebRequest req))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = case msg of
