@@ -6,6 +6,7 @@ import Html.Attributes exposing (href, class, style)
 import Material
 import Material.Scheme
 import Material.Tabs as Tabs
+import Material.List as Lists
 import Material.Icon as Icon
 import Material.Button as Button
 import Material.Grid exposing (grid, cell, size, Device(..))
@@ -16,12 +17,18 @@ import ProjectModel exposing (..)
 viewProjects : Model -> Html Msg
 viewProjects model = grid []
                     [ cell [ size Tablet 2, size Desktop 3, size Phone 1 ]
-                        [ h4 [] [text "Cell 1"]
-                        ]
+                        [ viewAllProjects model ]
                     , cell [ size Tablet 6, size Desktop 8, size Phone 3 ]
-                        [ viewProjectTabs model
-                        ]
+                        [ viewProjectTabs model ]
                     ]
+viewAllProjects : Model -> Html Msg
+viewAllProjects model = let viewProjectButton pn = Lists.li []
+                                                               [ Lists.content
+                                                                   [ Options.attribute <| Html.Events.onClick (OpenProject pn) ]
+                                                                   [ text pn ]
+                                                               ]
+                        in Lists.ul [] (List.map viewProjectButton model.allProjects)
+
 
 viewProjectTabs : Model -> Html Msg
 viewProjectTabs model = Tabs.render Mdl [0] model.mdl

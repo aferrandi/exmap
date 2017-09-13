@@ -16,11 +16,21 @@ type alias ProjectModel = {
 
 type alias Model = {
     openProjects : List ProjectModel
+    , allProjects : List ProjectName
     , mdl : Material.Model
     , tab : Int
     }
+
 type Msg
   = Receive String
   | Send String
   | Mdl (Material.Msg Msg)
   | SelectTab Int
+  | OpenProject ProjectName
+
+emptyModel : Model
+emptyModel = { openProjects = []
+               , allProjects = []
+               , mdl =Material.model
+               , tab = 0
+               }
