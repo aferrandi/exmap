@@ -1,9 +1,11 @@
 module ProjectModel exposing (..)
 
 import Material
+import Dict exposing (..)
 
 import Project exposing (..)
 import Views exposing (..)
+import WebMessages exposing (WebRequest)
 
 type alias Mdl = Material.Model
 
@@ -15,22 +17,30 @@ type alias ProjectModel = {
     , openViews : List ViewModel }
 
 type alias Model = {
-    openProjects : List ProjectModel
+    openProjects : Dict ProjectName ProjectModel
     , allProjects : List ProjectName
     , mdl : Material.Model
     , tab : Int
+    , messages : List Error
     }
 
 type Msg
   = Receive String
-  | Send String
+  | Send WebRequest
   | Mdl (Material.Msg Msg)
   | SelectTab Int
-  | OpenProject ProjectName
 
 emptyModel : Model
-emptyModel = { openProjects = []
+emptyModel = { openProjects = Dict.empty
                , allProjects = []
+               , messages = []
                , mdl =Material.model
                , tab = 0
                }
+
+initProjectModel : Project -> ProjectModel
+initProjectModel p = {
+    project = p
+    , openViews = []
+    }
+

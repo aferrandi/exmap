@@ -9,8 +9,8 @@ encodeWebRequest ev = case ev of
     WRAllProjects -> object
             [ ("type", string "allProjects")
             ]
-    WRLoadProject pn ->  object
-            [ ("type", string "loadProject")
+    WRSubscribeToProject pn ->  object
+            [ ("type", string "subscribeToProject")
             , ("projectName", string pn)
             ]
     WRNewProject p -> object
