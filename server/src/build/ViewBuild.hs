@@ -35,8 +35,9 @@ viewToRuntime pn v = do
         status = status
     }
 
-
+{-
 runtimeDependencies :: RuntimeView  -> STM [XMapName]
 runtimeDependencies vr = do
                 v <- readTVar (view vr)
                 return $ viewDependencies v
+-}

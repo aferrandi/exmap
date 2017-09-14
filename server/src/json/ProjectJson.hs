@@ -197,14 +197,14 @@ instance FromJSON Project where
    parseJSON (Object v) =
       Project  <$> v .: "projectName"
              <*> v .: "calculations"
-             <*> v .: "views"
+             <*> v .: "viewNames"
              <*> v .: "sources"
 
 instance ToJSON Project where
      toJSON (Project projectName calculations views sources) =
         object [ "projectName"  .= projectName
                 , "calculations" .= calculations
-                , "views" .= views
+                , "viewNames" .= views
                 , "sources" .= sources
                  ]
 

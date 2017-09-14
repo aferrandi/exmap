@@ -8,7 +8,6 @@ import Control.Concurrent.STM
 import AssocList
 import CalculationMessages
 import ProjectState
-import ViewState
 import CommonChannels
 import Project
 import ProjectJson
@@ -16,7 +15,6 @@ import Load
 import CalculationActor
 import Dependencies
 import CalculationBuild
-import ViewBuild
 import Errors
 import XMapTypes
 
@@ -51,13 +49,15 @@ buildRuntimeProject chans p cbn cbm = do
     trp <- newTVar p
     tvbm <- newTVar M.empty
     tvbn <- newTVar M.empty
+    tsc <- newTVar []
     return RuntimeProject {
         project = trp,
         calculationChanByName = tcbn,
         calculationChanByMap = tcbm,
         viewChanByMap = tvbm,
         viewChanByName = tvbn,
-        chans = chans
+        chans = chans,
+        subscribedClients = tsc
     }
 
 calculationChansByNames :: [CalculationWithChan] ->  CalculationChanByMapName
