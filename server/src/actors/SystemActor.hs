@@ -42,7 +42,8 @@ actorSystem chan sys = loop
 handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> STM ()
 handleRequest chan sys r = case r of
         SRAllProjects c -> allProjects c sys
-        SRLoadProject c pn -> loadProjectIfNotAlreadyRunning chan  sys c pn
+        SRSubscribeToProject c pn -> loadProjectIfNotAlreadyRunning chan  sys c pn
+
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
         SRLoadMap c pn mn -> pipeToProject c pn sys (PMRequest $ PRLoadMap c mn)
@@ -83,16 +84,18 @@ loadProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Pro
 loadProjectIfNotAlreadyRunning chan sys c pn= do
   pbn <- readTVar (projectByName sys)
   case M.lookup pn pbn of
-      Just mp -> case mp of
-                     Just p -> sendSysError sys c ("the project " ++ show pn ++ " is already running")
+      Just mpc -> case mpc of
+                     Just pc -> writeTChan pc (PMRequest (PRSubscribeToProject c))
                      Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
       Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist in the sys")
+
 
 projectLoaded :: RuntimeSystem -> WAClient -> Project -> [Calculation] -> IO ()
 projectLoaded sys c p cs = do
     let pn = projectName p
     rp <- projectToRuntime (chans sys) p cs
     runProject sys rp pn
+    atomically $ pipeToProject c pn sys (PMRequest (PRSubscribeToProject c))
 
 
 runProject ::RuntimeSystem -> PS.RuntimeProject -> ProjectName -> IO ()

@@ -46,17 +46,12 @@ handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= do
     pn <- prjName rp
     case r of
+        PRSubscribeToProject c -> subscribeToProject c rp
+        PRUnsubscribeFromProject c -> unsubscribeFromProject c rp
         PRSubscribeToView c vn -> subscribeToView c vn rp chan
         PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
         PRLoadMap c mn -> writeTChan (loadChan $ chans rp)  $ LMLoadMap chan c pn mn
         PRStoreMap c m -> writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn  m
-
-prjName :: RuntimeProject -> STM ProjectName
-prjName rp = do
-    p <- readTVar (project rp)
-    return $ projectName p
-
-
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
@@ -67,6 +62,16 @@ handleEvent chan rp e = case e of
     PEMapStored c m -> atomically $ mapStored rp c m
     PEMapStoreError c m err -> atomically $ sendError evtChan [c] err
     where evtChan  = eventChan $ chans rp
+
+subscribeToProject :: WAClient -> RuntimeProject -> STM()
+subscribeToProject c rp = do
+    p <- readTVar $ project rp
+    modifyTVar (subscribedClients rp) (\cs -> c : cs)
+    writeTChan (eventChan $ chans rp) (EMWebEvent [c] (WEProjectContent p))
+
+unsubscribeFromProject :: WAClient -> RuntimeProject -> STM()
+unsubscribeFromProject c rp = do
+    modifyTVar (subscribedClients rp) (filter (\ci -> ci /= c))
 
 viewLoaded :: RuntimeProject -> WAClient -> View -> IO ()
 viewLoaded rp c v = do
@@ -114,3 +119,9 @@ mapStored rp c m = do
      mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
      let evtChan  = eventChan $ chans rp
      writeTChan evtChan (EMWebEvent [c] $ WEMapStored pn mn)
+
+
+prjName :: RuntimeProject -> STM ProjectName
+prjName rp = do
+    p <- readTVar (project rp)
+    return $ projectName p

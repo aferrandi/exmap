@@ -10,6 +10,7 @@ import CommonChannels
 import Project
 import XMapTypes
 import View
+import WebClients
 
 -- because not all views of the project are necessarily been viewed
 type ViewChanByName = M.Map ViewName (Maybe ViewChan)
@@ -23,7 +24,8 @@ data RuntimeProject = RuntimeProject {
     calculationChanByMap :: TVar CalculationChanByMapName,
     viewChanByMap :: TVar ViewChanByMapName,
     viewChanByName :: TVar ViewChanByName,
-    chans :: CommonChans
+    chans :: CommonChans,
+    subscribedClients :: TVar [WAClient]
 }
 
 

@@ -10,6 +10,8 @@ import View
 import Errors
 
 data ProjectRequest = PRMap XNamedMap
+                        | PRSubscribeToProject WAClient
+                        | PRUnsubscribeFromProject WAClient
                         | PRUpdateProject Project
                         | PRSubscribeToView WAClient ViewName
                         | PRUnsubscribeFromView WAClient ViewName

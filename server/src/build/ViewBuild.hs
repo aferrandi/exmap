@@ -6,7 +6,6 @@ import Control.Concurrent.STM
 import Control.Concurrent
 import qualified Data.Traversable as T
 
-import ProjectState
 import ViewState
 import View
 import AssocList

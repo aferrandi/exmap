@@ -8,7 +8,7 @@ import View
 
 data WebRequest =
     WRAllProjects
-    | WRLoadProject ProjectName
+    | WRSubscribeToProject ProjectName
     | WRNewProject Project
     | WRUpdateProject Project
     | WRLoadMap ProjectName XMapName

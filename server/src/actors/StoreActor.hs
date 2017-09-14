@@ -33,7 +33,6 @@ actorStore root chan = loop
                     storeViewInActor root source c pn v
                     loop
                 StMStop -> return ()
-                otherwise -> die $ "Unexpected message in store actor"
 
 storeProjectInActor :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
 storeProjectInActor root source c p = do

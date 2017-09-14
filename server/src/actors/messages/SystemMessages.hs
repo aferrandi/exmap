@@ -9,7 +9,8 @@ import View
 import LogTypes
 import Errors
 
-data SystemRequest = SRLoadProject WAClient ProjectName
+data SystemRequest = SRSubscribeToProject WAClient ProjectName
+                    | SRUnsubscribeFromProject WAClient ProjectName
                     | SRNewProject WAClient Project
                     | SRUpdateProject WAClient Project
                     | SRAllProjects WAClient
