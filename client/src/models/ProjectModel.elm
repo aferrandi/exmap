@@ -17,7 +17,7 @@ type alias ProjectModel = {
     , openViews : List ViewModel }
 
 type alias Model = {
-    openProjects : Dict ProjectName ProjectModel
+    openProjects : List ProjectModel
     , allProjects : List ProjectName
     , mdl : Material.Model
     , projectTab : Int
@@ -33,7 +33,7 @@ type Msg
   | SelectViewTab Int
 
 emptyModel : Model
-emptyModel = { openProjects = Dict.empty
+emptyModel = { openProjects = []
                , allProjects = []
                , messages = []
                , mdl =Material.model

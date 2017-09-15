@@ -48,11 +48,13 @@ updateEvent evt model = case evt of
                             WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
                             otherwise -> (model , Cmd.none)
 
-updateOpenProjects : Project -> Dict ProjectName ProjectModel -> Dict ProjectName ProjectModel
-updateOpenProjects p ops = let newOp = case Dict.get p.projectName ops of
-                                        Just pm -> { pm | project = p }
-                                        Nothing -> { project = p, openViews = [] }
-                           in Dict.insert p.projectName newOp ops
+updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
+updateOpenProjects p ops = let (same, notSame) = List.partition (\pm -> pm.project.projectName == p.projectName) ops
+                               same1 = List.head same
+                               newPm = case same1 of
+                                             Just fm -> { fm | project = p }
+                                             Nothing -> { project = p, openViews = [] }
+                           in newPm :: notSame
 
 updateWithWebEvent : String -> Model -> (Model, Cmd Msg)
 updateWithWebEvent json model = let _ = Debug.log ("Event " ++ json)

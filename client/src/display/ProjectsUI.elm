@@ -40,6 +40,9 @@ viewAllProjects model = let viewProjectName pn = Lists.li []
                         in Lists.ul [] (List.map viewProjectName model.allProjects)
 
 
+getAt : List a -> Int -> Maybe a
+getAt l i = List.head (List.drop i l)
+
 viewProjectTabs : Model -> Html Msg
 viewProjectTabs model = let projectTab pm = Tabs.label
                                        [ Options.center ]
@@ -52,14 +55,17 @@ viewProjectTabs model = let projectTab pm = Tabs.label
                              , Tabs.onSelectTab SelectProjectTab
                              , Tabs.activeTab model.projectTab
                              ]
-                             (List.map projectTab (Dict.values model.openProjects))
-                         [ showProject model.projectTab
+                             (List.map projectTab model.openProjects)
+                         [ viewProjectAt model
                          ]
 
-showProject : Int -> Html a
-showProject index = div [][]
+viewProjectAt : Model -> Html Msg
+viewProjectAt model = case getAt model.openProjects model.projectTab of
+                    Just pm -> viewProject model pm
+                    Nothing -> div [][]
 
-viewMessages : Model -> Html sg
+
+viewMessages : Model -> Html Msg
 viewMessages model = let viewMessage msg = Lists.li []
                                                    [ Lists.icon "inbox" []
                                                    , text msg
