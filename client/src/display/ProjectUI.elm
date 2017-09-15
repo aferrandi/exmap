@@ -34,25 +34,23 @@ viewAllViews model pm = let viewViewName vn = Lists.li []
                          in Lists.ul [] (List.map viewViewName pm.project.viewNames)
 
 
+
+viewTabHeader : ViewModel -> Tabs.Label Msg
+viewTabHeader vm = Tabs.label
+               [ Options.center ]
+               [ Icon.i "info_outline"
+               , Options.span [ css "width" "4px" ] []
+               , text vm.view.viewName
+               ]
+
+
 viewViewTabs :  Model -> ProjectModel -> Html Msg
 viewViewTabs model pm = Tabs.render Mdl [0] model.mdl
  [ Tabs.ripple
  , Tabs.onSelectTab SelectViewTab
  , Tabs.activeTab model.viewTab
  ]
- [ Tabs.label
-     [ Options.center ]
-     [ Icon.i "info_outline"
-     , Options.span [ css "width" "4px" ] []
-     , text "About tabs"
-     ]
- , Tabs.label
-     [ Options.center ]
-     [ Icon.i "code"
-     , Options.span [ css "width" "4px" ] []
-     , text "Example"
-     ]
- ]
+ (List.map viewTabHeader pm.openViews)
  [ showView model.viewTab
  ]
 

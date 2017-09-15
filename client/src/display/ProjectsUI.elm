@@ -16,6 +16,7 @@ import Dict as Dict exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ProjectUI exposing (..)
+import Project exposing (ProjectName, Error)
 
 viewProjects : Model -> Html Msg
 viewProjects model = div [] [
@@ -31,33 +32,37 @@ viewProjects model = div [] [
                         ]
 
 
+viewAllProjectsItem : ProjectName -> Html Msg
+viewAllProjectsItem pn = Lists.li []
+                            [ Lists.content
+                                [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
+                                [ text pn ]
+                            ]
+
 viewAllProjects : Model -> Html Msg
-viewAllProjects model = let viewProjectName pn = Lists.li []
-                                                   [ Lists.content
-                                                       [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
-                                                       [ text pn ]
-                                                   ]
-                        in Lists.ul [] (List.map viewProjectName model.allProjects)
+viewAllProjects model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
 
 
 getAt : List a -> Int -> Maybe a
 getAt l i = List.head (List.drop i l)
 
+
+projectTabHeader : ProjectModel -> Tabs.Label Msg
+projectTabHeader pm = Tabs.label
+               [ Options.center ]
+               [ Icon.i "info_outline"
+               , Options.span [ css "width" "4px" ] []
+               , text pm.project.projectName
+               ]
+
 viewProjectTabs : Model -> Html Msg
-viewProjectTabs model = let projectTab pm = Tabs.label
-                                       [ Options.center ]
-                                       [ Icon.i "info_outline"
-                                       , Options.span [ css "width" "4px" ] []
-                                       , text pm.project.projectName
-                                       ]
-                        in Tabs.render Mdl [0] model.mdl
+viewProjectTabs model = Tabs.render Mdl [0] model.mdl
                              [ Tabs.ripple
                              , Tabs.onSelectTab SelectProjectTab
                              , Tabs.activeTab model.projectTab
                              ]
-                             (List.map projectTab model.openProjects)
-                         [ viewProjectAt model
-                         ]
+                             (List.map projectTabHeader model.openProjects)
+                         [ viewProjectAt model]
 
 viewProjectAt : Model -> Html Msg
 viewProjectAt model = case getAt model.openProjects model.projectTab of
@@ -65,9 +70,11 @@ viewProjectAt model = case getAt model.openProjects model.projectTab of
                     Nothing -> div [][]
 
 
+viewMessagesItem : Error -> Html Msg
+viewMessagesItem msg = Lists.li []
+                          [ Lists.icon "inbox" []
+                          , text msg
+                          ]
+
 viewMessages : Model -> Html Msg
-viewMessages model = let viewMessage msg = Lists.li []
-                                                   [ Lists.icon "inbox" []
-                                                   , text msg
-                                                   ]
-                     in Lists.ul [] (List.map viewMessage model.messages)
+viewMessages model = Lists.ul [] (List.map viewMessagesItem model.messages)
