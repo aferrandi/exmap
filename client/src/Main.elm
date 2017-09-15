@@ -9,7 +9,7 @@ import Material
 import Material.Scheme
 import Material.Button as Button
 import Material.Options as Options exposing (css)
-import Dict exposing (..)
+import Dict as Dict exposing (..)
 
 import XMapTypes exposing (..)
 import Project exposing (..)
@@ -65,7 +65,8 @@ update msg model = case msg of
     Receive json -> updateWithWebEvent json model
     Send req -> model ! [ sendToServer req ]
     Mdl msg_ -> Material.update Mdl msg_ model
-    SelectTab idx -> ({ model | tab = idx }, Cmd.none)
+    SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
+    SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

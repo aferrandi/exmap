@@ -1,4 +1,4 @@
-module ProjectsUI exposing (..)
+module ProjectsUI exposing (viewProjects)
 
 import Html        exposing (..)
 import Html.Events exposing (..)
@@ -9,19 +9,21 @@ import Material.Tabs as Tabs
 import Material.List as Lists
 import Material.Icon as Icon
 import Material.Button as Button
-import Material.Grid exposing (grid, cell, size, Device(..))
+import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
+import Dict as Dict exposing (..)
 
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
+import ProjectUI exposing (..)
 
 viewProjects : Model -> Html Msg
 viewProjects model = div [] [
                             div [class  "content"] [
-                                grid [ ]
-                                    [ cell [ size Tablet 2, size Desktop 3, size Phone 1 ]
+                                Grid.grid [ ]
+                                    [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 3, Grid.size Grid.Phone 1 ]
                                         [ viewAllProjects model ]
-                                    , cell [ size Tablet 6, size Desktop 8, size Phone 3 ]
+                                    , Grid.cell [ Grid.size Grid.Tablet 6, Grid.size Grid.Desktop 8, Grid.size Grid.Phone 3 ]
                                         [ viewProjectTabs model ]
                                 ]
                                 ]
@@ -39,26 +41,20 @@ viewAllProjects model = let viewProjectName pn = Lists.li []
 
 
 viewProjectTabs : Model -> Html Msg
-viewProjectTabs model = Tabs.render Mdl [0] model.mdl
- [ Tabs.ripple
- , Tabs.onSelectTab SelectTab
- , Tabs.activeTab model.tab
- ]
- [ Tabs.label
-     [ Options.center ]
-     [ Icon.i "info_outline"
-     , Options.span [ css "width" "4px" ] []
-     , text "About tabs"
-     ]
- , Tabs.label
-     [ Options.center ]
-     [ Icon.i "code"
-     , Options.span [ css "width" "4px" ] []
-     , text "Example"
-     ]
- ]
- [ showProject model.tab
- ]
+viewProjectTabs model = let projectTab pm = Tabs.label
+                                       [ Options.center ]
+                                       [ Icon.i "info_outline"
+                                       , Options.span [ css "width" "4px" ] []
+                                       , text pm.project.projectName
+                                       ]
+                        in Tabs.render Mdl [0] model.mdl
+                             [ Tabs.ripple
+                             , Tabs.onSelectTab SelectProjectTab
+                             , Tabs.activeTab model.projectTab
+                             ]
+                             (List.map projectTab (Dict.values model.openProjects))
+                         [ showProject model.projectTab
+                         ]
 
 showProject : Int -> Html a
 showProject index = div [][]

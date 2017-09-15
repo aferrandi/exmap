@@ -20,7 +20,8 @@ type alias Model = {
     openProjects : Dict ProjectName ProjectModel
     , allProjects : List ProjectName
     , mdl : Material.Model
-    , tab : Int
+    , projectTab : Int
+    , viewTab : Int
     , messages : List Error
     }
 
@@ -28,19 +29,16 @@ type Msg
   = Receive String
   | Send WebRequest
   | Mdl (Material.Msg Msg)
-  | SelectTab Int
+  | SelectProjectTab Int
+  | SelectViewTab Int
 
 emptyModel : Model
 emptyModel = { openProjects = Dict.empty
                , allProjects = []
                , messages = []
                , mdl =Material.model
-               , tab = 0
+               , projectTab = 0
+               , viewTab = 0
                }
 
-initProjectModel : Project -> ProjectModel
-initProjectModel p = {
-    project = p
-    , openViews = []
-    }
 
