@@ -14,15 +14,15 @@ import WebClients
 
 -- because not all views of the project are necessarily been viewed
 type ViewChanByName = M.Map ViewName (Maybe ViewChan)
-type ViewChanByMapName = M.Map XMapName [ViewChan]
-type CalculationChanByMapName = M.Map XMapName [CalculationChan]
+type ViewChanByMap = M.Map XMapName [ViewChan]
+type CalculationChanByMap = M.Map XMapName [CalculationChan]
 type CalculationChanByName = M.Map CalculationName CalculationChan
 
 data RuntimeProject = RuntimeProject {
     project :: TVar Project,
     calculationChanByName :: TVar CalculationChanByName,
-    calculationChanByMap :: TVar CalculationChanByMapName,
-    viewChanByMap :: TVar ViewChanByMapName,
+    calculationChanByMap :: TVar CalculationChanByMap,
+    viewChanByMap :: TVar ViewChanByMap,
     viewChanByName :: TVar ViewChanByName,
     chans :: CommonChans,
     subscribedClients :: TVar [WAClient]

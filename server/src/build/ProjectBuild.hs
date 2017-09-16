@@ -42,13 +42,13 @@ buildCalculationChan c = do
     cch <- calculationToChan cr
     return CalculationWithChan { calculation = c, chan = cch }
 
-buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMapName -> STM RuntimeProject
+buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMap -> STM RuntimeProject
 buildRuntimeProject chans p cbn cbm = do
     tcbn <- newTVar cbn
     tcbm <- newTVar cbm
     trp <- newTVar p
     tvbm <- newTVar M.empty
-    tvbn <- newTVar M.empty
+    tvbn <- newTVar $ M.fromList (map (\vn -> (vn, Nothing)) (views p))
     tsc <- newTVar []
     return RuntimeProject {
         project = trp,
@@ -60,7 +60,7 @@ buildRuntimeProject chans p cbn cbm = do
         subscribedClients = tsc
     }
 
-calculationChansByNames :: [CalculationWithChan] ->  CalculationChanByMapName
+calculationChansByNames :: [CalculationWithChan] ->  CalculationChanByMap
 calculationChansByNames ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
         -- return $ T.mapM sequence cs
     where deps :: CalculationWithChan -> [XMapName]

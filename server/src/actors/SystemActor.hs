@@ -43,7 +43,8 @@ handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> STM ()
 handleRequest chan sys r = case r of
         SRAllProjects c -> allProjects c sys
         SRSubscribeToProject c pn -> loadProjectIfNotAlreadyRunning chan  sys c pn
-
+        SRSubscribeToView c pn vn -> pipeToProject c pn sys (PMRequest $ PRSubscribeToView c vn)
+        SRUnsubscribeFromView c pn vn -> pipeToProject c pn sys (PMRequest $ PRUnsubscribeFromView c vn)
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
         SRLoadMap c pn mn -> pipeToProject c pn sys (PMRequest $ PRLoadMap c mn)

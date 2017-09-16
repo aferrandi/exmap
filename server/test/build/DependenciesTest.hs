@@ -59,6 +59,7 @@ calculationDependencies_simpleCalculation_originalMap = TestCase (assertEqual "d
     where ka = mapName ["a"]
           kr = mapName ["r"]
           c = Calculation {
+                calculationName = CalculationName $ T.pack "calc",
                 resultName = kr,
                 formula = XFMap ka,
                 operationMode = Intersection

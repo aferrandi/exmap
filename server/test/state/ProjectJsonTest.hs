@@ -3,7 +3,8 @@ module ProjectJsonTest (
     toParseJSON_project_same,
     toParseJSON_allProjects_same,
     toParseJSON_user_same,
-    toParseJSON_map_same) where
+    toParseJSON_map_same,
+    toParseJSON_view_same) where
 
 import Data.Aeson
 import Test.HUnit
@@ -26,15 +27,26 @@ import Debug.Trace
 
 toParseJSON_calculation_same = TestCase (assertEqual "calculation -> json -> calculation" (Just calculationExample) (decode . encodeTrace $ calculationExample) )
 
-toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (Just original)  (decode . encode $ original) )
+toParseJSON_project_same = TestCase (assertEqual "project -> json -> project" (Just original)  (decode . encodeTrace $ original) )
     where original = Project {
             projectName = makeProjectName "proj",
             calculations = [calculationNameExample],
-            viewNames = [viewNameExample],
+            views = [viewNameExample],
             sources = [source]
             }
-          view = viewExample
           source = sourceExample
+
+
+toParseJSON_view_same = TestCase (assertEqual "view -> json -> view" (Just original)  (decode . encodeTrace $ original) )
+    where original = View {
+                           viewName = viewNameExample,
+                           rows = [
+                               ViewRow [
+                                   MapItem (mapName ["one"]),
+                                   LabelItem (ViewLabel (T.pack "label"))
+                                   ]
+                           ]
+                     }
 
 
 toParseJSON_allProjects_same = TestCase (assertEqual "allProjects -> json -> allProjects" (Just original) (decode . encodeTrace $ original) )
@@ -56,16 +68,6 @@ calculationExample = Calculation {
         operationMode = Intersection
         }
 
-
-viewExample = View {
-      viewName = viewNameExample,
-      rows = [
-          ViewRow [
-              MapItem (mapName ["one"]),
-              LabelItem (ViewLabel (T.pack "label"))
-              ]
-      ]
-}
 
 viewNameExample = ViewName (T.pack "view")
 

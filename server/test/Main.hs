@@ -31,6 +31,7 @@ main = runTestTT tests
                 FormulaParserTest.parseFormula_formulaWrongApplicationName_error,
 
                 ProjectJsonTest.toParseJSON_calculation_same,
+                ProjectJsonTest.toParseJSON_view_same,
                 ProjectJsonTest.toParseJSON_project_same,
                 ProjectJsonTest.toParseJSON_allProjects_same,
                 ProjectJsonTest.toParseJSON_user_same,

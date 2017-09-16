@@ -36,7 +36,7 @@ data Source = Source {
 data Project = Project {
     projectName :: ProjectName,
     calculations :: [CalculationName],
-    viewNames :: [ViewName],
+    views :: [ViewName],
     sources :: [Source] -- maps could come from different sources
 } deriving (Show, Eq)
 
