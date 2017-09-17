@@ -80,22 +80,22 @@ projectDecoder : Decoder Project
 projectDecoder = decode Project
                    |> required "projectName" string
                    |> required "calculations" (list string)
-                   |> required "viewNames" (list string)
+                   |> required "views" (list string)
                    |> required "sources" (list sourceDecoder)
 
 viewItemDecoder : Decoder ViewItem
 viewItemDecoder =
     let decodeFromType t = case t of
-                            "mapItem" -> decode MapItem
+                            "map" -> decode MapItem
                                                |> required "mapName" xmapNameDecoder
-                            "labelItem" -> decode LabelItem
-                                               |> required "viewLabel" string
+                            "label" -> decode LabelItem
+                                               |> required "label" string
                             otherwise -> fail ("view item type " ++ t ++ " not recognized")
     in decodeType decodeFromType
 
 
 viewRowDecoder : Decoder ViewRow
-viewRowDecoder = list viewItemDecoder |> andThen (\s -> succeed (ViewRow s))
+viewRowDecoder = field "items" (list viewItemDecoder) |> andThen (\s -> succeed (ViewRow s))
 
 -- vertical on the screen
 

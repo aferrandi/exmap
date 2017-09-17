@@ -79,7 +79,7 @@ encodeProject : Project -> Value
 encodeProject p = object
                  [ ("projectName", string p.projectName)
                  , ("calculations", List.map string p.calculations |> list)
-                 , ("viewNames", List.map string p.viewNames |> list)
+                 , ("views", List.map string p.viewNames |> list)
                  , ("sources", List.map encodeSource p.sources |> list)
                   ]
 
