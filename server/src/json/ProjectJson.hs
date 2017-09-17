@@ -180,10 +180,10 @@ instance ToJSON ViewName where
    toJSON (ViewName v) = String v
 
 instance FromJSON View where
-   parseJSON (Object v) = View <$> v .: "name" <*> v .: "rows"
+   parseJSON (Object v) = View <$> v .: "viewName" <*> v .: "rows"
 
 instance ToJSON View where
-     toJSON (View n rs) = object [ "name" .= n
+     toJSON (View n rs) = object [ "viewName" .= n
                                  , "rows" .= rs
                                  ]
 

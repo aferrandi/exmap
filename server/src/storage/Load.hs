@@ -22,8 +22,10 @@ tryReadAndDecode ::  FromJSON a => FilePath -> IO (Either Error a)
 tryReadAndDecode p = do
      strOrExc <- tryReadFile p
      return $ case strOrExc of
-        Left ex -> Left $ mkError (show ex)
-        Right json -> first mkError $ eitherDecode json
+        Left ex -> Left $ readingError ex
+        Right json -> first decodingError $ eitherDecode json
+     where decodingError ex = mkError $ "Decoding the file " ++ show p ++ "got " ++show ex
+           readingError ex = mkError $ "Reading the file " ++ show p ++ "got " ++show ex
 
 loadAvailableProjects :: FilePath -> IO (Either Error AllProjects)
 loadAvailableProjects root = tryReadAndDecode (allProjectsPath root)

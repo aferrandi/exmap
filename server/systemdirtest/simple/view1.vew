@@ -1,5 +1,5 @@
 {
-    "name": "view1",
+    "viewName": "view1",
     "rows": [{
             "items" : [
                 { "type": "label", "label": "firstView" },

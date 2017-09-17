@@ -23,12 +23,13 @@ data WAState = WAState {
                     logChan :: LogChan
                     }
 
-handleWebRequest :: WAClientId -> WAState -> WebRequest -> STM ()
+handleWebRequest :: WAClientId -> WAState -> WebRequest -> IO ()
 handleWebRequest id s r = do
+    print $ "handling request " ++ show r ++ " from " ++ show id
     let mc = M.lookup id (clients s)
     case mc of
-        Just c -> handleClientRequest c (systemChan s) r
-        Nothing -> writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show id ++ " not found"))
+        Just c -> atomically $ handleClientRequest c (systemChan s) r
+        Nothing -> atomically $ writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show id ++ " not found"))
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of

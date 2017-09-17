@@ -83,8 +83,8 @@ handleMessage cid stateRef json = do
   print $ "got request " ++ show json ++ " from " ++ show cid
   state <- Concurrent.readMVar stateRef
   case eitherDecode json of
-        Right r -> atomically $ handleWebRequest cid state r
-        Left e -> sendErrorToClient cid (clients state) (mkError e)
+        Right r -> handleWebRequest cid state r
+        Left e -> sendErrorToClient cid (clients state) (mkError (e ++ " when decoding " ++ show json))
   return ()
 
 wsApp :: Concurrent.MVar WAState -> WS.ServerApp
