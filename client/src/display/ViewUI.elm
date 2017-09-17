@@ -14,5 +14,5 @@ import Material.Options as Options exposing (css)
 
 import ProjectModel exposing (..)
 
-viewView : Model -> ViewModel -> Html Msg
-viewView model vm = div [][]
+viewView : Model -> ProjectModel -> ViewModel -> Html Msg
+viewView model pm vm = div [][]

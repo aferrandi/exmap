@@ -11,6 +11,7 @@ import Material.List as Lists
 import Material.Button as Button
 import Material.Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
+import List.Extra exposing (getAt)
 
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
@@ -51,8 +52,10 @@ viewViewTabs model pm = Tabs.render Mdl [0] model.mdl
  , Tabs.activeTab model.viewTab
  ]
  (List.map viewTabHeader pm.openViews)
- [ showView model.viewTab
+ [ viewViewAt model pm
  ]
 
-showView : Int -> Html a
-showView index = div [][]
+viewViewAt : Model -> ProjectModel -> Html Msg
+viewViewAt model pm = case getAt model.viewTab pm.openViews of
+                    Just vm -> viewView model pm vm
+                    Nothing -> div [][]

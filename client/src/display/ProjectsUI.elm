@@ -12,6 +12,7 @@ import Material.Button as Button
 import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
 import Dict as Dict exposing (..)
+import List.Extra exposing (getAt)
 
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
@@ -43,10 +44,6 @@ viewAllProjects : Model -> Html Msg
 viewAllProjects model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
 
 
-getAt : List a -> Int -> Maybe a
-getAt l i = List.head (List.drop i l)
-
-
 projectTabHeader : ProjectModel -> Tabs.Label Msg
 projectTabHeader pm = Tabs.label
                [ Options.center ]
@@ -65,7 +62,7 @@ viewProjectTabs model = Tabs.render Mdl [0] model.mdl
                          [ viewProjectAt model]
 
 viewProjectAt : Model -> Html Msg
-viewProjectAt model = case getAt model.openProjects model.projectTab of
+viewProjectAt model = case getAt model.projectTab model.openProjects of
                     Just pm -> viewProject model pm
                     Nothing -> div [][]
 
