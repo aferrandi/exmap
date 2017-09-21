@@ -1,20 +1,26 @@
 module ProjectModel exposing (..)
 
 import Material
-import Dict exposing (..)
+import Dict as Dict
 
 import Project exposing (..)
 import Views exposing (..)
+import XMapTypes exposing (..)
 import WebMessages exposing (WebRequest)
 
 type alias Mdl = Material.Model
 
+type alias XMapByName = Dict.Dict XMapName XMap
+
 type alias ViewModel = {
-    view : View}
+    view : View
+    , maps : XMapByName
+    }
 
 type alias ProjectModel = {
     project : Project
-    , openViews : List ViewModel }
+    , openViews : List ViewModel
+    }
 
 type alias Model = {
     openProjects : List ProjectModel

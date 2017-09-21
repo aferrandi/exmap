@@ -9,7 +9,7 @@ import Project exposing (..)
 import Views exposing (..)
 
 encodeXmapName : XMapName -> Value
-encodeXmapName (XMapName mn) = string (join "/" mn)
+encodeXmapName mn = string (join "/" mn)
 
 
 

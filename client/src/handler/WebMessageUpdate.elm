@@ -9,6 +9,7 @@ import Project exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
 import List.Extra exposing (..)
+import Dict as Dict
 
 updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
@@ -31,11 +32,12 @@ updateOpenViews : ProjectName -> View  -> List XNamedMap -> List ProjectModel ->
 updateOpenViews pn v ms ops = updateIf (sameProjectName pn) (updateOpenViewsInProject v ms) ops
 
 updateOpenViewsInProject : View  -> List XNamedMap -> ProjectModel -> ProjectModel
-updateOpenViewsInProject v ms pm = let sameViewName vm = vm.view.viewName == v.viewName
+updateOpenViewsInProject v ms pm = let msn = Dict.fromList (List.map (\m -> (m.xmapName, m.xmap)) ms)
+                                       sameViewName vm = vm.view.viewName == v.viewName
                                        ovs = pm.openViews
                                        newOvs = case find sameViewName ovs of
-                                            Just _ -> updateIf sameViewName (\vm -> { vm | view = v }) ovs
-                                            Nothing -> { view = v } :: ovs
+                                            Just _ -> updateIf sameViewName (\vm -> { vm | view = v, maps = msn }) ovs
+                                            Nothing -> { view = v, maps = msn } :: ovs
                                     in {pm | openViews = newOvs }
 
 updateWithWebEvent : String -> Model -> (Model, Cmd Msg)
