@@ -1,12 +1,11 @@
 module WebClients where
 
 import qualified Network.WebSockets as WS
-import qualified Data.Text as T
 import qualified Data.ByteString.Lazy as B
 import Data.Aeson
 
 import WebMessages
-import WebMessagesJson
+import WebMessagesJson()
 
 newtype WAClientId = WAClientId Int
     deriving (Show, Eq, Ord)

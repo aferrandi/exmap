@@ -11,7 +11,6 @@ import Control.Concurrent
 
 import SystemState
 import SystemBuild
-import Store
 import SystemActor
 import LogActor
 import qualified WebApp
@@ -21,15 +20,15 @@ main :: IO ()
 main = do
     args <- getArgs
     case B.listToMaybe args of
-        Just root -> do
-            print $ "loading system from " ++ root
+        Just rt -> do
+            print $ "loading system from " ++ rt
             logChan <- newTChanIO
-            forkIO $ actorLog logChan
-            system <- startSystem root logChan
+            _ <- forkIO $ actorLog logChan
+            system <- startSystem rt logChan
             ps <- atomically $ readTVar (projectByName system)
             print $ "System loaded with " ++ show (M.size ps) ++ " projects"
             systemChan <- newTChanIO
-            forkIO $ actorSystem systemChan system
+            _ <- forkIO $ actorSystem systemChan system
             WebApp.runWebApp systemChan logChan
         Nothing -> do
             print "exmap <rootPath>"

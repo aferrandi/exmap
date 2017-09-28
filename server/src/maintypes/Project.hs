@@ -2,28 +2,17 @@ module Project where
 
 -- strucure of a project that can be stored and read from a file
 
-import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import Formula
+
 import XMapTypes
 import View
-import XFunction
+import Calculation
 
-
-newtype CalculationName = CalculationName T.Text
-    deriving (Show, Eq, Ord)
-
-data Calculation = Calculation {
-    calculationName :: CalculationName,
-    resultName :: XMapName,
-    formula :: XFormula,
-    operationMode :: OperationMode
-} deriving (Show, Eq)
 
 newtype ProjectName = ProjectName T.Text
     deriving (Show, Eq, Ord)
 
-data SourceType = InternalSource |
+data SourceType = FileSource |
       OdbcSource { connectionString :: T.Text, sqlQuery :: T.Text } |
       HttpSource { url :: T.Text }
     deriving (Show, Eq)

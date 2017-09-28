@@ -11,8 +11,8 @@ import XMapTypes
 
 data LoadMessage = LMLoadView ProjectChan WAClient ProjectName ViewName
                   | LMLoadProject SystemChan WAClient ProjectName
-                  | LMLoadMap ProjectChan WAClient ProjectName XMapName
-                  | LMLoadCalculation ProjectChan WAClient ProjectName CalculationName
+                  | LMLoadMaps ProjectChan WAClient ProjectName [XMapName]
+                  | LMLoadMapsForView ProjectChan WAClient ProjectName ViewName [XMapName]
                   | LMStop
 
 type LoadChan = TChan LoadMessage

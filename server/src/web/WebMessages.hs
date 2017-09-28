@@ -11,18 +11,19 @@ data WebRequest =
     | WRSubscribeToProject ProjectName
     | WRNewProject Project
     | WRUpdateProject Project
-    | WRLoadMap ProjectName XMapName
+    | WRLoadMaps ProjectName [XMapName]
     | WRStoreMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
+    -- | WRCalculationStore ProjectName CalculationName CalculationFormulaText
     deriving (Show, Eq)
 
 data WebEvent =
     WEAllProjects AllProjects
-    | WEViewChanged ProjectName ViewName XNamedMap
+    | WEViewChanged ProjectName ViewName [XNamedMap]
     | WEProjectContent Project
     | WEProjectStored ProjectName
-    | WEMapLoaded ProjectName XNamedMap
+    | WEMapsLoaded ProjectName [XNamedMap]
     | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName
     | WEViewStatus ProjectName View [XNamedMap]

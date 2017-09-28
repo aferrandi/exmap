@@ -87,7 +87,7 @@ parseOperationName = do
     s <- parseName
     case enumWithTextCI enumValues s of
         Just n -> return n
-        Nothing -> fail $ "not an operation name " ++ (T.unpack s)
+        Nothing -> fail $ "not an operation name " ++ T.unpack s
 
 
 parseApplicationName :: P.Parser ApplicationName
@@ -95,7 +95,7 @@ parseApplicationName = do
     s <- parseName
     case enumWithTextCI enumValues s of
         Just n -> return n
-        Nothing -> fail $ "not an application name " ++ (T.unpack s)
+        Nothing -> fail $ "not an application name " ++ T.unpack s
 
 
 parseOperation :: P.Parser XFormula

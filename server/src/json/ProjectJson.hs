@@ -1,4 +1,7 @@
 {-# LANGUAGE OverloadedStrings   #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+{-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
 module ProjectJson where
 
@@ -6,9 +9,9 @@ import Data.Aeson
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
---import qualified Data.Vector as V
 
 import Project
+import Calculation
 import XMapTypes
 import Formula
 import XFunction
@@ -123,13 +126,13 @@ instance ToJSON Calculation  where
 
 instance FromJSON SourceType where
    parseJSON (Object v) = case HML.lookup "type" v of
-      Just (String "internalSource") -> return InternalSource
+      Just (String "fileSource") -> return FileSource
       Just (String "odbcSource") ->  OdbcSource <$> v .: "connectionString" <*> v .: "sqlQuery"
       Just (String "httpSource") ->  HttpSource <$> v .: "url"
 
 
 instance ToJSON SourceType where
-     toJSON InternalSource = object [ "type"  .= T.pack "internalSource"                              ]
+     toJSON FileSource = object [ "type"  .= T.pack "fileSource"                              ]
      toJSON (OdbcSource connectionString sqlQuery) = object ["type" .= T.pack "odbcSource"
                                             , "connectionString" .= connectionString
                                             , "sqlQuery" .= sqlQuery

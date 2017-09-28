@@ -1,16 +1,11 @@
+{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 module EventActor (actorEvent) where
 
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
-import qualified Data.Text.IO as TIO
-import Data.Aeson
-import System.Exit (die)
 
-import XMapTypes
 import EventMessages
-import ProjectState
 import WebClients
-import WebMessagesJson
 
 actorEvent :: EventChan -> IO ()
 actorEvent chan = loop
@@ -22,4 +17,3 @@ actorEvent chan = loop
                     sendToClients cs e
                     loop
                 EMStop -> return ()
-                otherwise -> die $ "Unexpected message " ++ show msg ++ " in event actor"

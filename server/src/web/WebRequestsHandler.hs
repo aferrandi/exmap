@@ -1,17 +1,12 @@
 module WebRequestsHandler where
 
 import Control.Concurrent.STM.TChan
-import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.Map.Strict as M
-import qualified Data.Text as T
 
-import Store
 import WebMessages
 import WebClients
-import SystemState
 import SystemMessages
-import LogTypes
 import LogMessages
 import Errors
 
@@ -24,12 +19,12 @@ data WAState = WAState {
                     }
 
 handleWebRequest :: WAClientId -> WAState -> WebRequest -> IO ()
-handleWebRequest id s r = do
-    print $ "handling request " ++ show r ++ " from " ++ show id
-    let mc = M.lookup id (clients s)
+handleWebRequest cid s r = do
+    print $ "handling request " ++ show r ++ " from " ++ show cid
+    let mc = M.lookup cid (clients s)
     case mc of
         Just c -> atomically $ handleClientRequest c (systemChan s) r
-        Nothing -> atomically $ writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show id ++ " not found"))
+        Nothing -> atomically $ writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show cid ++ " not found"))
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of
@@ -37,10 +32,10 @@ handleClientRequest c sc r = case r of
                                 WRSubscribeToProject pn -> sendRequest $ SRSubscribeToProject c pn
                                 WRNewProject p -> sendRequest $ SRNewProject c p
                                 WRUpdateProject p -> sendRequest $ SRUpdateProject c p
-                                WRLoadMap pn mn -> sendRequest $ SRLoadMap c pn mn
+                                WRLoadMaps pn mns -> sendRequest $ SRLoadMaps c pn mns
                                 WRStoreMap pn m -> sendRequest$ SRStoreMap c pn m
                                 WRSubscribeToView pn vn -> sendRequest $ SRSubscribeToView c pn vn
                                 WRUnsubscribeFromView pn vn -> sendRequest $ SRUnsubscribeFromView c pn vn
-    where sendRequest r = writeTChan sc $ SMRequest r
+    where sendRequest sr = writeTChan sc $ SMRequest sr
 
 

@@ -7,56 +7,51 @@ import Control.Concurrent
 
 import SystemState
 import Project
-import ProjectJson
 import Load
-import CalculationActor
-import LoadMessages
-import ViewActor
 import EventActor
 import LoadActor
 import StoreActor
-import Dependencies
 import AssocList
 import LogMessages
 import CommonChannels
 
 startSystem :: FilePath -> LogChan -> IO RuntimeSystem
-startSystem root logChan = do
-    ps <- loadSystem root
-    systemToRuntime root ps logChan
+startSystem rt lch = do
+    ps <- loadSystem rt
+    systemToRuntime rt ps lch
 
 systemToRuntime :: FilePath -> [ProjectName] -> LogChan -> IO RuntimeSystem
-systemToRuntime root ps logChan  = do
+systemToRuntime rt ps lch  = do
     let psMap = mapWithNothingValues ps
     emptyByName <- newTVarIO psMap
     emptyByMapName <- newTVarIO M.empty
-    chans <- buildChans root logChan
+    chs <- buildChans rt lch
     return RuntimeSystem {
         projectByName = emptyByName,
         projectByMapName = emptyByMapName,
-        chans = chans,
-        root = root
+        chans = chs,
+        root = rt
     }
 
 buildChans :: FilePath -> LogChan -> IO CommonChans
-buildChans root logChan = do
-    eventChan <- newTChanIO
-    loadChan <- newTChanIO
-    storeChan <- newTChanIO
-    forkIO $ actorEvent eventChan
-    forkIO $ actorLoad root loadChan
-    forkIO $ actorStore root storeChan
+buildChans rt lch = do
+    evch <- newTChanIO
+    ldch <- newTChanIO
+    stch <- newTChanIO
+    _ <- forkIO $ actorEvent evch
+    _ <- forkIO $ actorLoad rt ldch
+    _ <- forkIO $ actorStore rt stch
     return CommonChans {
-        eventChan = eventChan,
-        loadChan = loadChan,
-        storeChan = storeChan,
-        logChan = logChan
+        eventChan = evch,
+        loadChan = ldch,
+        storeChan = stch,
+        logChan = lch
     }
 
 
 loadSystem :: FilePath -> IO [ProjectName]
-loadSystem root = do
-    pe <- loadAvailableProjects root
+loadSystem rt = do
+    pe <- loadAvailableProjects rt
     case pe of
         Right (AllProjects ps) -> return ps
-        Left err -> return []
+        Left _ -> return []

@@ -2,9 +2,8 @@ module CalculationState where
 
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar (TVar)
-import Control.Concurrent.STM.TChan (TChan)
 
-import Project
+import Calculation
 import XMapTypes
 import CalculationMessages
 import ViewMessages
@@ -12,7 +11,7 @@ import ViewMessages
 type MapRepository = M.Map XMapName (Maybe XMap)
 
 data RuntimeCalculation = RuntimeCalculation {
-    calculation :: Calculation,
+    calculation ::TVar Calculation,
     repository :: TVar MapRepository,
     calculationsToNotify :: [CalculationChan],
     viewsToNotify ::[ViewChan]

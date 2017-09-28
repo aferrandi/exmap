@@ -1,18 +1,16 @@
 module Store where
 
 import Data.Aeson
-import System.IO
-import System.IO.Error
-import System.FilePath
 import Control.Exception (try)
 import qualified Data.ByteString.Lazy as B
 
 import Paths
 import XMapTypes
 import Project
-import ProjectJson
+import ProjectJson()
 import View
 import Errors
+import Calculation
 
 tryWriteFile :: FilePath -> B.ByteString -> IO (Maybe Error)
 tryWriteFile p c = do

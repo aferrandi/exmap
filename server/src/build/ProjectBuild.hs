@@ -10,12 +10,9 @@ import CalculationMessages
 import ProjectState
 import CommonChannels
 import Project
-import ProjectJson
-import Load
-import CalculationActor
+import Calculation
 import Dependencies
 import CalculationBuild
-import Errors
 import XMapTypes
 
 -- vertical on the screen
@@ -25,11 +22,11 @@ data CalculationWithChan = CalculationWithChan {
     }
 
 projectToRuntime :: CommonChans -> Project -> [Calculation]-> IO RuntimeProject
-projectToRuntime chans p cs = do
+projectToRuntime chs p cs = do
         ccs <- T.mapM buildCalculationChan cs
         cbn <- calculationByName ccs
         let cbm = calculationChansByNames ccs
-        atomically $ buildRuntimeProject chans p cbn cbm
+        atomically $ buildRuntimeProject chs p cbn cbm
     where name = calculationName . calculation
           calculationByName :: [CalculationWithChan] -> IO CalculationChanByName
           calculationByName ccs = do
@@ -38,17 +35,16 @@ projectToRuntime chans p cs = do
 
 buildCalculationChan :: Calculation -> IO CalculationWithChan
 buildCalculationChan c = do
-    cr <- atomically $ calculationToRuntime c
-    cch <- calculationToChan cr
+    cch <- calculationToChan c
     return CalculationWithChan { calculation = c, chan = cch }
 
 buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMap -> STM RuntimeProject
-buildRuntimeProject chans p cbn cbm = do
+buildRuntimeProject chs p cbn cbm = do
     tcbn <- newTVar cbn
     tcbm <- newTVar cbm
     trp <- newTVar p
     tvbm <- newTVar M.empty
-    tvbn <- newTVar $ M.fromList (map (\vn -> (vn, Nothing)) (views p))
+    tvbn <- newTVar M.empty
     tsc <- newTVar []
     return RuntimeProject {
         project = trp,
@@ -56,7 +52,7 @@ buildRuntimeProject chans p cbn cbm = do
         calculationChanByMap = tcbm,
         viewChanByMap = tvbm,
         viewChanByName = tvbn,
-        chans = chans,
+        chans = chs,
         subscribedClients = tsc
     }
 

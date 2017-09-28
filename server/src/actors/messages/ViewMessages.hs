@@ -3,12 +3,14 @@ module ViewMessages where
 import Control.Concurrent.STM.TChan (TChan)
 
 import XMapTypes
-import Errors
+import Errors()
 import WebClients
+import View
 
-data ViewMessage = VMMap XNamedMap
+data ViewMessage = VMMaps [XNamedMap]
                       | VMSubscribeToView WAClient
                       | VMUnsubscribeFromView WAClient
+                      | VMUpdate View
                       | VMError Error
                       | VMStop
     deriving (Show, Eq)

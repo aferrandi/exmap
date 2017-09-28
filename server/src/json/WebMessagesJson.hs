@@ -1,4 +1,7 @@
 {-# LANGUAGE OverloadedStrings   #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+{-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
 module WebMessagesJson where
 
@@ -7,17 +10,17 @@ import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
 
 import WebMessages
-import ProjectJson
+import ProjectJson()
 import qualified Errors as E
 
 instance ToJSON WebEvent where
      toJSON (WEAllProjects ps) = object [ "type" .=  T.pack "allProjects"
                                         , "projectNames" .= ps
                                         ]
-     toJSON (WEViewChanged pn vn m) = object [ "type" .=  T.pack "viewChanged"
+     toJSON (WEViewChanged pn vn ms) = object [ "type" .=  T.pack "viewChanged"
                                         , "projectName" .= pn
                                         , "viewName" .= vn
-                                        , "map" .= m
+                                        , "maps" .= ms
                                         ]
      toJSON (WEProjectContent p) = object [ "type" .=  T.pack "projectContent"
                                         , "project" .= p
@@ -25,9 +28,9 @@ instance ToJSON WebEvent where
      toJSON (WEProjectStored pn) = object [ "type" .=  T.pack "projectStored"
                                         , "projectName" .= pn
                                         ]
-     toJSON (WEMapLoaded pn m) = object [ "type" .=  T.pack "mapLoaded"
+     toJSON (WEMapsLoaded pn ms) = object [ "type" .=  T.pack "mapLoaded"
                                         , "projectName" .= pn
-                                        , "map" .= m
+                                        , "maps" .= ms
                                         ]
      toJSON (WEMapStored pn mn) = object [ "type" .=  T.pack "mapStored"
                                         , "projectName" .= pn
@@ -55,7 +58,7 @@ instance FromJSON WebRequest where
       Just (String "subscribeToProject") ->  WRSubscribeToProject <$> v .: "projectName"
       Just (String "newProject") -> WRNewProject <$> v .: "project"
       Just (String "updateProject") -> WRUpdateProject <$> v .: "project"
-      Just (String "loadMap") ->  WRLoadMap <$> v .: "projectName" <*> v .: "mapName"
+      Just (String "loadMaps") ->  WRLoadMaps <$> v .: "projectName" <*> v .: "mapNames"
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"

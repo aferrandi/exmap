@@ -1,11 +1,13 @@
 module Paths where
 
 import System.FilePath
+import qualified Data.Text as T
 
 import XMapTypes
 import Project
 import View
-import qualified Data.Text as T
+import Calculation
+
 
 allProjectsPath :: FilePath -> FilePath
 allProjectsPath root = root </> "allProjects.ex"

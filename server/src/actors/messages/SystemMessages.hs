@@ -6,15 +6,15 @@ import XMapTypes
 import Project
 import WebClients
 import View
-import LogTypes
-import Errors
+import Calculation
+import Errors()
 
 data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRUnsubscribeFromProject WAClient ProjectName
                     | SRNewProject WAClient Project
                     | SRUpdateProject WAClient Project
                     | SRAllProjects WAClient
-                    | SRLoadMap WAClient ProjectName XMapName
+                    | SRLoadMaps WAClient ProjectName [XMapName]
                     | SRStoreMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName

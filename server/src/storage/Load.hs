@@ -1,9 +1,6 @@
 module Load where
 
 import Data.Aeson
-import System.IO
-import System.IO.Error
-import System.FilePath
 import Control.Exception
 import qualified Data.ByteString.Lazy as B
 import Data.Bifunctor (first)
@@ -11,9 +8,10 @@ import Data.Bifunctor (first)
 import Paths
 import XMapTypes
 import Project
-import ProjectJson
 import View
+import Calculation
 import Errors
+import ProjectJson()
 
 tryReadFile :: FilePath -> IO (Either IOError B.ByteString)
 tryReadFile p = try $ B.readFile p
@@ -23,7 +21,7 @@ tryReadAndDecode p = do
      strOrExc <- tryReadFile p
      return $ case strOrExc of
         Left ex -> Left $ readingError ex
-        Right json -> first decodingError $ eitherDecode json
+        Right js -> first decodingError $ eitherDecode js
      where decodingError ex = mkError $ "Decoding the file " ++ show p ++ "got " ++show ex
            readingError ex = mkError $ "Reading the file " ++ show p ++ "got " ++show ex
 
