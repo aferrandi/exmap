@@ -88,18 +88,16 @@ subscribeToProject c rp = do
     writeTChan (evtChan rp) (EMWebEvent [c] (WEProjectContent p))
 
 unsubscribeFromProject :: WAClient -> RuntimeProject -> STM()
-unsubscribeFromProject c rp = do
-    modifyTVar (subscribedClients rp) (filter (\ci -> ci /= c))
-
-
+unsubscribeFromProject c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
+    where notSameClient ci = ci /= c
 
 viewLoaded :: WAClient -> ProjectChan -> RuntimeProject -> View -> IO ()
 viewLoaded c chan rp v = do
      p <- atomically $ readTVar (project rp)
      vChan <- viewToChan (evtChan rp) (projectName p) v
-     atomically $ modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
-     atomically $ sendSubscriptionToView vChan c
-     atomically $ sendDependedMapsToVIew chan rp c v
+     atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
+                     sendSubscriptionToView vChan c
+                     sendDependedMapsToVIew chan rp c v
 
 sendDependedMapsToVIew :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToVIew chan rp c v = do
@@ -107,7 +105,7 @@ sendDependedMapsToVIew chan rp c v = do
      case L.find (\s -> sourceType s == FileSource) (sources p) of
         Just fileSources -> do
              let toLoad = L.intersect (viewDependencies v) (sourceOfMaps fileSources)
-             loadMaps c chan rp toLoad
+             writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
         Nothing -> return ()
 
 storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM ()
@@ -190,7 +188,7 @@ addCalculation rp cc = do
     let cn = calculationName cc
     atomically $ modifyTVar (project rp) (\p -> p { calculations = cn : (calculations p)} )
     cch <- calculationToChan cc
-    atomically $ modifyTVar (calculationChanByName rp)  (\ocbn -> M.insert cn cch ocbn)
+    atomically $ modifyTVar (calculationChanByName rp)  (M.insert cn cch)
     atomically $ writeTChan cch (CMUpdateCalculation cc)
 
 updateCalculation :: RuntimeProject -> WAClient -> Project -> Calculation -> STM()
