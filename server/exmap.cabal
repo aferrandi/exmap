@@ -63,6 +63,7 @@ executable exmap
                      , LogActor
                      , WebClients
                      , WebApp
+                     , XMapJson
                      , ProjectJson
                      , Paths
                      , Load
@@ -113,12 +114,14 @@ test-suite exmap-test
                      , OperationTypes
                      , XValues
                      , FormulaParser
+                     , Calculation
                      , View
                      , TextEnums
                      , TestTypes
                      , Project
                      , ProjectJson
                      , Dependencies
+                     , XMapJson
                      , FormulaTest
                      , FormulaParserTest
                      , TextEnumsTest

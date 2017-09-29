@@ -4,8 +4,8 @@ import qualified Data.Map.Strict as M
 
 import XMapTypes
 
-singletonXMap :: String -> Double -> XMap
-singletonXMap k n = XMapDouble $ M.singleton (XMapKey (T.pack k)) n
+makeXMap :: [(String, Double)] -> XMap
+makeXMap l = XMapDouble $ M.fromList (map (\(k, n) -> (XMapKey (T.pack k), n)) l)
 
 mapName :: [String] -> XMapName
 mapName ss = XMapName $ map T.pack ss

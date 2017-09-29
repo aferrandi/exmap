@@ -5,6 +5,7 @@
 module XMapJson where
 
 import Data.Aeson
+import Data.Aeson.Types
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
@@ -23,25 +24,34 @@ instance FromJSON XMapKey where
 instance ToJSON XMapKey where
    toJSON (XMapKey v) = String v
 
+instance ToJSONKey XMapKey where
+    toJSONKey = toJSONKeyText toText
+        where toText (XMapKey v) = v
+
+instance FromJSONKey XMapKey where
+    fromJSONKey = FromJSONKeyText XMapKey
+
+
+
 instance FromJSON XMap where
    parseJSON (Object v) = case HML.lookup "type" v of
-      Just (String "double") -> XMapDouble . M.fromList <$> v .: "values"
-      Just (String "int") ->  XMapInt . M.fromList <$> v .: "values"
-      Just (String "string") ->  XMapString . M.fromList <$> v .: "values"
-      Just (String "bool") ->  XMapBool . M.fromList <$> v .: "values"
+      Just (String "double") -> XMapDouble <$> v .: "values"
+      Just (String "int") ->  XMapInt <$> v .: "values"
+      Just (String "string") ->  XMapString <$> v .: "values"
+      Just (String "bool") ->  XMapBool <$> v .: "values"
 
 instance ToJSON XMap where
      toJSON (XMapDouble values) = object [ "type" .= T.pack "double"
-                                          , "values" .= M.toList values
+                                          , "values" .= values
                                           ]
      toJSON (XMapInt values) = object [ "type" .= T.pack "int"
-                                       , "values" .= M.toList values
+                                       , "values" .= values
                                        ]
      toJSON (XMapString values) = object [ "type" .=  T.pack "application"
-                                          , "values" .= M.toList values
+                                          , "values" .= values
                                           ]
      toJSON (XMapBool values) = object [ "type" .=  T.pack "application"
-                                          , "values" .= M.toList values
+                                          , "values" .= values
                                           ]
 
 instance FromJSON XNamedMap where

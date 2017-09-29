@@ -23,6 +23,7 @@ import Formula
 import View
 import XFunction
 import Project
+import Calculation
 
 formulaDependencies_trivialFormula_originalMap = TestCase (assertEqual "dependencies trivial formula" [ka] (formulaDependencies f))
     where ka = mapName ["a"]

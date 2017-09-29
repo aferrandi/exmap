@@ -20,6 +20,7 @@ import ProjectJson
 import TestTypes
 import Formula
 import View
+import Calculation
 import XMapTypes
 import XFunction
 import OperationTypes
@@ -72,7 +73,7 @@ calculationExample = Calculation {
 viewNameExample = ViewName (T.pack "view")
 
 sourceExample = Source {
-                  sourceType = InternalSource,
+                  sourceType = FileSource,
                   sourceOfMaps = [mapName ["one"],mapName ["two"]]
               }
 
@@ -80,7 +81,7 @@ sourceExample = Source {
 toParseJSON_map_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
     where original =  XNamedMap {
         xmapName = mapName ["map"],
-        xmap = singletonXMap "k" 13
+        xmap = makeXMap [("k1",13),("k2",24)]
     }
 
 
