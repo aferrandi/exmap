@@ -11,6 +11,7 @@ import qualified Data.Text as T
 
 import WebMessages
 import ProjectJson()
+import XMapJson()
 import qualified Errors as E
 
 instance ToJSON WebEvent where
