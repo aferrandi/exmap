@@ -1,0 +1,10 @@
+{ "mapName" : "map1"
+ , "xmap": {
+    "type" : "int"
+    , "values" : {
+        "january": 1
+        ,"february": 2
+        ,"march": 3
+		}
+	}
+}

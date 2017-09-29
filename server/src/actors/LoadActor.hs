@@ -22,6 +22,7 @@ actorLoad :: FilePath -> LoadChan -> IO ()
 actorLoad root chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
+            print $ "handling load request"
             case msg of
                 LMLoadView source c pn vn  -> do
                     loadViewInActor root source c pn vn

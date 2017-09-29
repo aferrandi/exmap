@@ -69,6 +69,8 @@ instance FromJSON XFormula where
       Just (String "map") -> XFMap <$> v .: "name"
       Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "formula1" <*> v .: "formula2"
       Just (String "application") ->  XFApplication <$> v .: "name" <*> v .: "formula"
+      otherwise -> mempty
+   parseJSON _ = mempty
 
 instance ToJSON XFormula where
      toJSON (XFMap n) = object [ "type"  .= T.pack "map"
@@ -86,6 +88,7 @@ instance ToJSON XFormula where
 
 instance FromJSON OperationMode where
    parseJSON (String v) = readT <$> pure v
+   parseJSON _ = mempty
 
 instance ToJSON OperationMode where
    toJSON v = String $ showT v
@@ -93,12 +96,14 @@ instance ToJSON OperationMode where
 
 instance FromJSON OperationName where
    parseJSON (String v) = readT <$> pure v
+   parseJSON _ = mempty
 
 instance ToJSON OperationName where
    toJSON v = String $ showT v
 
 instance FromJSON ApplicationName where
    parseJSON (String v) = readT <$> pure v
+   parseJSON _ = mempty
 
 instance ToJSON ApplicationName where
    toJSON v = String $ showT v
@@ -115,6 +120,7 @@ instance FromJSON Calculation  where
              <*> v .: "resultName"
              <*> v .: "formula"
              <*> v .: "operationMode"
+   parseJSON _ = mempty
 
 instance ToJSON Calculation  where
      toJSON (Calculation calculationName resultName formula operationMode) =
@@ -129,6 +135,8 @@ instance FromJSON SourceType where
       Just (String "fileSource") -> return FileSource
       Just (String "odbcSource") ->  OdbcSource <$> v .: "connectionString" <*> v .: "sqlQuery"
       Just (String "httpSource") ->  HttpSource <$> v .: "url"
+      otherwise -> mempty
+   parseJSON _ = mempty
 
 
 instance ToJSON SourceType where
@@ -144,6 +152,8 @@ instance FromJSON Source where
    parseJSON (Object v) =
       Source  <$> v .: "sourceType"
              <*> v .: "sourceOfMaps"
+   parseJSON _ = mempty
+
 
 instance ToJSON Source where
      toJSON (Source sourceType sourceOfMaps) =
@@ -153,6 +163,7 @@ instance ToJSON Source where
 
 instance FromJSON ViewLabel where
    parseJSON (String v) = return $ ViewLabel v
+   parseJSON _ = mempty
 
 instance ToJSON ViewLabel where
    toJSON (ViewLabel v) = String v
@@ -161,6 +172,8 @@ instance FromJSON ViewItem where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "map") ->  MapItem <$> v .: "mapName"
       Just (String "label") ->  LabelItem <$> v .: "label"
+      otherwise -> mempty
+   parseJSON _ = mempty
 
 instance ToJSON ViewItem where
      toJSON (MapItem mapName) = object [ "type" .=  T.pack "map"
@@ -172,18 +185,21 @@ instance ToJSON ViewItem where
 
 instance FromJSON ViewRow where
    parseJSON (Object v) = ViewRow <$> v .: "items"
+   parseJSON _ = mempty
 
 instance ToJSON ViewRow where
-     toJSON (ViewRow is) = object [ "items" .= is]
+    toJSON (ViewRow is) = object [ "items" .= is]
 
 instance FromJSON ViewName where
    parseJSON (String v) = return $ ViewName v
+   parseJSON _ = mempty
 
 instance ToJSON ViewName where
    toJSON (ViewName v) = String v
 
 instance FromJSON View where
    parseJSON (Object v) = View <$> v .: "viewName" <*> v .: "rows"
+   parseJSON _ = mempty
 
 instance ToJSON View where
      toJSON (View n rs) = object [ "viewName" .= n
@@ -192,6 +208,7 @@ instance ToJSON View where
 
 instance FromJSON ProjectName where
    parseJSON (String v) = return $ ProjectName v
+   parseJSON _ = mempty
 
 instance ToJSON ProjectName where
    toJSON (ProjectName v) = String v
@@ -202,6 +219,7 @@ instance FromJSON Project where
              <*> v .: "calculations"
              <*> v .: "views"
              <*> v .: "sources"
+   parseJSON _ = mempty
 
 instance ToJSON Project where
      toJSON (Project projectName calculations views sources) =
@@ -215,6 +233,7 @@ instance FromJSON User where
    parseJSON (Object v) =
       User <$> v .: "userId"
              <*> v .: "accessToProjects"
+   parseJSON _ = mempty
 
 
 instance ToJSON User where

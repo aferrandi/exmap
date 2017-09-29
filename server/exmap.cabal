@@ -46,6 +46,7 @@ executable exmap
                      , FormulaParser
                      , TextEnums
                      , View
+                     , Calculation
                      , Project
                      , SystemState
                      , ProjectState
