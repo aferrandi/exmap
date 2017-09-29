@@ -13,14 +13,14 @@ webEventDecoder =
                             "viewChanged" -> decode WEViewChanged
                                                 |> required "projectName" string
                                                 |> required "viewName" string
-                                                |> required "map" xNamedMapDecoder
+                                                |> required "maps" (list xNamedMapDecoder)
                             "projectContent" -> decode WEProjectContent
                                                 |> required "project" projectDecoder
                             "projectStored" -> decode WEProjectStored
                                                 |> required "projectName" string
-                            "mapLoaded" -> decode WEMapLoaded
+                            "mapLoaded" -> decode WEMapsLoaded
                                                 |> required "projectName" string
-                                                |> required "map" xNamedMapDecoder
+                                                |> required "maps"(list xNamedMapDecoder)
                             "mapStored" -> decode WEMapStored
                                                 |> required "projectName" string
                                                 |> required "mapName" xmapNameDecoder

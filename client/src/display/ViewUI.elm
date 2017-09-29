@@ -21,7 +21,7 @@ viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm = Table.table []
                        [ Table.thead []
                          [ Table.tr []
-                           [ Table.th [] [ text "Material" ]
+                           [ Table.th [] [ text "Ids" ]
                            , Table.th [ ] [ text "Quantity" ]
                            , Table.th [ ] [ text "Unit Price" ]
                            ]

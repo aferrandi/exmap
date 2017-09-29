@@ -19,7 +19,7 @@ type alias ProjectName = String
 type alias OdbcSourceType = { connectionString : String, sqlQuery : String}
 type alias HttpSourceType = { url : String }
 
-type SourceType = InternalSource
+type SourceType = FileSource
       | OdbcSource OdbcSourceType
       | HttpSource HttpSourceType
 

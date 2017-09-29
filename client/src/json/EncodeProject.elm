@@ -65,7 +65,7 @@ encodeOdbcSource st = object
 
 encodeSourceType : SourceType -> Value
 encodeSourceType st = case st of
-    InternalSource -> encodeInternalSource
+    FileSource -> encodeInternalSource
     HttpSource v -> encodeHttpSource v
     OdbcSource v -> encodeOdbcSource v
 

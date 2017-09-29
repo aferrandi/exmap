@@ -64,7 +64,7 @@ decodeOdbcSource = decode OdbcSourceType
 sourceTypeDecoder : Decoder SourceType
 sourceTypeDecoder =
     let decodeFromType t = case t of
-                            "internalSource" -> succeed InternalSource
+                            "fileSource" -> succeed FileSource
                             "odbcSource" -> decodeOdbcSource |> andThen (\s -> succeed (OdbcSource s))
                             "httpSource" -> decodeHttpSource |> andThen (\s -> succeed (HttpSource s))
                             otherwise -> fail ("source type " ++ t ++ " not recognized")
