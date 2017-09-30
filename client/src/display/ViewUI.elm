@@ -30,12 +30,11 @@ viewRow vm row = Table.table []
                     ]
 
 viewRowHeader : ViewRow -> Html Msg
-viewRowHeader row = Table.thead []
+viewRowHeader row =
+    let header id = Table.th [] [ text id ]
+    in Table.thead []
                      [ Table.tr []
-                       [ Table.th [] [ text "Ids" ]
-                       , Table.th [ ] [ text "Quantity" ]
-                       , Table.th [ ] [ text "Unit Price" ]
-                       ]
+                        (List.map header ("Ids" :: (rowNames row)))
                      ]
 
 viewRowBody : ViewModel -> ViewRow -> Html Msg
@@ -53,9 +52,20 @@ rowToTable row vm = let ids = rowIds row vm.maps
 
 
 rowIds : ViewRow -> XMapByName -> Set.Set XMapKey
-rowIds (ViewRow items) ms = let keysForMap item = case item of
-                                                     MapItem xmapName -> case Dict.get xmapName ms of
-                                                                            Just m -> Set.fromList (mapKeys m)
-                                                                            Nothing -> Set.empty
-                                                     LabelItem _ -> Set.empty
-                            in List.map keysForMap items |> List.foldr Set.union Set.empty
+rowIds (ViewRow items) ms =
+    let keysForMap item = case item of
+            MapItem xmapName -> case Dict.get xmapName ms of
+                                Just m -> Set.fromList (mapKeys m)
+                                Nothing -> Set.empty
+            LabelItem _ -> Set.empty
+    in List.map keysForMap items |> List.foldr Set.union Set.empty
+
+rowNames : ViewRow -> List String
+rowNames (ViewRow items) =
+    let xmapNameToString l = String.join "/" l
+        name item = case item of
+            MapItem xmapName -> xmapNameToString xmapName
+            LabelItem label -> label
+    in List.map name items
+
+

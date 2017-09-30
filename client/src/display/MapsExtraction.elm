@@ -26,7 +26,7 @@ itemToTable ms ids item =
         mapValuesForEachId xmapName = Dict.values (Dict.union (mapValuesInDict xmapName) idsMap)
       in case item of
          MapItem xmapName -> mapValuesForEachId xmapName
-         LabelItem label -> label :: List.repeat ((Set.size ids) - 1) ""
+         LabelItem label -> Dict.values idsMap
 
 mapKeys : XMap -> List XMapKey
 mapKeys m = case m of

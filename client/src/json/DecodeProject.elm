@@ -11,7 +11,7 @@ import Views exposing (..)
 
 
 xmapNameDecoder : Decoder XMapName
-xmapNameDecoder = string |> andThen (\s -> succeed (split s "/"))
+xmapNameDecoder = string |> andThen (\s -> succeed (split "/" s ))
 
 decodeType : (String -> Decoder a) -> Decoder a
 decodeType decodeFromType = field "type" string |> andThen decodeFromType
