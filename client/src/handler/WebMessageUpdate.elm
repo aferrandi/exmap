@@ -14,13 +14,12 @@ import Dict as Dict
 updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
                             WEAllProjects ap -> ({ model | allProjects = ap }, Cmd.none)
-                            WEError e -> ({ model | messages = e :: model.messages }, Cmd.none)
+                            WEError e -> (showMessage model e, Cmd.none)
                             WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
+                            WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
                             otherwise -> (model , Cmd.none)
 
-sameProjectName : ProjectName -> ProjectModel -> Bool
-sameProjectName pn pm = pm.project.projectName == pn
 
 updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
 updateOpenProjects p ops = let pn = p.projectName
@@ -29,7 +28,7 @@ updateOpenProjects p ops = let pn = p.projectName
                                 Nothing -> { project = p, openViews = [] } :: ops
 
 updateOpenViews : ProjectName -> View  -> List XNamedMap -> List ProjectModel -> List ProjectModel
-updateOpenViews pn v ms ops = updateIf (sameProjectName pn) (updateOpenViewsInProject v ms) ops
+updateOpenViews pn v ms ops = updateIfProjectHasSameName pn (updateOpenViewsInProject v ms) ops
 
 updateOpenViewsInProject : View  -> List XNamedMap -> ProjectModel -> ProjectModel
 updateOpenViewsInProject v ms pm = let msn = Dict.fromList (List.map (\m -> (m.xmapName, m.xmap)) ms)
@@ -40,8 +39,36 @@ updateOpenViewsInProject v ms pm = let msn = Dict.fromList (List.map (\m -> (m.x
                                             Nothing -> { view = v, maps = msn } :: ovs
                                     in {pm | openViews = newOvs }
 
+
+
+updateOpenViewMaps : ProjectName -> ViewName  -> List XNamedMap -> List ProjectModel -> List ProjectModel
+updateOpenViewMaps pn vn ms ops =  updateIfProjectHasSameName pn (updateOpenViewMapsInProject vn ms) ops
+
+updateOpenViewMapsInProject : ViewName -> List XNamedMap -> ProjectModel -> ProjectModel
+updateOpenViewMapsInProject vn ms pm = let sameViewName vm = vm.view.viewName == vn
+                                           ovs = pm.openViews
+                                           updatedOvs = updateIf sameViewName (updateOpenViewMapsInView ms) ovs
+                                        in {pm | openViews = updatedOvs }
+
+updateOpenViewMapsInView : List XNamedMap -> ViewModel -> ViewModel
+updateOpenViewMapsInView ms vm =
+    let updateMaps msn ms = List.foldr (\m msni -> Dict.insert m.xmapName m.xmap msni) msn ms
+    in{ vm | view = vm.view, maps = updateMaps vm.maps ms }
+
+
+
+
 updateWithWebEvent : String -> Model -> (Model, Cmd Msg)
 updateWithWebEvent json model = let _ = Debug.log ("Event " ++ json)
                                 in case decodeString webEventDecoder json of
                                       Ok evt -> updateEvent evt model
                                       Err err -> updateEvent (WEError err) model
+
+updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel
+updateIfProjectHasSameName pn m2m ops = updateIf (sameProjectName pn) m2m ops
+
+showMessage : Model -> String -> Model
+showMessage model msg = { model | messages = msg :: model.messages }
+
+sameProjectName : ProjectName -> ProjectModel -> Bool
+sameProjectName pn pm = pm.project.projectName == pn
