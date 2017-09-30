@@ -19,24 +19,32 @@ import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
-viewView model pm vm = Table.table []
-                       [ Table.thead []
-                         [ Table.tr []
-                           [ Table.th [] [ text "Ids" ]
-                           , Table.th [ ] [ text "Quantity" ]
-                           , Table.th [ ] [ text "Unit Price" ]
-                           ]
-                         ]
-                       , Table.tbody []
-                           (List.concatMap (viewViewRow model vm) vm.view.rows)
+viewView model pm vm = div [class  "content"]
+                            (List.map (\row -> viewRow vm row) vm.view.rows)
+
+viewRow : ViewModel -> ViewRow -> Html Msg
+viewRow vm row = Table.table []
+                    [
+                        viewRowHeader row,
+                        viewRowBody vm row
+                    ]
+
+viewRowHeader : ViewRow -> Html Msg
+viewRowHeader row = Table.thead []
+                     [ Table.tr []
+                       [ Table.th [] [ text "Ids" ]
+                       , Table.th [ ] [ text "Quantity" ]
+                       , Table.th [ ] [ text "Unit Price" ]
                        ]
+                     ]
+
+viewRowBody : ViewModel -> ViewRow -> Html Msg
+viewRowBody vm row = let matrix = transpose (rowToTable row vm)
+                         rows = List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
+                     in Table.tbody [] rows
 
 rowLineToTableRow : List String  -> Html Msg
 rowLineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
-
-viewViewRow : Model -> ViewModel -> ViewRow -> List (Html Msg)
-viewViewRow model vm row = let matrix = transpose (rowToTable row vm)
-                           in List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
 
 rowToTable : ViewRow -> ViewModel -> List (List String)
 rowToTable row vm = let ids = rowIds row vm.maps
