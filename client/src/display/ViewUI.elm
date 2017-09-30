@@ -36,7 +36,7 @@ rowLineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) lin
 
 viewViewRow : Model -> ViewModel -> ViewRow -> List (Html Msg)
 viewViewRow model vm row = let matrix = transpose (rowToTable row vm)
-                           in List.map rowLineToTableRow matrix
+                           in List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
 
 rowToTable : ViewRow -> ViewModel -> List (List String)
 rowToTable row vm = let ids = rowIds row vm.maps

@@ -23,10 +23,10 @@ itemToTable ms ids item =
         mapValuesInDict xmapName = case Dict.get xmapName ms of
             Just m -> mapValues m
             Nothing -> idsMap
-        mapValuesForEachId xmapName = Dict.values (Dict.union idsMap (mapValuesInDict xmapName))
+        mapValuesForEachId xmapName = Dict.values (Dict.union (mapValuesInDict xmapName) idsMap)
       in case item of
          MapItem xmapName -> mapValuesForEachId xmapName
-         LabelItem label -> List.singleton label
+         LabelItem label -> label :: List.repeat ((Set.size ids) - 1) ""
 
 mapKeys : XMap -> List XMapKey
 mapKeys m = case m of
