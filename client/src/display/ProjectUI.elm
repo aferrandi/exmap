@@ -1,15 +1,11 @@
 module ProjectUI exposing (viewProject)
 
-import Html exposing (..)
+import Html exposing (Html,text, div)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (href, class, style)
-import Material
-import Material.Color
-import Material.Scheme
 import Material.Tabs as Tabs
 import Material.Icon as Icon
 import Material.List as Lists
-import Material.Button as Button
 import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
 import List.Extra exposing (getAt)
@@ -28,12 +24,13 @@ viewProject model pm = grid [ Grid.noSpacing ]
 
 
 viewAllViews : Model -> ProjectModel -> Html Msg
-viewAllViews model pm = let viewViewName vn = Lists.li []
-                                                   [ Lists.content
-                                                       [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToView pm.project.projectName vn)) ]
-                                                       [ Lists.avatarIcon "view_comfy" [], text vn ]
-                                                   ]
-                         in Lists.ul [] (List.map viewViewName pm.project.viewNames)
+viewAllViews model pm =
+    let viewViewName vn = Lists.li []
+                           [ Lists.content
+                               [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToView pm.project.projectName vn)) ]
+                               [ Lists.avatarIcon "view_comfy" [], text vn ]
+                           ]
+    in Lists.ul [] (List.map viewViewName pm.project.viewNames)
 
 
 viewViewTabs :  Model -> ProjectModel -> Html Msg

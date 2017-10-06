@@ -1,6 +1,6 @@
 module ViewUI exposing (viewView)
 
-import Html        exposing (..)
+import Html exposing (Html, text, div)
 import Html.Attributes exposing (class)
 import Material.Table as Table
 import Set as Set

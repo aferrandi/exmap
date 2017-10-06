@@ -1,6 +1,6 @@
 module Stretch exposing (..)
 
-import Html exposing (..)
+import Html exposing (Html)
 import Html.Attributes
 import Material.Options as Options exposing (css)
 

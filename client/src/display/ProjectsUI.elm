@@ -1,6 +1,6 @@
 module ProjectsUI exposing (viewProjects)
 
-import Html        exposing (..)
+import Html        exposing (Html, text, div)
 import Html.Events exposing (onClick)
 import Material
 import Material.Color as Color
@@ -8,7 +8,7 @@ import Material.Scheme
 import Material.Tabs as Tabs
 import Material.List as Lists
 import Material.Icon as Icon
-import Material.Grid as Grid exposing (grid, cell, size, Device(..))
+import Material.Grid as Grid
 import Material.Options as Options exposing (css)
 import List.Extra exposing (getAt)
 
