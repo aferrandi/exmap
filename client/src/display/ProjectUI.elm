@@ -29,7 +29,7 @@ viewAllViews model pm = div [] [
     viewAllViewsList model pm]
 
 viewAllViewsMenu :  Model -> ProjectModel -> Html Msg
-viewAllViewsMenu model pm = Menu.render Mdl [0] model.mdl
+viewAllViewsMenu model pm = Menu.render Mdl [mdlIdxViews] model.mdl
                               [ Menu.bottomLeft ]
                               [ Menu.item
                                   [ Menu.onSelect (Internal NewMap) ]
@@ -52,7 +52,7 @@ viewAllViewsList model pm =
 
 
 viewViewTabs :  Model -> ProjectModel -> Html Msg
-viewViewTabs model pm = Tabs.render Mdl [1] model.mdl
+viewViewTabs model pm = Tabs.render Mdl [mdlIdxViews] model.mdl
  [ Tabs.ripple
  , Tabs.onSelectTab (\i -> Internal (SelectViewTab i))
  , Tabs.activeTab model.viewTab

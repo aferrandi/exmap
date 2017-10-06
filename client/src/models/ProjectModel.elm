@@ -44,6 +44,9 @@ type Msg
   | Mdl (Material.Msg Msg)
   | Internal InternalMsg
 
+mdlIdxProjects = 0
+mdlIdxViews = 1
+
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
