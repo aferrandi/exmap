@@ -4,12 +4,13 @@ import Html        exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Material
+import Material.Color
 import Material.Scheme
 import Material.Tabs as Tabs
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Button as Button
-import Material.Grid exposing (grid, cell, size, Device(..))
+import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Options as Options exposing (css)
 import List.Extra exposing (getAt)
 
@@ -18,10 +19,10 @@ import WebMessages exposing (WebRequest(..))
 import ViewUI exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
-viewProject model pm = grid [ ]
-                            [ cell [ size Tablet 2, size Desktop 2, size Phone 1 ]
+viewProject model pm = grid [ Grid.noSpacing ]
+                            [ cell [ size Tablet 2, size Desktop 2, size Phone 1, Grid.stretch]
                                 [ viewAllViews model pm ]
-                            , cell [ size Tablet 6, size Desktop 8, size Phone 3 ]
+                            , cell [ size Tablet 6, size Desktop 10, size Phone 3, Grid.stretch]
                                 [ viewViewTabs model pm ]
                         ]
 
@@ -45,10 +46,9 @@ viewViewTabs model pm = Tabs.render Mdl [0] model.mdl
  [ viewViewAt model pm
  ]
 
-
 viewTabHeader : ViewModel -> Tabs.Label Msg
 viewTabHeader vm = Tabs.label
-               [ Options.center ]
+               [ Options.center]
                [ Icon.i "view_comfy"
                , Options.span [ css "width" "4px" ] []
                , text vm.view.viewName

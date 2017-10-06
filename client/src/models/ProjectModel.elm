@@ -41,7 +41,7 @@ type Msg
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
-               , messages = []
+               , messages = ["testMessage"]
                , mdl =Material.model
                , projectTab = 0
                , viewTab = 0
