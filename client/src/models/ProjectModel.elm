@@ -31,12 +31,18 @@ type alias Model = {
     , messages : List Error
     }
 
+type InternalMsg =
+  SelectProjectTab Int
+  | SelectViewTab Int
+  | NewProject
+  | NewMap
+  | NewView
+
 type Msg
   = Receive String
   | Send WebRequest
   | Mdl (Material.Msg Msg)
-  | SelectProjectTab Int
-  | SelectViewTab Int
+  | Internal InternalMsg
 
 emptyModel : Model
 emptyModel = { openProjects = []

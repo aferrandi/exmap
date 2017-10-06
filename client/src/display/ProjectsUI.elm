@@ -5,6 +5,7 @@ import Html.Events exposing (onClick)
 import Material
 import Material.Color as Color
 import Material.Scheme
+import Material.Menu as Menu exposing (Item)
 import Material.Tabs as Tabs
 import Material.List as Lists
 import Material.Icon as Icon
@@ -35,6 +36,21 @@ viewProjectsContent model = topDiv [
                           ]
 
 
+viewAllProjects : Model -> Html Msg
+viewAllProjects model = div [] [
+    viewAllProjectsMenu model,
+    viewAllProjectsList model]
+
+viewAllProjectsList : Model -> Html Msg
+viewAllProjectsList model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
+
+viewAllProjectsMenu :  Model -> Html Msg
+viewAllProjectsMenu model = Menu.render Mdl [0] model.mdl
+                              [ Menu.bottomLeft ]
+                              [ Menu.item
+                                  [ Menu.onSelect (Internal NewProject) ]
+                                  [ text "New Project" ]
+                              ]
 
 viewAllProjectsItem : ProjectName -> Html Msg
 viewAllProjectsItem pn = Lists.li [Color.background (Color.color Color.Grey Color.S50)]
@@ -42,9 +58,6 @@ viewAllProjectsItem pn = Lists.li [Color.background (Color.color Color.Grey Colo
                                 [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
                                 [ Lists.avatarIcon "folder" [], text pn ]
                             ]
-
-viewAllProjects : Model -> Html Msg
-viewAllProjects model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
 
 
 projectTabHeader : ProjectModel -> Tabs.Label Msg
@@ -58,7 +71,7 @@ projectTabHeader pm = Tabs.label
 viewProjectTabs : Model -> Html Msg
 viewProjectTabs model = Tabs.render Mdl [0] model.mdl
                              [ Tabs.ripple
-                             , Tabs.onSelectTab SelectProjectTab
+                             , Tabs.onSelectTab (\i -> Internal (SelectProjectTab i))
                              , Tabs.activeTab model.projectTab
                              ]
                              (List.map projectTabHeader model.openProjects)

@@ -42,8 +42,14 @@ update msg model = case msg of
     Receive json -> updateWithWebEvent json model
     Send req -> model ! [ sendToServer req ]
     Mdl msg_ -> Material.update Mdl msg_ model
+    Internal msg -> updateInternal msg model
+
+updateInternal msg model = case msg of
     SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
     SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
+    NewProject -> (model, Cmd.none)
+    NewMap -> (model, Cmd.none)
+    NewView -> (model, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
