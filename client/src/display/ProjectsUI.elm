@@ -1,7 +1,7 @@
 module ProjectsUI exposing (viewProjects)
 
 import Html        exposing (..)
-import Html.Events exposing (..)
+import Html.Events exposing (onClick)
 import Material
 import Material.Color as Color
 import Material.Scheme

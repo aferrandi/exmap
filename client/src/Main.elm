@@ -1,12 +1,10 @@
 module Main exposing (main)
+
 import Html        exposing (..)
-import Html.Events exposing (..)
-import Html.Attributes exposing (href, class, style)
 import WebSocket exposing (..)
 import Json.Encode exposing (encode)
 import Material
 import Material.Scheme
-import Material.Options as Options exposing (css)
 
 import XMapTypes exposing (..)
 import Project exposing (..)

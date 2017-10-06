@@ -1,9 +1,8 @@
 module Stretch exposing (..)
 
-import Html        exposing (..)
-import Html.Events exposing (..)
-import Html.Attributes exposing (id)
-import Material.Options as Options exposing (css, cs)
+import Html exposing (..)
+import Html.Attributes
+import Material.Options as Options exposing (css)
 
 topDiv : List (Html msg) -> Html msg
 topDiv = Options.div [

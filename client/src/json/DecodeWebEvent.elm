@@ -36,5 +36,5 @@ webEventDecoder =
                             "error" -> decode WEError
                                                 |> required "error" string
 
-                            otherwise -> fail ("webEvent type " ++ t ++ " not recognized")
+                            _ -> fail ("webEvent type " ++ t ++ " not recognized")
     in decodeType decodeFromType

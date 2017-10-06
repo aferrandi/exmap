@@ -90,7 +90,7 @@ viewItemDecoder =
                                                |> required "mapName" xmapNameDecoder
                             "label" -> decode LabelItem
                                                |> required "label" string
-                            otherwise -> fail ("view item type " ++ t ++ " not recognized")
+                            _ -> fail ("view item type " ++ t ++ " not recognized")
     in decodeType decodeFromType
 
 

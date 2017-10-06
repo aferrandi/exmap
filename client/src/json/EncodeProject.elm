@@ -15,7 +15,7 @@ encodeXmapName mn = string (join "/" mn)
 
 encodeMapContent : (a-> Value) -> MapValue a -> Value
 encodeMapContent encodeMapValue (MapValue mv)  =
-    let encodeMapItem k v = encodeMapValue v
+    let encodeMapItem _ v = encodeMapValue v
     in Dict.map encodeMapItem mv
         |> toList
         |> object

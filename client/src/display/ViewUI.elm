@@ -1,12 +1,8 @@
 module ViewUI exposing (viewView)
 
 import Html        exposing (..)
-import Html.Events exposing (..)
 import Html.Attributes exposing (class)
-import Material
-import Material.Scheme
 import Material.Table as Table
-import Material.Options as Options exposing (css)
 import Set as Set
 import Dict as Dict
 import List.Extra exposing (transpose)
@@ -32,7 +28,7 @@ viewRowHeader row =
     let header id = Table.th [] [ text id ]
     in Table.thead []
                      [ Table.tr []
-                        (List.map header ("Ids" :: (rowNames row)))
+                        (List.map header ("Ids" :: rowNames row))
                      ]
 
 viewRowBody : ViewModel -> ViewRow -> Html Msg

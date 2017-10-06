@@ -1,7 +1,7 @@
 module ProjectUI exposing (viewProject)
 
-import Html        exposing (..)
-import Html.Events exposing (..)
+import Html exposing (..)
+import Html.Events exposing (onClick)
 import Html.Attributes exposing (href, class, style)
 import Material
 import Material.Color
