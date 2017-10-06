@@ -20,10 +20,10 @@ import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 
 viewProjects : Model -> Html Msg
-viewProjects model = Material.Scheme.topWithScheme Color.Green Color.LightGreen (viewProjectsContent model)
+viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Amber (viewProjectsContent model)
 
 viewProjectsContent : Model -> Html Msg
-viewProjectsContent model = topDiv [
+viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Color.primary][
                                stretchDiv [
                                    Grid.grid [ Grid.noSpacing]
                                       [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
@@ -53,7 +53,7 @@ viewAllProjectsMenu model = Menu.render Mdl [mdlIdxProjects] model.mdl
                               ]
 
 viewAllProjectsItem : ProjectName -> Html Msg
-viewAllProjectsItem pn = Lists.li [Color.background (Color.color Color.Grey Color.S50)]
+viewAllProjectsItem pn = Lists.li []
                             [ Lists.content
                                 [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
                                 [ Lists.avatarIcon "folder" [], text pn ]

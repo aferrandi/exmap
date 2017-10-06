@@ -5,6 +5,7 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (href, class, style)
 import Material.Tabs as Tabs
 import Material.Icon as Icon
+import Material.Dialog as Dialog
 import Material.List as Lists
 import Material.Menu as Menu exposing (Item)
 import Material.Grid as Grid exposing (Device(..))
@@ -14,6 +15,7 @@ import List.Extra exposing (getAt)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ViewUI exposing (..)
+import MapEditor exposing (viewModel)
 
 viewProject : Model -> ProjectModel -> Html Msg
 viewProject model pm = Grid.grid [ Grid.noSpacing ]
@@ -26,13 +28,14 @@ viewProject model pm = Grid.grid [ Grid.noSpacing ]
 viewAllViews : Model -> ProjectModel -> Html Msg
 viewAllViews model pm = div [] [
     viewAllViewsMenu model pm,
-    viewAllViewsList model pm]
+    viewAllViewsList model pm,
+    MapEditor.viewModel model]
 
 viewAllViewsMenu :  Model -> ProjectModel -> Html Msg
 viewAllViewsMenu model pm = Menu.render Mdl [mdlIdxViews] model.mdl
                               [ Menu.bottomLeft ]
                               [ Menu.item
-                                  [ Menu.onSelect (Internal NewMap) ]
+                                  [ Dialog.openOn "click" ]
                                   [ text "New Map" ]
                               , Menu.item
                                   [ Menu.onSelect (Internal NewView) ]

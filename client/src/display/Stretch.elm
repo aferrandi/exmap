@@ -2,17 +2,19 @@ module Stretch exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes
-import Material.Options as Options exposing (css)
+import Material.Color as Color
+import Material.Options as Options exposing (css, Property)
 
-topDiv : List (Html msg) -> Html msg
-topDiv = Options.div [
+
+topDiv : List(Options.Property c msg) -> List (Html msg) -> Html msg
+topDiv props = Options.div ([
     css "display" "flex",
     css "flex-flow" "column",
     css "align-items" "stretch",
     css "width" "100vw",
     css "minHeight" "100vh",
     Options.attribute <| Html.Attributes.id "top"
-    ]
+    ] ++ props)
 
 stretchDiv : List (Html msg) -> Html msg
 stretchDiv = Options.div [
