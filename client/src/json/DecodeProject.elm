@@ -27,7 +27,7 @@ xmapDecoder =
             "int" -> (field "values" (keyValuePairs int))|> andThen (\s -> succeed (XMapInt (buildMapContent s)))
             "string" -> (field "values" (keyValuePairs string))|> andThen (\s -> succeed (XMapString (buildMapContent s)))
             "bool" -> (field "values" (keyValuePairs bool))|> andThen (\s -> succeed (XMapBool (buildMapContent s)))
-            otherwise -> fail ("map type " ++ d ++ " not recognized")
+            _ -> fail ("map type " ++ d ++ " not recognized")
     in decodeType decodeFromType
 
 xNamedMapDecoder : Decoder XNamedMap

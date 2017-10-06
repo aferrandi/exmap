@@ -9,7 +9,7 @@ import ProjectModel exposing (..)
 
 mapValues : XMap -> Dict.Dict String String
 mapValues m =
-    let keyValueToString k v =  toString v
+    let keyValueToString _ v =  toString v
     in case m of
      XMapInt (MapValue mapInt) -> Dict.map keyValueToString mapInt
      XMapString (MapValue mapString) -> Dict.map keyValueToString mapString
@@ -26,7 +26,7 @@ itemToTable ms ids item =
         mapValuesForEachId xmapName = Dict.values (Dict.union (mapValuesInDict xmapName) idsMap)
       in case item of
          MapItem xmapName -> mapValuesForEachId xmapName
-         LabelItem label -> Dict.values idsMap
+         LabelItem _ -> Dict.values idsMap
 
 mapKeys : XMap -> List XMapKey
 mapKeys m = case m of

@@ -2,16 +2,14 @@ module ViewUI exposing (viewView)
 
 import Html        exposing (..)
 import Html.Events exposing (..)
-import Html.Attributes exposing (href, class, style)
+import Html.Attributes exposing (class)
 import Material
 import Material.Scheme
-import Material.Icon as Icon
-import Material.Button as Button
 import Material.Table as Table
 import Material.Options as Options exposing (css)
 import Set as Set
 import Dict as Dict
-import List.Extra exposing (uncons, transpose)
+import List.Extra exposing (transpose)
 
 import ProjectModel exposing (..)
 import Views exposing (..)
