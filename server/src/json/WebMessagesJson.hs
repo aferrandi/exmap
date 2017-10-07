@@ -63,5 +63,5 @@ instance FromJSON WebRequest where
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
-      otherwise -> mempty
+      _ -> mempty
    parseJSON _ = mempty
