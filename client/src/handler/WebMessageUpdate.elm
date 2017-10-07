@@ -18,6 +18,7 @@ updateEvent evt model = case evt of
                             WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
                             WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
+                            WEMapsLoaded pn ms -> ({ model | xmapToEdit = List.head ms }, Cmd.none)
                             otherwise -> (model , Cmd.none)
 
 

@@ -22,7 +22,7 @@ encodeWebRequest ev = case ev of
             , ("project", encodeProject p)
             ]
     WRLoadMaps pn mns -> object
-            [ ("type", string "loadMap")
+            [ ("type", string "loadMaps")
             , ("projectName", string pn)
             , ("mapNames", List.map encodeXmapName mns |> list )
             ]
