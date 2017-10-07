@@ -14,7 +14,7 @@ import Dict as Dict
 updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
                             WEAllProjects ap -> ({ model | allProjects = ap }, Cmd.none)
-                            WEError e -> (showMessage model e, Cmd.none)
+                            WEError e -> (showMessage model ("Server: " ++ e), Cmd.none)
                             WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
                             WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)

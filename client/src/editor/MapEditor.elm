@@ -13,8 +13,6 @@ import Material.Table as Table
 import Material.Options as Options exposing (css)
 import List.Extra as ListX exposing (transpose, find)
 
-
-
 import ProjectModel exposing (..)
 import XMapTypes exposing(..)
 import MapsExtraction exposing (..)
@@ -24,7 +22,7 @@ import WebMessages exposing (WebRequest(..))
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
                 Dialog.view
-                    []
+                    [ Options.css "width" "50%" ]
                     [ Dialog.title [] [ text "Map Editor" ]
                     , Dialog.content [] (mapDialogContent model pm)
                     , Dialog.actions []
