@@ -29,3 +29,8 @@ fixedDiv = Options.div [
     Options.attribute <| Html.Attributes.id "fixed"
     ]
 
+rightDiv : List (Html msg) -> Html msg
+rightDiv = Options.div [
+    css "margin-left" "auto",
+    css "margin-right" "0px"
+    ]

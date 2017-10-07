@@ -38,6 +38,8 @@ type InternalMsg =
   | NewProject
   | NewMap
   | NewView
+  | MapToTextArea
+  | MapToTable
 
 type Msg
   = Receive String

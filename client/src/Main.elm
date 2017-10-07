@@ -50,6 +50,8 @@ updateInternal msg model = case msg of
     NewProject -> (model, Cmd.none)
     NewMap -> (model, Cmd.none)
     NewView -> (model, Cmd.none)
+    MapToTextArea-> (model, Cmd.none)
+    MapToTable-> (model, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

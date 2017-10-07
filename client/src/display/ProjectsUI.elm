@@ -20,7 +20,7 @@ import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 
 viewProjects : Model -> Html Msg
-viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Amber (viewProjectsContent model)
+viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Red (viewProjectsContent model)
 
 viewProjectsContent : Model -> Html Msg
 viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Color.primary][

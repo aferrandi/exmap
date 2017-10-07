@@ -10,6 +10,7 @@ import Material.Textfield as Textfield
 import Material.Grid as Grid
 import Material.List as Lists
 import Material.Table as Table
+import Material.Icon as Icon
 import Material.Options as Options exposing (css)
 import List.Extra as ListX exposing (transpose, find)
 
@@ -18,6 +19,7 @@ import XMapTypes exposing(..)
 import MapsExtraction exposing (..)
 import Project exposing (..)
 import WebMessages exposing (WebRequest(..))
+import Stretch exposing (..)
 
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
@@ -43,6 +45,24 @@ mapDialogContent model pm = [
                                           [ mapDialogTextArea model pm]
                                       , Grid.cell [ Grid.size Grid.Tablet 3, Grid.size Grid.Desktop 5, Grid.size Grid.Phone 2, Grid.stretch]
                                           [ mapDialogTable model.xmapToEdit ]
+                                  ],
+                                   Grid.grid [ Grid.noSpacing]
+                                      [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
+                                          [ ]
+                                      , Grid.cell [ Grid.size Grid.Tablet 6, Grid.size Grid.Desktop 10, Grid.size Grid.Phone 3, Grid.stretch, Options.center]
+                                          [
+                                                Button.render Mdl [8] model.mdl
+                                              [ Button.fab
+                                              , Button.colored
+                                              , Options.onClick (Internal MapToTable)
+                                              ]
+                                              [ Icon.i "arrow_forward" ],
+                                                Button.render Mdl [9] model.mdl
+                                              [ Button.fab
+                                              , Button.colored
+                                              , Options.onClick (Internal MapToTextArea)
+                                              ]
+                                              [ Icon.i "arrow_back"]]
                                   ]
                           ]
 
@@ -51,7 +71,7 @@ mapDialogMapList p =
     let listItem mn = Lists.li []
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadMaps p.projectName [mn])) ]
-                               [ Lists.avatarIcon "view_comfy" [], text (xmapNameToString mn) ]
+                               [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
     in Lists.ul [] (List.map listItem (fileSourcesOfProject p))
 
