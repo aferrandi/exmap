@@ -19,7 +19,7 @@ updateEvent evt model = case evt of
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
                             WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
                             WEMapsLoaded pn ms -> ({ model | xmapToEdit = List.head ms }, Cmd.none)
-                            otherwise -> (model , Cmd.none)
+                            _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
 
 updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
