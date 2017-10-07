@@ -29,7 +29,7 @@ viewAllViews : Model -> ProjectModel -> Html Msg
 viewAllViews model pm = div [] [
     viewAllViewsMenu model pm,
     viewAllViewsList model pm,
-    MapEditor.viewModel model]
+    MapEditor.viewModel model pm]
 
 viewAllViewsMenu :  Model -> ProjectModel -> Html Msg
 viewAllViewsMenu model pm = Menu.render Mdl [mdlIdxViews] model.mdl

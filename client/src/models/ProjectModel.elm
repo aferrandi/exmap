@@ -28,6 +28,7 @@ type alias Model = {
     , mdl : Material.Model
     , projectTab : Int
     , viewTab : Int
+    , xmapToEdit : Maybe XNamedMap
     , messages : List Error
     }
 
@@ -50,10 +51,11 @@ mdlIdxViews = 1
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
-               , messages = ["testMessage"]
+               , messages = ["Client started"]
                , mdl =Material.model
                , projectTab = 0
                , viewTab = 0
+               , xmapToEdit = Nothing
                }
 
 

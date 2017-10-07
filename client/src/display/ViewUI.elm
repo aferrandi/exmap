@@ -56,10 +56,20 @@ rowIds (ViewRow items) ms =
 
 rowNames : ViewRow -> List String
 rowNames (ViewRow items) =
-    let xmapNameToString l = String.join "/" l
-        name item = case item of
+    let name item = case item of
             MapItem xmapName -> xmapNameToString xmapName
             LabelItem label -> label
     in List.map name items
 
 
+
+itemToTable : XMapByName -> Set.Set XMapKey -> ViewItem -> List String
+itemToTable ms ids item =
+    let idsMap = Set.foldr (\id dict -> Dict.insert id  "" dict) Dict.empty ids
+        mapValuesInDict xmapName = case Dict.get xmapName ms of
+            Just m -> mapValues m
+            Nothing -> idsMap
+        mapValuesForEachId xmapName = Dict.values (Dict.union (mapValuesInDict xmapName) idsMap)
+      in case item of
+         MapItem xmapName -> mapValuesForEachId xmapName
+         LabelItem _ -> Dict.values idsMap
