@@ -36,10 +36,10 @@ viewAllViewsMenu model pm = Menu.render Mdl [mdlIdxViews] model.mdl
                               [ Menu.bottomLeft ]
                               [ Menu.item
                                   [ Dialog.openOn "click" ]
-                                  [ text "New Map" ]
+                                  [ text "Map Editor" ]
                               , Menu.item
-                                  [ Menu.onSelect (Internal NewView) ]
-                                  [ text "New View" ]
+                                  [ Dialog.openOn "click" ]
+                                  [ text "View Editor" ]
                               ]
 
 
