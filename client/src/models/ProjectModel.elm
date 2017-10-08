@@ -29,6 +29,7 @@ type alias Model = {
     , projectTab : Int
     , viewTab : Int
     , xmapToEdit : Maybe XNamedMap
+    , xmapEditing : Maybe String
     , messages : List Error
     }
 
@@ -58,6 +59,7 @@ emptyModel = { openProjects = []
                , projectTab = 0
                , viewTab = 0
                , xmapToEdit = Nothing
+               , xmapEditing = Nothing
                }
 
 

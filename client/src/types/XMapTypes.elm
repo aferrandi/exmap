@@ -13,6 +13,11 @@ type XMap = XMapDouble (MapValue Float)
             | XMapString (MapValue String)
             | XMapBool (MapValue Bool)
 
+type XMapType = TypeDouble
+                | TypeInt
+                | TypeString
+                | TypeBool
+
 type alias XNamedMap = {
     xmapName : XMapName
     , xmap : XMap

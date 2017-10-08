@@ -20,6 +20,8 @@ import MapsExtraction exposing (..)
 import Project exposing (..)
 import WebMessages exposing (WebRequest(..))
 import Stretch exposing (..)
+import XMapText exposing (..)
+import XMapParse exposing (..)
 
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
@@ -50,21 +52,19 @@ mapDialogContent model pm = [
                                       [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
                                           [ ]
                                       , Grid.cell [ Grid.size Grid.Tablet 6, Grid.size Grid.Desktop 10, Grid.size Grid.Phone 3, Grid.stretch, Options.center]
-                                          [
-                                                Button.render Mdl [8] model.mdl
-                                              [ Button.fab
-                                              , Button.colored
-                                              , Options.onClick (Internal MapToTable)
-                                              ]
-                                              [ Icon.i "arrow_forward" ],
-                                                Button.render Mdl [9] model.mdl
-                                              [ Button.fab
-                                              , Button.colored
-                                              , Options.onClick (Internal MapToTextArea)
-                                              ]
-                                              [ Icon.i "arrow_back"]]
+                                          [ button model 8 "To Table >" (Internal MapToTable),
+                                            button model 9 "< To Text" (Internal MapToTextArea)
+                                            ]
                                   ]
                           ]
+
+button : Model -> Int -> String -> Msg  -> Html Msg
+button model index txt msg = Button.render Mdl [index] model.mdl
+                                              [ Button.raised
+                                              , Button.colored
+                                              , Options.onClick msg
+                                              ]
+                                              [ text txt]
 
 mapDialogMapList : Project -> Html Msg
 mapDialogMapList p =
@@ -113,13 +113,11 @@ mapHeader = Table.thead []
                      ]
 
 mapRows : XMap -> Html Msg
-mapRows m = let matrix = ListX.transpose (mapToTable m)
-                rows = List.map lineToTableRow (Debug.log "Matrix: " matrix)
+mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
             in Table.tbody [] rows
 
 lineToTableRow : List String  -> Html Msg
 lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
 
-mapToTable : XMap -> List (List String)
-mapToTable m = [Dict.keys (mapValues m), Dict.values (mapValues m)]
+
 
