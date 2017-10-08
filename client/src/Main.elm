@@ -43,7 +43,7 @@ update msg model = case msg of
     Receive json -> updateWithWebEvent json model
     Send req -> model ! [ sendToServer req ]
     Mdl msg_ -> Material.update Mdl msg_ model
-    Internal msg -> updateInternal msg model
+    Internal msg -> updateInternal (Debug.log "Internal received:" msg) model
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

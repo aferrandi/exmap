@@ -15,6 +15,7 @@ updateInternal msg model = case msg of
     NewView -> (model, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
+    TextToTextArea s -> ( { model | xmapEditing = Just s }, Cmd.none)
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let mm = Maybe.map2 textToMap model.xmapType model.xmapEditing

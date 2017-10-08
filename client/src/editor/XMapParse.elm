@@ -8,7 +8,7 @@ import MapsExtraction exposing (..)
 import XMapTypes exposing(..)
 
 textToMap : XMapType -> String -> Result String XMap
-textToMap t s = textToMatrix s |> matrixToMap t
+textToMap t s = textToMatrix s |> transpose |> matrixToMap t
 
 toBool : String -> Result String Bool
 toBool b = case b of

@@ -43,6 +43,7 @@ type InternalMsg =
   | NewView
   | MapToTextArea
   | MapToTable
+  | TextToTextArea String
 
 type Msg
   = Receive String
