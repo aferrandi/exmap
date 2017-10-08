@@ -87,6 +87,7 @@ mapDialogTextArea model pm = Textfield.render Mdl [9] model.mdl
                               , Textfield.floatingLabel
                               , Textfield.textarea
                               , Textfield.rows 20
+                              , Textfield.value (Maybe.withDefault "" model.xmapEditing)
                               ]
                               []
 
