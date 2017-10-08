@@ -22,3 +22,10 @@ type alias XNamedMap = {
     xmapName : XMapName
     , xmap : XMap
     }
+
+mapType : XMap -> XMapType
+mapType m = case m of
+                XMapDouble _ -> TypeDouble
+                XMapInt _ -> TypeInt
+                XMapString _ -> TypeString
+                XMapBool _ -> TypeBool

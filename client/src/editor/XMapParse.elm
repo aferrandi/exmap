@@ -30,6 +30,3 @@ matrixToMap t ll = let compose = List.foldr (Result.map2 (::)) (Ok [])
                             TypeInt -> List.map String.toInt vs |> compose |> toDict |> Result.map XMapInt
                             TypeString -> Ok vs |> toDict |> Result.map XMapString
                             TypeBool -> List.map toBool vs |> compose |> toDict |> Result.map XMapBool
-
-
-

@@ -6,6 +6,7 @@ import Json.Encode exposing (encode)
 import Material
 import Material.Scheme
 
+import InternalMessageUpdate exposing (..)
 import XMapTypes exposing (..)
 import Project exposing (..)
 import Views exposing (..)
@@ -43,15 +44,6 @@ update msg model = case msg of
     Send req -> model ! [ sendToServer req ]
     Mdl msg_ -> Material.update Mdl msg_ model
     Internal msg -> updateInternal msg model
-
-updateInternal msg model = case msg of
-    SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
-    SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
-    NewProject -> (model, Cmd.none)
-    NewMap -> (model, Cmd.none)
-    NewView -> (model, Cmd.none)
-    MapToTextArea-> (model, Cmd.none)
-    MapToTable-> (model, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

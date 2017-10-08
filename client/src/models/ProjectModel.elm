@@ -28,7 +28,9 @@ type alias Model = {
     , mdl : Material.Model
     , projectTab : Int
     , viewTab : Int
-    , xmapToEdit : Maybe XNamedMap
+    , xmapName : Maybe XMapName
+    , xmapType : Maybe XMapType
+    , xmapToEdit : Maybe XMap
     , xmapEditing : Maybe String
     , messages : List Error
     }
@@ -58,6 +60,8 @@ emptyModel = { openProjects = []
                , mdl =Material.model
                , projectTab = 0
                , viewTab = 0
+               , xmapName = Nothing
+               , xmapType = Nothing
                , xmapToEdit = Nothing
                , xmapEditing = Nothing
                }

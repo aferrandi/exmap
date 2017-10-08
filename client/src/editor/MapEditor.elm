@@ -90,12 +90,12 @@ mapDialogTextArea model pm = Textfield.render Mdl [9] model.mdl
                               ]
                               []
 
-mapDialogTable : Maybe XNamedMap -> Html Msg
+mapDialogTable : Maybe XMap -> Html Msg
 mapDialogTable mm = case mm of
                         Just m -> Table.table []
                             [
                                 mapHeader,
-                                mapRows m.xmap
+                                mapRows m
                             ]
                         Nothing -> Table.table []
                             [

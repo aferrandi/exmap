@@ -11,6 +11,8 @@ import XMapTypes exposing (..)
 import List.Extra exposing (..)
 import Dict as Dict
 
+import ModelUpdate exposing (..)
+
 updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
                             WEAllProjects ap -> ({ model | allProjects = ap }, Cmd.none)
@@ -18,9 +20,18 @@ updateEvent evt model = case evt of
                             WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
                             WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
-                            WEMapsLoaded pn ms -> ({ model | xmapToEdit = List.head ms }, Cmd.none)
+                            WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
+
+handleMapsLoaded : Model -> List XNamedMap -> Model
+handleMapsLoaded model ms = case List.head ms of
+                                    Just m -> { model |
+                                        xmapToEdit = Just m.xmap,
+                                        xmapName = Just m.xmapName,
+                                        xmapType = Just (mapType m.xmap)
+                                        }
+                                    Nothing -> model
 
 updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
 updateOpenProjects p ops = let pn = p.projectName
@@ -68,8 +79,7 @@ updateWithWebEvent json model = let _ = Debug.log ("Event " ++ json)
 updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel
 updateIfProjectHasSameName pn m2m ops = updateIf (sameProjectName pn) m2m ops
 
-showMessage : Model -> String -> Model
-showMessage model msg = { model | messages = msg :: model.messages }
+
 
 sameProjectName : ProjectName -> ProjectModel -> Bool
 sameProjectName pn pm = pm.project.projectName == pn
