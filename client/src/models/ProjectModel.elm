@@ -7,6 +7,7 @@ import Project exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
 import WebMessages exposing (WebRequest)
+import List.Extra as ListX
 
 type alias Mdl = Material.Model
 
@@ -67,4 +68,5 @@ emptyModel = { openProjects = []
                , xmapEditing = Nothing
                }
 
-
+currentOpenProject : Model -> Maybe ProjectModel
+currentOpenProject model = ListX.getAt model.projectTab model.openProjects

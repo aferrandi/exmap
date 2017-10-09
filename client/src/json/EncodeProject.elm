@@ -43,7 +43,7 @@ encodeXMap m = case m of
 encodeXNamedMap : XNamedMap -> Value
 encodeXNamedMap nm = object
                         [ ("mapName", encodeXmapName nm.xmapName)
-                        , ("values", encodeXMap nm.xmap)
+                        , ("xmap", encodeXMap nm.xmap)
                         ]
 
 encodeInternalSource : Value

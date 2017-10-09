@@ -22,6 +22,7 @@ import WebMessages exposing (WebRequest(..))
 import Stretch exposing (..)
 import XMapText exposing (..)
 import XMapParse exposing (..)
+import UIWrapper exposing (..)
 
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
@@ -41,30 +42,19 @@ viewModel model pm =
 mapDialogContent : Model -> ProjectModel -> List(Html Msg)
 mapDialogContent model pm = [
                                    Grid.grid [ Grid.noSpacing]
-                                      [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
-                                          [ mapDialogMapList pm.project]
-                                      , Grid.cell [ Grid.size Grid.Tablet 3, Grid.size Grid.Desktop 5, Grid.size Grid.Phone 1, Grid.stretch]
-                                          [ mapDialogTextArea model pm]
-                                      , Grid.cell [ Grid.size Grid.Tablet 3, Grid.size Grid.Desktop 5, Grid.size Grid.Phone 2, Grid.stretch]
-                                          [ mapDialogTable model.xmapToEdit ]
-                                  ],
+                                      [ cell 2 2 1 [ mapDialogMapList pm.project]
+                                      , cell 3 5 1 [ mapDialogTextArea model pm]
+                                      , cell 3 5 2 [ mapDialogTable model.xmapToEdit ]
+                                   ],
                                    Grid.grid [ Grid.noSpacing]
-                                      [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
-                                          [ ]
-                                      , Grid.cell [ Grid.size Grid.Tablet 6, Grid.size Grid.Desktop 10, Grid.size Grid.Phone 3, Grid.stretch, Options.center]
-                                          [ button model 8 "To Table >" (Internal MapToTable),
-                                            button model 9 "< To Text" (Internal MapToTextArea)
-                                            ]
+                                      [ cell 3 2 1 []
+                                      , cell 3 2 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
+                                      , cell 3 2 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
+                                      , cell 3 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (\n m -> Send (WRStoreMap  pm.project.projectName { xmapName = n , xmap = m }) ) model.xmapName model.xmapToEdit)   ]
                                   ]
                           ]
 
-button : Model -> Int -> String -> Msg  -> Html Msg
-button model index txt msg = Button.render Mdl [index] model.mdl
-                                              [ Button.raised
-                                              , Button.colored
-                                              , Options.onClick msg
-                                              ]
-                                              [ text txt]
+
 
 mapDialogMapList : Project -> Html Msg
 mapDialogMapList p =

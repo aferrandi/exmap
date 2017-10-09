@@ -1,6 +1,9 @@
 module WebMessageUpdate exposing (..)
 
 import Json.Decode exposing (decodeString)
+import List.Extra exposing (..)
+import Dict as Dict
+import ModelUpdate exposing (..)
 
 import ProjectModel exposing (..)
 import WebMessages exposing (..)
@@ -8,10 +11,7 @@ import DecodeWebEvent exposing (..)
 import Project exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
-import List.Extra exposing (..)
-import Dict as Dict
-
-import ModelUpdate exposing (..)
+import MapsExtraction exposing (..)
 
 updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
@@ -21,6 +21,7 @@ updateEvent evt model = case evt of
                             WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
                             WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
                             WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
+                            WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
 

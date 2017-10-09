@@ -78,7 +78,7 @@ viewProjectTabs model = Tabs.render Mdl [mdlIdxProjects] model.mdl
                          [ viewProjectAt model]
 
 viewProjectAt : Model -> Html Msg
-viewProjectAt model = case getAt model.projectTab model.openProjects of
+viewProjectAt model = case currentOpenProject model of
                     Just pm -> viewProject model pm
                     Nothing -> div [][]
 
