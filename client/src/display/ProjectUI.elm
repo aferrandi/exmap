@@ -16,14 +16,13 @@ import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ViewUI exposing (..)
 import MapEditor exposing (viewModel)
+import UIWrapper exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
 viewProject model pm = Grid.grid [ Grid.noSpacing ]
-                                [ Grid.cell [ Grid.size Tablet 2, Grid.size Desktop 2, Grid.size Phone 1, Grid.stretch]
-                                    [ viewAllViews model pm ]
-                                , Grid.cell [ Grid.size Tablet 6, Grid.size Desktop 10, Grid.size Phone 3, Grid.stretch]
-                                    [ viewViewTabs model pm ]
-                            ]
+                                [ cell 2 2 1 [ viewAllViews model pm ]
+                                , cell 6 10 3 [ viewViewTabs model pm ]
+                                 ]
 
 viewAllViews : Model -> ProjectModel -> Html Msg
 viewAllViews model pm = div [] [

@@ -18,6 +18,7 @@ import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
+import UIWrapper exposing (..)
 
 viewProjects : Model -> Html Msg
 viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Red (viewProjectsContent model)
@@ -26,10 +27,8 @@ viewProjectsContent : Model -> Html Msg
 viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Color.primary][
                                stretchDiv [
                                    Grid.grid [ Grid.noSpacing]
-                                      [ Grid.cell [ Grid.size Grid.Tablet 2, Grid.size Grid.Desktop 2, Grid.size Grid.Phone 1, Grid.stretch]
-                                          [ viewAllProjects model ]
-                                      , Grid.cell [ Grid.size Grid.Tablet 6, Grid.size Grid.Desktop 10, Grid.size Grid.Phone 3, Grid.stretch]
-                                          [ viewProjectTabs model ]
+                                      [ cell 2 2 1 [ viewAllProjects model ]
+                                      , cell 6 10 3 [ viewProjectTabs model ]
                                   ]
                               ]
                               , fixedDiv [viewMessages model]

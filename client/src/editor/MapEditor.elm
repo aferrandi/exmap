@@ -47,10 +47,10 @@ mapDialogContent model pm = [
                                       , cell 3 5 2 [ mapDialogTable model.xmapToEdit ]
                                    ],
                                    Grid.grid [ Grid.noSpacing]
-                                      [ cell 3 2 1 []
-                                      , cell 3 2 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
-                                      , cell 3 2 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-                                      , cell 3 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (\n m -> Send (WRStoreMap  pm.project.projectName { xmapName = n , xmap = m }) ) model.xmapName model.xmapToEdit)   ]
+                                      [ cell 2 3 1 [ buttonClick model 7 "New Map" (Internal MapToTable) ]
+                                      , cell 2 3 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
+                                      , cell 2 3 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
+                                      , cell 2 3 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (\n m -> Send (WRStoreMap  pm.project.projectName { xmapName = n , xmap = m }) ) model.xmapName model.xmapToEdit)   ]
                                   ]
                           ]
 
