@@ -27,7 +27,7 @@ import UIWrapper exposing (..)
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
                 Dialog.view
-                    [ Options.css "width" "50%" ]
+                    [ Options.css "width" "50%", Options.css "height" "50%" ]
                     [ Dialog.title [] [ text "Map Editor" ]
                     , Dialog.content [] (mapDialogContent model pm)
                     , Dialog.actions []
@@ -41,7 +41,7 @@ viewModel model pm =
 
 mapDialogContent : Model -> ProjectModel -> List(Html Msg)
 mapDialogContent model pm = [
-                                   Grid.grid [ Grid.noSpacing]
+                                   Grid.grid [ Grid.noSpacing ]
                                       [ cell 2 2 1 [ mapDialogMapList pm.project]
                                       , cell 3 5 1 [ mapDialogTextArea model pm]
                                       , cell 3 5 2 [ mapDialogTable model.xmapToEdit ]
@@ -96,7 +96,7 @@ mapDialogTable mm = case mm of
                             ]
 
 mapHeader : Html Msg
-mapHeader = Table.thead []
+mapHeader = Table.thead [Options.css "display" "table"]
                      [ Table.tr []
                         [
                         Table.th [] [ text "Ids" ],
@@ -106,7 +106,7 @@ mapHeader = Table.thead []
 
 mapRows : XMap -> Html Msg
 mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
-            in Table.tbody [] rows
+            in Table.tbody [Options.css "height" "30vh", Options.css "overflow-y" "auto", Options.css "display" "block" ] rows
 
 lineToTableRow : List String  -> Html Msg
 lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)

@@ -3,6 +3,7 @@ module ViewUI exposing (viewView)
 import Html exposing (Html, text, div)
 import Html.Attributes exposing (class)
 import Material.Table as Table
+import Material.Options as Options
 import Set as Set
 import Dict as Dict
 import List.Extra exposing (transpose)
@@ -26,7 +27,7 @@ viewRow vm row = Table.table []
 viewRowHeader : ViewRow -> Html Msg
 viewRowHeader row =
     let header id = Table.th [] [ text id ]
-    in Table.thead []
+    in Table.thead [Options.css "display" "table"]
                      [ Table.tr []
                         (List.map header ("Ids" :: rowNames row))
                      ]
@@ -34,7 +35,7 @@ viewRowHeader row =
 viewRowBody : ViewModel -> ViewRow -> Html Msg
 viewRowBody vm row = let matrix = transpose (rowToTable row vm)
                          rows = List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
-                     in Table.tbody [] rows
+                     in Table.tbody [Options.css "height" "70vh", Options.css "overflow-y" "auto", Options.css "display" "block"] rows
 
 rowLineToTableRow : List String  -> Html Msg
 rowLineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
