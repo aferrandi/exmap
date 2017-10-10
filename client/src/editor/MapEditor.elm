@@ -23,6 +23,7 @@ import Stretch exposing (..)
 import XMapText exposing (..)
 import XMapParse exposing (..)
 import UIWrapper exposing (..)
+import ModelUpdate exposing (..)
 
 viewModel : Model -> ProjectModel -> Html Msg
 viewModel model pm =
@@ -47,13 +48,28 @@ mapDialogContent model pm = [
                                       , cell 3 5 2 [ mapDialogTable model.xmapToEdit ]
                                    ],
                                    Grid.grid [ Grid.noSpacing]
-                                      [ cell 2 3 1 [ buttonClick model 7 "New Map" (Internal MapToTable) ]
+                                      [ cell 3 4 1 [ newMapButton model pm ]
                                       , cell 2 3 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
                                       , cell 2 3 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-                                      , cell 2 3 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (\n m -> Send (WRStoreMap  pm.project.projectName { xmapName = n , xmap = m }) ) model.xmapName model.xmapToEdit)   ]
+                                      , cell 1 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) model.xmapName model.xmapToEdit)   ]
                                   ]
                           ]
 
+newMapButton : Model -> ProjectModel -> Html Msg
+newMapButton model pm =
+    let storeNewMap = case xmapNameFromString model.newXmapName of
+                          Ok mapName -> Maybe.map (storeMap pm mapName) model.xmapToEdit
+                          Err e -> Just (Internal (ShowMessage e))
+    in Grid.grid [ Grid.noSpacing]
+        [ cell 4 6 2 [ Textfield.render Mdl [9] model.mdl
+                                             [ Textfield.label "New map name"
+                                             , Textfield.floatingLabel
+                                             , Textfield.text_
+                                             , Options.onInput (\s -> Internal (NewMapName s))
+                                             ]
+                                             [] ]
+        , cell 4 6 2 [ buttonMaybe model 7 "New Map" storeNewMap]
+           ]
 
 
 mapDialogMapList : Project -> Html Msg
@@ -64,6 +80,9 @@ mapDialogMapList p =
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
     in Lists.ul [] (List.map listItem (fileSourcesOfProject p))
+
+storeMap : ProjectModel -> XMapName -> XMap -> Msg
+storeMap pm n m =  WRStoreMap  pm.project.projectName { xmapName = n , xmap = m } |> Send
 
 fileSourcesOfProject : Project -> List XMapName
 fileSourcesOfProject p =

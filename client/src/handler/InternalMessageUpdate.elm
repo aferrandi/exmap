@@ -11,11 +11,11 @@ updateInternal msg model = case msg of
     SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
     SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
     NewProject -> (model, Cmd.none)
-    NewMap -> (model, Cmd.none)
-    NewView -> (model, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
     TextToTextArea s -> ( { model | xmapEditing = Just s }, Cmd.none)
+    NewMapName  s -> ( { model | newXmapName = s }, Cmd.none)
+    ShowMessage s -> ( showMessage model s, Cmd.none)
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let mm = Maybe.map2 textToMap model.xmapType model.xmapEditing

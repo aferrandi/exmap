@@ -33,6 +33,7 @@ type alias Model = {
     , xmapType : Maybe XMapType
     , xmapToEdit : Maybe XMap
     , xmapEditing : Maybe String
+    , newXmapName : String
     , messages : List Error
     }
 
@@ -40,11 +41,11 @@ type InternalMsg =
   SelectProjectTab Int
   | SelectViewTab Int
   | NewProject
-  | NewMap
-  | NewView
   | MapToTextArea
   | MapToTable
   | TextToTextArea String
+  | NewMapName String
+  | ShowMessage String
 
 type Msg
   = Receive String
@@ -66,6 +67,7 @@ emptyModel = { openProjects = []
                , xmapType = Nothing
                , xmapToEdit = Nothing
                , xmapEditing = Nothing
+               , newXmapName = ""
                }
 
 currentOpenProject : Model -> Maybe ProjectModel
