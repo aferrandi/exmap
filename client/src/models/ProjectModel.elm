@@ -1,6 +1,7 @@
 module ProjectModel exposing (..)
 
 import Material
+import Html exposing (Html)
 import Dict as Dict
 
 import Project exposing (..)
@@ -23,18 +24,25 @@ type alias ProjectModel = {
     , openViews : List ViewModel
     }
 
+type alias XMapEditorModel = {
+    xmapName : Maybe XMapName
+    , xmapType : Maybe XMapType
+    , xmapToEdit : Maybe XMap
+    , xmapEditing : Maybe String
+    , newXmapName : String
+    }
+
+type DialogType =
+  MapDialogType
+
 type alias Model = {
     openProjects : List ProjectModel
     , allProjects : List ProjectName
     , mdl : Material.Model
     , projectTab : Int
     , viewTab : Int
-    , xmapName : Maybe XMapName
-    , xmapType : Maybe XMapType
-    , xmapToEdit : Maybe XMap
-    , xmapEditing : Maybe String
-    , newXmapName : String
     , messages : List Error
+    , xmapEditorModel : XMapEditorModel
     }
 
 type InternalMsg =
@@ -56,6 +64,15 @@ type Msg
 mdlIdxProjects = 0
 mdlIdxViews = 1
 
+emptyXMapEditorModel : XMapEditorModel
+emptyXMapEditorModel = {
+       xmapName = Nothing
+       , xmapType = Nothing
+       , xmapToEdit = Nothing
+       , xmapEditing = Nothing
+       , newXmapName = ""
+    }
+
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
@@ -63,11 +80,7 @@ emptyModel = { openProjects = []
                , mdl =Material.model
                , projectTab = 0
                , viewTab = 0
-               , xmapName = Nothing
-               , xmapType = Nothing
-               , xmapToEdit = Nothing
-               , xmapEditing = Nothing
-               , newXmapName = ""
+               , xmapEditorModel = emptyXMapEditorModel
                }
 
 currentOpenProject : Model -> Maybe ProjectModel

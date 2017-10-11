@@ -10,6 +10,7 @@ import Material.Tabs as Tabs
 import Material.List as Lists
 import Material.Icon as Icon
 import Material.Grid as Grid
+import Material.Elevation as Elevation
 import Material.Options as Options exposing (css)
 import List.Extra exposing (getAt)
 
@@ -26,8 +27,8 @@ viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Red (viewPr
 viewProjectsContent : Model -> Html Msg
 viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Color.primary][
                                stretchDiv [
-                                   Grid.grid [ Grid.noSpacing]
-                                      [ cell 2 2 1 [ viewAllProjects model ]
+                                   Grid.grid [ Options.css "height" "100%"]
+                                      [ cell 2 2 1 (viewAllProjects model)
                                       , cell 6 10 3 [ viewProjectTabs model ]
                                   ]
                               ]
@@ -35,13 +36,13 @@ viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Co
                           ]
 
 
-viewAllProjects : Model -> Html Msg
-viewAllProjects model = div [] [
+viewAllProjects : Model -> List (Html Msg)
+viewAllProjects model = [
     viewAllProjectsMenu model,
     viewAllProjectsList model]
 
 viewAllProjectsList : Model -> Html Msg
-viewAllProjectsList model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
+viewAllProjectsList model = Lists.ul [Elevation.e2, Options.css "height" "100%"] (List.map viewAllProjectsItem model.allProjects)
 
 viewAllProjectsMenu :  Model -> Html Msg
 viewAllProjectsMenu model = Menu.render Mdl [mdlIdxProjects] model.mdl

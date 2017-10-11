@@ -13,16 +13,17 @@ updateInternal msg model = case msg of
     NewProject -> (model, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
-    TextToTextArea s -> ( { model | xmapEditing = Just s }, Cmd.none)
-    NewMapName  s -> ( { model | newXmapName = s }, Cmd.none)
+    TextToTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
+    NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
 
 handleMapToTable : Model -> Model
-handleMapToTable model = let mm = Maybe.map2 textToMap model.xmapType model.xmapEditing
+handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
+                             mm = Maybe.map2 textToMap xmapEditorModel.xmapType xmapEditorModel.xmapEditing
                          in case mm of
-                                   Just (Ok m) -> { model | xmapToEdit = Just m }
+                                   Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m })
                                    Just (Err e) -> showMessage model e
                                    Nothing -> model
 
 handleMapToTextArea : Model -> Model
-handleMapToTextArea model = { model | xmapEditing = Maybe.map mapToText model.xmapToEdit }
+handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })

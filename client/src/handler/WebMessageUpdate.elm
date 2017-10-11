@@ -3,8 +3,8 @@ module WebMessageUpdate exposing (..)
 import Json.Decode exposing (decodeString)
 import List.Extra exposing (..)
 import Dict as Dict
-import ModelUpdate exposing (..)
 
+import ModelUpdate exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (..)
 import DecodeWebEvent exposing (..)
@@ -26,13 +26,14 @@ updateEvent evt model = case evt of
 
 
 handleMapsLoaded : Model -> List XNamedMap -> Model
-handleMapsLoaded model ms = case List.head ms of
-                                    Just m -> { model |
-                                        xmapToEdit = Just m.xmap,
-                                        xmapName = Just m.xmapName,
-                                        xmapType = Just (mapType m.xmap)
-                                        }
-                                    Nothing -> model
+handleMapsLoaded model ms =
+    case List.head ms of
+        Just m -> updateXMapEditorModel model (\xm -> { xm |
+            xmapToEdit = Just m.xmap,
+            xmapName = Just m.xmapName,
+            xmapType = Just (mapType m.xmap)
+            })
+        Nothing -> model
 
 updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
 updateOpenProjects p ops = let pn = p.projectName

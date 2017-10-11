@@ -1,4 +1,4 @@
-module MapEditor exposing (..)
+module MapEditor exposing (mapEditorContent)
 
 import Dict as Dict
 import Html        exposing (..)
@@ -25,40 +25,29 @@ import XMapParse exposing (..)
 import UIWrapper exposing (..)
 import ModelUpdate exposing (..)
 
-viewModel : Model -> ProjectModel -> Html Msg
-viewModel model pm =
-                Dialog.view
-                    [ Options.css "width" "50%", Options.css "height" "50%" ]
-                    [ Dialog.title [] [ text "Map Editor" ]
-                    , Dialog.content [] (mapDialogContent model pm)
-                    , Dialog.actions []
-                        [ Button.render Mdl
-                            [ 0 ]
-                            model.mdl
-                            [ Dialog.closeOn "click" ]
-                            [ text "Close" ]
-                        ]
-                    ]
 
-mapDialogContent : Model -> ProjectModel -> List(Html Msg)
-mapDialogContent model pm = [
-                                   Grid.grid [ Grid.noSpacing ]
-                                      [ cell 2 2 1 [ mapDialogMapList pm.project]
-                                      , cell 3 5 1 [ mapDialogTextArea model pm]
-                                      , cell 3 5 2 [ mapDialogTable model.xmapToEdit ]
-                                   ],
-                                   Grid.grid [ Grid.noSpacing]
-                                      [ cell 3 4 1 [ newMapButton model pm ]
-                                      , cell 2 3 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
-                                      , cell 2 3 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-                                      , cell 1 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) model.xmapName model.xmapToEdit)   ]
-                                  ]
-                          ]
+mapEditorContent : Model -> ProjectModel -> List(Html Msg)
+mapEditorContent model pm =
+    let  xmapEditorModel = model.xmapEditorModel
+    in [
+           Grid.grid [ Grid.noSpacing ]
+              [ cell 2 2 1 [ mapDialogMapList pm.project]
+              , cell 3 5 1 [ mapDialogTextArea model pm]
+              , cell 3 5 2 [ mapDialogTable xmapEditorModel.xmapToEdit ]
+           ],
+           Grid.grid [ Grid.noSpacing]
+              [ cell 3 4 1 [ newMapButton model pm ]
+              , cell 2 3 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
+              , cell 2 3 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
+              , cell 1 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
+          ]
+  ]
 
 newMapButton : Model -> ProjectModel -> Html Msg
 newMapButton model pm =
-    let storeNewMap = case xmapNameFromString model.newXmapName of
-                          Ok mapName -> Maybe.map (storeMap pm mapName) model.xmapToEdit
+    let xmapEditorModel = model.xmapEditorModel
+        storeNewMap = case xmapNameFromString xmapEditorModel.newXmapName of
+                          Ok mapName -> Maybe.map (storeMap pm mapName) xmapEditorModel.xmapToEdit
                           Err e -> Just (Internal (ShowMessage e))
     in Grid.grid [ Grid.noSpacing]
         [ cell 4 6 2 [ Textfield.render Mdl [9] model.mdl
@@ -96,7 +85,7 @@ mapDialogTextArea model pm = Textfield.render Mdl [9] model.mdl
                               , Textfield.floatingLabel
                               , Textfield.textarea
                               , Textfield.rows 20
-                              , Textfield.value (Maybe.withDefault "" model.xmapEditing)
+                              , Textfield.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
                               , Options.onInput (\s -> Internal (TextToTextArea s))
                               ]
                               []
