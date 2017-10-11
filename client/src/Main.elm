@@ -5,6 +5,8 @@ import WebSocket exposing (..)
 import Json.Encode exposing (encode)
 import Material
 import Material.Scheme
+import Material.Color as Color
+import Material.Layout as Layout
 
 import InternalMessageUpdate exposing (..)
 import XMapTypes exposing (..)
@@ -26,11 +28,11 @@ main = Html.program
      }
 
 init : (Model, Cmd Msg)
-init = emptyModel ! [  sendToServer WRAllProjects ]
+init = ( emptyModel ! [  sendToServer WRAllProjects, Layout.sub0 Mdl ] )
 
 view : Model -> Html Msg
-view model = viewProjects model
-        |> Material.Scheme.top
+view model = viewProjects model |> Material.Scheme.topWithScheme Color.Teal Color.Red
+        -- |> Material.Scheme.top
 
 wsUrl : String
 wsUrl = "ws://localhost:3000"

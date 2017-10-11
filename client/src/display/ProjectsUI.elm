@@ -22,19 +22,17 @@ import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
 
 viewProjects : Model -> Html Msg
-viewProjects model = Material.Scheme.topWithScheme Color.Green Color.Red (viewProjectsContent model)
-
-viewProjectsContent : Model -> Html Msg
-viewProjectsContent model = topDiv [ Color.background Color.white, Color.text Color.primary][
-                               stretchDiv [
-                                   Grid.grid [ Options.css "height" "100%"]
-                                      [ cell 2 2 1 (viewAllProjects model)
-                                      , cell 6 10 3 [ viewProjectTabs model ]
-                                  ]
-                              ]
-                              , fixedDiv [viewMessages model]
-                          ]
-
+viewProjects model =
+    topDiv []
+            [
+                    stretchDiv [
+                        Grid.grid [ Options.css "height" "100%"]
+                           [ cell 2 2 1 (viewAllProjects model)
+                           , cell 6 10 3 [ viewProjectTabs model ]
+                       ]
+                   ]
+                   , fixedDiv [viewMessages model]
+               ]
 
 viewAllProjects : Model -> List (Html Msg)
 viewAllProjects model = [
@@ -42,11 +40,11 @@ viewAllProjects model = [
     viewAllProjectsList model]
 
 viewAllProjectsList : Model -> Html Msg
-viewAllProjectsList model = Lists.ul [Elevation.e2, Options.css "height" "100%"] (List.map viewAllProjectsItem model.allProjects)
+viewAllProjectsList model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
 
 viewAllProjectsMenu :  Model -> Html Msg
 viewAllProjectsMenu model = Menu.render Mdl [mdlIdxProjects] model.mdl
-                              [ Menu.bottomLeft ]
+                              [ Menu.bottomLeft, Color.background Color.primary ]
                               [ Menu.item
                                   [ Menu.onSelect (Internal NewProject) ]
                                   [ text "New Project" ]
@@ -59,15 +57,6 @@ viewAllProjectsItem pn = Lists.li []
                                 [ Lists.avatarIcon "folder" [], text pn ]
                             ]
 
-
-projectTabHeader : ProjectModel -> Tabs.Label Msg
-projectTabHeader pm = Tabs.label
-               [ Options.center ]
-               [ Icon.i "folder"
-               , Options.span [ css "width" "4px" ] []
-               , text pm.project.projectName
-               ]
-
 viewProjectTabs : Model -> Html Msg
 viewProjectTabs model = Tabs.render Mdl [mdlIdxProjects] model.mdl
                              [ Tabs.ripple
@@ -76,6 +65,16 @@ viewProjectTabs model = Tabs.render Mdl [mdlIdxProjects] model.mdl
                              ]
                              (List.map projectTabHeader model.openProjects)
                          [ viewProjectAt model]
+
+projectTabHeader : ProjectModel -> Tabs.Label Msg
+projectTabHeader pm = Tabs.label
+               [ Options.center]
+               [ Icon.i "folder"
+               , Options.span [ css "width" "4px" ] []
+               , text pm.project.projectName
+               ]
+
+
 
 viewProjectAt : Model -> Html Msg
 viewProjectAt model = case currentOpenProject model of
@@ -90,4 +89,4 @@ viewMessagesItem msg = Lists.li []
                           ]
 
 viewMessages : Model -> Html Msg
-viewMessages model = Lists.ul [] (List.map viewMessagesItem model.messages)
+viewMessages model = Lists.ul [Elevation.e4] (List.map viewMessagesItem model.messages)

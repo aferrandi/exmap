@@ -4,6 +4,8 @@ import Html exposing (Html, text, div)
 import Html.Attributes exposing (class)
 import Material.Table as Table
 import Material.Options as Options
+import Material.Elevation as Elevation
+import Material.Color as Color
 import Set as Set
 import Dict as Dict
 import List.Extra exposing (transpose)
@@ -12,10 +14,10 @@ import ProjectModel exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
+import Stretch exposing  (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
-viewView model pm vm = div [class  "content"]
-                            (List.map (\row -> viewRow vm row) vm.view.rows)
+viewView model pm vm = stretchDiv (List.map (\row -> viewRow vm row) vm.view.rows)
 
 viewRow : ViewModel -> ViewRow -> Html Msg
 viewRow vm row = Table.table []
