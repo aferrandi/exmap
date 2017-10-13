@@ -17,11 +17,12 @@ updateEvent : WebEvent -> Model -> (Model, Cmd Msg)
 updateEvent evt model = case evt of
                             WEAllProjects ap -> ({ model | allProjects = ap }, Cmd.none)
                             WEError e -> (showMessage model ("Server: " ++ e), Cmd.none)
-                            WEProjectContent p -> ({ model | openProjects = updateOpenProjects  p model.openProjects }, Cmd.none)
-                            WEViewStatus pn v ms -> ({ model | openProjects = updateOpenViews  pn v ms model.openProjects }, Cmd.none)
-                            WEViewChanged pn vn ms -> ({ model | openProjects = updateOpenViewMaps  pn vn ms model.openProjects }, Cmd.none)
+                            WEProjectContent p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
+                            WEViewStatus pn v ms -> (updateOpenProjects model (updateOpenViews  pn v ms), Cmd.none)
+                            WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
                             WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
                             WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
+                            WEViewLoaded pn v -> (handleViewLoaded model v, Cmd.none)
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
 
@@ -35,8 +36,12 @@ handleMapsLoaded model ms =
             })
         Nothing -> model
 
-updateOpenProjects : Project -> List ProjectModel -> List ProjectModel
-updateOpenProjects p ops = let pn = p.projectName
+handleViewLoaded : Model -> View -> Model
+handleViewLoaded model v =
+    updateViewEditorModel model (\vm -> { vm | viewToEdit = Just v })
+
+addProjectToOpenProjects : Project -> List ProjectModel -> List ProjectModel
+addProjectToOpenProjects p ops = let pn = p.projectName
                            in case find (sameProjectName pn) ops of
                                 Just _ -> updateIf (sameProjectName pn) (\pm -> { pm | project = p }) ops
                                 Nothing -> { project = p, openViews = [] } :: ops
