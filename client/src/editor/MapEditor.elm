@@ -1,11 +1,10 @@
-module MapEditor exposing (mapEditorContent)
+module MapEditor exposing (mapEditorView)
 
 import Dict as Dict
 import Html        exposing (..)
 import Html.Events exposing (onClick)
 import Material
 import Material.Button as Button exposing (render)
-import Material.Dialog as Dialog exposing (openOn)
 import Material.Textfield as Textfield
 import Material.Grid as Grid
 import Material.List as Lists
@@ -26,20 +25,20 @@ import UIWrapper exposing (..)
 import ModelUpdate exposing (..)
 
 
-mapEditorContent : Model -> ProjectModel -> List(Html Msg)
-mapEditorContent model pm =
+mapEditorView : Model -> ProjectModel -> Html Msg
+mapEditorView model pm =
     let  xmapEditorModel = model.xmapEditorModel
-    in [
+    in stretchDiv [
            Grid.grid [ Grid.noSpacing ]
-              [ cell 2 2 1 [ mapDialogMapList pm.project]
-              , cell 3 5 1 [ mapDialogTextArea model pm]
-              , cell 3 5 2 [ mapDialogTable xmapEditorModel.xmapToEdit ]
+              [ cell 2 2 1 [] [ mapEditorMapList pm.project]
+              , cell 3 5 1 [] [ mapEditorTextArea model pm]
+              , cell 3 5 2 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
            ],
            Grid.grid [ Grid.noSpacing]
-              [ cell 3 4 1 [ newMapButton model pm ]
-              , cell 2 3 1 [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
-              , cell 2 3 1 [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-              , cell 1 2 1 [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
+              [ cell 3 4 1 [] [ newMapButton model pm ]
+              , cell 2 3 1 [] [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
+              , cell 2 3 1 [] [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
+              , cell 1 2 1 [] [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
           ]
   ]
 
@@ -50,19 +49,19 @@ newMapButton model pm =
                           Ok mapName -> Maybe.map (storeMap pm mapName) xmapEditorModel.xmapToEdit
                           Err e -> Just (Internal (ShowMessage e))
     in Grid.grid [ Grid.noSpacing]
-        [ cell 4 6 2 [ Textfield.render Mdl [9] model.mdl
+        [ cell 4 6 2 [] [ Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New map name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (NewMapName s))
                                              ]
                                              [] ]
-        , cell 4 6 2 [ buttonMaybe model 7 "New Map" storeNewMap]
+        , cell 4 6 2 [] [ buttonMaybe model 7 "New Map" storeNewMap]
            ]
 
 
-mapDialogMapList : Project -> Html Msg
-mapDialogMapList p =
+mapEditorMapList : Project -> Html Msg
+mapEditorMapList p =
     let listItem mn = Lists.li []
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadMaps p.projectName [mn])) ]
@@ -79,8 +78,8 @@ fileSourcesOfProject p =
         maybeMaps = ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
     in Maybe.withDefault [] maybeMaps
 
-mapDialogTextArea : Model -> ProjectModel -> Html Msg
-mapDialogTextArea model pm = Textfield.render Mdl [9] model.mdl
+mapEditorTextArea : Model -> ProjectModel -> Html Msg
+mapEditorTextArea model pm = Textfield.render Mdl [9] model.mdl
                               [ Textfield.label "Enter the map data"
                               , Textfield.floatingLabel
                               , Textfield.textarea
@@ -90,8 +89,8 @@ mapDialogTextArea model pm = Textfield.render Mdl [9] model.mdl
                               ]
                               []
 
-mapDialogTable : Maybe XMap -> Html Msg
-mapDialogTable mm = case mm of
+mapEditorTable : Maybe XMap -> Html Msg
+mapEditorTable mm = case mm of
                         Just m -> Table.table []
                             [
                                 mapHeader,
@@ -114,10 +113,11 @@ mapHeader = Table.thead [Options.css "display" "table"]
 
 mapRows : XMap -> Html Msg
 mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
-            in Table.tbody [Options.css "height" "30vh", Options.css "overflow-y" "auto", Options.css "display" "block" ] rows
+            in Table.tbody scrollableTableStyle rows
 
 lineToTableRow : List String  -> Html Msg
 lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
+
 
 
 

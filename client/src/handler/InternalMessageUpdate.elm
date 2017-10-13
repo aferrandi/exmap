@@ -10,12 +10,12 @@ updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
 updateInternal msg model = case msg of
     SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
     SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
-    NewProject -> (model, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
     TextToTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
     NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
+    SwitchProjectViewTo vt -> ({ model | currentProjectView = vt }, Cmd.none)
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let xmapEditorModel = model.xmapEditorModel

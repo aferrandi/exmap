@@ -1,15 +1,26 @@
-module UIWrapper exposing (cell, buttonClick, buttonMaybe)
+module UIWrapper exposing (..)
 
 import Html        exposing (Html, text, div)
 import Html.Events exposing (onClick)
 import Material.Options as Options exposing (css)
 import Material.Grid as Grid
+import Material.Color as Color
 import Material.Button as Button exposing (render)
 
 import ProjectModel exposing (..)
 
-cell : Int -> Int -> Int -> List (Html Msg) ->  Grid.Cell Msg
-cell tablet desktop phone  = Grid.cell [ Grid.size Grid.Tablet tablet, Grid.size Grid.Desktop desktop, Grid.size Grid.Phone phone, Grid.stretch]
+lightGrey : Color.Color
+lightGrey = Color.color Color.Grey Color.S200
+
+lighterGrey : Color.Color
+lighterGrey = Color.color Color.Grey Color.S100
+
+pastel : Color.Hue -> Color.Color
+pastel hue = Color.color hue Color.S400
+
+cell : Int -> Int -> Int -> List (Options.Style Msg) -> List (Html Msg) ->  Grid.Cell Msg
+cell tablet desktop phone others =
+    Grid.cell ([ Grid.size Grid.Tablet tablet, Grid.size Grid.Desktop desktop, Grid.size Grid.Phone phone, Grid.stretch] ++ others)
 
 buttonNoClick : Model -> Int -> String -> List (Button.Property Msg) -> Html Msg
 buttonNoClick model index txt props = Button.render Mdl [index] model.mdl
@@ -29,3 +40,6 @@ buttonMaybe model index txt mmsg =
                     Just msg -> [ Options.onClick msg ]
                     Nothing -> []
     in buttonNoClick model index txt msgProp
+
+scrollableTableStyle : List (Options.Property c Msg)
+scrollableTableStyle = [Options.css "height" "80vh", Options.css "overflow-y" "auto", Options.css "display" "block"]

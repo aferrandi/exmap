@@ -10,6 +10,7 @@ import Material.Tabs as Tabs
 import Material.List as Lists
 import Material.Icon as Icon
 import Material.Grid as Grid
+import Material.Dialog as Dialog
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (css)
 import List.Extra exposing (getAt)
@@ -21,34 +22,26 @@ import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
 
+
+
+
 viewProjects : Model -> Html Msg
 viewProjects model =
     topDiv []
             [
                     stretchDiv [
                         Grid.grid [ Options.css "height" "100%"]
-                           [ cell 2 2 1 (viewAllProjects model)
-                           , cell 6 10 3 [ viewProjectTabs model ]
+                           [ cell 2 2 1 [Color.background lightGrey] [viewAllProjectsList model]
+                           , cell 6 10 3 [] [ viewProjectTabs model ]
                        ]
                    ]
                    , fixedDiv [viewMessages model]
                ]
 
-viewAllProjects : Model -> List (Html Msg)
-viewAllProjects model = [
-    viewAllProjectsMenu model,
-    viewAllProjectsList model]
-
 viewAllProjectsList : Model -> Html Msg
 viewAllProjectsList model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
 
-viewAllProjectsMenu :  Model -> Html Msg
-viewAllProjectsMenu model = Menu.render Mdl [mdlIdxProjects] model.mdl
-                              [ Menu.bottomLeft, Color.background Color.primary ]
-                              [ Menu.item
-                                  [ Menu.onSelect (Internal NewProject) ]
-                                  [ text "New Project" ]
-                              ]
+
 
 viewAllProjectsItem : ProjectName -> Html Msg
 viewAllProjectsItem pn = Lists.li []

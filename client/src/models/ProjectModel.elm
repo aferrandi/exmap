@@ -32,8 +32,18 @@ type alias XMapEditorModel = {
     , newXmapName : String
     }
 
-type DialogType =
-  MapDialogType
+type alias ViewEditorModel = {
+    viewName : Maybe ViewName
+    , viewToEdit : Maybe View
+    , newViewName : ViewName
+    }
+
+
+type ProjectViewType =
+    ViewsView
+    | MapEditorView
+    | ViewEditorView
+    | CalculationEditorView
 
 type alias Model = {
     openProjects : List ProjectModel
@@ -43,17 +53,20 @@ type alias Model = {
     , viewTab : Int
     , messages : List Error
     , xmapEditorModel : XMapEditorModel
+    , viewEditorModel : ViewEditorModel
+    , currentProjectView : ProjectViewType
     }
+
 
 type InternalMsg =
   SelectProjectTab Int
   | SelectViewTab Int
-  | NewProject
   | MapToTextArea
   | MapToTable
   | TextToTextArea String
   | NewMapName String
   | ShowMessage String
+  | SwitchProjectViewTo ProjectViewType
 
 type Msg
   = Receive String
@@ -64,6 +77,13 @@ type Msg
 mdlIdxProjects = 0
 mdlIdxViews = 1
 
+emptyViewEditorModel : ViewEditorModel
+emptyViewEditorModel = {
+    viewName = Nothing
+    , viewToEdit = Nothing
+    , newViewName = ""
+    }
+
 emptyXMapEditorModel : XMapEditorModel
 emptyXMapEditorModel = {
        xmapName = Nothing
@@ -73,6 +93,7 @@ emptyXMapEditorModel = {
        , newXmapName = ""
     }
 
+
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
@@ -81,6 +102,8 @@ emptyModel = { openProjects = []
                , projectTab = 0
                , viewTab = 0
                , xmapEditorModel = emptyXMapEditorModel
+               , viewEditorModel = emptyViewEditorModel
+               , currentProjectView = ViewsView
                }
 
 currentOpenProject : Model -> Maybe ProjectModel
