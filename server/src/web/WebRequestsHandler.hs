@@ -36,6 +36,8 @@ handleClientRequest c sc r = case r of
                                 WRStoreMap pn m -> sendRequest$ SRStoreMap c pn m
                                 WRSubscribeToView pn vn -> sendRequest $ SRSubscribeToView c pn vn
                                 WRUnsubscribeFromView pn vn -> sendRequest $ SRUnsubscribeFromView c pn vn
+                                WRLoadView pn vn -> sendRequest $ SRLoadView c pn vn
+                                WRStoreView pn v -> sendRequest$ SRStoreView c pn v
     where sendRequest sr = writeTChan sc $ SMRequest sr
 
 

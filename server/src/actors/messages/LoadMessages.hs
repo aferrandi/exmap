@@ -13,6 +13,7 @@ data LoadMessage = LMLoadView ProjectChan WAClient ProjectName ViewName
                   | LMLoadProject SystemChan WAClient ProjectName
                   | LMLoadMaps ProjectChan WAClient ProjectName [XMapName]
                   | LMLoadMapsForView ProjectChan WAClient ProjectName ViewName [XMapName]
+                  | LMLoadViewForProject ProjectChan WAClient ProjectName ViewName
                   | LMStop
 
 type LoadChan = TChan LoadMessage

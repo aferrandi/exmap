@@ -15,6 +15,8 @@ data WebRequest =
     | WRStoreMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
+    | WRLoadView ProjectName ViewName
+    | WRStoreView ProjectName View
     -- | WRCalculationStore ProjectName CalculationName CalculationFormulaText
     deriving (Show, Eq)
 
@@ -27,6 +29,8 @@ data WebEvent =
     | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName
     | WEViewStatus ProjectName View [XNamedMap]
+    | WEViewLoaded ProjectName View
+    | WEViewStored ProjectName ViewName
     | WEInfo T.Text
     | WEError Error
     deriving (Show, Eq)

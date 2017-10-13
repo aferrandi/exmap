@@ -45,17 +45,18 @@ handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
     PRSubscribeToProject c -> subscribeToProject c rp
     PRUnsubscribeFromProject c -> unsubscribeFromProject c rp
-    PRSubscribeToView c vn -> subscribeToView c vn rp chan
+    PRSubscribeToView c vn -> subscribeToView chan rp c vn
     PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
     PRUpdateProject c p -> updateProject chan rp c p
     PRLoadMaps c mns -> loadMaps c chan rp mns
     PRStoreMap c m -> storeMap c chan rp m
     PRStoreCalculation c cc -> storeCalculation chan rp c cc
+    PRLoadView c vn -> loadView chan rp c vn
     PRStoreView c v -> storeView chan rp c v
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
-    PEViewLoaded c v -> viewLoaded c chan rp v
+    PEViewLoaded c v -> atomically $ viewLoaded c rp v
     PEViewLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsLoaded c ms -> atomically $ mapsLoaded rp c ms
     PEMapsLoadError c _ err -> atomically $ sendError ec [c] err
@@ -69,6 +70,8 @@ handleEvent chan rp e = case e of
     PEViewStoreError c _ err -> atomically $ sendError ec [c] err
     PEProjectStored c p -> atomically $ projectStored rp c p
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
+    PEViewForProjectLoaded c v -> viewForProjectLoaded c chan rp v
+    PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
 loadMaps :: WAClient -> ProjectChan -> RuntimeProject -> [XMapName] -> STM ()
@@ -91,13 +94,20 @@ unsubscribeFromProject :: WAClient -> RuntimeProject -> STM()
 unsubscribeFromProject c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
     where notSameClient ci = ci /= c
 
-viewLoaded :: WAClient -> ProjectChan -> RuntimeProject -> View -> IO ()
-viewLoaded c chan rp v = do
+viewForProjectLoaded :: WAClient -> ProjectChan -> RuntimeProject -> View -> IO ()
+viewForProjectLoaded c chan rp v = do
      p <- atomically $ readTVar (project rp)
      vChan <- viewToChan (evtChan rp) (projectName p) v
      atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
                      sendSubscriptionToView vChan c
                      sendDependedMapsToVIew chan rp c v
+
+viewLoaded :: WAClient -> RuntimeProject -> View -> STM ()
+viewLoaded c rp v = do
+    pn <- prjName rp
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
+
+
 
 sendDependedMapsToVIew :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToVIew chan rp c v = do
@@ -121,13 +131,18 @@ storeView chan rp c v = do
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
 sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 
-subscribeToView :: WAClient -> ViewName -> RuntimeProject -> ProjectChan -> STM ()
-subscribeToView c vn rp chan = do
+subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
+subscribeToView chan rp c vn   = do
     vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
         Just vChan -> sendSubscriptionToView vChan c
-        Nothing -> writeTChan (loadChan $ chans rp) (LMLoadView chan c pn vn)
+        Nothing -> writeTChan (loadChan $ chans rp) (LMLoadViewForProject chan c pn vn)
+
+loadView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
+loadView chan rp c vn = do
+    pn <- prjName rp
+    writeTChan (loadChan $ chans rp) (LMLoadView chan c pn vn)
 
 unsubscribeFromView :: WAClient -> ViewName -> RuntimeProject -> STM ()
 unsubscribeFromView c vn rp = do
@@ -170,13 +185,15 @@ calculationStored rp c cc = do
     if elem (calculationName cc) (calculations p)
         then addCalculation rp cc
         else atomically $ updateCalculation rp c p cc
+    atomically $ sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
 viewStored :: RuntimeProject -> WAClient -> View -> IO ()
 viewStored rp c v = do
     p <- readTVarIO $ project rp
     if elem (viewName v) (views p)
-        then addView rp v
-        else atomically $ updateView rp c p v
+        then atomically $ updateView rp c p v
+        else addView rp v
+    atomically $ sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
 
 projectStored :: RuntimeProject -> WAClient -> Project -> STM()
 projectStored rp c p = do
@@ -219,8 +236,6 @@ updateView rp c p v = do
     case M.lookup vn vbn of
         Just vch -> writeTChan vch (VMUpdate v)
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
-
-
 
 prjName :: RuntimeProject -> STM ProjectName
 prjName rp = do

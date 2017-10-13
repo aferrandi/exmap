@@ -46,6 +46,14 @@ instance ToJSON WebEvent where
                                         , "view" .= v
                                         , "maps" .= ms
                                         ]
+     toJSON (WEViewLoaded pn v) = object [ "type" .=  T.pack "viewLoaded"
+                                        , "projectName" .= pn
+                                        , "view" .= v
+                                        ]
+     toJSON (WEViewStored pn vn) = object [ "type" .=  T.pack "viewStored"
+                                        , "projectName" .= pn
+                                        , "viewName" .= vn
+                                        ]
      toJSON (WEError (E.Error err)) = object [ "type" .=  T.pack "error"
                                         , "error" .= err
                                         ]
@@ -63,5 +71,7 @@ instance FromJSON WebRequest where
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
+      Just (String "loadView") ->  WRLoadView <$> v .: "projectName" <*> v .: "viewName"
+      Just (String "storeView") ->  WRStoreView <$> v .: "projectName" <*> v .: "view"
       _ -> mempty
    parseJSON _ = mempty

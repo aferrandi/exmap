@@ -48,6 +48,8 @@ handleRequest chan sys r = case r of
         SRUpdateProject c p -> pipeToProject c (projectName p) sys (PMRequest $ PRUpdateProject c p)
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
         SRLoadMaps c pn mns -> pipeToProject c pn sys (PMRequest $ PRLoadMaps c mns)
+        SRLoadView c pn vn -> pipeToProject c pn sys (PMRequest $ PRLoadView c vn)
+        SRStoreView c pn v -> pipeToProject c pn sys (PMRequest $ PRStoreView c v)
 
 handleEvent :: RuntimeSystem -> SystemEvent -> IO ()
 handleEvent sys e = case e of

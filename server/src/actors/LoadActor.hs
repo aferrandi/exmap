@@ -36,6 +36,9 @@ actorLoad root chan = loop
                 LMLoadMapsForView source c pn vn mns -> do
                     loadMapsInActor root source pn mns (PEMapsForViewLoaded c vn) (PEMapsForViewLoadError c vn)
                     loop
+                LMLoadViewForProject source c pn vn  -> do
+                    loadViewForProjectInActor root source c pn vn
+                    loop
                 LMStop -> return ()
 
 
@@ -45,6 +48,14 @@ loadViewInActor root source c pn vn = do
        case mv of
            Right v -> atomically $ writeTChan source (PMEvent $ PEViewLoaded c v)
            Left err -> atomically $ writeTChan source (PMEvent $ PEViewLoadError c vn err)
+
+loadViewForProjectInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
+loadViewForProjectInActor root source c pn vn = do
+       mv <- loadView root pn vn
+       case mv of
+           Right v -> atomically $ writeTChan source (PMEvent $ PEViewForProjectLoaded c v)
+           Left err -> atomically $ writeTChan source (PMEvent $ PEViewForProjectLoadError c vn err)
+
 
 loadProjectInActor :: FilePath -> SystemChan -> WAClient -> ProjectName -> IO ()
 loadProjectInActor root source c pn = do

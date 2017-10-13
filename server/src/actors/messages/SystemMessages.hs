@@ -18,6 +18,8 @@ data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRStoreMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName
+                    | SRLoadView WAClient ProjectName ViewName
+                    | SRStoreView WAClient ProjectName View
     deriving (Show, Eq)
 
 data SystemEvent = SEProjectLoaded WAClient Project [Calculation]

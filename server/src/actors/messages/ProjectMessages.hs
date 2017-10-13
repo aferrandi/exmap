@@ -16,6 +16,7 @@ data ProjectRequest =     PRSubscribeToProject WAClient
                         | PRLoadMaps WAClient [XMapName]
                         | PRStoreMap WAClient XNamedMap
                         | PRStoreCalculation WAClient Calculation
+                        | PRLoadView WAClient ViewName
                         | PRStoreView WAClient View
     deriving (Show, Eq)
 
@@ -33,6 +34,8 @@ data ProjectEvent = PEViewLoaded WAClient View
                     | PEViewStoreError WAClient View Error
                     | PEProjectStored WAClient Project
                     | PEProjectStoreError WAClient Project Error
+                    | PEViewForProjectLoaded WAClient View
+                    | PEViewForProjectLoadError WAClient ViewName Error
 
     deriving (Show, Eq)
 
