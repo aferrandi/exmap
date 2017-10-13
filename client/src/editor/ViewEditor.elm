@@ -36,7 +36,7 @@ viewsList : Project -> Html Msg
 viewsList p =
     let listItem vn = Lists.li []
                            [ Lists.content
-                               [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToView p.projectName vn)) ]
+                               [ Options.attribute <| Html.Events.onClick (Send (WRLoadView p.projectName vn)) ]
                                [ Lists.avatarIcon "list" [], text vn ]                           ]
     in Lists.ul [] (List.map listItem p.viewNames)
 

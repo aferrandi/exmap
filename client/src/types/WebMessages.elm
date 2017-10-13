@@ -13,6 +13,8 @@ type WebRequest =
         | WRStoreMap ProjectName XNamedMap
         | WRSubscribeToView ProjectName ViewName
         | WRUnsubscribeFromView ProjectName ViewName
+        | WRLoadView ProjectName ViewName
+        | WRStoreView ProjectName View
 
 type WebEvent =
         WEAllProjects AllProjects
@@ -23,5 +25,7 @@ type WebEvent =
         | WEMapStored ProjectName XMapName
         | WEUnsubscribedFromView ProjectName ViewName
         | WEViewStatus ProjectName View (List XNamedMap)
+        | WEViewLoaded ProjectName View
+        | WEViewStored ProjectName ViewName
         | WEInfo String
         | WEError Error

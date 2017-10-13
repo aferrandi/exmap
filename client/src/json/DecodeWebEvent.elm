@@ -31,6 +31,12 @@ webEventDecoder =
                                                 |> required "projectName" string
                                                 |> required "view" viewDecoder
                                                 |> required "maps" (list xNamedMapDecoder)
+                            "viewLoaded" -> decode WEViewLoaded
+                                                |> required "projectName" string
+                                                |> required "view"viewDecoder
+                            "viewStored" -> decode WEViewStored
+                                                |> required "projectName" string
+                                                |> required "viewName" string
                             "info" -> decode WEInfo
                                                 |> required "info" string
                             "error" -> decode WEError
