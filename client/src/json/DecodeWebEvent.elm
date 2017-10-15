@@ -27,6 +27,9 @@ webEventDecoder =
                             "unsubscribedFromView" -> decode WEUnsubscribedFromView
                                                 |> required "projectName" string
                                                 |> required "viewName" string
+                            "mapsInProject" -> decode WEMapsInProject
+                                                |> required "projectName" string
+                                                |> required "mapNames"(list xmapNameDecoder)
                             "viewStatus" -> decode WEViewStatus
                                                 |> required "projectName" string
                                                 |> required "view" viewDecoder

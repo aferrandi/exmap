@@ -41,6 +41,10 @@ encodeWebRequest ev = case ev of
             , ("projectName", string pn)
             , ("viewName", string vn)
             ]
+    WRMapsInProject pn -> object
+            [ ("type", string "mapsInProject")
+            , ("projectName", string pn)
+            ]
     WRLoadView pn vn -> object
             [ ("type", string "loadView")
             , ("projectName", string pn)
