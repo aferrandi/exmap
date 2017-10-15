@@ -14,6 +14,8 @@ type ApplicationName = Negate
 
 type alias CalculationName = String
 
+type alias CalculationFormulaText = String
+
 type alias ProjectName = String
 
 type alias OdbcSourceType = { connectionString : String, sqlQuery : String}

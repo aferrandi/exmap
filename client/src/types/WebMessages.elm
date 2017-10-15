@@ -15,6 +15,8 @@ type WebRequest =
         | WRUnsubscribeFromView ProjectName ViewName
         | WRLoadView ProjectName ViewName
         | WRStoreView ProjectName View
+        | WRLoadCalculation ProjectName CalculationName
+        | WRStoreCalculation ProjectName CalculationName CalculationFormulaText
 
 type WebEvent =
         WEAllProjects AllProjects
@@ -27,5 +29,7 @@ type WebEvent =
         | WEViewStatus ProjectName View (List XNamedMap)
         | WEViewLoaded ProjectName View
         | WEViewStored ProjectName ViewName
+        | WECalculationLoaded ProjectName CalculationName CalculationFormulaText
+        | WECalculationStored ProjectName CalculationName
         | WEInfo String
         | WEError Error

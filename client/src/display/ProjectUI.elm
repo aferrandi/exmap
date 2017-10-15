@@ -41,7 +41,8 @@ viewCards :  Model -> ProjectModel -> Html Msg
 viewCards model pm = stretchDiv [
     viewCard model "Views" "Live views" 0 Color.LightBlue ViewsView
     , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorView
-    , viewCard model "View Editor" "create and update views" 2 Color.Yellow ViewEditorView
+    , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorView
+    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green ViewEditorView
     ]
 
 white : Options.Property c m
@@ -54,10 +55,9 @@ viewCard model title cardText i hue viewType =  Card.view
 --          , css "height" "192px"
           ]
           [ Card.title [ ] [ Card.head [ white ] [ text title ] ]
+           , Card.text [ white ] [ text cardText ]
           , Card.actions
           [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
-          --, Card.text [ white ] [ text cardText ]
-              -- [ Options.span [ Typography.caption, Typography.contrast 0.87 ] [ text "August 3, 2016" ]
               [ Button.render Mdl [ i ] model.mdl
                   [ Button.raised, Button.ripple, Options.onClick (Internal (SwitchProjectViewTo viewType)) ]
                     [ text "Switch to" ]

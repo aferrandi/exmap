@@ -37,6 +37,13 @@ webEventDecoder =
                             "viewStored" -> decode WEViewStored
                                                 |> required "projectName" string
                                                 |> required "viewName" string
+                            "calculationLoaded" -> decode WECalculationLoaded
+                                                |> required "projectName" string
+                                                |> required "calculationName" string
+                                                |> required "calculationFormulaText" string
+                            "calculationStored"  -> decode WECalculationStored
+                                                |> required "projectName" string
+                                                |> required "calculationName" string
                             "info" -> decode WEInfo
                                                 |> required "info" string
                             "error" -> decode WEError

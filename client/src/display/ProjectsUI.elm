@@ -22,15 +22,12 @@ import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
 
-
-
-
 viewProjects : Model -> Html Msg
 viewProjects model =
     topDiv []
             [
                     stretchDiv [
-                        Grid.grid [ Options.css "height" "100%"]
+                        Grid.grid []
                            [ cell 2 2 1 [Color.background lightGrey] [viewAllProjectsList model]
                            , cell 6 10 3 [] [ viewProjectTabs model ]
                        ]

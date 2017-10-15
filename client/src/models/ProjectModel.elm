@@ -38,6 +38,11 @@ type alias ViewEditorModel = {
     , newViewName : ViewName
     }
 
+type alias CalculationEditorModel = {
+    calculationName : Maybe CalculationName
+    , calculationFormulaText : Maybe CalculationFormulaText
+    , newCalculationName : CalculationName
+    }
 
 type ProjectViewType =
     ViewsView
@@ -54,6 +59,7 @@ type alias Model = {
     , messages : List Error
     , xmapEditorModel : XMapEditorModel
     , viewEditorModel : ViewEditorModel
+    , calculationEditorModel : CalculationEditorModel
     , currentProjectView : ProjectViewType
     }
 
@@ -67,6 +73,7 @@ type InternalMsg =
   | NewMapName String
   | ShowMessage String
   | SwitchProjectViewTo ProjectViewType
+  | AddMapToCalculation XMapName
 
 type Msg
   = Receive String
@@ -93,6 +100,12 @@ emptyXMapEditorModel = {
        , newXmapName = ""
     }
 
+emptyCalculationEditorModel : CalculationEditorModel
+emptyCalculationEditorModel = {
+    calculationName = Nothing
+    , calculationFormulaText = Nothing
+    , newCalculationName = ""
+    }
 
 emptyModel : Model
 emptyModel = { openProjects = []
@@ -103,6 +116,7 @@ emptyModel = { openProjects = []
                , viewTab = 0
                , xmapEditorModel = emptyXMapEditorModel
                , viewEditorModel = emptyViewEditorModel
+               , calculationEditorModel = emptyCalculationEditorModel
                , currentProjectView = ViewsView
                }
 

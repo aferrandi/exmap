@@ -16,12 +16,15 @@ topDiv props = Options.div ([
     Options.attribute <| Html.Attributes.id "top"
     ] ++ props)
 
+stretchOptions : List(Options.Property c msg)
+stretchOptions = [
+                     css "flex" "1 1 auto",
+                     css "overflow" "auto",
+                     Options.attribute <| Html.Attributes.id "stretch"
+                     ]
+
 stretchDiv : List (Html msg) -> Html msg
-stretchDiv = Options.div [
-    css "flex" "1 1 auto",
-    css "overflow" "auto",
-    Options.attribute <| Html.Attributes.id "stretch"
-    ]
+stretchDiv = Options.div stretchOptions
 
 fixedDiv : List (Html msg) -> Html msg
 fixedDiv = Options.div [

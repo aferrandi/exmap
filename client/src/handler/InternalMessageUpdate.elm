@@ -3,8 +3,10 @@ module InternalMessageUpdate exposing (updateInternal)
 import ProjectModel exposing (..)
 
 import XMapText exposing (..)
+import XMapTypes exposing (..)
 import XMapParse exposing (..)
 import ModelUpdate exposing (..)
+import MapsExtraction exposing (xmapNameToString)
 
 updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
 updateInternal msg model = case msg of
@@ -16,6 +18,13 @@ updateInternal msg model = case msg of
     NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
     SwitchProjectViewTo vt -> ({ model | currentProjectView = vt }, Cmd.none)
+    AddMapToCalculation mn -> ( handleAddMapToCalculation model mn , Cmd.none)
+
+
+handleAddMapToCalculation : Model -> XMapName -> Model
+handleAddMapToCalculation model mn =
+    let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ (xmapNameToString mn)
+    in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let xmapEditorModel = model.xmapEditorModel

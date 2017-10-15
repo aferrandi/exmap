@@ -54,7 +54,7 @@ viewEditorTable mv = case mv of
                                 Table.tbody [] []
                             ]
 viewRows : View -> Html Msg
-viewRows v = let rows = List.map viewRowToTableCells v.rows |> ListX.transpose |> List.map (Table.tr [])
+viewRows v = let rows = List.map viewRowToTableCells v.rows |> List.map (Table.tr [])
              in Table.tbody [] rows
 
 viewCell : ViewItem -> Html Msg
