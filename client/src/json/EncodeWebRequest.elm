@@ -1,7 +1,11 @@
 module EncodeWebRequest exposing (..)
 
 import Json.Encode exposing (..)
+import EncodeXMap exposing (..)
 import EncodeProject exposing (..)
+import EncodeView exposing (..)
+import EncodeCalculation exposing (..)
+
 import WebMessages exposing (..)
 
 encodeWebRequest : WebRequest -> Value
@@ -60,9 +64,8 @@ encodeWebRequest ev = case ev of
             , ("projectName", string pn)
             , ("calculationName", string cn)
             ]
-    WRStoreCalculation pn cn crt -> object
+    WRStoreCalculation pn cs -> object
            [ ("type", string "storeCalculation")
            , ("projectName", string pn)
-           , ("calculationName", string cn)
-           , ("calculationFormulaText", string crt)
+           , ("calculationSource", encodeCalculationSource cs)
            ]

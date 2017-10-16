@@ -7,6 +7,7 @@ import Dict as Dict
 import Project exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
+import Calculation exposing (..)
 import WebMessages exposing (WebRequest)
 import List.Extra as ListX
 

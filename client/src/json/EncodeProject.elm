@@ -1,47 +1,11 @@
 module EncodeProject exposing (..)
 
 import Json.Encode exposing (..)
-import String exposing (join)
-import Dict exposing (..)
 
-import XMapTypes exposing (..)
+import EncodeXMap exposing (..)
 import Project exposing (..)
+import Calculation exposing (..)
 import Views exposing (..)
-
-encodeXmapName : XMapName -> Value
-encodeXmapName mn = string (join "/" mn)
-
-encodeMapContent : (a-> Value) -> MapValue a -> Value
-encodeMapContent encodeMapValue (MapValue mv)  =
-    let encodeMapItem _ v = encodeMapValue v
-    in Dict.map encodeMapItem mv
-        |> toList
-        |> object
-
-encodeXMap : XMap -> Value
-encodeXMap m = case m of
-    (XMapDouble v) -> object
-                            [ ("type", string "double")
-                            , ("values", encodeMapContent float v)
-                            ]
-    (XMapInt v) -> object
-                            [ ("type", string "int")
-                            , ("values", encodeMapContent int v)
-                            ]
-    (XMapString v) -> object
-                            [ ("type", string "string")
-                            , ("values", encodeMapContent string v)
-                            ]
-    (XMapBool v) ->  object
-                            [ ("type", string "bool")
-                            , ("values", encodeMapContent bool v)
-                            ]
-
-encodeXNamedMap : XNamedMap -> Value
-encodeXNamedMap nm = object
-                        [ ("mapName", encodeXmapName nm.xmapName)
-                        , ("xmap", encodeXMap nm.xmap)
-                        ]
 
 encodeInternalSource : Value
 encodeInternalSource = object
@@ -79,38 +43,3 @@ encodeProject p = object
                  , ("views", List.map string p.viewNames |> list)
                  , ("sources", List.map encodeSource p.sources |> list)
                   ]
-
-encodeViewItem : ViewItem -> Value
-encodeViewItem i = case i of
-                    MapItem mn -> object
-                          [ ("type", string "mapItem")
-                          , ("mapItem", encodeXmapName mn)
-                          ]
-                    LabelItem l -> object
-                         [ ("type", string "label")
-                         , ("label", string l)
-                         ]
-
-encodeViewRow : ViewRow -> Value
-encodeViewRow r =
-    let items (ViewRow is) = is
-    in object
-         [ ("items", List.map encodeViewItem (items r) |> list)
-          ]
-
-
-encodeView : View -> Value
-encodeView v = object
-                 [ ("viewName", string v.viewName)
-                 , ("rows", List.map encodeViewRow v.rows |> list)
-                  ]
-
-
-{-
-  object
-    [ ("type", "loadProject")
-    , ("projectName", lp.projectName)
-    ]
-
--}
-

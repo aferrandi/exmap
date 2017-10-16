@@ -2,19 +2,14 @@ module Project exposing (..)
 
 import XMapTypes exposing (..)
 import Views exposing (..)
+import Calculation exposing (..)
 
 type alias Error =  String
-
-type OperationMode = Union | Intersection
 
 type OperationName = Add
     | Subtract
 
 type ApplicationName = Negate
-
-type alias CalculationName = String
-
-type alias CalculationFormulaText = String
 
 type alias ProjectName = String
 

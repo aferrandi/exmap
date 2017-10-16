@@ -4,6 +4,10 @@ import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import WebMessages exposing (..)
 import DecodeProject exposing (..)
+import DecodeXMap exposing (..)
+import DecodeView exposing (..)
+import DecodeCalculation exposing (..)
+
 
 webEventDecoder : Decoder WebEvent
 webEventDecoder =
@@ -42,8 +46,7 @@ webEventDecoder =
                                                 |> required "viewName" string
                             "calculationLoaded" -> decode WECalculationLoaded
                                                 |> required "projectName" string
-                                                |> required "calculationName" string
-                                                |> required "calculationFormulaText" string
+                                                |> required "calculationSource" calculationSourceDecoder
                             "calculationStored"  -> decode WECalculationStored
                                                 |> required "projectName" string
                                                 |> required "calculationName" string
