@@ -19,3 +19,8 @@ calculationSourceDecoder = decode CalculationSource
                    |> required "resultName" xmapNameDecoder
                    |> required "formulaText" string
                    |> required "operationMode" operationModeDecoder
+
+functionsDecoder : Decoder Functions
+functionsDecoder = decode Functions
+                   |> required "operations" (list string)
+                   |> required "applications" (list string)

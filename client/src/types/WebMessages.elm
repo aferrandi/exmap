@@ -19,6 +19,7 @@ type WebRequest =
         | WRStoreView ProjectName View
         | WRLoadCalculation ProjectName CalculationName
         | WRStoreCalculation ProjectName CalculationSource
+        | WRFunctions
 
 type WebEvent =
         WEAllProjects AllProjects
@@ -34,5 +35,6 @@ type WebEvent =
         | WEViewStored ProjectName ViewName
         | WECalculationLoaded ProjectName CalculationSource
         | WECalculationStored ProjectName CalculationName
+        | WEFunctions Functions
         | WEInfo String
         | WEError Error

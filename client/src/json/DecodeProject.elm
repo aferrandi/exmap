@@ -10,17 +10,6 @@ import Project exposing (..)
 import Views exposing (..)
 import EnumToString exposing (stringToEnum)
 
-operationNameDecoder : Decoder OperationName
-operationNameDecoder =
-    let m = fromList [("Add",Add), ("Subtract",Subtract)]
-    in string |> andThen (stringToEnum m)
-
-
-applicationNameDecoder : Decoder ApplicationName
-applicationNameDecoder =
-    let  m = fromList [("Negate",Negate)]
-    in string |> andThen (stringToEnum m)
-
 
 decodeHttpSource : Decoder HttpSourceType
 decodeHttpSource = decode HttpSourceType

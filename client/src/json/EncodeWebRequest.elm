@@ -69,3 +69,6 @@ encodeWebRequest ev = case ev of
            , ("projectName", string pn)
            , ("calculationSource", encodeCalculationSource cs)
            ]
+    WRFunctions -> object
+            [ ("type", string "functions")
+            ]

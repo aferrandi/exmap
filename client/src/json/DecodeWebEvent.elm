@@ -50,6 +50,8 @@ webEventDecoder =
                             "calculationStored"  -> decode WECalculationStored
                                                 |> required "projectName" string
                                                 |> required "calculationName" string
+                            "functions" -> decode WEFunctions
+                                                |> required "functions" functionsDecoder
                             "info" -> decode WEInfo
                                                 |> required "info" string
                             "error" -> decode WEError

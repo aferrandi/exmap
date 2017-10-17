@@ -13,3 +13,11 @@ type alias CalculationSource = {
     resultName : XMapName,
     formulaText : CalculationFormulaText,
     operationMode : OperationMode}
+
+type alias OperationName = String
+
+type alias ApplicationName = String
+
+type alias Functions = {
+    operations : List OperationName,
+    applications : List ApplicationName}
