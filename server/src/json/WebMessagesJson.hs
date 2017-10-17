@@ -41,6 +41,10 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "viewName" .= vn
                                         ]
+     toJSON (WEMapsInProject pn mns) = object [ "type" .=  T.pack "mapsInProject"
+                                        , "projectName" .= pn
+                                        , "mapNames" .= mns
+                                        ]
      toJSON (WEViewStatus pn v ms) = object [ "type" .=  T.pack "viewStatus"
                                         , "projectName" .= pn
                                         , "view" .= v
@@ -60,6 +64,14 @@ instance ToJSON WebEvent where
      toJSON (WEInfo info) = object [ "type" .=  T.pack "info"
                                         , "info" .= info
                                         ]
+     toJSON (WECalculationLoaded pn cs) = object [ "type" .=  T.pack "calculationLoaded"
+                                        , "projectName" .= pn
+                                        , "calculationSource" .= cs
+                                        ]
+     toJSON (WECalculationStored pn cn) = object [ "type" .=  T.pack "calculationStored"
+                                        , "projectName" .= pn
+                                        , "calculationName" .= cn
+                                        ]
 
 instance FromJSON WebRequest where
    parseJSON (Object v) = case HML.lookup "type" v of
@@ -71,7 +83,10 @@ instance FromJSON WebRequest where
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
+      Just (String "mapsInProject") ->  WRMapsInProject <$> v .: "projectName"
       Just (String "loadView") ->  WRLoadView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "storeView") ->  WRStoreView <$> v .: "projectName" <*> v .: "view"
+      Just (String "loadCalculation") ->  WRLoadCalculation <$> v .: "projectName" <*> v .: "calculationName"
+      Just (String "storeCalculation") ->  WRStoreCalculation <$> v .: "projectName" <*> v .: "calculationSource"
       _ -> mempty
    parseJSON _ = mempty

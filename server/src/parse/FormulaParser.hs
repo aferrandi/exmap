@@ -5,18 +5,16 @@ import Control.Applicative ((<|>))
 import qualified Data.Text as T
 import qualified Data.Char as C
 import Control.Monad (fail)
-import Text.Read (readEither)
-import Debug.Trace
-import Data.Monoid ((<>))
 
 import Formula
 import Operations
 import Applications
 import XMapTypes
 import TextEnums
+import Calculation
 
-parseFormula :: T.Text -> Either String XFormula
-parseFormula s = P.parseOnly (parseFormulaRootNode <* P.endOfInput) s
+parseFormula :: CalculationFormulaText -> Either String XFormula
+parseFormula (CalculationFormulaText s) = P.parseOnly (parseFormulaRootNode <* P.endOfInput) s
 
 parseFormulaRootNode :: P.Parser XFormula
 parseFormulaRootNode = do
@@ -33,13 +31,14 @@ parseFormulaNode = do
 skipSpaceAndChar :: Char -> P.Parser ()
 skipSpaceAndChar c = do
     P.skipSpace
-    P.char c
+    _ <- P.char c
     return ()
 
+skipClosePar :: P.Parser()
 skipClosePar = skipSpaceAndChar ')'
+
+skipOpenPar :: P.Parser()
 skipOpenPar = skipSpaceAndChar '('
-
-
 
 parseOperationInPars :: P.Parser XFormula
 parseOperationInPars = do
@@ -60,8 +59,8 @@ parseMap = do
     s <- parsePath
     return $ XFMap (XMapName s)
 
-splitPath :: T.Text -> [T.Text]
-splitPath = T.split (== '/')
+--splitPath :: T.Text -> [T.Text]
+--splitPath = T.split (== '/')
 
 parsePath :: P.Parser [T.Text]
 parsePath = do

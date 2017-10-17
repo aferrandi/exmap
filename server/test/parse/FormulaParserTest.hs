@@ -1,4 +1,4 @@
-module FormulaParserTest where
++module FormulaParserTest where
 
 import Test.HUnit
 import Test.Framework

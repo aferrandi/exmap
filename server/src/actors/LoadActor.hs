@@ -39,6 +39,9 @@ actorLoad root chan = loop
                 LMLoadViewForProject source c pn vn  -> do
                     loadViewForProjectInActor root source c pn vn
                     loop
+                LMLoadCalculation source c pn cn  -> do
+                    loadCalculationInActor root source c pn cn
+                    loop
                 LMStop -> return ()
 
 
@@ -74,6 +77,15 @@ loadCalculationsInProject root source c p = do
                         [] -> writeTChan source (SMEvent $ SEProjectLoaded c p (E.rights cs))
                         errs-> writeTChan source (SMEvent $ SEProjectLoadError c (projectName p) (compose errs))
              loadCalculationInProject = loadCalculation root (projectName p)
+
+
+
+loadCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> CalculationName -> IO ()
+loadCalculationInActor root source c pn cn = do
+       ce <- loadCalculation root pn cn
+       atomically $ case ce of
+           Right cc -> writeTChan source (PMEvent $ PECalculationLoaded c cc)
+           Left err -> writeTChan source (PMEvent $ PECalculationLoadError c cn err)
 
 
 type MapsLoadedEvent = [XNamedMap] -> ProjectEvent

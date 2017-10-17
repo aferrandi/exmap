@@ -44,12 +44,16 @@ handleRequest chan sys r = case r of
         SRUnsubscribeFromProject c pn ->pipeToProject c pn sys (PMRequest $ PRUnsubscribeFromProject c)
         SRSubscribeToView c pn vn -> pipeToProject c pn sys (PMRequest $ PRSubscribeToView c vn)
         SRUnsubscribeFromView c pn vn -> pipeToProject c pn sys (PMRequest $ PRUnsubscribeFromView c vn)
+        SRMapsInProject c pn -> pipeToProject c pn sys (PMRequest $ PRMapsInProject c)
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRUpdateProject c p -> pipeToProject c (projectName p) sys (PMRequest $ PRUpdateProject c p)
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
         SRLoadMaps c pn mns -> pipeToProject c pn sys (PMRequest $ PRLoadMaps c mns)
         SRLoadView c pn vn -> pipeToProject c pn sys (PMRequest $ PRLoadView c vn)
         SRStoreView c pn v -> pipeToProject c pn sys (PMRequest $ PRStoreView c v)
+        SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculation c cn)
+        SRStoreCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRStoreCalculation c cs)
+
 
 handleEvent :: RuntimeSystem -> SystemEvent -> IO ()
 handleEvent sys e = case e of

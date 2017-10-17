@@ -25,6 +25,8 @@ import Project
 import Calculation
 import CalculationBuild
 import ViewBuild
+import FormulaParser
+import FormulaText
 
 actorProject :: ProjectChan -> RuntimeProject -> IO ()
 actorProject chan rp = loop
@@ -47,10 +49,12 @@ handleRequests chan rp r= case r of
     PRUnsubscribeFromProject c -> unsubscribeFromProject c rp
     PRSubscribeToView c vn -> subscribeToView chan rp c vn
     PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
+    PRMapsInProject c -> mapsInProject rp c
     PRUpdateProject c p -> updateProject chan rp c p
     PRLoadMaps c mns -> loadMaps c chan rp mns
     PRStoreMap c m -> storeMap c chan rp m
-    PRStoreCalculation c cc -> storeCalculation chan rp c cc
+    PRLoadCalculation c cn -> loadCalculation chan rp c cn
+    PRStoreCalculation c cs-> storeCalculation chan rp c cs
     PRLoadView c vn -> loadView chan rp c vn
     PRStoreView c v -> storeView chan rp c v
 
@@ -72,6 +76,8 @@ handleEvent chan rp e = case e of
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewForProjectLoaded c v -> viewForProjectLoaded c chan rp v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
+    PECalculationLoaded c cc -> atomically $ calculationLoaded rp c cc
+    PECalculationLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
 loadMaps :: WAClient -> ProjectChan -> RuntimeProject -> [XMapName] -> STM ()
@@ -118,10 +124,26 @@ sendDependedMapsToVIew chan rp c v = do
              writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
         Nothing -> return ()
 
-storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM ()
-storeCalculation chan rp c cc = do
+loadCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationName -> STM ()
+loadCalculation chan rp c cn = do
+     pn <- prjName rp
+     writeTChan (loadChan $ chans rp)  $ LMLoadCalculation chan c pn cn
+
+
+storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
+storeCalculation chan rp c cs = do
     pn <- prjName rp
-    writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
+    let ft = formulaText cs
+    case parseFormula ft of
+        Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+        Right f -> do
+                let cc = Calculation {
+                        calculationName = sourceCalculationName cs,
+                        resultName = sourceResultName cs,
+                        formula = f,
+                        operationMode = sourceOperationMode cs
+                }
+                writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
 
 storeView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 storeView chan rp c v = do
@@ -157,7 +179,6 @@ updateProject chan rp c p = do
     writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
     -- update calculations and views
 
-
 mapsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
 mapsLoaded rp c ms = do
      pn <- prjName rp
@@ -186,6 +207,18 @@ calculationStored rp c cc = do
         then addCalculation rp cc
         else atomically $ updateCalculation rp c p cc
     atomically $ sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
+
+calculationLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
+calculationLoaded rp c cc = do
+    let cs = CalculationSource {
+        sourceCalculationName = calculationName cc,
+        sourceResultName = resultName cc,
+        formulaText = formulaToText (formula cc),
+        sourceOperationMode = operationMode cc
+    }
+    pn <- prjName rp
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WECalculationLoaded pn cs)
+
 
 viewStored :: RuntimeProject -> WAClient -> View -> IO ()
 viewStored rp c v = do
@@ -216,6 +249,15 @@ updateCalculation rp c p cc = do
         Just cch -> writeTChan cch (CMUpdateCalculation cc)
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show (projectName p))
 
+
+mapsInProject :: RuntimeProject -> WAClient -> STM ()
+mapsInProject rp c = do
+    p <- readTVar (project rp)
+    cbm <- readTVar $ calculationChanByMap rp
+    rbn <- readTVar $ calculationResultByName rp
+    let ss = L.nub (concatMap sourceOfMaps (sources p) ++ M.keys cbm ++ M.elems rbn)
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapsInProject (projectName p) ss)
+
 evtChan :: RuntimeProject -> EventChan
 evtChan rp = eventChan $ chans rp
 
@@ -223,7 +265,7 @@ evtChan rp = eventChan $ chans rp
 addView :: RuntimeProject -> View -> IO()
 addView rp v = do
     let vn = viewName v
-    atomically $ modifyTVar (project rp) (\p -> p { views = vn : (views p) })
+    atomically $ modifyTVar (project rp) (\p -> p { views = vn : views p })
     pn <- atomically $ prjName rp
     vch <- viewToChan (evtChan rp) pn v
     atomically $ modifyTVar (viewChanByName rp) (\vbn  -> M.insert vn vch vbn )

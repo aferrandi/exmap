@@ -7,25 +7,24 @@ module ProjectJson where
 import Data.Aeson
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
-import qualified Data.Map.Strict as M
 
 import Project
 import Calculation
-import XMapTypes
+import XMapTypes ()
 import Formula
 import XFunction
 import TextEnums
 import OperationTypes
 import ApplicationTypes
 import View
-import XMapJson
+import XMapJson ()
 
 instance FromJSON XFormula where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "map") -> XFMap <$> v .: "name"
       Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "formula1" <*> v .: "formula2"
       Just (String "application") ->  XFApplication <$> v .: "name" <*> v .: "formula"
-      otherwise -> mempty
+      _ -> mempty
    parseJSON _ = mempty
 
 instance ToJSON XFormula where
@@ -86,12 +85,35 @@ instance ToJSON Calculation  where
                , "operationMode" .= operationMode
                  ]
 
+instance FromJSON CalculationFormulaText where
+   parseJSON (String v) = return $ CalculationFormulaText v
+
+instance ToJSON CalculationFormulaText where
+   toJSON (CalculationFormulaText v) = String v
+
+instance FromJSON CalculationSource  where
+   parseJSON (Object v) =
+      CalculationSource <$> v .: "calculationName"
+             <*> v .: "resultName"
+             <*> v .: "formulaText"
+             <*> v .: "operationMode"
+   parseJSON _ = mempty
+
+instance ToJSON CalculationSource where
+     toJSON (CalculationSource calculationName resultName formulaText operationMode) =
+        object [ "calculationName" .= calculationName
+               , "resultName" .= resultName
+               , "formulaText" .= formulaText
+               , "operationMode" .= operationMode
+                 ]
+
+
 instance FromJSON SourceType where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "fileSource") -> return FileSource
       Just (String "odbcSource") ->  OdbcSource <$> v .: "connectionString" <*> v .: "sqlQuery"
       Just (String "httpSource") ->  HttpSource <$> v .: "url"
-      otherwise -> mempty
+      _ -> mempty
    parseJSON _ = mempty
 
 
@@ -128,7 +150,7 @@ instance FromJSON ViewItem where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "map") ->  MapItem <$> v .: "mapName"
       Just (String "label") ->  LabelItem <$> v .: "label"
-      otherwise -> mempty
+      _ -> mempty
    parseJSON _ = mempty
 
 instance ToJSON ViewItem where

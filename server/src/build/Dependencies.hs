@@ -21,3 +21,4 @@ viewDependencies (View _ rs)= concatMap rowDependencies rs
 
 calculationDependencies :: Calculation -> [XMapName]
 calculationDependencies c = formulaDependencies $ formula c
+

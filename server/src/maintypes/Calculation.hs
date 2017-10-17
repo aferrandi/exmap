@@ -19,3 +19,10 @@ data Calculation = Calculation {
     formula :: XFormula,
     operationMode :: OperationMode
 } deriving (Show, Eq)
+
+data CalculationSource = CalculationSource {
+    sourceCalculationName :: CalculationName,
+    sourceResultName :: XMapName,
+    formulaText :: CalculationFormulaText,
+    sourceOperationMode :: OperationMode
+} deriving (Show, Eq)

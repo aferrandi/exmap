@@ -16,11 +16,13 @@ type ViewChanByName = M.Map ViewName ViewChan
 type ViewChanByMap = M.Map XMapName [ViewChan]
 type CalculationChanByMap = M.Map XMapName [CalculationChan]
 type CalculationChanByName = M.Map CalculationName CalculationChan
+type CalculationResultByName = M.Map CalculationName XMapName
 
 data RuntimeProject = RuntimeProject {
     project :: TVar Project,
     calculationChanByName :: TVar CalculationChanByName,
     calculationChanByMap :: TVar CalculationChanByMap,
+    calculationResultByName :: TVar CalculationResultByName,
     viewChanByMap :: TVar ViewChanByMap,
     viewChanByName :: TVar ViewChanByName,
     chans :: CommonChans,
