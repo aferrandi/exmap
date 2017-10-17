@@ -1,4 +1,4 @@
-module ViewEditor exposing (viewCalculationEditor)
+module CalculationEditor exposing (viewCalculationEditor)
 
 import Html exposing (Html,text, div)
 import Html.Events exposing (onClick)
@@ -40,7 +40,7 @@ mapsInProjectList model  =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddMapToCalculation mn)) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [] (List.map listItem (fileSourcesOfProject p))
+    in Lists.ul [] (List.map listItem (model.calculationEditorModel.mapsInProject))
 
 
 calculationTextArea : Model  -> Html Msg
@@ -49,7 +49,7 @@ calculationTextArea model = Textfield.render Mdl [9] model.mdl
                               , Textfield.floatingLabel
                               , Textfield.textarea
                               , Textfield.rows 20
-                              , Textfield.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
+                              , Textfield.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
                               , Options.onInput (\s -> Internal (TextToTextArea s))
                               ]
                               []

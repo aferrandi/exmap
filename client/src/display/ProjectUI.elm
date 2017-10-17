@@ -23,6 +23,7 @@ import UIWrapper exposing (..)
 import Stretch exposing (..)
 import MapEditor exposing (..)
 import ViewEditor exposing (..)
+import CalculationEditor exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
 viewProject model pm = Grid.grid []
@@ -35,14 +36,14 @@ viewProjectContent model pm = case model.currentProjectView of
     ViewsView -> viewViews model pm
     MapEditorView -> mapEditorView model pm
     ViewEditorView -> viewViewEditor model pm
-    CalculationEditorView -> mapEditorView model pm
+    CalculationEditorView -> viewCalculationEditor model pm
 
 viewCards :  Model -> ProjectModel -> Html Msg
 viewCards model pm = stretchDiv [
     viewCard model "Views" "Live views" 0 Color.LightBlue ViewsView
     , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorView
     , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorView
-    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green ViewEditorView
+    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green CalculationEditorView
     ]
 
 white : Options.Property c m
