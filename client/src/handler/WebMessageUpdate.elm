@@ -20,6 +20,7 @@ updateEvent evt model = case evt of
                             WEError e -> (showMessage model ("Server: " ++ e), Cmd.none)
                             WEProjectContent p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
                             WEViewStatus pn v ms -> (updateOpenProjects model (updateOpenViews  pn v ms), Cmd.none)
+                            WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
                             WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
                             WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
@@ -53,6 +54,10 @@ handleCalculationLoaded model cs =
 
 handleFunctions : Model -> Functions -> Model
 handleFunctions model fs = updateCalculationEditorModel model (\cm -> { cm | functions = Just fs })
+
+handleMapsInProject : Model -> List XMapName -> Model
+handleMapsInProject model mns = updateCalculationEditorModel model (\cm -> { cm | mapsInProject = mns })
+
 
 addProjectToOpenProjects : Project -> List ProjectModel -> List ProjectModel
 addProjectToOpenProjects p ops = let pn = p.projectName

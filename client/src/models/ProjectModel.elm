@@ -43,6 +43,7 @@ type alias CalculationEditorModel = {
     calculationName : Maybe CalculationName
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
+    , mapsInProject : List XMapName
     , functions : Maybe Functions
     }
 
@@ -107,6 +108,7 @@ emptyCalculationEditorModel = {
     calculationName = Nothing
     , calculationFormulaText = Nothing
     , newCalculationName = ""
+    , mapsInProject = []
     , functions = Nothing
     }
 

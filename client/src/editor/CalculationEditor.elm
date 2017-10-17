@@ -34,7 +34,7 @@ viewCalculationEditor model pm = Grid.grid []
                                  ]
 
 mapsInProjectList : Model -> Html Msg
-mapsInProjectList p =
+mapsInProjectList model  =
     let listItem mn = Lists.li []
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Internal (AddMapToCalculation mn)) ]
