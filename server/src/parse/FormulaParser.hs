@@ -84,7 +84,7 @@ parseVar = do
 parseOperationName :: P.Parser OperationName
 parseOperationName = do
     s <- parseName
-    case enumWithTextCI enumValues s of
+    case enumWithTextCaseInsensitive enumValues s of
         Just n -> return n
         Nothing -> fail $ "not an operation name " ++ T.unpack s
 
@@ -92,7 +92,7 @@ parseOperationName = do
 parseApplicationName :: P.Parser ApplicationName
 parseApplicationName = do
     s <- parseName
-    case enumWithTextCI enumValues s of
+    case enumWithTextCaseInsensitive enumValues s of
         Just n -> return n
         Nothing -> fail $ "not an application name " ++ T.unpack s
 

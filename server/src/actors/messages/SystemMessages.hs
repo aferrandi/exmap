@@ -23,6 +23,7 @@ data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRStoreView WAClient ProjectName View
                     | SRLoadCalculation WAClient ProjectName CalculationName
                     | SRStoreCalculation WAClient ProjectName CalculationSource
+                    | SRFunctions WAClient
 
     deriving (Show, Eq)
 

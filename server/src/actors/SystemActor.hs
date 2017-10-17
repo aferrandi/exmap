@@ -7,6 +7,7 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import Control.Concurrent
 
+import TextEnums
 import SystemState
 import ProjectBuild
 import SystemMessages
@@ -19,6 +20,8 @@ import CommonChannels
 import WebClients
 import Project
 import Calculation
+import OperationTypes
+import ApplicationTypes
 import qualified ProjectState as PS
 
 actorSystem :: SystemChan -> RuntimeSystem -> IO ()
@@ -53,6 +56,7 @@ handleRequest chan sys r = case r of
         SRStoreView c pn v -> pipeToProject c pn sys (PMRequest $ PRStoreView c v)
         SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculation c cn)
         SRStoreCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRStoreCalculation c cs)
+        SRFunctions c -> sendFunctions sys c
 
 
 handleEvent :: RuntimeSystem -> SystemEvent -> IO ()
@@ -78,6 +82,18 @@ pipeToProject c pn sys msg = do
             Nothing -> sendSysError sys c ("the project " ++ show pn ++ " was not loaded")
         Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist")
 
+sendFunctions :: RuntimeSystem -> WAClient -> STM()
+sendFunctions sys c = do
+    let fs = Functions {
+        operationNames = operations,
+        applicationNames = applications
+    }
+    let evtChan  = eventChan $ chans sys
+    writeTChan evtChan (EMWebEvent [c] $ WEFunctions fs)
+    where operations :: [OperationName]
+          operations = enumValues
+          applications :: [ApplicationName]
+          applications = enumValues
 
 newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()
 newProjectIfNotAlreadyRunning chan sys c p = do

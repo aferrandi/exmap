@@ -41,6 +41,7 @@ handleClientRequest c sc r = case r of
                                 WRStoreView pn v -> sendRequest$ SRStoreView c pn v
                                 WRLoadCalculation pn cn -> sendRequest$ SRLoadCalculation c pn cn
                                 WRStoreCalculation pn cs -> sendRequest$ SRStoreCalculation c pn cs
+                                WRFunctions -> sendRequest  $ SRFunctions c
     where sendRequest sr = writeTChan sc $ SMRequest sr
 
 

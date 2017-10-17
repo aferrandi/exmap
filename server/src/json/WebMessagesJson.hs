@@ -72,6 +72,9 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "calculationName" .= cn
                                         ]
+     toJSON (WEFunctions fs) = object [ "type" .=  T.pack "functions"
+                                        , "functions" .= fs
+                                        ]
 
 instance FromJSON WebRequest where
    parseJSON (Object v) = case HML.lookup "type" v of
@@ -88,5 +91,6 @@ instance FromJSON WebRequest where
       Just (String "storeView") ->  WRStoreView <$> v .: "projectName" <*> v .: "view"
       Just (String "loadCalculation") ->  WRLoadCalculation <$> v .: "projectName" <*> v .: "calculationName"
       Just (String "storeCalculation") ->  WRStoreCalculation <$> v .: "projectName" <*> v .: "calculationSource"
+      Just (String "functions") ->  return WRFunctions
       _ -> mempty
    parseJSON _ = mempty

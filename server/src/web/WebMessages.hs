@@ -21,6 +21,7 @@ data WebRequest =
     | WRStoreView ProjectName View
     | WRLoadCalculation ProjectName CalculationName
     | WRStoreCalculation ProjectName CalculationSource
+    | WRFunctions
     deriving (Show, Eq)
 
 data WebEvent =
@@ -37,6 +38,7 @@ data WebEvent =
     | WEViewStored ProjectName ViewName
     | WECalculationLoaded ProjectName CalculationSource
     | WECalculationStored ProjectName CalculationName
+    | WEFunctions Functions
     | WEInfo T.Text
     | WEError Error
     deriving (Show, Eq)

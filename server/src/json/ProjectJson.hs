@@ -107,6 +107,11 @@ instance ToJSON CalculationSource where
                , "operationMode" .= operationMode
                  ]
 
+instance ToJSON Functions where
+     toJSON (Functions operations applications) =
+        object [ "operations" .= operations
+               , "applications" .= applications
+                 ]
 
 instance FromJSON SourceType where
    parseJSON (Object v) = case HML.lookup "type" v of

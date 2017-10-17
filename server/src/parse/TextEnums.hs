@@ -1,14 +1,13 @@
-module TextEnums (enumValues, enumWithTextCI, showT, readT) where
+module TextEnums (enumValues, enumWithTextCaseInsensitive, showT, readT) where
 
-import qualified Data.Char as C
 import qualified Data.Text as T
 import Data.List (find)
 
 enumValues:: (Enum a, Bounded a) => [a]
 enumValues = enumFrom minBound
 
-enumWithTextCI :: (Enum a, Show a) => [a] -> T.Text -> Maybe a
-enumWithTextCI es s = find (\e -> toLowerEnum e == T.toLower s) es
+enumWithTextCaseInsensitive :: (Enum a, Show a) => [a] -> T.Text -> Maybe a
+enumWithTextCaseInsensitive es s = find (\e -> toLowerEnum e == T.toLower s) es
     where toLowerEnum = T.toLower . showT
 
 showT :: Show a => a -> T.Text
