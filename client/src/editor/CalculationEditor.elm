@@ -30,7 +30,7 @@ import MapsExtraction exposing (xmapNameToString)
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = Grid.grid []
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                , cell 6 10 3 [] [ stretchDiv [mapEditorTextArea model ] ]
+                                , cell 6 10 3 [] [ stretchDiv [calculationTextArea model ] ]
                                  ]
 
 mapsInProjectList : Model -> Html Msg

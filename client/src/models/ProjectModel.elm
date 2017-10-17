@@ -43,6 +43,7 @@ type alias CalculationEditorModel = {
     calculationName : Maybe CalculationName
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
+    , functions : Maybe Functions
     }
 
 type ProjectViewType =
@@ -106,6 +107,7 @@ emptyCalculationEditorModel = {
     calculationName = Nothing
     , calculationFormulaText = Nothing
     , newCalculationName = ""
+    , functions = Nothing
     }
 
 emptyModel : Model

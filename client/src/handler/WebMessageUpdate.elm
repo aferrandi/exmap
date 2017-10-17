@@ -9,6 +9,7 @@ import ProjectModel exposing (..)
 import WebMessages exposing (..)
 import DecodeWebEvent exposing (..)
 import Project exposing (..)
+import Calculation exposing (..)
 import Views exposing (..)
 import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
@@ -23,6 +24,9 @@ updateEvent evt model = case evt of
                             WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
                             WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
                             WEViewLoaded pn v -> (handleViewLoaded model v, Cmd.none)
+                            WECalculationLoaded pn cs -> (handleCalculationLoaded model cs, Cmd.none)
+                            WECalculationStored pn cn -> (showMessage model ("Calculation:" ++ cn ++ " of project:"++ pn ++ " stored"), Cmd.none)
+                            WEFunctions fs -> (handleFunctions model fs, Cmd.none)
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
 
@@ -39,6 +43,16 @@ handleMapsLoaded model ms =
 handleViewLoaded : Model -> View -> Model
 handleViewLoaded model v =
     updateViewEditorModel model (\vm -> { vm | viewToEdit = Just v })
+
+handleCalculationLoaded : Model -> CalculationSource -> Model
+handleCalculationLoaded model cs =
+    updateCalculationEditorModel model (\cm -> { cm |
+                                                    calculationName = Just cs.calculationName,
+                                                    calculationFormulaText = Just cs.formulaText
+                                                    })
+
+handleFunctions : Model -> Functions -> Model
+handleFunctions model fs = updateCalculationEditorModel model (\cm -> { cm | functions = Just fs })
 
 addProjectToOpenProjects : Project -> List ProjectModel -> List ProjectModel
 addProjectToOpenProjects p ops = let pn = p.projectName
