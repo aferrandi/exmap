@@ -7,6 +7,8 @@ import XMapTypes exposing (..)
 import XMapParse exposing (..)
 import ModelUpdate exposing (..)
 import MapsExtraction exposing (xmapNameToString)
+import ServerMessaging exposing (..)
+import WebMessages exposing (..)
 
 updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
 updateInternal msg model = case msg of
@@ -17,9 +19,17 @@ updateInternal msg model = case msg of
     TextToTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
     NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
-    SwitchProjectViewTo vt -> ({ model | currentProjectView = vt }, Cmd.none)
+    SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
     AddMapToCalculation mn -> ( handleAddMapToCalculation model mn , Cmd.none)
 
+handleSwitchProjectViewTo : Model -> ProjectViewType -> (Model, Cmd Msg)
+handleSwitchProjectViewTo  model vt =
+    let functionRequest : Maybe (Cmd Msg)
+        functionRequest = case model.calculationEditorModel.functions of
+                                Just fs -> Nothing
+                                Nothing -> Just (sendToServer WRFunctions)
+        mapsInProjectRequest = Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentOpenProject model)
+    in { model | currentProjectView = vt } ! List.filterMap identity [functionRequest, mapsInProjectRequest]
 
 handleAddMapToCalculation : Model -> XMapName -> Model
 handleAddMapToCalculation model mn =

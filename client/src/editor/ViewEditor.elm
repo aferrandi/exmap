@@ -63,4 +63,4 @@ viewCell i = case i of
                 LabelItem l -> Table.td [Color.background (pastel Color.LightBlue)] [ text l ]
 
 viewRowToTableCells : ViewRow -> List (Html Msg)
-viewRowToTableCells (ViewRow row) =List.map viewCell row
+viewRowToTableCells (ViewRow row) = List.map viewCell row

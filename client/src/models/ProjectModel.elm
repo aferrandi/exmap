@@ -81,6 +81,7 @@ type InternalMsg =
 type Msg
   = Receive String
   | Send WebRequest
+  | SendMany (List WebRequest)
   | Mdl (Material.Msg Msg)
   | Internal InternalMsg
 

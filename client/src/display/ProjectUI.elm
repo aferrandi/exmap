@@ -36,7 +36,7 @@ viewProjectContent model pm = case model.currentProjectView of
     ViewsView -> viewViews model pm
     MapEditorView -> mapEditorView model pm
     ViewEditorView -> viewViewEditor model pm
-    CalculationEditorView -> viewCalculationEditor model pm
+    CalculationEditorView ->  viewCalculationEditor model pm
 
 viewCards :  Model -> ProjectModel -> Html Msg
 viewCards model pm = stretchDiv [
