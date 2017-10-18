@@ -85,7 +85,7 @@ mapEditorTextArea model pm = Textfield.render Mdl [9] model.mdl
                               , Textfield.textarea
                               , Textfield.rows 20
                               , Textfield.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
-                              , Options.onInput (\s -> Internal (TextToTextArea s))
+                              , Options.onInput (\s -> Internal (TextToMapTextArea s))
                               ]
                               []
 

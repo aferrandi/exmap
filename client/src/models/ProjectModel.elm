@@ -72,11 +72,14 @@ type InternalMsg =
   | SelectViewTab Int
   | MapToTextArea
   | MapToTable
-  | TextToTextArea String
+  | TextToMapTextArea String
   | NewMapName String
   | ShowMessage String
   | SwitchProjectViewTo ProjectViewType
+  | TextToCalculationTextArea String
   | AddMapToCalculation XMapName
+  | AddApplicationToCalculation ApplicationName
+  | AddOperationToCalculation OperationName
 
 type Msg
   = Receive String

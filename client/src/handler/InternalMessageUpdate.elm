@@ -16,11 +16,14 @@ updateInternal msg model = case msg of
     SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
-    TextToTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
+    TextToMapTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
     NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
     SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
-    AddMapToCalculation mn -> ( handleAddMapToCalculation model mn , Cmd.none)
+    TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
+    AddMapToCalculation mn -> ( appendToFormulaText model (xmapNameToString mn) , Cmd.none)
+    AddApplicationToCalculation an -> ( appendToFormulaText model (an ++ " p") , Cmd.none)
+    AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2") , Cmd.none)
 
 handleSwitchProjectViewTo : Model -> ProjectViewType -> (Model, Cmd Msg)
 handleSwitchProjectViewTo  model vt =
@@ -31,9 +34,9 @@ handleSwitchProjectViewTo  model vt =
         mapsInProjectRequest = Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentOpenProject model)
     in { model | currentProjectView = vt } ! List.filterMap identity [functionRequest, mapsInProjectRequest]
 
-handleAddMapToCalculation : Model -> XMapName -> Model
-handleAddMapToCalculation model mn =
-    let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ (xmapNameToString mn)
+appendToFormulaText : Model -> String -> Model
+appendToFormulaText model s =
+    let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ s
     in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
 
 handleMapToTable : Model -> Model

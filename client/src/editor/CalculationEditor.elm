@@ -30,7 +30,8 @@ import MapsExtraction exposing (xmapNameToString)
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = Grid.grid []
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                , cell 6 10 3 [] [ stretchDiv [calculationTextArea model ] ]
+                                , cell 4 8 2 [] [ stretchDiv [calculationTextArea model ] ]
+                                , cell 2 2 1 [ Color.background lighterGrey]  [functionsList model]
                                  ]
 
 mapsInProjectList : Model -> Html Msg
@@ -42,6 +43,24 @@ mapsInProjectList model  =
                            ]
     in Lists.ul [] (List.map listItem (model.calculationEditorModel.mapsInProject))
 
+functionsList : Model -> Html Msg
+functionsList model  =
+    let applicationListItem an = Lists.li []
+                           [ Lists.content
+                               [ Options.attribute <| Html.Events.onClick (Internal (AddApplicationToCalculation an)) ]
+                               [ Lists.avatarIcon "fast_forward" [], text an ]
+                           ]
+        operationListItem on = Lists.li []
+                           [ Lists.content
+                               [ Options.attribute <| Html.Events.onClick (Internal (AddOperationToCalculation on)) ]
+                               [ Lists.avatarIcon "play_arrow" [], text on ]
+                           ]
+        functions = Maybe.withDefault { applications = [], operations= [] }  model.calculationEditorModel.functions
+        applicationList = List.map applicationListItem functions.applications
+        operationList = List.map operationListItem functions.operations
+    in Lists.ul [] ( List.append applicationList operationList)
+
+
 
 calculationTextArea : Model  -> Html Msg
 calculationTextArea model = Textfield.render Mdl [9] model.mdl
@@ -50,6 +69,6 @@ calculationTextArea model = Textfield.render Mdl [9] model.mdl
                               , Textfield.textarea
                               , Textfield.rows 20
                               , Textfield.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
-                              , Options.onInput (\s -> Internal (TextToTextArea s))
+                              , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
                               ]
                               []
