@@ -12,7 +12,7 @@ topDiv props = Options.div ([
     css "flex-flow" "column",
     css "align-items" "stretch",
     css "width" "100vw",
-    css "minHeight" "100vh",
+    css "minHeight" "90vh",
     Options.attribute <| Html.Attributes.id "top"
     ] ++ props)
 

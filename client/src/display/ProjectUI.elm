@@ -26,7 +26,7 @@ import ViewEditor exposing (..)
 import CalculationEditor exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
-viewProject model pm = Grid.grid []
+viewProject model pm = Grid.grid [heightInView 75]
                                 [ cell 7 10 3 [] [viewProjectContent model pm]
                                 , cell 1 2 1 [] [ viewCards model pm ]
                                  ]

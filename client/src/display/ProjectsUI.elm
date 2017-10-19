@@ -21,16 +21,37 @@ import WebMessages exposing (WebRequest(..))
 import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
+import Material.Layout as Layout
+
+layoutHeader : Model -> Html Msg
+layoutHeader model =
+    Layout.row
+        [ Color.background <| pastel Color.Blue
+        , Color.text <| Color.white
+        ]
+        [ Layout.title [] [ text "EXMAP" ]
+        , Layout.spacer
+        , Layout.navigation []
+            []
+        ]
 
 viewProjects : Model -> Html Msg
-viewProjects model =
-    topDiv []
-            [
-                    stretchDiv [
-                        Grid.grid []
+viewProjects model = Layout.render Mdl model.mdl
+  [ Layout.fixedHeader
+  ]
+  { header = [ layoutHeader model ]
+  , drawer = [  ]
+  , tabs = ([ ], [ ])
+  , main = [viewProjectsContent model |> Material.Scheme.topWithScheme Color.Grey Color.Red]
+  }
+
+
+viewProjectsContent : Model -> Html Msg
+viewProjectsContent model =
+            div [] [
+                        Grid.grid [heightInView 80]
                            [ cell 2 2 1 [Color.background lightGrey] [viewAllProjectsList model]
-                           , cell 6 10 3 [] [ viewProjectTabs model ]
-                       ]
+                           , cell 6 10 3 [] [ viewProjectAt model ]
                    ]
                    , fixedDiv [viewMessages model]
                ]
@@ -47,14 +68,6 @@ viewAllProjectsItem pn = Lists.li []
                                 [ Lists.avatarIcon "folder" [], text pn ]
                             ]
 
-viewProjectTabs : Model -> Html Msg
-viewProjectTabs model = Tabs.render Mdl [mdlIdxProjects] model.mdl
-                             [ Tabs.ripple
-                             , Tabs.onSelectTab (\i -> Internal (SelectProjectTab i))
-                             , Tabs.activeTab model.projectTab
-                             ]
-                             (List.map projectTabHeader model.openProjects)
-                         [ viewProjectAt model]
 
 projectTabHeader : ProjectModel -> Tabs.Label Msg
 projectTabHeader pm = Tabs.label

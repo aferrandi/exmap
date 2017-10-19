@@ -4,7 +4,9 @@ import Html        exposing (Html, text, div)
 import Html.Events exposing (onClick)
 import Material.Options as Options exposing (css)
 import Material.Grid as Grid
+import Material.Icon as Icon
 import Material.Color as Color
+import Material.Typography as Typo
 import Material.Button as Button exposing (render)
 
 import ProjectModel exposing (..)
@@ -43,3 +45,12 @@ buttonMaybe model index txt mmsg =
 
 scrollableTableStyle : List (Options.Property c Msg)
 scrollableTableStyle = [Options.css "height" "80vh", Options.css "overflow-y" "auto", Options.css "display" "block"]
+
+heightInView : Int -> Options.Property c Msg
+heightInView h = Options.css "height" (toString h ++ "vh")
+
+title : String -> Html Msg
+title s = Options.styled Html.p [ Typo.display1] [ text s ]
+
+titleWithIcon : String -> String -> Color.Hue -> Html Msg
+titleWithIcon s i c = Html.span [] [Icon.view i [Color.text (pastel c), Icon.size48], title s]

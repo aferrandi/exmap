@@ -9,6 +9,7 @@ import Material.Textfield as Textfield
 import Material.Grid as Grid
 import Material.List as Lists
 import Material.Table as Table
+import Material.Color as Color
 import Material.Icon as Icon
 import Material.Options as Options exposing (css)
 import List.Extra as ListX exposing (transpose, find)
@@ -28,7 +29,8 @@ import ModelUpdate exposing (..)
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
     let  xmapEditorModel = model.xmapEditorModel
-    in stretchDiv [
+    in div [] [
+           titleWithIcon "Map Editor" "layers" Color.DeepOrange,
            Grid.grid [ Grid.noSpacing ]
               [ cell 2 2 1 [] [ mapEditorMapList pm.project]
               , cell 3 5 1 [] [ mapEditorTextArea model pm]

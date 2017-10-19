@@ -22,11 +22,15 @@ import Stretch exposing (..)
 
 
 viewViews : Model -> ProjectModel -> Html Msg
-viewViews model pm = Grid.grid []
+viewViews model pm = div[]
+                        [
+                            titleWithIcon "Views" "view_comfy" Color.Blue,
+                            Grid.grid [Options.css "height" "80vh"]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [viewAllViewsList model pm]
-                                , cell 6 10 3 [] [ stretchDiv [viewViewTabs model pm] ]
+                                , cell 6 10 3 [] [ stretchDiv [viewViewAt model pm] ]
                                  ]
 
+                        ]
 
 
 viewAllViewsList : Model -> ProjectModel -> Html Msg
@@ -38,24 +42,6 @@ viewAllViewsList model pm =
                            ]
     in Lists.ul [Color.background (Color.color Color.Grey Color.S100)] (List.map viewViewName pm.project.viewNames)
 
-
-viewViewTabs :  Model -> ProjectModel -> Html Msg
-viewViewTabs model pm = Tabs.render Mdl [mdlIdxViews] model.mdl
- [ Tabs.ripple
- , Tabs.onSelectTab (\i -> Internal (SelectViewTab i))
- , Tabs.activeTab model.viewTab
- , Elevation.e2
- ]
- (List.map viewTabHeader pm.openViews)
- [ viewViewAt model pm ]
-
-viewTabHeader : ViewModel -> Tabs.Label Msg
-viewTabHeader vm = Tabs.label
-               [ Options.center]
-               [ Icon.i "view_comfy"
-               , Options.span [ css "width" "4px" ] []
-               , text vm.view.viewName
-               ]
 
 
 viewViewAt : Model -> ProjectModel -> Html Msg

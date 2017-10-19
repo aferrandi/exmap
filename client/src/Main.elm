@@ -28,9 +28,9 @@ main = Html.program
 init : (Model, Cmd Msg)
 init = ( emptyModel ! [  sendToServer WRAllProjects, Layout.sub0 Mdl ] )
 
+
 view : Model -> Html Msg
-view model = viewProjects model |> Material.Scheme.topWithScheme Color.Grey Color.Red
-        -- |> Material.Scheme.top
+view model = viewProjects model
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = case msg of

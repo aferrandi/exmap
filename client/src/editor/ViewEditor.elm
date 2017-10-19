@@ -26,10 +26,13 @@ import MapsExtraction exposing (xmapNameToString)
 
 
 viewViewEditor : Model -> ProjectModel -> Html Msg
-viewViewEditor model pm = Grid.grid []
+viewViewEditor model pm = div [] [
+                                titleWithIcon "View Editor" "view_module" Color.Pink,
+                                Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [viewsList pm.project]
                                 , cell 6 10 3 [] [ stretchDiv [viewEditorTable model.viewEditorModel.viewToEdit ] ]
                                  ]
+                                ]
 
 
 viewsList : Project -> Html Msg
