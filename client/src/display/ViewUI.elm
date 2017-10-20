@@ -12,12 +12,13 @@ import List.Extra exposing (transpose)
 
 import ProjectModel exposing (..)
 import Views exposing (..)
+import UIWrapper exposing (..)
 import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
 import Stretch exposing  (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
-viewView model pm vm = stretchDiv (List.map (\row -> viewRow vm row) vm.view.rows)
+viewView model pm vm =  div [] (List.map (\row -> viewRow vm row) vm.view.rows)
 
 viewRow : ViewModel -> ViewRow -> Html Msg
 viewRow vm row = Table.table []
@@ -37,7 +38,7 @@ viewRowHeader row =
 viewRowBody : ViewModel -> ViewRow -> Html Msg
 viewRowBody vm row = let matrix = transpose (rowToTable row vm)
                          rows = List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
-                     in Table.tbody [Options.css "height" "70vh", Options.css "overflow-y" "auto", Options.css "display" "block"] rows
+                     in Table.tbody (scrollableTableStyle 60) rows
 
 rowLineToTableRow : List String  -> Html Msg
 rowLineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)

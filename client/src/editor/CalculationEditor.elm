@@ -31,7 +31,7 @@ viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = div []
                                 [
                                 titleWithIcon "Calculation Editor" "functions" Color.Green,
-                                Grid.grid []
+                                Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [mapsInProjectList model]
                                 , cell 4 8 2 [] [ stretchDiv [calculationTextArea model ] ]
                                 , cell 2 2 1 [ Color.background lighterGrey]  [functionsList model]

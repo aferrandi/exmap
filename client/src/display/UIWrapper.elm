@@ -43,14 +43,13 @@ buttonMaybe model index txt mmsg =
                     Nothing -> []
     in buttonNoClick model index txt msgProp
 
-scrollableTableStyle : List (Options.Property c Msg)
-scrollableTableStyle = [Options.css "height" "80vh", Options.css "overflow-y" "auto", Options.css "display" "block"]
+scrollableTableStyle : Int -> List (Options.Property c Msg)
+scrollableTableStyle h = [heightInView h, Options.css "overflow-y" "auto", Options.css "display" "block"]
 
 heightInView : Int -> Options.Property c Msg
 heightInView h = Options.css "height" (toString h ++ "vh")
 
-title : String -> Html Msg
-title s = Options.styled Html.p [ Typo.display1] [ text s ]
 
 titleWithIcon : String -> String -> Color.Hue -> Html Msg
-titleWithIcon s i c = Html.span [] [Icon.view i [Color.text (pastel c), Icon.size48], title s]
+titleWithIcon s i c = Options.styled Html.label [ Typo.display1]
+                        [ Icon.view i [Color.text (pastel c), Icon.size36], text s]

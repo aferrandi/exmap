@@ -92,4 +92,4 @@ viewMessagesItem msg = Lists.li []
                           ]
 
 viewMessages : Model -> Html Msg
-viewMessages model = Lists.ul [Elevation.e4] (List.map viewMessagesItem model.messages)
+viewMessages model = Lists.ul [] (List.map viewMessagesItem model.messages)

@@ -31,12 +31,12 @@ mapEditorView model pm =
     let  xmapEditorModel = model.xmapEditorModel
     in div [] [
            titleWithIcon "Map Editor" "layers" Color.DeepOrange,
-           Grid.grid [ Grid.noSpacing ]
+           Grid.grid [ Grid.noSpacing, heightInView 60 ]
               [ cell 2 2 1 [] [ mapEditorMapList pm.project]
               , cell 3 5 1 [] [ mapEditorTextArea model pm]
               , cell 3 5 2 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
            ],
-           Grid.grid [ Grid.noSpacing]
+           Grid.grid [ Grid.noSpacing, heightInView 10]
               [ cell 3 4 1 [] [ newMapButton model pm ]
               , cell 2 3 1 [] [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
               , cell 2 3 1 [] [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
@@ -115,7 +115,7 @@ mapHeader = Table.thead [Options.css "display" "table"]
 
 mapRows : XMap -> Html Msg
 mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
-            in Table.tbody scrollableTableStyle rows
+            in Table.tbody (scrollableTableStyle 60) rows
 
 lineToTableRow : List String  -> Html Msg
 lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
