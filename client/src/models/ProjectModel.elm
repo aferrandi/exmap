@@ -41,6 +41,8 @@ type alias ViewEditorModel = {
 
 type alias CalculationEditorModel = {
     calculationName : Maybe CalculationName
+    , resultMapName : Maybe String
+    , operationMode : OperationMode
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
     , mapsInProject : List XMapName
@@ -77,9 +79,11 @@ type InternalMsg =
   | ShowMessage String
   | SwitchProjectViewTo ProjectViewType
   | TextToCalculationTextArea String
+  | TextToResultNameText String
   | AddMapToCalculation XMapName
   | AddApplicationToCalculation ApplicationName
   | AddOperationToCalculation OperationName
+  | ChangeOperationMode OperationMode
 
 type Msg
   = Receive String
@@ -110,8 +114,10 @@ emptyXMapEditorModel = {
 emptyCalculationEditorModel : CalculationEditorModel
 emptyCalculationEditorModel = {
     calculationName = Nothing
+    , resultMapName = Nothing
     , calculationFormulaText = Nothing
     , newCalculationName = ""
+    , operationMode = Union
     , mapsInProject = []
     , functions = Nothing
     }

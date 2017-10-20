@@ -14,8 +14,10 @@ import Material.Textfield as Textfield
 import Material.Menu as Menu exposing (Item)
 import Material.Grid as Grid exposing (Device(..))
 import Material.Options as Options exposing (css)
+import Material.Toggles as Toggles
 import List.Extra as ListX exposing (transpose)
 
+import Calculation exposing (..)
 import Project exposing (..)
 import XMapTypes exposing(..)
 import Views exposing (..)
@@ -33,7 +35,12 @@ viewCalculationEditor model pm = div []
                                 titleWithIcon "Calculation Editor" "functions" Color.Green,
                                 Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                , cell 4 8 2 [] [ stretchDiv [calculationTextArea model ] ]
+                                , cell 4 8 2 [] [
+                                            div [] [resultMapNameText model],
+                                            div [] [operationNameChoice model],
+                                            div [] [calculationTextArea model]
+                                            ]
+
                                 , cell 2 2 1 [ Color.background lighterGrey]  [functionsList model]
                                  ]
                                  ]
@@ -64,15 +71,39 @@ functionsList model  =
         operationList = List.map operationListItem functions.operations
     in Lists.ul [] ( List.append applicationList operationList)
 
-
-
 calculationTextArea : Model  -> Html Msg
 calculationTextArea model = Textfield.render Mdl [9] model.mdl
                               [ Textfield.label "Enter the formula"
-                              , Textfield.floatingLabel
                               , Textfield.textarea
                               , Textfield.rows 20
                               , Textfield.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
                               , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
                               ]
                               []
+
+resultMapNameText : Model  -> Html Msg
+resultMapNameText model = Textfield.render Mdl [8] model.mdl
+                              [ Textfield.label "Enter the result map name"
+                              , Textfield.floatingLabel
+                              , Textfield.value (Maybe.withDefault "" model.calculationEditorModel.resultMapName )
+                              , Options.onInput (\s -> Internal (TextToResultNameText s))
+                              ]
+                              []
+
+operationNameChoice : Model  -> Html Msg
+operationNameChoice model = div []
+  [ Toggles.radio Mdl [0] model.mdl
+      [ Toggles.value (model.calculationEditorModel.operationMode == Union)
+      , Toggles.group "operationName"
+      , Toggles.ripple
+      , Options.onToggle (Internal (ChangeOperationMode Union))
+      ]
+      [ text "Union" ]
+  , Toggles.radio Mdl [1] model.mdl
+      [ Toggles.value (model.calculationEditorModel.operationMode == Intersection)
+      , Toggles.group "operationName"
+      , Toggles.ripple
+      , Options.onToggle (Internal (ChangeOperationMode Intersection))
+      ]
+      [ text "Intersection" ]
+  ]

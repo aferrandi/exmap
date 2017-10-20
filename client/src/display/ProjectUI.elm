@@ -53,7 +53,7 @@ viewCard : Model -> String -> String -> Int -> Color.Hue -> ProjectViewType -> H
 viewCard model title cardText i hue viewType =  Card.view
           [ Color.background (pastel hue)
           , css "width" "192px"
---          , css "height" "192px"
+         , css "height" "20vh"
           ]
           [ Card.title [ ] [ Card.head [ white ] [ text title ] ]
            , Card.text [ white ] [ text cardText ]

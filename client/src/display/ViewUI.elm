@@ -21,7 +21,7 @@ viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm =  div [] (List.map (\row -> viewRow vm row) vm.view.rows)
 
 viewRow : ViewModel -> ViewRow -> Html Msg
-viewRow vm row = Table.table []
+viewRow vm row = Table.table [Options.css "width" "100%"]
                     [
                         viewRowHeader row,
                         viewRowBody vm row
