@@ -1,4 +1,4 @@
-module CalculationEditor exposing (viewCalculationEditor)
+module CalculationEditor exposing (viewCalculationsEditor)
 
 import Html exposing (Html,text, div)
 import Html.Events exposing (onClick)
@@ -27,23 +27,47 @@ import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import Stretch exposing (..)
 import MapsExtraction exposing (xmapNameToString)
+import WebMessages exposing (..)
 
+
+viewCalculationsEditor : Model -> ProjectModel -> Html Msg
+viewCalculationsEditor model pm = div []
+                                [
+                                    titleWithIcon "Calculation Editor" "functions" Color.Green,
+                                    Grid.grid [heightInView 70]
+                                    [ cell 2 2 1 [ Color.background lighterGrey]  [calculationsInProjectList model pm]
+                                    , cell 6 10 3 []  [viewCalculationEditor model pm]
+                                     ]
+                                 ]
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = div []
                                 [
-                                titleWithIcon "Calculation Editor" "functions" Color.Green,
-                                Grid.grid [heightInView 70]
-                                [ cell 2 2 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                , cell 4 8 2 [] [
-                                            div [] [resultMapNameText model],
-                                            div [] [operationNameChoice model],
-                                            div [] [calculationTextArea model]
-                                            ]
+                                    titleWithIcon "Calculation " "functions" Color.Green,
+                                    Grid.grid [heightInView 60]
+                                    [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
+                                    , cell 4 4 2 [] [
+                                                div [] [resultMapNameText model],
+                                                div [] [operationNameChoice model],
+                                                div [] [calculationTextArea model]
+                                                ]
 
-                                , cell 2 2 1 [ Color.background lighterGrey]  [functionsList model]
+                                    , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
                                  ]
                                  ]
+
+
+
+calculationsInProjectList : Model -> ProjectModel -> Html Msg
+calculationsInProjectList model pm =
+    let projectName = pm.project.projectName
+        listItem cn = Lists.li []
+                           [ Lists.content
+                               [ Options.attribute <| Html.Events.onClick (Send (WRLoadCalculation projectName cn)) ]
+                               [ Lists.avatarIcon "list" [], text cn ]
+                           ]
+    in Lists.ul [] (List.map listItem (pm.project.calculations))
+
 
 mapsInProjectList : Model -> Html Msg
 mapsInProjectList model  =

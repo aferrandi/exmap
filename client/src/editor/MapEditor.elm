@@ -32,7 +32,7 @@ mapEditorView model pm =
     in div [] [
            titleWithIcon "Map Editor" "layers" Color.DeepOrange,
            Grid.grid [ Grid.noSpacing, heightInView 60 ]
-              [ cell 2 2 1 [] [ mapEditorMapList pm.project]
+              [ cell 2 2 1 [Color.background lighterGrey] [ mapEditorMapList pm.project]
               , cell 3 5 1 [] [ mapEditorTextArea model pm]
               , cell 3 5 2 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
            ],

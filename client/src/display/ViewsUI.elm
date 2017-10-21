@@ -27,7 +27,7 @@ viewViews model pm = div[]
                             titleWithIcon "Views" "view_comfy" Color.Blue,
                             Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [viewAllViewsList model pm]
-                                , cell 6 10 3 [] [ stretchDiv [viewViewAt model pm] ]
+                                , cell 6 10 3 [] [ viewViewAt model pm ]
                                  ]
 
                         ]
