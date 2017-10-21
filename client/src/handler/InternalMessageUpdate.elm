@@ -1,14 +1,18 @@
 module InternalMessageUpdate exposing (updateInternal)
 
+import List.Extra as ListX
+
 import ProjectModel exposing (..)
 
 import XMapText exposing (..)
 import XMapTypes exposing (..)
 import XMapParse exposing (..)
+import Views exposing (..)
 import ModelUpdate exposing (..)
 import MapsExtraction exposing (xmapNameToString)
 import ServerMessaging exposing (..)
 import WebMessages exposing (..)
+import InternalMessages exposing (..)
 import Calculation exposing (..)
 
 updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
@@ -27,7 +31,18 @@ updateInternal msg model = case msg of
     AddApplicationToCalculation an -> ( appendToFormulaText model (an ++ " p"), Cmd.none)
     AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
     ChangeOperationMode om -> handleChangeOperationMode model om
+    AddItemToView row it -> handleAddItemToView model row it
 
+
+handleAddItemToView : Model -> Int -> ViewItem -> (Model, Cmd Msg)
+handleAddItemToView model ri it =
+    let updateRow : ViewRow -> ViewRow
+        updateRow (ViewRow r) = List.append r [it] |> ViewRow
+        updateRows : List ViewRow -> List ViewRow
+        updateRows rs = ListX.updateAt ri updateRow rs |> Maybe.withDefault rs
+        updateView : Maybe View -> Maybe View
+        updateView mv = Maybe.map (\v -> {v | rows = updateRows v.rows}) mv
+    in ( updateViewEditorModel model (\vm -> {vm | viewToEdit = updateView vm.viewToEdit }), Cmd.none)
 
 handleChangeOperationMode : Model -> OperationMode -> (Model, Cmd Msg)
 handleChangeOperationMode model om = ( updateCalculationEditorModel model (\cm ->{  cm | operationMode = om }), Cmd.none)
@@ -35,7 +50,7 @@ handleChangeOperationMode model om = ( updateCalculationEditorModel model (\cm -
 handleSwitchProjectViewTo : Model -> ProjectViewType -> (Model, Cmd Msg)
 handleSwitchProjectViewTo  model vt =
     let functionRequest : Maybe (Cmd Msg)
-        functionRequest = case model.calculationEditorModel.functions of
+        functionRequest = case model.functions of
                                 Just fs -> Nothing
                                 Nothing -> Just (sendToServer WRFunctions)
         mapsInProjectRequest = Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentOpenProject model)

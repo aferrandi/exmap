@@ -19,6 +19,7 @@ import Project exposing (..)
 import Views exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
+import InternalMessages exposing (..)
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import Stretch exposing (..)
@@ -49,13 +50,9 @@ viewsList p =
 viewEditorTable : Maybe View -> Html Msg
 viewEditorTable mv = case mv of
                         Just v -> Table.table []
-                            [
-                                viewRows v
-                            ]
+                            [ viewRows v ]
                         Nothing -> Table.table []
-                            [
-                                Table.tbody [] []
-                            ]
+                            [ Table.tbody [] [] ]
 viewRows : View -> Html Msg
 viewRows v = let rows = List.map viewRowToTableCells v.rows |> List.map (Table.tr [])
              in Table.tbody [] rows
@@ -67,3 +64,12 @@ viewCell i = case i of
 
 viewRowToTableCells : ViewRow -> List (Html Msg)
 viewRowToTableCells (ViewRow row) = List.map viewCell row
+
+viewEditorMapList : Model -> Html Msg
+viewEditorMapList model =
+    let listItem mn = Lists.li []
+                           [ Lists.content
+                               [ Options.attribute <| Html.Events.onClick (Internal (AddItemToView 0 (MapItem mn))) ]
+                               [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
+                           ]
+    in Lists.ul [] (List.map listItem model.mapsInProject)

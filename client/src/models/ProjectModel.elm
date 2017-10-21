@@ -9,6 +9,7 @@ import Views exposing (..)
 import XMapTypes exposing (..)
 import Calculation exposing (..)
 import WebMessages exposing (WebRequest)
+import InternalMessages exposing (..)
 import List.Extra as ListX
 
 type alias Mdl = Material.Model
@@ -45,15 +46,9 @@ type alias CalculationEditorModel = {
     , operationMode : OperationMode
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
-    , mapsInProject : List XMapName
-    , functions : Maybe Functions
     }
 
-type ProjectViewType =
-    ViewsView
-    | MapEditorView
-    | ViewEditorView
-    | CalculationEditorView
+
 
 type alias Model = {
     openProjects : List ProjectModel
@@ -66,24 +61,9 @@ type alias Model = {
     , viewEditorModel : ViewEditorModel
     , calculationEditorModel : CalculationEditorModel
     , currentProjectView : ProjectViewType
+    , mapsInProject : List XMapName
+    , functions : Maybe Functions
     }
-
-
-type InternalMsg =
-  SelectProjectTab Int
-  | SelectViewTab Int
-  | MapToTextArea
-  | MapToTable
-  | TextToMapTextArea String
-  | NewMapName String
-  | ShowMessage String
-  | SwitchProjectViewTo ProjectViewType
-  | TextToCalculationTextArea String
-  | TextToResultNameText String
-  | AddMapToCalculation XMapName
-  | AddApplicationToCalculation ApplicationName
-  | AddOperationToCalculation OperationName
-  | ChangeOperationMode OperationMode
 
 type Msg
   = Receive String
@@ -118,8 +98,6 @@ emptyCalculationEditorModel = {
     , calculationFormulaText = Nothing
     , newCalculationName = ""
     , operationMode = Union
-    , mapsInProject = []
-    , functions = Nothing
     }
 
 emptyModel : Model
@@ -133,6 +111,8 @@ emptyModel = { openProjects = []
                , viewEditorModel = emptyViewEditorModel
                , calculationEditorModel = emptyCalculationEditorModel
                , currentProjectView = ViewsView
+               , mapsInProject = []
+               , functions = Nothing
                }
 
 currentOpenProject : Model -> Maybe ProjectModel

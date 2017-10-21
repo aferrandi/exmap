@@ -53,10 +53,10 @@ handleCalculationLoaded model cs =
                                                     })
 
 handleFunctions : Model -> Functions -> Model
-handleFunctions model fs = updateCalculationEditorModel model (\cm -> { cm | functions = Just fs })
+handleFunctions model fs =  { model | functions = Just fs }
 
 handleMapsInProject : Model -> List XMapName -> Model
-handleMapsInProject model mns = updateCalculationEditorModel model (\cm -> { cm | mapsInProject = mns })
+handleMapsInProject model mns = { model | mapsInProject = mns }
 
 
 addProjectToOpenProjects : Project -> List ProjectModel -> List ProjectModel

@@ -27,7 +27,7 @@ import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import Stretch exposing (..)
 import MapsExtraction exposing (xmapNameToString)
-import WebMessages exposing (..)
+import InternalMessages exposing (..)
 
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
@@ -41,20 +41,25 @@ viewCalculationsEditor model pm = div []
                                  ]
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
-viewCalculationEditor model pm = div []
-                                [
-                                    titleWithIcon "Calculation " "functions" Color.Green,
-                                    Grid.grid [heightInView 60]
-                                    [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                    , cell 4 4 2 [] [
-                                                div [] [resultMapNameText model],
-                                                div [] [operationNameChoice model],
-                                                div [] [calculationTextArea model]
-                                                ]
+viewCalculationEditor model pm = case model.calculationEditorModel.calculationName of
+                                    Just cn -> viewEditorForCalculation model pm
+                                    Nothing -> div [][]
 
-                                    , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
-                                 ]
-                                 ]
+viewEditorForCalculation : Model -> ProjectModel -> Html Msg
+viewEditorForCalculation model pm = div []
+                                     [
+                                         titleWithIcon "Calculation " "functions" Color.Green,
+                                         Grid.grid [heightInView 60]
+                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
+                                         , cell 4 4 2 [] [
+                                                     div [] [resultMapNameText model],
+                                                     div [] [operationNameChoice model],
+                                                     div [] [calculationTextArea model]
+                                                     ]
+
+                                         , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
+                                      ]
+                                      ]
 
 
 
@@ -76,7 +81,7 @@ mapsInProjectList model  =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddMapToCalculation mn)) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [] (List.map listItem (model.calculationEditorModel.mapsInProject))
+    in Lists.ul [] (List.map listItem (model.mapsInProject))
 
 functionsList : Model -> Html Msg
 functionsList model  =
@@ -90,7 +95,7 @@ functionsList model  =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddOperationToCalculation on)) ]
                                [ Lists.avatarIcon "play_arrow" [], text on ]
                            ]
-        functions = Maybe.withDefault { applications = [], operations= [] }  model.calculationEditorModel.functions
+        functions = Maybe.withDefault { applications = [], operations= [] }  model.functions
         applicationList = List.map applicationListItem functions.applications
         operationList = List.map operationListItem functions.operations
     in Lists.ul [] ( List.append applicationList operationList)

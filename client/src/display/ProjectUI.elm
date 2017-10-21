@@ -24,6 +24,7 @@ import Stretch exposing (..)
 import MapEditor exposing (..)
 import ViewEditor exposing (..)
 import CalculationEditor exposing (..)
+import InternalMessages exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
 viewProject model pm = Grid.grid [heightInView 75]
