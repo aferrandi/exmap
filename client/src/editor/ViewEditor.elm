@@ -31,10 +31,20 @@ viewViewEditor model pm = div [] [
                                 titleWithIcon "View Editor" "view_module" Color.Pink,
                                 Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ Color.background lighterGrey]  [viewsList pm.project]
-                                , cell 6 10 3 [] [ stretchDiv [viewEditorTable model.viewEditorModel.viewToEdit ] ]
+                                , cell 6 10 3 [] [ viewEditorForView model pm ]
                                  ]
                                 ]
 
+viewEditorForView model pm = case model.viewEditorModel.viewName of
+                               Just vn -> div [] [
+                                     titleWithIcon ("View " ++ Maybe.withDefault "" model.viewEditorModel.viewName) "view_module" Color.Pink,
+                                     Grid.grid [heightInView 70]
+                                     [
+                                     cell 6 10 3 [] [ viewEditorTable model.viewEditorModel.viewToEdit ]
+                                     , cell 2 2 1 [ Color.background lighterGrey]  [viewEditorMapList model ]
+                                      ]
+                                    ]
+                               Nothing -> div [] []
 
 viewsList : Project -> Html Msg
 viewsList p =

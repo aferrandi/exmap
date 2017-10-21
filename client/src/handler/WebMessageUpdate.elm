@@ -43,7 +43,9 @@ handleMapsLoaded model ms =
 
 handleViewLoaded : Model -> View -> Model
 handleViewLoaded model v =
-    updateViewEditorModel model (\vm -> { vm | viewToEdit = Just v })
+    updateViewEditorModel model (\vm -> { vm |
+                                            viewName = Just v.viewName
+                                            , viewToEdit = Just v })
 
 handleCalculationLoaded : Model -> CalculationSource -> Model
 handleCalculationLoaded model cs =
