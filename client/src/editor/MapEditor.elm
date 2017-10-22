@@ -32,33 +32,47 @@ mapEditorView model pm =
     let  xmapEditorModel = model.xmapEditorModel
     in div [] [
            titleWithIcon "Map Editor" "layers" Color.DeepOrange,
-           Grid.grid [ Grid.noSpacing, heightInView 60 ]
-              [ cell 2 2 1 [Color.background lighterGrey] [ mapEditorMapList pm.project]
-              , cell 3 5 1 [] [ mapEditorTextArea model pm]
-              , cell 3 5 2 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
-           ],
-           Grid.grid [ Grid.noSpacing, heightInView 10]
-              [ cell 1 4 3 [] [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
-              , cell 2 4 3 [] [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-              , cell 1 4 2 [] [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
-          ]
+           Grid.grid [ Grid.noSpacing, heightInView 70 ]
+              [ cell 2 2 1 [] [ mapEditorMapList pm.project, newMapButton model]
+              , cell 6 10 3 [] [ mapEditorViewForMap model pm]
+           ]
   ]
 
-newMapButton : Model -> ProjectModel -> Html Msg
-newMapButton model pm =
+mapEditorViewForMap : Model -> ProjectModel -> Html Msg
+mapEditorViewForMap model pm =
+    let  xmapEditorModel = model.xmapEditorModel
+    in case model.xmapEditorModel.xmapName of
+        Just mn -> div [] [
+               titleWithIcon ("Editing map:" ++ xmapNameToString mn) "layers" Color.DeepOrange,
+               Grid.grid [ Grid.noSpacing, heightInView 60 ]
+                  [ cell 3 5 1 [] [ mapEditorTextArea model pm]
+                  , cell 5 7 3 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
+               ],
+               Grid.grid [ Grid.noSpacing]
+                  [ cell 1 4 3 [] [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
+                  , cell 2 4 3 [] [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
+                  , cell 1 4 2 [] [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
+              ]
+            ]
+        Nothing -> div [][]
+
+
+
+newMapButton : Model -> Html Msg
+newMapButton model=
     let xmapEditorModel = model.xmapEditorModel
         storeNewMap = case xmapNameFromString xmapEditorModel.newXmapName of
-                          Ok mapName -> Maybe.map (storeMap pm mapName) xmapEditorModel.xmapToEdit
-                          Err e -> Just (Internal (ShowMessage e))
-    in Grid.grid [ Grid.noSpacing]
-        [ cell 4 6 2 [] [ Textfield.render Mdl [9] model.mdl
+                          Ok mn -> Internal (NewMapWithName mn TypeDouble)
+                          Err e -> Internal (ShowMessage e)
+    in div[] [
+        Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New map name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateMapName s))
                                              ]
-                                             [] ]
-        , cell 4 6 2 [] [ buttonMaybe model 7 "New Map" storeNewMap]
+                                             [],
+        buttonClick model 7 "New map" storeNewMap
            ]
 
 
@@ -69,7 +83,7 @@ mapEditorMapList p =
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadMaps p.projectName [mn])) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [] (List.map listItem (fileSourcesOfProject p))
+    in Lists.ul [heightInView 60, Color.background lighterGrey] (List.map listItem (fileSourcesOfProject p))
 
 storeMap : ProjectModel -> XMapName -> XMap -> Msg
 storeMap pm n m =  WRStoreMap  pm.project.projectName { xmapName = n , xmap = m } |> Send

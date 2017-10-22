@@ -35,7 +35,7 @@ viewCalculationsEditor model pm = div []
                                 [
                                     titleWithIcon "Calculation Editor" "functions" Color.Green,
                                     Grid.grid [heightInView 70]
-                                    [ cell 2 2 1 [ Color.background lighterGrey]  [calculationsInProjectList model pm]
+                                    [ cell 2 2 1 [ ]  [div[] [calculationsInProjectList model pm, newCalculationButton model]]
                                     , cell 6 10 3 []  [viewCalculationEditor model pm]
                                      ]
                                  ]
@@ -50,7 +50,7 @@ viewEditorForCalculation model pm = div []
                                      [
                                          titleWithIcon "Calculation " "functions" Color.Green,
                                          Grid.grid [heightInView 60]
-                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model, newCalculationButton model]
+                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
                                          , cell 4 4 2 [] [
                                                      div [] [resultMapNameText model],
                                                      div [] [operationNameChoice model],
@@ -71,7 +71,7 @@ calculationsInProjectList model pm =
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadCalculation projectName cn)) ]
                                [ Lists.avatarIcon "list" [], text cn ]
                            ]
-    in Lists.ul [] (List.map listItem (pm.project.calculations))
+    in Lists.ul [heightInView 55, Color.background lighterGrey] (List.map listItem (pm.project.calculations))
 
 
 mapsInProjectList : Model -> Html Msg
@@ -139,12 +139,13 @@ operationNameChoice model = div []
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =
-    div []
+    let  newCalculationMessage = (Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName))
+    in div []
         [ Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New calculation name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateCalculationName s))
                                              ][]
-        , buttonClick model 7 "New Map" (Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName))
+        , buttonClick model 7 "New calculation" newCalculationMessage
         ]

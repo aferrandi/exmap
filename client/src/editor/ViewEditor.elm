@@ -10,6 +10,7 @@ import Material.List as Lists
 import Material.Elevation as Elevation
 import Material.Color as Color
 import Material.Table as Table
+import Material.Textfield as Textfield
 import Material.Menu as Menu exposing (Item)
 import Material.Grid as Grid exposing (Device(..))
 import Material.Options as Options exposing (css)
@@ -30,7 +31,7 @@ viewViewEditor : Model -> ProjectModel -> Html Msg
 viewViewEditor model pm = div [] [
                                 titleWithIcon "View Editor" "view_module" Color.Pink,
                                 Grid.grid [heightInView 70]
-                                [ cell 2 2 1 [ Color.background lighterGrey]  [viewsList pm.project]
+                                [ cell 2 2 1 [ ]  [viewsList pm.project, newViewButton model]
                                 , cell 6 10 3 [] [ viewEditorForView model pm ]
                                  ]
                                 ]
@@ -52,7 +53,7 @@ viewsList p =
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadView p.projectName vn)) ]
                                [ Lists.avatarIcon "list" [], text vn ]                           ]
-    in Lists.ul [] (List.map listItem p.viewNames)
+    in Lists.ul [heightInView 55, Color.background lighterGrey] (List.map listItem p.viewNames)
 
 
 
@@ -83,3 +84,16 @@ viewEditorMapList model =
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
     in Lists.ul [] (List.map listItem model.mapsInProject)
+
+newViewButton : Model -> Html Msg
+newViewButton model =
+    let newViewMessage = (Internal (NewViewWithName model.viewEditorModel.newViewName))
+    in div []
+        [ Textfield.render Mdl [9] model.mdl
+                                             [ Textfield.label "New view name"
+                                             , Textfield.floatingLabel
+                                             , Textfield.text_
+                                             , Options.onInput (\s -> Internal (UpdateViewName s))
+                                             ][]
+        , buttonClick model 7 "New view" newViewMessage
+        ]

@@ -7,6 +7,7 @@ import Material.Grid as Grid
 import Material.Icon as Icon
 import Material.Color as Color
 import Material.Typography as Typo
+import Material.Textfield as Textfield
 import Material.Button as Button exposing (render)
 
 import ProjectModel exposing (..)
@@ -53,3 +54,4 @@ heightInView h = Options.css "height" (toString h ++ "vh")
 titleWithIcon : String -> String -> Color.Hue -> Html Msg
 titleWithIcon s i c = Options.styled Html.label [ Typo.display1]
                         [ Icon.view i [Color.text (pastel c), Icon.size36], text s]
+

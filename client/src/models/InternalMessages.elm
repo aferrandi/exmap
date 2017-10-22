@@ -31,3 +31,5 @@ type InternalMsg =
   | ChangeOperationMode OperationMode
   | AddItemToView Int ViewItem
   | NewCalculationWithName CalculationName
+  | NewViewWithName ViewName
+  | NewMapWithName XMapName XMapType

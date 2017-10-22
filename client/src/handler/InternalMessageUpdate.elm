@@ -29,6 +29,8 @@ updateInternal msg model = case msg of
     UpdateViewName  s -> ( handleUpdateViewName model s, Cmd.none)
     UpdateProjectName  s -> ( handleUpdateProjectName model s, Cmd.none)
     NewCalculationWithName cn -> ( handleNewCalculationWithName model cn , Cmd.none)
+    NewViewWithName vn -> ( handleNewViewWithName model vn , Cmd.none)
+    NewMapWithName mn mt  -> ( handleNewMapWithName model mn mt , Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
     SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
@@ -54,6 +56,12 @@ handleUpdateProjectName model s = { model | newProjectName = s }
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn = { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn }}
+
+handleNewViewWithName : Model -> CalculationName -> Model
+handleNewViewWithName model vn = { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn }}
+
+handleNewMapWithName : Model -> XMapName -> XMapType -> Model
+handleNewMapWithName model mn mt = { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = Just mt }}
 
 handleAddItemToView : Model -> Int -> ViewItem -> (Model, Cmd Msg)
 handleAddItemToView model ri it =
