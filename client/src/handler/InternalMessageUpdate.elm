@@ -14,6 +14,8 @@ import ServerMessaging exposing (..)
 import WebMessages exposing (..)
 import InternalMessages exposing (..)
 import Calculation exposing (..)
+import EmptyModel exposing (..)
+
 
 updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
 updateInternal msg model = case msg of
@@ -22,7 +24,11 @@ updateInternal msg model = case msg of
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
     TextToMapTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
-    NewMapName  s -> ( updateXMapEditorModel model (\xm ->{ xm | newXmapName = s }), Cmd.none)
+    UpdateMapName  s -> ( handleUpdateMapName model s, Cmd.none)
+    UpdateCalculationName  s -> ( handleUpdateCalculationName model s, Cmd.none)
+    UpdateViewName  s -> ( handleUpdateViewName model s, Cmd.none)
+    UpdateProjectName  s -> ( handleUpdateProjectName model s, Cmd.none)
+    NewCalculationWithName cn -> ( handleNewCalculationWithName model cn , Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
     SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
@@ -33,6 +39,21 @@ updateInternal msg model = case msg of
     ChangeOperationMode om -> handleChangeOperationMode model om
     AddItemToView row it -> handleAddItemToView model row it
 
+
+handleUpdateCalculationName : Model -> String -> Model
+handleUpdateCalculationName model s = updateCalculationEditorModel model (\cm ->{ cm | newCalculationName = s })
+
+handleUpdateViewName : Model -> String -> Model
+handleUpdateViewName model s = updateViewEditorModel model (\vm ->{ vm | newViewName = s })
+
+handleUpdateMapName : Model -> String -> Model
+handleUpdateMapName model s = updateXMapEditorModel model (\xm ->{ xm | newXmapName = s })
+
+handleUpdateProjectName : Model -> String -> Model
+handleUpdateProjectName model s = { model | newProjectName = s }
+
+handleNewCalculationWithName : Model -> CalculationName -> Model
+handleNewCalculationWithName model cn = { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn }}
 
 handleAddItemToView : Model -> Int -> ViewItem -> (Model, Cmd Msg)
 handleAddItemToView model ri it =

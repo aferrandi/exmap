@@ -17,7 +17,10 @@ type InternalMsg =
   | MapToTextArea
   | MapToTable
   | TextToMapTextArea String
-  | NewMapName String
+  | UpdateMapName String
+  | UpdateCalculationName String
+  | UpdateViewName String
+  | UpdateProjectName String
   | ShowMessage String
   | SwitchProjectViewTo ProjectViewType
   | TextToCalculationTextArea String
@@ -27,3 +30,4 @@ type InternalMsg =
   | AddOperationToCalculation OperationName
   | ChangeOperationMode OperationMode
   | AddItemToView Int ViewItem
+  | NewCalculationWithName CalculationName

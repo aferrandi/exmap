@@ -55,7 +55,7 @@ newMapButton model pm =
                                              [ Textfield.label "New map name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
-                                             , Options.onInput (\s -> Internal (NewMapName s))
+                                             , Options.onInput (\s -> Internal (UpdateMapName s))
                                              ]
                                              [] ]
         , cell 4 6 2 [] [ buttonMaybe model 7 "New Map" storeNewMap]

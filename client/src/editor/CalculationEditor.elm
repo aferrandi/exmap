@@ -50,7 +50,7 @@ viewEditorForCalculation model pm = div []
                                      [
                                          titleWithIcon "Calculation " "functions" Color.Green,
                                          Grid.grid [heightInView 60]
-                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
+                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model, newCalculationButton model]
                                          , cell 4 4 2 [] [
                                                      div [] [resultMapNameText model],
                                                      div [] [operationNameChoice model],
@@ -136,3 +136,15 @@ operationNameChoice model = div []
       ]
       [ text "Intersection" ]
   ]
+
+newCalculationButton : Model -> Html Msg
+newCalculationButton model =
+    div []
+        [ Textfield.render Mdl [9] model.mdl
+                                             [ Textfield.label "New calculation name"
+                                             , Textfield.floatingLabel
+                                             , Textfield.text_
+                                             , Options.onInput (\s -> Internal (UpdateCalculationName s))
+                                             ][]
+        , buttonClick model 7 "New Map" (Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName))
+        ]

@@ -53,6 +53,7 @@ type alias CalculationEditorModel = {
 type alias Model = {
     openProjects : List ProjectModel
     , allProjects : List ProjectName
+    , newProjectName : String
     , mdl : Material.Model
     , projectTab : Int
     , viewTab : Int
@@ -74,46 +75,6 @@ type Msg
 
 mdlIdxProjects = 0
 mdlIdxViews = 1
-
-emptyViewEditorModel : ViewEditorModel
-emptyViewEditorModel = {
-    viewName = Nothing
-    , viewToEdit = Nothing
-    , newViewName = ""
-    }
-
-emptyXMapEditorModel : XMapEditorModel
-emptyXMapEditorModel = {
-       xmapName = Nothing
-       , xmapType = Nothing
-       , xmapToEdit = Nothing
-       , xmapEditing = Nothing
-       , newXmapName = ""
-    }
-
-emptyCalculationEditorModel : CalculationEditorModel
-emptyCalculationEditorModel = {
-    calculationName = Nothing
-    , resultMapName = Nothing
-    , calculationFormulaText = Nothing
-    , newCalculationName = ""
-    , operationMode = Union
-    }
-
-emptyModel : Model
-emptyModel = { openProjects = []
-               , allProjects = []
-               , messages = ["Client started"]
-               , mdl =Material.model
-               , projectTab = 0
-               , viewTab = 0
-               , xmapEditorModel = emptyXMapEditorModel
-               , viewEditorModel = emptyViewEditorModel
-               , calculationEditorModel = emptyCalculationEditorModel
-               , currentProjectView = ViewsView
-               , mapsInProject = []
-               , functions = Nothing
-               }
 
 currentOpenProject : Model -> Maybe ProjectModel
 currentOpenProject model = ListX.getAt model.projectTab model.openProjects

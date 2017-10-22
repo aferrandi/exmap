@@ -7,6 +7,7 @@ import Material.Color as Color
 import Material.Layout as Layout
 
 import InternalMessageUpdate exposing (..)
+import EmptyModel exposing (emptyModel)
 import XMapTypes exposing (..)
 import Project exposing (..)
 import Views exposing (..)
