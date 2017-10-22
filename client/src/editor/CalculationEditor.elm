@@ -26,7 +26,7 @@ import WebMessages exposing (WebRequest(..))
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import Stretch exposing (..)
-import MapsExtraction exposing (xmapNameToString)
+import MapsExtraction exposing (xmapNameToString, xmapNameFromString)
 import InternalMessages exposing (..)
 
 
@@ -42,26 +42,48 @@ viewCalculationsEditor model pm = div []
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = case model.calculationEditorModel.calculationName of
-                                    Just cn -> viewEditorForCalculation model pm
+                                    Just cn -> viewEditorForCalculation model pm cn
                                     Nothing -> div [][]
 
-viewEditorForCalculation : Model -> ProjectModel -> Html Msg
-viewEditorForCalculation model pm = div []
-                                     [
-                                         titleWithIcon "Calculation " "functions" Color.Green,
-                                         Grid.grid [heightInView 60]
-                                         [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
-                                         , cell 4 4 2 [] [
-                                                     div [] [resultMapNameText model],
-                                                     div [] [operationNameChoice model],
-                                                     div [] [calculationTextArea model]
-                                                     ]
+viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
+viewEditorForCalculation model pm cn =
+    div []
+         [
+             titleWithIcon ("Calculation " ++ cn) "functions" Color.Green,
+             Grid.grid []
+             [ cell 4 4 2 [] [resultMapNameText model]
+             , cell 2 3 1 [ ]  [operationNameChoice model]
+             ],
+             Grid.grid [heightInView 50]
+             [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
+             , cell 4 4 2 [] [calculationTextArea model]
+             , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
+             ],
+             Grid.grid [ Grid.noSpacing]
+                  [ cell 1 4 3 [] [ ]
+                  , cell 2 4 3 [] [ ]
+                  , cell 1 4 2 [] [ storeButton model pm  ]
+             ]
+          ]
 
-                                         , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
-                                      ]
-                                      ]
 
+storeButton : Model -> ProjectModel -> Html Msg
+storeButton model pm = storeCalculation pm model.calculationEditorModel |> buttonClick model 10 "Store"
 
+storeCalculation : ProjectModel -> CalculationEditorModel -> Msg
+storeCalculation pm cm = case cm.calculationName of
+    Just cn -> case cm.calculationFormulaText of
+        Just ft -> case cm.resultMapName of
+            Just rns -> case xmapNameFromString rns of
+                Ok rn -> Send (WRStoreCalculation pm.project.projectName {
+                                calculationName = cn,
+                                resultName = rn,
+                                formulaText = ft,
+                                operationMode = cm.operationMode})
+                Err e -> Internal (ShowMessage e)
+            Nothing -> Internal (ShowMessage "Please enter a result map name")
+        Nothing -> Internal (ShowMessage "Please enter a formula")
+    Nothing -> Internal (ShowMessage "Please enter a calculation name")
 
 calculationsInProjectList : Model -> ProjectModel -> Html Msg
 calculationsInProjectList model pm =
