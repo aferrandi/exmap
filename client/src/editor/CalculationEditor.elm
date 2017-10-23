@@ -49,7 +49,7 @@ viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
          [
-             titleWithIcon ("Calculation " ++ cn) "functions" Color.Green,
+             titleWithIcon ("Editing calculation: " ++ cn) "functions" Color.Green,
              Grid.grid []
              [ cell 4 4 2 [] [resultMapNameText model]
              , cell 2 3 1 [ ]  [operationNameChoice model]

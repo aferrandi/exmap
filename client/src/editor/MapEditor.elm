@@ -43,7 +43,7 @@ mapEditorViewForMap model pm =
     let  xmapEditorModel = model.xmapEditorModel
     in case model.xmapEditorModel.xmapName of
         Just mn -> div [] [
-               titleWithIcon ("Editing map:" ++ xmapNameToString mn) "layers" Color.DeepOrange,
+               titleWithIcon ("Editing map: " ++ xmapNameToString mn) "layers" Color.DeepOrange,
                Grid.grid [ Grid.noSpacing, heightInView 60 ]
                   [ cell 3 5 1 [] [ mapEditorTextArea model pm]
                   , cell 5 7 3 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]

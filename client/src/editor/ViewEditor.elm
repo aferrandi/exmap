@@ -38,7 +38,7 @@ viewViewsEditor model pm = div [] [
 
 viewEditorForView model pm = case model.viewEditorModel.viewName of
                                Just vn -> div [] [
-                                     titleWithIcon ("View " ++ Maybe.withDefault "" model.viewEditorModel.viewName) "view_module" Color.Pink,
+                                     titleWithIcon ("Editing view: " ++ Maybe.withDefault "" model.viewEditorModel.viewName) "view_module" Color.Pink,
                                      Grid.grid [heightInView 60]
                                      [ cell 6 10 3 [] [ viewEditorTable model.viewEditorModel.viewToEdit ]
                                      , cell 2 2 1 [ Color.background lighterGrey]  [viewEditorMapList model ]
