@@ -58,13 +58,26 @@ mapEditorViewForMap model pm =
 
 
 
+xmapTypeChoice : Model  -> Html Msg
+xmapTypeChoice  model =
+  let hasType t = model.xmapEditorModel.xmapType == t
+  in div []
+  [
+    toggle model 0 "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble)),
+    toggle model 1 "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt)),
+    toggle model 2 "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString)),
+    toggle model 3 "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+    ]
+
+
 newMapButton : Model -> Html Msg
 newMapButton model=
     let xmapEditorModel = model.xmapEditorModel
         storeNewMap = case xmapNameFromString xmapEditorModel.newXmapName of
-                          Ok mn -> Internal (NewMapWithName mn TypeDouble)
+                          Ok mn -> Internal (NewMapWithName mn xmapEditorModel.xmapType)
                           Err e -> Internal (ShowMessage e)
     in div[] [
+        xmapTypeChoice model,
         Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New map name"
                                              , Textfield.floatingLabel

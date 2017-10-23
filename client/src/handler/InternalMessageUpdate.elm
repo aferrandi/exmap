@@ -39,6 +39,7 @@ updateInternal msg model = case msg of
     AddApplicationToCalculation an -> ( appendToFormulaText model (an ++ " p"), Cmd.none)
     AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
     ChangeOperationMode om -> handleChangeOperationMode model om
+    ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
     AddItemToView row it -> handleAddItemToView model row it
 
 
@@ -61,7 +62,10 @@ handleNewViewWithName : Model -> CalculationName -> Model
 handleNewViewWithName model vn = { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn }}
 
 handleNewMapWithName : Model -> XMapName -> XMapType -> Model
-handleNewMapWithName model mn mt = { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = Just mt }}
+handleNewMapWithName model mn mt = { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt }}
+
+handleChangeMapType : Model -> XMapType -> Model
+handleChangeMapType model mt = updateXMapEditorModel model (\xm ->{ xm | xmapType = mt })
 
 handleAddItemToView : Model -> Int -> ViewItem -> (Model, Cmd Msg)
 handleAddItemToView model ri it =
@@ -95,7 +99,7 @@ appendToFormulaText model s =
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
-                             mm = Maybe.map2 textToMap xmapEditorModel.xmapType xmapEditorModel.xmapEditing
+                             mm = Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
                          in case mm of
                                    Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m })
                                    Just (Err e) -> showMessage model e

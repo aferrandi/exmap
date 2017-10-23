@@ -38,7 +38,7 @@ handleMapsLoaded model ms =
         Just m -> updateXMapEditorModel model (\xm -> { xm |
             xmapToEdit = Just m.xmap,
             xmapName = Just m.xmapName,
-            xmapType = Just (mapType m.xmap)
+            xmapType = mapType m.xmap
             })
         Nothing -> model
 

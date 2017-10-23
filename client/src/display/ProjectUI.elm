@@ -36,7 +36,7 @@ viewProjectContent : Model -> ProjectModel -> Html Msg
 viewProjectContent model pm = case model.currentProjectView of
     ViewsView -> viewViews model pm
     MapEditorView -> mapEditorView model pm
-    ViewEditorView -> viewViewEditor model pm
+    ViewEditorView -> viewViewsEditor model pm
     CalculationEditorView -> viewCalculationsEditor model pm
 
 viewCards :  Model -> ProjectModel -> Html Msg

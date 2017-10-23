@@ -28,7 +28,7 @@ type alias ProjectModel = {
 
 type alias XMapEditorModel = {
     xmapName : Maybe XMapName
-    , xmapType : Maybe XMapType
+    , xmapType : XMapType
     , xmapToEdit : Maybe XMap
     , xmapEditing : Maybe String
     , newXmapName : String

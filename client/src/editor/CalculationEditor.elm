@@ -60,8 +60,7 @@ viewEditorForCalculation model pm cn =
              , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
              ],
              Grid.grid [ Grid.noSpacing]
-                  [ cell 1 4 3 [] [ ]
-                  , cell 2 4 3 [] [ ]
+                  [ cell 3 8 6 [] [ ]
                   , cell 1 4 2 [] [ storeButton model pm  ]
              ]
           ]
@@ -142,22 +141,13 @@ resultMapNameText model = Textfield.render Mdl [8] model.mdl
                               []
 
 operationNameChoice : Model  -> Html Msg
-operationNameChoice model = div []
-  [ Toggles.radio Mdl [0] model.mdl
-      [ Toggles.value (model.calculationEditorModel.operationMode == Union)
-      , Toggles.group "operationName"
-      , Toggles.ripple
-      , Options.onToggle (Internal (ChangeOperationMode Union))
-      ]
-      [ text "Union" ]
-  , Toggles.radio Mdl [1] model.mdl
-      [ Toggles.value (model.calculationEditorModel.operationMode == Intersection)
-      , Toggles.group "operationName"
-      , Toggles.ripple
-      , Options.onToggle (Internal (ChangeOperationMode Intersection))
-      ]
-      [ text "Intersection" ]
-  ]
+operationNameChoice model =
+  let hasMode m = model.calculationEditorModel.operationMode == m
+  in div []
+  [
+    toggle model 0 "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union)),
+    toggle model 1 "Intersection" "operationName" (hasMode Intersection)  (Internal (ChangeOperationMode Intersection))
+    ]
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =

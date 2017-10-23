@@ -29,6 +29,7 @@ type InternalMsg =
   | AddApplicationToCalculation ApplicationName
   | AddOperationToCalculation OperationName
   | ChangeOperationMode OperationMode
+  | ChangeMapType XMapType
   | AddItemToView Int ViewItem
   | NewCalculationWithName CalculationName
   | NewViewWithName ViewName

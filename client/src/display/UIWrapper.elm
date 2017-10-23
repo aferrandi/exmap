@@ -7,6 +7,7 @@ import Material.Grid as Grid
 import Material.Icon as Icon
 import Material.Color as Color
 import Material.Typography as Typo
+import Material.Toggles as Toggles
 import Material.Textfield as Textfield
 import Material.Button as Button exposing (render)
 
@@ -55,3 +56,11 @@ titleWithIcon : String -> String -> Color.Hue -> Html Msg
 titleWithIcon s i c = Options.styled Html.label [ Typo.display1]
                         [ Icon.view i [Color.text (pastel c), Icon.size36], text s]
 
+toggle : Model -> Int -> String -> String -> Bool -> Msg -> Html Msg
+toggle model idx txt gp val msg = Toggles.radio Mdl [0] model.mdl
+              [ Toggles.value val
+              , Toggles.group gp
+              , Toggles.ripple
+              , Options.onToggle msg
+              ]
+              [ text txt]

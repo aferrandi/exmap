@@ -3,6 +3,7 @@ module EmptyModel exposing (..)
 import Material
 import Html exposing (Html)
 
+import XMapTypes exposing (..)
 import ProjectModel exposing (..)
 import Calculation exposing (..)
 import InternalMessages exposing (..)
@@ -18,7 +19,7 @@ emptyViewEditorModel = {
 emptyXMapEditorModel : XMapEditorModel
 emptyXMapEditorModel = {
        xmapName = Nothing
-       , xmapType = Nothing
+       , xmapType = TypeDouble
        , xmapToEdit = Nothing
        , xmapEditing = Nothing
        , newXmapName = ""
