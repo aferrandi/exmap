@@ -21,6 +21,7 @@ type InternalMsg =
   | UpdateCalculationName String
   | UpdateViewName String
   | UpdateProjectName String
+  | UpdateViewLabel String
   | ShowMessage String
   | SwitchProjectViewTo ProjectViewType
   | TextToCalculationTextArea String
@@ -34,3 +35,4 @@ type InternalMsg =
   | NewCalculationWithName CalculationName
   | NewViewWithName ViewName
   | NewMapWithName XMapName XMapType
+  | ChangeViewEditSelectedRow Int

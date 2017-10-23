@@ -28,6 +28,7 @@ updateInternal msg model = case msg of
     UpdateCalculationName  s -> ( handleUpdateCalculationName model s, Cmd.none)
     UpdateViewName  s -> ( handleUpdateViewName model s, Cmd.none)
     UpdateProjectName  s -> ( handleUpdateProjectName model s, Cmd.none)
+    UpdateViewLabel s  -> ( handleUpdateViewLabel model s, Cmd.none)
     NewCalculationWithName cn -> ( handleNewCalculationWithName model cn , Cmd.none)
     NewViewWithName vn -> ( handleNewViewWithName model vn , Cmd.none)
     NewMapWithName mn mt  -> ( handleNewMapWithName model mn mt , Cmd.none)
@@ -41,19 +42,26 @@ updateInternal msg model = case msg of
     ChangeOperationMode om -> handleChangeOperationMode model om
     ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
     AddItemToView row it -> handleAddItemToView model row it
+    ChangeViewEditSelectedRow row -> ( handleChangeViewEditSelectedRow model row, Cmd.none)
 
+
+handleChangeViewEditSelectedRow : Model -> Int -> Model
+handleChangeViewEditSelectedRow model row = updateViewEditorModel model (\vm -> { vm | rowToAddTo = row })
 
 handleUpdateCalculationName : Model -> String -> Model
 handleUpdateCalculationName model s = updateCalculationEditorModel model (\cm ->{ cm | newCalculationName = s })
 
 handleUpdateViewName : Model -> String -> Model
-handleUpdateViewName model s = updateViewEditorModel model (\vm ->{ vm | newViewName = s })
+handleUpdateViewName model s = updateViewEditorModel model (\vm -> { vm | newViewName = s })
 
 handleUpdateMapName : Model -> String -> Model
-handleUpdateMapName model s = updateXMapEditorModel model (\xm ->{ xm | newXmapName = s })
+handleUpdateMapName model s = updateXMapEditorModel model (\xm -> { xm | newXmapName = s })
 
 handleUpdateProjectName : Model -> String -> Model
 handleUpdateProjectName model s = { model | newProjectName = s }
+
+handleUpdateViewLabel : Model -> String -> Model
+handleUpdateViewLabel model s = updateViewEditorModel model (\vm ->{ vm | labelEditing = s })
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn = { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn }}

@@ -14,7 +14,9 @@ import Material.Textfield as Textfield
 import Material.Menu as Menu exposing (Item)
 import Material.Grid as Grid exposing (Device(..))
 import Material.Options as Options exposing (css)
+import Material.Toggles as Toggles
 import List.Extra as ListX exposing (transpose)
+import Set as Set
 
 import Project exposing (..)
 import Views exposing (..)
@@ -40,8 +42,8 @@ viewEditorForView model pm = case model.viewEditorModel.viewName of
                                Just vn -> div [] [
                                      titleWithIcon ("Editing view: " ++ Maybe.withDefault "" model.viewEditorModel.viewName) "view_module" Color.Pink,
                                      Grid.grid [heightInView 60]
-                                     [ cell 6 10 3 [] [ viewEditorTable model.viewEditorModel.viewToEdit ]
-                                     , cell 2 2 1 [ Color.background lighterGrey]  [viewEditorMapList model ]
+                                     [ cell 6 10 3 [] [ viewEditorTable model model.viewEditorModel.viewToEdit ]
+                                     , cell 2 2 1 [ ]  [viewEditorMapList model, addLabelButton model ]
                                      ],
                                      Grid.grid [ Grid.noSpacing]
                                           [ cell 3 8 6 [] [ ]
@@ -71,23 +73,34 @@ viewsList p =
                                [ Lists.avatarIcon "list" [], text vn ]                           ]
     in Lists.ul [heightInView 55, Color.background lighterGrey] (List.map listItem p.viewNames)
 
-viewEditorTable : Maybe View -> Html Msg
-viewEditorTable mv = case mv of
+viewEditorTable : Model -> Maybe View -> Html Msg
+viewEditorTable model mv = case mv of
                         Just v -> Table.table []
-                            [ viewRows v ]
+                            [ viewRows model v ]
                         Nothing -> Table.table []
                             [ Table.tbody [] [] ]
-viewRows : View -> Html Msg
-viewRows v = let rows = List.map viewRowToTableCells v.rows |> List.map (Table.tr [])
-             in Table.tbody [] rows
+viewRows : Model -> View -> Html Msg
+viewRows model v = let rows = ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewRowToTableCells model) |> List.map (Table.tr [])
+                   in Table.tbody [] rows
+
+viewChoice model rowI =
+    Table.td []
+      [
+        Toggles.radio Mdl [0] model.mdl
+        [ Toggles.value (model.viewEditorModel.rowToAddTo == rowI)
+          , Toggles.group "tableGroup"
+          , Toggles.ripple
+          , Options.onToggle (Internal (ChangeViewEditSelectedRow rowI))
+          ] []
+      ]
 
 viewCell : ViewItem -> Html Msg
 viewCell i = case i of
                 MapItem mn -> Table.td [Color.background (pastel Color.DeepOrange)] [ text (xmapNameToString mn) ]
                 LabelItem l -> Table.td [Color.background (pastel Color.LightBlue)] [ text l ]
 
-viewRowToTableCells : ViewRow -> List (Html Msg)
-viewRowToTableCells (ViewRow row) = List.map viewCell row
+viewRowToTableCells : Model -> (Int, ViewRow) -> List (Html Msg)
+viewRowToTableCells model (rowIdx,  (ViewRow row)) = (viewChoice model rowIdx) :: (List.map viewCell row)
 
 viewEditorMapList : Model -> Html Msg
 viewEditorMapList model =
@@ -96,7 +109,7 @@ viewEditorMapList model =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddItemToView 0 (MapItem mn))) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [] (List.map listItem model.mapsInProject)
+    in Lists.ul [Color.background lighterGrey, heightInView 50] (List.map listItem model.mapsInProject)
 
 newViewButton : Model -> Html Msg
 newViewButton model =
@@ -109,5 +122,18 @@ newViewButton model =
                                              , Options.onInput (\s -> Internal (UpdateViewName s))
                                              ][]
         , buttonClick model 7 "New view" newViewMessage
+        ]
+
+addLabelButton : Model -> Html Msg
+addLabelButton model =
+    let newViewMessage = (Internal (AddItemToView 0 (LabelItem model.viewEditorModel.labelEditing)))
+    in div []
+        [ Textfield.render Mdl [0] model.mdl
+                                             [ Textfield.label "Label name"
+                                             , Textfield.floatingLabel
+                                             , Textfield.text_
+                                             , Options.onInput (\s -> Internal (UpdateViewLabel s))
+                                             ][]
+        , buttonClick model 1 "Add label" newViewMessage
         ]
 

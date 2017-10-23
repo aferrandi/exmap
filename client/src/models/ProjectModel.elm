@@ -38,6 +38,8 @@ type alias ViewEditorModel = {
     viewName : Maybe ViewName
     , viewToEdit : Maybe View
     , newViewName : ViewName
+    , labelEditing : String
+    , rowToAddTo : Int
     }
 
 type alias CalculationEditorModel = {

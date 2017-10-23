@@ -14,6 +14,8 @@ emptyViewEditorModel = {
     viewName = Nothing
     , viewToEdit = Nothing
     , newViewName = ""
+    , labelEditing = ""
+    , rowToAddTo = 0
     }
 
 emptyXMapEditorModel : XMapEditorModel
