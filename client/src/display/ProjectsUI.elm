@@ -13,6 +13,8 @@ import Material.Grid as Grid
 import Material.Dialog as Dialog
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (css)
+import Material.Toggles as Toggles
+import Material.Textfield as Textfield
 import List.Extra exposing (getAt)
 
 import Stretch exposing (..)
@@ -22,6 +24,7 @@ import ProjectUI exposing (..)
 import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
 import Material.Layout as Layout
+import InternalMessages exposing (..)
 
 layoutHeader : Model -> Html Msg
 layoutHeader model =
@@ -50,14 +53,14 @@ viewProjectsContent : Model -> Html Msg
 viewProjectsContent model =
             div [] [
                         Grid.grid [heightInView 80]
-                           [ cell 2 2 1 [Color.background lightGrey] [viewAllProjectsList model]
+                           [ cell 2 2 1 [] [viewAllProjectsList model, newProjectButton model]
                            , cell 6 10 3 [] [ viewProjectAt model ]
                    ]
                    , fixedDiv [viewMessages model]
                ]
 
 viewAllProjectsList : Model -> Html Msg
-viewAllProjectsList model = Lists.ul [] (List.map viewAllProjectsItem model.allProjects)
+viewAllProjectsList model = Lists.ul [heightInView 65, Color.background lightGrey] (List.map viewAllProjectsItem model.allProjects)
 
 
 
@@ -67,17 +70,6 @@ viewAllProjectsItem pn = Lists.li []
                                 [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
                                 [ Lists.avatarIcon "folder" [], text pn ]
                             ]
-
-
-projectTabHeader : ProjectModel -> Tabs.Label Msg
-projectTabHeader pm = Tabs.label
-               [ Options.center]
-               [ Icon.i "folder"
-               , Options.span [ css "width" "4px" ] []
-               , text pm.project.projectName
-               ]
-
-
 
 viewProjectAt : Model -> Html Msg
 viewProjectAt model = case currentOpenProject model of
@@ -93,3 +85,19 @@ viewMessagesItem msg = Lists.li []
 
 viewMessages : Model -> Html Msg
 viewMessages model = Lists.ul [] (List.map viewMessagesItem model.messages)
+
+newProjectButton : Model -> Html Msg
+newProjectButton model =
+    let newProjectMessage = Send (WRNewProject {
+                                    projectName= model.newProjectName,
+                                    calculations = [],
+                                    viewNames = [],
+                                    sources = []})
+    in div []
+        [ Textfield.render Mdl [9] model.mdl
+                                             [ Textfield.label "New project name"
+                                             , Textfield.floatingLabel
+                                             , Textfield.text_
+                                             , Options.onInput (\s -> Internal (UpdateProjectName s))
+                                             ][]
+        , buttonClick model 7 "Create and store project" newProjectMessage]
