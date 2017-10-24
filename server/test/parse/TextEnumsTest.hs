@@ -13,6 +13,6 @@ import Applications
 
 enumValues_ApplicationName_containNegate = TestCase (assertBool "contain negate in application names" (elem Negate enumValues) )
 
-enumWithTextCI_ApplicationName_containNegate = TestCase (assertEqual "contains negate in application names texts" (Just Negate) (enumWithTextCI enumValues (T.pack "negate")))
+enumWithTextCI_ApplicationName_containNegate = TestCase (assertEqual "contains negate in application names texts" (Just Negate) (enumWithTextCaseInsensitive enumValues (T.pack "negate")))
 
-enumWithTextCI_ApplicationName_notContainNegate = TestCase (assertEqual "does not contain nogate in application names texts" Nothing (enumWithTextCI (enumValues :: [ApplicationName]) (T.pack "nogate") ))
+enumWithTextCI_ApplicationName_notContainNegate = TestCase (assertEqual "does not contain nogate in application names texts" Nothing (enumWithTextCaseInsensitive (enumValues :: [ApplicationName]) (T.pack "nogate") ))

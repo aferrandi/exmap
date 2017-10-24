@@ -1,4 +1,4 @@
-+module FormulaParserTest where
+module FormulaParserTest where
 
 import Test.HUnit
 import Test.Framework
@@ -15,26 +15,27 @@ import FormulaParser
 import XMapTypes
 import Operations as Ops
 import Applications as Apps
+import Calculation as Calculation
 
 import TestTypes
 
 parseFormula_formulaWithMap_map = TestCase (assertEqual "parse formula with map" (Right res) parsed)
-    where parsed = parseFormula (T.pack "one/map")
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "one/map")
           res = XFMap (mapName ["one", "map"])
 
 parseFormula_formulaApplication_application = TestCase (assertEqual "parse application" (Right res) parsed)
-    where parsed = parseFormula (T.pack "negate one/map")
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "negate one/map")
           res = XFApplication Negate $ XFMap (mapName ["one", "map"])
 
 parseFormula_formulaWrongApplicationName_error = TestCase (assertEqual "parse application with wrong name" (Left "endOfInput") parsed)
-    where parsed = parseFormula (T.pack "nogate one/map")
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "nogate one/map")
 
 parseFormula_formulaOperation_operation = TestCase (assertEqual "parse operation" (Right res) parsed)
-    where parsed = parseFormula (T.pack "subtract one/map two")
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "subtract one/map two")
           res = XFOperation Subtract (XFMap (mapName ["one", "map"])) (XFMap (mapName["two"]))
 
 parseFormula_complex_operation = TestCase (assertEqual "parse operation" (Right res) parsed)
-    where parsed = parseFormula (T.pack "subtract (negate one/map) two")
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "subtract (negate one/map) two")
           res = XFOperation Subtract (XFApplication Negate $ XFMap (mapName ["one", "map"])) (XFMap (mapName ["two"]))
 
 
