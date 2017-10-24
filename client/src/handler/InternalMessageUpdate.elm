@@ -67,8 +67,11 @@ handleUpdateViewLabel model s = updateViewEditorModel model (\vm ->{ vm | labelE
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn = { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn }}
 
+emptyRow : ViewRow
+emptyRow = ViewRow []
+
 handleNewViewWithName : Model -> CalculationName -> Model
-handleNewViewWithName model vn = { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn }}
+handleNewViewWithName model vn = { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [emptyRow]} }}
 
 handleNewMapWithName : Model -> XMapName -> XMapType -> Model
 handleNewMapWithName model mn mt = { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt }}
@@ -78,8 +81,7 @@ handleChangeMapType model mt = updateXMapEditorModel model (\xm ->{ xm | xmapTyp
 
 handleAddRowToView: Model -> Model
 handleAddRowToView model =
-    let emptyRow = ViewRow []
-        updateView mv = case mv of
+    let updateView mv = case mv of
                         Just v ->  { v | rows = v.rows ++ [emptyRow]}
                         Nothing -> {viewName = "", rows = [emptyRow] }
     in updateViewEditorModel model (\vm -> {vm | viewToEdit = Just (updateView vm.viewToEdit) })

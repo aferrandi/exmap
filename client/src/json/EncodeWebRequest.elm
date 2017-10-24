@@ -57,7 +57,7 @@ encodeWebRequest ev = case ev of
     WRStoreView pn v -> object
             [ ("type", string "storeView")
             , ("projectName", string pn)
-            , ("map", encodeView v)
+            , ("view", encodeView v)
             ]
     WRLoadCalculation pn cn -> object
             [ ("type", string "loadCalculation")
