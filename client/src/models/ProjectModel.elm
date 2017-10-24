@@ -50,8 +50,6 @@ type alias CalculationEditorModel = {
     , newCalculationName : CalculationName
     }
 
-
-
 type alias Model = {
     openProjects : List ProjectModel
     , allProjects : List ProjectName

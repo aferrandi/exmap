@@ -41,12 +41,13 @@ updateInternal msg model = case msg of
     AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
     ChangeOperationMode om -> handleChangeOperationMode model om
     ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
-    AddItemToView row it -> handleAddItemToView model row it
+    AddItemToView row it -> (handleAddItemToView model row it, Cmd.none)
+    AddRowToView -> (handleAddRowToView model, Cmd.none)
     ChangeViewEditSelectedRow row -> ( handleChangeViewEditSelectedRow model row, Cmd.none)
 
 
 handleChangeViewEditSelectedRow : Model -> Int -> Model
-handleChangeViewEditSelectedRow model row = updateViewEditorModel model (\vm -> { vm | rowToAddTo = row })
+handleChangeViewEditSelectedRow model ri = updateViewEditorModel model (\vm -> { vm | rowToAddTo = ri })
 
 handleUpdateCalculationName : Model -> String -> Model
 handleUpdateCalculationName model s = updateCalculationEditorModel model (\cm ->{ cm | newCalculationName = s })
@@ -75,15 +76,20 @@ handleNewMapWithName model mn mt = { model | xmapEditorModel = { emptyXMapEditor
 handleChangeMapType : Model -> XMapType -> Model
 handleChangeMapType model mt = updateXMapEditorModel model (\xm ->{ xm | xmapType = mt })
 
-handleAddItemToView : Model -> Int -> ViewItem -> (Model, Cmd Msg)
+handleAddRowToView: Model -> Model
+handleAddRowToView model =
+    let emptyRow = ViewRow []
+        updateView mv = case mv of
+                        Just v ->  { v | rows = v.rows ++ [emptyRow]}
+                        Nothing -> {viewName = "", rows = [emptyRow] }
+    in updateViewEditorModel model (\vm -> {vm | viewToEdit = Just (updateView vm.viewToEdit) })
+
+handleAddItemToView : Model -> Int -> ViewItem -> Model
 handleAddItemToView model ri it =
-    let updateRow : ViewRow -> ViewRow
-        updateRow (ViewRow r) = List.append r [it] |> ViewRow
-        updateRows : List ViewRow -> List ViewRow
+    let updateRow (ViewRow r) = List.append r [it] |> ViewRow
         updateRows rs = ListX.updateAt ri updateRow rs |> Maybe.withDefault rs
-        updateView : Maybe View -> Maybe View
         updateView mv = Maybe.map (\v -> {v | rows = updateRows v.rows}) mv
-    in ( updateViewEditorModel model (\vm -> {vm | viewToEdit = updateView vm.viewToEdit }), Cmd.none)
+    in updateViewEditorModel model (\vm -> {vm | viewToEdit = updateView vm.viewToEdit })
 
 handleChangeOperationMode : Model -> OperationMode -> (Model, Cmd Msg)
 handleChangeOperationMode model om = ( updateCalculationEditorModel model (\cm ->{  cm | operationMode = om }), Cmd.none)

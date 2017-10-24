@@ -36,3 +36,4 @@ type InternalMsg =
   | NewViewWithName ViewName
   | NewMapWithName XMapName XMapType
   | ChangeViewEditSelectedRow Int
+  | AddRowToView

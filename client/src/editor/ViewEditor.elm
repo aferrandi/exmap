@@ -46,8 +46,9 @@ viewEditorForView model pm = case model.viewEditorModel.viewName of
                                      , cell 2 2 1 [ ]  [viewEditorMapList model, addLabelButton model ]
                                      ],
                                      Grid.grid [ Grid.noSpacing]
-                                          [ cell 3 8 6 [] [ ]
-                                          , cell 1 4 2 [] [ storeButton model pm  ]
+                                          [ cell 2 6 4 [] [ ]
+                                          , cell 1 3 2 [] [ addRowButton model ]
+                                          , cell 1 3 2 [] [ storeButton model pm  ]
                                      ]
                                     ]
                                Nothing -> div [] []
@@ -106,10 +107,10 @@ viewEditorMapList : Model -> Html Msg
 viewEditorMapList model =
     let listItem mn = Lists.li []
                            [ Lists.content
-                               [ Options.attribute <| Html.Events.onClick (Internal (AddItemToView 0 (MapItem mn))) ]
+                               [ Options.attribute <| Html.Events.onClick (Internal (AddItemToView model.viewEditorModel.rowToAddTo (MapItem mn))) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [Color.background lighterGrey, heightInView 50] (List.map listItem model.mapsInProject)
+    in Lists.ul [Color.background lighterGrey, heightInView 40] (List.map listItem model.mapsInProject)
 
 newViewButton : Model -> Html Msg
 newViewButton model =
@@ -126,7 +127,8 @@ newViewButton model =
 
 addLabelButton : Model -> Html Msg
 addLabelButton model =
-    let newViewMessage = (Internal (AddItemToView 0 (LabelItem model.viewEditorModel.labelEditing)))
+    let viewEditorModel = model.viewEditorModel
+        newViewMessage = (Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing)))
     in div []
         [ Textfield.render Mdl [0] model.mdl
                                              [ Textfield.label "Label name"
@@ -137,3 +139,5 @@ addLabelButton model =
         , buttonClick model 1 "Add label" newViewMessage
         ]
 
+addRowButton : Model -> Html Msg
+addRowButton model = buttonClick model 1 "Add row" (Internal AddRowToView)
