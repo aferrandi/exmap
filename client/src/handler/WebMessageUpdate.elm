@@ -20,6 +20,7 @@ updateEvent evt model = case evt of
                             WEError e -> (showMessage model ("Server Error: " ++ e), Cmd.none)
                             WEInfo i -> (showMessage model ("Server Info: " ++ i), Cmd.none)
                             WEProjectContent p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
+                            WEProjectStored p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
                             WEViewStatus pn v ms -> (updateOpenProjects model (updateOpenViews  pn v ms), Cmd.none)
                             WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)

@@ -21,7 +21,7 @@ webEventDecoder =
                             "projectContent" -> decode WEProjectContent
                                                 |> required "project" projectDecoder
                             "projectStored" -> decode WEProjectStored
-                                                |> required "projectName" string
+                                                |> required "project" projectDecoder
                             "mapLoaded" -> decode WEMapsLoaded
                                                 |> required "projectName" string
                                                 |> required "maps"(list xNamedMapDecoder)

@@ -9,8 +9,8 @@ import Views exposing (..)
 encodeViewItem : ViewItem -> Value
 encodeViewItem i = case i of
                     MapItem mn -> object
-                          [ ("type", string "mapItem")
-                          , ("mapItem", encodeXmapName mn)
+                          [ ("type", string "map")
+                          , ("mapName", encodeXmapName mn)
                           ]
                     LabelItem l -> object
                          [ ("type", string "label")

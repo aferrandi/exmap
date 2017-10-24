@@ -25,7 +25,7 @@ type WebEvent =
         WEAllProjects AllProjects
         | WEViewChanged ProjectName ViewName (List XNamedMap)
         | WEProjectContent Project
-        | WEProjectStored ProjectName
+        | WEProjectStored Project
         | WEMapsLoaded ProjectName (List XNamedMap)
         | WEMapStored ProjectName XMapName
         | WEUnsubscribedFromView ProjectName ViewName
