@@ -28,7 +28,7 @@ data WebEvent =
     WEAllProjects AllProjects
     | WEViewChanged ProjectName ViewName [XNamedMap]
     | WEProjectContent Project
-    | WEProjectStored ProjectName
+    | WEProjectStored Project
     | WEMapsLoaded ProjectName [XNamedMap]
     | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName

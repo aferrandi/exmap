@@ -26,8 +26,8 @@ instance ToJSON WebEvent where
      toJSON (WEProjectContent p) = object [ "type" .=  T.pack "projectContent"
                                         , "project" .= p
                                         ]
-     toJSON (WEProjectStored pn) = object [ "type" .=  T.pack "projectStored"
-                                        , "projectName" .= pn
+     toJSON (WEProjectStored p) = object [ "type" .=  T.pack "projectStored"
+                                        , "project" .= p
                                         ]
      toJSON (WEMapsLoaded pn ms) = object [ "type" .=  T.pack "mapLoaded"
                                         , "projectName" .= pn

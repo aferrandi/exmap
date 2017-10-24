@@ -121,7 +121,7 @@ viewStored chan rp c v = do
 projectStored :: RuntimeProject -> WAClient -> Project -> STM()
 projectStored rp c p = do
     writeTVar (project rp) p
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEProjectStored (projectName p))
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEProjectStored p)
 
 sendDependedMapsToVIew :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToVIew chan rp c v = do
