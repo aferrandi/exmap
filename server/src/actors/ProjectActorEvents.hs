@@ -13,6 +13,7 @@ import ViewMessages
 import EventMessages
 import WebMessages
 import LoadMessages
+import StoreMessages
 import CommonChannels
 import CalculationMessages
 import Dependencies
@@ -33,15 +34,15 @@ handleEvent chan rp e = case e of
     PEMapsLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsForViewLoaded c vn ms -> atomically $ mapsForViewLoaded rp c vn ms
     PEMapsForViewLoadError c _ _ err -> atomically $ sendError ec [c] err
-    PEMapStored c m -> atomically $ mapStored rp c m
+    PEMapStored c m -> atomically $ mapStored chan rp c m
     PEMapStoreError c _ err -> atomically $ sendError ec [c] err
-    PECalculationStored c cc -> calculationStored rp c cc
+    PECalculationStored c cc -> calculationStored chan rp c cc
     PECalculationStoreError c _ err -> atomically $ sendError ec [c] err
-    PEViewStored c v -> viewStored rp c v
+    PEViewStored c v -> viewStored chan rp c v
     PEViewStoreError c _ err -> atomically $ sendError ec [c] err
     PEProjectStored c p -> atomically $ projectStored rp c p
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
-    PEViewForProjectLoaded c v -> viewForProjectLoaded c chan rp v
+    PEViewForProjectLoaded c v -> viewForProjectLoaded chan rp c v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
     PECalculationLoaded c cc -> atomically $ calculationLoaded rp c cc
     PECalculationLoadError c _ err -> atomically $ sendError ec [c] err
@@ -49,8 +50,8 @@ handleEvent chan rp e = case e of
 
 
 
-viewForProjectLoaded :: WAClient -> ProjectChan -> RuntimeProject -> View -> IO ()
-viewForProjectLoaded c chan rp v = do
+viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
+viewForProjectLoaded chan rp c v = do
      p <- atomically $ readTVar (project rp)
      vChan <- viewToChan (evtChan rp) (projectName p) v
      atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
@@ -75,21 +76,25 @@ mapsForViewLoaded rp c vn ms = do
         Just vChan -> writeTChan vChan (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
-mapStored :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
-mapStored rp c m = do
+mapStored :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapStored chan rp c m = do
     let mn = xmapName m
-    pn <- prjName rp
+    p <- readTVar (project rp)
+    let pn = projectName p
     cbm <- readTVar $ calculationChanByMap rp
     mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
+    storeProject chan rp c p
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
 
-calculationStored :: RuntimeProject -> WAClient -> Calculation -> IO ()
-calculationStored rp c cc = do
+calculationStored :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
+calculationStored chan rp c cc = do
     p <- readTVarIO $ project rp
     if elem (calculationName cc) (calculations p)
         then addCalculation rp cc
         else atomically $ updateCalculation rp c p cc
-    atomically $ sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
+    atomically $ do
+        storeProject chan rp c p
+        sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
 calculationLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
 calculationLoaded rp c cc = do
@@ -103,20 +108,20 @@ calculationLoaded rp c cc = do
     writeTChan (evtChan rp) (EMWebEvent [c] $ WECalculationLoaded pn cs)
 
 
-viewStored :: RuntimeProject -> WAClient -> View -> IO ()
-viewStored rp c v = do
+viewStored :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
+viewStored chan rp c v = do
     p <- readTVarIO $ project rp
     if elem (viewName v) (views p)
         then atomically $ updateView rp c p v
         else addView rp v
-    atomically $ sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
+    atomically $ do
+        storeProject chan rp c p
+        sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
 
 projectStored :: RuntimeProject -> WAClient -> Project -> STM()
 projectStored rp c p = do
     writeTVar (project rp) p
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEProjectStored (projectName p))
-
-
 
 sendDependedMapsToVIew :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToVIew chan rp c v = do
@@ -165,3 +170,7 @@ updateView rp c p v = do
         Just vch -> writeTChan vch (VMUpdate v)
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
+
+storeProject :: ProjectChan -> RuntimeProject -> WAClient -> Project -> STM ()
+storeProject chan rp c p = do
+    writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)

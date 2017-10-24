@@ -1,6 +1,1 @@
-{
-	"projectName": "simple",
-	"calculations": [],
-	"views": ["view1"],
-    "sources": [{ "sourceType": { "type": "fileSource" }, "sourceOfMaps": ["map1"] }]
-}
+{"calculations":[],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["map1"]}],"views":["view1"],"projectName":"simple"}
