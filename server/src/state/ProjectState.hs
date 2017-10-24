@@ -2,6 +2,8 @@ module ProjectState where
 
 import qualified Data.Map.Strict as M
 import Control.Concurrent.STM.TVar (TVar)
+import Control.Concurrent.STM (STM, readTVar)
+
 
 import ViewMessages
 import CalculationMessages
@@ -11,6 +13,7 @@ import Calculation
 import XMapTypes
 import View
 import WebClients
+import EventMessages (EventChan)
 
 type ViewChanByName = M.Map ViewName ViewChan
 type ViewChanByMap = M.Map XMapName [ViewChan]
@@ -29,5 +32,12 @@ data RuntimeProject = RuntimeProject {
     subscribedClients :: TVar [WAClient]
 }
 
+prjName :: RuntimeProject -> STM ProjectName
+prjName rp = do
+    p <- readTVar (project rp)
+    return $ projectName p
+
+evtChan :: RuntimeProject -> EventChan
+evtChan rp = eventChan $ chans rp
 
 
