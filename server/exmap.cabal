@@ -90,6 +90,7 @@ executable exmap
                      , FormulaText
                      , ProjectActorEvents
                      , ProjectActorRequests
+
 test-suite exmap-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test test/parse test/state test/formula test/build test/testtypes src/maintypes src/json src/functions src/formula src/state src/parse src/storage src/build

@@ -5,6 +5,7 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.List as L
 import qualified Data.Map.Strict as M
+import qualified Data.Maybe as B
 
 import TChans
 import ProjectState
@@ -76,25 +77,20 @@ mapsForViewLoaded rp c vn ms = do
         Just vChan -> writeTChan vChan (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
+newSource :: SourceType -> [XMapName] -> Source
+newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
+
 mapStored :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored chan rp c m = do
-    let mn = xmapName m
-    p <- readTVar (project rp)
-    let pn = projectName p
-    cbm <- readTVar $ calculationChanByMap rp
-    mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
-    storeProject chan rp c p
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
+        let mn = xmapName m
+        modifyTVar (project rp) (updateProjectWithFileMap mn)
+        p <- readTVar (project rp)
+        let pn = projectName p
+        cbm <- readTVar $ calculationChanByMap rp
+        mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
+        storeProject chan rp c
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
 
-calculationStored :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
-calculationStored chan rp c cc = do
-    p <- readTVarIO $ project rp
-    if elem (calculationName cc) (calculations p)
-        then addCalculation rp cc
-        else atomically $ updateCalculation rp c p cc
-    atomically $ do
-        storeProject chan rp c p
-        sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
 calculationLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
 calculationLoaded rp c cc = do
@@ -115,8 +111,19 @@ viewStored chan rp c v = do
         then atomically $ updateView rp c p v
         else addView rp v
     atomically $ do
-        storeProject chan rp c p
+        storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
+
+
+calculationStored :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
+calculationStored chan rp c cc = do
+    p <- readTVarIO $ project rp
+    if elem (calculationName cc) (calculations p)
+        then atomically $ updateCalculation rp c cc
+        else addCalculation rp cc
+    atomically $ do
+        storeProject chan rp c
+        sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
 projectStored :: RuntimeProject -> WAClient -> Project -> STM()
 projectStored rp c p = do
@@ -132,6 +139,14 @@ sendDependedMapsToVIew chan rp c v = do
              writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
         Nothing -> return ()
 
+updateProjectWithFileMap :: XMapName -> Project -> Project
+updateProjectWithFileMap mn p = p { sources = updateFileSources : notFileSources }
+    where isFileSources s = sourceType s == FileSource
+          notFileSources = filter (not . isFileSources) (sources p)
+          updateFileSources = B.maybe (newSource FileSource [mn]) updateFileSourcesContent findFileSources
+          findFileSources = L.find isFileSources (sources p)
+          updateFileSourcesContent s = s { sourceOfMaps = updateMaps (sourceOfMaps s)}
+          updateMaps mns = L.union mns [mn]
 
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
 sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
@@ -139,19 +154,19 @@ sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 addCalculation :: RuntimeProject -> Calculation -> IO()
 addCalculation rp cc = do
     let cn = calculationName cc
-    atomically $ modifyTVar (project rp) (\p -> p { calculations = cn : (calculations p)} )
+    atomically $ modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
     cch <- calculationToChan cc
     atomically $ modifyTVar (calculationChanByName rp)  (M.insert cn cch)
     atomically $ writeTChan cch (CMUpdateCalculation cc)
 
-updateCalculation :: RuntimeProject -> WAClient -> Project -> Calculation -> STM()
-updateCalculation rp c p cc = do
+updateCalculation :: RuntimeProject -> WAClient -> Calculation -> STM()
+updateCalculation rp c cc = do
     let cn = calculationName cc
     cbn <- readTVar $ calculationChanByName rp
+    pn <- prjName rp
     case M.lookup cn cbn of
         Just cch -> writeTChan cch (CMUpdateCalculation cc)
-        Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show (projectName p))
-
+        Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
 
 addView :: RuntimeProject -> View -> IO()
 addView rp v = do
@@ -159,7 +174,7 @@ addView rp v = do
     atomically $ modifyTVar (project rp) (\p -> p { views = vn : views p })
     pn <- atomically $ prjName rp
     vch <- viewToChan (evtChan rp) pn v
-    atomically $ modifyTVar (viewChanByName rp) (\vbn  -> M.insert vn vch vbn )
+    atomically $ modifyTVar (viewChanByName rp) (M.insert vn vch)
     atomically $ writeTChan vch (VMUpdate v)
 
 updateView :: RuntimeProject -> WAClient -> Project -> View -> STM()
@@ -171,6 +186,7 @@ updateView rp c p v = do
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
 
-storeProject :: ProjectChan -> RuntimeProject -> WAClient -> Project -> STM ()
-storeProject chan rp c p = do
+storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
+storeProject chan rp c = do
+    p <- readTVar $ project rp
     writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
