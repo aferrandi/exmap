@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 module ProjectActorEvents where
 
 import Control.Concurrent.STM.TChan

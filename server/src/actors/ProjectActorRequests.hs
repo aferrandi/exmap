@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 module ProjectActorRequests where
 
 import Control.Concurrent.STM.TChan
@@ -24,7 +25,7 @@ import FormulaParser
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
     PRSubscribeToProject c -> subscribeToProject c rp
-    PRUnsubscribeFromProject c -> unsubscribeFromProject c rp
+    PRUnsubscribeFromProject c -> removeSubscriber c rp
     PRSubscribeToView c vn -> subscribeToView chan rp c vn
     PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
     PRMapsInProject c -> mapsInProject rp c
@@ -49,11 +50,11 @@ storeMap c chan rp m = do
 subscribeToProject :: WAClient -> RuntimeProject -> STM()
 subscribeToProject c rp = do
     p <- readTVar $ project rp
-    modifyTVar (subscribedClients rp) (\cs -> c : cs)
+    addSubscriber rp c
     writeTChan (evtChan rp) (EMWebEvent [c] (WEProjectContent p))
 
-unsubscribeFromProject :: WAClient -> RuntimeProject -> STM()
-unsubscribeFromProject c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
+removeSubscriber :: WAClient -> RuntimeProject -> STM()
+removeSubscriber c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
     where notSameClient ci = ci /= c
 
 mapsInProject :: RuntimeProject -> WAClient -> STM ()
@@ -115,3 +116,7 @@ loadView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
 loadView chan rp c vn = do
     pn <- prjName rp
     writeTChan (loadChan $ chans rp) $ LMLoadView chan c pn vn
+
+addSubscriber ::RuntimeProject -> WAClient -> STM ()
+addSubscriber rp c= modifyTVar (subscribedClients rp) (\cs -> c : cs)
+

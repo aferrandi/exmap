@@ -26,11 +26,13 @@ systemToRuntime rt ps lch  = do
     emptyByName <- newTVarIO psMap
     emptyByMapName <- newTVarIO M.empty
     chs <- buildChans rt lch
+    tsc <- newTVarIO []
     return RuntimeSystem {
         projectByName = emptyByName,
         projectByMapName = emptyByMapName,
         chans = chs,
-        root = rt
+        root = rt,
+        subscribedClients = tsc
     }
 
 buildChans :: FilePath -> LogChan -> IO CommonChans

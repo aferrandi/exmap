@@ -1,8 +1,10 @@
 module Store where
 
 import Data.Aeson
+import System.Directory
 import Control.Exception (try)
 import qualified Data.ByteString.Lazy as B
+import System.FilePath (dropFileName)
 
 import Paths
 import XMapTypes
@@ -29,6 +31,7 @@ storeAvailableProjects root ap = do
 storeProject :: FilePath -> Project -> IO (Maybe Error)
 storeProject root pr = do
     let path = projectPath root (projectName pr)
+    createDirectoryIfMissing False (dropFileName path)
     tryWriteFile path (encode pr)
 
 storeXMap :: FilePath -> ProjectName -> XNamedMap -> IO (Maybe Error)

@@ -29,6 +29,7 @@ executable exmap
                      , aeson
                      , unordered-containers
                      , filepath
+                     , directory
                      , bytestring
                      , stm
                      , base

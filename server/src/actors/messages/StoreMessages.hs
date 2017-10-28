@@ -13,6 +13,7 @@ import XMapTypes
 data StoreMessage =
                   StMStoreNewProject SystemChan WAClient Project
                   | StMStoreExistingProject ProjectChan WAClient Project
+                  | StMStoreAllProjects SystemChan WAClient AllProjects
                   | StMStoreMap ProjectChan WAClient ProjectName XNamedMap
                   | StMStoreCalculation ProjectChan WAClient ProjectName Calculation
                   | StMStoreView ProjectChan WAClient ProjectName View

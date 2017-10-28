@@ -25,6 +25,9 @@ actorStore root chan = loop
                 StMStoreExistingProject source c p -> do
                     storeExistingProjectInActor root source c p
                     loop
+                StMStoreAllProjects source c ap -> do
+                    storeAllProjectsInActor root source c ap
+                    loop
                 StMStoreMap source c pn m -> do
                     storeMapInActor root source c pn m
                     loop
@@ -39,16 +42,23 @@ actorStore root chan = loop
 storeNewProjectInActor :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
 storeNewProjectInActor root source c p = do
        mp <- storeProject root p
-       case mp of
-           Nothing -> atomically $ writeTChan source (SMEvent $ SEProjectStored c p)
-           Just err -> atomically $ writeTChan source (SMEvent $ SEProjectStoreError c p err)
+       atomically $ case mp of
+           Nothing -> writeTChan source (SMEvent $ SEProjectStored c p)
+           Just err -> writeTChan source (SMEvent $ SEProjectStoreError c p err)
+
+storeAllProjectsInActor :: FilePath -> SystemChan -> WAClient -> AllProjects -> IO ()
+storeAllProjectsInActor root source c ap = do
+    mp <- storeAvailableProjects root ap
+    case mp of
+       Nothing -> atomically $ writeTChan source (SMEvent $ SEAllProjectsStored c ap)
+       Just err -> atomically $ writeTChan source (SMEvent $ SEAllProjectsStoreError c ap err)
 
 storeExistingProjectInActor :: FilePath -> ProjectChan -> WAClient -> Project -> IO ()
 storeExistingProjectInActor root source c p = do
-       mp <- storeProject root p
-       case mp of
-           Nothing -> atomically $ writeTChan source (PMEvent $ PEProjectStored c p)
-           Just err -> atomically $ writeTChan source (PMEvent $ PEProjectStoreError c p err)
+   mp <- storeProject root p
+   case mp of
+       Nothing -> atomically $ writeTChan source (PMEvent $ PEProjectStored c p)
+       Just err -> atomically $ writeTChan source (PMEvent $ PEProjectStoreError c p err)
 
 
 storeMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XNamedMap ->  IO ()

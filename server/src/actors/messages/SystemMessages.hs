@@ -31,6 +31,8 @@ data SystemEvent = SEProjectLoaded WAClient Project [Calculation]
                     | SEProjectLoadError WAClient ProjectName Error
                     | SEProjectStored WAClient Project
                     | SEProjectStoreError WAClient Project Error
+                    | SEAllProjectsStored WAClient AllProjects
+                    | SEAllProjectsStoreError WAClient AllProjects Error
     deriving (Show, Eq)
 
 data SystemMessage = SMRequest SystemRequest
