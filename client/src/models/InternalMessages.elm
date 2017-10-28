@@ -5,17 +5,17 @@ import Project exposing (..)
 import Views exposing (..)
 import Calculation exposing (..)
 
-type ProjectViewType =
-    ViewsView
-    | MapEditorView
-    | ViewEditorView
-    | CalculationEditorView
+type ProjectFormType =
+    ViewsForm
+    | MapEditorForm
+    | ViewEditorForm
+    | CalculationEditorForm
 
 type InternalMsg =
-  SelectProjectTab Int
-  | SelectViewTab Int
-  | MapToTextArea
+  MapToTextArea
   | MapToTable
+  | OpenProject ProjectName
+  | OpenView ViewName
   | TextToMapTextArea String
   | UpdateMapName String
   | UpdateCalculationName String
@@ -23,7 +23,7 @@ type InternalMsg =
   | UpdateProjectName String
   | UpdateViewLabel String
   | ShowMessage String
-  | SwitchProjectViewTo ProjectViewType
+  | SwitchProjectViewTo ProjectFormType
   | TextToCalculationTextArea String
   | TextToResultNameText String
   | AddMapToCalculation XMapName

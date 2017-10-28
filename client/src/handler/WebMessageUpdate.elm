@@ -53,6 +53,7 @@ handleCalculationLoaded : Model -> CalculationSource -> Model
 handleCalculationLoaded model cs =
     updateCalculationEditorModel model (\cm -> { cm |
                                                     calculationName = Just cs.calculationName,
+                                                    resultMapName = Just (xmapNameToString cs.resultName),
                                                     calculationFormulaText = Just cs.formulaText
                                                     })
 

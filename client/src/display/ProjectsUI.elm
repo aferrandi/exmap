@@ -15,7 +15,7 @@ import Material.Elevation as Elevation
 import Material.Options as Options exposing (css)
 import Material.Toggles as Toggles
 import Material.Textfield as Textfield
-import List.Extra exposing (getAt)
+import List.Extra as ListX
 
 import Stretch exposing (..)
 import ProjectModel exposing (..)
@@ -54,7 +54,7 @@ viewProjectsContent model =
             div [] [
                         Grid.grid [heightInView 80]
                            [ cell 2 2 1 [] [viewAllProjectsList model, newProjectButton model]
-                           , cell 6 10 3 [] [ viewProjectAt model ]
+                           , cell 6 10 3 [] [ viewCurrentProject model ]
                    ]
                    , fixedDiv [viewMessages model]
                ]
@@ -67,15 +67,14 @@ viewAllProjectsList model = Lists.ul [heightInView 65, Color.background lightGre
 viewAllProjectsItem : ProjectName -> Html Msg
 viewAllProjectsItem pn = Lists.li []
                             [ Lists.content
-                                [ Options.attribute <| Html.Events.onClick (Send (WRSubscribeToProject pn)) ]
+                                [ Options.attribute <| Html.Events.onClick (Internal (OpenProject pn)) ]
                                 [ Lists.avatarIcon "folder" [], text pn ]
                             ]
 
-viewProjectAt : Model -> Html Msg
-viewProjectAt model = case currentOpenProject model of
-                    Just pm -> viewProject model pm
-                    Nothing -> div [][]
-
+viewCurrentProject : Model -> Html Msg
+viewCurrentProject model = case  currentProjectModel model  of
+                                Just pm -> viewProject model pm
+                                Nothing -> div [][]
 
 viewMessagesItem : Error -> Html Msg
 viewMessagesItem msg = Lists.li []

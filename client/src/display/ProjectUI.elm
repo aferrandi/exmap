@@ -33,24 +33,24 @@ viewProject model pm = Grid.grid [heightInView 75]
                                  ]
 
 viewProjectContent : Model -> ProjectModel -> Html Msg
-viewProjectContent model pm = case model.currentProjectView of
-    ViewsView -> viewViews model pm
-    MapEditorView -> mapEditorView model pm
-    ViewEditorView -> viewViewsEditor model pm
-    CalculationEditorView -> viewCalculationsEditor model pm
+viewProjectContent model pm = case model.currentProjectForm of
+    ViewsForm -> viewViews model pm
+    MapEditorForm -> mapEditorView model pm
+    ViewEditorForm  -> viewViewsEditor model pm
+    CalculationEditorForm  -> viewCalculationsEditor model pm
 
 viewCards :  Model -> ProjectModel -> Html Msg
 viewCards model pm = stretchDiv [
-    viewCard model "Views" "Live views" 0 Color.LightBlue ViewsView
-    , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorView
-    , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorView
-    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green CalculationEditorView
+    viewCard model "Views" "Live views" 0 Color.LightBlue ViewsForm
+    , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorForm
+    , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorForm
+    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green CalculationEditorForm
     ]
 
 white : Options.Property c m
 white = Color.text Color.white
 
-viewCard : Model -> String -> String -> Int -> Color.Hue -> ProjectViewType -> Html Msg
+viewCard : Model -> String -> String -> Int -> Color.Hue -> ProjectFormType -> Html Msg
 viewCard model title cardText i hue viewType =  Card.view
           [ Color.background (pastel hue)
           , css "width" "192px"

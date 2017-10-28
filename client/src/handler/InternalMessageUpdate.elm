@@ -1,6 +1,7 @@
 module InternalMessageUpdate exposing (updateInternal)
 
 import List.Extra as ListX
+import Maybe as Maybe
 
 import ProjectModel exposing (..)
 
@@ -15,14 +16,15 @@ import WebMessages exposing (..)
 import InternalMessages exposing (..)
 import Calculation exposing (..)
 import EmptyModel exposing (..)
+import Project exposing (..)
 
 
 updateInternal : InternalMsg -> Model -> (Model, Cmd Msg)
 updateInternal msg model = case msg of
-    SelectProjectTab idx -> ({ model | projectTab = idx }, Cmd.none)
-    SelectViewTab idx -> ({ model | viewTab = idx }, Cmd.none)
     MapToTextArea-> (handleMapToTextArea model, Cmd.none)
     MapToTable-> ( handleMapToTable model, Cmd.none)
+    OpenProject pn -> handleOpenProject model pn
+    OpenView vn -> handleOpenView model vn
     TextToMapTextArea s -> ( updateXMapEditorModel model (\xm ->{ xm | xmapEditing = Just s }), Cmd.none)
     UpdateMapName  s -> ( handleUpdateMapName model s, Cmd.none)
     UpdateCalculationName  s -> ( handleUpdateCalculationName model s, Cmd.none)
@@ -35,15 +37,16 @@ updateInternal msg model = case msg of
     ShowMessage s -> ( showMessage model s, Cmd.none)
     SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
-    TextToResultNameText mn -> handleTextToResultNameText model mn
+    TextToResultNameText mn -> (handleTextToResultNameText model mn, Cmd.none)
     AddMapToCalculation mn -> ( appendToFormulaText model (xmapNameToString mn), Cmd.none)
     AddApplicationToCalculation an -> ( appendToFormulaText model (an ++ " p"), Cmd.none)
     AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
-    ChangeOperationMode om -> handleChangeOperationMode model om
+    ChangeOperationMode om -> (handleChangeOperationMode model om, Cmd.none)
     ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
     AddItemToView row it -> (handleAddItemToView model row it, Cmd.none)
     AddRowToView -> (handleAddRowToView model, Cmd.none)
     ChangeViewEditSelectedRow row -> ( handleChangeViewEditSelectedRow model row, Cmd.none)
+
 
 
 handleChangeViewEditSelectedRow : Model -> Int -> Model
@@ -66,6 +69,21 @@ handleUpdateViewLabel model s = updateViewEditorModel model (\vm ->{ vm | labelE
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn = { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn }}
+
+handleOpenProject : Model -> ProjectName -> (Model, Cmd Msg)
+handleOpenProject model pn =
+    let command = case openProjectWithName model pn of
+                    Just pm -> Cmd.none
+                    Nothing -> sendToServer (WRSubscribeToProject pn)
+    in ({ model | currentProject = Just pn }, command)
+
+handleOpenView : Model -> ViewName -> (Model, Cmd Msg)
+handleOpenView model vn =
+    let command = case openViewWithName model vn of
+                    Just v -> Cmd.none
+                    Nothing -> Maybe.withDefault Cmd.none (Maybe.map (\pn -> sendToServer (WRSubscribeToView pn vn)) model.currentProject)
+    in ({ model | currentView = Just vn }, command)
+
 
 emptyRow : ViewRow
 emptyRow = ViewRow []
@@ -93,20 +111,20 @@ handleAddItemToView model ri it =
         updateView mv = Maybe.map (\v -> {v | rows = updateRows v.rows}) mv
     in updateViewEditorModel model (\vm -> {vm | viewToEdit = updateView vm.viewToEdit })
 
-handleChangeOperationMode : Model -> OperationMode -> (Model, Cmd Msg)
-handleChangeOperationMode model om = ( updateCalculationEditorModel model (\cm ->{  cm | operationMode = om }), Cmd.none)
+handleChangeOperationMode : Model -> OperationMode -> Model
+handleChangeOperationMode model om = updateCalculationEditorModel model (\cm ->{  cm | operationMode = om })
 
-handleSwitchProjectViewTo : Model -> ProjectViewType -> (Model, Cmd Msg)
+handleSwitchProjectViewTo : Model -> ProjectFormType -> (Model, Cmd Msg)
 handleSwitchProjectViewTo  model vt =
     let functionRequest : Maybe (Cmd Msg)
         functionRequest = case model.functions of
                                 Just fs -> Nothing
                                 Nothing -> Just (sendToServer WRFunctions)
-        mapsInProjectRequest = Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentOpenProject model)
-    in { model | currentProjectView = vt } ! List.filterMap identity [functionRequest, mapsInProjectRequest]
+        mapsInProjectRequest = Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentProjectModel model)
+    in { model | currentProjectForm = vt } ! List.filterMap identity [functionRequest, mapsInProjectRequest]
 
-handleTextToResultNameText : Model -> String -> (Model, Cmd Msg)
-handleTextToResultNameText model mn = ( updateCalculationEditorModel model (\cm ->{  cm | resultMapName = Just mn }), Cmd.none)
+handleTextToResultNameText : Model -> String -> Model
+handleTextToResultNameText model mn = updateCalculationEditorModel model (\cm ->{  cm | resultMapName = Just mn })
 
 appendToFormulaText : Model -> String -> Model
 appendToFormulaText model s =
@@ -123,3 +141,4 @@ handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
+

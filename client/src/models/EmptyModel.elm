@@ -39,15 +39,15 @@ emptyCalculationEditorModel = {
 emptyModel : Model
 emptyModel = { openProjects = []
                , allProjects = []
+               , currentProject = Nothing
+               , currentView = Nothing
                , newProjectName = ""
                , messages = ["Client started"]
                , mdl =Material.model
-               , projectTab = 0
-               , viewTab = 0
                , xmapEditorModel = emptyXMapEditorModel
                , viewEditorModel = emptyViewEditorModel
                , calculationEditorModel = emptyCalculationEditorModel
-               , currentProjectView = ViewsView
+               , currentProjectForm = ViewsForm
                , mapsInProject = []
                , functions = Nothing
                }
