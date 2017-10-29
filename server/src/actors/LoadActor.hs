@@ -36,6 +36,9 @@ actorLoad root chan = loop
                 LMLoadMapsForView source c pn vn mns -> do
                     loadMapsInActor root source pn mns (PEMapsForViewLoaded c vn) (PEMapsForViewLoadError c vn)
                     loop
+                LMLoadMapsForCalculations source c pn mns -> do
+                    loadMapsInActor root source pn mns (PEMapsForCalculationsLoaded c) (PEMapsForCalculationsLoadError c)
+                    loop
                 LMLoadViewForProject source c pn vn  -> do
                     loadViewForProjectInActor root source c pn vn
                     loop

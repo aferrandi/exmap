@@ -36,7 +36,9 @@ projectLoaded sys c p cs = do
     let pn = projectName p
     rp <- projectToRuntime (chans sys) p cs
     runProject sys rp pn
-    atomically $ pipeToProject c pn sys (PMRequest (PRSubscribeToProject c))
+    atomically $ do
+        pipeToProject c pn sys (PMRequest (PRStartCalculations c))
+        pipeToProject c pn sys (PMRequest (PRSubscribeToProject c))
 
 projectStored :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()
 projectStored chan sys c p = do

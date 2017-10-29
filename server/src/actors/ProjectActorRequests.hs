@@ -36,6 +36,7 @@ handleRequests chan rp r= case r of
     PRStoreCalculation c cs-> storeCalculation chan rp c cs
     PRLoadView c vn -> loadView chan rp c vn
     PRStoreView c v -> storeView chan rp c v
+    PRStartCalculations c -> startCalculations chan rp c
 
 loadMaps :: WAClient -> ProjectChan -> RuntimeProject -> [XMapName] -> STM ()
 loadMaps c chan rp mns = do
@@ -51,7 +52,7 @@ subscribeToProject :: WAClient -> RuntimeProject -> STM()
 subscribeToProject c rp = do
     p <- readTVar $ project rp
     addSubscriber rp c
-    writeTChan (evtChan rp) (EMWebEvent [c] (WEProjectContent p))
+    writeTChan (evtChan rp) $ EMWebEvent [c] (WEProjectContent p)
 
 removeSubscriber :: WAClient -> RuntimeProject -> STM()
 removeSubscriber c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
@@ -63,7 +64,7 @@ mapsInProject rp c = do
     cbm <- readTVar $ calculationChanByMap rp
     rbn <- readTVar $ calculationResultByName rp
     let ss = L.nub (concatMap sourceOfMaps (sources p) ++ M.keys cbm ++ M.elems rbn)
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapsInProject (projectName p) ss)
+    writeTChan (evtChan rp) $ EMWebEvent [c] (WEMapsInProject (projectName p) ss)
 
 subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
 subscribeToView chan rp c vn   = do
@@ -91,7 +92,6 @@ loadCalculation chan rp c cn = do
      pn <- prjName rp
      writeTChan (loadChan $ chans rp)  $ LMLoadCalculation chan c pn cn
 
-
 storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 storeCalculation chan rp c cs = do
     pn <- prjName rp
@@ -117,6 +117,15 @@ loadView chan rp c vn = do
     pn <- prjName rp
     writeTChan (loadChan $ chans rp) $ LMLoadView chan c pn vn
 
+startCalculations :: ProjectChan -> RuntimeProject -> WAClient -> STM()
+startCalculations chan rp c = do
+    p <- readTVar $ project rp
+    case L.find (\s -> sourceType s == FileSource) (sources p) of
+        Just fileSources -> do
+            cbm <- readTVar (calculationChanByMap rp)
+            let cms = L.intersect (M.keys cbm) (sourceOfMaps fileSources)
+            writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculations chan c (projectName p) cms
+        Nothing -> return ()
+
 addSubscriber ::RuntimeProject -> WAClient -> STM ()
 addSubscriber rp c= modifyTVar (subscribedClients rp) (\cs -> c : cs)
-

@@ -36,6 +36,8 @@ handleEvent chan rp e = case e of
     PEMapsLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsForViewLoaded c vn ms -> atomically $ mapsForViewLoaded rp c vn ms
     PEMapsForViewLoadError c _ _ err -> atomically $ sendError ec [c] err
+    PEMapsForCalculationsLoaded c ms -> atomically $ mapsForCalculationsLoaded rp c ms
+    PEMapsForCalculationsLoadError c  _ err -> atomically $ sendError ec [c] err
     PEMapStored c m -> atomically $ mapStored chan rp c m
     PEMapStoreError c _ err -> atomically $ sendError ec [c] err
     PECalculationStored c cc -> calculationStored chan rp c cc
@@ -50,15 +52,13 @@ handleEvent chan rp e = case e of
     PECalculationLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
-
-
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewForProjectLoaded chan rp c v = do
      p <- atomically $ readTVar (project rp)
      vChan <- viewToChan (evtChan rp) (projectName p) v
      atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
                      sendSubscriptionToView vChan c
-                     sendDependedMapsToVIew chan rp c v
+                     sendDependedMapsToView chan rp c v
 
 viewLoaded :: WAClient -> RuntimeProject -> View -> STM ()
 viewLoaded c rp v = do
@@ -77,6 +77,15 @@ mapsForViewLoaded rp c vn ms = do
     case M.lookup vn vs of
         Just vChan -> writeTChan vChan (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
+
+mapsForCalculationsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
+mapsForCalculationsLoaded rp _ ms = do
+    cbm <- readTVar $ calculationChanByMap rp
+    mapM_ (findAndSend cbm) ms
+    where findAndSend cbm m = do
+            let mn = xmapName m
+            mapM_ (sendMapToCalculations m) (M.lookup mn cbm)
+          sendMapToCalculations m cs = mapM_ (\c -> writeTChan c (CMMap m)) cs
 
 newSource :: SourceType -> [XMapName] -> Source
 newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
@@ -131,8 +140,8 @@ projectStored rp c p = do
     writeTVar (project rp) p
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEProjectStored p)
 
-sendDependedMapsToVIew :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
-sendDependedMapsToVIew chan rp c v = do
+sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
+sendDependedMapsToView chan rp c v = do
      p <- readTVar $ project rp
      case L.find (\s -> sourceType s == FileSource) (sources p) of
         Just fileSources -> do
