@@ -16,6 +16,7 @@ actorView :: ViewChan -> RuntimeView -> EventChan -> IO ()
 actorView chan rv evtChan = loop
     where loop = do
             msg <- atomically $ readTChan chan
+            print $ "handling view request " ++ show msg
             case msg of
                 VMMaps ms -> do
                     atomically $ handleMaps rv evtChan ms

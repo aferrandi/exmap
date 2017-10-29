@@ -20,6 +20,7 @@ actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rtCalc = loop
     where loop = do
             msg <- atomically $ readTChan chan
+            print $ "handling calculation request " ++ show msg
             case msg of
                 CMMap m -> do
                     atomically $ handleMap rtCalc m

@@ -1,9 +1,1 @@
-{
-    "viewName": "view1",
-    "rows": [{
-            "items" : [
-                { "type": "label", "label": "firstView" },
-                { "type": "map", "mapName": "map1" }
-            ]
-        }]
-}
+{"viewName":"view1","rows":[{"items":[{"type":"label","label":"firstView"},{"mapName":"map1","type":"map"},{"mapName":"zuzzo","type":"map"}]}]}
