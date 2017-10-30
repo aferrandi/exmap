@@ -16,9 +16,11 @@ calculationToRuntime :: Calculation -> STM RuntimeCalculation
 calculationToRuntime c = do
     rp <- newTVar (mapWithNothingValues deps)
     rc <- newTVar c
+    cr <- newTVar Nothing
     return RuntimeCalculation {
         calculation = rc,
         repository = rp,
+        currentResult = cr,
         calculationsToNotify = [],
         viewsToNotify = []
     }

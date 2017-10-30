@@ -62,8 +62,8 @@ mapsInProject :: RuntimeProject -> WAClient -> STM ()
 mapsInProject rp c = do
     p <- readTVar (project rp)
     cbm <- readTVar $ calculationChanByMap rp
-    rbn <- readTVar $ calculationResultByName rp
-    let ss = L.nub (concatMap sourceOfMaps (sources p) ++ M.keys cbm ++ M.elems rbn)
+    cbr <- readTVar $ calculationByResult rp
+    let ss = L.nub (concatMap sourceOfMaps (sources p) ++ M.keys cbm ++ M.keys cbr)
     writeTChan (evtChan rp) $ EMWebEvent [c] (WEMapsInProject (projectName p) ss)
 
 subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()

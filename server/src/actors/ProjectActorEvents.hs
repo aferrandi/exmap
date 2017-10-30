@@ -7,6 +7,7 @@ import Control.Concurrent.STM
 import qualified Data.List as L
 import qualified Data.Map.Strict as M
 import qualified Data.Maybe as B
+import Debug.Trace (trace)
 
 import TChans
 import ProjectState
@@ -54,11 +55,12 @@ handleEvent chan rp e = case e of
 
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewForProjectLoaded chan rp c v = do
-     p <- atomically $ readTVar (project rp)
-     vChan <- viewToChan (evtChan rp) (projectName p) v
-     atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vChan)
-                     sendSubscriptionToView vChan c
+     p <- readTVarIO $ project rp
+     vch <- viewToChan (evtChan rp) (projectName p) v
+     atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vch)
+                     sendSubscriptionToView vch c
                      sendDependedMapsToView chan rp c v
+                     listenToDependentCalculations rp vch v
 
 viewLoaded :: WAClient -> RuntimeProject -> View -> STM ()
 viewLoaded c rp v = do
@@ -85,7 +87,9 @@ mapsForCalculationsLoaded rp _ ms = do
     where findAndSend cbm m = do
             let mn = xmapName m
             mapM_ (sendMapToCalculations m) (M.lookup mn cbm)
-          sendMapToCalculations m cs = mapM_ (\c -> writeTChan c (CMMap m)) cs
+          sendMapToCalculations m = mapM_ (\c -> writeTChan c (CMMap (traceMap m)))
+          traceMap :: XNamedMap -> XNamedMap
+          traceMap m = trace ("sending map " ++ show (xmapName m) ++ " to calculations") m
 
 newSource :: SourceType -> [XMapName] -> Source
 newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
@@ -195,8 +199,16 @@ updateView rp c p v = do
         Just vch -> writeTChan vch (VMUpdate v)
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
-
 storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
 storeProject chan rp c = do
     p <- readTVar $ project rp
     writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
+
+listenToDependentCalculations :: RuntimeProject -> ViewChan -> View -> STM ()
+listenToDependentCalculations rp vch v = do
+    let deps = viewDependencies v
+    cbr <- readTVar $ calculationByResult rp
+    let cs = B.mapMaybe (\d -> M.lookup d cbr) deps
+    cbn <- readTVar $ calculationChanByName rp
+    let chs = B.mapMaybe (\c -> M.lookup c cbn) cs
+    mapM_ (\ch -> writeTChan ch (CMViewStarted vch)) chs

@@ -13,6 +13,7 @@ type MapRepository = M.Map XMapName (Maybe XMap)
 data RuntimeCalculation = RuntimeCalculation {
     calculation ::TVar Calculation,
     repository :: TVar MapRepository,
+    currentResult :: TVar (Maybe XNamedMap),
     calculationsToNotify :: [CalculationChan],
     viewsToNotify ::[ViewChan]
 }

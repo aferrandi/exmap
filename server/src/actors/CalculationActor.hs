@@ -20,7 +20,7 @@ actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rtCalc = loop
     where loop = do
             msg <- atomically $ readTChan chan
-            print $ "handling calculation request " ++ show msg
+            print $ "handling calculation request "
             case msg of
                 CMMap m -> do
                     atomically $ handleMap rtCalc m
@@ -30,6 +30,9 @@ actorCalculation chan rtCalc = loop
                     loop
                 CMUpdateCalculation c -> do
                     atomically $ handleCalculation rtCalc c
+                    loop
+                CMViewStarted vc -> do
+                    atomically $ handleViewStarted rtCalc vc
                     loop
                 CMStop -> return ()
 
@@ -57,6 +60,11 @@ handleMapWithErrors rtCalc m = do
        execAndSendIfFull rtCalc
     where updateRepository = M.insert (xmapName m) (Just (xmap m))
 
+handleViewStarted :: RuntimeCalculation -> ViewChan -> STM ()
+handleViewStarted rtCalc vc = do
+    cr <- readTVar $ currentResult rtCalc
+    mapM_ (\m -> writeTChan vc (VMMaps [m])) cr
+
 errorToAll :: RuntimeCalculation -> Error -> STM ()
 errorToAll rtCalc e = do
     let cs = calculationsToNotify rtCalc
@@ -72,10 +80,9 @@ execAndSendIfFull rtCalc = do
                                Just xm -> execAndSendrtCalc xm
                                Nothing -> return $ Right ()
     where execAndSendrtCalc xm = do
-                                 calc <- readTVar $ calculation rtCalc
                                  let chs = calculationsToNotify rtCalc
                                  let vs = viewsToNotify rtCalc
-                                 execAndSend calc chs vs xm
+                                 execAndSend rtCalc chs vs xm
 
 
 
@@ -86,14 +93,17 @@ repositoryIfFull rm = do
     where expandToKey (k, mv) = do v <- mv
                                    return (k, v)
 
-execAndSend :: Calculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
-execAndSend calc cs vs xm = do
+execAndSend :: RuntimeCalculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
+execAndSend rtCalc cs vs xm = do
+    calc <- readTVar $ calculation rtCalc
     let ers = execFormula (formula calc) xm  (operationMode calc)
-    mapM (sendToDependents calc cs vs) ers
+    mapM (sendToDependents rtCalc cs vs) ers
 
-sendToDependents :: Calculation -> [CalculationChan] -> [ViewChan] -> XMap -> STM ()
-sendToDependents calc cs vs rs = do
+sendToDependents :: RuntimeCalculation -> [CalculationChan] -> [ViewChan] -> XMap -> STM ()
+sendToDependents rtCalc cs vs rs = do
+    calc <- readTVar $ calculation rtCalc
     let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
+    writeTVar (currentResult rtCalc) (Just rsn)
     sendToAll cs (CMMap rsn)
     sendToAll vs (VMMaps [rsn])
     return ()

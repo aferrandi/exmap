@@ -26,8 +26,8 @@ projectToRuntime chs p cs = do
         ccs <- T.mapM buildCalculationChan cs
         cbn <- calculationByName ccs
         let cbm = calculationChansByNames ccs
-        let rbn = calculationResultsByNames cs
-        atomically $ buildRuntimeProject chs p cbn cbm rbn
+        let cbr = calculationsByResults cs
+        atomically $ buildRuntimeProject chs p cbn cbm cbr
     where name = calculationName . calculation
           calculationByName :: [CalculationWithChan] -> IO CalculationChanByName
           calculationByName ccs = do
@@ -39,12 +39,12 @@ buildCalculationChan c = do
     cch <- calculationToChan c
     return CalculationWithChan { calculation = c, chan = cch }
 
-buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMap -> CalculationResultByName -> STM RuntimeProject
-buildRuntimeProject chs p cbn cbm rbn = do
+buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMap -> CalculationByResult -> STM RuntimeProject
+buildRuntimeProject chs p cbn cbm cbr = do
     tcbn <- newTVar cbn
     tcbm <- newTVar cbm
     trp <- newTVar p
-    trbn <- newTVar rbn
+    tcbr <- newTVar cbr
     tvbm <- newTVar M.empty
     tvbn <- newTVar M.empty
     tsc <- newTVar []
@@ -52,7 +52,7 @@ buildRuntimeProject chs p cbn cbm rbn = do
         project = trp,
         calculationChanByName = tcbn,
         calculationChanByMap = tcbm,
-        calculationResultByName = trbn,
+        calculationByResult = tcbr,
         viewChanByMap = tvbm,
         viewChanByName = tvbn,
         chans = chs,
@@ -69,5 +69,5 @@ calculationChansByNames ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
           chanByDeps :: [CalculationWithChan] -> [(XMapName, CalculationChan)]
           chanByDeps = concatMap chansByDep
 
-calculationResultsByNames :: [Calculation] -> CalculationResultByName
-calculationResultsByNames cs = M.fromList $ map (\c -> (calculationName c, resultName c)) cs
+calculationsByResults :: [Calculation] -> CalculationByResult
+calculationsByResults cs = M.fromList $ map (\c -> (resultName c, calculationName c)) cs
