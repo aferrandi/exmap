@@ -169,9 +169,10 @@ addCalculation :: RuntimeProject -> Calculation -> IO()
 addCalculation rp cc = do
     let cn = calculationName cc
     atomically $ modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
-    cch <- calculationToChan cc
-    atomically $ modifyTVar (calculationChanByName rp)  (M.insert cn cch)
-    atomically $ writeTChan cch (CMUpdateCalculation cc)
+    cch <- calculationToChan (logChan (chans rp)) cc
+    atomically $ do
+                    modifyTVar (calculationChanByName rp)  (M.insert cn cch)
+                    writeTChan cch (CMUpdateCalculation cc)
 
 updateCalculation :: RuntimeProject -> WAClient -> Calculation -> STM()
 updateCalculation rp c cc = do

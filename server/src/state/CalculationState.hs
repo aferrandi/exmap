@@ -7,6 +7,7 @@ import Calculation
 import XMapTypes
 import CalculationMessages
 import ViewMessages
+import LogMessages
 
 type MapRepository = M.Map XMapName (Maybe XMap)
 
@@ -15,7 +16,8 @@ data RuntimeCalculation = RuntimeCalculation {
     repository :: TVar MapRepository,
     currentResult :: TVar (Maybe XNamedMap),
     calculationsToNotify :: [CalculationChan],
-    viewsToNotify ::[ViewChan]
+    viewsToNotify ::[ViewChan],
+    logChan :: LogChan
 }
 
 

@@ -14,6 +14,7 @@ import Calculation
 import Dependencies
 import CalculationBuild
 import XMapTypes
+import LogMessages
 
 -- vertical on the screen
 data CalculationWithChan = CalculationWithChan {
@@ -23,7 +24,7 @@ data CalculationWithChan = CalculationWithChan {
 
 projectToRuntime :: CommonChans -> Project -> [Calculation]-> IO RuntimeProject
 projectToRuntime chs p cs = do
-        ccs <- T.mapM buildCalculationChan cs
+        ccs <- T.mapM (buildCalculationChan (logChan chs)) cs
         cbn <- calculationByName ccs
         let cbm = calculationChansByNames ccs
         let cbr = calculationsByResults cs
@@ -34,9 +35,9 @@ projectToRuntime chs p cs = do
                 let cbn = map (\cc -> (name cc, chan cc)) ccs
                 return $ M.fromList cbn
 
-buildCalculationChan :: Calculation -> IO CalculationWithChan
-buildCalculationChan c = do
-    cch <- calculationToChan c
+buildCalculationChan :: LogChan -> Calculation -> IO CalculationWithChan
+buildCalculationChan lc c = do
+    cch <- calculationToChan lc c
     return CalculationWithChan { calculation = c, chan = cch }
 
 buildRuntimeProject :: CommonChans -> Project -> CalculationChanByName -> CalculationChanByMap -> CalculationByResult -> STM RuntimeProject

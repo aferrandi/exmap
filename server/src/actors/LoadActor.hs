@@ -22,27 +22,33 @@ actorLoad :: FilePath -> LoadChan -> IO ()
 actorLoad root chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
-            print $ "handling load request"
             case msg of
                 LMLoadView source c pn vn  -> do
+                    print $ "handling LMLoadView " ++ show vn
                     loadViewInActor root source c pn vn
                     loop
                 LMLoadProject source c pn -> do
+                    print $ "handling LMLoadProject " ++ show pn
                     loadProjectInActor root source c pn
                     loop
                 LMLoadMaps source c pn mns -> do
+                    print $ "handling LMLoadMaps " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsLoaded c) (PEMapsLoadError c)
                     loop
                 LMLoadMapsForView source c pn vn mns -> do
+                    print $ "handling LMLoadMapsForView " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForViewLoaded c vn) (PEMapsForViewLoadError c vn)
                     loop
                 LMLoadMapsForCalculations source c pn mns -> do
+                    print $ "handling LMLoadMapsForCalculations " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForCalculationsLoaded c) (PEMapsForCalculationsLoadError c)
                     loop
                 LMLoadViewForProject source c pn vn  -> do
+                    print $ "handling LMLoadViewForProject " ++ show vn
                     loadViewForProjectInActor root source c pn vn
                     loop
                 LMLoadCalculation source c pn cn  -> do
+                    print $ "handling LMLoadCalculation " ++ show cn
                     loadCalculationInActor root source c pn cn
                     loop
                 LMStop -> return ()

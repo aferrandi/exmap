@@ -14,24 +14,27 @@ import Calculation
 import ExecFormula
 import CalculationMessages
 import ViewMessages
-
+import LogMessages
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rtCalc = loop
     where loop = do
             msg <- atomically $ readTChan chan
-            print $ "handling calculation request "
             case msg of
                 CMMap m -> do
+                    print $ "handling CMMap " ++ show (xmapName m)
                     atomically $ handleMap rtCalc m
                     loop
                 CMError e -> do
+                    print $ "handling CMError " ++ show e
                     atomically $ handleError rtCalc e
                     loop
                 CMUpdateCalculation c -> do
+                    print $ "handling CMUpdateCalculation " ++ show c
                     atomically $ handleCalculation rtCalc c
                     loop
                 CMViewStarted vc -> do
+                    print "handling CMViewStarted"
                     atomically $ handleViewStarted rtCalc vc
                     loop
                 CMStop -> return ()
@@ -66,23 +69,24 @@ handleViewStarted rtCalc vc = do
     mapM_ (\m -> writeTChan vc (VMMaps [m])) cr
 
 errorToAll :: RuntimeCalculation -> Error -> STM ()
-errorToAll rtCalc e = do
+errorToAll rtCalc  e = do
     let cs = calculationsToNotify rtCalc
     let vs = viewsToNotify rtCalc
     sendToAll cs (CMError e)
     sendToAll vs (VMError e)
+    writeTChan (logChan rtCalc) (LogMLog e)
     return ()
 
 execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
 execAndSendIfFull rtCalc = do
                             rm <- readTVar $ repository rtCalc
                             case repositoryIfFull rm of
-                               Just xm -> execAndSendrtCalc xm
+                               Just mbn -> execAndSendrtCalc mbn
                                Nothing -> return $ Right ()
-    where execAndSendrtCalc xm = do
+    where execAndSendrtCalc mbn = do
                                  let chs = calculationsToNotify rtCalc
                                  let vs = viewsToNotify rtCalc
-                                 execAndSend rtCalc chs vs xm
+                                 execAndSend rtCalc chs vs mbn
 
 
 
@@ -94,9 +98,9 @@ repositoryIfFull rm = do
                                    return (k, v)
 
 execAndSend :: RuntimeCalculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
-execAndSend rtCalc cs vs xm = do
+execAndSend rtCalc cs vs mbn = do
     calc <- readTVar $ calculation rtCalc
-    let ers = execFormula (formula calc) xm  (operationMode calc)
+    let ers = execFormula (formula calc) mbn (operationMode calc)
     mapM (sendToDependents rtCalc cs vs) ers
 
 sendToDependents :: RuntimeCalculation -> [CalculationChan] -> [ViewChan] -> XMap -> STM ()
