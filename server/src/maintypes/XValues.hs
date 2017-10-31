@@ -7,7 +7,7 @@ import qualified Data.Text as T
 
 type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
-type AggregateXMapFun a r = a -> r
+--type AggregateXMapFun a r = a -> r
 
 
 class XValue a where
@@ -32,9 +32,9 @@ instance XValue Int where
     extractMap (XMapInt m) _ = Right m
     extractMap _ _ = Left $ Error "The map must be of type int"
     extractMapFirst (XMapInt m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type double"
+    extractMapFirst _ _ = Left $ Error "The map must be of type int"
     extractMapSecond (XMapInt m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type double"
+    extractMapSecond _ _ = Left $ Error "The map must be of type int"
     buildMap = XMapInt
     defaultValue = 0
 
@@ -42,9 +42,9 @@ instance XValue T.Text where
     extractMap (XMapString m) _ = Right m
     extractMap _ _ = Left $ Error "The map must be of type string"
     extractMapFirst (XMapString m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type double"
+    extractMapFirst _ _ = Left $ Error "The map must be of type string"
     extractMapSecond (XMapString m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type double"
+    extractMapSecond _ _ = Left $ Error "The map must be of type string"
     buildMap = XMapString
     defaultValue = ""
 
@@ -52,9 +52,9 @@ instance XValue Bool where
     extractMap (XMapBool m) _ = Right m
     extractMap _ _ = Left $ Error "The map must be of type bool"
     extractMapFirst (XMapBool m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type double"
+    extractMapFirst _ _ = Left $ Error "The map must be of type bool"
     extractMapSecond (XMapBool m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type double"
+    extractMapSecond _ _ = Left $ Error "The map must be of type bool"
     buildMap = XMapBool
     defaultValue = False
 

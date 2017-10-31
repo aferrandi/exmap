@@ -2,7 +2,6 @@ module Applications(ApplicationName(..), ApplicationFun, applicationRepository) 
 
 import XFunction
 import XMapTypes
-import XValues
 import ApplicationTypes
 
 
