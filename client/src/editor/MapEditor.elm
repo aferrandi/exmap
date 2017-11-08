@@ -93,7 +93,7 @@ mapEditorMapList : Project -> Html Msg
 mapEditorMapList p =
     let listItem mn = Lists.li []
                            [ Lists.content
-                               [ Options.attribute <| Html.Events.onClick (Send (WRLoadMaps p.projectName [mn])) ]
+                               [ Options.attribute <| Html.Events.onClick (Internal (ShowMapInEditor mn)) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
     in Lists.ul [heightInView 60, Color.background lighterGrey] (List.map listItem (fileSourcesOfProject p))

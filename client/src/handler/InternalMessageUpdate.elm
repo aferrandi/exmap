@@ -35,6 +35,7 @@ updateInternal msg model = case msg of
     NewViewWithName vn -> ( handleNewViewWithName model vn , Cmd.none)
     NewMapWithName mn mt  -> ( handleNewMapWithName model mn mt , Cmd.none)
     ShowMessage s -> ( showMessage model s, Cmd.none)
+    ShowMapInEditor mn -> handleShowMapInEditor model mn
     SwitchProjectViewTo vt -> handleSwitchProjectViewTo model vt
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
     TextToResultNameText mn -> (handleTextToResultNameText model mn, Cmd.none)
@@ -85,9 +86,6 @@ handleOpenView model vn =
     in ({ model | currentView = Just vn }, command)
 
 
-emptyRow : ViewRow
-emptyRow = ViewRow []
-
 handleNewViewWithName : Model -> CalculationName -> Model
 handleNewViewWithName model vn = { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [emptyRow]} }}
 
@@ -126,10 +124,13 @@ handleSwitchProjectViewTo  model vt =
 handleTextToResultNameText : Model -> String -> Model
 handleTextToResultNameText model mn = updateCalculationEditorModel model (\cm ->{  cm | resultMapName = Just mn })
 
-appendToFormulaText : Model -> String -> Model
-appendToFormulaText model s =
-    let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ s
-    in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
+handleShowMapInEditor : Model -> XMapName -> (Model, Cmd Msg)
+handleShowMapInEditor model mn =
+    let cleanup =  updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing })
+        command pn = sendToServer (WRLoadMaps pn [mn])
+    in case model.currentProject of
+        Just pn -> (cleanup, command pn)
+        Nothing -> (model, Cmd.none)
 
 handleMapToTable : Model -> Model
 handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
@@ -139,6 +140,15 @@ handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
                                    Just (Err e) -> showMessage model e
                                    Nothing -> model
 
+appendToFormulaText : Model -> String -> Model
+appendToFormulaText model s =
+    let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ s
+    in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
+
+
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
+
+emptyRow : ViewRow
+emptyRow = ViewRow []
 

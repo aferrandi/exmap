@@ -35,11 +35,11 @@ view model = viewProjects model
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = case msg of
-    Receive json -> updateWithWebEvent json model
+    Receive json -> updateWithWebEvent (Debug.log "Web received:" json) model
     Send req -> model ! [ sendToServer req ]
     SendMany reqs -> model ! (List.map sendToServer reqs)
     Mdl msg_ -> Material.update Mdl msg_ model
-    Internal msg -> updateInternal (Debug.log "Internal received:" msg) model
+    Internal msg -> updateInternal (Debug.log "Internal received:" msg ) (Debug.log "Model: " model)
 
 subscriptions : Model -> Sub Msg
 subscriptions model = subscriptionsToServer model

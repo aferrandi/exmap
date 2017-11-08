@@ -23,6 +23,7 @@ type InternalMsg =
   | UpdateProjectName String
   | UpdateViewLabel String
   | ShowMessage String
+  | ShowMapInEditor XMapName
   | SwitchProjectViewTo ProjectFormType
   | TextToCalculationTextArea String
   | TextToResultNameText String
