@@ -3,7 +3,6 @@ module ProjectJsonTest (
     toParseJSON_project_same,
     toParseJSON_allProjects_same,
     toParseJSON_user_same,
-    toParseJSON_map_same,
     toParseJSON_view_same) where
 
 import Data.Aeson
@@ -78,11 +77,6 @@ sourceExample = Source {
               }
 
 
-toParseJSON_map_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
-    where original =  XNamedMap {
-        xmapName = mapName ["map"],
-        xmap = makeXMap [("k1",13),("k2",24)]
-    }
 
 
 makeProjectName :: String -> ProjectName

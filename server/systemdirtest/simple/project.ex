@@ -1,1 +1,1 @@
-{"calculations":["pippo"],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["map1","map2"]}],"views":["view2","view1"],"projectName":"simple"}
+{"calculations":["pippo"],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["map1","map2","pippo"]}],"views":["view2","view1"],"projectName":"simple"}

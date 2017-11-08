@@ -10,6 +10,7 @@ import qualified FormulaTest
 import qualified FormulaParserTest
 import qualified TextEnumsTest
 import qualified ProjectJsonTest
+import qualified XMapJsonTest
 import qualified DependenciesTest
 
 main :: IO Counts
@@ -35,7 +36,8 @@ main = runTestTT tests
                 ProjectJsonTest.toParseJSON_project_same,
                 ProjectJsonTest.toParseJSON_allProjects_same,
                 ProjectJsonTest.toParseJSON_user_same,
-                ProjectJsonTest.toParseJSON_map_same,
+                XMapJsonTest.toParseJSON_doublemap_same,
+                XMapJsonTest.toParseJSON_stringmap_same,
 
                 DependenciesTest.formulaDependencies_trivialFormula_originalMap,
                 DependenciesTest.formulaDependencies_complexFormula_maps,

@@ -19,7 +19,7 @@ import TestTypes
 
 
 execFormula_trivialFormula_originalMap = TestCase (assertEqual "exec trivial formula" (Right r) (execFormula f m XFunction.Intersection))
-    where r = makeXMap [("k",13.3)]
+    where r = makeDoubleXMap [("k",13.3)]
           ka = mapName ["a"]
           m = M.singleton ka r
           f = XFMap ka
@@ -27,14 +27,14 @@ execFormula_trivialFormula_originalMap = TestCase (assertEqual "exec trivial for
 execFormula_operationFormula_expectedMap = TestCase (assertEqual "exec operation formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
-          m = M.fromList [(ka ,makeXMap [("k",13)]), (kb ,makeXMap [("k",12)])]
-          r = makeXMap [("k",25)]
+          m = M.fromList [(ka ,makeDoubleXMap [("k",13)]), (kb ,makeDoubleXMap [("k",12)])]
+          r = makeDoubleXMap [("k",25)]
           f = XFOperation Ops.Add (XFMap ka) (XFMap kb)
 
 execFormula_applicationFormula_expectedMap = TestCase (assertEqual "exec application formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
-          m = M.fromList [(ka ,makeXMap [("k",13)]), (kb ,makeXMap [("k",12)])]
-          r = makeXMap [("k",-13)]
+          m = M.fromList [(ka ,makeDoubleXMap [("k",13)]), (kb ,makeDoubleXMap [("k",12)])]
+          r = makeDoubleXMap [("k",-13)]
           f = XFApplication Apps.Negate (XFMap ka)
 

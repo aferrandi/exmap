@@ -8,7 +8,6 @@ import Data.Aeson
 import Data.Aeson.Types
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
-import qualified Data.Map.Strict as M
 
 import XMapTypes
 
@@ -47,10 +46,10 @@ instance ToJSON XMap where
      toJSON (XMapInt values) = object [ "type" .= T.pack "int"
                                        , "values" .= values
                                        ]
-     toJSON (XMapString values) = object [ "type" .=  T.pack "application"
+     toJSON (XMapString values) = object [ "type" .=  T.pack "string"
                                           , "values" .= values
                                           ]
-     toJSON (XMapBool values) = object [ "type" .=  T.pack "application"
+     toJSON (XMapBool values) = object [ "type" .=  T.pack "bool"
                                           , "values" .= values
                                           ]
 
