@@ -136,7 +136,7 @@ handleMapToTable : Model -> Model
 handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
                              mm = Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
                          in case mm of
-                                   Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m })
+                                   Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
                                    Just (Err e) -> showMessage model e
                                    Nothing -> model
 
