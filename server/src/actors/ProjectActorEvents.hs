@@ -31,7 +31,7 @@ import FormulaText
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
-    PEViewLoaded c v -> atomically $ viewLoaded c rp v
+    PEViewLoaded c v -> atomically $ viewForClientLoaded c rp v
     PEViewLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsLoaded c ms -> atomically $ mapsLoaded rp c ms
     PEMapsLoadError c _ err -> atomically $ sendError ec [c] err
@@ -53,17 +53,9 @@ handleEvent chan rp e = case e of
     PECalculationLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
-viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
-viewForProjectLoaded chan rp c v = do
-     p <- readTVarIO $ project rp
-     vch <- viewToChan (evtChan rp) (projectName p) v
-     atomically $ do modifyTVar (viewChanByName rp) (M.insert (viewName v) vch)
-                     sendSubscriptionToView vch c
-                     sendDependedMapsToView chan rp c v
-                     listenToDependentCalculations rp vch v
 
-viewLoaded :: WAClient -> RuntimeProject -> View -> STM ()
-viewLoaded c rp v = do
+viewForClientLoaded :: WAClient -> RuntimeProject -> View -> STM ()
+viewForClientLoaded c rp v = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
 
@@ -99,11 +91,17 @@ mapStored chan rp c m = do
         let mn = xmapName m
         modifyTVar (project rp) (updateProjectWithFileMap mn)
         p <- readTVar (project rp)
-        let pn = projectName p
-        cbm <- readTVar $ calculationChanByMap rp
-        mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
         storeProject chan rp c
+        sendToAllCalculations mn
+        sendToAllViews mn
+        let pn = projectName p
         writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
+        where sendToAllCalculations mn = do
+                    cbm <- readTVar $ calculationChanByMap rp
+                    mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
+              sendToAllViews mn = do
+                    vbm <- readTVar $ viewChanByMap rp
+                    mapM_ (flip sendToAll (VMMaps [m]) ) (M.lookup mn vbm)
 
 
 calculationLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
@@ -183,14 +181,36 @@ updateCalculation rp c cc = do
         Just cch -> writeTChan cch (CMUpdateCalculation cc)
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
 
+viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
+viewForProjectLoaded chan rp c v = do
+     p <- readTVarIO $ project rp
+     vch <- viewToChan (evtChan rp) (projectName p) v
+     atomically $ do addViewToProject rp vch v
+                     sendSubscriptionToView vch c
+                     sendDependedMapsToView chan rp c v
+                     listenToDependentCalculations rp vch v
+
+addViewToProject ::  RuntimeProject -> ViewChan -> View -> STM ()
+addViewToProject rp vch v = do
+    modifyTVar (viewChanByName rp) $ M.insert (viewName v) vch
+    modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
+
 addView :: RuntimeProject -> View -> IO()
 addView rp v = do
     let vn = viewName v
     atomically $ modifyTVar (project rp) (\p -> p { views = vn : views p })
     pn <- atomically $ prjName rp
     vch <- viewToChan (evtChan rp) pn v
-    atomically $ modifyTVar (viewChanByName rp) (M.insert vn vch)
-    atomically $ writeTChan vch (VMUpdate v)
+    atomically $ do
+        addViewToProject rp vch v
+        writeTChan vch (VMUpdate v)
+
+updateViewChanByMap :: ViewChan -> [XMapName] -> ViewChanByMap -> ViewChanByMap
+updateViewChanByMap vch mns = trace ("updateView:" ++ show mns) $ updated . cleaned
+    where cleaned :: ViewChanByMap -> ViewChanByMap
+          cleaned = M.map (filter (/= vch))
+          updated :: ViewChanByMap -> ViewChanByMap
+          updated vbm = foldr (\mn cvbm-> M.insertWith (++) mn [vch] cvbm) vbm mns
 
 updateView :: RuntimeProject -> WAClient -> Project -> View -> STM()
 updateView rp c p v = do
