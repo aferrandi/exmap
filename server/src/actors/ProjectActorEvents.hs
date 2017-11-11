@@ -45,7 +45,7 @@ handleEvent chan rp e = case e of
     PECalculationStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewStored c v -> viewStored chan rp c v
     PEViewStoreError c _ err -> atomically $ sendError ec [c] err
-    PEProjectStored c p -> atomically $ projectStored rp c p
+    PEProjectStored _ p -> atomically $ projectStored rp p
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewForProjectLoaded c v -> viewForProjectLoaded chan rp c v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
@@ -137,10 +137,11 @@ calculationStored chan rp c cc = do
         storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
-projectStored :: RuntimeProject -> WAClient -> Project -> STM()
-projectStored rp c p = do
+projectStored :: RuntimeProject -> Project -> STM()
+projectStored rp p = do
     writeTVar (project rp) p
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEProjectStored p)
+    cs <- readTVar $ subscribedClients rp
+    writeTChan (evtChan rp) (EMWebEvent cs $ WEProjectStored p)
 
 sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToView chan rp c v = do
