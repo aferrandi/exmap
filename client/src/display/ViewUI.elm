@@ -15,7 +15,6 @@ import Views exposing (..)
 import UIWrapper exposing (..)
 import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
-import Stretch exposing  (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm =  div [] (List.map (\row -> viewRow vm row) vm.view.rows)

@@ -23,9 +23,9 @@ import Views exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import InternalMessages exposing (..)
+import NameParser exposing (..)
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
-import Stretch exposing (..)
 import MapsExtraction exposing (xmapNameToString)
 
 
@@ -114,7 +114,9 @@ viewEditorMapList model =
 
 newViewButton : Model -> Html Msg
 newViewButton model =
-    let newViewMessage = (Internal (NewViewWithName model.viewEditorModel.newViewName))
+    let newViewMessage = case nameFromString model.viewEditorModel.newViewName of
+                            Ok newViewName -> Internal (NewViewWithName newViewName)
+                            Err err -> Internal (ShowMessage err)
     in div []
         [ Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New view name"
@@ -141,3 +143,4 @@ addLabelButton model =
 
 addRowButton : Model -> Html Msg
 addRowButton model = buttonClick model 1 "Add row" (Internal AddRowToView)
+

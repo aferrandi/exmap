@@ -17,7 +17,6 @@ import Material.Toggles as Toggles
 import Material.Textfield as Textfield
 import List.Extra as ListX
 
-import Stretch exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ProjectUI exposing (..)
@@ -56,7 +55,7 @@ viewProjectsContent model =
                            [ cell 2 2 1 [] [viewAllProjectsList model, newProjectButton model]
                            , cell 6 10 3 [] [ viewCurrentProject model ]
                    ]
-                   , fixedDiv [viewMessages model]
+                   , viewMessages model
                ]
 
 viewAllProjectsList : Model -> Html Msg

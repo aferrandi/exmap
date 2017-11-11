@@ -23,9 +23,9 @@ import XMapTypes exposing(..)
 import Views exposing (..)
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
+import NameParser exposing (..)
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
-import Stretch exposing (..)
 import MapsExtraction exposing (xmapNameToString, xmapNameFromString)
 import InternalMessages exposing (..)
 
@@ -151,7 +151,9 @@ operationNameChoice model =
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =
-    let  newCalculationMessage = (Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName))
+    let  newCalculationMessage = case nameFromString model.calculationEditorModel.newCalculationName of
+                                    Ok newCalculationName -> Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName)
+                                    Err err -> Internal (ShowMessage err)
     in div []
         [ Textfield.render Mdl [9] model.mdl
                                              [ Textfield.label "New calculation name"

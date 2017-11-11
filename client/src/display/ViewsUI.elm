@@ -19,7 +19,6 @@ import WebMessages exposing (WebRequest(..))
 import InternalMessages exposing (..)
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
-import Stretch exposing (..)
 
 
 viewViews : Model -> ProjectModel -> Html Msg

@@ -20,7 +20,6 @@ import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
 import ViewsUI exposing (..)
 import UIWrapper exposing (..)
-import Stretch exposing (..)
 import MapEditor exposing (..)
 import ViewEditor exposing (..)
 import CalculationEditor exposing (..)
@@ -40,7 +39,7 @@ viewProjectContent model pm = case model.currentProjectForm of
     CalculationEditorForm  -> viewCalculationsEditor model pm
 
 viewCards :  Model -> ProjectModel -> Html Msg
-viewCards model pm = stretchDiv [
+viewCards model pm = div [] [
     viewCard model "Views" "Live views" 0 Color.LightBlue ViewsForm
     , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorForm
     , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorForm

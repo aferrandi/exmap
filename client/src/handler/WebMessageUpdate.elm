@@ -19,8 +19,8 @@ updateEvent evt model = case evt of
                             WEAllProjects ap -> ({ model | allProjects = ap }, Cmd.none)
                             WEError e -> (showMessage model ("Server Error: " ++ e), Cmd.none)
                             WEInfo i -> (showMessage model ("Server Info: " ++ i), Cmd.none)
-                            WEProjectContent p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
-                            WEProjectStored p -> (updateOpenProjects model (addProjectToOpenProjects p), Cmd.none)
+                            WEProjectContent p -> (updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none)
+                            WEProjectStored p -> (updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none)
                             WEViewStatus pn v ms -> (updateOpenProjects model (updateOpenViews  pn v ms), Cmd.none)
                             WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
@@ -64,8 +64,8 @@ handleMapsInProject : Model -> List XMapName -> Model
 handleMapsInProject model mns = { model | mapsInProject = mns }
 
 
-addProjectToOpenProjects : Project -> List ProjectModel -> List ProjectModel
-addProjectToOpenProjects p ops = let pn = p.projectName
+updateOpenProjectsWithProject : Project -> List ProjectModel -> List ProjectModel
+updateOpenProjectsWithProject p ops = let pn = p.projectName
                            in case find (sameProjectName pn) ops of
                                 Just _ -> updateIf (sameProjectName pn) (\pm -> { pm | project = p }) ops
                                 Nothing -> { project = p, openViews = [] } :: ops
