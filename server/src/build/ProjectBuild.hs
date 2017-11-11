@@ -26,7 +26,7 @@ projectToRuntime :: CommonChans -> Project -> [Calculation]-> IO RuntimeProject
 projectToRuntime chs p cs = do
         ccs <- T.mapM (buildCalculationChan (logChan chs)) cs
         cbn <- calculationByName ccs
-        let cbm = calculationChansByNames ccs
+        let cbm = calculationChansByMaps ccs
         let cbr = calculationsByResults cs
         atomically $ buildRuntimeProject chs p cbn cbm cbr
     where name = calculationName . calculation
@@ -60,8 +60,8 @@ buildRuntimeProject chs p cbn cbm cbr = do
         subscribedClients = tsc
     }
 
-calculationChansByNames :: [CalculationWithChan] ->  CalculationChanByMap
-calculationChansByNames ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
+calculationChansByMaps :: [CalculationWithChan] ->  CalculationChanByMap
+calculationChansByMaps ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
         -- return $ T.mapM sequence cs
     where deps :: CalculationWithChan -> [XMapName]
           deps = calculationDependencies . calculation

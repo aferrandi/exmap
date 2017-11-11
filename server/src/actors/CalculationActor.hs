@@ -6,6 +6,7 @@ import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.Map.Strict as M
+import qualified Data.List as L
 import Debug.Trace
 
 import TChans
@@ -67,13 +68,14 @@ handleMapWithErrors rc m = do
 
 handleViewStarted :: RuntimeCalculation -> ViewChan -> STM ()
 handleViewStarted rc vc = do
+    modifyTVar (viewsToNotify rc)  (L.union [vc])
     cr <- readTVar $ currentResult rc
     mapM_ (\m -> writeTChan vc (VMMaps [m])) cr
 
 errorToAll :: RuntimeCalculation -> Error -> STM ()
 errorToAll rc  e = do
-    let cs = calculationsToNotify rc
-    let vs = viewsToNotify rc
+    cs <- readTVar $ calculationsToNotify rc
+    vs <- readTVar $ viewsToNotify rc
     sendToAll cs (CMError e)
     sendToAll vs (VMError e)
     writeTChan (logChan rc) (LogMLog e)
@@ -87,8 +89,8 @@ execAndSendIfFull rc = do
                                Just mbn -> execAndSendCalc mbn
                                Nothing -> return $ Right ()
     where execAndSendCalc mbn = do
-                                 let chs = calculationsToNotify rc
-                                 let vs = viewsToNotify rc
+                                 chs <- readTVar $ calculationsToNotify rc
+                                 vs <- readTVar $ viewsToNotify rc
                                  execAndSend rc chs vs mbn
 
 

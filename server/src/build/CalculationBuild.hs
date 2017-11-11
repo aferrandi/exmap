@@ -18,12 +18,14 @@ calculationToRuntime lc c = do
     rp <- newTVar (mapWithNothingValues deps)
     rc <- newTVar c
     cr <- newTVar Nothing
+    vs <- newTVar []
+    cs <- newTVar []
     return RuntimeCalculation {
         calculation = rc,
         repository = rp,
         currentResult = cr,
-        calculationsToNotify = [],
-        viewsToNotify = [],
+        calculationsToNotify = cs,
+        viewsToNotify = vs,
         logChan = lc
     }
     where deps = formulaDependencies (formula c)

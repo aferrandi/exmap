@@ -165,11 +165,11 @@ sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 
 addCalculation :: RuntimeProject -> Calculation -> IO()
 addCalculation rp cc = do
-    let cn = calculationName cc
-    atomically $ modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
     cch <- calculationToChan (logChan (chans rp)) cc
     atomically $ do
-                    modifyTVar (calculationChanByName rp)  (M.insert cn cch)
+                    let cn = calculationName cc
+                    modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
+                    modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     writeTChan cch (CMUpdateCalculation cc)
 
 updateCalculation :: RuntimeProject -> WAClient -> Calculation -> STM()
