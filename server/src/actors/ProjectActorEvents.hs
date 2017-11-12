@@ -204,7 +204,7 @@ addView rp v = do
     vch <- viewToChan (evtChan rp) pn v
     atomically $ do
         addViewToProject rp vch v
-        writeTChan vch (VMUpdate v)
+        writeTChan vch $ VMUpdate v
 
 updateViewChanByMap :: ViewChan -> [XMapName] -> ViewChanByMap -> ViewChanByMap
 updateViewChanByMap vch mns = trace ("updateView:" ++ show mns) $ updated . cleaned
@@ -218,7 +218,9 @@ updateView rp c p v = do
     let vn = viewName v
     vbn <- readTVar $ viewChanByName rp
     case M.lookup vn vbn of
-        Just vch -> writeTChan vch (VMUpdate v)
+        Just vch -> do
+            modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
+            writeTChan vch (VMUpdate v)
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
 storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
