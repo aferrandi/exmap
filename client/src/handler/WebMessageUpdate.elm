@@ -89,8 +89,7 @@ updateOpenViewMaps pn vn ms ops =  updateIfProjectHasSameName pn (updateOpenView
 
 updateOpenViewMapsInProject : ViewName -> List XNamedMap -> ProjectModel -> ProjectModel
 updateOpenViewMapsInProject vn ms pm = let sameViewName vm = vm.view.viewName == vn
-                                           ovs = pm.openViews
-                                           updatedOvs = updateIf sameViewName (updateOpenViewMapsInView ms) ovs
+                                           updatedOvs = updateIf sameViewName (updateOpenViewMapsInView ms) pm.openViews
                                         in {pm | openViews = updatedOvs }
 
 updateOpenViewMapsInView : List XNamedMap -> ViewModel -> ViewModel

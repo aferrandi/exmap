@@ -29,8 +29,11 @@ import ModelUpdate exposing (..)
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
     let  xmapEditorModel = model.xmapEditorModel
+         title = case xmapEditorModel.xmapName of
+                        Just xmapName -> "Editing map: " ++ xmapNameToString xmapName
+                        Nothing -> "Map Editor"
     in div [] [
-           titleWithIcon "Map Editor" "layers" Color.DeepOrange,
+           titleWithIcon title "layers" Color.DeepOrange,
            Grid.grid [ Grid.noSpacing, heightInView 70 ]
               [ cell 2 2 1 [] [ mapEditorMapList pm.project, newMapButton model]
               , cell 6 10 3 [] [ mapEditorViewForMap model pm]
@@ -42,7 +45,6 @@ mapEditorViewForMap model pm =
     let  xmapEditorModel = model.xmapEditorModel
     in case model.xmapEditorModel.xmapName of
         Just mn -> div [] [
-               titleWithIcon ("Editing map: " ++ xmapNameToString mn) "layers" Color.DeepOrange,
                Grid.grid [ Grid.noSpacing, heightInView 60 ]
                   [ cell 3 5 1 [] [ mapEditorTextArea model pm]
                   , cell 5 7 3 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]

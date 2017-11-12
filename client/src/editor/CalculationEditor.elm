@@ -31,14 +31,18 @@ import InternalMessages exposing (..)
 
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
-viewCalculationsEditor model pm = div []
-                                [
-                                    titleWithIcon "Calculation Editor" "functions" Color.Green,
-                                    Grid.grid [heightInView 70]
-                                    [ cell 2 2 1 [ ]  [div[] [calculationsInProjectList model pm, newCalculationButton model]]
-                                    , cell 6 10 3 []  [viewCalculationEditor model pm]
-                                     ]
-                                 ]
+viewCalculationsEditor model pm =
+        let title = case model.calculationEditorModel.calculationName of
+                                    Just calculationName -> "Editing calculation: " ++ calculationName
+                                    Nothing -> "Calculation Editor"
+        in div []
+                [
+                    titleWithIcon title "functions" Color.Green,
+                    Grid.grid [heightInView 70]
+                    [ cell 2 2 1 [ ]  [div[] [calculationsInProjectList model pm, newCalculationButton model]]
+                    , cell 6 10 3 []  [viewCalculationEditor model pm]
+                     ]
+                 ]
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm = case model.calculationEditorModel.calculationName of
@@ -49,7 +53,6 @@ viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
          [
-             titleWithIcon ("Editing calculation: " ++ cn) "functions" Color.Green,
              Grid.grid []
              [ cell 4 4 2 [] [resultMapNameText model]
              , cell 2 3 1 [ ]  [operationNameChoice model]

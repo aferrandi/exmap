@@ -30,8 +30,11 @@ import MapsExtraction exposing (xmapNameToString)
 
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
-viewViewsEditor model pm = div [] [
-                                titleWithIcon "View Editor" "view_module" Color.Pink,
+viewViewsEditor model pm = let title = case model.viewEditorModel.viewName of
+                                            Just viewName -> "Editing view: " ++ viewName
+                                            Nothing -> "View Editor"
+                           in div [] [
+                                titleWithIcon title "view_module" Color.Pink,
                                 Grid.grid [heightInView 70]
                                 [ cell 2 2 1 [ ]  [viewsList pm.project, newViewButton model]
                                 , cell 6 10 3 [] [ viewEditorForView model pm ]
@@ -40,7 +43,6 @@ viewViewsEditor model pm = div [] [
 
 viewEditorForView model pm = case model.viewEditorModel.viewName of
                                Just vn -> div [] [
-                                     titleWithIcon ("Editing view: " ++ Maybe.withDefault "" model.viewEditorModel.viewName) "view_module" Color.Pink,
                                      Grid.grid [heightInView 60]
                                      [ cell 6 10 3 [] [ viewEditorTable model model.viewEditorModel.viewToEdit ]
                                      , cell 2 2 1 [ ]  [viewEditorMapList model, addLabelButton model ]
