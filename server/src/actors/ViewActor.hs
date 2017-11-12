@@ -54,11 +54,12 @@ unsuscribeFromView rv evtChan c = do
 
 handleMaps :: RuntimeView -> EventChan -> [XNamedMap] -> STM ()
 handleMaps rv evtChan ms = do
-    -- the view does not contain the maps, so we just need to send it to all clients
-    modifyTVar (status rv) updateStatus
+    modifyTVar (mapsInView rv) $ updateMapsInView ms
     cs <- readTVar $ subscribedClients rv
     writeTChan evtChan (EMWebEvent cs $ WEViewChanged (ownerProjectName rv) (runtimeViewName rv) ms)
-    where updateStatus msbn = foldr  (\m msbni -> M.insert (xmapName m) (xmap m) msbni) msbn ms
+
+updateMapsInView :: [XNamedMap] -> XMapByName -> XMapByName
+updateMapsInView ms msbn = foldr  (\m msbni -> M.insert (xmapName m) (xmap m) msbni) msbn ms
 
 handleView :: RuntimeView -> EventChan -> View -> STM ()
 handleView rv evtChan v = do
@@ -69,7 +70,7 @@ handleView rv evtChan v = do
 sendStatus :: RuntimeView -> EventChan -> [WAClient] -> STM ()
 sendStatus rv evtChan cs = do
     v <- readTVar $ view rv
-    ms <- readTVar $ status rv
+    ms <- readTVar $ mapsInView rv
     let nms = map (\(k,a) -> XNamedMap { xmapName = k ,xmap = a }) $ M.toList ms
     writeTChan evtChan (EMWebEvent cs $ WEViewStatus (ownerProjectName rv)  v nms)
 

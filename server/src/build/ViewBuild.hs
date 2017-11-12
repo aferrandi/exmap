@@ -23,18 +23,11 @@ viewToRuntime :: ProjectName -> View -> STM RuntimeView
 viewToRuntime pn v = do
     vv <- newTVar v
     cs <- newTVar []
-    st <- newTVar M.empty
+    ms <- newTVar M.empty
     return RuntimeView {
         runtimeViewName = viewName v,
         view = vv,
         subscribedClients = cs,
         ownerProjectName = pn,
-        status = st
+        mapsInView = ms
     }
-
-{-
-runtimeDependencies :: RuntimeView  -> STM [XMapName]
-runtimeDependencies vr = do
-                v <- readTVar (view vr)
-                return $ viewDependencies v
--}

@@ -12,7 +12,7 @@ data RuntimeView =  RuntimeView {
     ownerProjectName :: ProjectName,
     view :: TVar View,
     subscribedClients :: TVar [WAClient],
-    status :: TVar XMapByName
+    mapsInView :: TVar XMapByName
 }
 
 
