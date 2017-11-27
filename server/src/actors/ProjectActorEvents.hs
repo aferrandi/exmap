@@ -120,7 +120,7 @@ viewStored :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewStored chan rp c v = do
     p <- readTVarIO $ project rp
     if elem (viewName v) (views p)
-        then atomically $ updateView rp c p v
+        then atomically $ updateView chan rp c p v
         else addView rp v
     atomically $ do
         storeProject chan rp c
@@ -142,15 +142,6 @@ projectStored rp p = do
     writeTVar (project rp) p
     cs <- readTVar $ subscribedClients rp
     writeTChan (evtChan rp) (EMWebEvent cs $ WEProjectStored p)
-
-sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
-sendDependedMapsToView chan rp c v = do
-     p <- readTVar $ project rp
-     case L.find (\s -> sourceType s == FileSource) (sources p) of
-        Just fileSources -> do
-             let toLoad = L.intersect (viewDependencies v) (sourceOfMaps fileSources)
-             writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
-        Nothing -> return ()
 
 updateProjectWithFileMap :: XMapName -> Project -> Project
 updateProjectWithFileMap mn p = p { sources = updateFileSources : notFileSources }
@@ -213,14 +204,16 @@ updateViewChanByMap vch mns = trace ("updateView:" ++ show mns) $ updated . clea
           updated :: ViewChanByMap -> ViewChanByMap
           updated vbm = foldr (\mn cvbm-> M.insertWith (++) mn [vch] cvbm) vbm mns
 
-updateView :: RuntimeProject -> WAClient -> Project -> View -> STM()
-updateView rp c p v = do
+updateView :: ProjectChan -> RuntimeProject -> WAClient -> Project -> View -> STM()
+updateView chan rp c p v = do
     let vn = viewName v
     vbn <- readTVar $ viewChanByName rp
     case M.lookup vn vbn of
         Just vch -> do
             modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
             writeTChan vch (VMUpdate v)
+            sendDependedMapsToView chan rp c v
+            listenToDependentCalculations rp vch v
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
 storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
@@ -236,3 +229,12 @@ listenToDependentCalculations rp vch v = do
     cbn <- readTVar $ calculationChanByName rp
     let chs = B.mapMaybe (\c -> M.lookup c cbn) cs
     mapM_ (\ch -> writeTChan ch (CMViewStarted vch)) chs
+
+sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
+sendDependedMapsToView chan rp c v = do
+     p <- readTVar $ project rp
+     case L.find (\s -> sourceType s == FileSource) (sources p) of
+        Just fileSources -> do
+             let toLoad = L.intersect (viewDependencies v) (sourceOfMaps fileSources)
+             writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
+        Nothing -> return ()
