@@ -14,7 +14,7 @@ data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRNewProject WAClient Project
                     | SRUpdateProject WAClient Project
                     | SRAllProjects WAClient
-                    | SRLoadMaps WAClient ProjectName [XMapName]
+                    | SRLoadMap WAClient ProjectName XMapName
                     | SRStoreMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName

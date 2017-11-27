@@ -23,17 +23,17 @@ actorLoad root chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
-                LMLoadView source c pn vn  -> do
+                LMLoadViewForClient source c pn vn  -> do
                     print $ "handling LMLoadView " ++ show vn
-                    loadViewInActor root source c pn vn
+                    loadViewForClient root source c pn vn
                     loop
                 LMLoadProject source c pn -> do
                     print $ "handling LMLoadProject " ++ show pn
                     loadProjectInActor root source c pn
                     loop
-                LMLoadMaps source c pn mns -> do
-                    print $ "handling LMLoadMaps " ++ show mns
-                    loadMapsInActor root source pn mns (PEMapsLoaded c) (PEMapsLoadError c)
+                LMLoadMapForClient source c pn mn -> do
+                    print $ "handling LMLoadMapForClient " ++ show mn
+                    loadMapForClient root source c pn mn
                     loop
                 LMLoadMapsForView source c pn vn mns -> do
                     print $ "handling LMLoadMapsForView " ++ show mns
@@ -54,12 +54,12 @@ actorLoad root chan = loop
                 LMStop -> return ()
 
 
-loadViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
-loadViewInActor root source c pn vn = do
+loadViewForClient :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
+loadViewForClient root source c pn vn = do
        mv <- loadView root pn vn
        case mv of
-           Right v -> atomically $ writeTChan source (PMEvent $ PEViewLoaded c v)
-           Left err -> atomically $ writeTChan source (PMEvent $ PEViewLoadError c vn err)
+           Right v -> atomically $ writeTChan source (PMEvent $ PEViewForClientLoaded c v)
+           Left err -> atomically $ writeTChan source (PMEvent $ PEViewForClientLoadError c vn err)
 
 loadViewForProjectInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
 loadViewForProjectInActor root source c pn vn = do
@@ -93,8 +93,8 @@ loadCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> 
 loadCalculationInActor root source c pn cn = do
        ce <- loadCalculation root pn cn
        atomically $ case ce of
-           Right cc -> writeTChan source (PMEvent $ PECalculationLoaded c cc)
-           Left err -> writeTChan source (PMEvent $ PECalculationLoadError c cn err)
+           Right cc -> writeTChan source (PMEvent $ PECalculationForClientLoaded c cc)
+           Left err -> writeTChan source (PMEvent $ PECalculationForClientLoadError c cn err)
 
 
 type MapsLoadedEvent = [XNamedMap] -> ProjectEvent
@@ -117,3 +117,10 @@ loadMapsInActor root source pn mns loadedEvent loadErrorEvent = do
              loadXMaps = mapM (loadXMap root pn)
              addMapNameToErrors = zipWith (\v mn -> first (\e -> (e, mn)) v)
 
+
+loadMapForClient :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XMapName -> IO ()
+loadMapForClient root source c pn mn = do
+       mOrErr <- loadXMap root pn mn
+       atomically $ case mOrErr of
+            Left err -> writeTChan source (PMEvent $ PEMapForClientLoadError c mn err)
+            Right m ->  writeTChan source (PMEvent $ PEMapForClientLoaded c m)

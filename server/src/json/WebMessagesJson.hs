@@ -29,9 +29,9 @@ instance ToJSON WebEvent where
      toJSON (WEProjectStored p) = object [ "type" .=  T.pack "projectStored"
                                         , "project" .= p
                                         ]
-     toJSON (WEMapsLoaded pn ms) = object [ "type" .=  T.pack "mapLoaded"
+     toJSON (WEMapLoaded pn m) = object [ "type" .=  T.pack "mapLoaded"
                                         , "projectName" .= pn
-                                        , "maps" .= ms
+                                        , "map" .= m
                                         ]
      toJSON (WEMapStored pn mn) = object [ "type" .=  T.pack "mapStored"
                                         , "projectName" .= pn
@@ -82,7 +82,7 @@ instance FromJSON WebRequest where
       Just (String "subscribeToProject") ->  WRSubscribeToProject <$> v .: "projectName"
       Just (String "newProject") -> WRNewProject <$> v .: "project"
       Just (String "updateProject") -> WRUpdateProject <$> v .: "project"
-      Just (String "loadMaps") ->  WRLoadMaps <$> v .: "projectName" <*> v .: "mapNames"
+      Just (String "loadMap") ->  WRLoadMap <$> v .: "projectName" <*> v .: "mapName"
       Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"

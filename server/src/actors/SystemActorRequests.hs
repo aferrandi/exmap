@@ -32,10 +32,10 @@ handleRequest chan sys r = case r of
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRUpdateProject c p -> pipeToProject c (projectName p) sys (PMRequest $ PRUpdateProject c p)
         SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
-        SRLoadMaps c pn mns -> pipeToProject c pn sys (PMRequest $ PRLoadMaps c mns)
-        SRLoadView c pn vn -> pipeToProject c pn sys (PMRequest $ PRLoadView c vn)
+        SRLoadMap c pn mn -> pipeToProject c pn sys (PMRequest $ PRLoadMapForClient c mn)
+        SRLoadView c pn vn -> pipeToProject c pn sys (PMRequest $ PRLoadViewForClient c vn)
         SRStoreView c pn v -> pipeToProject c pn sys (PMRequest $ PRStoreView c v)
-        SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculation c cn)
+        SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculationForClient c cn)
         SRStoreCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRStoreCalculation c cs)
         SRFunctions c -> sendFunctions sys c
 

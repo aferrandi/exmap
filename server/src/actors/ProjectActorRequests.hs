@@ -30,18 +30,18 @@ handleRequests chan rp r= case r of
     PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
     PRMapsInProject c -> mapsInProject rp c
     PRUpdateProject c p -> updateProject chan rp c p
-    PRLoadMaps c mns -> loadMaps c chan rp mns
+    PRLoadMapForClient c mn -> loadMapForClient c chan rp mn
     PRStoreMap c m -> storeMap c chan rp m
-    PRLoadCalculation c cn -> loadCalculation chan rp c cn
+    PRLoadCalculationForClient c cn -> loadCalculation chan rp c cn
     PRStoreCalculation c cs-> storeCalculation chan rp c cs
-    PRLoadView c vn -> loadView chan rp c vn
+    PRLoadViewForClient c vn -> loadView chan rp c vn
     PRStoreView c v -> storeView chan rp c v
     PRStartCalculations c -> startCalculations chan rp c
 
-loadMaps :: WAClient -> ProjectChan -> RuntimeProject -> [XMapName] -> STM ()
-loadMaps c chan rp mns = do
+loadMapForClient :: WAClient -> ProjectChan -> RuntimeProject -> XMapName -> STM ()
+loadMapForClient c chan rp mn = do
      pn <- prjName rp
-     writeTChan (loadChan $ chans rp)  $ LMLoadMaps chan c pn mns
+     writeTChan (loadChan $ chans rp)  $ LMLoadMapForClient chan c pn mn
 
 storeMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 storeMap c chan rp m = do
@@ -115,7 +115,7 @@ storeView chan rp c v = do
 loadView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
 loadView chan rp c vn = do
     pn <- prjName rp
-    writeTChan (loadChan $ chans rp) $ LMLoadView chan c pn vn
+    writeTChan (loadChan $ chans rp) $ LMLoadViewForClient chan c pn vn
 
 startCalculations :: ProjectChan -> RuntimeProject -> WAClient -> STM()
 startCalculations chan rp c = do

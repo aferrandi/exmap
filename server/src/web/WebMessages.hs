@@ -12,7 +12,7 @@ data WebRequest =
     | WRSubscribeToProject ProjectName
     | WRNewProject Project
     | WRUpdateProject Project
-    | WRLoadMaps ProjectName [XMapName]
+    | WRLoadMap ProjectName XMapName
     | WRStoreMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
@@ -29,7 +29,7 @@ data WebEvent =
     | WEViewChanged ProjectName ViewName [XNamedMap]
     | WEProjectContent Project
     | WEProjectStored Project
-    | WEMapsLoaded ProjectName [XNamedMap]
+    | WEMapLoaded ProjectName XNamedMap
     | WEMapStored ProjectName XMapName
     | WEUnsubscribedFromView ProjectName ViewName
     | WEMapsInProject ProjectName [XMapName]

@@ -31,10 +31,10 @@ import FormulaText
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
-    PEViewLoaded c v -> atomically $ viewForClientLoaded c rp v
-    PEViewLoadError c _ err -> atomically $ sendError ec [c] err
-    PEMapsLoaded c ms -> atomically $ mapsLoaded rp c ms
-    PEMapsLoadError c _ err -> atomically $ sendError ec [c] err
+    PEViewForClientLoaded c v -> atomically $ viewForClientLoaded c rp v
+    PEViewForClientLoadError c _ err -> atomically $ sendError ec [c] err
+    PEMapForClientLoaded c m -> atomically $ mapForClientLoaded rp c m
+    PEMapForClientLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsForViewLoaded c vn ms -> atomically $ mapsForViewLoaded rp c vn ms
     PEMapsForViewLoadError c _ _ err -> atomically $ sendError ec [c] err
     PEMapsForCalculationsLoaded c ms -> atomically $ mapsForCalculationsLoaded rp c ms
@@ -49,8 +49,8 @@ handleEvent chan rp e = case e of
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewForProjectLoaded c v -> viewForProjectLoaded chan rp c v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
-    PECalculationLoaded c cc -> atomically $ calculationLoaded rp c cc
-    PECalculationLoadError c _ err -> atomically $ sendError ec [c] err
+    PECalculationForClientLoaded c cc -> atomically $ calculationForClientLoaded rp c cc
+    PECalculationForClientLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
 
@@ -59,10 +59,10 @@ viewForClientLoaded c rp v = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
 
-mapsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
-mapsLoaded rp c ms = do
+mapForClientLoaded :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapForClientLoaded rp c m = do
      pn <- prjName rp
-     writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapsLoaded pn ms)
+     writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapLoaded pn m)
 
 mapsForViewLoaded :: RuntimeProject -> WAClient -> ViewName -> [XNamedMap] -> STM ()
 mapsForViewLoaded rp c vn ms = do
@@ -104,8 +104,8 @@ mapStored chan rp c m = do
                     mapM_ (flip sendToAll (VMMaps [m]) ) (M.lookup mn vbm)
 
 
-calculationLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
-calculationLoaded rp c cc = do
+calculationForClientLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
+calculationForClientLoaded rp c cc = do
     let cs = CalculationSource {
         sourceCalculationName = calculationName cc,
         sourceResultName = resultName cc,

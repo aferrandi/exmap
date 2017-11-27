@@ -32,7 +32,7 @@ handleClientRequest c sc r = case r of
                                 WRSubscribeToProject pn -> sendRequest $ SRSubscribeToProject c pn
                                 WRNewProject p -> sendRequest $ SRNewProject c p
                                 WRUpdateProject p -> sendRequest $ SRUpdateProject c p
-                                WRLoadMaps pn mns -> sendRequest $ SRLoadMaps c pn mns
+                                WRLoadMap pn mn -> sendRequest $ SRLoadMap c pn mn
                                 WRStoreMap pn m -> sendRequest$ SRStoreMap c pn m
                                 WRSubscribeToView pn vn -> sendRequest $ SRSubscribeToView c pn vn
                                 WRUnsubscribeFromView pn vn -> sendRequest $ SRUnsubscribeFromView c pn vn
