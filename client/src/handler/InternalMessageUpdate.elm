@@ -127,7 +127,7 @@ handleTextToResultNameText model mn = updateCalculationEditorModel model (\cm ->
 handleShowMapInEditor : Model -> XMapName -> (Model, Cmd Msg)
 handleShowMapInEditor model mn =
     let cleanup =  updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing })
-        command pn = sendToServer (WRLoadMaps pn [mn])
+        command pn = sendToServer (WRLoadMap pn mn)
     in case model.currentProject of
         Just pn -> (cleanup, command pn)
         Nothing -> (model, Cmd.none)

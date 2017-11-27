@@ -24,7 +24,7 @@ updateEvent evt model = case evt of
                             WEViewStatus pn v ms -> (updateOpenProjects model (updateOpenViews  pn v ms), Cmd.none)
                             WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
-                            WEMapsLoaded pn ms -> (handleMapsLoaded model ms, Cmd.none)
+                            WEMapLoaded pn m -> (handleMapLoaded model m, Cmd.none)
                             WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
                             WEViewLoaded pn v -> (handleViewLoaded model v, Cmd.none)
                             WECalculationLoaded pn cs -> (handleCalculationLoaded model cs, Cmd.none)
@@ -33,15 +33,13 @@ updateEvent evt model = case evt of
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
 
-handleMapsLoaded : Model -> List XNamedMap -> Model
-handleMapsLoaded model ms =
-    case List.head ms of
-        Just m -> updateXMapEditorModel model (\xm -> { xm |
+handleMapLoaded : Model -> XNamedMap -> Model
+handleMapLoaded model m =
+        updateXMapEditorModel model (\xm -> { xm |
             xmapToEdit = Just m.xmap,
             xmapName = Just m.xmapName,
             xmapType = mapType m.xmap
             })
-        Nothing -> model
 
 handleViewLoaded : Model -> View -> Model
 handleViewLoaded model v =
