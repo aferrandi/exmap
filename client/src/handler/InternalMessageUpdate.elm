@@ -140,6 +140,7 @@ handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
                                    Just (Err e) -> showMessage model e
                                    Nothing -> model
 
+
 appendToFormulaText : Model -> String -> Model
 appendToFormulaText model s =
     let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ s

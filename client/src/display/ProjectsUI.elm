@@ -33,8 +33,7 @@ layoutHeader model =
         ]
         [ Layout.title [] [ text "EXMAP" ]
         , Layout.spacer
-        , Layout.navigation []
-            []
+        , Layout.navigation [] []
         ]
 
 viewProjects : Model -> Html Msg
@@ -46,6 +45,8 @@ viewProjects model = Layout.render Mdl model.mdl
   , tabs = ([ ], [ ])
   , main = [viewProjectsContent model |> Material.Scheme.topWithScheme Color.Grey Color.Red]
   }
+
+
 
 
 viewProjectsContent : Model -> Html Msg
@@ -60,8 +61,6 @@ viewProjectsContent model =
 
 viewAllProjectsList : Model -> Html Msg
 viewAllProjectsList model = Lists.ul [heightInView 65, Color.background lightGrey] (List.map viewAllProjectsItem model.allProjects)
-
-
 
 viewAllProjectsItem : ProjectName -> Html Msg
 viewAllProjectsItem pn = Lists.li []

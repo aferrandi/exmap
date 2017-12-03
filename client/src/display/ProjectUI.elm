@@ -14,7 +14,7 @@ import Material.Color as Color
 import Material.Menu as Menu exposing (Item)
 import Material.Grid as Grid exposing (Device(..))
 import Material.Options as Options exposing (css)
-import List.Extra exposing (getAt)
+import List.Extra as ListX
 
 import ProjectModel exposing (..)
 import WebMessages exposing (WebRequest(..))
@@ -26,10 +26,50 @@ import CalculationEditor exposing (..)
 import InternalMessages exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
-viewProject model pm = Grid.grid [heightInView 75]
-                                [ cell 7 10 3 [] [viewProjectContent model pm]
-                                , cell 1 2 1 [] [ viewCards model pm ]
-                                 ]
+viewProject model pm = div[] [
+                viewProjectTabs model,
+                viewProjectContent model pm
+                ]
+
+viewProjectTabs : Model -> Html Msg
+viewProjectTabs model =
+    let tab icon title =   Tabs.label
+                           [ Options.center, Color.text <| pastel Color.Blue ]
+                           [ Icon.i icon
+                           , Options.span [ css "width" "4px" ] []
+                           , text title
+
+                           ]
+
+    in Tabs.render Mdl [0] model.mdl
+                   [ Tabs.ripple
+                   , Tabs.onSelectTab tabToMessage
+                   , Tabs.activeTab (projectFormToTab model.currentProjectForm)
+                   , Color.text <| pastel Color.Blue
+                   ]
+                   [
+                     tab "view_comfy" "Views",
+                     tab "layers" "Map Editor",
+                     tab "view_module" "View Editor",
+                     tab "functions" "Calculation Editor"
+                   ]
+                   []
+
+tabArray = [ViewsForm, MapEditorForm, ViewEditorForm,CalculationEditorForm]
+
+tabToProjectForm : Int -> Maybe ProjectFormType
+tabToProjectForm tabI = ListX.getAt tabI tabArray
+
+projectFormToTab : ProjectFormType -> Int
+projectFormToTab pf = Maybe.withDefault 0 (ListX.elemIndex pf tabArray)
+
+tabToMessage : Int -> Msg
+tabToMessage tabI =
+    let msg =  case tabToProjectForm tabI of
+                    Just pf -> SwitchProjectViewTo pf
+                    Nothing -> ShowMessage "tab value not recognized"
+    in Internal msg
+
 
 viewProjectContent : Model -> ProjectModel -> Html Msg
 viewProjectContent model pm = case model.currentProjectForm of
@@ -38,30 +78,6 @@ viewProjectContent model pm = case model.currentProjectForm of
     ViewEditorForm  -> viewViewsEditor model pm
     CalculationEditorForm  -> viewCalculationsEditor model pm
 
-viewCards :  Model -> ProjectModel -> Html Msg
-viewCards model pm = div [] [
-    viewCard model "Views" "Live views" 0 Color.LightBlue ViewsForm
-    , viewCard model "Map Editor" "create and update maps" 1 Color.DeepOrange MapEditorForm
-    , viewCard model "View Editor" "create and update views" 2 Color.Pink ViewEditorForm
-    , viewCard model "Calculation Editor" "create and update calculations" 3 Color.Green CalculationEditorForm
-    ]
-
 white : Options.Property c m
 white = Color.text Color.white
-
-viewCard : Model -> String -> String -> Int -> Color.Hue -> ProjectFormType -> Html Msg
-viewCard model title cardText i hue viewType =  Card.view
-          [ Color.background (pastel hue)
-          , css "width" "192px"
-         , css "height" "20vh"
-          ]
-          [ Card.title [ ] [ Card.head [ white ] [ text title ] ]
-           , Card.text [ white ] [ text cardText ]
-          , Card.actions
-          [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
-              [ Button.render Mdl [ i ] model.mdl
-                  [ Button.raised, Button.ripple, Options.onClick (Internal (SwitchProjectViewTo viewType)) ]
-                    [ text "Switch to" ]
-              ]
-          ]
 
