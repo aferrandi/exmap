@@ -8,7 +8,7 @@ import Material.Elevation as Elevation
 import Material.Color as Color
 import Set as Set
 import Dict as Dict
-import List.Extra exposing (transpose)
+import List.Extra exposing (transpose, zip)
 
 import ProjectModel exposing (..)
 import Views exposing (..)
@@ -17,36 +17,36 @@ import XMapTypes exposing (..)
 import MapsExtraction exposing (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
-viewView model pm vm =  div [] (List.map (\row -> viewRow vm row) vm.view.rows)
+viewView model pm vm =  Table.table (scrollableTableStyle 60) (List.concatMap (viewRow vm) vm.view.rows)
 
-viewRow : ViewModel -> ViewRow -> Html Msg
-viewRow vm row = Table.table []
-                    [
+viewRow : ViewModel -> ViewRow -> List (Html Msg)
+viewRow vm row =    [
                         viewRowHeader row,
                         viewRowBody vm row
                     ]
 
 viewRowHeader : ViewRow -> Html Msg
-viewRowHeader row =
-    let header id = Table.th [] [ text id ]
-    in Table.thead [Options.css "display" "table"]
+viewRowHeader  row=
+    let cell id = Table.th [] [ text id ]
+    in Table.thead []
                      [ Table.tr []
-                        (List.map header ("Ids" :: rowNames row))
+                        (List.map cell ("Ids" :: rowNames row))
                      ]
 
 viewRowBody : ViewModel -> ViewRow -> Html Msg
 viewRowBody vm row = let matrix = transpose (rowToTable row vm)
-                         rows = List.map rowLineToTableRow (Debug.log "Matrix: " matrix)
-                     in Table.tbody (scrollableTableStyle 60) rows
+                         rows = List.map rowLineToTableRow matrix
+                     in Table.tbody [] rows
 
-rowLineToTableRow : List String  -> Html Msg
-rowLineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
+rowLineToTableRow : List String -> Html Msg
+rowLineToTableRow line =
+    let cell v = Table.td [] [ text v ]
+    in Table.tr [] (List.map cell line)
 
 rowToTable : ViewRow -> ViewModel -> List (List String)
 rowToTable row vm = let ids = rowIds row vm.maps
                         values (ViewRow items) = List.map (itemToTable vm.maps ids) items
                     in Set.toList ids :: values row
-
 
 rowIds : ViewRow -> XMapByName -> Set.Set XMapKey
 rowIds (ViewRow items) ms =

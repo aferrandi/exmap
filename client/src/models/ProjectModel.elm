@@ -16,6 +16,10 @@ type alias Mdl = Material.Model
 
 type alias XMapByName = Dict.Dict XMapName XMap
 
+type alias TableConfiguration = {
+    columnsWidths : List Int
+    }
+
 type alias ViewModel = {
     view : View
     , maps : XMapByName
@@ -32,6 +36,7 @@ type alias XMapEditorModel = {
     , xmapToEdit : Maybe XMap
     , xmapEditing : Maybe String
     , newXmapName : String
+    , tableConf : TableConfiguration
     }
 
 type alias ViewEditorModel = {

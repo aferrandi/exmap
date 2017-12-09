@@ -8,6 +8,10 @@ import ProjectModel exposing (..)
 import Calculation exposing (..)
 import InternalMessages exposing (..)
 
+emptyTableConfiguration : TableConfiguration
+emptyTableConfiguration = {
+    columnsWidths = []
+    }
 
 emptyViewEditorModel : ViewEditorModel
 emptyViewEditorModel = {
@@ -25,6 +29,7 @@ emptyXMapEditorModel = {
        , xmapToEdit = Nothing
        , xmapEditing = Nothing
        , newXmapName = ""
+       , tableConf = emptyTableConfiguration
     }
 
 emptyCalculationEditorModel : CalculationEditorModel
