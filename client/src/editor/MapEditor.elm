@@ -119,31 +119,35 @@ mapEditorTextArea model pm = Textfield.render Mdl [9] model.mdl
                               ]
                               []
 
+mapEditorTableFull  : XMap -> Html Msg
+mapEditorTableFull m = Table.table (scrollableTableStyle 50) [
+                                                           mapHeader,
+                                                           mapRows m
+                                                           ]
+
+mapEditorTableEmpty : Html Msg
+mapEditorTableEmpty = Table.table [] [
+                                        mapHeader,
+                                        Table.tbody [] []
+                                        ]
+
 mapEditorTable : Maybe XMap -> Html Msg
 mapEditorTable mm = case mm of
-                        Just m -> Table.table []
-                            [
-                                mapHeader,
-                                mapRows m
-                            ]
-                        Nothing -> Table.table []
-                            [
-                                mapHeader,
-                                Table.tbody [] []
-                            ]
+                        Just m -> mapEditorTableFull m
+                        Nothing -> mapEditorTableEmpty
 
 mapHeader : Html Msg
-mapHeader = Table.thead [Options.css "display" "table"]
+mapHeader = Table.thead []
                      [ Table.tr []
                         [
-                        Table.th [] [ text "Ids" ],
-                        Table.th [] [ text "Values" ]
+                        Table.th bold [ text "Ids" ],
+                        Table.th bold [ text "Values" ]
                         ]
                      ]
 
 mapRows : XMap -> Html Msg
 mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
-            in Table.tbody (scrollableTableStyle 50) rows
+            in Table.tbody [] rows
 
 lineToTableRow : List String  -> Html Msg
 lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)

@@ -41,12 +41,21 @@ buttonClick model index txt msg = buttonNoClick model index txt [ Options.onClic
 buttonMaybe : Model -> Int -> String -> Maybe Msg -> Html Msg
 buttonMaybe model index txt mmsg =
     let msgProp = case mmsg of
-                    Just msg -> [ Options.onClick msg ]
-                    Nothing -> []
+                        Just msg -> [ Options.onClick msg ]
+                        Nothing -> []
     in buttonNoClick model index txt msgProp
 
 scrollableTableStyle : Int -> List (Options.Property c Msg)
-scrollableTableStyle h = [heightInView h, Options.css "overflow-y" "auto", Options.css "display" "block"]
+scrollableTableStyle h = [
+        heightInView h,
+        Options.css "overflow-y" "auto",
+        Options.css "display" "block",
+        Options.css "float" "left"
+       ]
+
+bold : List (Options.Property c Msg)
+bold = [Options.css "font-weight" "1000"]
+
 
 heightInView : Int -> Options.Property c Msg
 heightInView h = Options.css "height" (toString h ++ "vh")

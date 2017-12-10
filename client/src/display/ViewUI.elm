@@ -20,14 +20,11 @@ viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm =  Table.table (scrollableTableStyle 60) (List.concatMap (viewRow vm) vm.view.rows)
 
 viewRow : ViewModel -> ViewRow -> List (Html Msg)
-viewRow vm row =    [
-                        viewRowHeader row,
-                        viewRowBody vm row
-                    ]
+viewRow vm row = [ viewRowHeader row, viewRowBody vm row ]
 
 viewRowHeader : ViewRow -> Html Msg
 viewRowHeader  row=
-    let cell id = Table.th [] [ text id ]
+    let cell id = Table.th bold [ text id ]
     in Table.thead []
                      [ Table.tr []
                         (List.map cell ("Ids" :: rowNames row))
@@ -63,8 +60,6 @@ rowNames (ViewRow items) =
             MapItem xmapName -> xmapNameToString xmapName
             LabelItem label -> label
     in List.map name items
-
-
 
 itemToTable : XMapByName -> Set.Set XMapKey -> ViewItem -> List String
 itemToTable ms ids item =
