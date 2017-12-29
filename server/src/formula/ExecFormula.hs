@@ -8,12 +8,13 @@ import XFunction
 import Operations
 import Applications
 import Formula
+import FormulaText (mapNameToText)
 
 execFormula :: XFormula ->  XMapByName -> OperationMode -> XMapErr
 execFormula xf rm m = case xf of
     XFMap n -> case M.lookup n rm of
         Just om -> Right om
-        Nothing -> Left (Error $ T.pack "map not found")
+        Nothing -> Left (Error $ T.pack ("map " ++ T.unpack (mapNameToText n) ++ " not found"))
     XFOperation f a b -> do
         oa <- execFormula a rm m
         ob <- execFormula b rm m

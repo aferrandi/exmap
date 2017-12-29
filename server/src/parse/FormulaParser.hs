@@ -14,7 +14,7 @@ import TextEnums
 import Calculation
 
 parseFormula :: CalculationFormulaText -> Either String XFormula
-parseFormula (CalculationFormulaText s) = P.parseOnly (parseFormulaRootNode <* P.endOfInput) s
+parseFormula (CalculationFormulaText s) = P.parseOnly (parseFormulaRootNode <* P.endOfInput) $ T.strip s
 
 parseFormulaRootNode :: P.Parser XFormula
 parseFormulaRootNode = do

@@ -16,20 +16,23 @@ import LogActor
 import qualified WebApp
 
 
+startFromRootPath :: String -> IO ()
+startFromRootPath rt = do
+    print $ "loading system from " ++ rt
+    logChan <- newTChanIO
+    _ <- forkIO $ actorLog logChan
+    system <- startSystem rt logChan
+    ps <- atomically $ readTVar (projectByName system)
+    print $ "System loaded with " ++ show (M.size ps) ++ " projects"
+    systemChan <- newTChanIO
+    _ <- forkIO $ actorSystem systemChan system
+    WebApp.runWebApp systemChan logChan
+
 main :: IO ()
 main = do
     args <- getArgs
     case B.listToMaybe args of
-        Just rt -> do
-            print $ "loading system from " ++ rt
-            logChan <- newTChanIO
-            _ <- forkIO $ actorLog logChan
-            system <- startSystem rt logChan
-            ps <- atomically $ readTVar (projectByName system)
-            print $ "System loaded with " ++ show (M.size ps) ++ " projects"
-            systemChan <- newTChanIO
-            _ <- forkIO $ actorSystem systemChan system
-            WebApp.runWebApp systemChan logChan
+        Just rt -> startFromRootPath rt
         Nothing -> do
             print "exmap <rootPath>"
             return ()

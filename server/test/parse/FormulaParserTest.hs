@@ -38,5 +38,6 @@ parseFormula_complex_operation = TestCase (assertEqual "parse operation" (Right 
     where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "subtract (negate one/map) two")
           res = XFOperation Subtract (XFApplication Negate $ XFMap (mapName ["one", "map"])) (XFMap (mapName ["two"]))
 
-
-
+parseFormula_formulaWithSpaces_map = TestCase (assertEqual "parse formula with spaces" (Right res) parsed)
+    where parsed = parseFormula (Calculation.CalculationFormulaText $ T.pack "  negate  one/map  ")
+          res = XFApplication Negate $ XFMap (mapName ["one", "map"])

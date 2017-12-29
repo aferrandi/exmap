@@ -24,6 +24,7 @@ main = runTestTT tests
                 FormulaParserTest.parseFormula_formulaApplication_application,
                 FormulaParserTest.parseFormula_formulaOperation_operation,
                 FormulaParserTest.parseFormula_complex_operation,
+                FormulaParserTest.parseFormula_formulaWithSpaces_map,
 
                 TextEnumsTest.enumValues_ApplicationName_containNegate,
                 TextEnumsTest.enumWithTextCI_ApplicationName_containNegate,

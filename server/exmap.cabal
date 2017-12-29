@@ -115,6 +115,7 @@ test-suite exmap-test
                      , Operations
                      , Applications
                      , XFunction
+                     , FormulaText
                      , XMapTypes
                      , ApplicationTypes
                      , OperationTypes
