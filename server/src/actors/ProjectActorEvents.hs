@@ -39,6 +39,8 @@ handleEvent chan rp e = case e of
     PEMapsForViewLoadError c _ _ err -> atomically $ sendError ec [c] err
     PEMapsForCalculationsLoaded c ms -> atomically $ mapsForCalculationsLoaded rp c ms
     PEMapsForCalculationsLoadError c  _ err -> atomically $ sendError ec [c] err
+    PEMapsForCalculationLoaded c cn ms -> atomically $ mapsForCalculationLoaded rp c cn ms
+    PEMapsForCalculationLoadError c _  _ err -> atomically $ sendError ec [c] err
     PEMapStored c m -> atomically $ mapStored chan rp c m
     PEMapStoreError c _ err -> atomically $ sendError ec [c] err
     PECalculationStored c cc -> calculationStored chan rp c cc
@@ -72,6 +74,14 @@ mapsForViewLoaded rp c vn ms = do
         Just vChan -> writeTChan vChan (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
+mapsForCalculationLoaded :: RuntimeProject -> WAClient -> CalculationName -> [XNamedMap] -> STM ()
+mapsForCalculationLoaded rp c cn ms = do
+    cs <- readTVar $ calculationChanByName rp
+    pn <- prjName rp
+    case M.lookup cn cs of
+        Just cChan -> writeTChan cChan (CMMaps ms)
+        Nothing -> sendStringError (evtChan rp) [c] ("calculation " ++ show cn ++ " to add the maps to not found in project " ++ show pn)
+
 mapsForCalculationsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
 mapsForCalculationsLoaded rp _ ms = do
     cbm <- readTVar $ calculationChanByMap rp
@@ -79,7 +89,7 @@ mapsForCalculationsLoaded rp _ ms = do
     where findAndSend cbm m = do
             let mn = xmapName m
             mapM_ (sendMapToCalculations m) (M.lookup mn cbm)
-          sendMapToCalculations m = mapM_ (\c -> writeTChan c (CMMap (traceMap m)))
+          sendMapToCalculations m = mapM_ (\c -> writeTChan c (CMMaps [traceMap m]))
           traceMap :: XNamedMap -> XNamedMap
           traceMap m = trace ("sending map " ++ show (xmapName m) ++ " to calculations") m
 
@@ -98,7 +108,7 @@ mapStored chan rp c m = do
         writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
         where sendToAllCalculations mn = do
                     cbm <- readTVar $ calculationChanByMap rp
-                    mapM_ (flip sendToAll (CMMap m) ) (M.lookup mn cbm)
+                    mapM_ (flip sendToAll (CMMaps [m]) ) (M.lookup mn cbm)
               sendToAllViews mn = do
                     vbm <- readTVar $ viewChanByMap rp
                     mapM_ (flip sendToAll (VMMaps [m]) ) (M.lookup mn vbm)
@@ -131,7 +141,7 @@ calculationStored :: ProjectChan -> RuntimeProject -> WAClient -> Calculation ->
 calculationStored chan rp c cc = do
     p <- readTVarIO $ project rp
     if elem (calculationName cc) (calculations p)
-        then atomically $ updateCalculation rp c cc
+        then atomically $ updateCalculation chan rp c cc
         else addCalculation rp cc
     atomically $ do
         storeProject chan rp c
@@ -164,13 +174,17 @@ addCalculation rp cc = do
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     writeTChan cch (CMUpdateCalculation cc)
 
-updateCalculation :: RuntimeProject -> WAClient -> Calculation -> STM()
-updateCalculation rp c cc = do
+updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()
+updateCalculation chan rp c cc = do
     let cn = calculationName cc
     cbn <- readTVar $ calculationChanByName rp
     pn <- prjName rp
     case M.lookup cn cbn of
-        Just cch -> writeTChan cch (CMUpdateCalculation cc)
+        Just cch -> do
+            modifyTVar (calculationChanByMap rp) $ updateCalculationChanByMap cch (calculationDependencies cc)
+            writeTChan cch (CMUpdateCalculation cc)
+            sendDependedMapsToCalculation chan rp c cc
+
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
 
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
@@ -202,7 +216,9 @@ updateViewChanByMap vch mns = trace ("updateView:" ++ show mns) $ updated . clea
     where cleaned :: ViewChanByMap -> ViewChanByMap
           cleaned = M.map (filter (/= vch))
           updated :: ViewChanByMap -> ViewChanByMap
-          updated vbm = foldr (\mn cvbm-> M.insertWith (++) mn [vch] cvbm) vbm mns
+          updated vbm = foldr addToMultimap vbm mns
+          addToMultimap :: XMapName -> ViewChanByMap -> ViewChanByMap
+          addToMultimap mn = M.insertWith (++) mn [vch]
 
 updateView :: ProjectChan -> RuntimeProject -> WAClient -> Project -> View -> STM()
 updateView chan rp c p v = do
@@ -233,8 +249,30 @@ listenToDependentCalculations rp vch v = do
 sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToView chan rp c v = do
      p <- readTVar $ project rp
-     case L.find (\s -> sourceType s == FileSource) (sources p) of
+     case fileSourcesInProject p of
         Just fileSources -> do
-             let toLoad = L.intersect (viewDependencies v) (sourceOfMaps fileSources)
-             writeTChan (loadChan $ chans rp)  $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
+             let toLoad = L.intersect (viewDependencies v) fileSources
+             writeTChan (loadChan $ chans rp) $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
+        Nothing -> return ()
+
+fileSourcesInProject :: Project -> Maybe [XMapName]
+fileSourcesInProject p = fmap sourceOfMaps fileSources
+        where fileSources = L.find (\s -> sourceType s == FileSource) (sources p)
+
+updateCalculationChanByMap :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
+updateCalculationChanByMap cch mns = trace ("updateCalculation:" ++ show mns) $ updated . cleaned
+    where cleaned :: CalculationChanByMap -> CalculationChanByMap
+          cleaned = M.map (filter (/= cch))
+          updated :: CalculationChanByMap -> CalculationChanByMap
+          updated cbm = foldr addToMultimap cbm mns
+          addToMultimap :: XMapName -> CalculationChanByMap -> CalculationChanByMap
+          addToMultimap mn = M.insertWith (++) mn [cch]
+
+sendDependedMapsToCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM ()
+sendDependedMapsToCalculation chan rp c cc = do
+     p <- readTVar $ project rp
+     case fileSourcesInProject p of
+        Just fileSources -> do
+             let toLoad = L.intersect (calculationDependencies cc) fileSources
+             writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
         Nothing -> return ()

@@ -7,7 +7,7 @@ import Errors()
 import Calculation
 import ViewMessages
 
-data CalculationMessage = CMMap XNamedMap
+data CalculationMessage = CMMaps [XNamedMap]
                           | CMError Error
                           | CMUpdateCalculation Calculation
                           | CMViewStarted ViewChan

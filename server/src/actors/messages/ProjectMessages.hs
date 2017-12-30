@@ -31,6 +31,8 @@ data ProjectEvent = PEViewForClientLoaded WAClient View
                     | PEMapsForViewLoadError WAClient ViewName [XMapName] Error
                     | PEMapsForCalculationsLoaded WAClient [XNamedMap]
                     | PEMapsForCalculationsLoadError WAClient [XMapName] Error
+                    | PEMapsForCalculationLoaded WAClient CalculationName [XNamedMap]
+                    | PEMapsForCalculationLoadError WAClient CalculationName [XMapName] Error
                     | PEMapStored WAClient XNamedMap
                     | PEMapStoreError WAClient XNamedMap Error
                     | PECalculationStored WAClient Calculation

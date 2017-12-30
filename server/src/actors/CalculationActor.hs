@@ -24,9 +24,9 @@ actorCalculation chan rc = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
-                CMMap m -> do
-                    print $ "handling CMMap " ++ show (xmapName m)
-                    atomically $ handleMap rc m
+                CMMaps ms -> do
+                    print $ "handling CMMaps " ++ show (map xmapName ms)
+                    atomically $ handleMaps rc ms
                     loop
                 CMError e -> do
                     print $ "handling CMError " ++ show e
@@ -53,18 +53,20 @@ handleCalculation rc c = do
 handleError :: RuntimeCalculation -> Error -> STM ()
 handleError = errorToAll
 
-handleMap :: RuntimeCalculation -> XNamedMap -> STM ()
-handleMap rc m = do
-    ers <- handleMapWithErrors rc m
+handleMaps :: RuntimeCalculation -> [XNamedMap] -> STM ()
+handleMaps rc ms = do
+    ers <- handleMapsWithErrors rc ms
     case ers of
         Right () -> return ()
         Left err -> errorToAll rc err
 
-handleMapWithErrors :: RuntimeCalculation -> XNamedMap -> STM (Either Error ())
-handleMapWithErrors rc m = do
-       modifyTVar (repository rc) updateRepository
+handleMapsWithErrors :: RuntimeCalculation -> [XNamedMap] -> STM (Either Error ())
+handleMapsWithErrors rc ms = do
+       modifyTVar (repository rc) (updateMapsInCalculation ms)
        execAndSendIfFull rc
-    where updateRepository = M.insert (xmapName m) (Just (xmap m))
+
+updateMapsInCalculation :: [XNamedMap] -> MapRepository -> MapRepository
+updateMapsInCalculation ms msbn = foldr  (\m msbni -> M.insert (xmapName m) (Just $ xmap m) msbni) msbn ms
 
 handleViewStarted :: RuntimeCalculation -> ViewChan -> STM ()
 handleViewStarted rc vc = do
@@ -113,7 +115,7 @@ sendToDependents rc cs vs rs = do
     calc <- trace "sendToDependents" (readTVar $ calculation rc)
     let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
     writeTVar (currentResult rc) (Just rsn)
-    sendToAll cs (CMMap rsn)
+    sendToAll cs (CMMaps [rsn])
     sendToAll vs (VMMaps [rsn])
     return ()
 

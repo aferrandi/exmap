@@ -43,6 +43,10 @@ actorLoad root chan = loop
                     print $ "handling LMLoadMapsForCalculations " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForCalculationsLoaded c) (PEMapsForCalculationsLoadError c)
                     loop
+                LMLoadMapsForCalculation source c pn cn mns -> do
+                    print $ "handling LMLoadMapsForCalculation " ++ show mns
+                    loadMapsInActor root source pn mns (PEMapsForCalculationLoaded c cn) (PEMapsForCalculationLoadError c cn)
+                    loop
                 LMLoadViewForProject source c pn vn  -> do
                     print $ "handling LMLoadViewForProject " ++ show vn
                     loadViewForProjectInActor root source c pn vn

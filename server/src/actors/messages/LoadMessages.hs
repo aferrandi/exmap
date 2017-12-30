@@ -15,6 +15,7 @@ data LoadMessage = LMLoadViewForClient ProjectChan WAClient ProjectName ViewName
                   | LMLoadMapForClient ProjectChan WAClient ProjectName XMapName
                   | LMLoadMapsForView ProjectChan WAClient ProjectName ViewName [XMapName]
                   | LMLoadMapsForCalculations ProjectChan WAClient ProjectName [XMapName]
+                  | LMLoadMapsForCalculation ProjectChan WAClient ProjectName CalculationName [XMapName]
                   | LMLoadViewForProject ProjectChan WAClient ProjectName ViewName
                   | LMLoadCalculation ProjectChan WAClient ProjectName CalculationName
                   | LMStop
