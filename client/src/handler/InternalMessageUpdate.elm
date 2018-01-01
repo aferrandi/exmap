@@ -76,7 +76,11 @@ handleOpenProject model pn =
     let command = case openProjectWithName model pn of
                     Just pm -> Cmd.none
                     Nothing -> sendToServer (WRSubscribeToProject pn)
-    in ({ model | currentProject = Just pn }, command)
+    in ({ model | currentProject = Just pn,
+                  currentView = Nothing,
+                  xmapEditorModel = emptyXMapEditorModel,
+                  viewEditorModel = emptyViewEditorModel,
+                  calculationEditorModel = emptyCalculationEditorModel }, command)
 
 handleOpenView : Model -> ViewName -> (Model, Cmd Msg)
 handleOpenView model vn =
