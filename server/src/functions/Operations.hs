@@ -16,7 +16,14 @@ subtracto om = operate om subtrct
     where subtrct :: Double -> Double -> Double
           subtrct = (-)
 
+timeso :: OperationMode -> XMap -> XMap -> XMapErr
+timeso om = operate om times
+    where times :: Double -> Double -> Double
+          times = (*)
+
+
 
 operationRepository :: OperationName -> OperationFun
 operationRepository Add = addo
 operationRepository Subtract = subtracto
+operationRepository Times = timeso

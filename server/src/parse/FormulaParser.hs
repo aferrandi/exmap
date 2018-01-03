@@ -59,9 +59,6 @@ parseMap = do
     s <- parsePath
     return $ XFMap (XMapName s)
 
---splitPath :: T.Text -> [T.Text]
---splitPath = T.split (== '/')
-
 parsePath :: P.Parser [T.Text]
 parsePath = do
     P.skipSpace
@@ -75,10 +72,13 @@ parseName = do
 parseVar :: P.Parser T.Text
 parseVar = do
     c <- P.letter
-    t <- P.takeWhile C.isAlphaNum
+    t <- P.takeWhile isVarLetter
     let s = T.cons c t
 --    traceM $ "var: " ++ show s
     return s
+
+isVarLetter :: Char -> Bool
+isVarLetter c = C.isAlphaNum c || c == '_'
 
 
 parseOperationName :: P.Parser OperationName
