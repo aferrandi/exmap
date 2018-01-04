@@ -23,24 +23,30 @@ actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rc = loop
     where loop = do
             msg <- atomically $ readTChan chan
+            cn <- atomically $ runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
-                    print $ "handling CMMaps " ++ show (map xmapName ms)
+                    print $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
                     atomically $ handleMaps rc ms
                     loop
                 CMError e -> do
-                    print $ "handling CMError " ++ show e
+                    print $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
                     atomically $ handleError rc e
                     loop
                 CMUpdateCalculation c -> do
-                    print $ "handling CMUpdateCalculation " ++ show c
+                    print $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
                     atomically $ handleCalculation rc c
                     loop
                 CMViewStarted vc -> do
-                    print "handling CMViewStarted"
+                    print $ "Calculation " ++ show cn ++ " handling CMViewStarted"
                     atomically $ handleViewStarted rc vc
                     loop
                 CMStop -> return ()
+
+runtimeCalcName :: RuntimeCalculation -> STM CalculationName
+runtimeCalcName rc = do
+    c <- readTVar (calculation rc)
+    return (calculationName c)
 
 handleCalculation :: RuntimeCalculation -> Calculation -> STM()
 handleCalculation rc c = do

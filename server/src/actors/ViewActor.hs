@@ -16,26 +16,26 @@ actorView :: ViewChan -> RuntimeView -> EventChan -> IO ()
 actorView chan rv evtChan = loop
     where loop = do
             msg <- atomically $ readTChan chan
-
+            let vn = runtimeViewName rv
             case msg of
                 VMMaps ms -> do
-                    print $ "handling VMMaps " ++ show (map xmapName ms)
+                    print $ "View " ++ show vn ++ " handling VMMaps " ++ show (map xmapName ms)
                     atomically $ handleMaps rv evtChan ms
                     loop
                 VMSubscribeToView c -> do
-                    print "handling VMSubscribeToView "
+                    print "View " ++ show vn ++ " handling VMSubscribeToView "
                     atomically $ subscribeToView rv evtChan c
                     loop
                 VMUnsubscribeFromView c -> do
-                    print "handling VMUnsubscribeFromView"
+                    print "View " ++ show vn ++ " handling VMUnsubscribeFromView"
                     atomically $ unsuscribeFromView rv evtChan c
                     loop
                 VMUpdate v -> do
-                    print $ "handling VMUpdate " ++ show v
+                    print $ "View " ++ show vn ++ " handling VMUpdate " ++ show v
                     atomically $ handleView rv evtChan v
                     loop
                 VMError e -> do
-                    print $ "handling VMError " ++ show e
+                    print $ "View " ++ show vn ++ " handling VMError " ++ show e
                     atomically $ sendErrorToClients rv evtChan e
                     loop
                 VMStop -> return ()
