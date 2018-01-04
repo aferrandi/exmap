@@ -31,10 +31,15 @@ layoutHeader model =
         [ Color.background <| pastel Color.Blue
         , Color.text <| Color.white
         ]
-        [ Layout.title [] [ text "EXMAP" ]
+        [ Layout.title [] [ text (title model) ]
         , Layout.spacer
         , Layout.navigation [] []
         ]
+
+title : Model -> String
+title model = let titleWithProject = Maybe.map (\p -> ". Project " ++ p) model.currentProject
+              in "EXMAP" ++ (Maybe.withDefault "" titleWithProject)
+
 
 viewProjects : Model -> Html Msg
 viewProjects model = Layout.render Mdl model.mdl
@@ -45,9 +50,6 @@ viewProjects model = Layout.render Mdl model.mdl
   , tabs = ([ ], [ ])
   , main = [viewProjectsContent model |> Material.Scheme.topWithScheme Color.Grey Color.Red]
   }
-
-
-
 
 viewProjectsContent : Model -> Html Msg
 viewProjectsContent model =
