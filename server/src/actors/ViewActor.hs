@@ -23,11 +23,11 @@ actorView chan rv evtChan = loop
                     atomically $ handleMaps rv evtChan ms
                     loop
                 VMSubscribeToView c -> do
-                    print "View " ++ show vn ++ " handling VMSubscribeToView "
+                    print $ "View " ++ show vn ++ " handling VMSubscribeToView "
                     atomically $ subscribeToView rv evtChan c
                     loop
                 VMUnsubscribeFromView c -> do
-                    print "View " ++ show vn ++ " handling VMUnsubscribeFromView"
+                    print $ "View " ++ show vn ++ " handling VMUnsubscribeFromView"
                     atomically $ unsuscribeFromView rv evtChan c
                     loop
                 VMUpdate v -> do

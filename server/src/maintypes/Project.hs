@@ -3,6 +3,7 @@ module Project where
 -- strucure of a project that can be stored and read from a file
 
 import qualified Data.Text as T
+import qualified Data.List as L
 
 import XMapTypes
 import View
@@ -37,3 +38,7 @@ data User = User {
 
 newtype AllProjects = AllProjects [ProjectName]
     deriving (Show, Eq)
+
+sourcesOfTypeInProject :: SourceType -> Project -> Maybe [XMapName]
+sourcesOfTypeInProject sc p = fmap sourceOfMaps fileSources
+        where fileSources = L.find (\s -> sourceType s == sc) (sources p)
