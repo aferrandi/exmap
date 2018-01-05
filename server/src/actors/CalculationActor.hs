@@ -18,7 +18,6 @@ import CalculationMessages
 import ViewMessages
 import LogMessages
 
-
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rc = loop
     where loop = do
@@ -91,17 +90,15 @@ errorToAll rc  e = do
 
 execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
 execAndSendIfFull rc = do
-                            rm <- readTVar $ repository rc
-                            let mmbn = repositoryIfFull rm
-                            case trace ("calculation maps:" ++ show mmbn) mmbn of
-                               Just mbn -> execAndSendCalc mbn
-                               Nothing -> return $ Right ()
+        rm <- readTVar $ repository rc
+        let mmbn = repositoryIfFull rm
+        case trace ("calculation maps:" ++ show mmbn) mmbn of
+           Just mbn -> execAndSendCalc mbn
+           Nothing -> return $ Right ()
     where execAndSendCalc mbn = do
-                                 chs <- readTVar $ calculationsToNotify rc
-                                 vs <- readTVar $ viewsToNotify rc
-                                 execAndSend rc chs vs mbn
-
-
+             chs <- readTVar $ calculationsToNotify rc
+             vs <- readTVar $ viewsToNotify rc
+             execAndSend rc chs vs mbn
 
 repositoryIfFull :: MapRepository -> Maybe XMapByName
 repositoryIfFull rm = do
@@ -124,7 +121,3 @@ sendToDependents rc cs vs rs = do
     sendToAll cs (CMMaps [rsn])
     sendToAll vs (VMMaps [rsn])
     return ()
-
-
-
-

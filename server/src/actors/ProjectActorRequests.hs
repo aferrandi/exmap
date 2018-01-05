@@ -21,6 +21,7 @@ import View
 import Project
 import Calculation
 import FormulaParser
+import Formula
 
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
@@ -99,12 +100,7 @@ storeCalculation chan rp c cs = do
     case parseFormula ft of
         Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
         Right f -> do
-                let cc = Calculation {
-                        calculationName = sourceCalculationName cs,
-                        resultName = sourceResultName cs,
-                        formula = f,
-                        operationMode = sourceOperationMode cs
-                }
+                let cc = calculationFromFormula cs f
                 writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
 
 storeView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
@@ -129,3 +125,11 @@ startCalculations chan rp c = do
 
 addSubscriber ::RuntimeProject -> WAClient -> STM ()
 addSubscriber rp c= modifyTVar (subscribedClients rp) (\cs -> c : cs)
+
+calculationFromFormula :: CalculationSource -> XFormula -> Calculation
+calculationFromFormula cs f = Calculation {
+                                   calculationName = sourceCalculationName cs,
+                                   resultName = sourceResultName cs,
+                                   formula = f,
+                                   operationMode = sourceOperationMode cs
+                               }

@@ -38,12 +38,12 @@ updateCalculation chan rp c cc = do
     cbn <- readTVar $ calculationChanByName rp
     pn <- prjName rp
     case M.lookup cn cbn of
-        Just cch -> do
-            modifyTVar (calculationChanByMap rp) $ updateCalculationChanByMap cch (calculationDependencies cc)
-            writeTChan cch (CMUpdateCalculation cc)
-            sendDependedMapsToCalculation chan rp c cc
-
+        Just cch -> updateFoundCalculation cch
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
+    where updateFoundCalculation cch =  do
+                                       modifyTVar (calculationChanByMap rp) $ updateCalculationChanByMap cch (calculationDependencies cc)
+                                       writeTChan cch (CMUpdateCalculation cc)
+                                       sendDependedMapsToCalculation chan rp c cc
 
 mapsForCalculationLoaded :: RuntimeProject -> WAClient -> CalculationName -> [XNamedMap] -> STM ()
 mapsForCalculationLoaded rp c cn ms = do
