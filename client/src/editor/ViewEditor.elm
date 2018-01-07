@@ -120,7 +120,7 @@ newViewButton model =
                             Ok newViewName -> Internal (NewViewWithName newViewName)
                             Err err -> Internal (ShowMessage err)
     in div []
-        [ Textfield.render Mdl [9] model.mdl
+        [ Textfield.render Mdl [10] model.mdl
                                              [ Textfield.label "New view name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_

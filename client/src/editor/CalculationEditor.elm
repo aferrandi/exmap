@@ -158,7 +158,7 @@ newCalculationButton model =
                                     Ok newCalculationName -> Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName)
                                     Err err -> Internal (ShowMessage err)
     in div []
-        [ Textfield.render Mdl [9] model.mdl
+        [ Textfield.render Mdl [10] model.mdl
                                              [ Textfield.label "New calculation name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
