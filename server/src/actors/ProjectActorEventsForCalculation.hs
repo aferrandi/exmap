@@ -30,6 +30,7 @@ addCalculation rp cc = do
                     let cn = calculationName cc
                     modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
+                    modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
                     writeTChan cch (CMUpdateCalculation cc)
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()
@@ -82,7 +83,7 @@ calculationStored chan rp c cc = do
         then atomically $ updateCalculation chan rp c cc
         else addCalculation rp cc
     atomically $ do
-        writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
+        storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
 updateCalculationChanByMap :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
@@ -102,3 +103,9 @@ sendDependedMapsToCalculation chan rp c cc = do
              let toLoad = L.intersect (calculationDependencies cc) fileSources
              writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
         Nothing -> return ()
+
+storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
+storeProject chan rp c = do
+    p <- readTVar $ project rp
+    writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
+

@@ -24,12 +24,10 @@ import View
 import Project
 import ViewBuild
 
-
 viewForClientLoaded :: WAClient -> RuntimeProject -> View -> STM ()
 viewForClientLoaded c rp v = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
-
 
 mapsForViewLoaded :: RuntimeProject -> WAClient -> ViewName -> [XNamedMap] -> STM ()
 mapsForViewLoaded rp c vn ms = do
@@ -39,7 +37,6 @@ mapsForViewLoaded rp c vn ms = do
         Just vChan -> writeTChan vChan (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
-
 viewStored :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewStored chan rp c v = do
     p <- readTVarIO $ project rp
@@ -47,13 +44,11 @@ viewStored chan rp c v = do
         then atomically $ updateView chan rp c p v
         else addView rp v
     atomically $ do
-        writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
+        storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
-
 
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
 sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
-
 
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewForProjectLoaded chan rp c v = do
@@ -118,3 +113,7 @@ updateViewChanByMap vch mns = trace ("updateView:" ++ show mns) $ updated . clea
           addToMultimap :: XMapName -> ViewChanByMap -> ViewChanByMap
           addToMultimap mn = M.insertWith (++) mn [vch]
 
+storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()
+storeProject chan rp c = do
+    p <- readTVar $ project rp
+    writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
