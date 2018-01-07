@@ -42,7 +42,7 @@ viewStored chan rp c v = do
     p <- readTVarIO $ project rp
     if elem (viewName v) (views p)
         then atomically $ updateView chan rp c p v
-        else addView rp v
+        else addView chan rp c v
     atomically $ do
         storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
@@ -64,8 +64,8 @@ addViewToProject rp vch v = do
     modifyTVar (viewChanByName rp) $ M.insert (viewName v) vch
     modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
 
-addView :: RuntimeProject -> View -> IO()
-addView rp v = do
+addView :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO()
+addView chan rp c v = do
     let vn = viewName v
     atomically $ modifyTVar (project rp) (\p -> p { views = vn : views p })
     pn <- atomically $ prjName rp
@@ -73,6 +73,8 @@ addView rp v = do
     atomically $ do
         addViewToProject rp vch v
         writeTChan vch $ VMUpdate v
+        sendDependedMapsToView chan rp c v
+        listenToDependentCalculations rp vch v
 
 updateView :: ProjectChan -> RuntimeProject -> WAClient -> Project -> View -> STM()
 updateView chan rp c p v = do
