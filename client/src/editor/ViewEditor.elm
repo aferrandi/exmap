@@ -27,6 +27,7 @@ import NameParser exposing (..)
 import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import MapsExtraction exposing (xmapNameToString)
+import MdlIndexes exposing (..)
 
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
@@ -56,7 +57,7 @@ viewEditorForView model pm = case model.viewEditorModel.viewName of
                                Nothing -> div [] []
 
 storeButton : Model -> ProjectModel -> Html Msg
-storeButton model pm = storeView pm model.viewEditorModel |> buttonClick model 10 "Store"
+storeButton model pm = storeView pm model.viewEditorModel |> buttonClick model [viewEditorIdx, 1]  "Store"
 
 storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm = case vm.viewName of
@@ -89,7 +90,7 @@ viewRows model v = let rows = ListX.zip (List.range 0 (List.length v.rows)) v.ro
 viewChoice model rowI =
     Table.td []
       [
-        Toggles.radio Mdl [0] model.mdl
+        Toggles.radio Mdl [viewEditorIdx, 2] model.mdl
         [ Toggles.value (model.viewEditorModel.rowToAddTo == rowI)
           , Toggles.group "tableGroup"
           , Toggles.ripple
@@ -120,13 +121,13 @@ newViewButton model =
                             Ok newViewName -> Internal (NewViewWithName newViewName)
                             Err err -> Internal (ShowMessage err)
     in div []
-        [ Textfield.render Mdl [10] model.mdl
+        [ Textfield.render Mdl [viewEditorIdx, 3] model.mdl
                                              [ Textfield.label "New view name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateViewName s))
                                              ][]
-        , buttonClick model 7 "New view" newViewMessage
+        , buttonClick model [viewEditorIdx, 4] "New view" newViewMessage
         ]
 
 addLabelButton : Model -> Html Msg
@@ -134,15 +135,15 @@ addLabelButton model =
     let viewEditorModel = model.viewEditorModel
         newViewMessage = (Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing)))
     in div []
-        [ Textfield.render Mdl [0] model.mdl
+        [ Textfield.render Mdl [viewEditorIdx, 5] model.mdl
                                              [ Textfield.label "Label name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateViewLabel s))
                                              ][]
-        , buttonClick model 1 "Add label" newViewMessage
+        , buttonClick model [viewEditorIdx, 6] "Add label" newViewMessage
         ]
 
 addRowButton : Model -> Html Msg
-addRowButton model = buttonClick model 1 "Add row" (Internal AddRowToView)
+addRowButton model = buttonClick model [viewEditorIdx, 7] "Add row" (Internal AddRowToView)
 

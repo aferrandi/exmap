@@ -24,6 +24,7 @@ import Project exposing (ProjectName, Error)
 import UIWrapper exposing (..)
 import Material.Layout as Layout
 import InternalMessages exposing (..)
+import MdlIndexes exposing (..)
 
 layoutHeader : Model -> Html Msg
 layoutHeader model =
@@ -93,10 +94,10 @@ newProjectButton model =
                                     viewNames = [],
                                     sources = []})
     in div []
-        [ Textfield.render Mdl [9] model.mdl
+        [ Textfield.render Mdl [projectsUIIdx, 1] model.mdl
                                              [ Textfield.label "New project name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateProjectName s))
                                              ][]
-        , buttonClick model 7 "Create and store project" newProjectMessage]
+        , buttonClick model [projectsUIIdx, 2] "Create and store project" newProjectMessage]

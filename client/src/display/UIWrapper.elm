@@ -26,8 +26,8 @@ cell : Int -> Int -> Int -> List (Options.Style Msg) -> List (Html Msg) ->  Grid
 cell tablet desktop phone others =
     Grid.cell ([ Grid.size Grid.Tablet tablet, Grid.size Grid.Desktop desktop, Grid.size Grid.Phone phone, Grid.stretch] ++ others)
 
-buttonNoClick : Model -> Int -> String -> List (Button.Property Msg) -> Html Msg
-buttonNoClick model index txt props = Button.render Mdl [index] model.mdl
+buttonNoClick : Model -> List Int -> String -> List (Button.Property Msg) -> Html Msg
+buttonNoClick model indexes txt props = Button.render Mdl indexes model.mdl
                                               (
                                                   [ Button.raised
                                                   , Button.colored
@@ -35,15 +35,15 @@ buttonNoClick model index txt props = Button.render Mdl [index] model.mdl
                                               ++ props)
                                               [ text txt]
 
-buttonClick : Model -> Int -> String -> Msg -> Html Msg
-buttonClick model index txt msg = buttonNoClick model index txt [ Options.onClick msg ]
+buttonClick : Model -> List Int -> String -> Msg -> Html Msg
+buttonClick model indexes txt msg = buttonNoClick model indexes txt [ Options.onClick msg ]
 
-buttonMaybe : Model -> Int -> String -> Maybe Msg -> Html Msg
-buttonMaybe model index txt mmsg =
+buttonMaybe : Model -> List Int -> String -> Maybe Msg -> Html Msg
+buttonMaybe model indexes txt mmsg =
     let msgProp = case mmsg of
                         Just msg -> [ Options.onClick msg ]
                         Nothing -> []
-    in buttonNoClick model index txt msgProp
+    in buttonNoClick model indexes txt msgProp
 
 scrollableTableStyle : Int -> List (Options.Property c Msg)
 scrollableTableStyle h = [
@@ -65,8 +65,8 @@ titleWithIcon : String -> String -> Color.Hue -> Html Msg
 titleWithIcon s i c = Options.styled Html.label [ Typo.display1]
                         [ Icon.view i [Color.text (pastel c), Icon.size36], text s]
 
-toggle : Model -> Int -> String -> String -> Bool -> Msg -> Html Msg
-toggle model idx txt gp val msg = Toggles.radio Mdl [0] model.mdl
+toggle : Model -> List Int -> String -> String -> Bool -> Msg -> Html Msg
+toggle model idxs txt gp val msg = Toggles.radio Mdl idxs model.mdl
               [ Toggles.value val
               , Toggles.group gp
               , Toggles.ripple

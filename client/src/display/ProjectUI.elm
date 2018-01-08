@@ -24,6 +24,7 @@ import MapEditor exposing (..)
 import ViewEditor exposing (..)
 import CalculationEditor exposing (..)
 import InternalMessages exposing (..)
+import MdlIndexes exposing (..)
 
 viewProject : Model -> ProjectModel -> Html Msg
 viewProject model pm = div[] [
@@ -41,7 +42,7 @@ viewProjectTabs model =
 
                            ]
 
-    in Tabs.render Mdl [0] model.mdl
+    in Tabs.render Mdl [projectUIIdx, 1] model.mdl
                    [ Tabs.ripple
                    , Tabs.onSelectTab tabToMessage
                    , Tabs.activeTab (projectFormToTab model.currentProjectForm)

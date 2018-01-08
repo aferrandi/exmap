@@ -28,6 +28,7 @@ import ViewUI exposing (..)
 import UIWrapper exposing (..)
 import MapsExtraction exposing (xmapNameToString, xmapNameFromString)
 import InternalMessages exposing (..)
+import MdlIndexes exposing (..)
 
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
@@ -70,7 +71,7 @@ viewEditorForCalculation model pm cn =
 
 
 storeButton : Model -> ProjectModel -> Html Msg
-storeButton model pm = storeCalculation pm model.calculationEditorModel |> buttonClick model 10 "Store"
+storeButton model pm = storeCalculation pm model.calculationEditorModel |> buttonClick model [calcEditorIdx, 1] "Store"
 
 storeCalculation : ProjectModel -> CalculationEditorModel -> Msg
 storeCalculation pm cm = case cm.calculationName of
@@ -125,7 +126,7 @@ functionsList model  =
     in Lists.ul [] ( List.append applicationList operationList)
 
 calculationTextArea : Model  -> Html Msg
-calculationTextArea model = Textfield.render Mdl [9] model.mdl
+calculationTextArea model = Textfield.render Mdl [calcEditorIdx, 2] model.mdl
                               [ Textfield.label "Enter the formula"
                               , Textfield.textarea
                               , Textfield.rows 20
@@ -135,7 +136,7 @@ calculationTextArea model = Textfield.render Mdl [9] model.mdl
                               []
 
 resultMapNameText : Model  -> Html Msg
-resultMapNameText model = Textfield.render Mdl [8] model.mdl
+resultMapNameText model = Textfield.render Mdl [calcEditorIdx, 3] model.mdl
                               [ Textfield.label "Enter the result map name"
                               , Textfield.floatingLabel
                               , Textfield.value (Maybe.withDefault "" model.calculationEditorModel.resultMapName )
@@ -148,8 +149,8 @@ operationNameChoice model =
   let hasMode m = model.calculationEditorModel.operationMode == m
   in div []
   [
-    toggle model 0 "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union)),
-    toggle model 1 "Intersection" "operationName" (hasMode Intersection)  (Internal (ChangeOperationMode Intersection))
+    toggle model [calcEditorIdx, 4] "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union)),
+    toggle model [calcEditorIdx, 5] "Intersection" "operationName" (hasMode Intersection)  (Internal (ChangeOperationMode Intersection))
     ]
 
 newCalculationButton : Model -> Html Msg
@@ -158,11 +159,11 @@ newCalculationButton model =
                                     Ok newCalculationName -> Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName)
                                     Err err -> Internal (ShowMessage err)
     in div []
-        [ Textfield.render Mdl [10] model.mdl
+        [ Textfield.render Mdl [calcEditorIdx, 6] model.mdl
                                              [ Textfield.label "New calculation name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateCalculationName s))
                                              ][]
-        , buttonClick model 7 "New calculation" newCalculationMessage
+        , buttonClick model [calcEditorIdx, 7] "New calculation" newCalculationMessage
         ]

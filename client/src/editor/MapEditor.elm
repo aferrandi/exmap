@@ -24,6 +24,7 @@ import XMapText exposing (..)
 import XMapParse exposing (..)
 import UIWrapper exposing (..)
 import ModelUpdate exposing (..)
+import MdlIndexes exposing (..)
 
 
 mapEditorView : Model -> ProjectModel -> Html Msg
@@ -50,9 +51,9 @@ mapEditorViewForMap model pm =
                   , cell 5 7 3 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
                ],
                Grid.grid [ Grid.noSpacing]
-                  [ cell 1 4 3 [] [ buttonClick model 8 "To Table >" (Internal MapToTable) ]
-                  , cell 2 4 3 [] [ buttonClick model 9 "< To Text" (Internal MapToTextArea) ]
-                  , cell 1 4 2 [] [ buttonMaybe model 10 "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
+                  [ cell 1 4 3 [] [ buttonClick model [mapEditorIdx, 1] "To Table >" (Internal MapToTable) ]
+                  , cell 2 4 3 [] [ buttonClick model [mapEditorIdx, 2] "< To Text" (Internal MapToTextArea) ]
+                  , cell 1 4 2 [] [ buttonMaybe model [mapEditorIdx, 3] "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
               ]
             ]
         Nothing -> div [][]
@@ -64,10 +65,10 @@ xmapTypeChoice  model =
   let hasType t = model.xmapEditorModel.xmapType == t
   in div []
   [
-    toggle model 0 "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble)),
-    toggle model 1 "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt)),
-    toggle model 2 "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString)),
-    toggle model 3 "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+    toggle model [mapEditorIdx, 4] "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble)),
+    toggle model [mapEditorIdx, 5] "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt)),
+    toggle model [mapEditorIdx, 6] "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString)),
+    toggle model [mapEditorIdx, 7] "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
     ]
 
 
@@ -79,14 +80,14 @@ newMapButton model=
                           Err e -> Internal (ShowMessage e)
     in div[] [
         xmapTypeChoice model,
-        Textfield.render Mdl [9] model.mdl
+        Textfield.render Mdl [mapEditorIdx, 8] model.mdl
                                              [ Textfield.label "New map name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateMapName s))
                                              ]
                                              [],
-        buttonClick model 7 "New map" storeNewMap
+        buttonClick model [mapEditorIdx, 9] "New map" storeNewMap
            ]
 
 
@@ -109,7 +110,7 @@ fileSourcesOfProject p =
     in Maybe.withDefault [] maybeMaps
 
 mapEditorTextArea : Model -> ProjectModel -> Html Msg
-mapEditorTextArea model pm = Textfield.render Mdl [9] model.mdl
+mapEditorTextArea model pm = Textfield.render Mdl [mapEditorIdx, 10] model.mdl
                               [ Textfield.label "Enter the map data"
                               , Textfield.floatingLabel
                               , Textfield.textarea
