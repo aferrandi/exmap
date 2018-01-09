@@ -85,6 +85,7 @@ newMapButton model=
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Options.onInput (\s -> Internal (UpdateMapName s))
+                                             , Textfield.value xmapEditorModel.newXmapName
                                              ]
                                              [],
         buttonClick model [mapEditorIdx, 9] "New map" storeNewMap

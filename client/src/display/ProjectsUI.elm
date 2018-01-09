@@ -98,6 +98,7 @@ newProjectButton model =
                                              [ Textfield.label "New project name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
+                                             , Textfield.value model.newProjectName
                                              , Options.onInput (\s -> Internal (UpdateProjectName s))
-                                             ][]
+                                             ] []
         , buttonClick model [projectsUIIdx, 2] "Create and store project" newProjectMessage]

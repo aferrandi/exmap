@@ -25,10 +25,10 @@ updateEvent evt model = case evt of
                             WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
                             WEMapLoaded pn m -> (handleMapLoaded model m, Cmd.none)
-                            WEMapStored pn mn -> (showMessage model ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored"), Cmd.none)
+                            WEMapStored pn mn -> (handleMapStored model pn mn, Cmd.none)
                             WEViewLoaded pn v -> (handleViewLoaded model v, Cmd.none)
                             WECalculationLoaded pn cs -> (handleCalculationLoaded model cs, Cmd.none)
-                            WECalculationStored pn cn -> (showMessage model ("Calculation:" ++ cn ++ " of project:"++ pn ++ " stored"), Cmd.none)
+                            WECalculationStored pn cn -> (handleCalculationStored model pn cn, Cmd.none)
                             WEFunctions fs -> (handleFunctions model fs, Cmd.none)
                             _ -> (showMessage model ("Message from server "++(toString evt)++" not recognized") , Cmd.none)
 
@@ -40,6 +40,18 @@ handleMapLoaded model m =
             xmapName = Just m.xmapName,
             xmapType = mapType m.xmap
             })
+
+handleCalculationStored : Model -> ProjectName ->  CalculationName -> Model
+handleCalculationStored model pn cn =
+    let mdlCleaned = updateCalculationEditorModel model (\cm -> { cm | newCalculationName = "" })
+    in showMessage mdlCleaned ("Calculation:" ++ cn ++ " of project:"++ pn ++ " stored")
+
+
+handleMapStored : Model -> ProjectName ->  XMapName -> Model
+handleMapStored model pn mn =
+    let mdlCleaned = updateXMapEditorModel model (\mm -> { mm| newXmapName = "" })
+    in showMessage mdlCleaned ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored")
+
 
 handleViewLoaded : Model -> View -> Model
 handleViewLoaded model v =

@@ -139,8 +139,9 @@ addLabelButton model =
                                              [ Textfield.label "Label name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
+                                             , Textfield.value viewEditorModel.newViewName
                                              , Options.onInput (\s -> Internal (UpdateViewLabel s))
-                                             ][]
+                                             ] []
         , buttonClick model [viewEditorIdx, 6] "Add label" newViewMessage
         ]
 

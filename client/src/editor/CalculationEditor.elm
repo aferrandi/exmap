@@ -155,15 +155,17 @@ operationNameChoice model =
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =
-    let  newCalculationMessage = case nameFromString model.calculationEditorModel.newCalculationName of
-                                    Ok newCalculationName -> Internal (NewCalculationWithName model.calculationEditorModel.newCalculationName)
+    let calculationEditorModel = model.calculationEditorModel
+        newCalculationMessage = case nameFromString calculationEditorModel.newCalculationName of
+                                    Ok newCalculationName -> Internal (NewCalculationWithName calculationEditorModel.newCalculationName)
                                     Err err -> Internal (ShowMessage err)
     in div []
         [ Textfield.render Mdl [calcEditorIdx, 6] model.mdl
                                              [ Textfield.label "New calculation name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
+                                             , Textfield.value calculationEditorModel.newCalculationName
                                              , Options.onInput (\s -> Internal (UpdateCalculationName s))
-                                             ][]
+                                             ] []
         , buttonClick model [calcEditorIdx, 7] "New calculation" newCalculationMessage
         ]
