@@ -29,7 +29,7 @@ viewViews model pm =    let title = case model.currentView of
                         [
                             titleWithIcon title "view_comfy" Color.Blue,
                             Grid.grid [heightInView 70]
-                                [ cell 2 2 1 [ Color.background lighterGrey]  [viewAllViewsList model pm]
+                                [ cell 2 2 1 []  [viewAllViewsList model pm]
                                 , cell 6 10 3 [] [ viewCurrentView model pm ]
                                  ]
                         ]
@@ -41,7 +41,7 @@ viewAllViewsList model pm =
                                [ Options.attribute <| Html.Events.onClick (Internal (OpenView vn))]
                                [ Lists.avatarIcon "view_comfy" [], text vn ]
                            ]
-    in Lists.ul [Color.background (Color.color Color.Grey Color.S100)] (List.map viewViewName pm.project.viewNames)
+    in Lists.ul (scrollableListStyle 65) (List.map viewViewName pm.project.viewNames)
 
 
 

@@ -53,6 +53,15 @@ scrollableTableStyle h = [
         Options.css "float" "left"
        ]
 
+scrollableListStyle : Int -> List (Options.Property c Msg)
+scrollableListStyle h = [
+        heightInView h,
+        Options.css "overflow-y" "auto",
+        Options.css "display" "block",
+        Color.background lightGrey
+       ]
+
+
 bold : List (Options.Property c Msg)
 bold = [Options.css "font-weight" "1000"]
 

@@ -63,7 +63,7 @@ viewProjectsContent model =
                ]
 
 viewAllProjectsList : Model -> Html Msg
-viewAllProjectsList model = Lists.ul [heightInView 65, Color.background lightGrey] (List.map viewAllProjectsItem model.allProjects)
+viewAllProjectsList model = Lists.ul (scrollableListStyle 65) (List.map viewAllProjectsItem model.allProjects)
 
 viewAllProjectsItem : ProjectName -> Html Msg
 viewAllProjectsItem pn = Lists.li []

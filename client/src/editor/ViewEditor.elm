@@ -75,7 +75,7 @@ viewsList p =
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadView p.projectName vn)) ]
                                [ Lists.avatarIcon "list" [], text vn ]                           ]
-    in Lists.ul [heightInView 55, Color.background lighterGrey] (List.map listItem p.viewNames)
+    in Lists.ul (scrollableListStyle 55) (List.map listItem p.viewNames)
 
 viewEditorTable : Model -> Maybe View -> Html Msg
 viewEditorTable model mv = case mv of
@@ -113,7 +113,7 @@ viewEditorMapList model =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddItemToView model.viewEditorModel.rowToAddTo (MapItem mn))) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [Color.background lighterGrey, heightInView 40] (List.map listItem model.mapsInProject)
+    in Lists.ul (scrollableListStyle 40) (List.map listItem model.mapsInProject)
 
 newViewButton : Model -> Html Msg
 newViewButton model =

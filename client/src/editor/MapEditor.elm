@@ -99,7 +99,7 @@ mapEditorMapList p =
                                [ Options.attribute <| Html.Events.onClick (Internal (ShowMapInEditor mn)) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [heightInView 50, Color.background lighterGrey] (List.map listItem (fileSourcesOfProject p))
+    in Lists.ul (scrollableListStyle 50) (List.map listItem (fileSourcesOfProject p))
 
 storeMap : ProjectModel -> XMapName -> XMap -> Msg
 storeMap pm n m =  WRStoreMap  pm.project.projectName { xmapName = n , xmap = m } |> Send

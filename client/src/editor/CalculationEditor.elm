@@ -59,9 +59,9 @@ viewEditorForCalculation model pm cn =
              , cell 2 3 1 [ ]  [operationNameChoice model]
              ],
              Grid.grid [heightInView 50]
-             [ cell 2 3 1 [ Color.background lighterGrey]  [mapsInProjectList model]
+             [ cell 2 3 1 []  [mapsInProjectList model]
              , cell 4 4 2 [] [calculationTextArea model]
-             , cell 2 3 1 [ Color.background lighterGrey]  [functionsList model]
+             , cell 2 3 1 []  [functionsList model]
              ],
              Grid.grid [ Grid.noSpacing]
                   [ cell 3 8 6 [] [ ]
@@ -96,7 +96,7 @@ calculationsInProjectList model pm =
                                [ Options.attribute <| Html.Events.onClick (Send (WRLoadCalculation projectName cn)) ]
                                [ Lists.avatarIcon "list" [], text cn ]
                            ]
-    in Lists.ul [heightInView 55, Color.background lighterGrey] (List.map listItem (pm.project.calculations))
+    in Lists.ul (scrollableListStyle 55) (List.map listItem (pm.project.calculations))
 
 
 mapsInProjectList : Model -> Html Msg
@@ -106,7 +106,7 @@ mapsInProjectList model  =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddMapToCalculation mn)) ]
                                [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
                            ]
-    in Lists.ul [] (List.map listItem (model.mapsInProject))
+    in Lists.ul (scrollableListStyle 40) (List.map listItem (model.mapsInProject))
 
 functionsList : Model -> Html Msg
 functionsList model  =
@@ -123,7 +123,7 @@ functionsList model  =
         functions = Maybe.withDefault { applications = [], operations= [] }  model.functions
         applicationList = List.map applicationListItem functions.applications
         operationList = List.map operationListItem functions.operations
-    in Lists.ul [] ( List.append applicationList operationList)
+    in Lists.ul (scrollableListStyle 40) ( List.append applicationList operationList)
 
 calculationTextArea : Model  -> Html Msg
 calculationTextArea model = Textfield.render Mdl [calcEditorIdx, 2] model.mdl
