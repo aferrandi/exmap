@@ -25,8 +25,8 @@ import Formula
 
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
-    PRSubscribeToProject c -> subscribeToProject c rp
-    PRUnsubscribeFromProject c -> removeSubscriber c rp
+    PRSubscribeToProject c -> subscribeToProject rp c
+    PRUnsubscribeFromProject c -> removeSubscriber rp c
     PRSubscribeToView c vn -> subscribeToView chan rp c vn
     PRUnsubscribeFromView c vn -> unsubscribeFromView c vn rp
     PRMapsInProject c -> mapsInProject rp c
@@ -38,6 +38,7 @@ handleRequests chan rp r= case r of
     PRLoadViewForClient c vn -> loadView chan rp c vn
     PRStoreView c v -> storeView chan rp c v
     PRStartCalculations c -> startCalculations chan rp c
+    PRDisconnect c -> disconnectClient rp c
 
 loadMapForClient :: WAClient -> ProjectChan -> RuntimeProject -> XMapName -> STM ()
 loadMapForClient c chan rp mn = do
@@ -49,14 +50,22 @@ storeMap c chan rp m = do
     pn <- prjName rp
     writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn  m
 
-subscribeToProject :: WAClient -> RuntimeProject -> STM()
-subscribeToProject c rp = do
+disconnectClient :: RuntimeProject -> WAClient -> STM()
+disconnectClient rp c = do
+    removeSubscriber rp c
+    disconnectAll
+    where disconnectAll = do
+           vs <- readTVar $ viewChanByName rp
+           mapM_ (\vc -> writeTChan vc (VMUnsubscribeFromView c)) (M.elems vs)
+
+subscribeToProject :: RuntimeProject -> WAClient -> STM()
+subscribeToProject rp c = do
     p <- readTVar $ project rp
     addSubscriber rp c
     writeTChan (evtChan rp) $ EMWebEvent [c] (WEProjectContent p)
 
-removeSubscriber :: WAClient -> RuntimeProject -> STM()
-removeSubscriber c rp = modifyTVar (subscribedClients rp) (filter notSameClient)
+removeSubscriber :: RuntimeProject -> WAClient -> STM()
+removeSubscriber rp c = modifyTVar (subscribedClients rp) (filter notSameClient)
     where notSameClient ci = ci /= c
 
 mapsInProject :: RuntimeProject -> WAClient -> STM ()

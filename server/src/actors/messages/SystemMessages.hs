@@ -24,6 +24,7 @@ data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRLoadCalculation WAClient ProjectName CalculationName
                     | SRStoreCalculation WAClient ProjectName CalculationSource
                     | SRFunctions WAClient
+                    | SRDisconnect WAClient
 
     deriving (Show, Eq)
 

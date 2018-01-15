@@ -2,6 +2,7 @@ module SystemActorRequests where
 
 import qualified Data.Map.Strict as M
 import qualified Data.List as L
+import qualified Data.Maybe as B
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
@@ -38,6 +39,7 @@ handleRequest chan sys r = case r of
         SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculationForClient c cn)
         SRStoreCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRStoreCalculation c cs)
         SRFunctions c -> sendFunctions sys c
+        SRDisconnect c -> disconnectClient sys c
 
 allProjects :: WAClient -> RuntimeSystem -> STM ()
 allProjects c sys = do
@@ -80,9 +82,18 @@ loadProjectIfNotAlreadyRunning chan sys c pn= do
   pbn <- readTVar (projectByName sys)
   case M.lookup pn pbn of
       Just mpc -> case mpc of
-                     Just pc -> writeTChan pc (PMRequest (PRSubscribeToProject c))
+                     Just pc -> writeTChan pc (PMRequest $ PRSubscribeToProject c)
                      Nothing -> writeTChan (loadChan $ chans sys) (LMLoadProject chan c pn)
       Nothing -> sendSysError sys c ("the project " ++ show pn ++ " does not exist in the sys")
+
+disconnectClient :: RuntimeSystem -> WAClient -> STM()
+disconnectClient sys c = do
+    removeSubscriber sys c
+    disconnectClientFromAllProjects
+    where disconnectClientFromAllProjects =  do
+           pbn <- readTVar $ projectByName sys
+           mapM_ (\pc -> writeTChan pc (PMRequest $ PRDisconnect c)) (B.catMaybes $ M.elems pbn)
+
 
 sendSysError :: RuntimeSystem -> WAClient -> String -> STM ()
 sendSysError sys c = sendStringError (evtChan sys) [c]

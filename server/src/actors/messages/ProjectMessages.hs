@@ -21,6 +21,9 @@ data ProjectRequest =     PRSubscribeToProject WAClient
                         | PRLoadViewForClient WAClient ViewName
                         | PRStoreView WAClient View
                         | PRStartCalculations WAClient
+                        | PRDisconnect WAClient
+
+
     deriving (Show, Eq)
 
 data ProjectEvent = PEViewForClientLoaded WAClient View

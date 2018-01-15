@@ -9,22 +9,19 @@ import WebClients
 import SystemMessages
 import LogMessages
 import Errors
-
-type WAClientById = M.Map WAClientId WAClient
-
-data WAState = WAState {
-                    clients:: WAClientById,
-                    systemChan :: SystemChan,
-                    logChan :: LogChan
-                    }
+import WebAppState
 
 handleWebRequest :: WAClientId -> WAState -> WebRequest -> IO ()
 handleWebRequest cid s r = do
     print $ "handling request " ++ show r ++ " from " ++ show cid
+    atomically $ withClient cid s (\c -> handleClientRequest c (systemChan s) r)
+
+withClient :: WAClientId -> WAState -> (WAClient -> STM()) -> STM ()
+withClient cid s handle = do
     let mc = M.lookup cid (clients s)
     case mc of
-        Just c -> atomically $ handleClientRequest c (systemChan s) r
-        Nothing -> atomically $ writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show cid ++ " not found"))
+        Just c -> handle c
+        Nothing -> writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show cid ++ " not found"))
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of
