@@ -6,6 +6,7 @@ import qualified Data.Maybe as B
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
+import qualified Data.Text as T
 
 import TextEnums
 import SystemState
@@ -14,6 +15,7 @@ import ProjectMessages
 import EventMessages
 import WebMessages
 import LoadMessages
+import LogMessages
 import StoreMessages
 import CommonChannels
 import WebClients
@@ -104,3 +106,6 @@ addSubscriber sys c= modifyTVar (subscribedClients sys) (L.union [c])
 removeSubscriber :: RuntimeSystem -> WAClient -> STM()
 removeSubscriber sys c = modifyTVar (subscribedClients sys) (filter notSameClient)
     where notSameClient ci = ci /= c
+
+logDebug :: RuntimeSystem -> String -> STM()
+logDebug sys t = writeTChan (logChan $ chans sys) $ LogMDebug (T.pack t)

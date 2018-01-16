@@ -13,7 +13,10 @@ actorLog chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
-                LogMLog (Error m) -> do
+                LogMErr (Error m) -> do
                     TIO.putStrLn m
+                    loop
+                LogMDebug s-> do
+                    TIO.putStrLn s
                     loop
                 LogMStop -> return ()

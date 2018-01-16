@@ -19,28 +19,29 @@ import ViewMessages
 import LogMessages
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
-actorCalculation chan rc = loop
+actorCalculation chan rc = atomically loop
     where loop = do
-            msg <- atomically $ readTChan chan
-            cn <- atomically $ runtimeCalcName rc
+            msg <- readTChan chan
+            cn <- runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
-                    print $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
-                    atomically $ handleMaps rc ms
+                    logCall $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
+                    handleMaps rc ms
                     loop
                 CMError e -> do
-                    print $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
-                    atomically $ handleError rc e
+                    logCall $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
+                    handleError rc e
                     loop
                 CMUpdateCalculation c -> do
-                    print $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
-                    atomically $ handleCalculation rc c
+                    logCall $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
+                    handleCalculation rc c
                     loop
                 CMViewStarted vc -> do
-                    print $ "Calculation " ++ show cn ++ " handling CMViewStarted"
-                    atomically $ handleViewStarted rc vc
+                    logCall $ "Calculation " ++ show cn ++ " handling CMViewStarted"
+                    handleViewStarted rc vc
                     loop
                 CMStop -> return ()
+          logCall = logDebug (logChan rc)
 
 runtimeCalcName :: RuntimeCalculation -> STM CalculationName
 runtimeCalcName rc = do
@@ -85,7 +86,7 @@ errorToAll rc  e = do
     vs <- readTVar $ viewsToNotify rc
     sendToAll cs (CMError e)
     sendToAll vs (VMError e)
-    writeTChan (logChan rc) (LogMLog e)
+    writeTChan (logChan rc) (LogMErr e)
     return ()
 
 execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
@@ -121,3 +122,4 @@ sendToDependents rc cs vs rs = do
     sendToAll cs (CMMaps [rsn])
     sendToAll vs (VMMaps [rsn])
     return ()
+

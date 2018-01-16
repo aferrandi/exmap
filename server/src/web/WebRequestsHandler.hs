@@ -21,7 +21,7 @@ withClient cid s handle = do
     let mc = M.lookup cid (clients s)
     case mc of
         Just c -> handle c
-        Nothing -> writeTChan (logChan s) (LogMLog $ mkError ("Client with id " ++ show cid ++ " not found"))
+        Nothing -> writeTChan (logChan s) (LogMErr $ mkError ("Client with id " ++ show cid ++ " not found"))
 
 handleClientRequest:: WAClient -> SystemChan -> WebRequest -> STM ()
 handleClientRequest c sc r = case r of
