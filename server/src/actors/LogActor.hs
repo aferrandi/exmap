@@ -4,6 +4,7 @@ module LogActor (actorLog) where
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text.IO as TIO
+import qualified Data.Text as T
 
 import Errors
 import LogMessages
@@ -13,10 +14,10 @@ actorLog chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
-                LogMErr (Error m) -> do
-                    TIO.putStrLn m
+                LogMErr source (Error m) -> do
+                    TIO.putStrLn $ T.append (T.pack $ "ERROR "++ source ++":") m
                     loop
-                LogMDebug s-> do
-                    TIO.putStrLn s
+                LogMDebug source s-> do
+                    TIO.putStrLn $ T.append (T.pack $ "DEBUG "++ source ++":") s
                     loop
                 LogMStop -> return ()

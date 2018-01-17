@@ -25,4 +25,4 @@ actorSystem chan sys = loop
                     handleEvent chan sys e
                     loop
                 SMStop -> return ()
-          logDbg t = atomically $ logDebug (logChan $ chans sys) t
+          logDbg t = atomically $ logDebug (logChan $ chans sys) "system" t

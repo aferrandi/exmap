@@ -40,7 +40,7 @@ actorView chan rv evtChan = atomically loop
                     sendErrorToClients rv evtChan e
                     loop
                 VMStop -> return ()
-          logDbg = logDebug (logChan rv)
+          logDbg = logDebug (logChan rv) "view"
 
 subscribeToView :: RuntimeView -> EventChan -> WAClient -> STM ()
 subscribeToView rv evtChan c = do

@@ -41,7 +41,7 @@ actorCalculation chan rc = atomically loop
                     handleViewStarted rc vc
                     loop
                 CMStop -> return ()
-          logDbg = logDebug (logChan rc)
+          logDbg = logDebug (logChan rc) "calc"
 
 runtimeCalcName :: RuntimeCalculation -> STM CalculationName
 runtimeCalcName rc = do
@@ -86,14 +86,14 @@ errorToAll rc  e = do
     vs <- readTVar $ viewsToNotify rc
     sendToAll cs (CMError e)
     sendToAll vs (VMError e)
-    writeTChan (logChan rc) (LogMErr e)
+    logError (logChan rc) "calc" e
     return ()
 
 execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
 execAndSendIfFull rc = do
         rm <- readTVar $ repository rc
         let mmbn = repositoryIfFull rm
-        case trace ("calculation maps:" ++ show mmbn) mmbn of
+        case mmbn of
            Just mbn -> execAndSendCalc mbn
            Nothing -> return $ Right ()
     where execAndSendCalc mbn = do
@@ -110,13 +110,13 @@ repositoryIfFull rm = do
 
 execAndSend :: RuntimeCalculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
 execAndSend rc cs vs mbn = do
-    calc <- trace ("execAndSend to " ++ show (length vs) ++ " view channels") (readTVar $ calculation rc)
+    calc <- readTVar $ calculation rc
     let ers = execFormula (formula calc) mbn (operationMode calc)
     mapM (sendToDependents rc cs vs) ers
 
 sendToDependents :: RuntimeCalculation -> [CalculationChan] -> [ViewChan] -> XMap -> STM ()
 sendToDependents rc cs vs rs = do
-    calc <- trace "sendToDependents" (readTVar $ calculation rc)
+    calc <- readTVar $ calculation rc
     let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
     writeTVar (currentResult rc) (Just rsn)
     sendToAll cs (CMMaps [rsn])

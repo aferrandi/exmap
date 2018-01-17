@@ -26,6 +26,6 @@ actorProject chan rp = loop
                     handleEvent chan rp e
                     loop
                 PMStop -> return ()
-          logDbg t = atomically $ logDebug (logChan $ chans rp) t
+          logDbg t = atomically $ logDebug (logChan $ chans rp) "project" t
 
 

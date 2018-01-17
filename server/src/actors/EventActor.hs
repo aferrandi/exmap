@@ -24,5 +24,5 @@ actorEvent chan lch = loop
                         $ \ex -> logErr (mkError $ "Sending to clients got: " ++ show ex)
                     loop
                 EMStop -> return ()
-          logDbg t = atomically $ logDebug lch t
-          logErr e = atomically $ logError lch e
+          logDbg t = atomically $ logDebug lch "event" t
+          logErr e = atomically $ logError lch "event" e

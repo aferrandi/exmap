@@ -45,7 +45,7 @@ actorStore root chan lch = loop
                     storeViewInActor root source c pn v
                     loop
                 StMStop -> return ()
-          logDbg t = atomically $ logDebug lch t
+          logDbg t = atomically $ logDebug lch "store" t
 
 storeNewProjectInActor :: FilePath -> SystemChan -> WAClient -> Project -> IO ()
 storeNewProjectInActor root source c p = do

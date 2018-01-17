@@ -57,7 +57,7 @@ actorLoad root chan lch = loop
                     loadCalculationInActor root source c pn cn
                     loop
                 LMStop -> return ()
-          logDbg t = atomically $ logDebug lch t
+          logDbg t = atomically $ logDebug lch "load" t
 
 loadViewForClient :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
 loadViewForClient root source c pn vn = do
