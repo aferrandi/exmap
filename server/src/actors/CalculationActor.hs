@@ -7,7 +7,6 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.Map.Strict as M
 import qualified Data.List as L
-import Debug.Trace
 
 import TChans
 import XMapTypes

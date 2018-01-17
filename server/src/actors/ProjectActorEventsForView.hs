@@ -31,7 +31,7 @@ viewForClientLoaded c rp v = do
 
 mapsForViewLoaded :: RuntimeProject -> WAClient -> ViewName -> [XNamedMap] -> STM ()
 mapsForViewLoaded rp c vn ms = do
-    vs <- readTVar $ viewChanByName rp
+    vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
         Just vChan -> writeTChan vChan (VMMaps ms)

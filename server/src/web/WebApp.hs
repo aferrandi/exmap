@@ -62,10 +62,11 @@ connectClient conn stateRef = Concurrent.modifyMVar stateRef $ \state -> do
 
 
 disconnectClient :: WAClientId -> Concurrent.MVar WAState -> IO ()
-disconnectClient cid stateRef = do
-  print $ "client " ++ show cid ++ " disconnecting"
+disconnectClient cid stateRef =
   Concurrent.modifyMVar_ stateRef $ \state -> do
-    propagateDisconnection (systemChan state) (clients state) cid
+    atomically $ do
+        webLogDbg state $ "client " ++ show cid ++ " disconnecting"
+        propagateDisconnection state (clients state) cid
     return $ stateWithoutClient state cid
 
 listen :: WS.Connection -> WAClientId -> Concurrent.MVar WAState -> IO ()
@@ -74,23 +75,23 @@ listen conn cid stateRef = Monad.forever receive
 
 handleMessage :: WAClientId -> Concurrent.MVar WAState -> B.ByteString -> IO ()
 handleMessage cid stateRef jsn = do
-  print $ "got request " ++ show jsn ++ " from " ++ show cid
-  state <- Concurrent.readMVar stateRef
-  case eitherDecode jsn of
-        Right r -> handleWebRequest cid state r
-        Left e -> sendErrorToClient cid (clients state) (mkError (e ++ " when decoding " ++ show jsn))
-  return ()
+    state <- Concurrent.readMVar stateRef
+    atomically $ webLogDbg state $ "got request " ++ show jsn ++ " from " ++ show cid
+    case eitherDecode jsn of
+        Right r -> atomically $ handleWebRequest cid state r
+        Left e -> sendErrorToClient state cid (mkError (e ++ " when decoding " ++ show jsn))
+    return ()
 
 
-propagateDisconnection :: SystemChan -> WAClientById -> WAClientId-> IO ()
-propagateDisconnection sys cs cid = case M.lookup cid cs of
-                                        Just c -> atomically $ writeTChan sys (SMRequest $ SRDisconnect c)
-                                        Nothing -> print $ "disconnecting clientId not found " ++ show cid -- nothing else to do.
+propagateDisconnection :: WAState -> WAClientById -> WAClientId-> STM ()
+propagateDisconnection state cs cid = case M.lookup cid cs of
+                                        Just c -> writeTChan (systemChan state) (SMRequest $ SRDisconnect c)
+                                        Nothing -> webLogErr state (mkError $ "disconnecting clientId not found " ++ show cid) -- nothing else to do.
 
-sendErrorToClient :: WAClientId -> WAClientById -> Error -> IO ()
-sendErrorToClient cid cs err = case M.lookup cid cs of
+sendErrorToClient :: WAState -> WAClientId -> Error -> IO ()
+sendErrorToClient state cid err = case M.lookup cid (clients state) of
                                         Just c -> sendToClient c (WEError err)
-                                        Nothing -> print $ "clientId not found " ++ show cid -- nothing else to do.
+                                        Nothing -> atomically $ webLogErr state (mkError $ "sending error clientId not found " ++ show cid) -- nothing else to do.
 
 stateWithClient :: WAState ->  WAClient -> WAState
 stateWithClient state c = WAState{

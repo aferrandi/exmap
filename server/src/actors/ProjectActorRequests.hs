@@ -55,7 +55,7 @@ disconnectClient rp c = do
     removeSubscriber rp c
     disconnectAll
     where disconnectAll = do
-           vs <- readTVar $ viewChanByName rp
+           vs <- readTVar $ viewChanByName rp
            mapM_ (\vc -> writeTChan vc (VMUnsubscribeFromView c)) (M.elems vs)
 
 subscribeToProject :: RuntimeProject -> WAClient -> STM()
@@ -77,8 +77,8 @@ mapsInProject rp c = do
     writeTChan (evtChan rp) $ EMWebEvent [c] (WEMapsInProject (projectName p) ss)
 
 subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
-subscribeToView chan rp c vn   = do
-    vs <- readTVar $ viewChanByName rp
+subscribeToView chan rp c vn = do
+    vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
         Just vChan -> writeTChan vChan (VMSubscribeToView c)
@@ -86,14 +86,14 @@ subscribeToView chan rp c vn   = do
 
 unsubscribeFromView :: WAClient -> ViewName -> RuntimeProject -> STM ()
 unsubscribeFromView c vn rp = do
-    vs <- readTVar $ viewChanByName rp
+    vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
         Just vChan -> writeTChan vChan (VMUnsubscribeFromView c)
         Nothing -> sendStringError  (evtChan rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show pn)
 
 updateProject :: ProjectChan -> RuntimeProject -> WAClient -> Project -> STM ()
-updateProject chan rp c p = do
+updateProject chan rp c p =
     writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
     -- update calculations and views
 

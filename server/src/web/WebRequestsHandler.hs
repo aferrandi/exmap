@@ -11,10 +11,10 @@ import LogMessages
 import Errors
 import WebAppState
 
-handleWebRequest :: WAClientId -> WAState -> WebRequest -> IO ()
+handleWebRequest :: WAClientId -> WAState -> WebRequest -> STM ()
 handleWebRequest cid s r = do
-    print $ "handling request " ++ show r ++ " from " ++ show cid
-    atomically $ withClient cid s (\c -> handleClientRequest c (systemChan s) r)
+    webLogDbg s $ "handling request " ++ show r ++ " from " ++ show cid
+    withClient cid s (\c -> handleClientRequest c (systemChan s) r)
 
 withClient :: WAClientId -> WAState -> (WAClient -> STM()) -> STM ()
 withClient cid s handle = do
