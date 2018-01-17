@@ -25,23 +25,23 @@ actorCalculation chan rc = atomically loop
             cn <- runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
-                    logCall $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
                     handleMaps rc ms
                     loop
                 CMError e -> do
-                    logCall $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
                     handleError rc e
                     loop
                 CMUpdateCalculation c -> do
-                    logCall $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
                     handleCalculation rc c
                     loop
                 CMViewStarted vc -> do
-                    logCall $ "Calculation " ++ show cn ++ " handling CMViewStarted"
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMViewStarted"
                     handleViewStarted rc vc
                     loop
                 CMStop -> return ()
-          logCall = logDebug (logChan rc)
+          logDbg = logDebug (logChan rc)
 
 runtimeCalcName :: RuntimeCalculation -> STM CalculationName
 runtimeCalcName rc = do

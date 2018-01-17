@@ -18,14 +18,14 @@ actorProject chan rp = loop
             pn <- atomically $ prjName rp
             case msg of
                 PMRequest r -> do
-                    logCall $ "handling project request " ++ show r ++ " for project " ++ show pn
+                    logDbg $ "handling project request " ++ show r ++ " for project " ++ show pn
                     atomically $ handleRequests chan rp r
                     loop
                 PMEvent e -> do
-                    logCall $ "handling project event " ++ show e ++ " for project " ++ show pn
+                    logDbg $ "handling project event " ++ show e ++ " for project " ++ show pn
                     handleEvent chan rp e
                     loop
                 PMStop -> return ()
-          logCall t = atomically $ logDebug (logChan $ chans rp) t
+          logDbg t = atomically $ logDebug (logChan $ chans rp) t
 
 

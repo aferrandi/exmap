@@ -8,6 +8,8 @@ import SystemState
 import SystemMessages
 import SystemActorRequests (handleRequest)
 import SystemActorEvents (handleEvent)
+import LogMessages
+import CommonChannels
 
 actorSystem :: SystemChan -> RuntimeSystem -> IO ()
 actorSystem chan sys = loop
@@ -15,11 +17,12 @@ actorSystem chan sys = loop
             msg <- atomically $ readTChan chan
             case msg of
                 SMRequest r -> do
-                    print $ "handling system request " ++ show r
+                    logDbg $ "handling system request " ++ show r
                     atomically $ handleRequest chan sys r
                     loop
                 SMEvent e -> do
-                    print $ "handling system event " ++ show e
+                    logDbg $ "handling system event " ++ show e
                     handleEvent chan sys e
                     loop
                 SMStop -> return ()
+          logDbg t = atomically $ logDebug (logChan $ chans sys) t

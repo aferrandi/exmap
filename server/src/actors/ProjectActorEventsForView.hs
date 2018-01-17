@@ -53,7 +53,7 @@ sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewForProjectLoaded chan rp c v = do
      p <- readTVarIO $ project rp
-     vch <- viewToChan (evtChan rp) (projectName p) v
+     vch <- viewToChan (evtChan rp) (logChan $ chans rp) (projectName p) v
      atomically $ do addViewToProject rp vch v
                      sendSubscriptionToView vch c
                      sendDependedMapsToView chan rp c v
@@ -69,7 +69,7 @@ addView chan rp c v = do
     let vn = viewName v
     atomically $ modifyTVar (project rp) (\p -> p { views = vn : views p })
     pn <- atomically $ prjName rp
-    vch <- viewToChan (evtChan rp) pn v
+    vch <- viewToChan (evtChan rp) (logChan $ chans rp) pn v
     atomically $ do
         addViewToProject rp vch v
         writeTChan vch $ VMUpdate v

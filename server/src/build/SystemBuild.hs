@@ -40,9 +40,9 @@ buildChans rt lch = do
     evch <- newTChanIO
     ldch <- newTChanIO
     stch <- newTChanIO
-    _ <- forkIO $ actorEvent evch
-    _ <- forkIO $ actorLoad rt ldch
-    _ <- forkIO $ actorStore rt stch
+    _ <- forkIO $ actorEvent evch lch
+    _ <- forkIO $ actorLoad rt ldch lch
+    _ <- forkIO $ actorStore rt stch lch
     return CommonChans {
         eventChan = evch,
         loadChan = ldch,

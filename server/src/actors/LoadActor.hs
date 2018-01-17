@@ -11,6 +11,7 @@ import XMapTypes
 import LoadMessages
 import ProjectMessages
 import SystemMessages
+import LogMessages
 import Project
 import View
 import Calculation
@@ -18,45 +19,45 @@ import WebClients
 import Load
 import Errors
 
-actorLoad :: FilePath -> LoadChan -> IO ()
-actorLoad root chan = loop
+actorLoad :: FilePath -> LoadChan -> LogChan -> IO ()
+actorLoad root chan lch = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
                 LMLoadViewForClient source c pn vn  -> do
-                    print $ "handling LMLoadView " ++ show vn
+                    logDbg $ "handling LMLoadView " ++ show vn
                     loadViewForClient root source c pn vn
                     loop
                 LMLoadProject source c pn -> do
-                    print $ "handling LMLoadProject " ++ show pn
+                    logDbg $ "handling LMLoadProject " ++ show pn
                     loadProjectInActor root source c pn
                     loop
                 LMLoadMapForClient source c pn mn -> do
-                    print $ "handling LMLoadMapForClient " ++ show mn
+                    logDbg $ "handling LMLoadMapForClient " ++ show mn
                     loadMapForClient root source c pn mn
                     loop
                 LMLoadMapsForView source c pn vn mns -> do
-                    print $ "handling LMLoadMapsForView " ++ show mns
+                    logDbg $ "handling LMLoadMapsForView " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForViewLoaded c vn) (PEMapsForViewLoadError c vn)
                     loop
                 LMLoadMapsForCalculations source c pn mns -> do
-                    print $ "handling LMLoadMapsForCalculations " ++ show mns
+                    logDbg $ "handling LMLoadMapsForCalculations " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForCalculationsLoaded c) (PEMapsForCalculationsLoadError c)
                     loop
                 LMLoadMapsForCalculation source c pn cn mns -> do
-                    print $ "handling LMLoadMapsForCalculation " ++ show mns
+                    logDbg $ "handling LMLoadMapsForCalculation " ++ show mns
                     loadMapsInActor root source pn mns (PEMapsForCalculationLoaded c cn) (PEMapsForCalculationLoadError c cn)
                     loop
                 LMLoadViewForProject source c pn vn  -> do
-                    print $ "handling LMLoadViewForProject " ++ show vn
+                    logDbg $ "handling LMLoadViewForProject " ++ show vn
                     loadViewForProjectInActor root source c pn vn
                     loop
                 LMLoadCalculation source c pn cn  -> do
-                    print $ "handling LMLoadCalculation " ++ show cn
+                    logDbg $ "handling LMLoadCalculation " ++ show cn
                     loadCalculationInActor root source c pn cn
                     loop
                 LMStop -> return ()
-
+          logDbg t = atomically $ logDebug lch t
 
 loadViewForClient :: FilePath -> ProjectChan -> WAClient -> ProjectName -> ViewName -> IO ()
 loadViewForClient root source c pn vn = do

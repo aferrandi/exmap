@@ -10,36 +10,37 @@ import ViewMessages
 import WebClients
 import WebMessages
 import EventMessages
+import LogMessages
 import XMapTypes
 
 actorView :: ViewChan -> RuntimeView -> EventChan -> IO ()
-actorView chan rv evtChan = loop
+actorView chan rv evtChan = atomically loop
     where loop = do
-            msg <- atomically $ readTChan chan
+            msg <- readTChan chan
             let vn = runtimeViewName rv
             case msg of
                 VMMaps ms -> do
-                    print $ "View " ++ show vn ++ " handling VMMaps " ++ show (map xmapName ms)
-                    atomically $ handleMaps rv evtChan ms
+                    logDbg $ "View " ++ show vn ++ " handling VMMaps " ++ show (map xmapName ms)
+                    handleMaps rv evtChan ms
                     loop
                 VMSubscribeToView c -> do
-                    print $ "View " ++ show vn ++ " handling VMSubscribeToView "
-                    atomically $ subscribeToView rv evtChan c
+                    logDbg $ "View " ++ show vn ++ " handling VMSubscribeToView "
+                    subscribeToView rv evtChan c
                     loop
                 VMUnsubscribeFromView c -> do
-                    print $ "View " ++ show vn ++ " handling VMUnsubscribeFromView"
-                    atomically $ unsuscribeFromView rv evtChan c
+                    logDbg $ "View " ++ show vn ++ " handling VMUnsubscribeFromView"
+                    unsuscribeFromView rv evtChan c
                     loop
                 VMUpdate v -> do
-                    print $ "View " ++ show vn ++ " handling VMUpdate " ++ show v
-                    atomically $ handleView rv evtChan v
+                    logDbg $ "View " ++ show vn ++ " handling VMUpdate " ++ show v
+                    handleView rv evtChan v
                     loop
                 VMError e -> do
-                    print $ "View " ++ show vn ++ " handling VMError " ++ show e
-                    atomically $ sendErrorToClients rv evtChan e
+                    logDbg $ "View " ++ show vn ++ " handling VMError " ++ show e
+                    sendErrorToClients rv evtChan e
                     loop
                 VMStop -> return ()
-
+          logDbg = logDebug (logChan rv)
 
 subscribeToView :: RuntimeView -> EventChan -> WAClient -> STM ()
 subscribeToView rv evtChan c = do
