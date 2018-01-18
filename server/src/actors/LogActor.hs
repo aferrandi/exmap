@@ -5,7 +5,7 @@ import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 import qualified Data.Text as T
 import System.Log.FastLogger
-
+import Data.Monoid ((<>))
 
 import Errors
 import LogMessages
@@ -13,10 +13,16 @@ import Paths (logPath)
 
 actorLog :: FilePath -> LogChan -> IO ()
 actorLog root chan = do
-    fileLog <- newFileLoggerSet defaultBufSize (logPath root)
-    consoleLog <- newStderrLoggerSet defaultBufSize
+    timeCache <- newTimeCache simpleTimeFormat'
+    (consoleLog, consoleCleanUp) <- newTimedFastLogger timeCache (LogStdout defaultBufSize)
+    (fileLog, fileCleanUp) <- newTimedFastLogger timeCache (LogFile fileSpec defaultBufSize)
     logLoop fileLog consoleLog chan
-
+    consoleCleanUp
+    fileCleanUp
+    where fileSpec = FileLogSpec {
+                                  log_file = logPath root,
+                                  log_file_size = ((10::Integer)^(6::Integer))::Integer,
+                                  log_backup_number = 4}
 
 data TypeLog = LogDebug | LogError
 
@@ -24,22 +30,20 @@ instance Show TypeLog where
     show LogDebug = "DEBUG "
     show LogError = "ERROR "
 
-logLoop :: LoggerSet -> LoggerSet -> LogChan -> IO ()
+logLoop :: TimedFastLogger -> TimedFastLogger -> LogChan -> IO ()
 logLoop fileLog consoleLog chan = loop
     where loop = do
             msg <- atomically $ readTChan chan
             case msg of
                 LogMErr source (Error m) -> do
-                    let txt = mkLogStr LogError source  m
-                    pushLogStrLn fileLog txt
-                    pushLogStrLn consoleLog txt
+                    pushLog fileLog LogError source m
+                    pushLog consoleLog LogError source m
                     loop
                 LogMDebug source s-> do
-                    let txt = mkLogStr LogDebug source s
-                    pushLogStrLn fileLog txt
+                    pushLog fileLog LogDebug source s
                     loop
                 LogMStop -> return ()
 
-mkLogStr :: TypeLog -> String -> T.Text -> LogStr
-mkLogStr typ src s = toLogStr $ T.append (T.pack $ show typ ++ src ++":") s
 
+pushLog :: TimedFastLogger -> TypeLog -> String -> T.Text -> IO ()
+pushLog logger typ src msg = logger $ \ft -> toLogStr ft <> toLogStr " " <> toLogStr (show typ) <> toLogStr src <> toLogStr ": " <> toLogStr msg <> toLogStr "\n"
