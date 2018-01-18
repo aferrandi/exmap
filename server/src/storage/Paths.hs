@@ -26,3 +26,6 @@ viewPath root pn (ViewName vn) = projectDir root pn </> T.unpack vn <.> "vew"
 
 calculationPath :: FilePath -> ProjectName -> CalculationName -> FilePath
 calculationPath root pn (CalculationName cn) = projectDir root pn </> T.unpack cn <.> "clc"
+
+logPath :: FilePath  -> FilePath
+logPath root = root </> "exmap" <.> "log"

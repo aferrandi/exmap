@@ -33,6 +33,7 @@ executable exmap
                      , bytestring
                      , stm
                      , base
+                     , fast-logger
   other-modules:
                        Formula
                      , TChans
