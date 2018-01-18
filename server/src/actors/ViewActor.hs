@@ -14,33 +14,33 @@ import LogMessages
 import XMapTypes
 
 actorView :: ViewChan -> RuntimeView -> EventChan -> IO ()
-actorView chan rv evtChan = atomically loop
+actorView chan rv evtChan = loop
     where loop = do
-            msg <- readTChan chan
+            msg <- atomically $ readTChan chan
             let vn = runtimeViewName rv
             case msg of
                 VMMaps ms -> do
                     logDbg $ "View " ++ show vn ++ " handling VMMaps " ++ show (map xmapName ms)
-                    handleMaps rv evtChan ms
+                    atomically $ handleMaps rv evtChan ms
                     loop
                 VMSubscribeToView c -> do
                     logDbg $ "View " ++ show vn ++ " handling VMSubscribeToView "
-                    subscribeToView rv evtChan c
+                    atomically $ subscribeToView rv evtChan c
                     loop
                 VMUnsubscribeFromView c -> do
                     logDbg $ "View " ++ show vn ++ " handling VMUnsubscribeFromView"
-                    unsuscribeFromView rv evtChan c
+                    atomically $ unsuscribeFromView rv evtChan c
                     loop
                 VMUpdate v -> do
                     logDbg $ "View " ++ show vn ++ " handling VMUpdate " ++ show v
-                    handleView rv evtChan v
+                    atomically $ handleView rv evtChan v
                     loop
                 VMError e -> do
                     logDbg $ "View " ++ show vn ++ " handling VMError " ++ show e
-                    sendErrorToClients rv evtChan e
+                    atomically $ sendErrorToClients rv evtChan e
                     loop
                 VMStop -> return ()
-          logDbg = logDebug (logChan rv) "view"
+          logDbg t = atomically $ logDebug (logChan rv) "view" t
 
 subscribeToView :: RuntimeView -> EventChan -> WAClient -> STM ()
 subscribeToView rv evtChan c = do

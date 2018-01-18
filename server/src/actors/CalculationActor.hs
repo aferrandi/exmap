@@ -18,29 +18,29 @@ import ViewMessages
 import LogMessages
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
-actorCalculation chan rc = atomically loop
+actorCalculation chan rc = loop
     where loop = do
-            msg <- readTChan chan
-            cn <- runtimeCalcName rc
+            msg <- atomically $ readTChan chan
+            cn <- atomically $ runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
-                    handleMaps rc ms
+                    atomically $ handleMaps rc ms
                     loop
                 CMError e -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMError " ++ show e
-                    handleError rc e
+                    atomically $ handleError rc e
                     loop
                 CMUpdateCalculation c -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
-                    handleCalculation rc c
+                    atomically $ handleCalculation rc c
                     loop
                 CMViewStarted vc -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMViewStarted"
-                    handleViewStarted rc vc
+                    atomically $ handleViewStarted rc vc
                     loop
                 CMStop -> return ()
-          logDbg = logDebug (logChan rc) "calc"
+          logDbg t = atomically $ logDebug (logChan rc) "calc" t
 
 runtimeCalcName :: RuntimeCalculation -> STM CalculationName
 runtimeCalcName rc = do
