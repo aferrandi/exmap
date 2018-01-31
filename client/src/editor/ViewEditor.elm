@@ -125,6 +125,7 @@ newViewButton model =
                                              [ Textfield.label "New view name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
+                                             , Textfield.value model.viewEditorModel.newViewName
                                              , Options.onInput (\s -> Internal (UpdateViewName s))
                                              ][]
         , buttonClick model [viewEditorIdx, 4] "New view" newViewMessage
@@ -133,16 +134,16 @@ newViewButton model =
 addLabelButton : Model -> Html Msg
 addLabelButton model =
     let viewEditorModel = model.viewEditorModel
-        newViewMessage = (Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing)))
+        newLabelMessage = (Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing)))
     in div []
         [ Textfield.render Mdl [viewEditorIdx, 5] model.mdl
                                              [ Textfield.label "Label name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
-                                             , Textfield.value viewEditorModel.newViewName
+                                             , Textfield.value viewEditorModel.labelEditing
                                              , Options.onInput (\s -> Internal (UpdateViewLabel s))
                                              ] []
-        , buttonClick model [viewEditorIdx, 6] "Add label" newViewMessage
+        , buttonClick model [viewEditorIdx, 6] "Add label" newLabelMessage
         ]
 
 addRowButton : Model -> Html Msg
