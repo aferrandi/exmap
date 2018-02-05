@@ -45,8 +45,8 @@ viewViewsEditor model pm = let title = case model.viewEditorModel.viewName of
 viewEditorForView model pm = case model.viewEditorModel.viewName of
                                Just vn -> div [] [
                                      Grid.grid [heightInView 60]
-                                     [ cell 6 10 3 [] [ viewEditorTable model model.viewEditorModel.viewToEdit ]
-                                     , cell 2 2 1 [ ]  [viewEditorMapList model, addLabelButton model ]
+                                     [ cell 6 9 3 [] [ viewEditorTable model model.viewEditorModel.viewToEdit ]
+                                     , cell 2 3 1 [ ]  [viewEditorMapList model, addLabelButton model ]
                                      ],
                                      Grid.grid [ Grid.noSpacing]
                                           [ cell 2 6 4 [] [ ]

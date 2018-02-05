@@ -161,11 +161,11 @@ newCalculationButton model =
                                     Err err -> Internal (ShowMessage err)
     in div []
         [ Textfield.render Mdl [calcEditorIdx, 6] model.mdl
-                                             [ Textfield.label "New calculation name"
+                                             [ Textfield.label "New Calculation Name"
                                              , Textfield.floatingLabel
                                              , Textfield.text_
                                              , Textfield.value calculationEditorModel.newCalculationName
                                              , Options.onInput (\s -> Internal (UpdateCalculationName s))
                                              ] []
-        , buttonClick model [calcEditorIdx, 7] "New calculation" newCalculationMessage
+        , buttonClick model [calcEditorIdx, 7] "New Calculation" newCalculationMessage
         ]
