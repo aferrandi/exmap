@@ -1,0 +1,145 @@
+
+==================== FINAL INTERFACE ====================
+2017-08-16 17:25:54.682560173 UTC
+
+interface main@main:WebAppState 8002
+  interface hash: 129a2353935cb0077a74bab498495c48
+  ABI hash: f77b3b725acfc0b17e2d91d1609586b3
+  export-list hash: b5c5e67949c8875e233c7a4933238f2a
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 85c62bb38ef90b008a19d0e7fa11d888
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  WebAppState.WAClient{WebAppState.WAClient clientId connection}
+  WebAppState.WAClientId
+  WebAppState.WAClients
+module dependencies:
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      http-types-0.9.1@http-types-0.9.1-G7E1zHPzooHCYxKqGuQmxY
+                      integer-gmp-1.0.0.1
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      vault-0.3.0.7@vault-0.3.0.7-FSJCPczyPWW8DwvwP76qt4
+                      wai-3.2.1.1@wai-3.2.1.1-GYhAFGd1F2uKjCUZVPyC2C
+                      wai-websockets-3.0.1.1@wai-websockets-3.0.1.1-EWamZZc3JrL9kdmOSaQ81H
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  wai-websockets-3.0.1.1@wai-websockets-3.0.1.1-EWamZZc3JrL9kdmOSaQ81H:Network.Wai.Handler.WebSockets 2b2516403c52bc17210266ef82c3eb7c
+import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets dac061edf008b1b72780269f7fae6494
+import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets.Connection 461242369db54ba20a4c709a7c262225
+d78a919e5954c274c5bf9db4431efda7
+  $tc'WAClient :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8713632376801871507##
+                   10087193094331728295##
+                   WebAppState.$trModule
+                   WebAppState.$tc'WAClient1) -}
+516bf3ec594aa13087a161a659be003d
+  $tc'WAClient1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WAClient"#) -}
+aecc589dc9e40514fc52150b4ca65458
+  $tcWAClient :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   3740112411841067266##
+                   8711399191088889897##
+                   WebAppState.$trModule
+                   WebAppState.$tcWAClient1) -}
+585265b4f2be7f8abefd802fe89f5d9b
+  $tcWAClient1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WAClient"#) -}
+660c02165a29eec8abcad3b8f4d28b4d
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   WebAppState.$trModule2
+                   WebAppState.$trModule1) -}
+689fd90113297fb9661227e2d0bc1f6e
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebAppState"#) -}
+972841215db73b4c8a8ef2b1020523d0
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+be23adde8ac436a04f76615fdd65ede8
+  data WAClient
+    = WAClient {clientId :: WebAppState.WAClientId,
+                connection :: Network.WebSockets.Connection.Connection}
+e6f9378e640e876f3fa038eedfcf3f9d
+  type WAClientId = GHC.Types.Int
+3095afea254dc7859d3b5e72ea3297a9
+  type WAClients = [WebAppState.WAClient]
+af5cba851cfc02932ac89865fb8c7098
+  clientId :: WebAppState.WAClient -> WebAppState.WAClientId
+  RecSel Left WebAppState.WAClient
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(SL),1*U(1*U(U),A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: WebAppState.WAClient) ->
+                 case ds of wild { WebAppState.WAClient ds1 ds2 -> ds1 }) -}
+25f5feb3109872008d352599024f9216
+  connection ::
+    WebAppState.WAClient -> Network.WebSockets.Connection.Connection
+  RecSel Left WebAppState.WAClient
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LS),1*U(A,1*U(U,U,U,U,U))>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: WebAppState.WAClient) ->
+                 case ds of wild { WebAppState.WAClient ds1 ds2 -> ds2 }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

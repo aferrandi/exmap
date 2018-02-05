@@ -1,0 +1,365 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-29 18:59:03.931569194 UTC
+
+interface main@main:Main 8002
+  interface hash: de003d98239b377bd0a081e759013cd3
+  ABI hash: 5bc4ef8657fe84cfe03929028b6e3dd9
+  export-list hash: 4ffb9bbb16bbd98000bc4d91a0a7b083
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: afb7410b08fc799dceca43b53cf6a844
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Main.main
+module dependencies: ApplicationTypes Applications Calculation
+                     Dependencies DependenciesTest Errors ExecFormula Formula
+                     FormulaParser FormulaParserTest FormulaTest OperationTypes
+                     Operations Project ProjectJson ProjectJsonTest TestTypes TextEnums
+                     TextEnumsTest View XFunction XMapJson XMapJsonTest XMapTypes
+                     XValues
+package dependencies: HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      ansi-terminal-0.6.3.1@ansi-terminal-0.6.3.1-3RTqikoQf47ajVD9m8zgB
+                      ansi-wl-pprint-0.6.7.3@ansi-wl-pprint-0.6.7.3-A79v826bgPr574HtaZPPqC
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      call-stack-0.1.0@call-stack-0.1.0-FYVrCPXGP9EGAuTW32963O
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      hostname-1.0@hostname-1.0-LHxcvBDHWay1RGMj1Uzenf
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa
+                      regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO
+                      test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      xml-1.3.14@xml-1.3.14-AKug8Ud7K0VEhc87tBwsGy
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:XMapJson
+         regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa:Text.Regex.Base.Context
+         regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO:Text.Regex.Posix.String
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit 430ab81af3668b12bae4950025858f90
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Base 123233f642490df0be04d505715ba97a
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Text dae9d5556dfb2f57d4dfe82107af90ee
+import  -/  base-4.9.1.0:Control.Monad a6784c5dab0d75c63dabec5a37843f98
+import  -/  base-4.9.1.0:Data.Monoid 51cc9cd8c130d49ba96b7c2c2406022b
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  DependenciesTest 656d346a06d51531236c355f1cb1799b
+  exports: 656b6e9e3e7ba07fd6018216d5d193e6
+  calculationDependencies_simpleCalculation_originalMap 9b62fb3a3a9301884563abf0d596c8ba
+  formulaDependencies_complexFormula_maps efe266bca0abf19e1d079b7cfcd9d537
+  formulaDependencies_duplicates_onlyOnce 6dfa927637ea03093bb90432bd1e545f
+  formulaDependencies_trivialFormula_originalMap d4dd6312d2c0d6d69b49527b1def339b
+  viewDependencies_complex_maps eba3f18e41d329d1ae037aded57c3ce8
+  viewDependencies_empty_empty 67f28bb25936679578b2720bc74d3acb
+import  -/  FormulaParserTest c48c3c5a5f1399615a79e03f7a632ba6
+  exports: 4f2325216e63250569e48dbba0467811
+  parseFormula_complex_operation 6a6f92c3e1aa37189fba61cda8c1b749
+  parseFormula_formulaApplication_application 865796fcadab8033dae137aaac569b80
+  parseFormula_formulaOperation_operation e4565991cc32de8007c92de270522276
+  parseFormula_formulaWithMap_map 979671a9c9774a18b59727d28884794c
+  parseFormula_formulaWithSpaces_map a0cd5be9b1935d7a737c2b4e31d9df77
+  parseFormula_formulaWrongApplicationName_error 910686228081f4170a1ad3e87b13853a
+import  -/  FormulaTest b22481bbe98ba9183098775b8f371551
+  exports: c5c870e691baaf8595aaed9a9151447a
+  execFormula_applicationFormula_expectedMap 3cee56c22f7f59b58859b3a04f342bd8
+  execFormula_operationFormula_expectedMap b25acca2b295a55cd5589b8b0f4ba7cd
+  execFormula_trivialFormula_originalMap 6860fbb7b77ce85807cc302dc691aaad
+import  -/  ProjectJsonTest 9b674bc3e6db1b6b998acea3e7222550
+  exports: 857ebf89eb21e70196a4ce8684653f6d
+  toParseJSON_allProjects_same cb971b395138b567604a4f8ae43b7521
+  toParseJSON_calculation_same 5c023e4d2d7ff1f5aca4449cefc15818
+  toParseJSON_project_same ea13c42203102fd3d09423f54d7dfad8
+  toParseJSON_user_same a8b91ae2a1be1842f16bb20c55e2ede4
+  toParseJSON_view_same fa2d48db5394854fda3d3a1bd95846b9
+import  -/  TextEnumsTest 97fd9a5df677871047a49edbe2e919df
+  exports: 4a74f7a1611ebdb5f8d728090f71262f
+  enumValues_ApplicationName_containNegate 5eecd0d9f3c3ae77a780fe3e0720e681
+  enumWithTextCI_ApplicationName_containNegate f37626df8e9b304c7049dca1d266fde6
+  enumWithTextCI_ApplicationName_notContainNegate 8ed93acb5442710243118d9f679bbc37
+import  -/  XMapJsonTest 963bef956e95817e497d9a3a38c40113
+  exports: 76f85ce149e050ed153806ca31e35329
+  toParseJSON_doublemap_same f200407828fa76eda7d7a9248a678344
+  toParseJSON_stringmap_same 0bd2084efaae456c0028149883335393
+import  -/  test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO:Test.Framework 236a0b8659fd71c2e4454100bfd40f0d
+import  -/  test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi:Test.Framework.Providers.HUnit a4df6047e42f92eec3aa8a7dd2fab93b
+d6831ef04cb9301b090dfae6f7bb7ec7
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module Main.$trModule2 Main.$trModule1) -}
+847d9fc3b8e6f0b424199f36b4999bb2
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Main"#) -}
+24ef6042833e75ffd7aa98b83ecca98d
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+db15d3e0e70efca4749661aa3ccd03d5
+  main :: GHC.Types.IO Test.HUnit.Base.Counts
+  {- Arity: 1, Strictness: <S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Main.main1
+                  `cast`
+                (Sym (GHC.Types.N:IO[0] <Test.HUnit.Base.Counts>_R)) -}
+5e5255ef4e992a0e785659a7b3e41254
+  main1 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, Test.HUnit.Base.Counts #)
+  {- Arity: 1, Strictness: <S,U>,
+     Unfolding: (\ (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case Test.HUnit.Text.runTestTT3 of ww { Test.HUnit.Text.PutText ww1 ww2 ->
+                 case Test.HUnit.Text.$wrunTestText
+                        @ GHC.Types.Int
+                        ww1
+                        ww2
+                        Main.main2
+                        s of ds1 { (#,#) ipv ipv1 ->
+                 case ipv1 of wild { (,) counts' ds ->
+                 case ds of wild1 { GHC.Types.I# ds2 ->
+                 case ds2 of ds3 {
+                   DEFAULT
+                   -> GHC.IO.failIO1
+                        @ Test.HUnit.Base.Counts
+                        Test.HUnit.Text.runTestTT2
+                        ipv
+                   0# -> (# ipv, counts' #) } } } } }) -}
+153ccffa402faf9bfe32623684c5e4ed
+  main10 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map
+                   Main.main11) -}
+83bdfa70d0f04fa9a2a4a798aa297a7b
+  main11 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   TextEnumsTest.enumValues_ApplicationName_containNegate
+                   Main.main12) -}
+4c55a85a8020a8236742d12f787a0554
+  main12 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   TextEnumsTest.enumWithTextCI_ApplicationName_containNegate
+                   Main.main13) -}
+e83c5665ff6ca4bda163190196129804
+  main13 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   TextEnumsTest.enumWithTextCI_ApplicationName_notContainNegate
+                   Main.main14) -}
+d72f3be20de07f0235c64fb8ce21542f
+  main14 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error
+                   Main.main15) -}
+25109bfcd00f998c714080a6dbb3bc0a
+  main15 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   ProjectJsonTest.toParseJSON_calculation_same
+                   Main.main16) -}
+6a8678dc957d924ce18fdd4b20c3b1d0
+  main16 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   ProjectJsonTest.toParseJSON_view_same
+                   Main.main17) -}
+73fc8f6c11ddf3280d4d5dbf8a1846c3
+  main17 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   ProjectJsonTest.toParseJSON_project_same
+                   Main.main18) -}
+a4b4850e65b57937e31febffc78c7b98
+  main18 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   ProjectJsonTest.toParseJSON_allProjects_same
+                   Main.main19) -}
+95d8a92c5e9e752fcdebdc1ff8ce3624
+  main19 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   ProjectJsonTest.toParseJSON_user_same
+                   Main.main20) -}
+d51d158c48d1f7e2de2fecab40972035
+  main2 :: Test.HUnit.Base.Test
+  {- Unfolding: (Test.HUnit.Base.TestList Main.main3) -}
+e98eafc253e8fc0fab0f51f685cd82e9
+  main20 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   XMapJsonTest.toParseJSON_doublemap_same
+                   Main.main21) -}
+b8816b30263bdc7661243990ccba19ee
+  main21 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   XMapJsonTest.toParseJSON_stringmap_same
+                   Main.main22) -}
+28df36da75b7676eb9a5c6b7b3f7117b
+  main22 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.formulaDependencies_trivialFormula_originalMap
+                   Main.main23) -}
+b7ff77342ee8b75b6108d53fa07218a1
+  main23 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.formulaDependencies_complexFormula_maps
+                   Main.main24) -}
+bf49142c1bbbd84b71ccde4bf27a409c
+  main24 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.formulaDependencies_duplicates_onlyOnce
+                   Main.main25) -}
+5dde74bf2fee73a5479185f9449753fb
+  main25 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.viewDependencies_empty_empty
+                   Main.main26) -}
+ac934cd7581455066e87e2f7b776ee12
+  main26 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.viewDependencies_complex_maps
+                   Main.main27) -}
+77535bbae578c196dd8ba5f2df713657
+  main27 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   DependenciesTest.calculationDependencies_simpleCalculation_originalMap
+                   (GHC.Types.[] @ Test.HUnit.Base.Test)) -}
+a95c6f3f9ba351de8d903537bee7ae12
+  main28 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, Test.HUnit.Base.Counts #)
+  {- Arity: 1,
+     Unfolding: (GHC.TopHandler.runMainIO1
+                   @ Test.HUnit.Base.Counts
+                   Main.main1
+                     `cast`
+                   (Sym (GHC.Types.N:IO[0] <Test.HUnit.Base.Counts>_R))) -}
+04f992ed46e757a29aef21f323c33822
+  main3 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaTest.execFormula_trivialFormula_originalMap
+                   Main.main4) -}
+2a8cacdd6862325e5d94442d8d8f2fdb
+  main4 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaTest.execFormula_operationFormula_expectedMap
+                   Main.main5) -}
+45b70e70261736d54d22af15a591b7cd
+  main5 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaTest.execFormula_applicationFormula_expectedMap
+                   Main.main6) -}
+d6363c5d4e11d19fbbe848845dd68be2
+  main6 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_formulaWithMap_map
+                   Main.main7) -}
+ca07c155d2ffa38287cfd1ec803526f1
+  main7 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_formulaApplication_application
+                   Main.main8) -}
+51cf94382cb788dbe87d408454208483
+  main8 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_formulaOperation_operation
+                   Main.main9) -}
+873b99d40cc5fca48270dbd20b97e486
+  main9 :: [Test.HUnit.Base.Test]
+  {- Unfolding: (GHC.Types.:
+                   @ Test.HUnit.Base.Test
+                   FormulaParserTest.parseFormula_complex_operation
+                   Main.main10) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

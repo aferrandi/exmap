@@ -1,0 +1,265 @@
+
+==================== FINAL INTERFACE ====================
+2017-09-07 20:35:50.071786174 UTC
+
+interface main@main:LogMessages 8002
+  interface hash: 3d837f429aea8205c2f53f3ba56e3a34
+  ABI hash: 3b3c448fca5ca0c1efa93e191f557ed1
+  export-list hash: 7ec54aab985649a6202fd26be75d5d43
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 9581e73690371ffaaf5c309a49faabb5
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  LogMessages.LogChan
+  LogMessages.LogMessage{LogMessages.LogMLog LogMessages.LogMStop}
+module dependencies: Errors
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1 stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve*
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+a709fe44259478b2df7d62f1a4b097b5
+  $fEqLogMessage :: GHC.Classes.Eq LogMessages.LogMessage
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ LogMessages.LogMessage
+                  LogMessages.$fEqLogMessage_$c==
+                  LogMessages.$fEqLogMessage_$c/= -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fEqLogMessage_$c/= ::
+    LogMessages.LogMessage -> LogMessages.LogMessage -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (a :: LogMessages.LogMessage)
+                   (b :: LogMessages.LogMessage) ->
+                 case a of wild {
+                   LogMessages.LogMLog a1
+                   -> case b of wild1 {
+                        LogMessages.LogMLog b1
+                        -> case a1
+                                  `cast`
+                                (Errors.N:Error[0]) of wild2 { Data.Text.Internal.Text dt dt1 dt2 ->
+                           case b1
+                                  `cast`
+                                (Errors.N:Error[0]) of wild3 { Data.Text.Internal.Text dt3 dt4 dt5 ->
+                           case GHC.Prim.tagToEnum#
+                                  @ GHC.Types.Bool
+                                  (GHC.Prim.==# dt2 dt5) of wild4 {
+                             GHC.Types.False -> GHC.Types.True
+                             GHC.Types.True
+                             -> case {__pkg_ccall text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00 _hs_text_memcmp GHC.Prim.ByteArray#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.ByteArray#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.State#
+                                                                                                                        GHC.Prim.RealWorld
+                                                                                                                   -> (# GHC.Prim.State#
+                                                                                                                           GHC.Prim.RealWorld,
+                                                                                                                         GHC.Prim.Int# #)}
+                                       dt
+                                       (GHC.Prim.int2Word# dt1)
+                                       dt3
+                                       (GHC.Prim.int2Word# dt4)
+                                       (GHC.Prim.int2Word# dt2)
+                                       GHC.Prim.realWorld# of wild5 { (#,#) ds11 ds12 ->
+                                case GHC.Prim.narrow32Int# ds12 of wild6 {
+                                  DEFAULT -> GHC.Types.True 0# -> GHC.Types.False } } } } }
+                        LogMessages.LogMStop -> GHC.Types.True }
+                   LogMessages.LogMStop
+                   -> case b of wild1 {
+                        LogMessages.LogMLog ipv -> GHC.Types.True
+                        LogMessages.LogMStop -> GHC.Types.False } }) -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fEqLogMessage_$c== ::
+    LogMessages.LogMessage -> LogMessages.LogMessage -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: LogMessages.LogMessage)
+                   (ds1 :: LogMessages.LogMessage) ->
+                 case ds of wild {
+                   LogMessages.LogMLog a1
+                   -> case ds1 of wild1 {
+                        LogMessages.LogMLog b1
+                        -> Data.Text.$fEqText_$c==
+                             a1 `cast` (Errors.N:Error[0])
+                             b1 `cast` (Errors.N:Error[0])
+                        LogMessages.LogMStop -> GHC.Types.False }
+                   LogMessages.LogMStop
+                   -> case ds1 of wild1 {
+                        LogMessages.LogMLog ipv -> GHC.Types.False
+                        LogMessages.LogMStop -> GHC.Types.True } }) -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fShowLogMessage :: GHC.Show.Show LogMessages.LogMessage
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ LogMessages.LogMessage
+                  LogMessages.$fShowLogMessage_$cshowsPrec
+                  LogMessages.$fShowLogMessage_$cshow
+                  LogMessages.$fShowLogMessage_$cshowList -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fShowLogMessage1 :: LogMessages.LogMessage -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (LogMessages.$fShowLogMessage_$cshowsPrec
+                   LogMessages.$fShowLogMessage2) -}
+0fa8acc4ccd0d701b0c9864cb3994539
+  $fShowLogMessage2 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+10bba1eb5a82bee982f37b813d0da756
+  $fShowLogMessage3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "LogMStop"#) -}
+56eeb32207a40b3d1f35c6b85f335673
+  $fShowLogMessage4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "LogMLog "#) -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fShowLogMessage_$cshow ::
+    LogMessages.LogMessage -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: (\ (x :: LogMessages.LogMessage) ->
+                 case x of wild {
+                   LogMessages.LogMLog b1
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        LogMessages.$fShowLogMessage4
+                        (Errors.$w$cshowsPrec 11# b1 (GHC.Types.[] @ GHC.Types.Char))
+                   LogMessages.LogMStop -> LogMessages.$fShowLogMessage3 }) -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fShowLogMessage_$cshowList ::
+    [LogMessages.LogMessage] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ LogMessages.LogMessage
+                   LogMessages.$fShowLogMessage1) -}
+a709fe44259478b2df7d62f1a4b097b5
+  $fShowLogMessage_$cshowsPrec ::
+    GHC.Types.Int -> LogMessages.LogMessage -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,1*U(U)><S,1*U><L,U>,
+     Unfolding: (\ (a :: GHC.Types.Int)
+                   (ds :: LogMessages.LogMessage)
+                   (eta :: GHC.Base.String) ->
+                 case ds of wild {
+                   LogMessages.LogMLog b1
+                   -> case a of wild1 { GHC.Types.I# x ->
+                      case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.>=# x 11#) of wild2 {
+                        GHC.Types.False
+                        -> GHC.Base.++
+                             @ GHC.Types.Char
+                             LogMessages.$fShowLogMessage4
+                             (Errors.$w$cshowsPrec 11# b1 eta)
+                        GHC.Types.True
+                        -> GHC.Types.:
+                             @ GHC.Types.Char
+                             GHC.Show.shows7
+                             (GHC.Base.++
+                                @ GHC.Types.Char
+                                LogMessages.$fShowLogMessage4
+                                (Errors.$w$cshowsPrec
+                                   11#
+                                   b1
+                                   (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 eta))) } }
+                   LogMessages.LogMStop
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        LogMessages.$fShowLogMessage3
+                        eta }) -}
+130d8d4920ac118c1d35398f14c821e4
+  $tc'LogMLog :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12660343526166756117##
+                   7538579393846278749##
+                   LogMessages.$trModule
+                   LogMessages.$tc'LogMLog1) -}
+d25d3d32878a923f1aa212b370ae0c9f
+  $tc'LogMLog1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogMLog"#) -}
+45b3a93be789d7f29df9781a449cab08
+  $tc'LogMStop :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12756464240327154630##
+                   4266766648784544680##
+                   LogMessages.$trModule
+                   LogMessages.$tc'LogMStop1) -}
+e43fd3b4d2d33b10c1ba34a67272592d
+  $tc'LogMStop1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogMStop"#) -}
+796bb1e8e4f7faa0db5a4a35d40a5a39
+  $tcLogMessage :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4335349232115708049##
+                   1013337672992345058##
+                   LogMessages.$trModule
+                   LogMessages.$tcLogMessage1) -}
+3f591a619ee6b54fcf1d312b1746637c
+  $tcLogMessage1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "LogMessage"#) -}
+8b3164afb29dd5babae4219761031af1
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   LogMessages.$trModule2
+                   LogMessages.$trModule1) -}
+a4b1e235e660873921a961c0f874b94b
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "LogMessages"#) -}
+baa689488b41de582c104f30c44122d8
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+8117d7ae5c4d9909c5f1d1bed0680791
+  type LogChan =
+    Control.Concurrent.STM.TChan.TChan LogMessages.LogMessage
+a709fe44259478b2df7d62f1a4b097b5
+  data LogMessage = LogMLog Errors.Error | LogMStop
+instance [safe] GHC.Classes.Eq [LogMessages.LogMessage]
+  = LogMessages.$fEqLogMessage
+instance [safe] GHC.Show.Show [LogMessages.LogMessage]
+  = LogMessages.$fShowLogMessage
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

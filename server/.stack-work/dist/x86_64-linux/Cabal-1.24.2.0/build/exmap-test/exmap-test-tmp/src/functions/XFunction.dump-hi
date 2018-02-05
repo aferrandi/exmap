@@ -1,0 +1,567 @@
+
+==================== FINAL INTERFACE ====================
+2017-10-31 21:26:50.19845656 UTC
+
+interface main@main:XFunction 8002
+  interface hash: 9237e6d37fe98cc873915a59c0518cc0
+  ABI hash: daf3a8fe929e99b13bb1482148441fb5
+  export-list hash: e4744bd862d5d39381a3b81764a14b8c
+  orphan hash: 708f1cb434f21c614fe3f5fadbdf9745
+  flag hash: 41cb72183c02d3fc92944c2d624cbf35
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  XFunction.apply
+  XFunction.operate
+  XFunction.OperationMode{XFunction.Intersection XFunction.Union}
+  XMapTypes.XMapErr
+module dependencies: Errors XMapTypes XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1*
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:Data.Maybe d876c4ffe4b3c43755a781e8ad860d88
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Read b6821365d2d5fa2155c9e910160e7f57
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Set 3ed2324fd1e757464a8ac2b636a64e5a
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base 69259e29eb6a13996a202cd7b2dae772
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMap c2ed918b428722f1755c470b6338cf45
+  XMapErr b49ed57204d25dc35d651e4ad165d1a3
+import  -/  XValues 6991ea65e365e7fedf0f1cba2efa239e
+  exports: cc2566eb9be7b2dcc61185c0615e3508
+  BinaryXMapFun c20475c38a4c03e49d9118a4b0a48b93
+  UnaryXMapFun a361318ef5cc91bd9664801be98c7ac4
+  XValue 9fa14550c26f129f7d93f37b42178809
+  buildMap 65e33427869bf3ce4be96615282691b4
+  defaultValue 0880f0bc87e30cb9eee9007c7e0bc0ac
+  extractMap e7dd1b5e4762fba7342048f3289f8ece
+  extractMapFirst 8118c1d8650ace84b8b3cd365718e523
+  extractMapSecond d61772b552a175f8c1360bfcca404161
+ba1024ee7488d74e75d2aa7e9c371660
+  $fEqOperationMode :: GHC.Classes.Eq XFunction.OperationMode
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ XFunction.OperationMode
+                  XFunction.$fEqOperationMode_$c==
+                  XFunction.$fEqOperationMode_$c/= -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fEqOperationMode_$c/= ::
+    XFunction.OperationMode
+    -> XFunction.OperationMode -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: XFunction.OperationMode) (b :: XFunction.OperationMode) ->
+                 case a of wild {
+                   XFunction.Union
+                   -> case b of wild1 {
+                        XFunction.Union -> GHC.Types.False
+                        XFunction.Intersection -> GHC.Types.True }
+                   XFunction.Intersection
+                   -> case b of wild1 {
+                        XFunction.Union -> GHC.Types.True
+                        XFunction.Intersection -> GHC.Types.False } }) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fEqOperationMode_$c== ::
+    XFunction.OperationMode
+    -> XFunction.OperationMode -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: XFunction.OperationMode)
+                   (ds1 :: XFunction.OperationMode) ->
+                 case ds of wild {
+                   XFunction.Union
+                   -> case ds1 of wild1 {
+                        XFunction.Union -> GHC.Types.True
+                        XFunction.Intersection -> GHC.Types.False }
+                   XFunction.Intersection
+                   -> case ds1 of wild1 {
+                        XFunction.Union -> GHC.Types.False
+                        XFunction.Intersection -> GHC.Types.True } }) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode :: GHC.Read.Read XFunction.OperationMode
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ XFunction.OperationMode
+                  XFunction.$fReadOperationMode_$creadsPrec
+                  XFunction.$fReadOperationMode_$creadList
+                  XFunction.$fReadOperationMode_$creadPrec
+                  XFunction.$fReadOperationMode_$creadListPrec -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode1 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       ([XFunction.OperationMode] -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta1 :: [XFunction.OperationMode]
+                            -> Text.ParserCombinators.ReadP.P b) ->
+                 GHC.Read.list1
+                   @ XFunction.OperationMode
+                   XFunction.$fReadOperationMode2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <XFunction.OperationMode>_R))
+                   eta
+                   @ b
+                   eta1) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode10 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       (XFunction.OperationMode -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,A><C(S),1*C1(U)>,
+     Unfolding: InlineRule (2, True, True)
+                (\ (ds :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta :: XFunction.OperationMode
+                           -> Text.ParserCombinators.ReadP.P b) ->
+                 eta XFunction.Union) -}
+776ba691d89865b33085d142bcce63b3
+  $fReadOperationMode11 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Union"#) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode12 ::
+    Text.ParserCombinators.ReadP.P [XFunction.OperationMode]
+  {- Unfolding: (GHC.Read.list1
+                   @ XFunction.OperationMode
+                   XFunction.$fReadOperationMode2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <XFunction.OperationMode>_R))
+                   GHC.Read.$fRead()5
+                   @ [XFunction.OperationMode]
+                   (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                      @ [XFunction.OperationMode])) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode2 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> Text.ParserCombinators.ReadP.ReadP XFunction.OperationMode
+  {- Arity: 1,
+     Unfolding: (GHC.Read.parens1
+                   @ XFunction.OperationMode
+                   XFunction.$fReadOperationMode3
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <XFunction.OperationMode>_R))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode3 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> Text.ParserCombinators.ReadP.ReadP XFunction.OperationMode
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (eta :: Text.ParserCombinators.ReadPrec.Prec) ->
+                 GHC.Read.choose2
+                   @ XFunction.OperationMode
+                   XFunction.$fReadOperationMode4
+                   eta) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode4 ::
+    [(GHC.Base.String,
+      Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ (GHC.Base.String,
+                      Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)
+                   XFunction.$fReadOperationMode9
+                   XFunction.$fReadOperationMode5) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode5 ::
+    [(GHC.Base.String,
+      Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ (GHC.Base.String,
+                      Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)
+                   XFunction.$fReadOperationMode6
+                   (GHC.Types.[]
+                      @ (GHC.Base.String,
+                         Text.ParserCombinators.ReadPrec.ReadPrec
+                           XFunction.OperationMode))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode6 ::
+    ([GHC.Types.Char],
+     Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)
+  {- Strictness: m,
+     Unfolding: ((XFunction.$fReadOperationMode8,
+                  XFunction.$fReadOperationMode7
+                    `cast`
+                  (Trans
+                       (<Text.ParserCombinators.ReadPrec.Prec>_R
+                        ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                      <XFunction.OperationMode>_R))
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <XFunction.OperationMode>_R))))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode7 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       (XFunction.OperationMode -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,A><C(S),1*C1(U)>,
+     Unfolding: InlineRule (2, True, True)
+                (\ (ds :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta :: XFunction.OperationMode
+                           -> Text.ParserCombinators.ReadP.P b) ->
+                 eta XFunction.Intersection) -}
+17ff3db485cc7edac8697e88fe03ec4e
+  $fReadOperationMode8 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Intersection"#) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode9 ::
+    ([GHC.Types.Char],
+     Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode)
+  {- Strictness: m,
+     Unfolding: ((XFunction.$fReadOperationMode11,
+                  XFunction.$fReadOperationMode10
+                    `cast`
+                  (Trans
+                       (<Text.ParserCombinators.ReadPrec.Prec>_R
+                        ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                      <XFunction.OperationMode>_R))
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <XFunction.OperationMode>_R))))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode_$creadList ::
+    Text.ParserCombinators.ReadP.ReadS [XFunction.OperationMode]
+  {- Arity: 1,
+     Unfolding: (Text.ParserCombinators.ReadP.run
+                   @ [XFunction.OperationMode]
+                   XFunction.$fReadOperationMode12) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode_$creadListPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec [XFunction.OperationMode]
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (0, True, True)
+                XFunction.$fReadOperationMode1
+                  `cast`
+                (Trans
+                     (<Text.ParserCombinators.ReadPrec.Prec>_R
+                      ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                    <[XFunction.OperationMode]>_R))
+                     (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                               <[XFunction.OperationMode]>_R))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode_$creadPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec XFunction.OperationMode
+  {- Arity: 1,
+     Unfolding: InlineRule (0, True, True)
+                XFunction.$fReadOperationMode2
+                  `cast`
+                (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                          <XFunction.OperationMode>_R)) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fReadOperationMode_$creadsPrec ::
+    GHC.Types.Int
+    -> Text.ParserCombinators.ReadP.ReadS XFunction.OperationMode
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (eta :: GHC.Types.Int) ->
+                 Text.ParserCombinators.ReadP.run
+                   @ XFunction.OperationMode
+                   ((GHC.Read.parens1
+                       @ XFunction.OperationMode
+                       XFunction.$fReadOperationMode3
+                         `cast`
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <XFunction.OperationMode>_R))
+                       eta)
+                      `cast`
+                    (Text.ParserCombinators.ReadP.N:ReadP[0]
+                         <XFunction.OperationMode>_R)
+                      @ XFunction.OperationMode
+                      (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                         @ XFunction.OperationMode))) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fShowOperationMode :: GHC.Show.Show XFunction.OperationMode
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ XFunction.OperationMode
+                  XFunction.$fShowOperationMode_$cshowsPrec
+                  XFunction.$fShowOperationMode_$cshow
+                  XFunction.$fShowOperationMode_$cshowList -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fShowOperationMode1 :: XFunction.OperationMode -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: XFunction.OperationMode) (eta :: GHC.Base.String) ->
+                 case ds of wild {
+                   XFunction.Union
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           XFunction.$fReadOperationMode11)
+                        eta
+                   XFunction.Intersection
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           XFunction.$fReadOperationMode8)
+                        eta }) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fShowOperationMode_$cshow ::
+    XFunction.OperationMode -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: XFunction.OperationMode) ->
+                 case x of wild {
+                   XFunction.Union -> XFunction.$fReadOperationMode11
+                   XFunction.Intersection -> XFunction.$fReadOperationMode8 }) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fShowOperationMode_$cshowList ::
+    [XFunction.OperationMode] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ XFunction.OperationMode
+                   XFunction.$fShowOperationMode1) -}
+ba1024ee7488d74e75d2aa7e9c371660
+  $fShowOperationMode_$cshowsPrec ::
+    GHC.Types.Int -> XFunction.OperationMode -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,A><S,1*U><L,1*U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (ds :: GHC.Types.Int)
+                   (ds1 :: XFunction.OperationMode)
+                   (eta :: GHC.Base.String) ->
+                 case ds1 of wild {
+                   XFunction.Union
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           XFunction.$fReadOperationMode11)
+                        eta
+                   XFunction.Intersection
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           XFunction.$fReadOperationMode8)
+                        eta }) -}
+462058ae57279f0e95fa2510e0c616d7
+  $sintersectionWith_$sintersectionWithKey ::
+    (XMapTypes.XMapKey -> a -> b -> c)
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+    -> Data.Map.Base.Map XMapTypes.XMapKey b
+    -> Data.Map.Base.Map XMapTypes.XMapKey c
+  {- Arity: 3, Strictness: <L,C(C1(C1(U)))><S,1*U><L,1*U> -}
+25c70c03e006ee5a3a02bd7ea80ed8b1
+  $strim1 ::
+    XMapTypes.XMapKey
+    -> XMapTypes.XMapKey
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,1*U(U,U,U)><L,1*U(U,U,U)><S,1*U> -}
+9b438311161a77813387761d85b0a489
+  $strim3 ::
+    XMapTypes.XMapKey
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U(U,U,U)><S,1*U> -}
+a39ca9eef72dbbe596354fbd23bd0175
+  $tc'Intersection :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6681491363602431203##
+                   5978380900750875731##
+                   XFunction.$trModule
+                   XFunction.$tc'Intersection1) -}
+a6338bacc5eb000b080159e76c363d15
+  $tc'Intersection1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Intersection"#) -}
+2214d00d0f4ca220fdb028be13ba380a
+  $tc'Union :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2006514890975361157##
+                   4839998120521871561##
+                   XFunction.$trModule
+                   XFunction.$tc'Union1) -}
+ccf50e43eafb46050be2e62e619ca8d5
+  $tc'Union1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Union"#) -}
+2615f6f6549622dd071ceb82dc72d004
+  $tcOperationMode :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12805488277654894179##
+                   1657270204597346842##
+                   XFunction.$trModule
+                   XFunction.$tcOperationMode1) -}
+b1914cfcd576e916f97069d405b3be7c
+  $tcOperationMode1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "OperationMode"#) -}
+d497844ede4a8283bbb5f0d7dcde2ea7
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   XFunction.$trModule2
+                   XFunction.$trModule1) -}
+2fdf981d238fa676fefb8b9f59779633
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "XFunction"#) -}
+4af47907120b751d1b15ca3ee20b72ad
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+f562922af4efea7b817685386892190f
+  $w$sgo4 ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> a1
+    -> Data.Map.Base.Map XMapTypes.XMapKey a1
+    -> Data.Map.Base.Map XMapTypes.XMapKey a1
+  {- Arity: 5, Strictness: <L,U><L,U><L,U><S,1*U><S,1*U>,
+     Inline: [0] -}
+6aa04f025684337c8ec5cebf7765fbac
+  $w$sgreater ::
+    XMapTypes.XMapKey
+    -> Data.Map.Base.Map XMapTypes.XMapKey a1
+    -> (# GHC.Base.Maybe a1, Data.Map.Base.Map XMapTypes.XMapKey a1 #)
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U(U,U,U)><S,1*U>,
+     Inline: [0] -}
+ee1e302df1bb4057399cc11bf55156fc
+  $w$smiddle ::
+    XMapTypes.XMapKey
+    -> XMapTypes.XMapKey
+    -> Data.Map.Base.Map XMapTypes.XMapKey a1
+    -> (# GHC.Base.Maybe a1, Data.Map.Base.Map XMapTypes.XMapKey a1 #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,1*U(U,U,U)><L,1*U(U,U,U)><S,1*U>, Inline: [0] -}
+c442025adabcc3ec8868fcdabc8b5b1d
+  $wpoly_go10 ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> Data.Map.Base.Map XMapTypes.XMapKey a
+    -> GHC.Base.Maybe a
+  {- Arity: 4, HasNoCafRefs, Strictness: <L,U><L,U><L,U><S,1*U>,
+     Inline: [0] -}
+ba1024ee7488d74e75d2aa7e9c371660
+  data OperationMode = Union | Intersection
+58a513078dc2739281ad3b3dda6c5ac4
+  apply ::
+    (XValues.XValue a, XValues.XValue r) =>
+    XValues.UnaryXMapFun a r -> XMapTypes.XMap -> XMapTypes.XMapErr
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <S(C(C(S))LLLL),1*U(1*C1(C1(U)),A,A,A,A)><L,1*U(A,A,A,1*C1(U),A)><L,U><L,U>,
+     Unfolding: (\ @ a
+                   @ r
+                   ($dXValue :: XValues.XValue a)
+                   ($dXValue1 :: XValues.XValue r)
+                   (f :: XValues.UnaryXMapFun a r)
+                   (m :: XMapTypes.XMap) ->
+                 case XValues.extractMap @ a $dXValue @ r m f of wild {
+                   Data.Either.Left l
+                   -> Data.Either.Left @ Errors.Error @ XMapTypes.XMap l
+                   Data.Either.Right r1
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ XMapTypes.XMap
+                        (XValues.buildMap
+                           @ r
+                           $dXValue1
+                           (Data.Map.Strict.map @ a @ r @ XMapTypes.XMapKey f r1)) }) -}
+c2f35057a2a529dbe06ec7dbc830d4f4
+  operate ::
+    (XValues.XValue a, XValues.XValue b, XValues.XValue r) =>
+    XFunction.OperationMode
+    -> XValues.BinaryXMapFun a b r
+    -> XMapTypes.XMap
+    -> XMapTypes.XMap
+    -> XMapTypes.XMapErr
+  {- Arity: 7,
+     Strictness: <S(LC(C(S))LLL),U(A,1*C1(C1(U)),A,A,U)><L,U(A,A,1*C1(C1(U)),A,U)><L,1*U(A,A,A,1*C1(U),A)><L,1*U><L,U><L,U><L,U> -}
+instance [safe] GHC.Classes.Eq [XFunction.OperationMode]
+  = XFunction.$fEqOperationMode
+instance [safe] GHC.Read.Read [XFunction.OperationMode]
+  = XFunction.$fReadOperationMode
+instance [safe] GHC.Show.Show [XFunction.OperationMode]
+  = XFunction.$fShowOperationMode
+"SPEC/XFunction intersectionWithKey @ XMapKey _ _ _" [ALWAYS] forall @ a
+                                                                     @ b
+                                                                     @ c
+                                                                     ($dOrd :: GHC.Classes.Ord
+                                                                                 XMapTypes.XMapKey)
+  Data.Map.Strict.intersectionWithKey @ XMapTypes.XMapKey
+                                      @ a
+                                      @ b
+                                      @ c
+                                      $dOrd
+  = XFunction.$sintersectionWith_$sintersectionWithKey @ a @ b @ c
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

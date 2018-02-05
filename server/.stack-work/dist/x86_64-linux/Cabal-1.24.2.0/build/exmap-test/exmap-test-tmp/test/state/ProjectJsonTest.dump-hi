@@ -1,0 +1,2387 @@
+
+==================== FINAL INTERFACE ====================
+2017-10-24 17:54:07.194737607 UTC
+
+interface main@main:ProjectJsonTest 8002
+  interface hash: ccaca5cc4f090542f81e9994babcae36
+  ABI hash: 0fb40d425d64a16108dbb89d5681f252
+  export-list hash: 7b8f2cefa6d40274ddfac6e39f31c889
+  orphan hash: 4b5ec6475f3a499accbb3642b4b07640
+  flag hash: 8a16f066ec23048adf1e1ae9aef79f6c
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  ProjectJsonTest.toParseJSON_allProjects_same
+  ProjectJsonTest.toParseJSON_calculation_same
+  ProjectJsonTest.toParseJSON_map_same
+  ProjectJsonTest.toParseJSON_project_same
+  ProjectJsonTest.toParseJSON_user_same
+  ProjectJsonTest.toParseJSON_view_same
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson TestTypes TextEnums View
+                     XFunction XMapJson XMapTypes XValues
+package dependencies: HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      ansi-terminal-0.6.3.1@ansi-terminal-0.6.3.1-3RTqikoQf47ajVD9m8zgB
+                      ansi-wl-pprint-0.6.7.3@ansi-wl-pprint-0.6.7.3-A79v826bgPr574HtaZPPqC
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      call-stack-0.1.0@call-stack-0.1.0-FYVrCPXGP9EGAuTW32963O
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      hostname-1.0@hostname-1.0-LHxcvBDHWay1RGMj1Uzenf
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa
+                      regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO
+                      test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      xml-1.3.14@xml-1.3.14-AKug8Ud7K0VEhc87tBwsGy
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:XMapJson
+         regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa:Text.Regex.Base.Context
+         regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO:Text.Regex.Posix.String
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit 430ab81af3668b12bae4950025858f90
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Base 123233f642490df0be04d505715ba97a
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Lang d3eccb655844bdbe01d10519d0981a09
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson 2e25d14a91e9ff13092f56c3ec0cd425
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson.Types.ToJSON 032e11a60f09165b3d041ef0b452cae8
+import  -/  base-4.9.1.0:Control.Monad a6784c5dab0d75c63dabec5a37843f98
+import  -/  base-4.9.1.0:Data.Monoid 51cc9cd8c130d49ba96b7c2c2406022b
+import  -/  base-4.9.1.0:Debug.Trace a9edf3aec504f4423d8ba829ab373a25
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy 710f3c92800106372d9fdf1463052e70
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy.Internal d9ce1975b5e9af58da7ffcb0a039c72e
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation 03698bd51c60bb7b5080d27c1b8658b8
+  CalculationName 33a8590d875a915188f9bbf7f53d4cad
+  calculationName 1f5a4a1ff915162dab157f63a0e9b230
+  formula 7e30c2b44fc021bfe0b0b9dee1abff77
+  operationMode ea1aee21e5a70c0c32eede2861da9f4e
+  resultName e0da4fa6227b34a0c0bbd4851b78e25e
+import  -/  Formula 09444ea12c0441bd37404b175a926171
+  exports: d6ceee93beb5ac820afa97f35b5fa611
+  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
+  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
+import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
+  exports: 1a323fe5f5d42124be5996496a88719d
+  Subtract 6903c995800fbe4485eda7a754f5c732
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  AllProjects 35135f9c77587ad25ef5fedd60d3f572
+  FileSource 257fe49100eecd56f874d64683d51d99
+  Project 0c411bbbdb86d102b55e0b64ae3c6841
+  ProjectName 88a5198f7b44b8586232adf22e56ae2a
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+  Source da908b3d55c3b3e54552f97841f9dea4
+  User 04b9a32a67174b83c88cb855401cc138
+  accessToProjects 42c1f3a8a8214a7829333fae587c28a5
+  calculations 947a3359d7ec290cee67001543df1f1d
+  projectName cb7533641bc632f228a4a92ccb44abc9
+  sourceOfMaps b117b52c0a3033f4e54e011d62f34511
+  sourceType ebf4a57d65de6a6ac97bf31643e10d62
+  sources c571d266f08a7212dea141c7ba655b5a
+  userId 79117b49c7401bb10f9a822f3ad09f25
+  views feffc535db2a1ff9a1a46a2d4b6a5274
+import  -/  ProjectJson 28cf22569bff98de403296fccd63ac73
+  exports: d443d88699e34f0157696a36e917f12f
+import  -/  TestTypes 861578adefb3978042d6c0716287bf51
+  exports: 4ac021d1f7aacbb4df4195b70c242a26
+  makeXMap 4f9576038c7feecfe9effa24e18b643d
+  mapName d0f61e53a569858e1479cb4117ca27d7
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  LabelItem 3434f01a13626dc85c51091e03fdb138
+  MapItem 708e458136cd9677a34a32de608f31f2
+  View 9743bd334b51c92047571846fec7be71
+  ViewLabel f2cda51f0694b9bffef52227952836e5
+  ViewName 4c6aad1e74bc6f916c25f7eddf2c9eb8
+  ViewRow 184ac2a10a0416d6b9313091dbfe9519
+  rows 969dd7825f1b9914ab755a059ffe6701
+  viewName 42649ec3eca0aa81869dee042d61646f
+import  -/  XFunction bec8a66c7661d34fbdc693714232edf1
+  exports: e4744bd862d5d39381a3b81764a14b8c
+  Intersection 27cae151bcc37e712b5f6da6fecfcae5
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XNamedMap 7cf2fcb1a016d4dff7eb6742faa16f39
+  xmap f70b47cf97b8cca308509f54b6e06b11
+  xmapName 57bc60d3cae24066ad31097c7544b0c7
+import  -/  test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO:Test.Framework 236a0b8659fd71c2e4454100bfd40f0d
+import  -/  test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi:Test.Framework.Providers.HUnit a4df6047e42f92eec3aa8a7dd2fab93b
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+8a4a87aa4eb126fdb56387070b631c69
+  $s$fEqMaybe :: GHC.Classes.Eq (GHC.Base.Maybe XMapTypes.XNamedMap)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe XMapTypes.XNamedMap)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==
+                  (GHC.Base.$fEqMaybe_$c/=
+                     @ XMapTypes.XNamedMap
+                     XMapTypes.$fEqXNamedMap) -}
+7c24881fa3ebcfee4b566c955eab19e3
+  $s$fEqMaybe1 :: GHC.Classes.Eq (GHC.Base.Maybe Project.User)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.User)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==1
+                  (GHC.Base.$fEqMaybe_$c/= @ Project.User Project.$fEqUser) -}
+3fe0386ac21766bf5d2155aa747f4fad
+  $s$fEqMaybe2 :: GHC.Classes.Eq (GHC.Base.Maybe Project.AllProjects)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.AllProjects)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==2
+                  (GHC.Base.$fEqMaybe_$c/=
+                     @ Project.AllProjects
+                     Project.$fEqAllProjects) -}
+d309a41c6c51385e5548a8204b39d64b
+  $s$fEqMaybe3 :: GHC.Classes.Eq (GHC.Base.Maybe View.View)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe View.View)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==3
+                  (GHC.Base.$fEqMaybe_$c/= @ View.View View.$fEqView) -}
+b96fcc6b152a83a50304c9dd330f499e
+  $s$fEqMaybe4 ::
+    GHC.Classes.Eq (GHC.Base.Maybe Calculation.Calculation)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Calculation.Calculation)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==4
+                  (GHC.Base.$fEqMaybe_$c/=
+                     @ Calculation.Calculation
+                     Calculation.$fEqCalculation) -}
+8afbf7c11aec71be6fdb643aab343257
+  $s$fEqMaybe5 :: GHC.Classes.Eq (GHC.Base.Maybe Project.Project)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.Project)
+                  ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==5
+                  (GHC.Base.$fEqMaybe_$c/= @ Project.Project Project.$fEqProject) -}
+82c2e4faaee0d7892b461f8654283031
+  $s$fEqMaybe_$s$fEqMaybe_$c== ::
+    GHC.Base.Maybe XMapTypes.XNamedMap
+    -> GHC.Base.Maybe XMapTypes.XNamedMap -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe XMapTypes.XNamedMap)
+                   (ds1 :: GHC.Base.Maybe XMapTypes.XNamedMap) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> XMapTypes.$fEqXNamedMap_$c== a1 b1 } }) -}
+e408ad517e387294cbea21d23103131e
+  $s$fEqMaybe_$s$fEqMaybe_$c==1 ::
+    GHC.Base.Maybe Project.User
+    -> GHC.Base.Maybe Project.User -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe Project.User)
+                   (ds1 :: GHC.Base.Maybe Project.User) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> Project.$fEqUser_$c== a1 b1 } }) -}
+6503960a6c9c11b021d6acc611f2e9af
+  $s$fEqMaybe_$s$fEqMaybe_$c==2 ::
+    GHC.Base.Maybe Project.AllProjects
+    -> GHC.Base.Maybe Project.AllProjects -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe Project.AllProjects)
+                   (ds1 :: GHC.Base.Maybe Project.AllProjects) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> Project.$fEqAllProjects_$c== a1 b1 } }) -}
+782a342bfee2b5fd1764af6bdd692035
+  $s$fEqMaybe_$s$fEqMaybe_$c==3 ::
+    GHC.Base.Maybe View.View
+    -> GHC.Base.Maybe View.View -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe View.View)
+                   (ds1 :: GHC.Base.Maybe View.View) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> View.$fEqView_$c== a1 b1 } }) -}
+8c3b11e144641ad1972e17abe45ded59
+  $s$fEqMaybe_$s$fEqMaybe_$c==4 ::
+    GHC.Base.Maybe Calculation.Calculation
+    -> GHC.Base.Maybe Calculation.Calculation -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe Calculation.Calculation)
+                   (ds1 :: GHC.Base.Maybe Calculation.Calculation) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> Calculation.$fEqCalculation_$c== a1 b1 } }) -}
+a05162e35551d50a4889fa2ea55e9393
+  $s$fEqMaybe_$s$fEqMaybe_$c==5 ::
+    GHC.Base.Maybe Project.Project
+    -> GHC.Base.Maybe Project.Project -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: GHC.Base.Maybe Project.Project)
+                   (ds1 :: GHC.Base.Maybe Project.Project) ->
+                 case ds of wild {
+                   GHC.Base.Nothing
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.True
+                        GHC.Base.Just ipv -> GHC.Types.False }
+                   GHC.Base.Just a1
+                   -> case ds1 of wild1 {
+                        GHC.Base.Nothing -> GHC.Types.False
+                        GHC.Base.Just b1 -> Project.$fEqProject_$c== a1 b1 } }) -}
+b6d6cf846d3c9e36e4d167977280d432
+  $s$fShowMaybe :: GHC.Show.Show (GHC.Base.Maybe XMapTypes.XNamedMap)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe XMapTypes.XNamedMap)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec
+                     @ XMapTypes.XNamedMap
+                     XMapTypes.$fShowXNamedMap)
+                  (GHC.Show.$fShowMaybe_$cshow
+                     @ XMapTypes.XNamedMap
+                     XMapTypes.$fShowXNamedMap)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList -}
+17bffb2cea519a2af15a1731f516b605
+  $s$fShowMaybe1 :: GHC.Show.Show (GHC.Base.Maybe Project.User)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.User)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec
+                     @ Project.User
+                     Project.$fShowUser)
+                  (GHC.Show.$fShowMaybe_$cshow @ Project.User Project.$fShowUser)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList1 -}
+6ba79ed76d157251aa937b28380726a5
+  $s$fShowMaybe2 ::
+    GHC.Show.Show (GHC.Base.Maybe Project.AllProjects)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.AllProjects)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec
+                     @ Project.AllProjects
+                     Project.$fShowAllProjects)
+                  (GHC.Show.$fShowMaybe_$cshow
+                     @ Project.AllProjects
+                     Project.$fShowAllProjects)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList2 -}
+cc96d17d82ac7bc46f684e22779e703c
+  $s$fShowMaybe3 :: GHC.Show.Show (GHC.Base.Maybe View.View)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe View.View)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec @ View.View View.$fShowView)
+                  (GHC.Show.$fShowMaybe_$cshow @ View.View View.$fShowView)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList3 -}
+c1e47755df4d02e0f5f933a193b9cbb9
+  $s$fShowMaybe4 ::
+    GHC.Show.Show (GHC.Base.Maybe Calculation.Calculation)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Calculation.Calculation)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec
+                     @ Calculation.Calculation
+                     Calculation.$fShowCalculation)
+                  (GHC.Show.$fShowMaybe_$cshow
+                     @ Calculation.Calculation
+                     Calculation.$fShowCalculation)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList4 -}
+adc9a9d339b0ebc36be4621757952aa4
+  $s$fShowMaybe5 :: GHC.Show.Show (GHC.Base.Maybe Project.Project)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (GHC.Base.Maybe Project.Project)
+                  (GHC.Show.$fShowMaybe_$cshowsPrec
+                     @ Project.Project
+                     Project.$fShowProject)
+                  (GHC.Show.$fShowMaybe_$cshow
+                     @ Project.Project
+                     Project.$fShowProject)
+                  ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList5 -}
+1e192dd0b0a63ef3dc6a43580170f74f
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList ::
+    [GHC.Base.Maybe XMapTypes.XNamedMap] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe XMapTypes.XNamedMap])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe XMapTypes.XNamedMap)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ XMapTypes.XNamedMap
+                      XMapTypes.$fShowXNamedMap
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+e893295cd837ea07a5d6921ecb34a895
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList1 ::
+    [GHC.Base.Maybe Project.User] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe Project.User])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe Project.User)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ Project.User
+                      Project.$fShowUser
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+9123bb0963edad3e9e7c054cfec1dc5e
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList2 ::
+    [GHC.Base.Maybe Project.AllProjects] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe Project.AllProjects])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe Project.AllProjects)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ Project.AllProjects
+                      Project.$fShowAllProjects
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+152d3262e1c6eb81ee29edaf616ca5b6
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList3 ::
+    [GHC.Base.Maybe View.View] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe View.View]) (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe View.View)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ View.View
+                      View.$fShowView
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+29bb07f3ff70ca209d464b12c8c355d1
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList4 ::
+    [GHC.Base.Maybe Calculation.Calculation] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe Calculation.Calculation])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe Calculation.Calculation)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ Calculation.Calculation
+                      Calculation.$fShowCalculation
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+8c04d460968d19765c21e98ce234a438
+  $s$fShowMaybe_$s$fShowMaybe_$cshowList5 ::
+    [GHC.Base.Maybe Project.Project] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [GHC.Base.Maybe Project.Project])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (GHC.Base.Maybe Project.Project)
+                   (GHC.Show.$fShowMaybe_$cshowsPrec
+                      @ Project.Project
+                      Project.$fShowProject
+                      GHC.Show.shows22)
+                   eta
+                   eta1) -}
+e4e8a5a1f85f0f8172c6769462a92b58
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   ProjectJsonTest.$trModule2
+                   ProjectJsonTest.$trModule1) -}
+3f0e90e15871bb95d5f87b4e6b0b43c7
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ProjectJsonTest"#) -}
+ec134aa76d7cc66d22770d7c35e14ebb
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+f2a230347809ac683c1107cec809db08
+  $wouter ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+9952d07c48e1ec63911bdf5b04528e8c
+  $wouter1 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+8aaf6000c7da4d50b8f82c06acf737c5
+  $wouter2 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+012e90af5c2dae046bf6cd62624f1673
+  $wouter3 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+a71765388c42124b5c13da881c09b67e
+  $wouter4 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+a8688b7143e68d3a99fcef5df09485cf
+  $wouter5 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+4be8e1f110c6a04886e63618b7193f77
+  $wouter6 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+62c6487f37808969e70182aa8cf49847
+  calculationExample :: Calculation.Calculation
+  {- Strictness: m,
+     Unfolding: (Calculation.Calculation
+                   ProjectJsonTest.toParseJSON_calculation_same21
+                     `cast`
+                   (Sym (Calculation.N:CalculationName[0]))
+                   ProjectJsonTest.toParseJSON_calculation_same17
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))
+                   ProjectJsonTest.toParseJSON_calculation_same6
+                   XFunction.Intersection) -}
+77685537ebd2f2550674488cd237d096
+  toParseJSON_allProjects_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_allProjects_same1) -}
+f1f2ca9ea7f3494f8cc37b3e30221910
+  toParseJSON_allProjects_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_allProjects_same19
+                   ProjectJsonTest.toParseJSON_allProjects_same18
+                   ProjectJsonTest.toParseJSON_allProjects_same17
+                   ProjectJsonTest.toParseJSON_allProjects_same2) -}
+f869042c1b7ddc3b3b2eb56ca66e143e
+  toParseJSON_allProjects_same10 :: [Project.ProjectName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Project.ProjectName
+                   ProjectJsonTest.toParseJSON_allProjects_same11
+                     `cast`
+                   (Sym (Project.N:ProjectName[0]))
+                   (GHC.Types.[] @ Project.ProjectName)) -}
+138f80d40a084a807f251108450152cf
+  toParseJSON_allProjects_same11 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "proj2"#) -}
+d7cee336e201887d8eb78ff1b3ec665e
+  toParseJSON_allProjects_same12 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "proj1"#) -}
+27739ba4b408b931700f969b47a17876
+  toParseJSON_allProjects_same13 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 0#) -}
+e73c336648c52f13e9595a5055f55bdf
+  toParseJSON_allProjects_same14 ::
+    GHC.Types.SPEC
+    -> (Data.Vector.Generic.Base.Mutable
+          Data.Vector.Vector
+          (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
+          Data.Aeson.Types.Internal.Value,
+        GHC.Types.Int)
+    -> [Data.Aeson.Types.Internal.Value]
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          (Data.Vector.Generic.Base.Mutable
+             Data.Vector.Vector
+             (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
+             Data.Aeson.Types.Internal.Value,
+           GHC.Types.Int) #)
+  {- Arity: 4, Strictness: <S,1*U><L,U(U(U,U,U),U(U))><S,1*U><S,U> -}
+315cce9619c94e66ce9e828547a397f4
+  toParseJSON_allProjects_same15 ::
+    Data.ByteString.Lazy.Internal.ByteString
+    -> Data.ByteString.Lazy.Internal.ByteString
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: (\ (json :: Data.ByteString.Lazy.Internal.ByteString)[OneShot] ->
+                 Debug.Trace.trace
+                   @ Data.ByteString.Lazy.Internal.ByteString
+                   (GHC.CString.unpackAppendCString#
+                      "json"#
+                      (GHC.Types.:
+                         @ GHC.Types.Char
+                         GHC.Show.shows6
+                         (GHC.Show.showLitString
+                            (Data.ByteString.Lazy.Internal.unpackChars json)
+                            ProjectJsonTest.toParseJSON_allProjects_same16)))
+                   json) -}
+8c009b62b2875e517cd7800be6c5cbc9
+  toParseJSON_allProjects_same16 :: [GHC.Types.Char]
+  {- HasNoCafRefs,
+     Unfolding: (GHC.Types.:
+                   @ GHC.Types.Char
+                   GHC.Show.shows6
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+40a2a93c2fe236c41bfd028eb2c26b6a
+  toParseJSON_allProjects_same17 ::
+    GHC.Base.Maybe Project.AllProjects
+  {- Unfolding: (GHC.Base.Just
+                   @ Project.AllProjects
+                   ProjectJsonTest.toParseJSON_allProjects_same9
+                     `cast`
+                   (Sym (Project.N:AllProjects[0]))) -}
+6857035c477568ec17bd1195c004c9ea
+  toParseJSON_allProjects_same18 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "allProjects -> json -> allProjects"#) -}
+720f0dafb545ceca882d31533fd5840d
+  toParseJSON_allProjects_same19 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe Project.AllProjects
+    -> GHC.Base.Maybe Project.AllProjects
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe Project.AllProjects)
+                   ProjectJsonTest.toParseJSON_allProjects_same20
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe2
+                   ProjectJsonTest.$s$fShowMaybe2) -}
+22a3086e28ed235c668ac555d8a4cc75
+  toParseJSON_allProjects_same2 :: GHC.Base.Maybe Project.AllProjects
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_allProjects_same5 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.AllProjects
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONAllProjects_$cparseJSONList1 v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <[Project.ProjectName]>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.AllProjects
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_allProjects_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.AllProjects)
+                                    `cast`
+                                  (Project.N:AllProjects[0]
+                                   ->_R <Data.Aeson.Types.Internal.Result
+                                           Project.AllProjects>_R) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.AllProjects
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.AllProjects a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.AllProjects
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONAllProjects_$cparseJSONList1 v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <[Project.ProjectName]>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.AllProjects
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_allProjects_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.AllProjects)
+                                    `cast`
+                                  (Project.N:AllProjects[0]
+                                   ->_R <Data.Aeson.Types.Internal.Result
+                                           Project.AllProjects>_R) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.AllProjects
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.AllProjects a1 } } }) -}
+dd7e48f7e3a6faa53ee1bc51b48d922d
+  toParseJSON_allProjects_same20 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_allProjects_same21
+                   GHC.Stack.Types.EmptyCallStack) -}
+a3755d11e3aff526e5be2229cf03d057
+  toParseJSON_allProjects_same21 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_allProjects_same24
+                   ProjectJsonTest.toParseJSON_allProjects_same23
+                   ProjectJsonTest.toParseJSON_allProjects_same24
+                   ProjectJsonTest.toParseJSON_allProjects_same22) -}
+8c7d5e7fa9097b405e059667a60f9777
+  toParseJSON_allProjects_same22 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 140#) -}
+0321dbde552d5ca27072fc50c20b4582
+  toParseJSON_allProjects_same23 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 42#) -}
+1fb6b1c497412797e06708e4febb72f6
+  toParseJSON_allProjects_same24 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 53#) -}
+bc6725bb402456cf0c00fddeb154624e
+  toParseJSON_allProjects_same25 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "test/state/ProjectJsonTest.hs"#) -}
+5cb2221eacf4b72a84b979f6c5d73c93
+  toParseJSON_allProjects_same26 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "ProjectJsonTest"#) -}
+052db38255122b79c973f97c35c4cfdf
+  toParseJSON_allProjects_same27 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "main"#) -}
+7d03cf1acd1eaf41f0383dd2b3e2adef
+  toParseJSON_allProjects_same28 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "assertEqual"#) -}
+b8eaf4047d2498aef428ecee79fd771e
+  toParseJSON_allProjects_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String
+    -> Data.Aeson.Types.Internal.Result Project.AllProjects
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ Project.AllProjects eta) -}
+b3ce6c26ad46ffe7706f27c1e07376f5
+  toParseJSON_allProjects_same4 ::
+    Data.Attoparsec.Internal.Types.IResult
+      Data.ByteString.Internal.ByteString Data.Aeson.Types.Internal.Value
+  {- Unfolding: (Data.Aeson.Parser.Internal.$wjsonEOF
+                   @ Data.Aeson.Types.Internal.Value
+                   __NULL
+                   Data.ByteString.Internal.$fMonoidByteString3
+                   0#
+                   0#
+                   0#
+                   0#
+                   0#
+                   Data.Attoparsec.Internal.Types.Incomplete
+                   (Data.Attoparsec.ByteString.Internal.failK
+                      @ Data.Aeson.Types.Internal.Value)
+                     `cast`
+                   (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                    ->_R <Data.Attoparsec.Internal.Types.Pos
+                          -> Data.Attoparsec.Internal.Types.More
+                          -> [GHC.Base.String]
+                          -> GHC.Base.String
+                          -> Data.Attoparsec.Internal.Types.IResult
+                               Data.ByteString.Internal.ByteString
+                               Data.Aeson.Types.Internal.Value>_R)
+                   (Data.Attoparsec.ByteString.Internal.successK
+                      @ Data.Aeson.Types.Internal.Value)
+                     `cast`
+                   (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                    ->_R <Data.Attoparsec.Internal.Types.Pos
+                          -> Data.Attoparsec.Internal.Types.More
+                          -> Data.Aeson.Types.Internal.Value
+                          -> Data.Attoparsec.Internal.Types.IResult
+                               Data.ByteString.Internal.ByteString
+                               Data.Aeson.Types.Internal.Value>_R)) -}
+228b596919694fc26b5836b33a0a7d80
+  toParseJSON_allProjects_same5 ::
+    Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_allProjects_same6) -}
+04cb0ffd1d54675c096dfa7f444f1952
+  toParseJSON_allProjects_same6 ::
+    Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ (Data.Vector.Vector Data.Aeson.Types.Internal.Value)
+                        ProjectJsonTest.toParseJSON_allProjects_same7 of ds1 { (#,#) ipv1 ipv2 ->
+                 case ipv2 of dt1 { Data.Vector.Vector ipv ipv4 ipv5 ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Array dt1) } }) -}
+1c3330898f91c7d36584339f2127ac5d
+  toParseJSON_allProjects_same7 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Vector.Vector Data.Aeson.Types.Internal.Value #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newArray#
+                        @ Data.Aeson.Types.Internal.Value
+                        @ (Control.Monad.Primitive.PrimState
+                             (GHC.ST.ST GHC.Prim.RealWorld))
+                        0#
+                        (Data.Vector.Mutable.uninitialised
+                           @ Data.Aeson.Types.Internal.Value)
+                        s1
+                          `cast`
+                        (GHC.Prim.State#
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <GHC.Prim.RealWorld>_N)))_R of ds1 { (#,#) ipv ipv1 ->
+                 case ProjectJsonTest.toParseJSON_allProjects_same14
+                        GHC.Types.SPEC
+                        ((Data.Vector.Mutable.MVector
+                            @ (Control.Monad.Primitive.PrimState
+                                 (GHC.ST.ST GHC.Prim.RealWorld))
+                            @ Data.Aeson.Types.Internal.Value
+                            0#
+                            0#
+                            ipv1)
+                           `cast`
+                         (Sub (Sym (Data.Vector.D:R:MutableVector[0])) <Control.Monad.Primitive.PrimState
+                                                                          (GHC.ST.ST
+                                                                             GHC.Prim.RealWorld)>_N <Data.Aeson.Types.Internal.Value>_N),
+                         ProjectJsonTest.toParseJSON_allProjects_same13)
+                        ProjectJsonTest.toParseJSON_allProjects_same8
+                        ipv
+                          `cast`
+                        (GHC.Prim.State#
+                           (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                <GHC.Prim.RealWorld>_N))_R of ds2 { (#,#) ipv6 ipv7 ->
+                 case ipv7 of wild5 { (,) v' n ->
+                 case v'
+                        `cast`
+                      (Sub (Data.Vector.D:R:MutableVector[0]) <Control.Monad.Primitive.PrimState
+                                                                 (GHC.ST.ST
+                                                                    GHC.Prim.RealWorld)>_N <Data.Aeson.Types.Internal.Value>_N) of wild { Data.Vector.Mutable.MVector dt dt1 dt2 ->
+                 case n of dt5 { GHC.Types.I# dt6 ->
+                 case GHC.Prim.unsafeFreezeArray#
+                        @ (Control.Monad.Primitive.PrimState
+                             (GHC.ST.ST GHC.Prim.RealWorld))
+                        @ Data.Aeson.Types.Internal.Value
+                        dt2
+                        ipv6
+                          `cast`
+                        (GHC.Prim.State#
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <GHC.Prim.RealWorld>_N)))_R of ds { (#,#) ipv2 ipv3 ->
+                 (# ipv2
+                      `cast`
+                    (GHC.Prim.State#
+                       (Control.Monad.Primitive.D:R:PrimStateST[0]
+                            <GHC.Prim.RealWorld>_N))_R,
+                    Data.Vector.Vector
+                      @ Data.Aeson.Types.Internal.Value
+                      dt
+                      dt6
+                      ipv3 #) } } } } } }) -}
+e228884e0aaea510a13f34de429eb18e
+  toParseJSON_allProjects_same8 :: [Data.Aeson.Types.Internal.Value]
+  {- Unfolding: (GHC.Base.map
+                   @ Project.ProjectName
+                   @ Data.Aeson.Types.Internal.Value
+                   Data.Aeson.Types.Internal.$WString
+                     `cast`
+                   (Sym (Project.N:ProjectName[0])
+                    ->_R <Data.Aeson.Types.Internal.Value>_R)
+                   ProjectJsonTest.toParseJSON_allProjects_same9) -}
+59bec5c3d65e0f5582690ffecf4c16b5
+  toParseJSON_allProjects_same9 :: [Project.ProjectName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Project.ProjectName
+                   ProjectJsonTest.toParseJSON_allProjects_same12
+                     `cast`
+                   (Sym (Project.N:ProjectName[0]))
+                   ProjectJsonTest.toParseJSON_allProjects_same10) -}
+148ccd1e18f7948973281fe8601f0c54
+  toParseJSON_calculation_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_calculation_same1) -}
+e3ea43ce0d97269db41cb0865d06330e
+  toParseJSON_calculation_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_calculation_same24
+                   ProjectJsonTest.toParseJSON_calculation_same23
+                   ProjectJsonTest.toParseJSON_calculation_same22
+                   ProjectJsonTest.toParseJSON_calculation_same2) -}
+28ac8ad0567b465151dd035bc64a83c6
+  toParseJSON_calculation_same10 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same11
+                   0#
+                   ipv }) -}
+47a31f5e22849f8fb6b25c0ff9acc975
+  toParseJSON_calculation_same11 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "two"#) -}
+e66e4cb4729388eb2a8f58c20708725c
+  toParseJSON_calculation_same12 :: Formula.XFormula
+  {- Strictness: m1,
+     Unfolding: (Formula.XFMap
+                   ProjectJsonTest.toParseJSON_calculation_same13
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+6bb394dc413af76ad273f28e26a1a534
+  toParseJSON_calculation_same13 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_calculation_same14
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+ee6931ad071ac0b6dbf06a898b9a9eea
+  toParseJSON_calculation_same14 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_calculation_same15 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+da1d63fb620f64650a9a509f9092a1ec
+  toParseJSON_calculation_same15 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter1
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same16
+                   0#
+                   ipv }) -}
+dc76f334594d0df6c540a2fb2ae980ce
+  toParseJSON_calculation_same16 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "one"#) -}
+44e0b43f5be4da0f41da48ec80daf51b
+  toParseJSON_calculation_same17 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_calculation_same18
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+b9775674b12fdce4ec765d43b4ac23f0
+  toParseJSON_calculation_same18 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_calculation_same19 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+00a3ab94b0dad46619f88540f95735bc
+  toParseJSON_calculation_same19 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter2
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same20
+                   0#
+                   ipv }) -}
+8f86c215fa9790caf54b5e969fdd29e6
+  toParseJSON_calculation_same2 ::
+    GHC.Base.Maybe Calculation.Calculation
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_calculation_same4 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Calculation.Calculation
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONCalculation_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Calculation.Calculation>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Calculation.Calculation
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_calculation_same3
+                                  (Data.Aeson.Types.Internal.Success
+                                     @ Calculation.Calculation) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Calculation.Calculation
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Calculation.Calculation a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Calculation.Calculation
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONCalculation_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Calculation.Calculation>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Calculation.Calculation
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_calculation_same3
+                                  (Data.Aeson.Types.Internal.Success
+                                     @ Calculation.Calculation) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Calculation.Calculation
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Calculation.Calculation a1 } } }) -}
+6234af3b6455f7c36f7ff4a41ce6e39f
+  toParseJSON_calculation_same20 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "res"#) -}
+c1a889d321581f0e2cc58447125f9568
+  toParseJSON_calculation_same21 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "calculation"#) -}
+0f9d46c3a11db6b53706e1dda9759bca
+  toParseJSON_calculation_same22 ::
+    GHC.Base.Maybe Calculation.Calculation
+  {- Unfolding: (GHC.Base.Just
+                   @ Calculation.Calculation
+                   ProjectJsonTest.calculationExample) -}
+cd0786e2df75e3281bc7ccb28f5aecb2
+  toParseJSON_calculation_same23 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "calculation -> json -> calculation"#) -}
+bf2f437ac9975f372c2ca9668afae01d
+  toParseJSON_calculation_same24 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe Calculation.Calculation
+    -> GHC.Base.Maybe Calculation.Calculation
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe Calculation.Calculation)
+                   ProjectJsonTest.toParseJSON_calculation_same25
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe4
+                   ProjectJsonTest.$s$fShowMaybe4) -}
+55485c06a4a370b84c5e0f61a8b09a2a
+  toParseJSON_calculation_same25 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_calculation_same26
+                   GHC.Stack.Types.EmptyCallStack) -}
+000e42df0e5f372e635af066c5c76ca2
+  toParseJSON_calculation_same26 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_calculation_same28
+                   ProjectJsonTest.toParseJSON_allProjects_same23
+                   ProjectJsonTest.toParseJSON_calculation_same28
+                   ProjectJsonTest.toParseJSON_calculation_same27) -}
+d08664586ebe874d1d72e33cc15da641
+  toParseJSON_calculation_same27 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 160#) -}
+03079a4405d6380b6927d092ebb4e429
+  toParseJSON_calculation_same28 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 29#) -}
+d537548570ee13dd9b572a54590bd7b0
+  toParseJSON_calculation_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String
+    -> Data.Aeson.Types.Internal.Result Calculation.Calculation
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ Calculation.Calculation eta) -}
+fd2c5c0573a50e1ee63edbd1927b35d5
+  toParseJSON_calculation_same4 ::
+    Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_calculation_same5) -}
+515ae8e6b9ec3250666824c3af6b7b72
+  toParseJSON_calculation_same5 ::
+    Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case ProjectJson.$w$ctoJSON
+                        ProjectJsonTest.toParseJSON_calculation_same21
+                          `cast`
+                        (Sym (Calculation.N:CalculationName[0]))
+                        ProjectJsonTest.toParseJSON_calculation_same17
+                          `cast`
+                        (Sym (XMapTypes.N:XMapName[0]))
+                        ProjectJsonTest.toParseJSON_calculation_same6
+                        XFunction.Intersection of ww5 { Unit# ww6 ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Object ww6) }) -}
+a5b35858e42468490ec2c2c84fca9c6c
+  toParseJSON_calculation_same6 :: Formula.XFormula
+  {- Strictness: m2,
+     Unfolding: (Formula.XFOperation
+                   OperationTypes.Subtract
+                   ProjectJsonTest.toParseJSON_calculation_same12
+                   ProjectJsonTest.toParseJSON_calculation_same7) -}
+49a7997df159e8c6ca5288e56c20fe60
+  toParseJSON_calculation_same7 :: Formula.XFormula
+  {- Strictness: m1,
+     Unfolding: (Formula.XFMap
+                   ProjectJsonTest.toParseJSON_calculation_same8
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+85bd71d1231aa6924f4152ce621d4ee7
+  toParseJSON_calculation_same8 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_calculation_same9
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+612c33a95922fd3f85ea3e52989a75fc
+  toParseJSON_calculation_same9 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_calculation_same10 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+80b30a0062ed9004adace022d4e255a2
+  toParseJSON_map_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_map_same1) -}
+6cdb0ecde1e8b228ec7d908720fabb84
+  toParseJSON_map_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_map_same38
+                   ProjectJsonTest.toParseJSON_map_same37
+                   ProjectJsonTest.toParseJSON_map_same34
+                   ProjectJsonTest.toParseJSON_map_same2) -}
+14cb27538e5da0cb06c785be4de3c030
+  toParseJSON_map_same10 :: [Data.Aeson.Types.Internal.Pair]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Aeson.Types.Internal.Pair
+                   XMapJson.$fToJSONXMap7
+                   ProjectJsonTest.toParseJSON_map_same11) -}
+80299101e7d021a82a797d22d5c6bc11
+  toParseJSON_map_same11 :: [Data.Aeson.Types.Internal.Pair]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Aeson.Types.Internal.Pair
+                   ProjectJsonTest.toParseJSON_map_same12
+                   (GHC.Types.[] @ Data.Aeson.Types.Internal.Pair)) -}
+0bcde023789edd3067a9a4844342e728
+  toParseJSON_map_same12 ::
+    (Data.Text.Internal.Text, Data.Aeson.Types.Internal.Value)
+  {- Unfolding: ((XMapJson.$fToJSONXMap6,
+                  ProjectJsonTest.toParseJSON_map_same13)) -}
+08c6700297c61aab21f65e71ec40fdc2
+  toParseJSON_map_same13 :: Data.Aeson.Types.Internal.Value
+  {- Unfolding: (case XMapJson.$fToJSONXMap_go3
+                        (Data.HashMap.Base.Empty
+                           @ Data.Text.Internal.Text
+                           @ Data.Aeson.Types.Internal.Value)
+                        ProjectJsonTest.toParseJSON_map_same14 of dt1 { DEFAULT ->
+                 Data.Aeson.Types.Internal.Object dt1 }) -}
+b599b2137eaf18892467e1d505b22bc5
+  toParseJSON_map_same14 ::
+    Data.Map.Base.Map XMapTypes.XMapKey GHC.Types.Double
+  {- Unfolding: (TestTypes.$sfromList
+                   @ GHC.Types.Double
+                   ProjectJsonTest.toParseJSON_map_same15) -}
+6d54bfe4dc9170a857fa761745f5830a
+  toParseJSON_map_same15 :: [(XMapTypes.XMapKey, GHC.Types.Double)]
+  {- Unfolding: (GHC.Types.:
+                   @ (XMapTypes.XMapKey, GHC.Types.Double)
+                   ProjectJsonTest.toParseJSON_map_same22
+                   ProjectJsonTest.toParseJSON_map_same16) -}
+d8f40c081bf36ed7563580b79b7ec0d7
+  toParseJSON_map_same16 :: [(XMapTypes.XMapKey, GHC.Types.Double)]
+  {- Unfolding: (GHC.Types.:
+                   @ (XMapTypes.XMapKey, GHC.Types.Double)
+                   ProjectJsonTest.toParseJSON_map_same17
+                   (GHC.Types.[] @ (XMapTypes.XMapKey, GHC.Types.Double))) -}
+e0057b20444ab659af39a5856fc18c9b
+  toParseJSON_map_same17 :: (XMapTypes.XMapKey, GHC.Types.Double)
+  {- Unfolding: ((ProjectJsonTest.toParseJSON_map_same19,
+                  ProjectJsonTest.toParseJSON_map_same18)) -}
+5342ed69a82fdfc8ac7e440db382a843
+  toParseJSON_map_same18 :: GHC.Types.Double
+  {- HasNoCafRefs, Unfolding: (GHC.Types.D# 24.0##) -}
+f0ccb801b1c35efd9835c965c037e193
+  toParseJSON_map_same19 :: XMapTypes.XMapKey
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_map_same20 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 `cast` (Sym (XMapTypes.N:XMapKey[0])) }) -}
+e3b9f4e4b25e5f3653fbd24c1ccc487f
+  toParseJSON_map_same2 :: GHC.Base.Maybe XMapTypes.XNamedMap
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_map_same4 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ XMapTypes.XNamedMap
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (XMapJson.$fFromJSONXNamedMap_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <XMapTypes.XNamedMap>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ XMapTypes.XNamedMap
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_map_same3
+                                  (Data.Aeson.Types.Internal.Success
+                                     @ XMapTypes.XNamedMap) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ XMapTypes.XNamedMap
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ XMapTypes.XNamedMap a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ XMapTypes.XNamedMap
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (XMapJson.$fFromJSONXNamedMap_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <XMapTypes.XNamedMap>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ XMapTypes.XNamedMap
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_map_same3
+                                  (Data.Aeson.Types.Internal.Success
+                                     @ XMapTypes.XNamedMap) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ XMapTypes.XNamedMap
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ XMapTypes.XNamedMap a1 } } }) -}
+c5a5d750ea207af663524ed4cf3d50a8
+  toParseJSON_map_same20 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 TestTypes.$wouter
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_map_same21
+                   0#
+                   ipv }) -}
+8bfd9230ec743d694acb87edf6fd6a46
+  toParseJSON_map_same21 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "k2"#) -}
+5416f260080d25e8086d2adea0bceb48
+  toParseJSON_map_same22 :: (XMapTypes.XMapKey, GHC.Types.Double)
+  {- Unfolding: ((ProjectJsonTest.toParseJSON_map_same24,
+                  ProjectJsonTest.toParseJSON_map_same23)) -}
+c62a07b6488d1238d65d8ecd511fb8ae
+  toParseJSON_map_same23 :: GHC.Types.Double
+  {- HasNoCafRefs, Unfolding: (GHC.Types.D# 13.0##) -}
+8b8a5eeeeea55d8cc001317fe167dd25
+  toParseJSON_map_same24 :: XMapTypes.XMapKey
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_map_same25 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 `cast` (Sym (XMapTypes.N:XMapKey[0])) }) -}
+dd9036cb3712495b0ccc1eec1bb04d3e
+  toParseJSON_map_same25 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 TestTypes.$wouter
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_map_same26
+                   0#
+                   ipv }) -}
+7508bea348b21ef0c3f432ea7722855d
+  toParseJSON_map_same26 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "k1"#) -}
+f66b0bc0c9c4808c98bacc2d7c82bda0
+  toParseJSON_map_same27 ::
+    (Data.Text.Internal.Text, Data.Aeson.Types.Internal.Value)
+  {- Unfolding: ((XMapJson.$fToJSONXNamedMap2,
+                  ProjectJsonTest.toParseJSON_map_same28)) -}
+096f4bb6d03a502d7123d0a2d33300c7
+  toParseJSON_map_same28 :: Data.Aeson.Types.Internal.Value
+  {- Unfolding: (case Data.Text.concat
+                        ProjectJsonTest.toParseJSON_map_same29 of dt { Data.Text.Internal.Text ipv ipv1 ipv2 ->
+                 Data.Aeson.Types.Internal.String dt }) -}
+fe92731fe547f72a93d7ec3c94d00c44
+  toParseJSON_map_same29 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_map_same31
+                   ProjectJsonTest.toParseJSON_map_same30) -}
+345e694652eea923aa9a86d1e743d599
+  toParseJSON_map_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String
+    -> Data.Aeson.Types.Internal.Result XMapTypes.XNamedMap
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ XMapTypes.XNamedMap eta) -}
+cc2ab777874d83a57a8fb154cfc29aa6
+  toParseJSON_map_same30 :: [Data.Text.Internal.Text]
+  {- Unfolding: (ProjectJsonTest.toParseJSON_map_same_go
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+a1be7102b63a4af43e49a7f4ab803316
+  toParseJSON_map_same31 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_map_same32 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+27e2fbd2144e368600d4d849af6c3d9b
+  toParseJSON_map_same32 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter3
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_map_same33
+                   0#
+                   ipv }) -}
+dd189dc9c4dc50019cd46f10c00ee0af
+  toParseJSON_map_same33 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "map"#) -}
+39e135e6872452021f48d2d2714cc333
+  toParseJSON_map_same34 :: GHC.Base.Maybe XMapTypes.XNamedMap
+  {- Unfolding: (GHC.Base.Just
+                   @ XMapTypes.XNamedMap
+                   ProjectJsonTest.toParseJSON_map_same_original) -}
+0ac66fa05b8dab7476a640830340acec
+  toParseJSON_map_same35 :: XMapTypes.XMap
+  {- Strictness: m1,
+     Unfolding: (XMapTypes.XMapDouble
+                   ProjectJsonTest.toParseJSON_map_same14) -}
+3ba31bec783f7689c9a1fb6636c9b288
+  toParseJSON_map_same36 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_map_same31
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+f37bb0e117518a2bfbc7a66871fa5ac4
+  toParseJSON_map_same37 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "map -> json -> map"#) -}
+946f56e6fdeffd8456d81cd29c1b3c2c
+  toParseJSON_map_same38 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe XMapTypes.XNamedMap
+    -> GHC.Base.Maybe XMapTypes.XNamedMap
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe XMapTypes.XNamedMap)
+                   ProjectJsonTest.toParseJSON_map_same39
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe
+                   ProjectJsonTest.$s$fShowMaybe) -}
+5c7d8067c96740509ee43a36aeba7099
+  toParseJSON_map_same39 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_map_same40
+                   GHC.Stack.Types.EmptyCallStack) -}
+21277914fc7f75127c7be493523a9ff4
+  toParseJSON_map_same4 :: Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_map_same5) -}
+fda2aa335750a90ff51e96d37e8ef9e8
+  toParseJSON_map_same40 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_map_same43
+                   ProjectJsonTest.toParseJSON_map_same42
+                   ProjectJsonTest.toParseJSON_map_same43
+                   ProjectJsonTest.toParseJSON_map_same41) -}
+6be8be218db4c505c5f1542319ec90dd
+  toParseJSON_map_same41 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 116#) -}
+43c82e2c81f550d803c5d5267edea174
+  toParseJSON_map_same42 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 34#) -}
+ff88b72c4a3a81bf5e7fc4eec3d5a8aa
+  toParseJSON_map_same43 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 81#) -}
+71190c29e0a05da00497e687e111ee10
+  toParseJSON_map_same5 :: Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case Data.Aeson.Types.Internal.$sfromList1
+                        @ Data.Aeson.Types.Internal.Value
+                        ProjectJsonTest.toParseJSON_map_same6
+                        (Data.HashMap.Base.Empty
+                           @ Data.Text.Internal.Text
+                           @ Data.Aeson.Types.Internal.Value) of dt { DEFAULT ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Object dt) }) -}
+1ad9209fba95ee276dc1d9d0a023bdb2
+  toParseJSON_map_same6 :: [Data.Aeson.Types.Internal.Pair]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Aeson.Types.Internal.Pair
+                   ProjectJsonTest.toParseJSON_map_same27
+                   ProjectJsonTest.toParseJSON_map_same7) -}
+61d79a2a0136a985c7b88c3b02f31e32
+  toParseJSON_map_same7 :: [Data.Aeson.Types.Internal.Pair]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Aeson.Types.Internal.Pair
+                   ProjectJsonTest.toParseJSON_map_same8
+                   (GHC.Types.[] @ Data.Aeson.Types.Internal.Pair)) -}
+f8047adea47547eb2f778bbe9dc5845f
+  toParseJSON_map_same8 ::
+    (Data.Text.Internal.Text, Data.Aeson.Types.Internal.Value)
+  {- Unfolding: ((XMapJson.$fToJSONXNamedMap1,
+                  ProjectJsonTest.toParseJSON_map_same9)) -}
+162c9116d6ebc9005003d6bcb31d66b3
+  toParseJSON_map_same9 :: Data.Aeson.Types.Internal.Value
+  {- Unfolding: (case Data.Aeson.Types.Internal.$sfromList1
+                        @ Data.Aeson.Types.Internal.Value
+                        ProjectJsonTest.toParseJSON_map_same10
+                        (Data.HashMap.Base.Empty
+                           @ Data.Text.Internal.Text
+                           @ Data.Aeson.Types.Internal.Value) of dt { DEFAULT ->
+                 Data.Aeson.Types.Internal.Object dt }) -}
+d6f544687a871f1f57ad99bd3d6ad965
+  toParseJSON_map_same_go ::
+    [Data.Text.Internal.Text] -> [Data.Text.Internal.Text]
+  {- Arity: 1, Strictness: <S,1*U> -}
+471e0844d0f69d59855d487127001e2b
+  toParseJSON_map_same_original :: XMapTypes.XNamedMap
+  {- Strictness: m,
+     Unfolding: (XMapTypes.XNamedMap
+                   ProjectJsonTest.toParseJSON_map_same36
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))
+                   ProjectJsonTest.toParseJSON_map_same35) -}
+abceb62887cb060cfd6e865bfbc699fd
+  toParseJSON_project_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_project_same1) -}
+d2bde86707daaa8bd16220a61a2afe6e
+  toParseJSON_project_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_project_same22
+                   ProjectJsonTest.toParseJSON_project_same21
+                   ProjectJsonTest.toParseJSON_project_same20
+                   ProjectJsonTest.toParseJSON_project_same2) -}
+7ef53b68c40f88bf8ed306d228a60357
+  toParseJSON_project_same10 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_project_same11
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+50e47e0338315c8171faa016b74cf013
+  toParseJSON_project_same11 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_project_same12 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+3298de8cfb4958842b3c4d3ef4488505
+  toParseJSON_project_same12 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter4
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same11
+                   0#
+                   ipv }) -}
+6e9a69a7e5c06c27b88c93ff2e0fa406
+  toParseJSON_project_same13 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_project_same14
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+6419a443b5a00bc8eafbe3cb9a5ebeb3
+  toParseJSON_project_same14 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_project_same15 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+4b67fcce097948c2a1910b147c695416
+  toParseJSON_project_same15 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter5
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same16
+                   0#
+                   ipv }) -}
+af3e1b7908bff467b2bc84d977f133f4
+  toParseJSON_project_same16 :: [View.ViewName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ View.ViewName
+                   ProjectJsonTest.toParseJSON_project_same17
+                     `cast`
+                   (Sym (View.N:ViewName[0]))
+                   (GHC.Types.[] @ View.ViewName)) -}
+483fa53790850777e23c63b553026a36
+  toParseJSON_project_same17 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "view"#) -}
+2522104317dfa33059d0787fae91c958
+  toParseJSON_project_same18 :: [Calculation.CalculationName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Calculation.CalculationName
+                   ProjectJsonTest.toParseJSON_calculation_same21
+                     `cast`
+                   (Sym (Calculation.N:CalculationName[0]))
+                   (GHC.Types.[] @ Calculation.CalculationName)) -}
+e6cae391939df60573f80fed6df4bfdc
+  toParseJSON_project_same19 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "proj"#) -}
+bd7b791ee2a423824a7057670d68522b
+  toParseJSON_project_same2 :: GHC.Base.Maybe Project.Project
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_project_same4 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.Project
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONProject_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Project.Project>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.Project
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_project_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.Project) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.Project
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.Project a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.Project
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONProject_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Project.Project>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.Project
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_project_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.Project) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.Project
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.Project a1 } } }) -}
+024fa6a861e1719455613646c5d52b22
+  toParseJSON_project_same20 :: GHC.Base.Maybe Project.Project
+  {- Unfolding: (GHC.Base.Just
+                   @ Project.Project
+                   ProjectJsonTest.toParseJSON_project_same_original) -}
+66751aa0e4605ae7a177a4276523037b
+  toParseJSON_project_same21 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "project -> json -> project"#) -}
+b9d3a04023f27cca9cf7055f47491e22
+  toParseJSON_project_same22 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe Project.Project
+    -> GHC.Base.Maybe Project.Project
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe Project.Project)
+                   ProjectJsonTest.toParseJSON_project_same23
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe5
+                   ProjectJsonTest.$s$fShowMaybe5) -}
+95b12caeb400f85e4e46d4b7e9059a79
+  toParseJSON_project_same23 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_project_same24
+                   GHC.Stack.Types.EmptyCallStack) -}
+9ae002ad31754432dc0df9ea6b00f277
+  toParseJSON_project_same24 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_project_same27
+                   ProjectJsonTest.toParseJSON_project_same26
+                   ProjectJsonTest.toParseJSON_project_same27
+                   ProjectJsonTest.toParseJSON_project_same25) -}
+e90e6ac51264c6c05d8548d736b619b4
+  toParseJSON_project_same25 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 129#) -}
+12c720a4453f2ef8c6f7b9c1854b8d2c
+  toParseJSON_project_same26 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 38#) -}
+6bdc48d2385fdda24e09de6e5dcc866c
+  toParseJSON_project_same27 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 31#) -}
+dd409359fd325d5d4f235f4d3f811209
+  toParseJSON_project_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String
+    -> Data.Aeson.Types.Internal.Result Project.Project
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ Project.Project eta) -}
+477a199bbb26de6793bd35140a1ee779
+  toParseJSON_project_same4 ::
+    Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_project_same5) -}
+f5f1179481e024bafae03d377c93643f
+  toParseJSON_project_same5 ::
+    Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case ProjectJson.$w$ctoJSON6
+                        ProjectJsonTest.toParseJSON_project_same19
+                          `cast`
+                        (Sym (Project.N:ProjectName[0]))
+                        ProjectJsonTest.toParseJSON_project_same18
+                        ProjectJsonTest.toParseJSON_project_same16
+                        ProjectJsonTest.toParseJSON_project_same6 of ww5 { Unit# ww6 ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Object ww6) }) -}
+1f2ecb3732073241a91bb968a08673d0
+  toParseJSON_project_same6 :: [Project.Source]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Project.Source
+                   ProjectJsonTest.toParseJSON_project_same7
+                   (GHC.Types.[] @ Project.Source)) -}
+ccacdc0232dfaf3720832048bfc5de75
+  toParseJSON_project_same7 :: Project.Source
+  {- Strictness: m,
+     Unfolding: (Project.Source
+                   Project.FileSource
+                   ProjectJsonTest.toParseJSON_project_same8) -}
+5dcfa658d2560a071b91762cc70b7983
+  toParseJSON_project_same8 :: [XMapTypes.XMapName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ XMapTypes.XMapName
+                   ProjectJsonTest.toParseJSON_project_same13
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))
+                   ProjectJsonTest.toParseJSON_project_same9) -}
+6fbf9832a9b53989c5f764c65b1eafa7
+  toParseJSON_project_same9 :: [XMapTypes.XMapName]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ XMapTypes.XMapName
+                   ProjectJsonTest.toParseJSON_project_same10
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))
+                   (GHC.Types.[] @ XMapTypes.XMapName)) -}
+cda54ed82d9dded96872cd33cc19ad14
+  toParseJSON_project_same_original :: Project.Project
+  {- Strictness: m,
+     Unfolding: (Project.Project
+                   ProjectJsonTest.toParseJSON_project_same19
+                     `cast`
+                   (Sym (Project.N:ProjectName[0]))
+                   ProjectJsonTest.toParseJSON_project_same18
+                   ProjectJsonTest.toParseJSON_project_same16
+                   ProjectJsonTest.toParseJSON_project_same6) -}
+584ccb56d2fe2372c3c1e4e8909f7d96
+  toParseJSON_user_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_user_same1) -}
+84daddfa9b3f2d7989cfa6c30f19add9
+  toParseJSON_user_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_user_same9
+                   ProjectJsonTest.toParseJSON_user_same8
+                   ProjectJsonTest.toParseJSON_user_same7
+                   ProjectJsonTest.toParseJSON_user_same2) -}
+729d9052b302f6ffd2cecbae17f8ff27
+  toParseJSON_user_same10 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_user_same11
+                   GHC.Stack.Types.EmptyCallStack) -}
+96eec410232c59ee8a7c67aeb924f023
+  toParseJSON_user_same11 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_user_same14
+                   ProjectJsonTest.toParseJSON_user_same13
+                   ProjectJsonTest.toParseJSON_user_same14
+                   ProjectJsonTest.toParseJSON_user_same12) -}
+3bca986bb88068ac52d8b323cae48409
+  toParseJSON_user_same12 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 119#) -}
+cdb7b3aff2e8da7be49643d669660092
+  toParseJSON_user_same13 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 35#) -}
+31df48c4affa6b5a7708e18274640d58
+  toParseJSON_user_same14 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 57#) -}
+49dd30527a1ced798f92c4dd45288200
+  toParseJSON_user_same2 :: GHC.Base.Maybe Project.User
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_user_same4 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.User
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONUser_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Project.User>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.User
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_user_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.User) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.User
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.User a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ Project.User
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONUser_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <Project.User>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ Project.User
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_user_same3
+                                  (Data.Aeson.Types.Internal.Success @ Project.User) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv
+                             -> GHC.Base.Nothing @ Project.User
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ Project.User a1 } } }) -}
+d136adfdf05aa385103fd62ffed9159f
+  toParseJSON_user_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String -> Data.Aeson.Types.Internal.Result Project.User
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ Project.User eta) -}
+e634940d6f26de3df9e0675e070a19f2
+  toParseJSON_user_same4 :: Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_user_same5) -}
+c6068e7fbebcb814bf88409f5db4eeea
+  toParseJSON_user_same5 :: Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case ProjectJson.$w$ctoJSON8
+                        ProjectJsonTest.toParseJSON_user_same6
+                        ProjectJsonTest.toParseJSON_allProjects_same9 of ww3 { Unit# ww4 ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Object ww4) }) -}
+9223c2cc88d0d1f90e70ddbd7ef027d5
+  toParseJSON_user_same6 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "user"#) -}
+fdad8bb8d4c665520f9c4fd4d26f03f2
+  toParseJSON_user_same7 :: GHC.Base.Maybe Project.User
+  {- Unfolding: (GHC.Base.Just
+                   @ Project.User
+                   ProjectJsonTest.toParseJSON_user_same_original) -}
+9111f2c505fc23c2c52e1d6fe29b09d0
+  toParseJSON_user_same8 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "user -> json -> user"#) -}
+df9dd2f344d8e378d41a14d01a967296
+  toParseJSON_user_same9 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe Project.User
+    -> GHC.Base.Maybe Project.User
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe Project.User)
+                   ProjectJsonTest.toParseJSON_user_same10
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe1
+                   ProjectJsonTest.$s$fShowMaybe1) -}
+01059cfe0a217f4e87ee775da404730c
+  toParseJSON_user_same_original :: Project.User
+  {- Strictness: m,
+     Unfolding: (Project.User
+                   ProjectJsonTest.toParseJSON_user_same6
+                   ProjectJsonTest.toParseJSON_allProjects_same9) -}
+a9e6a936e8555f8cbcbb23eb5d39d302
+  toParseJSON_view_same :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   ProjectJsonTest.toParseJSON_view_same1) -}
+f61c8eaf2c2b69eafa78dff471e5f1ce
+  toParseJSON_view_same1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (ProjectJsonTest.toParseJSON_view_same17
+                   ProjectJsonTest.toParseJSON_view_same16
+                   ProjectJsonTest.toParseJSON_view_same15
+                   ProjectJsonTest.toParseJSON_view_same2) -}
+b7d8ca69153faabd073733f0b76302ed
+  toParseJSON_view_same10 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString# "label"#) -}
+0d63e47cfdc36c95addd7fa5ad6e131a
+  toParseJSON_view_same11 :: View.ViewItem
+  {- Strictness: m1,
+     Unfolding: (View.MapItem
+                   ProjectJsonTest.toParseJSON_view_same12
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+b9db713a7617b37a70041c28f8fb2e3c
+  toParseJSON_view_same12 :: [Data.Text.Internal.Text]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   ProjectJsonTest.toParseJSON_view_same13
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+f3dbeefd26c2c87bfbaed04648164ab0
+  toParseJSON_view_same13 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        ProjectJsonTest.toParseJSON_view_same14 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+1a1b6f114a86cdd3b2e92cc6787ace59
+  toParseJSON_view_same14 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 ProjectJsonTest.$wouter6
+                   ipv1
+                   4#
+                   ProjectJsonTest.toParseJSON_calculation_same16
+                   0#
+                   ipv }) -}
+7450175c1659b1dee854db8bf90112dd
+  toParseJSON_view_same15 :: GHC.Base.Maybe View.View
+  {- Unfolding: (GHC.Base.Just
+                   @ View.View
+                   ProjectJsonTest.toParseJSON_view_same_original) -}
+a312780007444288815f3e0446e25404
+  toParseJSON_view_same16 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "view -> json -> view"#) -}
+346505cb85395b210f06ae67f77046da
+  toParseJSON_view_same17 ::
+    GHC.Base.String
+    -> GHC.Base.Maybe View.View
+    -> GHC.Base.Maybe View.View
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (GHC.Base.Maybe View.View)
+                   ProjectJsonTest.toParseJSON_view_same18
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   ProjectJsonTest.$s$fEqMaybe3
+                   ProjectJsonTest.$s$fShowMaybe3) -}
+cfd5b619493379f1abc62b83d3d141c8
+  toParseJSON_view_same18 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   ProjectJsonTest.toParseJSON_allProjects_same28
+                   ProjectJsonTest.toParseJSON_view_same19
+                   GHC.Stack.Types.EmptyCallStack) -}
+5fdadad738b18116cfd380083e2cb9da
+  toParseJSON_view_same19 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   ProjectJsonTest.toParseJSON_allProjects_same27
+                   ProjectJsonTest.toParseJSON_allProjects_same26
+                   ProjectJsonTest.toParseJSON_allProjects_same25
+                   ProjectJsonTest.toParseJSON_view_same21
+                   ProjectJsonTest.toParseJSON_user_same13
+                   ProjectJsonTest.toParseJSON_view_same21
+                   ProjectJsonTest.toParseJSON_view_same20) -}
+47c3552bc9df720b03bfba2adde80cb9
+  toParseJSON_view_same2 :: GHC.Base.Maybe View.View
+  {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
+                        ProjectJsonTest.toParseJSON_view_same4 of wild {
+                   Data.ByteString.Lazy.Internal.Empty
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_$sgo
+                             @ Data.Aeson.Types.Internal.Value
+                             ProjectJsonTest.toParseJSON_allProjects_same4 of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ View.View
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONView_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <View.View>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ View.View
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_view_same3
+                                  (Data.Aeson.Types.Internal.Success @ View.View) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv -> GHC.Base.Nothing @ View.View
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ View.View a1 } }
+                   Data.ByteString.Lazy.Internal.Chunk dt dt1 dt2 dt3 xs
+                   -> case Data.Attoparsec.ByteString.Lazy.parse_go
+                             @ Data.Aeson.Types.Internal.Value
+                             (Data.Aeson.Parser.Internal.$wjsonEOF
+                                @ Data.Aeson.Types.Internal.Value
+                                dt
+                                dt1
+                                dt2
+                                dt3
+                                dt3
+                                0#
+                                0#
+                                Data.Attoparsec.Internal.Types.Incomplete
+                                (Data.Attoparsec.ByteString.Internal.failK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> [GHC.Base.String]
+                                       -> GHC.Base.String
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R)
+                                (Data.Attoparsec.ByteString.Internal.successK
+                                   @ Data.Aeson.Types.Internal.Value)
+                                  `cast`
+                                (Sub (Sym (Data.Attoparsec.Internal.Types.D:R:StateByteString[0]))
+                                 ->_R <Data.Attoparsec.Internal.Types.Pos
+                                       -> Data.Attoparsec.Internal.Types.More
+                                       -> Data.Aeson.Types.Internal.Value
+                                       -> Data.Attoparsec.Internal.Types.IResult
+                                            Data.ByteString.Internal.ByteString
+                                            Data.Aeson.Types.Internal.Value>_R))
+                             xs of wild1 {
+                        Data.Attoparsec.ByteString.Lazy.Fail ipv ipv1 ipv2
+                        -> GHC.Base.Nothing @ View.View
+                        Data.Attoparsec.ByteString.Lazy.Done ds v
+                        -> case (ProjectJson.$fFromJSONView_$cparseJSON v)
+                                  `cast`
+                                (Data.Aeson.Types.Internal.N:Parser[0] <View.View>_R)
+                                  @ Data.Aeson.Types.Internal.Result
+                                  @ View.View
+                                  (GHC.Types.[] @ Data.Aeson.Types.Internal.JSONPathElement)
+                                  ProjectJsonTest.toParseJSON_view_same3
+                                  (Data.Aeson.Types.Internal.Success @ View.View) of wild2 {
+                             Data.Aeson.Types.Internal.Error ipv -> GHC.Base.Nothing @ View.View
+                             Data.Aeson.Types.Internal.Success a1
+                             -> GHC.Base.Just @ View.View a1 } } }) -}
+cc55ebea98941c1030d709ebf8721c49
+  toParseJSON_view_same20 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 120#) -}
+5421b5fb186601a3122223d83dd09b4d
+  toParseJSON_view_same21 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 41#) -}
+322b803a60b2d826d01c3fa0c4e5f19c
+  toParseJSON_view_same3 ::
+    Data.Aeson.Types.Internal.JSONPath
+    -> GHC.Base.String -> Data.Aeson.Types.Internal.Result View.View
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
+                   (eta :: GHC.Base.String) ->
+                 Data.Aeson.Types.Internal.Error @ View.View eta) -}
+c7a479b910619b9744dd7f170e7f2788
+  toParseJSON_view_same4 :: Data.ByteString.Lazy.Internal.ByteString
+  {- Unfolding: (Data.ByteString.Builder.toLazyByteString
+                   ProjectJsonTest.toParseJSON_view_same5) -}
+8a43988a8891ef40165c9a8745c69674
+  toParseJSON_view_same5 :: Data.ByteString.Builder.Internal.Builder
+  {- Unfolding: (case ProjectJson.$w$ctoJSON9
+                        ProjectJsonTest.toParseJSON_project_same17
+                          `cast`
+                        (Sym (View.N:ViewName[0]))
+                        ProjectJsonTest.toParseJSON_view_same6 of ww3 { Unit# ww4 ->
+                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                   (Data.Aeson.Types.Internal.Object ww4) }) -}
+b21835df8e6058343f931ae57a19ae35
+  toParseJSON_view_same6 :: [View.ViewRow]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ View.ViewRow
+                   ProjectJsonTest.toParseJSON_view_same7
+                     `cast`
+                   (Sym (View.N:ViewRow[0]))
+                   (GHC.Types.[] @ View.ViewRow)) -}
+65cc8c91e427e77ec924b3b1c0492171
+  toParseJSON_view_same7 :: [View.ViewItem]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ View.ViewItem
+                   ProjectJsonTest.toParseJSON_view_same11
+                   ProjectJsonTest.toParseJSON_view_same8) -}
+a468ba2630c8ad7e458a062743f705b8
+  toParseJSON_view_same8 :: [View.ViewItem]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ View.ViewItem
+                   ProjectJsonTest.toParseJSON_view_same9
+                   (GHC.Types.[] @ View.ViewItem)) -}
+9a755cec6eb54f01392e2d71f10f2a3d
+  toParseJSON_view_same9 :: View.ViewItem
+  {- Strictness: m2,
+     Unfolding: (View.LabelItem
+                   ProjectJsonTest.toParseJSON_view_same10
+                     `cast`
+                   (Sym (View.N:ViewLabel[0]))) -}
+594fac828ae209543b310eed13e1c4d1
+  toParseJSON_view_same_original :: View.View
+  {- Strictness: m,
+     Unfolding: (View.View
+                   ProjectJsonTest.toParseJSON_project_same17
+                     `cast`
+                   (Sym (View.N:ViewName[0]))
+                   ProjectJsonTest.toParseJSON_view_same6) -}
+"SPEC/ProjectJsonTest $fEqMaybe @ AllProjects" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                          Project.AllProjects)
+  GHC.Base.$fEqMaybe @ Project.AllProjects $dEq
+  = ProjectJsonTest.$s$fEqMaybe2
+"SPEC/ProjectJsonTest $fEqMaybe @ Calculation" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                          Calculation.Calculation)
+  GHC.Base.$fEqMaybe @ Calculation.Calculation $dEq
+  = ProjectJsonTest.$s$fEqMaybe4
+"SPEC/ProjectJsonTest $fEqMaybe @ Project" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                      Project.Project)
+  GHC.Base.$fEqMaybe @ Project.Project $dEq
+  = ProjectJsonTest.$s$fEqMaybe5
+"SPEC/ProjectJsonTest $fEqMaybe @ User" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                   Project.User)
+  GHC.Base.$fEqMaybe @ Project.User $dEq
+  = ProjectJsonTest.$s$fEqMaybe1
+"SPEC/ProjectJsonTest $fEqMaybe @ View" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                   View.View)
+  GHC.Base.$fEqMaybe @ View.View $dEq = ProjectJsonTest.$s$fEqMaybe3
+"SPEC/ProjectJsonTest $fEqMaybe @ XNamedMap" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                        XMapTypes.XNamedMap)
+  GHC.Base.$fEqMaybe @ XMapTypes.XNamedMap $dEq
+  = ProjectJsonTest.$s$fEqMaybe
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ AllProjects" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                               Project.AllProjects)
+  GHC.Base.$fEqMaybe_$c== @ Project.AllProjects $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==2
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ Calculation" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                               Calculation.Calculation)
+  GHC.Base.$fEqMaybe_$c== @ Calculation.Calculation $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==4
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ Project" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                           Project.Project)
+  GHC.Base.$fEqMaybe_$c== @ Project.Project $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==5
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ User" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                        Project.User)
+  GHC.Base.$fEqMaybe_$c== @ Project.User $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==1
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ View" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                        View.View)
+  GHC.Base.$fEqMaybe_$c== @ View.View $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==3
+"SPEC/ProjectJsonTest $fEqMaybe_$c== @ XNamedMap" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                             XMapTypes.XNamedMap)
+  GHC.Base.$fEqMaybe_$c== @ XMapTypes.XNamedMap $dEq
+  = ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==
+"SPEC/ProjectJsonTest $fShowMaybe @ AllProjects" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                              Project.AllProjects)
+  GHC.Show.$fShowMaybe @ Project.AllProjects $dShow
+  = ProjectJsonTest.$s$fShowMaybe2
+"SPEC/ProjectJsonTest $fShowMaybe @ Calculation" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                              Calculation.Calculation)
+  GHC.Show.$fShowMaybe @ Calculation.Calculation $dShow
+  = ProjectJsonTest.$s$fShowMaybe4
+"SPEC/ProjectJsonTest $fShowMaybe @ Project" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                          Project.Project)
+  GHC.Show.$fShowMaybe @ Project.Project $dShow
+  = ProjectJsonTest.$s$fShowMaybe5
+"SPEC/ProjectJsonTest $fShowMaybe @ User" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                       Project.User)
+  GHC.Show.$fShowMaybe @ Project.User $dShow
+  = ProjectJsonTest.$s$fShowMaybe1
+"SPEC/ProjectJsonTest $fShowMaybe @ View" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                       View.View)
+  GHC.Show.$fShowMaybe @ View.View $dShow
+  = ProjectJsonTest.$s$fShowMaybe3
+"SPEC/ProjectJsonTest $fShowMaybe @ XNamedMap" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                            XMapTypes.XNamedMap)
+  GHC.Show.$fShowMaybe @ XMapTypes.XNamedMap $dShow
+  = ProjectJsonTest.$s$fShowMaybe
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ AllProjects" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                         Project.AllProjects)
+  GHC.Show.$fShowMaybe_$cshowList @ Project.AllProjects $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList2
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ Calculation" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                         Calculation.Calculation)
+  GHC.Show.$fShowMaybe_$cshowList @ Calculation.Calculation $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList4
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ Project" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                     Project.Project)
+  GHC.Show.$fShowMaybe_$cshowList @ Project.Project $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList5
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ User" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                  Project.User)
+  GHC.Show.$fShowMaybe_$cshowList @ Project.User $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList1
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ View" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                  View.View)
+  GHC.Show.$fShowMaybe_$cshowList @ View.View $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList3
+"SPEC/ProjectJsonTest $fShowMaybe_$cshowList @ XNamedMap" [ALWAYS] forall ($dShow :: GHC.Show.Show
+                                                                                       XMapTypes.XNamedMap)
+  GHC.Show.$fShowMaybe_$cshowList @ XMapTypes.XNamedMap $dShow
+  = ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

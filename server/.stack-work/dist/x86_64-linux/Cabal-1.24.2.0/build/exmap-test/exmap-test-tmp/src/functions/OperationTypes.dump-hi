@@ -1,0 +1,726 @@
+
+==================== FINAL INTERFACE ====================
+2017-08-25 19:18:56.24189597 UTC
+
+interface main@main:OperationTypes 8002
+  interface hash: 2491996d4d7b266ee5e8162f7a8e69aa
+  ABI hash: 6975e529b4a89f8050baa8dcbf38831a
+  export-list hash: 1a323fe5f5d42124be5996496a88719d
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 41cb72183c02d3fc92944c2d624cbf35
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  OperationTypes.OperationName{OperationTypes.Add OperationTypes.Subtract}
+module dependencies:
+package dependencies: base-4.9.1.0* ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Const
+                         base-4.9.1.0:Data.Monoid base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:GHC.Generics base-4.9.1.0:GHC.IO.Exception
+                         base-4.9.1.0:GHC.TypeLits
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Enum 3811281f7b5f26da514529cf3ed44009
+import  -/  base-4.9.1.0:GHC.Err 3bba35a16538d33d424682ce66876cdd
+import  -/  base-4.9.1.0:GHC.Num 00bfaa7b2f9d6084913c0697a8a49ec8
+import  -/  base-4.9.1.0:GHC.Read b6821365d2d5fa2155c9e910160e7f57
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+a5a60b294983bcb41d5e4136aac111fd
+  $fBoundedOperationName ::
+    GHC.Enum.Bounded OperationTypes.OperationName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ OperationTypes.OperationName
+                  OperationTypes.Add
+                  OperationTypes.Subtract -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName :: GHC.Enum.Enum OperationTypes.OperationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ OperationTypes.OperationName
+                  OperationTypes.$fEnumOperationName_$csucc
+                  OperationTypes.$fEnumOperationName_$cpred
+                  OperationTypes.$fEnumOperationName_$ctoEnum
+                  OperationTypes.$fEnumOperationName_$cfromEnum
+                  OperationTypes.$fEnumOperationName_$cenumFrom
+                  OperationTypes.$fEnumOperationName_$cenumFromThen
+                  OperationTypes.$fEnumOperationName_$cenumFromTo
+                  OperationTypes.$fEnumOperationName_$cenumFromThenTo -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName1 ::
+    GHC.Prim.Int# -> OperationTypes.OperationName
+  {- Arity: 1, Strictness: <L,U>x -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName2 :: [OperationTypes.OperationName]
+  {- Unfolding: (OperationTypes.$fEnumOperationName_go2 1#) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName3 :: [OperationTypes.OperationName]
+  {- Unfolding: (OperationTypes.$fEnumOperationName_go3 0#) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName4 :: OperationTypes.OperationName
+  {- Strictness: x -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName5 :: OperationTypes.OperationName
+  {- Strictness: x -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cenumFrom ::
+    OperationTypes.OperationName -> [OperationTypes.OperationName]
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: (\ (a :: OperationTypes.OperationName) ->
+                 case a of wild {
+                   OperationTypes.Add -> OperationTypes.$fEnumOperationName3
+                   OperationTypes.Subtract
+                   -> OperationTypes.$fEnumOperationName2 }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cenumFromThen ::
+    OperationTypes.OperationName
+    -> OperationTypes.OperationName -> [OperationTypes.OperationName]
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (a :: OperationTypes.OperationName)
+                   (b :: OperationTypes.OperationName) ->
+                 let {
+                   $j :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                     {- Arity: 1, Strictness: <S,U> -}
+                   = \ (a# :: GHC.Prim.Int#)[OneShot] ->
+                     let {
+                       $j1 :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                         {- Arity: 1, Strictness: <S,U> -}
+                       = \ (b# :: GHC.Prim.Int#)[OneShot] ->
+                         let {
+                           $j2 :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                             {- Arity: 1, Strictness: <S,U> -}
+                           = \ (y :: GHC.Prim.Int#)[OneShot] ->
+                             case GHC.Prim.tagToEnum#
+                                    @ GHC.Types.Bool
+                                    (GHC.Prim.>=# b# a#) of wild {
+                               GHC.Types.False
+                               -> GHC.Enum.efdtIntDnFB
+                                    @ [OperationTypes.OperationName]
+                                    OperationTypes.$fEnumOperationName_c1
+                                    (GHC.Types.[] @ OperationTypes.OperationName)
+                                    a#
+                                    b#
+                                    y
+                               GHC.Types.True
+                               -> GHC.Enum.efdtIntUpFB
+                                    @ [OperationTypes.OperationName]
+                                    OperationTypes.$fEnumOperationName_c1
+                                    (GHC.Types.[] @ OperationTypes.OperationName)
+                                    a#
+                                    b#
+                                    y }
+                         } in
+                         case GHC.Prim.tagToEnum#
+                                @ GHC.Types.Bool
+                                (GHC.Prim.># a# b#) of wild {
+                           GHC.Types.False -> $j2 1# GHC.Types.True -> $j2 0# }
+                     } in
+                     case b of wild {
+                       OperationTypes.Add -> $j1 0# OperationTypes.Subtract -> $j1 1# }
+                 } in
+                 case a of wild {
+                   OperationTypes.Add -> $j 0# OperationTypes.Subtract -> $j 1# }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cenumFromThenTo ::
+    OperationTypes.OperationName
+    -> OperationTypes.OperationName
+    -> OperationTypes.OperationName
+    -> [OperationTypes.OperationName]
+  {- Arity: 3, Strictness: <S,1*U><S,1*U><S,1*U>,
+     Unfolding: (\ (x1 :: OperationTypes.OperationName)
+                   (x2 :: OperationTypes.OperationName)
+                   (y :: OperationTypes.OperationName) ->
+                 let {
+                   $j :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                     {- Arity: 1, Strictness: <S,U> -}
+                   = \ (x4 :: GHC.Prim.Int#)[OneShot] ->
+                     let {
+                       $j1 :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                         {- Arity: 1, Strictness: <S,U> -}
+                       = \ (x5 :: GHC.Prim.Int#)[OneShot] ->
+                         case y of wild {
+                           OperationTypes.Add
+                           -> case GHC.Prim.tagToEnum#
+                                     @ GHC.Types.Bool
+                                     (GHC.Prim.>=# x5 x4) of wild1 {
+                                GHC.Types.False
+                                -> GHC.Enum.efdtIntDnFB
+                                     @ [OperationTypes.OperationName]
+                                     OperationTypes.$fEnumOperationName_c
+                                     (GHC.Types.[] @ OperationTypes.OperationName)
+                                     x4
+                                     x5
+                                     0#
+                                GHC.Types.True
+                                -> GHC.Enum.efdtIntUpFB
+                                     @ [OperationTypes.OperationName]
+                                     OperationTypes.$fEnumOperationName_c
+                                     (GHC.Types.[] @ OperationTypes.OperationName)
+                                     x4
+                                     x5
+                                     0# }
+                           OperationTypes.Subtract
+                           -> case GHC.Prim.tagToEnum#
+                                     @ GHC.Types.Bool
+                                     (GHC.Prim.>=# x5 x4) of wild1 {
+                                GHC.Types.False
+                                -> GHC.Enum.efdtIntDnFB
+                                     @ [OperationTypes.OperationName]
+                                     OperationTypes.$fEnumOperationName_c
+                                     (GHC.Types.[] @ OperationTypes.OperationName)
+                                     x4
+                                     x5
+                                     1#
+                                GHC.Types.True
+                                -> GHC.Enum.efdtIntUpFB
+                                     @ [OperationTypes.OperationName]
+                                     OperationTypes.$fEnumOperationName_c
+                                     (GHC.Types.[] @ OperationTypes.OperationName)
+                                     x4
+                                     x5
+                                     1# } }
+                     } in
+                     case x2 of wild {
+                       OperationTypes.Add -> $j1 0# OperationTypes.Subtract -> $j1 1# }
+                 } in
+                 case x1 of wild {
+                   OperationTypes.Add -> $j 0# OperationTypes.Subtract -> $j 1# }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cenumFromTo ::
+    OperationTypes.OperationName
+    -> OperationTypes.OperationName -> [OperationTypes.OperationName]
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (x :: OperationTypes.OperationName)
+                   (y :: OperationTypes.OperationName) ->
+                 let {
+                   $j :: GHC.Prim.Int# -> [OperationTypes.OperationName]
+                     {- Arity: 1, Strictness: <S,U> -}
+                   = \ (x1 :: GHC.Prim.Int#)[OneShot] ->
+                     case y of wild {
+                       OperationTypes.Add
+                       -> case GHC.Prim.tagToEnum#
+                                 @ GHC.Types.Bool
+                                 (GHC.Prim.># x1 0#) of wild1 {
+                            GHC.Types.False -> OperationTypes.$fEnumOperationName_go1 x1
+                            GHC.Types.True -> GHC.Types.[] @ OperationTypes.OperationName }
+                       OperationTypes.Subtract
+                       -> case GHC.Prim.tagToEnum#
+                                 @ GHC.Types.Bool
+                                 (GHC.Prim.># x1 1#) of wild1 {
+                            GHC.Types.False -> OperationTypes.$fEnumOperationName_go x1
+                            GHC.Types.True -> GHC.Types.[] @ OperationTypes.OperationName } }
+                 } in
+                 case x of wild {
+                   OperationTypes.Add -> $j 0# OperationTypes.Subtract -> $j 1# }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cfromEnum ::
+    OperationTypes.OperationName -> GHC.Types.Int
+  {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: OperationTypes.OperationName) ->
+                 case a of wild {
+                   OperationTypes.Add -> GHC.Types.I# 0#
+                   OperationTypes.Subtract -> GHC.Types.I# 1# }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$cpred ::
+    OperationTypes.OperationName -> OperationTypes.OperationName
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: OperationTypes.OperationName) ->
+                 case a of wild {
+                   OperationTypes.Add -> OperationTypes.$fEnumOperationName4
+                   OperationTypes.Subtract -> OperationTypes.Add }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$csucc ::
+    OperationTypes.OperationName -> OperationTypes.OperationName
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: OperationTypes.OperationName) ->
+                 case a of wild {
+                   OperationTypes.Add -> OperationTypes.Subtract
+                   OperationTypes.Subtract
+                   -> OperationTypes.$fEnumOperationName5 }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_$ctoEnum ::
+    GHC.Types.Int -> OperationTypes.OperationName
+  {- Arity: 1, Strictness: <S(S),1*U(U)>, Inline: INLINE[0],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: GHC.Types.Int) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 OperationTypes.$w$ctoEnum ww1 }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_c ::
+    GHC.Types.Int
+    -> [OperationTypes.OperationName] -> [OperationTypes.OperationName]
+  {- Arity: 2, Strictness: <L,1*U(U)><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (x :: GHC.Types.Int) (ys :: [OperationTypes.OperationName]) ->
+                 GHC.Types.:
+                   @ OperationTypes.OperationName
+                   (OperationTypes.$fEnumOperationName_$ctoEnum x)
+                   ys) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_c1 ::
+    GHC.Types.Int
+    -> [OperationTypes.OperationName] -> [OperationTypes.OperationName]
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U(U)><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (x :: GHC.Types.Int) (ys :: [OperationTypes.OperationName]) ->
+                 GHC.Types.:
+                   @ OperationTypes.OperationName
+                   (case x of wild { GHC.Types.I# a ->
+                    GHC.Prim.tagToEnum# @ OperationTypes.OperationName a })
+                   ys) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_go ::
+    GHC.Prim.Int# -> [OperationTypes.OperationName]
+  {- Arity: 1, Strictness: <L,U> -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_go1 ::
+    GHC.Prim.Int# -> [OperationTypes.OperationName]
+  {- Arity: 1, Strictness: <L,U> -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_go2 ::
+    GHC.Prim.Int# -> [OperationTypes.OperationName]
+  {- Arity: 1, HasNoCafRefs, Strictness: <L,U> -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEnumOperationName_go3 ::
+    GHC.Prim.Int# -> [OperationTypes.OperationName]
+  {- Arity: 1, HasNoCafRefs, Strictness: <L,U> -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEqOperationName :: GHC.Classes.Eq OperationTypes.OperationName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ OperationTypes.OperationName
+                  OperationTypes.$fEqOperationName_$c==
+                  OperationTypes.$fEqOperationName_$c/= -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEqOperationName_$c/= ::
+    OperationTypes.OperationName
+    -> OperationTypes.OperationName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: OperationTypes.OperationName)
+                   (b :: OperationTypes.OperationName) ->
+                 case a of wild {
+                   OperationTypes.Add
+                   -> case b of wild1 {
+                        OperationTypes.Add -> GHC.Types.False
+                        OperationTypes.Subtract -> GHC.Types.True }
+                   OperationTypes.Subtract
+                   -> case b of wild1 {
+                        OperationTypes.Add -> GHC.Types.True
+                        OperationTypes.Subtract -> GHC.Types.False } }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fEqOperationName_$c== ::
+    OperationTypes.OperationName
+    -> OperationTypes.OperationName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: OperationTypes.OperationName)
+                   (ds1 :: OperationTypes.OperationName) ->
+                 case ds of wild {
+                   OperationTypes.Add
+                   -> case ds1 of wild1 {
+                        OperationTypes.Add -> GHC.Types.True
+                        OperationTypes.Subtract -> GHC.Types.False }
+                   OperationTypes.Subtract
+                   -> case ds1 of wild1 {
+                        OperationTypes.Add -> GHC.Types.False
+                        OperationTypes.Subtract -> GHC.Types.True } }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName :: GHC.Read.Read OperationTypes.OperationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ OperationTypes.OperationName
+                  OperationTypes.$fReadOperationName_$creadsPrec
+                  OperationTypes.$fReadOperationName_$creadList
+                  OperationTypes.$fReadOperationName_$creadPrec
+                  OperationTypes.$fReadOperationName_$creadListPrec -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName1 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       ([OperationTypes.OperationName]
+        -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta1 :: [OperationTypes.OperationName]
+                            -> Text.ParserCombinators.ReadP.P b) ->
+                 GHC.Read.list1
+                   @ OperationTypes.OperationName
+                   OperationTypes.$fReadOperationName2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <OperationTypes.OperationName>_R))
+                   eta
+                   @ b
+                   eta1) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName10 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       (OperationTypes.OperationName -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,A><C(S),1*C1(U)>,
+     Unfolding: InlineRule (2, True, True)
+                (\ (ds :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta :: OperationTypes.OperationName
+                           -> Text.ParserCombinators.ReadP.P b) ->
+                 eta OperationTypes.Add) -}
+b1fc3b8a83d6318be5c7a586e96b40a8
+  $fReadOperationName11 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Add"#) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName12 ::
+    Text.ParserCombinators.ReadP.P [OperationTypes.OperationName]
+  {- Unfolding: (GHC.Read.list1
+                   @ OperationTypes.OperationName
+                   OperationTypes.$fReadOperationName2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <OperationTypes.OperationName>_R))
+                   GHC.Read.$fRead()5
+                   @ [OperationTypes.OperationName]
+                   (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                      @ [OperationTypes.OperationName])) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName2 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> Text.ParserCombinators.ReadP.ReadP OperationTypes.OperationName
+  {- Arity: 1,
+     Unfolding: (GHC.Read.parens1
+                   @ OperationTypes.OperationName
+                   OperationTypes.$fReadOperationName3
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <OperationTypes.OperationName>_R))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName3 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> Text.ParserCombinators.ReadP.ReadP OperationTypes.OperationName
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (eta :: Text.ParserCombinators.ReadPrec.Prec) ->
+                 GHC.Read.choose2
+                   @ OperationTypes.OperationName
+                   OperationTypes.$fReadOperationName4
+                   eta) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName4 ::
+    [(GHC.Base.String,
+      Text.ParserCombinators.ReadPrec.ReadPrec
+        OperationTypes.OperationName)]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ (GHC.Base.String,
+                      Text.ParserCombinators.ReadPrec.ReadPrec
+                        OperationTypes.OperationName)
+                   OperationTypes.$fReadOperationName9
+                   OperationTypes.$fReadOperationName5) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName5 ::
+    [(GHC.Base.String,
+      Text.ParserCombinators.ReadPrec.ReadPrec
+        OperationTypes.OperationName)]
+  {- Strictness: m2,
+     Unfolding: (GHC.Types.:
+                   @ (GHC.Base.String,
+                      Text.ParserCombinators.ReadPrec.ReadPrec
+                        OperationTypes.OperationName)
+                   OperationTypes.$fReadOperationName6
+                   (GHC.Types.[]
+                      @ (GHC.Base.String,
+                         Text.ParserCombinators.ReadPrec.ReadPrec
+                           OperationTypes.OperationName))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName6 ::
+    ([GHC.Types.Char],
+     Text.ParserCombinators.ReadPrec.ReadPrec
+       OperationTypes.OperationName)
+  {- Strictness: m,
+     Unfolding: ((OperationTypes.$fReadOperationName8,
+                  OperationTypes.$fReadOperationName7
+                    `cast`
+                  (Trans
+                       (<Text.ParserCombinators.ReadPrec.Prec>_R
+                        ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                      <OperationTypes.OperationName>_R))
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <OperationTypes.OperationName>_R))))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName7 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       (OperationTypes.OperationName -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,A><C(S),1*C1(U)>,
+     Unfolding: InlineRule (2, True, True)
+                (\ (ds :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta :: OperationTypes.OperationName
+                           -> Text.ParserCombinators.ReadP.P b) ->
+                 eta OperationTypes.Subtract) -}
+2492b253ba647bc31133ece1e91f3753
+  $fReadOperationName8 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Subtract"#) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName9 ::
+    ([GHC.Types.Char],
+     Text.ParserCombinators.ReadPrec.ReadPrec
+       OperationTypes.OperationName)
+  {- Strictness: m,
+     Unfolding: ((OperationTypes.$fReadOperationName11,
+                  OperationTypes.$fReadOperationName10
+                    `cast`
+                  (Trans
+                       (<Text.ParserCombinators.ReadPrec.Prec>_R
+                        ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                      <OperationTypes.OperationName>_R))
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <OperationTypes.OperationName>_R))))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName_$creadList ::
+    Text.ParserCombinators.ReadP.ReadS [OperationTypes.OperationName]
+  {- Arity: 1,
+     Unfolding: (Text.ParserCombinators.ReadP.run
+                   @ [OperationTypes.OperationName]
+                   OperationTypes.$fReadOperationName12) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName_$creadListPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec
+      [OperationTypes.OperationName]
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (0, True, True)
+                OperationTypes.$fReadOperationName1
+                  `cast`
+                (Trans
+                     (<Text.ParserCombinators.ReadPrec.Prec>_R
+                      ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                    <[OperationTypes.OperationName]>_R))
+                     (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                               <[OperationTypes.OperationName]>_R))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName_$creadPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec
+      OperationTypes.OperationName
+  {- Arity: 1,
+     Unfolding: InlineRule (0, True, True)
+                OperationTypes.$fReadOperationName2
+                  `cast`
+                (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                          <OperationTypes.OperationName>_R)) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fReadOperationName_$creadsPrec ::
+    GHC.Types.Int
+    -> Text.ParserCombinators.ReadP.ReadS OperationTypes.OperationName
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (eta :: GHC.Types.Int) ->
+                 Text.ParserCombinators.ReadP.run
+                   @ OperationTypes.OperationName
+                   ((GHC.Read.parens1
+                       @ OperationTypes.OperationName
+                       OperationTypes.$fReadOperationName3
+                         `cast`
+                       (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                 <OperationTypes.OperationName>_R))
+                       eta)
+                      `cast`
+                    (Text.ParserCombinators.ReadP.N:ReadP[0]
+                         <OperationTypes.OperationName>_R)
+                      @ OperationTypes.OperationName
+                      (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                         @ OperationTypes.OperationName))) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fShowOperationName :: GHC.Show.Show OperationTypes.OperationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ OperationTypes.OperationName
+                  OperationTypes.$fShowOperationName_$cshowsPrec
+                  OperationTypes.$fShowOperationName_$cshow
+                  OperationTypes.$fShowOperationName_$cshowList -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fShowOperationName1 ::
+    OperationTypes.OperationName -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: OperationTypes.OperationName) (eta :: GHC.Base.String) ->
+                 case ds of wild {
+                   OperationTypes.Add
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           OperationTypes.$fReadOperationName11)
+                        eta
+                   OperationTypes.Subtract
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           OperationTypes.$fReadOperationName8)
+                        eta }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fShowOperationName_$cshow ::
+    OperationTypes.OperationName -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: OperationTypes.OperationName) ->
+                 case x of wild {
+                   OperationTypes.Add -> OperationTypes.$fReadOperationName11
+                   OperationTypes.Subtract
+                   -> OperationTypes.$fReadOperationName8 }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fShowOperationName_$cshowList ::
+    [OperationTypes.OperationName] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ OperationTypes.OperationName
+                   OperationTypes.$fShowOperationName1) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $fShowOperationName_$cshowsPrec ::
+    GHC.Types.Int -> OperationTypes.OperationName -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,A><S,1*U><L,1*U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (ds :: GHC.Types.Int)
+                   (ds1 :: OperationTypes.OperationName)
+                   (eta :: GHC.Base.String) ->
+                 case ds1 of wild {
+                   OperationTypes.Add
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           OperationTypes.$fReadOperationName11)
+                        eta
+                   OperationTypes.Subtract
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr
+                           @ GHC.Types.Char
+                           @ b
+                           c
+                           n
+                           OperationTypes.$fReadOperationName8)
+                        eta }) -}
+179959692582e151b3cee8c3780fdeab
+  $tc'Add :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   882438151953393781##
+                   15916389526996203890##
+                   OperationTypes.$trModule
+                   OperationTypes.$tc'Add1) -}
+fadcc8eb62a3e925b7673c707e3599fa
+  $tc'Add1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Add"#) -}
+31b3624556ee8157287c867609d4a173
+  $tc'Subtract :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   11115161491995592451##
+                   11517063096537277877##
+                   OperationTypes.$trModule
+                   OperationTypes.$tc'Subtract1) -}
+7d12ff395bbcc6f55c44a5c434d7b392
+  $tc'Subtract1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Subtract"#) -}
+cce32ba1e4aa2cb8ccb5f97b0c4942e1
+  $tcOperationName :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   11957108392692687544##
+                   1908565622769599145##
+                   OperationTypes.$trModule
+                   OperationTypes.$tcOperationName1) -}
+0a282cc7489e4c78cb6a9452a410b9ff
+  $tcOperationName1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "OperationName"#) -}
+28f150ff494f9bd560c4886634877b8d
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   OperationTypes.$trModule2
+                   OperationTypes.$trModule1) -}
+1d18324bf1faa8611608957468e8b116
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "OperationTypes"#) -}
+c2e6d86988d160f38e3c3cfd08329fb4
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+a5a60b294983bcb41d5e4136aac111fd
+  $w$ctoEnum :: GHC.Prim.Int# -> OperationTypes.OperationName
+  {- Arity: 1, Strictness: <S,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 0#) of wild {
+                   GHC.Types.False -> OperationTypes.$fEnumOperationName1 ww
+                   GHC.Types.True
+                   -> case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.<=# ww 1#) of wild1 {
+                        GHC.Types.False -> OperationTypes.$fEnumOperationName1 ww
+                        GHC.Types.True
+                        -> GHC.Prim.tagToEnum# @ OperationTypes.OperationName ww } }) -}
+a5a60b294983bcb41d5e4136aac111fd
+  data OperationName = Add | Subtract
+instance [safe] GHC.Enum.Bounded [OperationTypes.OperationName]
+  = OperationTypes.$fBoundedOperationName
+instance [safe] GHC.Enum.Enum [OperationTypes.OperationName]
+  = OperationTypes.$fEnumOperationName
+instance [safe] GHC.Classes.Eq [OperationTypes.OperationName]
+  = OperationTypes.$fEqOperationName
+instance [safe] GHC.Read.Read [OperationTypes.OperationName]
+  = OperationTypes.$fReadOperationName
+instance [safe] GHC.Show.Show [OperationTypes.OperationName]
+  = OperationTypes.$fShowOperationName
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

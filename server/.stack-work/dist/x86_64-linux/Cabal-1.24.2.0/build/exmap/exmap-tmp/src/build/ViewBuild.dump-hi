@@ -1,0 +1,280 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-27 15:14:08.307382186 UTC
+
+interface main@main:ViewBuild 8002
+  interface hash: 08f34de31921c8f56469a8e0947b0789
+  ABI hash: cd29470687cc7f0d9cc6a8bfeb5b85bc
+  export-list hash: 859fab5e21a1daad9ae4e390a99091c7
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 96b542d537f655ad583e6de1a6ed0c0e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  ViewBuild.viewToChan
+  ViewBuild.viewToRuntime
+module dependencies: ApplicationTypes Calculation Errors
+                     EventMessages Formula OperationTypes Project ProjectJson TextEnums
+                     View ViewActor ViewMessages ViewState WebClients WebMessages
+                     WebMessagesJson XFunction XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:Control.Concurrent 2ee6a0a58489520b9a96d8fef10380fa
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
+  exports: 64db4fd1ac7c8985ea6ceddadc69d169
+  EventChan 2fbf9ecb2263a4b748008f48f08708ef
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+  viewName 42649ec3eca0aa81869dee042d61646f
+import  -/  ViewActor 98434608e7e26d31cf4fae31206a48c5
+  exports: 84ec3b7815c651ea28ffdbb5b08322a7
+  actorView ca6cb091db94dcb606f51dd84385ee26
+import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
+  exports: 4f259910ac4dde7df97333a484b49710
+  ViewChan a8e7d5732ce960f93aa79f3505166fc7
+import  -/  ViewState 8829825235e49e6633efccbcf381cba0
+  exports: 26ed2c4cc8a9cd015f67700d8d8aed16
+  RuntimeView 802756b243aad3f82ac499d24cb900b8
+  RuntimeView 81b78cacdc88335398633ded129fee09
+  mapsInView 06f7584fa7b5edde326aea69f58f0d9b
+  ownerProjectName 5a53b2e49a427955b74556f17b6b4b47
+  runtimeViewName d6ccea246080bfccffd5a78f5f98ea94
+  subscribedClients c21b9a3851f74c2574e307ddbe92b017
+  view 5018c2e2a21c4f905e4baa8f0cbc9c98
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TVar 8271fdeaf6f41f205dbe31243cf91390
+660103faf1d6d08bdaf5e6a7dd9e3fca
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   ViewBuild.$trModule2
+                   ViewBuild.$trModule1) -}
+b99c6568e31a978c3cf6ad5e98bd8ff1
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ViewBuild"#) -}
+7f435c93ce803fbec135b51849012e27
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+afb76a34c69e5b072feb301e2b06bf10
+  viewToChan ::
+    EventMessages.EventChan
+    -> Project.ProjectName
+    -> View.View
+    -> GHC.Types.IO ViewMessages.ViewChan
+  {- Arity: 4, Strictness: <L,U(A,U)><L,U><L,U(U(U,U,U),U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ViewBuild.viewToChan1
+                  `cast`
+                (<EventMessages.EventChan>_R
+                 ->_R <Project.ProjectName>_R
+                 ->_R <View.View>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <ViewMessages.ViewChan>_R)) -}
+dc90b8227be533122a960fc3ce632a66
+  viewToChan1 ::
+    EventMessages.EventChan
+    -> Project.ProjectName
+    -> View.View
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, ViewMessages.ViewChan #)
+  {- Arity: 4, Strictness: <L,U(A,U)><L,U><L,U(U(U,U,U),U)><S,U>,
+     Unfolding: (\ (ec :: EventMessages.EventChan)
+                   (pn :: Project.ProjectName)
+                   (v :: View.View)
+                   (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.atomically#
+                        @ ViewState.RuntimeView
+                        (ViewBuild.viewToChan2 pn v)
+                        s of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ ViewMessages.ViewMessage)
+                        ipv of ds { (#,#) ipv2 ipv3 ->
+                 let {
+                   hole :: GHC.Conc.Sync.TVar
+                             (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                     {- Strictness: m -}
+                   = GHC.Conc.Sync.TVar
+                       @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                       ipv3
+                 } in
+                 case GHC.Prim.newTVar#
+                        @ (GHC.Conc.Sync.TVar
+                             (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage))
+                        @ GHC.Prim.RealWorld
+                        hole
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case GHC.Prim.newTVar#
+                        @ (GHC.Conc.Sync.TVar
+                             (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage))
+                        @ GHC.Prim.RealWorld
+                        hole
+                        ipv4 of ds3 { (#,#) ipv6 ipv7 ->
+                 case GHC.Prim.fork#
+                        @ (GHC.Types.IO ())
+                        (\ (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                         GHC.Prim.catch#
+                           @ ()
+                           @ GHC.Exception.SomeException
+                           (\ (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                            ViewActor.$wactorView ipv5 ipv7 ipv1 ec w3)
+                           GHC.Conc.Sync.childHandler1
+                           eta)
+                          `cast`
+                        (Sym (GHC.Types.N:IO[0] <()>_R))
+                        ipv6 of ds4 { (#,#) ipv8 ipv9 ->
+                 (# ipv8,
+                    Control.Concurrent.STM.TChan.TChan
+                      @ ViewMessages.ViewMessage
+                      ipv5
+                      ipv7 #) } } } } }) -}
+43e9e53ffea3add2828e7ecf7a5abb91
+  viewToChan2 ::
+    Project.ProjectName
+    -> View.View
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, ViewState.RuntimeView #)
+  {- Arity: 3, HasNoCafRefs, Strictness: <L,U><L,U(U(U,U,U),U)><S,U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (pn :: Project.ProjectName)
+                   (v :: View.View)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newTVar#
+                        @ View.View
+                        @ GHC.Prim.RealWorld
+                        v
+                        eta of ds { (#,#) ipv ipv1 ->
+                 case GHC.Prim.newTVar#
+                        @ [WebClients.WAClient]
+                        @ GHC.Prim.RealWorld
+                        (GHC.Types.[] @ WebClients.WAClient)
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Data.Map.Base.Map XMapTypes.XMapName XMapTypes.XMap)
+                        @ GHC.Prim.RealWorld
+                        (Data.Map.Base.Tip @ XMapTypes.XMapName @ XMapTypes.XMap)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 (# ipv4,
+                    ViewState.RuntimeView
+                      (View.viewName v)
+                      pn
+                      (GHC.Conc.Sync.TVar @ View.View ipv1)
+                      (GHC.Conc.Sync.TVar @ [WebClients.WAClient] ipv3)
+                      (GHC.Conc.Sync.TVar
+                         @ (Data.Map.Base.Map XMapTypes.XMapName XMapTypes.XMap)
+                         ipv5) #) } } }) -}
+7534c0de6d6096788f74eeff2f17d4d2
+  viewToRuntime ::
+    Project.ProjectName
+    -> View.View -> GHC.Conc.Sync.STM ViewState.RuntimeView
+  {- Arity: 3, HasNoCafRefs, Strictness: <L,U><L,U(U(U,U,U),U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ViewBuild.viewToChan2
+                  `cast`
+                (<Project.ProjectName>_R
+                 ->_R <View.View>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <ViewState.RuntimeView>_R)) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

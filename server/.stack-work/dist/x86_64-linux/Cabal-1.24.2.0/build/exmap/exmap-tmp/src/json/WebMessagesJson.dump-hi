@@ -1,0 +1,429 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-27 06:38:35.340426459 UTC
+
+interface main@main:WebMessagesJson [orphan module] 8002
+  interface hash: 728ccabb190c5bf86e7bb2e9f3e0488a
+  ABI hash: 8c67daf3c09ebfb70f97ef111afabeaf
+  export-list hash: 836b865dc702f419a711e93a8452704c
+  orphan hash: 87670469a50b0b1c843c2fee6c8fdfde
+  flag hash: 73a3d7fa5cb5ccfee42bfbaa2a11c30b
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson TextEnums View WebMessages
+                     XFunction XMapJson XMapTypes XValues
+package dependencies: aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:XMapJson
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson 2e25d14a91e9ff13092f56c3ec0cd425
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson.Types.FromJSON 4689ca8eaf34be826a16963134272afc
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson.Types.Internal c533249add6a1886866510b882a9b441
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson.Types.ToJSON 032e11a60f09165b3d041ef0b452cae8
+import  -/  base-4.9.1.0:Data.Functor 5ab1dc703df5b482e77efb697833ca3c
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 7256d6e5b58cf659563f724d4f20fd1c
+import  -/  ProjectJson acf18b712df8a0f901e55f49f516e8ae
+  exports: 7c021a43116ce3cd9ba9642848771ff1
+import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+  exports: b86ad7b8a0b44a02b28cdac11545ea56
+  WEAllProjects 18b5c4d698562f78292940d9cfb30a38
+  WECalculationLoaded 0699b5908a3ec5c38083ddb072b82bd8
+  WECalculationStored 4e0614255bd54b52eb2efa9678decf6e
+  WEError 1d83df9216403449f39d3318ecf8c398
+  WEFunctions a85b95138c63adf14476455c73854dc8
+  WEInfo 6a075aff2643ba80bd6703cfa7ed7f86
+  WEMapLoaded 49a5d16a3bf4d0695337a29fa8c165c3
+  WEMapStored ff0f5271b9f80815e24ef8474ee6cbda
+  WEMapsInProject f6ece629ee42247daa8c01faffed2242
+  WEProjectContent f15fe3d556e47377c3afa966f5c1b8f2
+  WEProjectStored 6f6c9b70fd49e547c3d58fa840e80150
+  WEUnsubscribedFromView 6b31b1836e7eb16ac9a9cca345745d57
+  WEViewChanged f96d8b4393a206d07e4b847cd480c87e
+  WEViewLoaded 7474f966340436b3b8604dfe32a51740
+  WEViewStatus ba5b7d323a8227fb2c47613f2c0ee10b
+  WEViewStored 597c1228ff4c316b97119e7ac86559c9
+  WRAllProjects 48e8b3426c930048a110b11169a8f278
+  WRFunctions 104adea5ace4e07e75a402003b68a8ef
+  WRLoadCalculation bed9b4031403a62162788af0b7153ec7
+  WRLoadMap 4efcc99a66736f0a8a73a3bbcd7208c5
+  WRLoadView 8b6248a958607172ad0706329e86aeb3
+  WRMapsInProject 2b661f9b83b108f55f641c195cff8007
+  WRNewProject 8492b0b5820c5bf1856b2cfb017b8069
+  WRStoreCalculation 3c40a7c61a487baa87a8e85ec1e06bcc
+  WRStoreMap aab88d63fb210e7980242c5d4c1e0d35
+  WRStoreView 3741f3406dbcb78c63df4b0e01388dcf
+  WRSubscribeToProject 83465e877e4d845e6c44eeb2ef3020e2
+  WRSubscribeToView 8492566b0b6a1f63cef2294878b12ef7
+  WRUnsubscribeFromView cda3dfc72bc0737e98865e2c5beee082
+  WRUpdateProject b8e66e408cdde1ee740ccb3be9fd0f45
+  WebEvent 6df2a76ec9950bbeadbcb273faa1370e
+  WebRequest 9c5be6678bd16407fd69eeb65c613b94
+import  -/  XMapJson c20984cd2df0cdd5c0b86c8fb49b2e16
+  exports: 4ac2a0aa4bf208de6d454547f1cdad95
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base 42bdf194c392fb9c910c94a2b5aa1ff1
+import  -/  unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Lazy fc12dd068603a4b3dd39186b8a9fe7b5
+398804e6cba67f1c2a449cc76ba25ecd
+  $fFromJSONWebRequest ::
+    Data.Aeson.Types.FromJSON.FromJSON WebMessages.WebRequest
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebRequest
+                  WebMessagesJson.$fFromJSONWebRequest_$cparseJSON
+                  WebMessagesJson.$fFromJSONWebRequest_$cparseJSONList -}
+a85983e78efef5cef8235e9d305e1387
+  $fFromJSONWebRequest1 ::
+    [Data.Aeson.Types.Internal.Parser WebMessages.WebRequest]
+    -> forall (f :: * -> *) r.
+       Data.Aeson.Types.Internal.JSONPath
+       -> Data.Aeson.Types.Internal.Failure f r
+       -> Data.Aeson.Types.Internal.Success [WebMessages.WebRequest] f r
+       -> f r
+  {- Arity: 4, HasNoCafRefs, Strictness: <S,1*U><L,U><L,U><L,C(U)> -}
+40bee7eab68f84413f3d11e6354adffb
+  $fFromJSONWebRequest2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "[a]"#) -}
+02dcfd2bdc5e4bbac4c3a48020dbea0c
+  $fFromJSONWebRequest_$cparseJSON ::
+    Data.Aeson.Types.Internal.Value
+    -> Data.Aeson.Types.Internal.Parser WebMessages.WebRequest
+  {- Arity: 1, Strictness: <S,1*U> -}
+e1289a8f95d741cc4a32002b9b5e2d03
+  $fFromJSONWebRequest_$cparseJSONList ::
+    Data.Aeson.Types.Internal.Value
+    -> Data.Aeson.Types.Internal.Parser [WebMessages.WebRequest]
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: (\ (ds :: Data.Aeson.Types.Internal.Value) ->
+                 case ds of wild {
+                   DEFAULT
+                   -> Data.Aeson.Types.FromJSON.typeMismatch
+                        @ [WebMessages.WebRequest]
+                        WebMessagesJson.$fFromJSONWebRequest2
+                        wild
+                   Data.Aeson.Types.Internal.Array a1
+                   -> case a1 of wild1 { Data.Vector.Vector dt dt1 dt2 ->
+                      (WebMessagesJson.$fFromJSONWebRequest1
+                         (letrec {
+                            $wgo :: GHC.Prim.Int# -> [Data.Aeson.Types.Internal.Value]
+                              {- Arity: 1, Strictness: <S,U>, Inline: [0] -}
+                            = \ (ww :: GHC.Prim.Int#) ->
+                              case GHC.Prim.tagToEnum#
+                                     @ GHC.Types.Bool
+                                     (GHC.Prim.>=# ww dt1) of wild2 {
+                                GHC.Types.False
+                                -> case GHC.Prim.indexArray#
+                                          @ Data.Aeson.Types.Internal.Value
+                                          dt2
+                                          (GHC.Prim.+# dt ww) of ds1 { Unit# ipv ->
+                                   GHC.Types.:
+                                     @ Data.Aeson.Types.Internal.Value
+                                     ipv
+                                     ($wgo (GHC.Prim.+# ww 1#)) }
+                                GHC.Types.True -> GHC.Types.[] @ Data.Aeson.Types.Internal.Value }
+                          } in
+                          WebMessagesJson.$fFromJSONWebRequest_go 0# ($wgo 0#)))
+                        `cast`
+                      (Sym (Data.Aeson.Types.Internal.N:Parser[0]
+                                <[WebMessages.WebRequest]>_R)) } }) -}
+460b7b71244a5a57551ad01420b57c74
+  $fFromJSONWebRequest_go ::
+    GHC.Prim.Int#
+    -> [Data.Aeson.Types.Internal.Value]
+    -> [Data.Aeson.Types.Internal.Parser WebMessages.WebRequest]
+  {- Arity: 2, Strictness: <L,U><S,1*U> -}
+4e03c3a3c42c99f921dad326de4e8b0d
+  $fToJSONWebEvent ::
+    Data.Aeson.Types.ToJSON.ToJSON WebMessages.WebEvent
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebEvent
+                  WebMessagesJson.$fToJSONWebEvent_$ctoJSON
+                  WebMessagesJson.$fToJSONWebEvent_$ctoEncoding
+                  WebMessagesJson.$fToJSONWebEvent_$ctoJSONList
+                  WebMessagesJson.$fToJSONWebEvent_$ctoEncodingList -}
+e9d49b17e4bf13e327d9caaa13769ebe
+  $fToJSONWebEvent_$ctoEncoding ::
+    WebMessages.WebEvent -> Data.Aeson.Encoding.Internal.Encoding
+  {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
+     Unfolding: InlineRule (0, False, False)
+                (\ (eta :: WebMessages.WebEvent) ->
+                 Data.Aeson.Encoding.Internal.value
+                   (WebMessagesJson.$fToJSONWebEvent_$ctoJSON eta)) -}
+7268f7fecf2c052af71febf94333f64c
+  $fToJSONWebEvent_$ctoEncodingList ::
+    [WebMessages.WebEvent] -> Data.Aeson.Encoding.Internal.Encoding
+  {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
+     Unfolding: InlineRule (0, False, False)
+                (\ (eta :: [WebMessages.WebEvent]) ->
+                 case eta of wild {
+                   [] -> Data.Aeson.Encoding.Internal.emptyArray_
+                   : x xs
+                   -> (Data.ByteString.Builder.Internal.append
+                         (Data.Aeson.Encoding.Internal.openBracket
+                            @ Data.Aeson.Types.Internal.Value)
+                           `cast`
+                         (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                              <Data.Aeson.Types.Internal.Value>_P)
+                         (Data.ByteString.Builder.Internal.append
+                            (Data.Aeson.Encoding.Internal.value
+                               (WebMessagesJson.$fToJSONWebEvent_$ctoJSON x))
+                              `cast`
+                            (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                 <Data.Aeson.Types.Internal.Value>_P)
+                            (Data.ByteString.Builder.Internal.append
+                               (GHC.Base.foldr
+                                  @ WebMessages.WebEvent
+                                  @ (Data.Aeson.Encoding.Internal.Encoding'
+                                       Data.Aeson.Types.Internal.Value)
+                                  (\ (v :: WebMessages.WebEvent)
+                                     (vs :: Data.Aeson.Encoding.Internal.Encoding'
+                                              Data.Aeson.Types.Internal.Value)[OneShot] ->
+                                   Data.ByteString.Builder.Internal.append
+                                     (Data.Aeson.Encoding.Internal.comma
+                                        @ Data.Aeson.Types.Internal.Value)
+                                       `cast`
+                                     (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                          <Data.Aeson.Types.Internal.Value>_P)
+                                     (Data.ByteString.Builder.Internal.append
+                                        (Data.Aeson.Encoding.Internal.value
+                                           (WebMessagesJson.$fToJSONWebEvent_$ctoJSON v))
+                                          `cast`
+                                        (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                             <Data.Aeson.Types.Internal.Value>_P)
+                                        vs
+                                          `cast`
+                                        (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                             <Data.Aeson.Types.Internal.Value>_P)))
+                                    `cast`
+                                  (<WebMessages.WebEvent>_R
+                                   ->_R <Data.Aeson.Encoding.Internal.Encoding'
+                                           Data.Aeson.Types.Internal.Value>_R
+                                   ->_R Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                                 <Data.Aeson.Types.Internal.Value>_P))
+                                  (Data.Aeson.Encoding.Internal.empty
+                                     @ Data.Aeson.Types.Internal.Value)
+                                  xs)
+                                 `cast`
+                               (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                    <Data.Aeson.Types.Internal.Value>_P)
+                               (Data.Aeson.Encoding.Internal.closeBracket
+                                  @ Data.Aeson.Types.Internal.Value)
+                                 `cast`
+                               (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                    <Data.Aeson.Types.Internal.Value>_P))))
+                        `cast`
+                      (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
+                                <Data.Aeson.Types.Internal.Value>_P)) }) -}
+ff5d27f5b5011eb26f12384d21d4cd9e
+  $fToJSONWebEvent_$ctoJSON ::
+    WebMessages.WebEvent -> Data.Aeson.Types.Internal.Value
+  {- Arity: 1, Strictness: <S,1*U>m1, Inline: INLINE[0],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: WebMessages.WebEvent) ->
+                 case WebMessagesJson.$w$ctoJSON w of ww { Unit# ww1 ->
+                 Data.Aeson.Types.Internal.Object ww1 }) -}
+5c4527eb13c56b22abb5b6fd4731a829
+  $fToJSONWebEvent_$ctoJSONList ::
+    [WebMessages.WebEvent] -> Data.Aeson.Types.Internal.Value
+  {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
+     Unfolding: InlineRule (0, False, False)
+                (\ (eta :: [WebMessages.WebEvent]) ->
+                 case Data.Vector.Generic.new
+                        @ Data.Vector.Vector
+                        @ Data.Aeson.Types.Internal.Value
+                        (Data.Vector.$fVectorVectora @ Data.Aeson.Types.Internal.Value)
+                        (Data.Vector.Generic.New.unstream
+                           @ Data.Vector.Vector
+                           @ Data.Aeson.Types.Internal.Value
+                           (Data.Vector.$fVectorVectora @ Data.Aeson.Types.Internal.Value)
+                           (Data.Vector.Fusion.Bundle.Monadic.unsafeFromList
+                              @ Data.Vector.Fusion.Util.Id
+                              @ Data.Aeson.Types.Internal.Value
+                              @ Data.Vector.Vector
+                              Data.Vector.Fusion.Util.$fMonadId
+                              Data.Vector.Fusion.Bundle.Size.Unknown
+                              (GHC.Base.build
+                                 @ Data.Aeson.Types.Internal.Value
+                                 (\ @ b1
+                                    (c :: Data.Aeson.Types.Internal.Value -> b1 -> b1)[OneShot]
+                                    (n :: b1)[OneShot] ->
+                                  GHC.Base.foldr
+                                    @ WebMessages.WebEvent
+                                    @ b1
+                                    (GHC.Base.mapFB
+                                       @ Data.Aeson.Types.Internal.Value
+                                       @ b1
+                                       @ WebMessages.WebEvent
+                                       c
+                                       WebMessagesJson.$fToJSONWebEvent_$ctoJSON)
+                                    n
+                                    eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
+                 Data.Aeson.Types.Internal.Array dt1 }) -}
+b26bc9d02aeefceeb1092adc773ba943
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   WebMessagesJson.$trModule2
+                   WebMessagesJson.$trModule1) -}
+1a5406c1040d3dd702d19fd959566733
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebMessagesJson"#) -}
+ebdda9e7f44ca695adf3e378cc1365ea
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+230278a271903cc8a92c36becb3c8c13
+  $w$ctoJSON ::
+    WebMessages.WebEvent -> (# Data.Aeson.Types.Internal.Object #)
+  {- Arity: 1, Strictness: <S,1*U>, Inline: [0] -}
+d221eb45efd9b4999609a71a29e9574e
+  $w$slookup ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> Data.HashMap.Base.HashMap Data.Text.Internal.Text v
+    -> GHC.Base.Maybe v
+  {- Arity: 4, HasNoCafRefs, Strictness: <S,U><S,U><S,U><S,1*U>,
+     Inline: [0],
+     Unfolding: (\ @ v
+                   (ww :: GHC.Prim.ByteArray#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (w :: Data.HashMap.Base.HashMap Data.Text.Internal.Text v) ->
+                 case {__pkg_ccall hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol hashable_fnv_hash_offset GHC.Prim.ByteArray#
+                                                                                                                     -> GHC.Prim.Int#
+                                                                                                                     -> GHC.Prim.Int#
+                                                                                                                     -> GHC.Prim.Int#
+                                                                                                                     -> GHC.Prim.State#
+                                                                                                                          GHC.Prim.RealWorld
+                                                                                                                     -> (# GHC.Prim.State#
+                                                                                                                             GHC.Prim.RealWorld,
+                                                                                                                           GHC.Prim.Int# #)}
+                        ww
+                        (GHC.Prim.uncheckedIShiftL# ww1 1#)
+                        (GHC.Prim.uncheckedIShiftL# ww2 1#)
+                        -2578643520546668380#
+                        GHC.Prim.realWorld# of wild1 { (#,#) ds1 ds2 ->
+                 WebMessagesJson.$wpoly_go2
+                   @ v
+                   (GHC.Prim.int2Word# ds2)
+                   ww
+                   ww1
+                   ww2
+                   0#
+                   w }) -}
+4c78b755683387e7a2213be3179f8d01
+  $wpoly_go1 ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Array#
+         (Data.HashMap.Base.Leaf Data.Text.Internal.Text v)
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Base.Maybe v
+  {- Arity: 6, HasNoCafRefs,
+     Strictness: <L,U><L,U><L,U><S,U><S,U><S,U>, Inline: [0] -}
+e28e3fd5873f0d9cb84cd4d69263a3c3
+  $wpoly_go2 ::
+    GHC.Prim.Word#
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> Data.HashMap.Base.HashMap Data.Text.Internal.Text v
+    -> GHC.Base.Maybe v
+  {- Arity: 6, HasNoCafRefs,
+     Strictness: <L,U><L,U><L,U><L,U><L,U><S,1*U>, Inline: [0] -}
+instance Data.Aeson.Types.FromJSON.FromJSON [WebMessages.WebRequest]
+  = WebMessagesJson.$fFromJSONWebRequest
+instance Data.Aeson.Types.ToJSON.ToJSON [WebMessages.WebEvent]
+  = WebMessagesJson.$fToJSONWebEvent
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

@@ -1,0 +1,645 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-27 06:37:27.341575903 UTC
+
+interface main@main:WebMessages 8002
+  interface hash: edef594d54fae4c8c2fd5cf6cfc0c0ab
+  ABI hash: 4e2e4b8978c35e53f8847f3038c867e8
+  export-list hash: b86ad7b8a0b44a02b28cdac11545ea56
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 85c62bb38ef90b008a19d0e7fa11d888
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  WebMessages.WebEvent{WebMessages.WEAllProjects WebMessages.WECalculationLoaded WebMessages.WECalculationStored WebMessages.WEError WebMessages.WEFunctions WebMessages.WEInfo WebMessages.WEMapLoaded WebMessages.WEMapStored WebMessages.WEMapsInProject WebMessages.WEProjectContent WebMessages.WEProjectStored WebMessages.WEUnsubscribedFromView WebMessages.WEViewChanged WebMessages.WEViewLoaded WebMessages.WEViewStatus WebMessages.WEViewStored}
+  WebMessages.WebRequest{WebMessages.WRAllProjects WebMessages.WRFunctions WebMessages.WRLoadCalculation WebMessages.WRLoadMap WebMessages.WRLoadView WebMessages.WRMapsInProject WebMessages.WRNewProject WebMessages.WRStoreCalculation WebMessages.WRStoreMap WebMessages.WRStoreView WebMessages.WRSubscribeToProject WebMessages.WRSubscribeToView WebMessages.WRUnsubscribeFromView WebMessages.WRUpdateProject}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project View XFunction XMapTypes XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  CalculationName 7681f69b2581ed31254c1a456f024695
+  CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
+  Functions 76913b8c92b440c4f1a034f58c20c5b1
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  AllProjects 5112a5d43849857c03604773be3e85a2
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+  ViewName 105e058b0f915624ee10874cf1c9d091
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName aed4e1c98ee09424176ec799b4e99672
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+6df2a76ec9950bbeadbcb273faa1370e
+  $fEqWebEvent :: GHC.Classes.Eq WebMessages.WebEvent
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebEvent
+                  WebMessages.$fEqWebEvent_$c==
+                  WebMessages.$fEqWebEvent_$c/= -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fEqWebEvent_$c/= ::
+    WebMessages.WebEvent -> WebMessages.WebEvent -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: WebMessages.WebEvent) (b :: WebMessages.WebEvent) ->
+                 case WebMessages.$fEqWebEvent_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fEqWebEvent_$c== ::
+    WebMessages.WebEvent -> WebMessages.WebEvent -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U> -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fEqWebRequest :: GHC.Classes.Eq WebMessages.WebRequest
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebRequest
+                  WebMessages.$fEqWebRequest_$c==
+                  WebMessages.$fEqWebRequest_$c/= -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fEqWebRequest_$c/= ::
+    WebMessages.WebRequest -> WebMessages.WebRequest -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: WebMessages.WebRequest) (b :: WebMessages.WebRequest) ->
+                 case WebMessages.$fEqWebRequest_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fEqWebRequest_$c== ::
+    WebMessages.WebRequest -> WebMessages.WebRequest -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U> -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fShowWebEvent :: GHC.Show.Show WebMessages.WebEvent
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebEvent
+                  WebMessages.$fShowWebEvent_$cshowsPrec
+                  WebMessages.$fShowWebEvent_$cshow
+                  WebMessages.$fShowWebEvent_$cshowList -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fShowWebEvent1 :: WebMessages.WebEvent -> GHC.Show.ShowS
+  {- Arity: 1,
+     Unfolding: (\ (w :: WebMessages.WebEvent) ->
+                 WebMessages.$w$cshowsPrec 0# w) -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fShowWebEvent_$cshow :: WebMessages.WebEvent -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: WebMessages.WebEvent) ->
+                 WebMessages.$fShowWebEvent_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fShowWebEvent_$cshowList ::
+    [WebMessages.WebEvent] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ WebMessages.WebEvent
+                   WebMessages.$fShowWebEvent1) -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $fShowWebEvent_$cshowsPrec ::
+    GHC.Types.Int -> WebMessages.WebEvent -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S(S),1*U(U)><S,1*U>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Types.Int) (w1 :: WebMessages.WebEvent) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 WebMessages.$w$cshowsPrec ww1 w1 }) -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fShowWebRequest :: GHC.Show.Show WebMessages.WebRequest
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebMessages.WebRequest
+                  WebMessages.$fShowWebRequest_$cshowsPrec
+                  WebMessages.$fShowWebRequest_$cshow
+                  WebMessages.$fShowWebRequest_$cshowList -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fShowWebRequest1 :: WebMessages.WebRequest -> GHC.Show.ShowS
+  {- Arity: 1,
+     Unfolding: (WebMessages.$fShowWebRequest_$cshowsPrec
+                   WebMessages.$fShowWebRequest2) -}
+597a0859882818dbd7fb63ee83163b17
+  $fShowWebRequest2 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fShowWebRequest_$cshow ::
+    WebMessages.WebRequest -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: WebMessages.WebRequest) ->
+                 WebMessages.$fShowWebRequest_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fShowWebRequest_$cshowList ::
+    [WebMessages.WebRequest] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ WebMessages.WebRequest
+                   WebMessages.$fShowWebRequest1) -}
+9c5be6678bd16407fd69eeb65c613b94
+  $fShowWebRequest_$cshowsPrec ::
+    GHC.Types.Int -> WebMessages.WebRequest -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <L,1*U(U)><S,1*U> -}
+e99ea1362e988c6e4371b0de7a215505
+  $tc'WEAllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9956997783462924167##
+                   7593081406924965553##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEAllProjects1) -}
+9822b06ed9d89b88b5f611ce52bd670a
+  $tc'WEAllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEAllProjects"#) -}
+623c3adc7de050e945df151f06f9013e
+  $tc'WECalculationLoaded :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8815694724778703968##
+                   7649090688580520538##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WECalculationLoaded1) -}
+e763a0bb97dfc8504eb042deaeb40bff
+  $tc'WECalculationLoaded1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WECalculationLoaded"#) -}
+62e5e076c2994fc8f03e58994edb54cb
+  $tc'WECalculationStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4074896168811837326##
+                   89879230246988344##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WECalculationStored1) -}
+956b7251ed6d2aca968e00519f8958cb
+  $tc'WECalculationStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WECalculationStored"#) -}
+95cfead19e2a78e557494b53d9114580
+  $tc'WEError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9163885013445601385##
+                   12271621882519182594##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEError1) -}
+ece58b63e250fd6aa750e27d25006d40
+  $tc'WEError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEError"#) -}
+6463be059670f35f54a85deabfcc89b9
+  $tc'WEFunctions :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14176245893198305969##
+                   1126889194532911144##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEFunctions1) -}
+3c4914c3be48dcd2901f11b4e0aee340
+  $tc'WEFunctions1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEFunctions"#) -}
+e5a630d19fb8721b42a1c2a94b61f47b
+  $tc'WEInfo :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6257536027925253224##
+                   1636407946214786973##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEInfo1) -}
+081b66ef61b872aa226ce24294af9b84
+  $tc'WEInfo1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEInfo"#) -}
+42fc303efd394cbaee0c8927f1210a58
+  $tc'WEMapLoaded :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5017765298754979519##
+                   1846946245561680770##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEMapLoaded1) -}
+4551d53222144ea51543b9685ef877df
+  $tc'WEMapLoaded1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEMapLoaded"#) -}
+685bb6fc3e0b4f1de0e41569415d4a2f
+  $tc'WEMapStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   15966224246099474896##
+                   11999998091064108341##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEMapStored1) -}
+2c1ed6a43356527f1ea34e7418d6a269
+  $tc'WEMapStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEMapStored"#) -}
+518544ae895a3e6e50f04d14d6107e49
+  $tc'WEMapsInProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14035510661946214583##
+                   14664142040799807008##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEMapsInProject1) -}
+7c8efd0009438023a2264113a6d6f4fd
+  $tc'WEMapsInProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEMapsInProject"#) -}
+7f818f78a2d5f33ad18203a5665d31f6
+  $tc'WEProjectContent :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   685323811328634315##
+                   7464094688788008157##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEProjectContent1) -}
+40fd641efc74eca385459c4b4e338c15
+  $tc'WEProjectContent1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEProjectContent"#) -}
+bdb23ddc64c3f16009e0ba1ac964a3d0
+  $tc'WEProjectStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8731989138930190685##
+                   10320342220585593438##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEProjectStored1) -}
+1c5e73b4463962ec443aacf70feff02b
+  $tc'WEProjectStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEProjectStored"#) -}
+e5eb20fd10c35eddf55da640c90792ab
+  $tc'WEUnsubscribedFromView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6399019567191618163##
+                   1049751502563561189##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEUnsubscribedFromView1) -}
+51399f8022a65c9589bf192e4301f1d4
+  $tc'WEUnsubscribedFromView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEUnsubscribedFromView"#) -}
+9d6b119bd364c33b55d58e9e5e0c0f0f
+  $tc'WEViewChanged :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5909433657995133961##
+                   13427046273106193811##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEViewChanged1) -}
+0ee16acf0f58902823c8f2aeb7d91849
+  $tc'WEViewChanged1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEViewChanged"#) -}
+6d9c481d9d93dfa752abe3448169f479
+  $tc'WEViewLoaded :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   15943782433610104668##
+                   15263961583554385673##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEViewLoaded1) -}
+406ba6fe586addfb2daa3474a19c9cef
+  $tc'WEViewLoaded1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEViewLoaded"#) -}
+297a922c65a067cd51612a88978d80ec
+  $tc'WEViewStatus :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16046675998997861402##
+                   5016184512103824510##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEViewStatus1) -}
+5a2098e74e1412f58c4ad451ec095406
+  $tc'WEViewStatus1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEViewStatus"#) -}
+db746f381204e8f3192ae099091e430d
+  $tc'WEViewStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9679847206629583267##
+                   3471341027182403909##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WEViewStored1) -}
+691745da8c26e83c3caae57b7526c35c
+  $tc'WEViewStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WEViewStored"#) -}
+f961679d06c61e1b246f284d7151f0d2
+  $tc'WRAllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4039762166714403507##
+                   6792138335658635893##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRAllProjects1) -}
+ba693bc078470a4a85773aa2316636eb
+  $tc'WRAllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRAllProjects"#) -}
+cd6245ed787c16333d53da54adfb2313
+  $tc'WRFunctions :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14907011737880486028##
+                   14098159050399222350##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRFunctions1) -}
+e4f5206fc7eeabb353b8771ef01a84c5
+  $tc'WRFunctions1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRFunctions"#) -}
+3fcc1736e6208ec33c88c6e613084104
+  $tc'WRLoadCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4075796067339685185##
+                   16371744007803529361##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRLoadCalculation1) -}
+48e866ce93936c28e25359931abdb2cd
+  $tc'WRLoadCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRLoadCalculation"#) -}
+e3cae468f0d44c45982e31e241774975
+  $tc'WRLoadMap :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8287293864446141272##
+                   16055171009127315205##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRLoadMap1) -}
+2699e02f8475e2b19fe6ef8e8c1c85d1
+  $tc'WRLoadMap1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRLoadMap"#) -}
+1cefbdbdd3e7d3d2f18f4f0da3c824f3
+  $tc'WRLoadView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   17401410629855257141##
+                   8877442391204737790##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRLoadView1) -}
+40b11615bfc918e6bb90c35e0e13e610
+  $tc'WRLoadView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRLoadView"#) -}
+c73ce87afedf138be5aae8ed66a060a8
+  $tc'WRMapsInProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10626851894983855924##
+                   3494606333548921856##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRMapsInProject1) -}
+93dbc5c86aab2b626b4c4ba103d67f4a
+  $tc'WRMapsInProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRMapsInProject"#) -}
+7cb66ed99dcf8e422341300fd063aea3
+  $tc'WRNewProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8158829363460948134##
+                   12016243360415378225##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRNewProject1) -}
+8807ed4cabd8d5f443a8a84bb9353068
+  $tc'WRNewProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRNewProject"#) -}
+d5c0cb87697ce335afb4d342e2917a4e
+  $tc'WRStoreCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   18105599024185488228##
+                   68471803373803782##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRStoreCalculation1) -}
+5a26919d413e1564120ebf2c261617db
+  $tc'WRStoreCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRStoreCalculation"#) -}
+325e5336c0b449bd43c60d749da80602
+  $tc'WRStoreMap :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   3766333270297387362##
+                   12547357391252306691##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRStoreMap1) -}
+1f8e1d99352aa5651925edaf8ae1e59d
+  $tc'WRStoreMap1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRStoreMap"#) -}
+d1549a83561ae1f7f8f80620b1f19a2d
+  $tc'WRStoreView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8857382537194786348##
+                   12475469659441899507##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRStoreView1) -}
+c1f66d280e7ff25a39950696a8e263bc
+  $tc'WRStoreView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRStoreView"#) -}
+7bc46abbbdaeb7faf006ed8a85a4028a
+  $tc'WRSubscribeToProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10180011688047298517##
+                   13664509987350672591##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRSubscribeToProject1) -}
+419089fe7938b23a09add4e875ea409b
+  $tc'WRSubscribeToProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRSubscribeToProject"#) -}
+2b1018a3776e9188b3e880c8767e7f10
+  $tc'WRSubscribeToView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16499352307114533761##
+                   11198193907223474199##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRSubscribeToView1) -}
+868ea94e99d9cd98abc0371f7e23dfee
+  $tc'WRSubscribeToView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRSubscribeToView"#) -}
+511e8d64d9ebd2f871e05307455ba5d0
+  $tc'WRUnsubscribeFromView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16715845231325243170##
+                   16457828147373781733##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRUnsubscribeFromView1) -}
+6fdf2f9e22d484ff7a808c886d511a49
+  $tc'WRUnsubscribeFromView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRUnsubscribeFromView"#) -}
+80aef8ad8bae9d3232c095a853cf546d
+  $tc'WRUpdateProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5877479445934418045##
+                   16025687288187190663##
+                   WebMessages.$trModule
+                   WebMessages.$tc'WRUpdateProject1) -}
+2d85c0e6afc8f330c950eb608769d74e
+  $tc'WRUpdateProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WRUpdateProject"#) -}
+4c8017a004666741bceb88785e7d1b58
+  $tcWebEvent :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   72787263802341484##
+                   4182362090082431832##
+                   WebMessages.$trModule
+                   WebMessages.$tcWebEvent1) -}
+cdc0979e6f5e3e4e5696c50f0e497dc5
+  $tcWebEvent1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebEvent"#) -}
+530479bc5635d094a449ccf6c39da8c0
+  $tcWebRequest :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9571423528086356904##
+                   11861257188301520073##
+                   WebMessages.$trModule
+                   WebMessages.$tcWebRequest1) -}
+298170e6c35c412ac2a341e86f22b533
+  $tcWebRequest1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebRequest"#) -}
+e666a76041e803128f3974898c9f7276
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   WebMessages.$trModule2
+                   WebMessages.$trModule1) -}
+b2b1f873c274d39e5bfef0cda5796c95
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebMessages"#) -}
+9234faa898e9f3e6d30673be48a8c088
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+6df2a76ec9950bbeadbcb273faa1370e
+  $w$cshowsPrec ::
+    GHC.Prim.Int# -> WebMessages.WebEvent -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,U><S,1*U>, Inline: [0] -}
+6df2a76ec9950bbeadbcb273faa1370e
+  data WebEvent
+    = WEAllProjects Project.AllProjects
+    | WEViewChanged Project.ProjectName
+                    View.ViewName
+                    [XMapTypes.XNamedMap]
+    | WEProjectContent Project.Project
+    | WEProjectStored Project.Project
+    | WEMapLoaded Project.ProjectName XMapTypes.XNamedMap
+    | WEMapStored Project.ProjectName XMapTypes.XMapName
+    | WEUnsubscribedFromView Project.ProjectName View.ViewName
+    | WEMapsInProject Project.ProjectName [XMapTypes.XMapName]
+    | WEViewStatus Project.ProjectName View.View [XMapTypes.XNamedMap]
+    | WEViewLoaded Project.ProjectName View.View
+    | WEViewStored Project.ProjectName View.ViewName
+    | WECalculationLoaded Project.ProjectName
+                          Calculation.CalculationSource
+    | WECalculationStored Project.ProjectName
+                          Calculation.CalculationName
+    | WEFunctions Calculation.Functions
+    | WEInfo Data.Text.Internal.Text
+    | WEError Errors.Error
+9c5be6678bd16407fd69eeb65c613b94
+  data WebRequest
+    = WRAllProjects
+    | WRSubscribeToProject Project.ProjectName
+    | WRNewProject Project.Project
+    | WRUpdateProject Project.Project
+    | WRLoadMap Project.ProjectName XMapTypes.XMapName
+    | WRStoreMap Project.ProjectName XMapTypes.XNamedMap
+    | WRSubscribeToView Project.ProjectName View.ViewName
+    | WRUnsubscribeFromView Project.ProjectName View.ViewName
+    | WRMapsInProject Project.ProjectName
+    | WRLoadView Project.ProjectName View.ViewName
+    | WRStoreView Project.ProjectName View.View
+    | WRLoadCalculation Project.ProjectName Calculation.CalculationName
+    | WRStoreCalculation Project.ProjectName
+                         Calculation.CalculationSource
+    | WRFunctions
+instance [safe] GHC.Classes.Eq [WebMessages.WebEvent]
+  = WebMessages.$fEqWebEvent
+instance [safe] GHC.Classes.Eq [WebMessages.WebRequest]
+  = WebMessages.$fEqWebRequest
+instance [safe] GHC.Show.Show [WebMessages.WebEvent]
+  = WebMessages.$fShowWebEvent
+instance [safe] GHC.Show.Show [WebMessages.WebRequest]
+  = WebMessages.$fShowWebRequest
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

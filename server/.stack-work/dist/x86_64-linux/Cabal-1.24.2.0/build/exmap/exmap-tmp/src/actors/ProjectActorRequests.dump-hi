@@ -1,0 +1,1929 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-30 11:07:11.199602148 UTC
+
+interface main@main:ProjectActorRequests 8002
+  interface hash: 252c6c2e09b4c13ad18e5750e73a6931
+  ABI hash: 61eb12d5a4bca6655e6b73c40ce081ec
+  export-list hash: e6a62972aa9f8a75b714638ea6de0723
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 3eeefb146dc97c851cab19b415b4ae7e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  ProjectActorRequests.addSubscriber
+  ProjectActorRequests.handleRequests
+  ProjectActorRequests.loadCalculation
+  ProjectActorRequests.loadMapForClient
+  ProjectActorRequests.loadView
+  ProjectActorRequests.mapsInProject
+  ProjectActorRequests.removeSubscriber
+  ProjectActorRequests.startCalculations
+  ProjectActorRequests.storeCalculation
+  ProjectActorRequests.storeMap
+  ProjectActorRequests.storeView
+  ProjectActorRequests.subscribeToProject
+  ProjectActorRequests.subscribeToView
+  ProjectActorRequests.unsubscribeFromView
+  ProjectActorRequests.updateProject
+module dependencies: ApplicationTypes Applications Calculation
+                     CalculationMessages CommonChannels Errors EventMessages Formula
+                     FormulaParser LoadMessages LogMessages OperationTypes Operations
+                     Project ProjectJson ProjectMessages ProjectState StoreMessages
+                     SystemMessages TextEnums View ViewMessages WebClients WebMessages
+                     WebMessagesJson XFunction XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:Data.Either 20b09ef8d0a5b74fdec011c40c1587f5
+import  -/  base-4.9.1.0:Data.Foldable 3e0b6967a1da89945d0e2d47266337a2
+import  -/  base-4.9.1.0:Data.List 07ae2acca6538aa0800bd0a993ac6ac1
+import  -/  base-4.9.1.0:Data.OldList 27987919d8da2f92e3f472ca81f730f8
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:GHC.List ab8c4e523e6c479c549d3bcd5fc4a439
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation 03698bd51c60bb7b5080d27c1b8658b8
+  CalculationName 7681f69b2581ed31254c1a456f024695
+  CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
+  calculationName 1f5a4a1ff915162dab157f63a0e9b230
+  formula 7e30c2b44fc021bfe0b0b9dee1abff77
+  formulaText 863770ecc9a039140641dbc28654318b
+  operationMode ea1aee21e5a70c0c32eede2861da9f4e
+  resultName e0da4fa6227b34a0c0bbd4851b78e25e
+  sourceCalculationName 5ef42190299a691828fe18f7e25144de
+  sourceOperationMode bb7a1fcb2335252e1bd5ab1463badec5
+  sourceResultName 590a450538852796b3e550f6fb98cc72
+import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
+  exports: aedbb846b4b45e6fdfa51d3b8e071d11
+  loadChan e6d2de703534e0deb289b93806cdfee5
+  storeChan 989c77daf92ad23347a4de106a15da86
+import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
+  exports: 64db4fd1ac7c8985ea6ceddadc69d169
+  EMWebEvent c941e172c95073a52dd73b2c44ff45f1
+  sendStringError b3eae56a2a7d17ad08032d27aeb84213
+import  -/  FormulaParser b03d0271c6a28942ff4e806d02eb31bb
+  exports: 7b913b3a450dd5a92a0c06728e74471f
+  parseFormula 25c9b1841afce8db855f2d5dbc16bf33
+import  -/  LoadMessages 86f7ef1ae97b59e6e38a3ad92beb7909
+  exports: 447fbd5d495b4d5cddbcbb2fe0139815
+  LMLoadCalculation 228fae6c8b65f194e916100e6a8f7d46
+  LMLoadMapForClient 73f3ad9f8010dd40468514aba6d7076d
+  LMLoadMapsForCalculations f70c0358b0e2f8f448bb02cce0c158da
+  LMLoadViewForClient 666c24f0ae863b98684b0b38b1471f13
+  LMLoadViewForProject 0f5f2764215c644edffde5460f05d365
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  FileSource 257fe49100eecd56f874d64683d51d99
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  projectName cb7533641bc632f228a4a92ccb44abc9
+  sourceOfMaps b117b52c0a3033f4e54e011d62f34511
+  sourceType ebf4a57d65de6a6ac97bf31643e10d62
+  sources c571d266f08a7212dea141c7ba655b5a
+import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
+  exports: 7b16c99942b55c7a72be31fd4804ba3f
+  PRLoadCalculationForClient bda2e06c18f1ee39613d4b8adf51acad
+  PRLoadMapForClient 82ec154c3050f064be2178528faedf54
+  PRLoadViewForClient 4506f4d888da2ab7de18d9179cf35436
+  PRMapsInProject edd20695948d51cb39112f82d9498448
+  PRStartCalculations 11fcf4fb20dfea49425bdd2e61af209d
+  PRStoreCalculation 491f8d04b7f73cd2b2cf752b6d201f64
+  PRStoreMap 3eb7c6801d0193c9d9993ea434568661
+  PRStoreView 00b987625ce9364cd227fcc6f0e21ba7
+  PRSubscribeToProject 503970d77f7140be3f6d89e18fde64f3
+  PRSubscribeToView ef838a6d30acdf495823d986acd38461
+  PRUnsubscribeFromProject 061be65d6ed8ef32ba7a6bc9a2236220
+  PRUnsubscribeFromView 35e5980f26e3ae750345d8bf7b5ca8b1
+  PRUpdateProject 2acbd7cdff253436e5747fc3158d39f5
+  ProjectChan 091f44512dd4db2ee61640a0a30b9371
+  ProjectRequest be50552ae6df018fa5306afd01f4475e
+import  -/  ProjectState b9445036ca91c8f8f17466da52a590df
+  exports: 45f061a0a4b72f3842496805809fba9c
+  RuntimeProject 6f800b4257f0a40180517de20dd96d62
+  calculationByResult 19c7c825961eea5395b8246623ae44f0
+  calculationChanByMap a28473bfc3c6b477e078f13f04196323
+  chans 63f09138dc269f54560c3785a96964ae
+  evtChan e0b2534d40c3837a7812ce382d0887a3
+  prjName 94ca58664f6ec802577ccd8dd03213a1
+  project a30b6ea9329cfba1f64ba26587a1f242
+  subscribedClients 2bb0e33d2fba454b4b07fa0a8b1b476c
+  viewChanByName 626b2130a672e67aa9cdc67025db420c
+import  -/  StoreMessages 604a62eda95aa09d4755ba38bd251a8e
+  exports: c031e914ea8fc941321bb1e578fc587f
+  StMStoreCalculation c65c17fc2af41d23269106b85c2872bc
+  StMStoreExistingProject 5514b7c48a205e09b7f2dd2aae126836
+  StMStoreMap f8a36bc87e5aad4c4a678b3db74a6ac7
+  StMStoreView 18f6bbb0faeeb15259dbb64d867586e4
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+  ViewName 105e058b0f915624ee10874cf1c9d091
+import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
+  exports: 4f259910ac4dde7df97333a484b49710
+  VMSubscribeToView f6a64aa1a3403807bce7e07837c89f83
+  VMUnsubscribeFromView ec2213fda9126b2cac68a4fd267486e5
+import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
+  exports: 9e20b0962809e2ead168d9d96578b360
+  WAClient b08796f2cd72dc596a7814e2532ade2f
+import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+  exports: b86ad7b8a0b44a02b28cdac11545ea56
+  WEMapsInProject f6ece629ee42247daa8c01faffed2242
+  WEProjectContent f15fe3d556e47377c3afa966f5c1b8f2
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName aed4e1c98ee09424176ec799b4e99672
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TVar 8271fdeaf6f41f205dbe31243cf91390
+9ab4639c5504276888232e6de6b3bec1
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   ProjectActorRequests.$trModule2
+                   ProjectActorRequests.$trModule1) -}
+e12044fa2685933825e7e33b83ba1681
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ProjectActorRequests"#) -}
+22b2584627c363a6ce630ba950d4a52c
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+b14821f2ce826e71d3555401eb89de8e
+  $whandleRequests ::
+    ProjectMessages.ProjectChan
+    -> GHC.Conc.Sync.TVar Project.Project
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByMap
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationByResult
+    -> GHC.Conc.Sync.TVar ProjectState.ViewChanByName
+    -> CommonChannels.CommonChans
+    -> GHC.Conc.Sync.TVar [WebClients.WAClient]
+    -> ProjectMessages.ProjectRequest
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 9,
+     Strictness: <L,U><L,1*U(U)><L,1*U(U)><L,1*U(U)><L,1*U(U)><L,1*U(1*U(1*U,U),1*U(A,U),1*U(A,U),A)><L,1*U(U)><S,1*U><S,U>,
+     Inline: [0] -}
+89d572753847f058e1d49d49306de282
+  $wloadCalculation ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> WebClients.WAClient
+    -> Calculation.CalculationName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <L,U><S,U><L,A><S,U><L,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: Calculation.CalculationName)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w3 of ds8 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ LoadMessages.LoadMessage)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case ipv3 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ LoadMessages.LoadMessage
+                           (LoadMessages.LMLoadCalculation
+                              w
+                              w1
+                              (case ipv1 of wild { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                              w2)
+                           ipv5)
+                        ipv4 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                           ipv5)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } }) -}
+91fd4e2629fb3cb03d7d033b0b844459
+  $wloadMapForClient ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> XMapTypes.XMapName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <L,U><L,U><S,U><L,A><S,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (w2 :: XMapTypes.XMapName)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w3 of ds8 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ LoadMessages.LoadMessage)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case ipv3 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ LoadMessages.LoadMessage
+                           (LoadMessages.LMLoadMapForClient
+                              w1
+                              w
+                              (case ipv1 of wild { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                              w2)
+                           ipv5)
+                        ipv4 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                           ipv5)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } }) -}
+ec23a0c79d1c3dfa80f739f85c961aee
+  $wloadView ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> WebClients.WAClient
+    -> View.ViewName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <L,U><S,U><L,A><S,U><L,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage))
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: View.ViewName)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w3 of ds8 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ LoadMessages.LoadMessage)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case ipv3 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ LoadMessages.LoadMessage
+                           (LoadMessages.LMLoadViewForClient
+                              w
+                              w1
+                              (case ipv1 of wild { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                              w2)
+                           ipv5)
+                        ipv4 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                           ipv5)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } }) -}
+cf402cad71a8b72532c3d5e897d8b33e
+  $wmapsInProject ::
+    GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld ProjectState.CalculationChanByMap
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld ProjectState.CalculationByResult
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <S,U><S,U><S,U><L,A><S,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld ProjectState.CalculationChanByMap)
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld ProjectState.CalculationByResult)
+                   (ww3 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
+                   (ww4 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
+                   (w :: WebClients.WAClient)
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w1 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ ProjectState.CalculationChanByMap
+                        ww1
+                        ipv of ds2 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ ProjectState.CalculationByResult
+                        ww2
+                        ipv2 of ds3 { (#,#) ipv4 ipv5 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             EventMessages.EventMessage)
+                        ww4
+                        ipv4 of ds4 { (#,#) ipv6 ipv7 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ EventMessages.EventMessage)
+                        ipv6 of ds5 { (#,#) ipv8 ipv9 ->
+                 case ipv7 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ EventMessages.EventMessage
+                           (EventMessages.EMWebEvent
+                              (GHC.Types.:
+                                 @ WebClients.WAClient
+                                 w
+                                 (GHC.Types.[] @ WebClients.WAClient))
+                              (WebMessages.WEMapsInProject
+                                 (Project.projectName ipv1)
+                                 (case ipv1 of wild { Project.Project ds6 ds7 ds8 ds9 ->
+                                  let {
+                                    z :: [XMapTypes.XMapName]
+                                    = ProjectActorRequests.mapsInProject_go10
+                                        (Data.Map.Base.keys
+                                           @ XMapTypes.XMapName
+                                           @ Calculation.CalculationName
+                                           ipv5)
+                                        ipv3
+                                  } in
+                                  letrec {
+                                    go :: [Project.Source] -> [XMapTypes.XMapName]
+                                      {- Arity: 1, Strictness: <S,1*U> -}
+                                    = \ (ds :: [Project.Source]) ->
+                                      case ds of wild2 {
+                                        [] -> z
+                                        : y ys
+                                        -> case y of wild3 { Project.Source ds10 ds11 ->
+                                           GHC.Base.++ @ XMapTypes.XMapName ds11 (go ys) } }
+                                  } in
+                                  Data.OldList.nubBy
+                                    @ XMapTypes.XMapName
+                                    XMapTypes.$fEqXMapName1
+                                      `cast`
+                                    (Sym (XMapTypes.N:XMapName[0])
+                                     ->_R Sym (XMapTypes.N:XMapName[0])
+                                     ->_R <GHC.Types.Bool>_R)
+                                    (go ds9) })))
+                           ipv9)
+                        ipv8 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             EventMessages.EventMessage)
+                        ww4
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                           ipv9)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } } } }) -}
+868b5e001dcb52b687c1b38937fb88fd
+  $wpoly_go10 ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> Data.Map.Base.Map View.ViewName a
+    -> GHC.Base.Maybe a
+  {- Arity: 4, HasNoCafRefs, Strictness: <L,U><L,U><L,U><S,1*U>,
+     Inline: [0] -}
+cf1127e3fbb8cc974b3de81083a9b805
+  $wremoveSubscriber ::
+    WebClients.WAClient
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs, Strictness: <L,U><S,U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient])
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww
+                        w1 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww
+                        (GHC.List.filter
+                           @ WebClients.WAClient
+                           (\ (ci :: WebClients.WAClient) ->
+                            WebClients.$fEqWAClient_$c/= ci w)
+                           ipv1)
+                        ipv of s2# { DEFAULT ->
+                 (# s2#, GHC.Tuple.() #) } }) -}
+210e3d223df5b35998b59c0917709a3a
+  $wstartCalculations ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByMap
+    -> CommonChannels.CommonChans
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 6, HasNoCafRefs,
+     Strictness: <L,U><S,U><L,1*U(U)><L,1*U(A,1*U(A,U),A,A)><L,U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Conc.Sync.TVar ProjectState.CalculationChanByMap)
+                   (ww2 :: CommonChannels.CommonChans)
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w2 of ds1 { (#,#) ipv ipv1 ->
+                 case ipv1 of wild { Project.Project ds2 ds3 ds4 ds5 ->
+                 case (ProjectActorRequests.startCalculations_go ds5)
+                        `cast`
+                      (Data.Monoid.N:First[0] <Project.Source>_N) of wild1 {
+                   GHC.Base.Nothing -> (# ipv, GHC.Tuple.() #)
+                   GHC.Base.Just fileSources
+                   -> case ww1 of wild2 { GHC.Conc.Sync.TVar tvar# ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ ProjectState.CalculationChanByMap
+                             tvar#
+                             ipv of ds6 { (#,#) ipv2 ipv3 ->
+                      case ww2 of wild3 { CommonChannels.CommonChans ds7 ds8 ds9 ds10 ->
+                      case ds8 of wild4 { Control.Concurrent.STM.TChan.TChan dt dt1 ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                             dt1
+                             ipv2 of ds11 { (#,#) ipv4 ipv5 ->
+                      case GHC.Prim.newTVar#
+                             @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                             @ GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TNil @ LoadMessages.LoadMessage)
+                             ipv4 of ds12 { (#,#) ipv6 ipv7 ->
+                      case ipv5 of wild5 { GHC.Conc.Sync.TVar tvar#1 ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                             tvar#1
+                             (Control.Concurrent.STM.TChan.TCons
+                                @ LoadMessages.LoadMessage
+                                (LoadMessages.LMLoadMapsForCalculations
+                                   w
+                                   w1
+                                   ds2
+                                   (Data.OldList.intersectBy
+                                      @ XMapTypes.XMapName
+                                      XMapTypes.$fEqXMapName1
+                                        `cast`
+                                      (Sym (XMapTypes.N:XMapName[0])
+                                       ->_R Sym (XMapTypes.N:XMapName[0])
+                                       ->_R <GHC.Types.Bool>_R)
+                                      (Data.Map.Base.keys1
+                                         @ [CalculationMessages.CalculationChan]
+                                         @ XMapTypes.XMapName
+                                         (GHC.Types.[] @ XMapTypes.XMapName)
+                                         ipv3)
+                                      (case fileSources of wild6 { Project.Source ds13 ds14 ->
+                                       ds14 })))
+                                ipv7)
+                             ipv6 of s2# { DEFAULT ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                             dt1
+                             (GHC.Conc.Sync.TVar
+                                @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                                ipv7)
+                             s2# of s2#1 { DEFAULT ->
+                      (# s2#1, GHC.Tuple.() #) } } } } } } } } } } } }) -}
+77f74bf88a918d13c0e69f1cc945c58a
+  $wstoreCalculation ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> EventMessages.EventChan
+    -> StoreMessages.StoreChan
+    -> WebClients.WAClient
+    -> Calculation.CalculationName
+    -> XMapTypes.XMapName
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> XFunction.OperationMode
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 12,
+     Strictness: <L,U><S,U><L,1*U(1*U,U)><L,1*U(A,U)><L,U><L,U><L,U><S,U><S,U><S,U><L,U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: EventMessages.EventChan)
+                   (ww2 :: StoreMessages.StoreChan)
+                   (w1 :: WebClients.WAClient)
+                   (ww3 :: Calculation.CalculationName)
+                   (ww4 :: XMapTypes.XMapName)
+                   (ww5 :: GHC.Prim.ByteArray#)
+                   (ww6 :: GHC.Prim.Int#)
+                   (ww7 :: GHC.Prim.Int#)
+                   (ww8 :: XFunction.OperationMode)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w2 of ds8 { (#,#) ipv ipv1 ->
+                 case FormulaParser.$wparseFormula ww5 ww6 ww7 of wild {
+                   Data.Either.Left err
+                   -> case ww1 of ww9 { Control.Concurrent.STM.TChan.TChan ww10 ww11 ->
+                      EventMessages.$wsendStringError
+                        ww10
+                        ww11
+                        (GHC.Types.:
+                           @ WebClients.WAClient
+                           w1
+                           (GHC.Types.[] @ WebClients.WAClient))
+                        (GHC.CString.unpackAppendCString#
+                           "Parsing the formula "#
+                           (GHC.Base.++
+                              @ GHC.Types.Char
+                              Calculation.$fShowCalculationFormulaText2
+                              (case Data.Text.Show.$w$cshowsPrec
+                                      (Data.Text.Internal.Text ww5 ww6 ww7)
+                                      (GHC.Types.[] @ GHC.Types.Char) of ww12 { (#,#) ww13 ww14 ->
+                               GHC.Base.++
+                                 @ GHC.Types.Char
+                                 (GHC.Types.: @ GHC.Types.Char ww13 ww14)
+                                 (GHC.CString.unpackAppendCString#
+                                    " got "#
+                                    (GHC.Types.:
+                                       @ GHC.Types.Char
+                                       GHC.Show.shows6
+                                       (GHC.Show.showLitString
+                                          err
+                                          ProjectActorRequests.storeCalculation2))) })))
+                        ipv }
+                   Data.Either.Right f
+                   -> case ww2 of wild1 { Control.Concurrent.STM.TChan.TChan dt dt1 ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList
+                                  StoreMessages.StoreMessage)
+                             dt1
+                             ipv of ds1 { (#,#) ipv2 ipv3 ->
+                      case GHC.Prim.newTVar#
+                             @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                             @ GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TNil @ StoreMessages.StoreMessage)
+                             ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                      case ipv3 of wild2 { GHC.Conc.Sync.TVar tvar# ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                             tvar#
+                             (Control.Concurrent.STM.TChan.TCons
+                                @ StoreMessages.StoreMessage
+                                (StoreMessages.StMStoreCalculation
+                                   w
+                                   w1
+                                   (case ipv1 of wild3 { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                                   (Calculation.Calculation ww3 ww4 f ww8))
+                                ipv5)
+                             ipv4 of s2# { DEFAULT ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList
+                                  StoreMessages.StoreMessage)
+                             dt1
+                             (GHC.Conc.Sync.TVar
+                                @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                                ipv5)
+                             s2# of s2#1 { DEFAULT ->
+                      (# s2#1, GHC.Tuple.() #) } } } } } } } }) -}
+dbcdcbba18515df6226b7ea477551a66
+  $wstoreMap ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> XMapTypes.XNamedMap
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <L,U><L,U><S,U><L,A><S,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (w2 :: XMapTypes.XNamedMap)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w3 of ds8 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww2
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ StoreMessages.StoreMessage)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case ipv3 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ StoreMessages.StoreMessage
+                           (StoreMessages.StMStoreMap
+                              w1
+                              w
+                              (case ipv1 of wild { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                              w2)
+                           ipv5)
+                        ipv4 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                           ipv5)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } }) -}
+8c5de30ef3926421b315f25d7d700068
+  $wstoreView ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> WebClients.WAClient
+    -> View.View
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 7, HasNoCafRefs,
+     Strictness: <L,U><S,U><L,A><S,U><L,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: View.View)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w3 of ds8 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww2
+                        ipv of ds1 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ StoreMessages.StoreMessage)
+                        ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                 case ipv3 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ StoreMessages.StoreMessage
+                           (StoreMessages.StMStoreView
+                              w
+                              w1
+                              (case ipv1 of wild { Project.Project ds4 ds5 ds3 ds6 -> ds4 })
+                              w2)
+                           ipv5)
+                        ipv4 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                           ipv5)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } } }) -}
+3fb63a3baab0c8c594507dd23016ae3e
+  $wsubscribeToProject ::
+    WebClients.WAClient
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 6, HasNoCafRefs,
+     Strictness: <L,U><S,U><L,A><S,U><S,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
+                   (ww2 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
+                   (ww3 :: GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient])
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        w1 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww3
+                        ipv of ds2 { (#,#) ipv2 ipv3 ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww3
+                        (GHC.Types.: @ WebClients.WAClient w ipv3)
+                        ipv2 of s2# { DEFAULT ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             EventMessages.EventMessage)
+                        ww2
+                        s2# of ds3 { (#,#) ipv4 ipv5 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ EventMessages.EventMessage)
+                        ipv4 of ds4 { (#,#) ipv6 ipv7 ->
+                 case ipv5 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ EventMessages.EventMessage
+                           (EventMessages.EMWebEvent
+                              (GHC.Types.:
+                                 @ WebClients.WAClient
+                                 w
+                                 (GHC.Types.[] @ WebClients.WAClient))
+                              (WebMessages.WEProjectContent ipv1))
+                           ipv7)
+                        ipv6 of s2#1 { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             EventMessages.EventMessage)
+                        ww2
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList EventMessages.EventMessage)
+                           ipv7)
+                        s2#1 of s2#2 { DEFAULT ->
+                 (# s2#2, GHC.Tuple.() #) } } } } } } } }) -}
+e780844b652661f45beeeb436b0d9d5d
+  $wsubscribeToView ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld ProjectState.ViewChanByName
+    -> CommonChannels.CommonChans
+    -> WebClients.WAClient
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 9, HasNoCafRefs,
+     Strictness: <L,U><S,U><S,U><L,1*U(A,1*U(A,U),A,A)><L,U><L,U><L,U><L,U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld ProjectState.ViewChanByName)
+                   (ww2 :: CommonChannels.CommonChans)
+                   (w1 :: WebClients.WAClient)
+                   (ww3 :: GHC.Prim.ByteArray#)
+                   (ww4 :: GHC.Prim.Int#)
+                   (ww5 :: GHC.Prim.Int#)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ ProjectState.ViewChanByName
+                        ww1
+                        w2 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww
+                        ipv of ds8 { (#,#) ipv2 ipv3 ->
+                 case ProjectActorRequests.$wpoly_go10
+                        @ (Control.Concurrent.STM.TChan.TChan ViewMessages.ViewMessage)
+                        ww3
+                        ww4
+                        ww5
+                        ipv1 of wild {
+                   GHC.Base.Nothing
+                   -> case ww2 of wild1 { CommonChannels.CommonChans ds2 ds3 ds4 ds5 ->
+                      case ds3 of wild2 { Control.Concurrent.STM.TChan.TChan dt dt1 ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                             dt1
+                             ipv2 of ds6 { (#,#) ipv4 ipv5 ->
+                      case GHC.Prim.newTVar#
+                             @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                             @ GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TNil @ LoadMessages.LoadMessage)
+                             ipv4 of ds7 { (#,#) ipv6 ipv7 ->
+                      case ipv5 of wild3 { GHC.Conc.Sync.TVar tvar# ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                             tvar#
+                             (Control.Concurrent.STM.TChan.TCons
+                                @ LoadMessages.LoadMessage
+                                (LoadMessages.LMLoadViewForProject
+                                   w
+                                   w1
+                                   (case ipv3 of wild4 { Project.Project ds9 ds10 ds11 ds12 ->
+                                    ds9 })
+                                   (Data.Text.Internal.Text ww3 ww4 ww5)
+                                     `cast`
+                                   (Sym (View.N:ViewName[0])))
+                                ipv7)
+                             ipv6 of s2# { DEFAULT ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+                             dt1
+                             (GHC.Conc.Sync.TVar
+                                @ (Control.Concurrent.STM.TChan.TList LoadMessages.LoadMessage)
+                                ipv7)
+                             s2# of s2#1 { DEFAULT ->
+                      (# s2#1, GHC.Tuple.() #) } } } } } } }
+                   GHC.Base.Just vChan
+                   -> case vChan of wild1 { Control.Concurrent.STM.TChan.TChan dt dt1 ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList ViewMessages.ViewMessage)
+                             dt1
+                             ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                      case GHC.Prim.newTVar#
+                             @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                             @ GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TNil @ ViewMessages.ViewMessage)
+                             ipv4 of ds3 { (#,#) ipv6 ipv7 ->
+                      case ipv5 of wild2 { GHC.Conc.Sync.TVar tvar# ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                             tvar#
+                             (Control.Concurrent.STM.TChan.TCons
+                                @ ViewMessages.ViewMessage
+                                (ViewMessages.VMSubscribeToView w1)
+                                ipv7)
+                             ipv6 of s2# { DEFAULT ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList ViewMessages.ViewMessage)
+                             dt1
+                             (GHC.Conc.Sync.TVar
+                                @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                                ipv7)
+                             s2# of s2#1 { DEFAULT ->
+                      (# s2#1, GHC.Tuple.() #) } } } } } } } } }) -}
+7e4290530920863bae4fa568956a0e32
+  $wunsubscribeFromView ::
+    WebClients.WAClient
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld ProjectState.ViewChanByName
+    -> CommonChannels.CommonChans
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 8,
+     Strictness: <L,U><L,U><L,U><L,U><S,U><S,U><L,1*U(1*U(1*U,U),A,A,A)><S,U>,
+     Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient)
+                   (ww :: GHC.Prim.ByteArray#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+                   (ww4 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld ProjectState.ViewChanByName)
+                   (ww5 :: CommonChannels.CommonChans)
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ ProjectState.ViewChanByName
+                        ww4
+                        w1 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        ww3
+                        ipv of ds8 { (#,#) ipv2 ipv3 ->
+                 case ProjectActorRequests.$wpoly_go10
+                        @ (Control.Concurrent.STM.TChan.TChan ViewMessages.ViewMessage)
+                        ww
+                        ww1
+                        ww2
+                        ipv1 of wild {
+                   GHC.Base.Nothing
+                   -> case ww5 of wild1 { CommonChannels.CommonChans ds2 ds9 ds10 ds11 ->
+                      case ds2 of ww6 { Control.Concurrent.STM.TChan.TChan ww7 ww8 ->
+                      EventMessages.$wsendStringError
+                        ww7
+                        ww8
+                        (GHC.Types.:
+                           @ WebClients.WAClient
+                           w
+                           (GHC.Types.[] @ WebClients.WAClient))
+                        (GHC.CString.unpackAppendCString#
+                           "view "#
+                           (GHC.Base.++
+                              @ GHC.Types.Char
+                              View.$fShowViewName2
+                              (case Data.Text.Show.$w$cshowsPrec
+                                      (Data.Text.Internal.Text ww ww1 ww2)
+                                      (GHC.Types.[] @ GHC.Types.Char) of ww9 { (#,#) ww10 ww11 ->
+                               GHC.Base.++
+                                 @ GHC.Types.Char
+                                 (GHC.Types.: @ GHC.Types.Char ww10 ww11)
+                                 (GHC.CString.unpackAppendCString#
+                                    " to unsubscribe from not found in project "#
+                                    (GHC.Base.++
+                                       @ GHC.Types.Char
+                                       Project.$fShowAllProjects3
+                                       (case Data.Text.Show.$w$cshowsPrec
+                                               (case ipv3 of wild2 { Project.Project ds3 ds4 ds5 ds6 ->
+                                                ds3 `cast` (Project.N:ProjectName[0]) })
+                                               (GHC.Types.[]
+                                                  @ GHC.Types.Char) of ww12 { (#,#) ww13 ww14 ->
+                                        GHC.Types.: @ GHC.Types.Char ww13 ww14 }))) })))
+                        ipv2 } }
+                   GHC.Base.Just vChan
+                   -> case vChan of wild1 { Control.Concurrent.STM.TChan.TChan dt dt1 ->
+                      case GHC.Prim.readTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList ViewMessages.ViewMessage)
+                             dt1
+                             ipv2 of ds2 { (#,#) ipv4 ipv5 ->
+                      case GHC.Prim.newTVar#
+                             @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                             @ GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TNil @ ViewMessages.ViewMessage)
+                             ipv4 of ds3 { (#,#) ipv6 ipv7 ->
+                      case ipv5 of wild2 { GHC.Conc.Sync.TVar tvar# ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                             tvar#
+                             (Control.Concurrent.STM.TChan.TCons
+                                @ ViewMessages.ViewMessage
+                                (ViewMessages.VMUnsubscribeFromView w)
+                                ipv7)
+                             ipv6 of s2# { DEFAULT ->
+                      case GHC.Prim.writeTVar#
+                             @ GHC.Prim.RealWorld
+                             @ (Control.Concurrent.STM.TChan.TVarList ViewMessages.ViewMessage)
+                             dt1
+                             (GHC.Conc.Sync.TVar
+                                @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                                ipv7)
+                             s2# of s2#1 { DEFAULT ->
+                      (# s2#1, GHC.Tuple.() #) } } } } } } } } }) -}
+8e7212310397f470cfd275a95338a157
+  $wupdateProject ::
+    ProjectMessages.ProjectChan
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> WebClients.WAClient
+    -> Project.Project
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 6, HasNoCafRefs,
+     Strictness: <L,U><L,A><S,U><L,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: ProjectMessages.ProjectChan)
+                   (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld
+                            (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage))
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: Project.Project)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww1
+                        w3 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.newTVar#
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        @ GHC.Prim.RealWorld
+                        (Control.Concurrent.STM.TChan.TNil @ StoreMessages.StoreMessage)
+                        ipv of ds2 { (#,#) ipv2 ipv3 ->
+                 case ipv1 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                        tvar#
+                        (Control.Concurrent.STM.TChan.TCons
+                           @ StoreMessages.StoreMessage
+                           (StoreMessages.StMStoreExistingProject w w1 w2)
+                           ipv3)
+                        ipv2 of s2# { DEFAULT ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ (Control.Concurrent.STM.TChan.TVarList
+                             StoreMessages.StoreMessage)
+                        ww1
+                        (GHC.Conc.Sync.TVar
+                           @ (Control.Concurrent.STM.TChan.TList StoreMessages.StoreMessage)
+                           ipv3)
+                        s2# of s2#1 { DEFAULT ->
+                 (# s2#1, GHC.Tuple.() #) } } } } }) -}
+3ece46d8206c10b4fcfd255503624222
+  addSubscriber ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.addSubscriber1
+                  `cast`
+                (<ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+9999d78eda6218f04e85b3f736dd40e1
+  addSubscriber1 ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><L,U><S,U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (rp :: ProjectState.RuntimeProject)
+                   (c :: WebClients.WAClient)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case rp of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 case ds8 of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        tvar#
+                        eta of ds11 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        tvar#
+                        (GHC.Types.: @ WebClients.WAClient c ipv1)
+                        ipv of s2# { DEFAULT ->
+                 (# s2#, GHC.Tuple.() #) } } } }) -}
+c74474bdcdbb783aadcf87919c4f3d44
+  handleRequests ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> ProjectMessages.ProjectRequest
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 4,
+     Strictness: <L,U><S,1*U(1*U(U),A,1*U(U),1*U(U),A,1*U(U),1*U(1*U(1*U,U),1*U(A,U),1*U(A,U),A),1*U(U))><S,1*U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.handleRequests1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <ProjectMessages.ProjectRequest>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+84aa9b04c9918fe2ddec6bfd604f5182
+  handleRequests1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> ProjectMessages.ProjectRequest
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 4,
+     Strictness: <L,U><S,1*U(1*U(U),A,1*U(U),1*U(U),A,1*U(U),1*U(1*U(1*U,U),1*U(A,U),1*U(A,U),A),1*U(U))><S,1*U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (4, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: ProjectMessages.ProjectRequest)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 ProjectActorRequests.$whandleRequests
+                   w
+                   ww1
+                   ww3
+                   ww4
+                   ww6
+                   ww7
+                   ww8
+                   w2
+                   w3 }) -}
+a6493221996de9071fc64b5a6e4cb44e
+  loadCalculation ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Calculation.CalculationName
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.loadCalculation1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <Calculation.CalculationName>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+93b95fec6456cb8948f69dd3106b4f56
+  loadCalculation1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Calculation.CalculationName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: Calculation.CalculationName)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww13 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 ProjectActorRequests.$wloadCalculation
+                   w
+                   ww10
+                   ww17
+                   ww18
+                   w2
+                   w3
+                   w4 } } } }) -}
+fce0d83a3295276b6c70a6f698c3068e
+  loadMapForClient ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> XMapTypes.XMapName
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.loadMapForClient1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <XMapTypes.XMapName>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+c612b39e722bf61d871f8a35cc7c002f
+  loadMapForClient1 ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> XMapTypes.XMapName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectMessages.ProjectChan)
+                   (w2 :: ProjectState.RuntimeProject)
+                   (w3 :: XMapTypes.XMapName)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w2 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww13 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 ProjectActorRequests.$wloadMapForClient
+                   w
+                   w1
+                   ww10
+                   ww17
+                   ww18
+                   w3
+                   w4 } } } }) -}
+a85fe2d5887b899461de7ee99c89a5d4
+  loadView ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.ViewName
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.loadView1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <View.ViewName>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+90ca283ed4add68a2aa81438dd955963
+  loadView1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.ViewName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LS(LS)LL)L),1*U(1*U(U),A,A,A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: View.ViewName)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww13 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 ProjectActorRequests.$wloadView
+                   w
+                   ww10
+                   ww17
+                   ww18
+                   w2
+                   w3
+                   w4 } } } }) -}
+9d766aa1a45508c9508a4e2a1878df4a
+  mapsInProject ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(S(S)LS(S)S(S)LLS(S(LS)LLL)L),1*U(1*U(U),A,1*U(U),1*U(U),A,A,1*U(1*U(A,U),A,A,A),A)><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.mapsInProject1
+                  `cast`
+                (<ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+a49dac9288a1bb2201cfb26f73944b66
+  mapsInProject1 ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(S(S)LS(S)S(S)LLS(S(LS)LLL)L),1*U(1*U(U),A,1*U(U),1*U(U),A,A,1*U(1*U(A,U),A,A,A),A)><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: ProjectState.RuntimeProject)
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww3 of ww11 { GHC.Conc.Sync.TVar ww12 ->
+                 case ww4 of ww13 { GHC.Conc.Sync.TVar ww14 ->
+                 case ww7 of ww15 { CommonChannels.CommonChans ww16 ww17 ww18 ww19 ->
+                 case ww16 of ww20 { Control.Concurrent.STM.TChan.TChan ww21 ww22 ->
+                 ProjectActorRequests.$wmapsInProject
+                   ww10
+                   ww12
+                   ww14
+                   ww21
+                   ww22
+                   w1
+                   w2 } } } } } }) -}
+4c60fc5d764035215bb7086fc172fbb7
+  mapsInProject_go10 ::
+    [XMapTypes.XMapName]
+    -> Data.Map.Base.Map
+         XMapTypes.XMapName [CalculationMessages.CalculationChan]
+    -> [XMapTypes.XMapName]
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U><S,1*U> -}
+1b4b633d2528e897d735fc508bae0703
+  removeSubscriber ::
+    WebClients.WAClient
+    -> ProjectState.RuntimeProject -> GHC.Conc.Sync.STM ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,U><S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.removeSubscriber1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+8038ca5b223cf0fdb8301ae26763d360
+  removeSubscriber1 ::
+    WebClients.WAClient
+    -> ProjectState.RuntimeProject
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,U><S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww8 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 ProjectActorRequests.$wremoveSubscriber w ww10 w2 } }) -}
+cbfd33ad8f871cec18cd98f47678ce4b
+  startCalculations ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLLL),1*U(1*U(U),A,1*U(U),A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.startCalculations1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+64c3d7c08b4a8af75a607cc02460583a
+  startCalculations1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLLL),1*U(1*U(U),A,1*U(U),A,A,A,1*U(A,1*U(A,U),A,A),A)><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (4, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 ProjectActorRequests.$wstartCalculations
+                   w
+                   ww10
+                   ww3
+                   ww7
+                   w2
+                   w3 } }) -}
+8c705241bb786f26c78c4e1561372ab7
+  startCalculations_go ::
+    [Project.Source] -> Data.Monoid.First Project.Source
+  {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U> -}
+01e50fd45dcb0405e7dc3b3fc69acc91
+  storeCalculation ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Calculation.CalculationSource
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5,
+     Strictness: <L,U><S(S(S)LLLLLSL),1*U(1*U(U),A,A,A,A,A,1*U(1*U(1*U,U),A,1*U(A,U),A),A)><L,U><S(LLS(SSS)L),1*U(U,U,1*U(U,U,U),U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.storeCalculation1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <Calculation.CalculationSource>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+3362d76aba7fba90b2447e29bdd6d990
+  storeCalculation1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Calculation.CalculationSource
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5,
+     Strictness: <L,U><S(S(S)LLLLLSL),1*U(1*U(U),A,A,A,A,A,1*U(1*U(1*U,U),A,1*U(A,U),A),A)><L,U><S(LLS(SSS)L),1*U(U,U,1*U(U,U,U),U)><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: Calculation.CalculationSource)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case w3 of ww16 { Calculation.CalculationSource ww17 ww18 ww19 ww20 ->
+                 case ww19
+                        `cast`
+                      (Calculation.N:CalculationFormulaText[0]) of ww21 { Data.Text.Internal.Text ww22 ww23 ww24 ->
+                 ProjectActorRequests.$wstoreCalculation
+                   w
+                   ww10
+                   ww12
+                   ww14
+                   w2
+                   ww17
+                   ww18
+                   ww22
+                   ww23
+                   ww24
+                   ww20
+                   w4 } } } } }) -}
+4b881d600370b0d98641d4a0d1890a0b
+  storeCalculation2 :: [GHC.Types.Char]
+  {- HasNoCafRefs,
+     Unfolding: (GHC.Types.:
+                   @ GHC.Types.Char
+                   GHC.Show.shows6
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+589e73a6f9a6e8c7b12c99aa2723ab08
+  storeMap ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> XMapTypes.XNamedMap
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><L,U><S(S(S)LLLLLS(LLS(LS)L)L),1*U(1*U(U),A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.storeMap1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <XMapTypes.XNamedMap>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+15c16935d2131c3432855db0b892ed89
+  storeMap1 ::
+    WebClients.WAClient
+    -> ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> XMapTypes.XNamedMap
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><L,U><S(S(S)LLLLLS(LLS(LS)L)L),1*U(1*U(U),A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectMessages.ProjectChan)
+                   (w2 :: ProjectState.RuntimeProject)
+                   (w3 :: XMapTypes.XNamedMap)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w2 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww14 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 ProjectActorRequests.$wstoreMap
+                   w
+                   w1
+                   ww10
+                   ww17
+                   ww18
+                   w3
+                   w4 } } } }) -}
+3b60222df5290de046ae3f72e999e9c5
+  storeView ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.View
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LLS(LS)L)L),1*U(1*U(U),A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.storeView1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <View.View>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+ecb975d18e0103a661df9014c07080cb
+  storeView1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.View
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(LLS(LS)L)L),1*U(1*U(U),A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: View.View)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww14 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 ProjectActorRequests.$wstoreView
+                   w
+                   ww10
+                   ww17
+                   ww18
+                   w2
+                   w3
+                   w4 } } } }) -}
+fe9ad2d97f501e77f9ff90fee1e8c879
+  subscribeToProject ::
+    WebClients.WAClient
+    -> ProjectState.RuntimeProject -> GHC.Conc.Sync.STM ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.subscribeToProject1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+b1860855772dde1e5bdb61fb997f044c
+  subscribeToProject1 ::
+    WebClients.WAClient
+    -> ProjectState.RuntimeProject
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
+                 case ww12 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
+                 case ww8 of ww19 { GHC.Conc.Sync.TVar ww20 ->
+                 ProjectActorRequests.$wsubscribeToProject
+                   w
+                   ww10
+                   ww17
+                   ww18
+                   ww20
+                   w2 } } } } }) -}
+da39e969fa1bb987c351fad34663dd13
+  subscribeToView ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.ViewName
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLS(S)LL),1*U(1*U(U),A,A,A,A,1*U(U),1*U(A,1*U(A,U),A,A),A)><L,U><S,U(U,U,U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.subscribeToView1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <View.ViewName>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+e4f6668910aefc737b1d817419003b49
+  subscribeToView1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> View.ViewName
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(S(S)LLLLS(S)LL),1*U(1*U(U),A,A,A,A,1*U(U),1*U(A,1*U(A,U),A,A),A)><L,U><S,U(U,U,U)><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: View.ViewName)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww6 of ww11 { GHC.Conc.Sync.TVar ww12 ->
+                 case w3
+                        `cast`
+                      (View.N:ViewName[0]) of ww13 { Data.Text.Internal.Text ww14 ww15 ww16 ->
+                 ProjectActorRequests.$wsubscribeToView
+                   w
+                   ww10
+                   ww12
+                   ww7
+                   w2
+                   ww14
+                   ww15
+                   ww16
+                   w4 } } } }) -}
+3392d51617308e7f419f1f9ed8b40081
+  unsubscribeFromView ::
+    WebClients.WAClient
+    -> View.ViewName
+    -> ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 4,
+     Strictness: <L,U><S,U(U,U,U)><S(S(S)LLLLS(S)LL),1*U(1*U(U),A,A,A,A,1*U(U),1*U(1*U(1*U,U),A,A,A),A)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.unsubscribeFromView1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <View.ViewName>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+f743dde7263f61ae851c982c8ce09fc2
+  unsubscribeFromView1 ::
+    WebClients.WAClient
+    -> View.ViewName
+    -> ProjectState.RuntimeProject
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 4,
+     Strictness: <L,U><S,U(U,U,U)><S(S(S)LLLLS(S)LL),1*U(1*U(U),A,A,A,A,1*U(U),1*U(1*U(1*U,U),A,A,A),A)><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (4, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: View.ViewName)
+                   (w2 :: ProjectState.RuntimeProject)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1
+                        `cast`
+                      (View.N:ViewName[0]) of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 case w2 of ww4 { ProjectState.RuntimeProject ww5 ww6 ww7 ww8 ww9 ww10 ww11 ww12 ->
+                 case ww5 of ww13 { GHC.Conc.Sync.TVar ww14 ->
+                 case ww10 of ww15 { GHC.Conc.Sync.TVar ww16 ->
+                 ProjectActorRequests.$wunsubscribeFromView
+                   w
+                   ww1
+                   ww2
+                   ww3
+                   ww14
+                   ww16
+                   ww11
+                   w3 } } } }) -}
+69bc838fa4e4e257f6a0212ef2642792
+  updateProject ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Project.Project
+    -> GHC.Conc.Sync.STM ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(LLLLLLS(LLS(LS)L)L),1*U(A,A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.updateProject1
+                  `cast`
+                (<ProjectMessages.ProjectChan>_R
+                 ->_R <ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R <Project.Project>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+c524189057ce717c0c92b0da7f5c5e4d
+  updateProject1 ::
+    ProjectMessages.ProjectChan
+    -> ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> Project.Project
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <L,U><S(LLLLLLS(LLS(LS)L)L),1*U(A,A,A,A,A,A,1*U(A,A,1*U(A,U),A),A)><L,U><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (5, True, False)
+                (\ (w :: ProjectMessages.ProjectChan)
+                   (w1 :: ProjectState.RuntimeProject)
+                   (w2 :: WebClients.WAClient)
+                   (w3 :: Project.Project)
+                   (w4 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww7 of ww9 { CommonChannels.CommonChans ww10 ww11 ww12 ww13 ->
+                 case ww12 of ww14 { Control.Concurrent.STM.TChan.TChan ww15 ww16 ->
+                 ProjectActorRequests.$wupdateProject w ww15 ww16 w2 w3 w4 } } }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

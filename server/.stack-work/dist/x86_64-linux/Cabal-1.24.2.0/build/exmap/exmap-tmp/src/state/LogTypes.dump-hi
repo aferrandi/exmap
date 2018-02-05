@@ -1,0 +1,109 @@
+
+==================== FINAL INTERFACE ====================
+2017-09-07 20:35:50.12352293 UTC
+
+interface main@main:LogTypes 8002
+  interface hash: 91476930cba3993fae0c5886ff3e192e
+  ABI hash: d192781444533a8d1c26ba4358c154ab
+  export-list hash: 226e844296fc0a9abbb434a91d369b52
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 7466539132b6c2c803b3afb4c7151c0e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  LogTypes.Log{LogTypes.LogError LogTypes.LogInfo}
+module dependencies: Errors
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+fd8d64e04b92e926871b0ff0db587c47
+  $tc'LogError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2192674051025121820##
+                   7784102753530685265##
+                   LogTypes.$trModule
+                   LogTypes.$tc'LogError1) -}
+610a274a6ac41156db9bea970b024b6d
+  $tc'LogError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogError"#) -}
+13d33cb7235bf15e67cb96f7dd5d907e
+  $tc'LogInfo :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   551946794243576381##
+                   17464107385397517466##
+                   LogTypes.$trModule
+                   LogTypes.$tc'LogInfo1) -}
+6acbb10172b5010eee8a43763c54062b
+  $tc'LogInfo1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogInfo"#) -}
+a46d301e4232e8ae079019740daf1066
+  $tcLog :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16538318005357467454##
+                   14521233647769100767##
+                   LogTypes.$trModule
+                   LogTypes.$tcLog1) -}
+fc6334a69320b55eda7e04802453d591
+  $tcLog1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Log"#) -}
+8b68e334e18f78166478ef8d5563f185
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   LogTypes.$trModule2
+                   LogTypes.$trModule1) -}
+ba974ca828582a1e6b797e0c616b5a82
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "LogTypes"#) -}
+8c5eef20c6e2f48f28439e5ef414f207
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+c4ce57d31cd2c22d1feef4d393fa167b
+  data Log
+    = LogInfo Data.Text.Internal.Text
+    | LogError Data.Text.Internal.Text
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

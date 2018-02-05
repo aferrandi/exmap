@@ -1,0 +1,1497 @@
+
+==================== FINAL INTERFACE ====================
+2017-10-17 06:06:57.336839179 UTC
+
+interface main@main:Project 8002
+  interface hash: 0afbfad1ddb1d6c9d1a0d64c1fe5081e
+  ABI hash: e9aaa611811a510eec90fd878cb1c85f
+  export-list hash: a1b12012f0f388e6620b2d764b9da9c5
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 90d6aceb9d0ad52e223e6b2f956157d2
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Project.AllProjects{Project.AllProjects}
+  Project.Project{Project.Project calculations projectName sources views}
+  Project.ProjectName{Project.ProjectName}
+  Project.Source{Project.Source sourceOfMaps sourceType}
+  Project.SourceType{Project.FileSource Project.HttpSource Project.OdbcSource connectionString sqlQuery url}
+  Project.User{Project.User accessToProjects userId}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes View XFunction XMapTypes XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  CalculationName 7681f69b2581ed31254c1a456f024695
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  ViewName 105e058b0f915624ee10874cf1c9d091
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName aed4e1c98ee09424176ec799b4e99672
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+5112a5d43849857c03604773be3e85a2
+  $fEqAllProjects :: GHC.Classes.Eq Project.AllProjects
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.AllProjects
+                  Project.$fEqAllProjects_$c==
+                  Project.$fEqAllProjects_$c/= -}
+7cffd8c51d92d5438cfc419a445d150f
+  $fEqAllProjects1 ::
+    [Project.ProjectName] -> [Project.ProjectName] -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (GHC.Classes.$fEq[]_$c==
+                   @ Project.ProjectName
+                   Project.$fEqProjectName) -}
+5112a5d43849857c03604773be3e85a2
+  $fEqAllProjects_$c/= ::
+    Project.AllProjects -> Project.AllProjects -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (0, True, True)
+                Project.$fEqAllProjects_$s$fEq[]_$c/=
+                  `cast`
+                (Sym (Project.N:AllProjects[0])
+                 ->_R Sym (Project.N:AllProjects[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+5112a5d43849857c03604773be3e85a2
+  $fEqAllProjects_$c== ::
+    Project.AllProjects -> Project.AllProjects -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: InlineRule (0, True, True)
+                Project.$fEqAllProjects1
+                  `cast`
+                (Sym (Project.N:AllProjects[0])
+                 ->_R Sym (Project.N:AllProjects[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+07959bb8db018ff76887f5e6fa7de1f2
+  $fEqAllProjects_$s$fEq[]_$c/= ::
+    [Project.ProjectName] -> [Project.ProjectName] -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Inline: INLINE (sat-args=2),
+     Unfolding: InlineRule (2, False, False)
+                (\ (x :: [Project.ProjectName]) (y :: [Project.ProjectName]) ->
+                 GHC.Classes.not
+                   (GHC.Classes.$fEq[]_$c==
+                      @ Project.ProjectName
+                      Project.$fEqProjectName
+                      x
+                      y)) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fEqProject :: GHC.Classes.Eq Project.Project
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.Project
+                  Project.$fEqProject_$c==
+                  Project.$fEqProject_$c/= -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fEqProjectName :: GHC.Classes.Eq Project.ProjectName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.ProjectName
+                  Project.$fEqProjectName_$c==
+                  Project.$fEqProjectName_$c/= -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fEqProjectName_$c/= ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fEqText_$c/=
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fEqProjectName_$c== ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fEqText_$c==
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fEqProject_$c/= ::
+    Project.Project -> Project.Project -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(LLS)LLL),1*U(1*U(U,U,U),1*U,1*U,1*U)><S(S(LLS)LLL),1*U(1*U(U,U,U),1*U,1*U,1*U)>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: Project.Project) (b :: Project.Project) ->
+                 case Project.$fEqProject_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fEqProject_$c== ::
+    Project.Project -> Project.Project -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(LLS)LLL),1*U(1*U(U,U,U),1*U,1*U,1*U)><S(S(LLS)LLL),1*U(1*U(U,U,U),1*U,1*U,1*U)>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Project.Project) (w1 :: Project.Project) ->
+                 case w of ww { Project.Project ww1 ww2 ww3 ww4 ->
+                 case ww1
+                        `cast`
+                      (Project.N:ProjectName[0]) of ww5 { Data.Text.Internal.Text ww6 ww7 ww8 ->
+                 case w1 of ww9 { Project.Project ww10 ww11 ww12 ww13 ->
+                 case ww10
+                        `cast`
+                      (Project.N:ProjectName[0]) of ww14 { Data.Text.Internal.Text ww15 ww16 ww17 ->
+                 Project.$w$c==
+                   ww6
+                   ww7
+                   ww8
+                   ww2
+                   ww3
+                   ww4
+                   ww15
+                   ww16
+                   ww17
+                   ww11
+                   ww12
+                   ww13 } } } }) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fEqSource :: GHC.Classes.Eq Project.Source
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.Source Project.$fEqSource_$c== Project.$fEqSource_$c/= -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fEqSourceType :: GHC.Classes.Eq Project.SourceType
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.SourceType
+                  Project.$fEqSource_$c==1
+                  Project.$fEqSourceType_$c/= -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fEqSourceType_$c/= ::
+    Project.SourceType -> Project.SourceType -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: Project.SourceType) (b :: Project.SourceType) ->
+                 case Project.$fEqSource_$c==1 a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fEqSource_$c/= ::
+    Project.Source -> Project.Source -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(SL),1*U(1*U,1*U)><S(SL),1*U(1*U,1*U)>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: Project.Source) (b :: Project.Source) ->
+                 case Project.$fEqSource_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fEqSource_$c== ::
+    Project.Source -> Project.Source -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(SL),1*U(1*U,1*U)><S(SL),1*U(1*U,1*U)>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Project.Source) (w1 :: Project.Source) ->
+                 case w of ww { Project.Source ww1 ww2 ->
+                 case w1 of ww3 { Project.Source ww4 ww5 ->
+                 Project.$w$c==1 ww1 ww2 ww4 ww5 } }) -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fEqSource_$c==1 ::
+    Project.SourceType -> Project.SourceType -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (ds :: Project.SourceType)
+                   (ds1 :: Project.SourceType) ->
+                 case ds of wild {
+                   Project.FileSource
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False Project.FileSource -> GHC.Types.True }
+                   Project.OdbcSource a1 a2
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        Project.OdbcSource b1 b2
+                        -> case a1 of wild2 { Data.Text.Internal.Text dt dt1 dt2 ->
+                           case b1 of wild3 { Data.Text.Internal.Text dt3 dt4 dt5 ->
+                           case GHC.Prim.tagToEnum#
+                                  @ GHC.Types.Bool
+                                  (GHC.Prim.==# dt2 dt5) of wild4 {
+                             GHC.Types.False -> GHC.Types.False
+                             GHC.Types.True
+                             -> case {__pkg_ccall text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00 _hs_text_memcmp GHC.Prim.ByteArray#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.ByteArray#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.Word#
+                                                                                                                   -> GHC.Prim.State#
+                                                                                                                        GHC.Prim.RealWorld
+                                                                                                                   -> (# GHC.Prim.State#
+                                                                                                                           GHC.Prim.RealWorld,
+                                                                                                                         GHC.Prim.Int# #)}
+                                       dt
+                                       (GHC.Prim.int2Word# dt1)
+                                       dt3
+                                       (GHC.Prim.int2Word# dt4)
+                                       (GHC.Prim.int2Word# dt2)
+                                       GHC.Prim.realWorld# of wild5 { (#,#) ds11 ds12 ->
+                                case GHC.Prim.narrow32Int# ds12 of wild6 {
+                                  DEFAULT -> GHC.Types.False
+                                  0# -> Data.Text.$fEqText_$c== a2 b2 } } } } } }
+                   Project.HttpSource a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        Project.HttpSource b1 -> Data.Text.$fEqText_$c== a1 b1 } }) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fEqUser :: GHC.Classes.Eq Project.User
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.User Project.$fEqUser_$c== Project.$fEqUser_$c/= -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fEqUser_$c/= :: Project.User -> Project.User -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(LLS)L),1*U(1*U(U,U,U),1*U)><S(S(LLS)L),1*U(1*U(U,U,U),1*U)>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: Project.User) (b :: Project.User) ->
+                 case Project.$fEqUser_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fEqUser_$c== :: Project.User -> Project.User -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(LLS)L),1*U(1*U(U,U,U),1*U)><S(S(LLS)L),1*U(1*U(U,U,U),1*U)>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Project.User) (w1 :: Project.User) ->
+                 case w of ww { Project.User ww1 ww2 ->
+                 case ww1 of ww3 { Data.Text.Internal.Text ww4 ww5 ww6 ->
+                 case w1 of ww7 { Project.User ww8 ww9 ->
+                 case ww8 of ww10 { Data.Text.Internal.Text ww11 ww12 ww13 ->
+                 Project.$w$c==2 ww4 ww5 ww6 ww2 ww11 ww12 ww13 ww9 } } } }) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName :: GHC.Classes.Ord Project.ProjectName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.ProjectName
+                  Project.$fEqProjectName
+                  Project.$fOrdProjectName_$ccompare
+                  Project.$fOrdProjectName_$c<
+                  Project.$fOrdProjectName_$c<=
+                  Project.$fOrdProjectName_$c>
+                  Project.$fOrdProjectName_$c>=
+                  Project.$fOrdProjectName_$cmax
+                  Project.$fOrdProjectName_$cmin -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$c< ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$c<
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$c<= ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$c<=
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$c> ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$c>
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$c>= ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$c>=
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$ccompare ::
+    Project.ProjectName -> Project.ProjectName -> GHC.Types.Ordering
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(U,U,U)><S(LLS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$ccompare
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R <GHC.Types.Ordering>_R) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$cmax ::
+    Project.ProjectName -> Project.ProjectName -> Project.ProjectName
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),U(U,U,U)><S(LLS),U(U,U,U)>m,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$cmax
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fOrdProjectName_$cmin ::
+    Project.ProjectName -> Project.ProjectName -> Project.ProjectName
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS),U(U,U,U)><S(LLS),U(U,U,U)>m,
+     Unfolding: InlineRule (0, True, True)
+                Data.Text.$fOrdText_$cmin
+                  `cast`
+                (Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])
+                 ->_R Sym (Project.N:ProjectName[0])) -}
+5112a5d43849857c03604773be3e85a2
+  $fShowAllProjects :: GHC.Show.Show Project.AllProjects
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.AllProjects
+                  Project.$fShowAllProjects_$cshowsPrec
+                  Project.$fShowAllProjects_$cshow
+                  Project.$fShowAllProjects_$cshowList -}
+5112a5d43849857c03604773be3e85a2
+  $fShowAllProjects1 :: Project.AllProjects -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Project.AllProjects) (w1 :: GHC.Base.String) ->
+                 Project.$w$cshowsPrec 0# w w1) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fShowAllProjects2 :: Project.ProjectName -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Project.ProjectName) (w1 :: GHC.Base.String) ->
+                 Project.$w$cshowsPrec1 0# w w1) -}
+579e05911985d891247de61502211de0
+  $fShowAllProjects3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "ProjectName "#) -}
+267c1275ef39d8487f79f9ca155a15aa
+  $fShowAllProjects4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "AllProjects "#) -}
+5112a5d43849857c03604773be3e85a2
+  $fShowAllProjects_$cshow :: Project.AllProjects -> GHC.Base.String
+  {- Arity: 1, Strictness: <L,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.AllProjects) ->
+                 GHC.Base.augment
+                   @ GHC.Types.Char
+                   (\ @ b
+                      (c :: GHC.Types.Char -> b -> b)[OneShot]
+                      (n :: b)[OneShot] ->
+                    GHC.Base.foldr @ GHC.Types.Char @ b c n Project.$fShowAllProjects4)
+                   (GHC.Show.showList__
+                      @ Project.ProjectName
+                      Project.$fShowAllProjects2
+                      x `cast` (Project.N:AllProjects[0])
+                      (GHC.Types.[] @ GHC.Types.Char))) -}
+5112a5d43849857c03604773be3e85a2
+  $fShowAllProjects_$cshowList ::
+    [Project.AllProjects] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.AllProjects
+                   Project.$fShowAllProjects1) -}
+5112a5d43849857c03604773be3e85a2
+  $fShowAllProjects_$cshowsPrec ::
+    GHC.Types.Int -> Project.AllProjects -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><L,1*U><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Project.AllProjects)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 Project.$w$cshowsPrec ww1 w1 w2 }) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fShowProject :: GHC.Show.Show Project.Project
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.Project
+                  Project.$fShowProject_$cshowsPrec
+                  Project.$fShowProject_$cshow
+                  Project.$fShowProject_$cshowList -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fShowProject1 :: Project.Project -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Project.Project) (w1 :: GHC.Base.String) ->
+                 case w of ww { Project.Project ww1 ww2 ww3 ww4 ->
+                 Project.$w$cshowsPrec2 0# ww1 ww2 ww3 ww4 w1 }) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fShowProjectName :: GHC.Show.Show Project.ProjectName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.ProjectName
+                  Project.$fShowProjectName_$cshowsPrec
+                  Project.$fShowProjectName_$cshow
+                  Project.$fShowProjectName_$cshowList -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fShowProjectName_$cshow :: Project.ProjectName -> GHC.Base.String
+  {- Arity: 1, Strictness: <L,1*U(U,U,U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.ProjectName) ->
+                 GHC.Base.augment
+                   @ GHC.Types.Char
+                   (\ @ b
+                      (c :: GHC.Types.Char -> b -> b)[OneShot]
+                      (n :: b)[OneShot] ->
+                    GHC.Base.foldr @ GHC.Types.Char @ b c n Project.$fShowAllProjects3)
+                   (case Data.Text.Show.$w$cshowsPrec
+                           x `cast` (Project.N:ProjectName[0])
+                           (GHC.Types.[] @ GHC.Types.Char) of ww { (#,#) ww1 ww2 ->
+                    GHC.Types.: @ GHC.Types.Char ww1 ww2 })) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fShowProjectName_$cshowList ::
+    [Project.ProjectName] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.ProjectName
+                   Project.$fShowAllProjects2) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $fShowProjectName_$cshowsPrec ::
+    GHC.Types.Int -> Project.ProjectName -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><L,1*U(U,U,U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Project.ProjectName)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 Project.$w$cshowsPrec1 ww1 w1 w2 }) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fShowProject_$cshow :: Project.Project -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U(1*U(U,U,U),1*U,1*U,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.Project) ->
+                 Project.$fShowProject_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fShowProject_$cshowList :: [Project.Project] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.Project
+                   Project.$fShowProject1) -}
+c7f6766f61d0b63c7ab6927b16e914f3
+  $fShowProject_$cshowsPrec ::
+    GHC.Types.Int -> Project.Project -> GHC.Show.ShowS
+  {- Arity: 3,
+     Strictness: <S(S),1*U(U)><S,1*U(1*U(U,U,U),1*U,1*U,1*U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Project.Project)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { Project.Project ww3 ww4 ww5 ww6 ->
+                 Project.$w$cshowsPrec2 ww1 ww3 ww4 ww5 ww6 w2 } }) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fShowSource :: GHC.Show.Show Project.Source
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.Source
+                  Project.$fShowSource_$cshowsPrec1
+                  Project.$fShowSource_$cshow
+                  Project.$fShowSource_$cshowList -}
+c41016d233cbedf3a4568ce830d45f45
+  $fShowSource1 :: Project.Source -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Project.Source) (w1 :: GHC.Base.String) ->
+                 case w of ww { Project.Source ww1 ww2 ->
+                 Project.$w$cshowsPrec3 0# ww1 ww2 w1 }) -}
+2784ba67c71b9a71ba69e96485a5dad5
+  $fShowSource10 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "sqlQuery = "#) -}
+a4b8c0b789447a37ce96e9ca2002205c
+  $fShowSource11 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "connectionString = "#) -}
+b3f563f7d7e81b849cab51c36b43e5fd
+  $fShowSource12 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "FileSource"#) -}
+6d259e5c551af8970671928502b1b010
+  $fShowSource13 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "sourceType = "#) -}
+0b81caa43ee76d150e410ce9d92abd49
+  $fShowSource2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Source {"#) -}
+4eb0386bbb7c9777df16310f2233b047
+  $fShowSource3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "}"#) -}
+88592115dd2867754d103f4150194e11
+  $fShowSource4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "sourceOfMaps = "#) -}
+fdd7f7d360d1053ef9c2d4a3cfa0f230
+  $fShowSource5 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# ", "#) -}
+aa650689798c325c6acd634c9eb2b3bf
+  $fShowSource6 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+0337cada0e4f1993d7101a4b1d9b8d8b
+  $fShowSource7 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "url = "#) -}
+4064dbdeb095790cc77e75feb7244fbd
+  $fShowSource8 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "HttpSource {"#) -}
+9883a35e297e43c539f7c089959eee5c
+  $fShowSource9 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "OdbcSource {"#) -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fShowSourceType :: GHC.Show.Show Project.SourceType
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.SourceType
+                  Project.$fShowSource_$cshowsPrec
+                  Project.$fShowSourceType_$cshow
+                  Project.$fShowSourceType_$cshowList -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fShowSourceType1 :: Project.SourceType -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (Project.$fShowSource_$cshowsPrec
+                   Project.$fShowSource6) -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fShowSourceType_$cshow :: Project.SourceType -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.SourceType) ->
+                 Project.$fShowSource_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fShowSourceType_$cshowList ::
+    [Project.SourceType] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.SourceType
+                   Project.$fShowSourceType1) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fShowSource_$cshow :: Project.Source -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U(1*U,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.Source) ->
+                 Project.$fShowSource_$cshowsPrec1
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fShowSource_$cshowList :: [Project.Source] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.Source
+                   Project.$fShowSource1) -}
+28d148184fb0f06dc30c86418e1b0d4f
+  $fShowSource_$cshowsPrec ::
+    GHC.Types.Int -> Project.SourceType -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,1*U(U)><S,1*U><L,U>,
+     Unfolding: (\ (ds :: GHC.Types.Int)
+                   (ds1 :: Project.SourceType)
+                   (eta :: GHC.Base.String) ->
+                 case ds1 of wild {
+                   Project.FileSource
+                   -> GHC.Base.++ @ GHC.Types.Char Project.$fShowSource12 eta
+                   Project.OdbcSource b1 b2
+                   -> case ds of wild1 { GHC.Types.I# x ->
+                      let {
+                        g :: GHC.Base.String -> GHC.Base.String
+                          {- Arity: 1, Strictness: <L,1*U> -}
+                        = \ (x1 :: GHC.Base.String)[OneShot] ->
+                          GHC.Base.++
+                            @ GHC.Types.Char
+                            Project.$fShowSource11
+                            (case Data.Text.Show.$w$cshowsPrec
+                                    b1
+                                    (GHC.Base.++
+                                       @ GHC.Types.Char
+                                       Project.$fShowSource5
+                                       (GHC.Base.++
+                                          @ GHC.Types.Char
+                                          Project.$fShowSource10
+                                          (case Data.Text.Show.$w$cshowsPrec
+                                                  b2
+                                                  (GHC.Base.++
+                                                     @ GHC.Types.Char
+                                                     Project.$fShowSource3
+                                                     x1) of ww { (#,#) ww1 ww2 ->
+                                           GHC.Types.:
+                                             @ GHC.Types.Char
+                                             ww1
+                                             ww2 }))) of ww { (#,#) ww1 ww2 ->
+                             GHC.Types.: @ GHC.Types.Char ww1 ww2 })
+                      } in
+                      case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.>=# x 11#) of wild2 {
+                        GHC.Types.False
+                        -> GHC.Base.++ @ GHC.Types.Char Project.$fShowSource9 (g eta)
+                        GHC.Types.True
+                        -> GHC.Types.:
+                             @ GHC.Types.Char
+                             GHC.Show.shows7
+                             (GHC.Base.++
+                                @ GHC.Types.Char
+                                Project.$fShowSource9
+                                (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 eta))) } }
+                   Project.HttpSource b1
+                   -> case ds of wild1 { GHC.Types.I# x ->
+                      let {
+                        p :: GHC.Show.ShowS {- Arity: 1, Strictness: <L,1*U> -}
+                        = \ (x1 :: GHC.Base.String)[OneShot] ->
+                          GHC.Base.++
+                            @ GHC.Types.Char
+                            Project.$fShowSource8
+                            (GHC.Base.++
+                               @ GHC.Types.Char
+                               Project.$fShowSource7
+                               (case Data.Text.Show.$w$cshowsPrec
+                                       b1
+                                       (GHC.Base.++
+                                          @ GHC.Types.Char
+                                          Project.$fShowSource3
+                                          x1) of ww { (#,#) ww1 ww2 ->
+                                GHC.Types.: @ GHC.Types.Char ww1 ww2 }))
+                      } in
+                      case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.>=# x 11#) of wild2 {
+                        GHC.Types.False -> p eta
+                        GHC.Types.True
+                        -> GHC.Types.:
+                             @ GHC.Types.Char
+                             GHC.Show.shows7
+                             (p (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 eta)) } } }) -}
+c41016d233cbedf3a4568ce830d45f45
+  $fShowSource_$cshowsPrec1 ::
+    GHC.Types.Int -> Project.Source -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S,1*U(1*U,1*U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Project.Source)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { Project.Source ww3 ww4 ->
+                 Project.$w$cshowsPrec3 ww1 ww3 ww4 w2 } }) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fShowUser :: GHC.Show.Show Project.User
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Project.User
+                  Project.$fShowUser_$cshowsPrec
+                  Project.$fShowUser_$cshow
+                  Project.$fShowUser_$cshowList -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fShowUser1 :: Project.User -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Project.User) (w1 :: GHC.Base.String) ->
+                 case w of ww { Project.User ww1 ww2 ->
+                 Project.$w$cshowsPrec4 0# ww1 ww2 w1 }) -}
+4efe8c8402dd3f6807d3998d6fafdc67
+  $fShowUser2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "User {"#) -}
+23d92d77f1167b770e577e295ee76b10
+  $fShowUser3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "accessToProjects = "#) -}
+806651ac8c01bfb4541799881e16ae26
+  $fShowUser4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "userId = "#) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fShowUser_$cshow :: Project.User -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U(1*U(U,U,U),1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Project.User) ->
+                 Project.$fShowUser_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fShowUser_$cshowList :: [Project.User] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Project.User
+                   Project.$fShowUser1) -}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  $fShowUser_$cshowsPrec ::
+    GHC.Types.Int -> Project.User -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S,1*U(1*U(U,U,U),1*U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Project.User)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { Project.User ww3 ww4 ->
+                 Project.$w$cshowsPrec4 ww1 ww3 ww4 w2 } }) -}
+57d2f22ba26c4c7d7bd6fc5d63ba848a
+  $tc'AllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9509947365902598257##
+                   6992900474368437417##
+                   Project.$trModule
+                   Project.$tc'AllProjects1) -}
+392185a0da44ffb7be35211a2d583c24
+  $tc'AllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'AllProjects"#) -}
+d747bd564353710d7b23243dac29cca1
+  $tc'FileSource :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   18418423253959115314##
+                   5983278551261414060##
+                   Project.$trModule
+                   Project.$tc'FileSource1) -}
+3258710c5ce642660180b4c378297207
+  $tc'FileSource1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'FileSource"#) -}
+9084ab5bd7eed91262293a5fbce39188
+  $tc'HttpSource :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9850872527329907336##
+                   8519308821434710041##
+                   Project.$trModule
+                   Project.$tc'HttpSource1) -}
+d695f3695cf6011fccffcc0a40a5da1f
+  $tc'HttpSource1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'HttpSource"#) -}
+edf45e8fa3c3d414e7da453954ae1c10
+  $tc'OdbcSource :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12617013372291735808##
+                   13082683163105886563##
+                   Project.$trModule
+                   Project.$tc'OdbcSource1) -}
+5ae93a2d7e06c2cf915cda859422a739
+  $tc'OdbcSource1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'OdbcSource"#) -}
+86fd4a8336fab1e1a2294f32432353d7
+  $tc'Project :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14717542056448239674##
+                   11485328506879538255##
+                   Project.$trModule
+                   Project.$tc'Project1) -}
+2b46dac0a0188d629830b2144a649509
+  $tc'Project1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Project"#) -}
+44d3961de8128d4e8f05907909a454e0
+  $tc'ProjectName :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10099344815155255340##
+                   15139185920216462929##
+                   Project.$trModule
+                   Project.$tc'ProjectName1) -}
+5d5855854afc90461033656633430133
+  $tc'ProjectName1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'ProjectName"#) -}
+ee9276b933a50c6e6c1f4b18d95003f7
+  $tc'Source :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   11741502724499310064##
+                   9028575405778053661##
+                   Project.$trModule
+                   Project.$tc'Source1) -}
+dace6ec8dd83ef3ffd126465ed3d1efc
+  $tc'Source1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Source"#) -}
+c11ec4b48d967f1daf946fa58b9834c9
+  $tc'User :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12094116436093561416##
+                   15881504720076098591##
+                   Project.$trModule
+                   Project.$tc'User1) -}
+3a81a8f84621ab70647f9732e8f7c770
+  $tc'User1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'User"#) -}
+eff1cc2f0944b308fd7d0eac8ff180fb
+  $tcAllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   261523562854878910##
+                   1208647871643408352##
+                   Project.$trModule
+                   Project.$tcAllProjects1) -}
+dbd6958b4c3e6b12d834bf1c08d2617f
+  $tcAllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "AllProjects"#) -}
+b41067310310a64894f8f8c05235d249
+  $tcProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6877072001730929031##
+                   13920390625117229234##
+                   Project.$trModule
+                   Project.$trModule1) -}
+83eeb1610e61ead71e7b50dfc844812f
+  $tcProjectName :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13477662205335844095##
+                   18339543798696741612##
+                   Project.$trModule
+                   Project.$tcProjectName1) -}
+05bb723f0f4a5993e94cd57d4bc51b03
+  $tcProjectName1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ProjectName"#) -}
+1e5899a54a75f82e2f0a9276e87d7f6d
+  $tcSource :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16852798651004586418##
+                   8099559721927783284##
+                   Project.$trModule
+                   Project.$tcSource1) -}
+5d958c6bec4893ce3bfc3082cb02a5fa
+  $tcSource1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Source"#) -}
+46d84103017c8b4c70b729740c926a90
+  $tcSourceType :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8033496944748894506##
+                   344027291044666664##
+                   Project.$trModule
+                   Project.$tcSourceType1) -}
+ac043efc6732834b3e7a3879678fa701
+  $tcSourceType1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "SourceType"#) -}
+c6d309d248d94839d293744a28145c82
+  $tcUser :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10075168858716429949##
+                   18093456148088526964##
+                   Project.$trModule
+                   Project.$tcUser1) -}
+160ff598c8db17f5b3c3fd59783725d8
+  $tcUser1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "User"#) -}
+3e27b730da420e806f0d72568cfb1f38
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Project.$trModule2
+                   Project.$trModule1) -}
+bf62ba46f65379467f54f2332b4b9c17
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Project"#) -}
+0d61c512d11a9d26b1fdf0d278041458
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+88084453b079d49de244bf63e6613ae3
+  $w$c== ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> [Calculation.CalculationName]
+    -> [View.ViewName]
+    -> [Project.Source]
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> [Calculation.CalculationName]
+    -> [View.ViewName]
+    -> [Project.Source]
+    -> GHC.Types.Bool
+  {- Arity: 12, HasNoCafRefs,
+     Strictness: <L,U><L,U><S,U><L,1*U><L,1*U><L,1*U><L,U><L,U><S,U><L,1*U><L,1*U><L,1*U>,
+     Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.ByteArray#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: [Calculation.CalculationName])
+                   (ww4 :: [View.ViewName])
+                   (ww5 :: [Project.Source])
+                   (ww6 :: GHC.Prim.ByteArray#)
+                   (ww7 :: GHC.Prim.Int#)
+                   (ww8 :: GHC.Prim.Int#)
+                   (ww9 :: [Calculation.CalculationName])
+                   (ww10 :: [View.ViewName])
+                   (ww11 :: [Project.Source]) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.==# ww2 ww8) of wild2 {
+                   GHC.Types.False -> GHC.Types.False
+                   GHC.Types.True
+                   -> case {__pkg_ccall text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00 _hs_text_memcmp GHC.Prim.ByteArray#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.ByteArray#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.State#
+                                                                                                              GHC.Prim.RealWorld
+                                                                                                         -> (# GHC.Prim.State#
+                                                                                                                 GHC.Prim.RealWorld,
+                                                                                                               GHC.Prim.Int# #)}
+                             ww
+                             (GHC.Prim.int2Word# ww1)
+                             ww6
+                             (GHC.Prim.int2Word# ww7)
+                             (GHC.Prim.int2Word# ww2)
+                             GHC.Prim.realWorld# of wild { (#,#) ds11 ds12 ->
+                      case GHC.Prim.narrow32Int# ds12 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        0#
+                        -> case GHC.Classes.$fEq[]_$c==
+                                  @ Calculation.CalculationName
+                                  Calculation.$fEqCalculationName
+                                  ww3
+                                  ww9 of wild3 {
+                             GHC.Types.False -> GHC.Types.False
+                             GHC.Types.True
+                             -> case GHC.Classes.$fEq[]_$c==
+                                       @ View.ViewName
+                                       View.$fEqViewName
+                                       ww4
+                                       ww10 of wild4 {
+                                  GHC.Types.False -> GHC.Types.False
+                                  GHC.Types.True
+                                  -> GHC.Classes.$fEq[]_$c==
+                                       @ Project.Source
+                                       Project.$fEqSource
+                                       ww5
+                                       ww11 } } } } }) -}
+94a84f00669533ef64307d8dbe572b89
+  $w$c==1 ::
+    Project.SourceType
+    -> [XMapTypes.XMapName]
+    -> Project.SourceType
+    -> [XMapTypes.XMapName]
+    -> GHC.Types.Bool
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <S,1*U><L,1*U><S,1*U><L,1*U>, Inline: [0],
+     Unfolding: (\ (ww :: Project.SourceType)
+                   (ww1 :: [XMapTypes.XMapName])
+                   (ww2 :: Project.SourceType)
+                   (ww3 :: [XMapTypes.XMapName]) ->
+                 case Project.$fEqSource_$c==1 ww ww2 of wild {
+                   GHC.Types.False -> GHC.Types.False
+                   GHC.Types.True
+                   -> GHC.Classes.$fEq[]_$c==
+                        @ XMapTypes.XMapName
+                        XMapTypes.$fEqXMapName
+                        ww1
+                        ww3 }) -}
+9b1bc65428b4738476eeaf58100e01d5
+  $w$c==2 ::
+    GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> [Project.ProjectName]
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> [Project.ProjectName]
+    -> GHC.Types.Bool
+  {- Arity: 8, HasNoCafRefs,
+     Strictness: <L,U><L,U><S,U><L,1*U><L,U><L,U><S,U><L,1*U>,
+     Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.ByteArray#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: [Project.ProjectName])
+                   (ww4 :: GHC.Prim.ByteArray#)
+                   (ww5 :: GHC.Prim.Int#)
+                   (ww6 :: GHC.Prim.Int#)
+                   (ww7 :: [Project.ProjectName]) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.==# ww2 ww6) of wild2 {
+                   GHC.Types.False -> GHC.Types.False
+                   GHC.Types.True
+                   -> case {__pkg_ccall text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00 _hs_text_memcmp GHC.Prim.ByteArray#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.ByteArray#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.Word#
+                                                                                                         -> GHC.Prim.State#
+                                                                                                              GHC.Prim.RealWorld
+                                                                                                         -> (# GHC.Prim.State#
+                                                                                                                 GHC.Prim.RealWorld,
+                                                                                                               GHC.Prim.Int# #)}
+                             ww
+                             (GHC.Prim.int2Word# ww1)
+                             ww4
+                             (GHC.Prim.int2Word# ww5)
+                             (GHC.Prim.int2Word# ww2)
+                             GHC.Prim.realWorld# of wild { (#,#) ds11 ds12 ->
+                      case GHC.Prim.narrow32Int# ds12 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        0#
+                        -> GHC.Classes.$fEq[]_$c==
+                             @ Project.ProjectName
+                             Project.$fEqProjectName
+                             ww3
+                             ww7 } } }) -}
+5112a5d43849857c03604773be3e85a2
+  $w$cshowsPrec ::
+    GHC.Prim.Int#
+    -> Project.AllProjects -> GHC.Base.String -> GHC.Base.String
+  {- Arity: 3, Strictness: <S,U><L,1*U><L,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (w :: Project.AllProjects)
+                   (w1 :: GHC.Base.String) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 11#) of wild {
+                   GHC.Types.False
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        Project.$fShowAllProjects4
+                        (GHC.Show.showList__
+                           @ Project.ProjectName
+                           Project.$fShowAllProjects2
+                           w `cast` (Project.N:AllProjects[0])
+                           w1)
+                   GHC.Types.True
+                   -> GHC.Types.:
+                        @ GHC.Types.Char
+                        GHC.Show.shows7
+                        (GHC.Base.++
+                           @ GHC.Types.Char
+                           Project.$fShowAllProjects4
+                           (GHC.Show.showList__
+                              @ Project.ProjectName
+                              Project.$fShowAllProjects2
+                              w `cast` (Project.N:AllProjects[0])
+                              (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 w1))) }) -}
+dc3277e72c5d1fd0c29f02dc48899838
+  $w$cshowsPrec1 ::
+    GHC.Prim.Int#
+    -> Project.ProjectName -> GHC.Base.String -> GHC.Base.String
+  {- Arity: 3, Strictness: <S,U><L,1*U(U,U,U)><L,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (w :: Project.ProjectName)
+                   (w1 :: GHC.Base.String) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 11#) of wild {
+                   GHC.Types.False
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        Project.$fShowAllProjects3
+                        (case Data.Text.Show.$w$cshowsPrec
+                                w `cast` (Project.N:ProjectName[0])
+                                w1 of ww1 { (#,#) ww2 ww3 ->
+                         GHC.Types.: @ GHC.Types.Char ww2 ww3 })
+                   GHC.Types.True
+                   -> GHC.Types.:
+                        @ GHC.Types.Char
+                        GHC.Show.shows7
+                        (GHC.Base.++
+                           @ GHC.Types.Char
+                           Project.$fShowAllProjects3
+                           (case Data.Text.Show.$w$cshowsPrec
+                                   w `cast` (Project.N:ProjectName[0])
+                                   (GHC.Types.:
+                                      @ GHC.Types.Char
+                                      GHC.Show.shows4
+                                      w1) of ww1 { (#,#) ww2 ww3 ->
+                            GHC.Types.: @ GHC.Types.Char ww2 ww3 })) }) -}
+7f70ad4db3e01b19ea6d2b1b45c2fd6f
+  $w$cshowsPrec2 ::
+    GHC.Prim.Int#
+    -> Project.ProjectName
+    -> [Calculation.CalculationName]
+    -> [View.ViewName]
+    -> [Project.Source]
+    -> GHC.Base.String
+    -> GHC.Base.String
+  {- Arity: 6,
+     Strictness: <S,U><L,1*U(U,U,U)><L,1*U><L,1*U><L,1*U><L,U>,
+     Inline: [0] -}
+50fe67d9c524a7e054671624ded01034
+  $w$cshowsPrec3 ::
+    GHC.Prim.Int#
+    -> Project.SourceType
+    -> [XMapTypes.XMapName]
+    -> GHC.Base.String
+    -> GHC.Base.String
+  {- Arity: 4, Strictness: <S,U><L,1*U><L,1*U><L,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: Project.SourceType)
+                   (ww2 :: [XMapTypes.XMapName])
+                   (w :: GHC.Base.String) ->
+                 let {
+                   g :: GHC.Base.String -> GHC.Base.String
+                     {- Arity: 1, Strictness: <L,1*U> -}
+                   = \ (x :: GHC.Base.String)[OneShot] ->
+                     GHC.Base.++
+                       @ GHC.Types.Char
+                       Project.$fShowSource13
+                       (Project.$fShowSource_$cshowsPrec
+                          Project.$fShowSource6
+                          ww1
+                          (GHC.Base.++
+                             @ GHC.Types.Char
+                             Project.$fShowSource5
+                             (GHC.Base.++
+                                @ GHC.Types.Char
+                                Project.$fShowSource4
+                                (let {
+                                   s :: GHC.Base.String
+                                   = GHC.Base.++ @ GHC.Types.Char Project.$fShowSource3 x
+                                 } in
+                                 case ww2 of wild {
+                                   [] -> GHC.CString.unpackAppendCString# "[]"# s
+                                   : x1 xs
+                                   -> GHC.Types.:
+                                        @ GHC.Types.Char
+                                        GHC.Show.showList__2
+                                        (XMapTypes.$w$cshowsPrec2
+                                           0#
+                                           x1
+                                           (let {
+                                              lvl27 :: [GHC.Types.Char]
+                                              = GHC.Types.: @ GHC.Types.Char GHC.Show.showList__1 s
+                                            } in
+                                            letrec {
+                                              showl :: [XMapTypes.XMapName] -> GHC.Base.String
+                                                {- Arity: 1, Strictness: <S,1*U> -}
+                                              = \ (ds2 :: [XMapTypes.XMapName]) ->
+                                                case ds2 of wild1 {
+                                                  [] -> lvl27
+                                                  : y ys
+                                                  -> GHC.Types.:
+                                                       @ GHC.Types.Char
+                                                       GHC.Show.shows5
+                                                       (XMapTypes.$w$cshowsPrec2 0# y (showl ys)) }
+                                            } in
+                                            showl xs)) }))))
+                 } in
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 11#) of wild {
+                   GHC.Types.False
+                   -> GHC.Base.++ @ GHC.Types.Char Project.$fShowSource2 (g w)
+                   GHC.Types.True
+                   -> GHC.Types.:
+                        @ GHC.Types.Char
+                        GHC.Show.shows7
+                        (GHC.Base.++
+                           @ GHC.Types.Char
+                           Project.$fShowSource2
+                           (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 w))) }) -}
+04c432c24e950f7e9cf821d79fb8ce7e
+  $w$cshowsPrec4 ::
+    GHC.Prim.Int#
+    -> Data.Text.Internal.Text
+    -> [Project.ProjectName]
+    -> GHC.Base.String
+    -> GHC.Base.String
+  {- Arity: 4, Strictness: <S,U><L,1*U(U,U,U)><L,1*U><L,U>,
+     Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: Data.Text.Internal.Text)
+                   (ww2 :: [Project.ProjectName])
+                   (w :: GHC.Base.String) ->
+                 let {
+                   g :: GHC.Base.String -> GHC.Base.String
+                     {- Arity: 1, Strictness: <L,1*U> -}
+                   = \ (x :: GHC.Base.String)[OneShot] ->
+                     GHC.Base.++
+                       @ GHC.Types.Char
+                       Project.$fShowUser4
+                       (case Data.Text.Show.$w$cshowsPrec
+                               ww1
+                               (GHC.Base.++
+                                  @ GHC.Types.Char
+                                  Project.$fShowSource5
+                                  (GHC.Base.++
+                                     @ GHC.Types.Char
+                                     Project.$fShowUser3
+                                     (let {
+                                        s :: GHC.Base.String
+                                        = GHC.Base.++ @ GHC.Types.Char Project.$fShowSource3 x
+                                      } in
+                                      case ww2 of wild {
+                                        [] -> GHC.CString.unpackAppendCString# "[]"# s
+                                        : x1 xs
+                                        -> GHC.Types.:
+                                             @ GHC.Types.Char
+                                             GHC.Show.showList__2
+                                             (GHC.Base.++
+                                                @ GHC.Types.Char
+                                                Project.$fShowAllProjects3
+                                                (case Data.Text.Show.$w$cshowsPrec
+                                                        x1 `cast` (Project.N:ProjectName[0])
+                                                        (let {
+                                                           lvl27 :: [GHC.Types.Char]
+                                                           = GHC.Types.:
+                                                               @ GHC.Types.Char
+                                                               GHC.Show.showList__1
+                                                               s
+                                                         } in
+                                                         letrec {
+                                                           showl :: [Project.ProjectName]
+                                                                    -> GHC.Base.String
+                                                             {- Arity: 1, Strictness: <S,1*U> -}
+                                                           = \ (ds2 :: [Project.ProjectName]) ->
+                                                             case ds2 of wild1 {
+                                                               [] -> lvl27
+                                                               : y ys
+                                                               -> GHC.Types.:
+                                                                    @ GHC.Types.Char
+                                                                    GHC.Show.shows5
+                                                                    (GHC.Base.++
+                                                                       @ GHC.Types.Char
+                                                                       Project.$fShowAllProjects3
+                                                                       (case Data.Text.Show.$w$cshowsPrec
+                                                                               y `cast`
+                                                                               (Project.N:ProjectName[0])
+                                                                               (showl
+                                                                                  ys) of ww3 { (#,#) ww4 ww5 ->
+                                                                        GHC.Types.:
+                                                                          @ GHC.Types.Char
+                                                                          ww4
+                                                                          ww5 })) }
+                                                         } in
+                                                         showl xs) of ww3 { (#,#) ww4 ww5 ->
+                                                 GHC.Types.:
+                                                   @ GHC.Types.Char
+                                                   ww4
+                                                   ww5 })) }))) of ww3 { (#,#) ww4 ww5 ->
+                        GHC.Types.: @ GHC.Types.Char ww4 ww5 })
+                 } in
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 11#) of wild {
+                   GHC.Types.False
+                   -> GHC.Base.++ @ GHC.Types.Char Project.$fShowUser2 (g w)
+                   GHC.Types.True
+                   -> GHC.Types.:
+                        @ GHC.Types.Char
+                        GHC.Show.shows7
+                        (GHC.Base.++
+                           @ GHC.Types.Char
+                           Project.$fShowUser2
+                           (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 w))) }) -}
+5112a5d43849857c03604773be3e85a2
+  newtype AllProjects = AllProjects [Project.ProjectName]
+c7f6766f61d0b63c7ab6927b16e914f3
+  data Project
+    = Project {projectName :: Project.ProjectName,
+               calculations :: [Calculation.CalculationName],
+               views :: [View.ViewName],
+               sources :: [Project.Source]}
+dc3277e72c5d1fd0c29f02dc48899838
+  newtype ProjectName = ProjectName Data.Text.Internal.Text
+c41016d233cbedf3a4568ce830d45f45
+  data Source
+    = Source {sourceType :: Project.SourceType,
+              sourceOfMaps :: [XMapTypes.XMapName]}
+28d148184fb0f06dc30c86418e1b0d4f
+  data SourceType
+    = FileSource
+    | OdbcSource {connectionString :: Data.Text.Internal.Text,
+                  sqlQuery :: Data.Text.Internal.Text}
+    | HttpSource {url :: Data.Text.Internal.Text}
+72afc65efc42b8e8a12e5e1696ba9e3b
+  data User
+    = User {userId :: Data.Text.Internal.Text,
+            accessToProjects :: [Project.ProjectName]}
+42c1f3a8a8214a7829333fae587c28a5
+  accessToProjects :: Project.User -> [Project.ProjectName]
+  RecSel Left Project.User
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LS),1*U(A,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.User) ->
+                 case ds of wild { Project.User ds1 ds2 -> ds2 }) -}
+947a3359d7ec290cee67001543df1f1d
+  calculations :: Project.Project -> [Calculation.CalculationName]
+  RecSel Left Project.Project
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LSLL),1*U(A,1*U,A,A)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Project) ->
+                 case ds of wild { Project.Project ds1 ds2 ds3 ds4 -> ds2 }) -}
+e40e8f3d42c8cbb46a7fc2e7866b4daf
+  connectionString :: Project.SourceType -> Data.Text.Internal.Text
+  RecSel Left Project.SourceType
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.SourceType) ->
+                 case ds of wild {
+                   DEFAULT -> Project.connectionString1
+                   Project.OdbcSource ds1 ds2 -> ds1 }) -}
+04a963f05ffb7f7c7984968bd2b23b22
+  connectionString1 :: Data.Text.Internal.Text
+  {- Strictness: x -}
+cb7533641bc632f228a4a92ccb44abc9
+  projectName :: Project.Project -> Project.ProjectName
+  RecSel Left Project.Project
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(SLLL),1*U(1*U(U,U,U),A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Project) ->
+                 case ds of wild { Project.Project ds1 ds2 ds3 ds4 -> ds1 }) -}
+b117b52c0a3033f4e54e011d62f34511
+  sourceOfMaps :: Project.Source -> [XMapTypes.XMapName]
+  RecSel Left Project.Source
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LS),1*U(A,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Source) ->
+                 case ds of wild { Project.Source ds1 ds2 -> ds2 }) -}
+ebf4a57d65de6a6ac97bf31643e10d62
+  sourceType :: Project.Source -> Project.SourceType
+  RecSel Left Project.Source
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(SL),1*U(1*U,A)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Source) ->
+                 case ds of wild { Project.Source ds1 ds2 -> ds1 }) -}
+c571d266f08a7212dea141c7ba655b5a
+  sources :: Project.Project -> [Project.Source]
+  RecSel Left Project.Project
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LLLS),1*U(A,A,A,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Project) ->
+                 case ds of wild { Project.Project ds1 ds2 ds3 ds4 -> ds4 }) -}
+4a8bd053ebed6121974e06a356d22382
+  sqlQuery :: Project.SourceType -> Data.Text.Internal.Text
+  RecSel Left Project.SourceType
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.SourceType) ->
+                 case ds of wild {
+                   DEFAULT -> Project.sqlQuery1
+                   Project.OdbcSource ds1 ds2 -> ds2 }) -}
+8655420419124eef04f4f8c86fde7043
+  sqlQuery1 :: Data.Text.Internal.Text
+  {- Strictness: x -}
+c42bfc18bbb1f42ba22d367df74c3482
+  url :: Project.SourceType -> Data.Text.Internal.Text
+  RecSel Left Project.SourceType
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.SourceType) ->
+                 case ds of wild {
+                   DEFAULT -> Project.url1 Project.HttpSource ds1 -> ds1 }) -}
+fac8f2e16eb84e55f056ec9739746a45
+  url1 :: Data.Text.Internal.Text
+  {- Strictness: x -}
+79117b49c7401bb10f9a822f3ad09f25
+  userId :: Project.User -> Data.Text.Internal.Text
+  RecSel Left Project.User
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(SL),1*U(1*U(U,U,U),A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.User) ->
+                 case ds of wild { Project.User ds1 ds2 -> ds1 }) -}
+feffc535db2a1ff9a1a46a2d4b6a5274
+  views :: Project.Project -> [View.ViewName]
+  RecSel Left Project.Project
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LLSL),1*U(A,A,1*U,A)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Project.Project) ->
+                 case ds of wild { Project.Project ds1 ds2 ds3 ds4 -> ds3 }) -}
+instance [safe] GHC.Classes.Eq [Project.AllProjects]
+  = Project.$fEqAllProjects
+instance [safe] GHC.Classes.Eq [Project.Project]
+  = Project.$fEqProject
+instance [safe] GHC.Classes.Eq [Project.ProjectName]
+  = Project.$fEqProjectName
+instance [safe] GHC.Classes.Eq [Project.Source]
+  = Project.$fEqSource
+instance [safe] GHC.Classes.Eq [Project.SourceType]
+  = Project.$fEqSourceType
+instance [safe] GHC.Classes.Eq [Project.User] = Project.$fEqUser
+instance [safe] GHC.Classes.Ord [Project.ProjectName]
+  = Project.$fOrdProjectName
+instance [safe] GHC.Show.Show [Project.AllProjects]
+  = Project.$fShowAllProjects
+instance [safe] GHC.Show.Show [Project.Project]
+  = Project.$fShowProject
+instance [safe] GHC.Show.Show [Project.ProjectName]
+  = Project.$fShowProjectName
+instance [safe] GHC.Show.Show [Project.Source]
+  = Project.$fShowSource
+instance [safe] GHC.Show.Show [Project.SourceType]
+  = Project.$fShowSourceType
+instance [safe] GHC.Show.Show [Project.User] = Project.$fShowUser
+"SPEC/Project $fEq[]_$c/= @ ProjectName" [ALWAYS] forall ($dEq :: GHC.Classes.Eq
+                                                                    Project.ProjectName)
+  GHC.Classes.$fEq[]_$c/= @ Project.ProjectName $dEq
+  = Project.$fEqAllProjects_$s$fEq[]_$c/=
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

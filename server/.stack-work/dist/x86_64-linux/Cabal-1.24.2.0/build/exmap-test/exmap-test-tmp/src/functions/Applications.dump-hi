@@ -1,0 +1,107 @@
+
+==================== FINAL INTERFACE ====================
+2017-10-31 21:26:50.284733867 UTC
+
+interface main@main:Applications 8002
+  interface hash: 9ab20cb6caa68c6552074e5594085dc2
+  ABI hash: 3d3f451dae3e1f48aff38fd638aa473d
+  export-list hash: fa080d0cbd35b542fbba1bdbc55030ec
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 41cb72183c02d3fc92944c2d624cbf35
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Applications.applicationRepository
+  ApplicationTypes.ApplicationName{ApplicationTypes.Negate}
+  Applications.ApplicationFun
+module dependencies: ApplicationTypes Errors XFunction XMapTypes
+                     XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Num 00bfaa7b2f9d6084913c0697a8a49ec8
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
+  exports: c8a509b10500b8e668c0d339e53814fa
+  ApplicationName 7d51253c4c8955e3629ff4b12eb2b14e
+  Negate d603bbcf06356a8b8861fc3d38c6370d
+import  -/  XFunction daf3a8fe929e99b13bb1482148441fb5
+  exports: e4744bd862d5d39381a3b81764a14b8c
+  apply 58a513078dc2739281ad3b3dda6c5ac4
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMap c2ed918b428722f1755c470b6338cf45
+  XMapErr b49ed57204d25dc35d651e4ad165d1a3
+6c46323666f9eef8f551452e246a7b94
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Applications.$trModule2
+                   Applications.$trModule1) -}
+e61355f4d8fb514e23f9a3383d21ace2
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Applications"#) -}
+88cf263bc1aaf872de3189fd51191489
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+95e050ad0d56025c9927bce0a984118c
+  type ApplicationFun = XMapTypes.XMap -> XMapTypes.XMapErr
+a6774b9a28b10b895f67d61dc42b3b12
+  applicationRepository ::
+    ApplicationTypes.ApplicationName -> Applications.ApplicationFun
+  {- Arity: 2, Strictness: <S,1*H><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: ApplicationTypes.ApplicationName)
+                   (eta :: XMapTypes.XMap) ->
+                 case ds of wild { ApplicationTypes.Negate ->
+                 case eta of wild1 {
+                   DEFAULT
+                   -> Data.Either.Left
+                        @ Errors.Error
+                        @ XMapTypes.XMap
+                        XValues.$fXValueDouble2 `cast` (Sym (Errors.N:Error[0]))
+                   XMapTypes.XMapDouble m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ XMapTypes.XMap
+                        (XMapTypes.XMapDouble
+                           (Data.Map.Strict.map
+                              @ GHC.Types.Double
+                              @ GHC.Types.Double
+                              @ XMapTypes.XMapKey
+                              GHC.Float.negateDouble
+                              m)) } }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

@@ -1,0 +1,273 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-30 00:42:02.634797846 UTC
+
+interface main@main:StoreMessages 8002
+  interface hash: 28dc70d9c052b28af92eebd4c6cf00b3
+  ABI hash: 604a62eda95aa09d4755ba38bd251a8e
+  export-list hash: c031e914ea8fc941321bb1e578fc587f
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 9581e73690371ffaaf5c309a49faabb5
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  StoreMessages.StoreChan
+  StoreMessages.StoreMessage{StoreMessages.StMStop StoreMessages.StMStoreAllProjects StoreMessages.StMStoreCalculation StoreMessages.StMStoreExistingProject StoreMessages.StMStoreMap StoreMessages.StMStoreNewProject StoreMessages.StMStoreView}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson ProjectMessages SystemMessages
+                     TextEnums View WebClients WebMessages WebMessagesJson XFunction
+                     XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation d417b5b8b099f384a090c1e4806d4f1d
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  AllProjects 5112a5d43849857c03604773be3e85a2
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
+  exports: 7b16c99942b55c7a72be31fd4804ba3f
+  ProjectChan 091f44512dd4db2ee61640a0a30b9371
+import  -/  SystemMessages 79d62c960f37bee63ab3490932f6d9bb
+  exports: 40bfc0a8cd3b65b3f3992016996f2ea2
+  SystemChan 071ec073d696ba528a27629f4c54c968
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
+  exports: 9e20b0962809e2ead168d9d96578b360
+  WAClient b08796f2cd72dc596a7814e2532ade2f
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+556e5d43a24c3eeffe1b5b18a3e04f16
+  $tc'StMStop :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12795698299392732332##
+                   14759353930572380664##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStop1) -}
+09926082a2f900a45fbf7e245cc3e410
+  $tc'StMStop1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStop"#) -}
+a8390aa7fda97a55fda41f9fe7607e82
+  $tc'StMStoreAllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   3912256168778286413##
+                   16395320813184600804##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreAllProjects1) -}
+766b3aa3ea22eb68fdbfa322d5d4bc94
+  $tc'StMStoreAllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreAllProjects"#) -}
+3d3ce03edd0fbb55d4df8a56e71aa976
+  $tc'StMStoreCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   18066530547179516812##
+                   18405046394425135017##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreCalculation1) -}
+ef432db466326e7ed261a57c7b92ea34
+  $tc'StMStoreCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreCalculation"#) -}
+75c3a34f1a01e67dd1535c570c3f63e1
+  $tc'StMStoreExistingProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5343876229328029230##
+                   9251556754740649017##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreExistingProject1) -}
+f71498f2f36467d3bccdb6ec908f8417
+  $tc'StMStoreExistingProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreExistingProject"#) -}
+394896924288cbff9ce9dd53df3bea2c
+  $tc'StMStoreMap :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13689954061898794700##
+                   17947038127766238888##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreMap1) -}
+61a73a7f7af5edb38a612e7078eec522
+  $tc'StMStoreMap1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreMap"#) -}
+ca7027364e697aa16e0cb9bfc3b39af2
+  $tc'StMStoreNewProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   15101098833026024864##
+                   9581579527478167997##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreNewProject1) -}
+7b57a8928180636c46a98240e78ed21e
+  $tc'StMStoreNewProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreNewProject"#) -}
+ded828f976d29210d34c6c621aa2103a
+  $tc'StMStoreView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12291786022097070782##
+                   12253792557628443271##
+                   StoreMessages.$trModule
+                   StoreMessages.$tc'StMStoreView1) -}
+f9204dc09b0a2e14d3dcc142beed9c14
+  $tc'StMStoreView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'StMStoreView"#) -}
+72875934d457679cc50e07bbc6ab1920
+  $tcStoreMessage :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16653136594646578954##
+                   15044068512269533255##
+                   StoreMessages.$trModule
+                   StoreMessages.$tcStoreMessage1) -}
+7624c0c01758d58a92c5ed7c8a29d96c
+  $tcStoreMessage1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "StoreMessage"#) -}
+ed92cfa248507971c7ce9666d4917311
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   StoreMessages.$trModule2
+                   StoreMessages.$trModule1) -}
+6b9622c23a39903b951bbf05d13a1669
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "StoreMessages"#) -}
+a7c04e723948d732c34e43601a890247
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+0d93dc7c316e89c9d449610e6f2caa49
+  type StoreChan =
+    Control.Concurrent.STM.TChan.TChan StoreMessages.StoreMessage
+ec1c0dde169d69158abc2f68cdb616ca
+  data StoreMessage
+    = StMStoreNewProject SystemMessages.SystemChan
+                         WebClients.WAClient
+                         Project.Project
+    | StMStoreExistingProject ProjectMessages.ProjectChan
+                              WebClients.WAClient
+                              Project.Project
+    | StMStoreAllProjects SystemMessages.SystemChan
+                          WebClients.WAClient
+                          Project.AllProjects
+    | StMStoreMap ProjectMessages.ProjectChan
+                  WebClients.WAClient
+                  Project.ProjectName
+                  XMapTypes.XNamedMap
+    | StMStoreCalculation ProjectMessages.ProjectChan
+                          WebClients.WAClient
+                          Project.ProjectName
+                          Calculation.Calculation
+    | StMStoreView ProjectMessages.ProjectChan
+                   WebClients.WAClient
+                   Project.ProjectName
+                   View.View
+    | StMStop
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

@@ -1,0 +1,1229 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-29 18:59:03.041503359 UTC
+
+interface main@main:FormulaParserTest 8002
+  interface hash: 07876dd0c59b6b5f8eacae2b6f1f7892
+  ABI hash: c48c3c5a5f1399615a79e03f7a632ba6
+  export-list hash: 4f2325216e63250569e48dbba0467811
+  orphan hash: aa4ce5a110db976339f563f886bb4f21
+  flag hash: ee4558acd677465c1c014ca7e821f077
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FormulaParserTest.parseFormula_complex_operation
+  FormulaParserTest.parseFormula_formulaApplication_application
+  FormulaParserTest.parseFormula_formulaOperation_operation
+  FormulaParserTest.parseFormula_formulaWithMap_map
+  FormulaParserTest.parseFormula_formulaWithSpaces_map
+  FormulaParserTest.parseFormula_formulaWrongApplicationName_error
+module dependencies: ApplicationTypes Applications Calculation
+                     Errors Formula FormulaParser OperationTypes Operations TestTypes
+                     TextEnums XFunction XMapTypes XValues
+package dependencies: HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI
+                      ansi-terminal-0.6.3.1@ansi-terminal-0.6.3.1-3RTqikoQf47ajVD9m8zgB
+                      ansi-wl-pprint-0.6.7.3@ansi-wl-pprint-0.6.7.3-A79v826bgPr574HtaZPPqC
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0 binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      call-stack-0.1.0@call-stack-0.1.0-FYVrCPXGP9EGAuTW32963O
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      hostname-1.0@hostname-1.0-LHxcvBDHWay1RGMj1Uzenf
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa
+                      regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO
+                      test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1 transformers-0.5.2.0@transformers-0.5.2.0
+                      xml-1.3.14@xml-1.3.14-AKug8Ud7K0VEhc87tBwsGy
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         regex-base-0.93.2@regex-base-0.93.2-AYjYAsBidAc8f5XNm9b2Aa:Text.Regex.Base.Context
+         regex-posix-0.95.2@regex-posix-0.95.2-KQJt29lnRa45d6bFn9XkFO:Text.Regex.Posix.String
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit 430ab81af3668b12bae4950025858f90
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Base 123233f642490df0be04d505715ba97a
+import  -/  HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI:Test.HUnit.Lang d3eccb655844bdbe01d10519d0981a09
+import  -/  base-4.9.1.0:Control.Monad a6784c5dab0d75c63dabec5a37843f98
+import  -/  base-4.9.1.0:Data.Either 20b09ef8d0a5b74fdec011c40c1587f5
+import  -/  base-4.9.1.0:Data.Monoid 51cc9cd8c130d49ba96b7c2c2406022b
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
+  Negate d603bbcf06356a8b8861fc3d38c6370d
+import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
+  exports: fa080d0cbd35b542fbba1bdbc55030ec
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  CalculationFormulaText 190506ef3f5899e15e830e35f1934183
+import  -/  Formula 09444ea12c0441bd37404b175a926171
+  exports: d6ceee93beb5ac820afa97f35b5fa611
+  XFApplication eb8c3b77bcb22eb578439fc9251971f9
+  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
+  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
+import  -/  FormulaParser b03d0271c6a28942ff4e806d02eb31bb
+  exports: 7b913b3a450dd5a92a0c06728e74471f
+  parseFormula 25c9b1841afce8db855f2d5dbc16bf33
+import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
+  Subtract 6903c995800fbe4485eda7a754f5c732
+import  -/  Operations 4f7f659bc11083106f43505cdb8994c7
+  exports: 494f1bcd2b9c618b52ead64473dd4e04
+import  -/  TestTypes e1faf5df45b087c8121b96368eb41d27
+  exports: 92fe1f9c8cb1615074e99dc4e14a7099
+  mapName d0f61e53a569858e1479cb4117ca27d7
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+import  -/  test-framework-0.8.1.1@test-framework-0.8.1.1-1JQwx9Rka8yIUcWorlBhvO:Test.Framework 236a0b8659fd71c2e4454100bfd40f0d
+import  -/  test-framework-hunit-0.3.0.2@test-framework-hunit-0.3.0.2-7RN3hdMcIVFLeM5SfEwOdi:Test.Framework.Providers.HUnit a4df6047e42f92eec3aa8a7dd2fab93b
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+40265cd0d57f66566cf7f4ca0a6441aa
+  $s$fEqEither ::
+    GHC.Classes.Eq
+      (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+                  (Data.Either.$fEqEither_$c==
+                     @ [GHC.Types.Char]
+                     @ Formula.XFormula
+                     Formula.$fEqXFormula
+                     GHC.Classes.$fEq[]_$s$fEq[]1)
+                  (Data.Either.$fEqEither_$c/=
+                     @ [GHC.Types.Char]
+                     @ Formula.XFormula
+                     Formula.$fEqXFormula
+                     GHC.Classes.$fEq[]_$s$fEq[]1) -}
+9f64fa6c2f69e23bc2393684d10ce8d6
+  $s$fShowEither ::
+    GHC.Show.Show
+      (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+                  (Data.Either.$fShowEither_$cshowsPrec
+                     @ [GHC.Types.Char]
+                     @ Formula.XFormula
+                     Formula.$fShowXFormula
+                     GHC.Show.$fShow[]_$s$fShow[]1)
+                  (Data.Either.$fShowEither_$cshow
+                     @ [GHC.Types.Char]
+                     @ Formula.XFormula
+                     Formula.$fShowXFormula
+                     GHC.Show.$fShow[]_$s$fShow[]1)
+                  FormulaParserTest.$s$fShowEither_$s$fShowEither_$cshowList -}
+1ac00593a4973e1b4caeb0ba141df9df
+  $s$fShowEither_$s$fShowEither_$cshowList ::
+    [Data.Either.Either [GHC.Types.Char] Formula.XFormula]
+    -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: [Data.Either.Either [GHC.Types.Char] Formula.XFormula])
+                   (eta1 :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+                   (Data.Either.$fShowEither_$cshowsPrec
+                      @ [GHC.Types.Char]
+                      @ Formula.XFormula
+                      Formula.$fShowXFormula
+                      GHC.Show.$fShow[]_$s$fShow[]1
+                      Data.Either.$fShowEither1)
+                   eta
+                   eta1) -}
+db8cbbed9137fca49c9e51b487ed1505
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   FormulaParserTest.$trModule2
+                   FormulaParserTest.$trModule1) -}
+18b9b0147de334c8dfd130fedf59253d
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "FormulaParserTest"#) -}
+fbb49c1b506ed7a850fff56c30b1c35e
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+6c6f26606a941f858f0f6a01fffd7a1a
+  $wouter ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+1bfe7202bf6c7a47a70f639a0069d311
+  $wouter1 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+27e559db2d245d61ea751b61cbdd3c6b
+  $wouter10 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+4ca3e2db456ed926e01d1d2573a1a7fd
+  $wouter11 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+2181c989ec25b2726a17a0414c461691
+  $wouter2 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+835a464e0e21a7399304b2539f3c804e
+  $wouter3 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+70bcc087d6c44ac612e5f545cb64605a
+  $wouter4 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+04ac35b0582e8e35f9790ed0ca76889f
+  $wouter5 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+c0ee04b1a67e35ecb3e9113b0686397c
+  $wouter6 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+70640472925b98970ab8f90539a8f81a
+  $wouter7 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+eb1176b41ee954377b5ea4b356897b25
+  $wouter8 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+253d84773c97a0fdc07cbd464ef012f5
+  $wouter9 ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+6a6f92c3e1aa37189fba61cda8c1b749
+  parseFormula_complex_operation :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_complex_operation1) -}
+44c03403374c8ce93322af79e69121de
+  parseFormula_complex_operation1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_complex_operation21
+                   FormulaParserTest.parseFormula_complex_operation20
+                   FormulaParserTest.parseFormula_complex_operation3
+                   FormulaParserTest.parseFormula_complex_operation2) -}
+8e4f510a457671104d69270cdbadd7dc
+  parseFormula_complex_operation10 :: Formula.XFormula
+  {- Unfolding: (Formula.XFApplication
+                   ApplicationTypes.Negate
+                   FormulaParserTest.parseFormula_complex_operation11) -}
+bd8acf9881bf2a6d8dc86f50dc71554a
+  parseFormula_complex_operation11 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_complex_operation12
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+b3c14b7cfb3733e92b7e82ba1bda2160
+  parseFormula_complex_operation12 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_complex_operation17
+                   FormulaParserTest.parseFormula_complex_operation13) -}
+391c980c797108843a774125ccd4e402
+  parseFormula_complex_operation13 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_complex_operation14
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+a907337372d198a549aaa7cfac0f7d9c
+  parseFormula_complex_operation14 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_complex_operation15 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+9aafd4911ffd11f636906c7990e68d4e
+  parseFormula_complex_operation15 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter1
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation16
+                   0#
+                   ipv }) -}
+04d7eca8aa3dad21fa66c4f400f5933f
+  parseFormula_complex_operation16 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "map"#) -}
+9820ab3918d7e3ba4d245da1b35686a0
+  parseFormula_complex_operation17 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_complex_operation18 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+888d0cb1a1488fe53799db76c1c318c6
+  parseFormula_complex_operation18 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter2
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation19
+                   0#
+                   ipv }) -}
+90d98ad96f72cf7bd50e13da59dfdb75
+  parseFormula_complex_operation19 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "one"#) -}
+c1c958882526d547838edb2b8f9825ff
+  parseFormula_complex_operation2 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "subtract (negate one/map) two"# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+8322c7d05a74310f6bb8b4b73d4694ec
+  parseFormula_complex_operation20 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "parse operation"#) -}
+52799311d868855ff6d347a690b08e0b
+  parseFormula_complex_operation21 ::
+    GHC.Base.String
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either GHC.Base.String Formula.XFormula)
+                   FormulaParserTest.parseFormula_complex_operation22
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+9d89d591f66fbf59539501f8293e40b2
+  parseFormula_complex_operation22 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_complex_operation23
+                   GHC.Stack.Types.EmptyCallStack) -}
+7b88f6c395ed3ff0a2d319723580b89f
+  parseFormula_complex_operation23 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_complex_operation26
+                   FormulaParserTest.parseFormula_complex_operation25
+                   FormulaParserTest.parseFormula_complex_operation26
+                   FormulaParserTest.parseFormula_complex_operation24) -}
+6fc8165fd0c0ceb8824ef2cc83b0d28c
+  parseFormula_complex_operation24 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 92#) -}
+7ec109ff46bf5b1deea390e277426955
+  parseFormula_complex_operation25 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 44#) -}
+0fbb724f50a2c95fc0edad814c03fa20
+  parseFormula_complex_operation26 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 37#) -}
+83d246088e0b3d01df4f18e6d2812e3f
+  parseFormula_complex_operation27 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "test/parse/FormulaParserTest.hs"#) -}
+ac77bb4f74205a3fbd20256a02a57f61
+  parseFormula_complex_operation28 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "FormulaParserTest"#) -}
+46ffdbd02640f3bfca7443004f0acd58
+  parseFormula_complex_operation29 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "main"#) -}
+24ffa3da93bdb27f9815f51bcfb06a3e
+  parseFormula_complex_operation3 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (Data.Either.Right
+                   @ GHC.Base.String
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_complex_operation4) -}
+0225bd71323a0b19f2bec6badcbabae9
+  parseFormula_complex_operation30 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "assertEqual"#) -}
+0d01e2777a98a423bd4d68d482de2c5a
+  parseFormula_complex_operation4 :: Formula.XFormula
+  {- Unfolding: (Formula.XFOperation
+                   OperationTypes.Subtract
+                   FormulaParserTest.parseFormula_complex_operation10
+                   FormulaParserTest.parseFormula_complex_operation5) -}
+68bc696c0985d1896a82ad08a141f03a
+  parseFormula_complex_operation5 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_complex_operation6
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+f3645874fe289d920be155f553077b6b
+  parseFormula_complex_operation6 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_complex_operation7
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+76f69c693b8bc715d7a6e569945f6805
+  parseFormula_complex_operation7 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_complex_operation8 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+0c04254e70dc8cd55cd17bbc2714efc5
+  parseFormula_complex_operation8 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation9
+                   0#
+                   ipv }) -}
+99e904c50714953087109a83152a62bf
+  parseFormula_complex_operation9 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "two"#) -}
+865796fcadab8033dae137aaac569b80
+  parseFormula_formulaApplication_application :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_formulaApplication_application1) -}
+057e0d405513a9b110e116020470006a
+  parseFormula_formulaApplication_application1 ::
+    Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_formulaApplication_application13
+                   FormulaParserTest.parseFormula_formulaApplication_application12
+                   FormulaParserTest.parseFormula_formulaApplication_application3
+                   FormulaParserTest.parseFormula_formulaApplication_application2) -}
+4521a23b6455c81537a94460c3b92a28
+  parseFormula_formulaApplication_application10 ::
+    Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaApplication_application11 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+3f423bb8e225300d95fa86b631eaf2e1
+  parseFormula_formulaApplication_application11 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter4
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation19
+                   0#
+                   ipv }) -}
+caed1e302db49b39a9cecf138bc02a89
+  parseFormula_formulaApplication_application12 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "parse application"#) -}
+8aa288a6bf379c62bec66f36c35653e3
+  parseFormula_formulaApplication_application13 ::
+    GHC.Base.String
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either GHC.Base.String Formula.XFormula)
+                   FormulaParserTest.parseFormula_formulaApplication_application14
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+938ca97f584972ae9e2d162fa832ab57
+  parseFormula_formulaApplication_application14 ::
+    GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_formulaApplication_application15
+                   GHC.Stack.Types.EmptyCallStack) -}
+44692433dab17b6d9c595bb147476328
+  parseFormula_formulaApplication_application15 ::
+    GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_formulaApplication_application18
+                   FormulaParserTest.parseFormula_formulaApplication_application17
+                   FormulaParserTest.parseFormula_formulaApplication_application18
+                   FormulaParserTest.parseFormula_formulaApplication_application16) -}
+36fdbbf2bff9e73136090548e371eaef
+  parseFormula_formulaApplication_application16 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 107#) -}
+761ff86d41c934a26c03f622038df60c
+  parseFormula_formulaApplication_application17 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 57#) -}
+d505abbffbf6592f37fee3da0735602e
+  parseFormula_formulaApplication_application18 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 26#) -}
+573b27ccf74adc7ac30e7d848c56d4c4
+  parseFormula_formulaApplication_application2 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "negate one/map"# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+6114392d8f2a8fb50aac96f868f49658
+  parseFormula_formulaApplication_application3 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (Data.Either.Right
+                   @ GHC.Base.String
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_formulaApplication_application4) -}
+8629ef3ade43b2d3dd8fcf75a0556928
+  parseFormula_formulaApplication_application4 :: Formula.XFormula
+  {- Unfolding: (Formula.XFApplication
+                   ApplicationTypes.Negate
+                   FormulaParserTest.parseFormula_formulaApplication_application5) -}
+78dceb589a932474bde2bcbc00ab7e51
+  parseFormula_formulaApplication_application5 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_formulaApplication_application6
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+a64225c880e5dc0f122c2f88cb876621
+  parseFormula_formulaApplication_application6 ::
+    [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaApplication_application10
+                   FormulaParserTest.parseFormula_formulaApplication_application7) -}
+c663dfee12c305eafd5ec8008ba79d6b
+  parseFormula_formulaApplication_application7 ::
+    [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaApplication_application8
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+e1ac1ac831561fa74b097f91a19bc6df
+  parseFormula_formulaApplication_application8 ::
+    Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaApplication_application9 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+74233e16dfc66a3526afb7105b79387e
+  parseFormula_formulaApplication_application9 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter3
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation16
+                   0#
+                   ipv }) -}
+e4565991cc32de8007c92de270522276
+  parseFormula_formulaOperation_operation :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_formulaOperation_operation1) -}
+16b2325cbd8380054373279b0e596fd4
+  parseFormula_formulaOperation_operation1 ::
+    Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_formulaOperation_operation16
+                   FormulaParserTest.parseFormula_complex_operation20
+                   FormulaParserTest.parseFormula_formulaOperation_operation3
+                   FormulaParserTest.parseFormula_formulaOperation_operation2) -}
+98af54065bbf51470b7d1170562f10e7
+  parseFormula_formulaOperation_operation10 ::
+    [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaOperation_operation14
+                   FormulaParserTest.parseFormula_formulaOperation_operation11) -}
+7020d1d49cdfdd82aeeee647e3daf956
+  parseFormula_formulaOperation_operation11 ::
+    [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaOperation_operation12
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+1155edfd6348c30d40465e14aba027b6
+  parseFormula_formulaOperation_operation12 ::
+    Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaOperation_operation13 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+2f8625d42f767b5b56bb23f1ebf7ace6
+  parseFormula_formulaOperation_operation13 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter6
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation16
+                   0#
+                   ipv }) -}
+a7ca23352242232661a882ab6c006ff2
+  parseFormula_formulaOperation_operation14 ::
+    Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaOperation_operation15 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+066ec247ab00f20b74df95f6eb406500
+  parseFormula_formulaOperation_operation15 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter7
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation19
+                   0#
+                   ipv }) -}
+a1b6c9e8bff2430ace7acbb0b2e22e5e
+  parseFormula_formulaOperation_operation16 ::
+    GHC.Base.String
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either GHC.Base.String Formula.XFormula)
+                   FormulaParserTest.parseFormula_formulaOperation_operation17
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+4713dcd1227c515cf0a3580b3989c711
+  parseFormula_formulaOperation_operation17 ::
+    GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_formulaOperation_operation18
+                   GHC.Stack.Types.EmptyCallStack) -}
+8ac148d9db97400697304a804ef04145
+  parseFormula_formulaOperation_operation18 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_formulaOperation_operation21
+                   FormulaParserTest.parseFormula_formulaOperation_operation20
+                   FormulaParserTest.parseFormula_formulaOperation_operation21
+                   FormulaParserTest.parseFormula_formulaOperation_operation19) -}
+5a085a972e61aed3aa871df11b30b2c9
+  parseFormula_formulaOperation_operation19 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 101#) -}
+9bbeeece76d0ff146a7f6d4e28a0fb5f
+  parseFormula_formulaOperation_operation2 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "subtract one/map two"# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+918a0303accacd44ee2d40b0d7c0870c
+  parseFormula_formulaOperation_operation20 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 53#) -}
+d5c98ce1b36f3596c0ec5555aeb8cf7d
+  parseFormula_formulaOperation_operation21 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 33#) -}
+d899d0b0ebeecf6945533541cae6c95d
+  parseFormula_formulaOperation_operation3 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (Data.Either.Right
+                   @ GHC.Base.String
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_formulaOperation_operation4) -}
+50955ebefca9eebaa649d8c02a904e20
+  parseFormula_formulaOperation_operation4 :: Formula.XFormula
+  {- Unfolding: (Formula.XFOperation
+                   OperationTypes.Subtract
+                   FormulaParserTest.parseFormula_formulaOperation_operation9
+                   FormulaParserTest.parseFormula_formulaOperation_operation5) -}
+8406a8b9208d0ad1ebd2ce07b4c89e78
+  parseFormula_formulaOperation_operation5 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_formulaOperation_operation6
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+c3bd551812c71f41434e749e4c239b7f
+  parseFormula_formulaOperation_operation6 ::
+    [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaOperation_operation7
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+ef5056ef20399f8727ff8535acaed747
+  parseFormula_formulaOperation_operation7 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaOperation_operation8 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+ab9a023506d79bee8c625ec756762349
+  parseFormula_formulaOperation_operation8 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter5
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation9
+                   0#
+                   ipv }) -}
+5efa26fa144ee44a6fb32bbc9507d470
+  parseFormula_formulaOperation_operation9 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_formulaOperation_operation10
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+979671a9c9774a18b59727d28884794c
+  parseFormula_formulaWithMap_map :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_formulaWithMap_map1) -}
+2a09eead6ebe02b53acd0d895d232cbe
+  parseFormula_formulaWithMap_map1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_formulaWithMap_map12
+                   FormulaParserTest.parseFormula_formulaWithMap_map11
+                   FormulaParserTest.parseFormula_formulaWithMap_map3
+                   FormulaParserTest.parseFormula_formulaWithMap_map2) -}
+9cf88e83a4b67191bd800038fbef5550
+  parseFormula_formulaWithMap_map10 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter9
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation19
+                   0#
+                   ipv }) -}
+f3890efa7ef6ac0ca9d25db6981dac84
+  parseFormula_formulaWithMap_map11 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "parse formula with map"#) -}
+420a43bd6cda39d1b8482bf7458becd8
+  parseFormula_formulaWithMap_map12 ::
+    GHC.Base.String
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either GHC.Base.String Formula.XFormula)
+                   FormulaParserTest.parseFormula_formulaWithMap_map13
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+16057f82dfb06c934db0cb6d3f15d173
+  parseFormula_formulaWithMap_map13 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_formulaWithMap_map14
+                   GHC.Stack.Types.EmptyCallStack) -}
+e479b4ced05b1e42905df2b35744c316
+  parseFormula_formulaWithMap_map14 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_formulaWithMap_map17
+                   FormulaParserTest.parseFormula_formulaWithMap_map16
+                   FormulaParserTest.parseFormula_formulaWithMap_map17
+                   FormulaParserTest.parseFormula_formulaWithMap_map15) -}
+926b1f5eff12f600a8c883e3865abdfe
+  parseFormula_formulaWithMap_map15 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 100#) -}
+2fe6b8ae9ec07f309cb7d0f21629dbbf
+  parseFormula_formulaWithMap_map16 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 45#) -}
+54ca4934ac6d5cbd6626028b51b2f841
+  parseFormula_formulaWithMap_map17 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 22#) -}
+1b9f5c904bdd6dac8a73cd21299f0031
+  parseFormula_formulaWithMap_map2 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "one/map"# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+b30e8337653cce0471366340835ad306
+  parseFormula_formulaWithMap_map3 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (Data.Either.Right
+                   @ GHC.Base.String
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_formulaWithMap_map4) -}
+22601a17d84c090c7cc27c2904803414
+  parseFormula_formulaWithMap_map4 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_formulaWithMap_map5
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+85ae8da683c095e043c0370b75ac97f1
+  parseFormula_formulaWithMap_map5 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaWithMap_map9
+                   FormulaParserTest.parseFormula_formulaWithMap_map6) -}
+345781ba52166c47cd218711a5cf4e79
+  parseFormula_formulaWithMap_map6 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaWithMap_map7
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+40e9bbdac8351ba184c7a93b629b8ea5
+  parseFormula_formulaWithMap_map7 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaWithMap_map8 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+afb2c7e0f9b876f6715efc0be831bca2
+  parseFormula_formulaWithMap_map8 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter8
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation16
+                   0#
+                   ipv }) -}
+cacf0ed640ce67595133bf05f049dad8
+  parseFormula_formulaWithMap_map9 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaWithMap_map10 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+a0cd5be9b1935d7a737c2b4e31d9df77
+  parseFormula_formulaWithSpaces_map :: Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map1) -}
+eba281a2e2a2f9e3e136e97c59edc0e0
+  parseFormula_formulaWithSpaces_map1 :: Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_formulaWithSpaces_map13
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map12
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map3
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map2) -}
+ad88baebc199c2c4fc61c512fa6b676f
+  parseFormula_formulaWithSpaces_map10 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaWithSpaces_map11 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+89ca1c7a4e368070bbfbbafa3730ab4a
+  parseFormula_formulaWithSpaces_map11 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter11
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation19
+                   0#
+                   ipv }) -}
+d483c402a74c75b7e7d6105fbf022e9a
+  parseFormula_formulaWithSpaces_map12 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "parse formula with spaces"#) -}
+33478df70021ed8814833b05f0746e39
+  parseFormula_formulaWithSpaces_map13 ::
+    GHC.Base.String
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Data.Either.Either GHC.Base.String Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either GHC.Base.String Formula.XFormula)
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map14
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+843e874a54b6b260c8150cf4fee88e11
+  parseFormula_formulaWithSpaces_map14 :: GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map15
+                   GHC.Stack.Types.EmptyCallStack) -}
+858464e4db491bd313d0e60eeb5e8cbb
+  parseFormula_formulaWithSpaces_map15 :: GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map18
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map17
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map18
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map16) -}
+e671d578e416f211ccd4ccdeb98f56b2
+  parseFormula_formulaWithSpaces_map16 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 106#) -}
+9f883558adf854827c21f68b63490b2d
+  parseFormula_formulaWithSpaces_map17 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 48#) -}
+b79f1db43d178aadebe03c6c14e37344
+  parseFormula_formulaWithSpaces_map18 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 41#) -}
+be0ee3f625bde99a852bba99afea80e9
+  parseFormula_formulaWithSpaces_map2 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "  negate  one/map  "# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+13b673db2c97b9f9145bf3fb06d11d3b
+  parseFormula_formulaWithSpaces_map3 ::
+    Data.Either.Either GHC.Base.String Formula.XFormula
+  {- Unfolding: (Data.Either.Right
+                   @ GHC.Base.String
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map4) -}
+170f618812af8acb5afc2290ab78413a
+  parseFormula_formulaWithSpaces_map4 :: Formula.XFormula
+  {- Unfolding: (Formula.XFApplication
+                   ApplicationTypes.Negate
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map5) -}
+48fcc64518766f45169c2be3b698ad97
+  parseFormula_formulaWithSpaces_map5 :: Formula.XFormula
+  {- Unfolding: (Formula.XFMap
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map6
+                     `cast`
+                   (Sym (XMapTypes.N:XMapName[0]))) -}
+29a31702da5b39e0cf5e519e72021b67
+  parseFormula_formulaWithSpaces_map6 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map10
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map7) -}
+a1b9a9d4a72495292a58e19d57113c6f
+  parseFormula_formulaWithSpaces_map7 :: [Data.Text.Internal.Text]
+  {- Unfolding: (GHC.Types.:
+                   @ Data.Text.Internal.Text
+                   FormulaParserTest.parseFormula_formulaWithSpaces_map8
+                   (GHC.Types.[] @ Data.Text.Internal.Text)) -}
+d4e8cea1aee22caf169706eef1a31eb2
+  parseFormula_formulaWithSpaces_map8 :: Data.Text.Internal.Text
+  {- Unfolding: (case GHC.Magic.runRW#
+                        @ 'GHC.Types.PtrRepLifted
+                        @ Data.Text.Internal.Text
+                        FormulaParserTest.parseFormula_formulaWithSpaces_map9 of ds1 { (#,#) ipv ipv1 ->
+                 ipv1 }) -}
+2653c89239de4032787ef1fa2253b814
+  parseFormula_formulaWithSpaces_map9 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 1,
+     Unfolding: (\ (s1 :: GHC.Prim.State#
+                            GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.newByteArray#
+                        @ GHC.Prim.RealWorld
+                        10#
+                        s1 of ds1 { (#,#) ipv ipv1 ->
+                 FormulaParserTest.$wouter10
+                   ipv1
+                   4#
+                   FormulaParserTest.parseFormula_complex_operation16
+                   0#
+                   ipv }) -}
+910686228081f4170a1ad3e87b13853a
+  parseFormula_formulaWrongApplicationName_error ::
+    Test.HUnit.Base.Test
+  {- Strictness: m1,
+     Unfolding: (Test.HUnit.Base.TestCase
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error1) -}
+83e38e203da3c12a2c2b8fe4caa6e86c
+  parseFormula_formulaWrongApplicationName_error1 ::
+    Test.HUnit.Lang.Assertion
+  {- Unfolding: (FormulaParserTest.parseFormula_formulaWrongApplicationName_error6
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error5
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error3
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error2) -}
+fe403d575333251cff774cb49f77602c
+  parseFormula_formulaWrongApplicationName_error10 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 60#) -}
+b431e5a2c473cf64e4b28ca5fb38f238
+  parseFormula_formulaWrongApplicationName_error11 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 30#) -}
+16afda14a6d5cf44a6845bf5a1fe0a92
+  parseFormula_formulaWrongApplicationName_error2 ::
+    Data.Either.Either [GHC.Types.Char] Formula.XFormula
+  {- Unfolding: (case Data.Text.Show.unpackCString#
+                        "nogate one/map"# of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                 FormulaParser.$wparseFormula ww1 ww2 ww3 }) -}
+e2fe3da1accf57f1f524fe487f785a55
+  parseFormula_formulaWrongApplicationName_error3 ::
+    Data.Either.Either [GHC.Types.Char] Formula.XFormula
+  {- Unfolding: (Data.Either.Left
+                   @ [GHC.Types.Char]
+                   @ Formula.XFormula
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error4) -}
+295c39a76089cb711442a6bf4466e4a3
+  parseFormula_formulaWrongApplicationName_error4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "endOfInput"#) -}
+3434bc508b595b3e8a29e7690ea93cf5
+  parseFormula_formulaWrongApplicationName_error5 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "parse application with wrong name"#) -}
+07fdc817ef02fabd58b289f5b9bbe8fb
+  parseFormula_formulaWrongApplicationName_error6 ::
+    GHC.Base.String
+    -> Data.Either.Either [GHC.Types.Char] Formula.XFormula
+    -> Data.Either.Either [GHC.Types.Char] Formula.XFormula
+    -> Test.HUnit.Lang.Assertion
+  {- Unfolding: (Test.HUnit.Lang.assertEqual
+                   @ (Data.Either.Either [GHC.Types.Char] Formula.XFormula)
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error7
+                     `cast`
+                   (Sym (GHC.Classes.N:IP[0]
+                             <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                   FormulaParserTest.$s$fEqEither
+                   FormulaParserTest.$s$fShowEither) -}
+39fae8d725cb3a3c0c7872938862935b
+  parseFormula_formulaWrongApplicationName_error7 ::
+    GHC.Stack.Types.CallStack
+  {- Unfolding: (GHC.Stack.Types.PushCallStack
+                   FormulaParserTest.parseFormula_complex_operation30
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error8
+                   GHC.Stack.Types.EmptyCallStack) -}
+c982e8cb889c0177d9df086fb5be3fc5
+  parseFormula_formulaWrongApplicationName_error8 ::
+    GHC.Stack.Types.SrcLoc
+  {- Unfolding: (GHC.Stack.Types.SrcLoc
+                   FormulaParserTest.parseFormula_complex_operation29
+                   FormulaParserTest.parseFormula_complex_operation28
+                   FormulaParserTest.parseFormula_complex_operation27
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error11
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error10
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error11
+                   FormulaParserTest.parseFormula_formulaWrongApplicationName_error9) -}
+d12dd1a7d3c5e16429b9f65a02d1232e
+  parseFormula_formulaWrongApplicationName_error9 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 134#) -}
+"SPEC/FormulaParserTest $fEqEither @ [Char] @ XFormula" [ALWAYS] forall ($dEq1 :: GHC.Classes.Eq
+                                                                                    [GHC.Types.Char])
+                                                                        ($dEq :: GHC.Classes.Eq
+                                                                                   Formula.XFormula)
+  Data.Either.$fEqEither @ [GHC.Types.Char]
+                         @ Formula.XFormula
+                         $dEq
+                         $dEq1
+  = FormulaParserTest.$s$fEqEither
+"SPEC/FormulaParserTest $fShowEither @ [Char] @ XFormula" [ALWAYS] forall ($dShow1 :: GHC.Show.Show
+                                                                                        [GHC.Types.Char])
+                                                                          ($dShow :: GHC.Show.Show
+                                                                                       Formula.XFormula)
+  Data.Either.$fShowEither @ [GHC.Types.Char]
+                           @ Formula.XFormula
+                           $dShow
+                           $dShow1
+  = FormulaParserTest.$s$fShowEither
+"SPEC/FormulaParserTest $fShowEither_$cshowList @ [Char] @ XFormula" [ALWAYS] forall ($dShow1 :: GHC.Show.Show
+                                                                                                   [GHC.Types.Char])
+                                                                                     ($dShow :: GHC.Show.Show
+                                                                                                  Formula.XFormula)
+  Data.Either.$fShowEither_$cshowList @ [GHC.Types.Char]
+                                      @ Formula.XFormula
+                                      $dShow
+                                      $dShow1
+  = FormulaParserTest.$s$fShowEither_$s$fShowEither_$cshowList
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

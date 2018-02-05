@@ -1,0 +1,864 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-27 16:16:02.719409448 UTC
+
+interface main@main:SystemMessages 8002
+  interface hash: 195813251dc50c67dbcd2641e2e485a0
+  ABI hash: 79d62c960f37bee63ab3490932f6d9bb
+  export-list hash: 40bfc0a8cd3b65b3f3992016996f2ea2
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 9581e73690371ffaaf5c309a49faabb5
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  SystemMessages.SystemChan
+  SystemMessages.SystemEvent{SystemMessages.SEAllProjectsStoreError SystemMessages.SEAllProjectsStored SystemMessages.SEProjectLoadError SystemMessages.SEProjectLoaded SystemMessages.SEProjectStoreError SystemMessages.SEProjectStored}
+  SystemMessages.SystemMessage{SystemMessages.SMEvent SystemMessages.SMRequest SystemMessages.SMStop}
+  SystemMessages.SystemRequest{SystemMessages.SRAllProjects SystemMessages.SRFunctions SystemMessages.SRLoadCalculation SystemMessages.SRLoadMap SystemMessages.SRLoadView SystemMessages.SRMapsInProject SystemMessages.SRNewProject SystemMessages.SRStoreCalculation SystemMessages.SRStoreMap SystemMessages.SRStoreView SystemMessages.SRSubscribeToProject SystemMessages.SRSubscribeToView SystemMessages.SRUnsubscribeFromProject SystemMessages.SRUnsubscribeFromView SystemMessages.SRUpdateProject}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson TextEnums View WebClients
+                     WebMessages WebMessagesJson XFunction XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  CalculationName 7681f69b2581ed31254c1a456f024695
+  CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  AllProjects 5112a5d43849857c03604773be3e85a2
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+  ViewName 105e058b0f915624ee10874cf1c9d091
+import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
+  exports: 9e20b0962809e2ead168d9d96578b360
+  WAClient b08796f2cd72dc596a7814e2532ade2f
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName aed4e1c98ee09424176ec799b4e99672
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fEqSystemEvent :: GHC.Classes.Eq SystemMessages.SystemEvent
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemEvent
+                  SystemMessages.$fEqSystemEvent_$c==
+                  SystemMessages.$fEqSystemEvent_$c/= -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fEqSystemEvent_$c/= ::
+    SystemMessages.SystemEvent
+    -> SystemMessages.SystemEvent -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: SystemMessages.SystemEvent)
+                   (b :: SystemMessages.SystemEvent) ->
+                 case SystemMessages.$fEqSystemEvent_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fEqSystemEvent_$c== ::
+    SystemMessages.SystemEvent
+    -> SystemMessages.SystemEvent -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><S,1*U> -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fEqSystemMessage :: GHC.Classes.Eq SystemMessages.SystemMessage
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemMessage
+                  SystemMessages.$fEqSystemMessage_$c==1
+                  SystemMessages.$fEqSystemMessage_$c/= -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fEqSystemMessage_$c/= ::
+    SystemMessages.SystemMessage
+    -> SystemMessages.SystemMessage -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (a :: SystemMessages.SystemMessage)
+                   (b :: SystemMessages.SystemMessage) ->
+                 case a of wild {
+                   SystemMessages.SMRequest a1
+                   -> case b of wild1 {
+                        DEFAULT -> GHC.Types.True
+                        SystemMessages.SMRequest b1
+                        -> case SystemMessages.$fEqSystemMessage_$c== a1 b1 of wild2 {
+                             GHC.Types.False -> GHC.Types.True
+                             GHC.Types.True -> GHC.Types.False } }
+                   SystemMessages.SMEvent a1
+                   -> case b of wild1 {
+                        DEFAULT -> GHC.Types.True
+                        SystemMessages.SMEvent b1
+                        -> case SystemMessages.$fEqSystemEvent_$c== a1 b1 of wild2 {
+                             GHC.Types.False -> GHC.Types.True
+                             GHC.Types.True -> GHC.Types.False } }
+                   SystemMessages.SMStop
+                   -> case b of wild1 {
+                        DEFAULT -> GHC.Types.True
+                        SystemMessages.SMStop -> GHC.Types.False } }) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fEqSystemMessage_$c== ::
+    SystemMessages.SystemRequest
+    -> SystemMessages.SystemRequest -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U> -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fEqSystemMessage_$c==1 ::
+    SystemMessages.SystemMessage
+    -> SystemMessages.SystemMessage -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (ds :: SystemMessages.SystemMessage)
+                   (ds1 :: SystemMessages.SystemMessage) ->
+                 case ds of wild {
+                   SystemMessages.SMRequest a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        SystemMessages.SMRequest b1
+                        -> SystemMessages.$fEqSystemMessage_$c== a1 b1 }
+                   SystemMessages.SMEvent a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        SystemMessages.SMEvent b1
+                        -> SystemMessages.$fEqSystemEvent_$c== a1 b1 }
+                   SystemMessages.SMStop
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        SystemMessages.SMStop -> GHC.Types.True } }) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fEqSystemRequest :: GHC.Classes.Eq SystemMessages.SystemRequest
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemRequest
+                  SystemMessages.$fEqSystemMessage_$c==
+                  SystemMessages.$fEqSystemRequest_$c/= -}
+3c41eaf611e5736537d8b36316d349e4
+  $fEqSystemRequest_$c/= ::
+    SystemMessages.SystemRequest
+    -> SystemMessages.SystemRequest -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: SystemMessages.SystemRequest)
+                   (b :: SystemMessages.SystemRequest) ->
+                 case SystemMessages.$fEqSystemMessage_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fShowSystemEvent :: GHC.Show.Show SystemMessages.SystemEvent
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemEvent
+                  SystemMessages.$fShowSystemEvent_$cshowsPrec
+                  SystemMessages.$fShowSystemEvent_$cshow
+                  SystemMessages.$fShowSystemEvent_$cshowList -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fShowSystemEvent1 :: SystemMessages.SystemEvent -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: SystemMessages.SystemEvent)
+                   (w1 :: GHC.Base.String) ->
+                 SystemMessages.$w$cshowsPrec 0# w w1) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fShowSystemEvent_$cshow ::
+    SystemMessages.SystemEvent -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: SystemMessages.SystemEvent) ->
+                 SystemMessages.$fShowSystemEvent_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fShowSystemEvent_$cshowList ::
+    [SystemMessages.SystemEvent] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ SystemMessages.SystemEvent
+                   SystemMessages.$fShowSystemEvent1) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $fShowSystemEvent_$cshowsPrec ::
+    GHC.Types.Int -> SystemMessages.SystemEvent -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S,1*U><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: SystemMessages.SystemEvent)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 SystemMessages.$w$cshowsPrec ww1 w1 w2 }) -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fShowSystemMessage :: GHC.Show.Show SystemMessages.SystemMessage
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemMessage
+                  SystemMessages.$fShowSystemMessage_$cshowsPrec
+                  SystemMessages.$fShowSystemMessage_$cshow
+                  SystemMessages.$fShowSystemMessage_$cshowList -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fShowSystemMessage1 ::
+    SystemMessages.SystemMessage -> GHC.Show.ShowS
+  {- Arity: 1,
+     Unfolding: (SystemMessages.$fShowSystemMessage_$cshowsPrec
+                   SystemMessages.$fShowSystemMessage2) -}
+ac69dfcd36a29656c6106171ff584f70
+  $fShowSystemMessage2 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+01951945404a461a199370bfe5d1390d
+  $fShowSystemMessage3 :: GHC.Show.ShowS
+  {- Arity: 1,
+     Unfolding: (GHC.Base.++
+                   @ GHC.Types.Char
+                   SystemMessages.$fShowSystemMessage4) -}
+90915d01d6662bba73ecd5941c1ac024
+  $fShowSystemMessage4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "SMStop"#) -}
+9a0c708b62312f1e8cf96df9e4d7b3d4
+  $fShowSystemMessage5 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "SMEvent "#) -}
+af35657055aee4c7c1ec056ed7043394
+  $fShowSystemMessage6 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "SMRequest "#) -}
+dd42d68e49f9f1855e477887ef075ef3
+  $fShowSystemMessage7 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.Base.++
+                   @ GHC.Types.Char
+                   SystemMessages.$fShowSystemMessage4
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fShowSystemMessage_$cshow ::
+    SystemMessages.SystemMessage -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: (\ (x :: SystemMessages.SystemMessage) ->
+                 case x of wild {
+                   SystemMessages.SMRequest b1
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        SystemMessages.$fShowSystemMessage6
+                        (SystemMessages.$w$cshowsPrec1
+                           11#
+                           b1
+                           (GHC.Types.[] @ GHC.Types.Char))
+                   SystemMessages.SMEvent b1
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        SystemMessages.$fShowSystemMessage5
+                        (SystemMessages.$w$cshowsPrec
+                           11#
+                           b1
+                           (GHC.Types.[] @ GHC.Types.Char))
+                   SystemMessages.SMStop -> SystemMessages.$fShowSystemMessage7 }) -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fShowSystemMessage_$cshowList ::
+    [SystemMessages.SystemMessage] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ SystemMessages.SystemMessage
+                   SystemMessages.$fShowSystemMessage1) -}
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  $fShowSystemMessage_$cshowsPrec ::
+    GHC.Types.Int -> SystemMessages.SystemMessage -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <L,1*U(U)><S,1*U>,
+     Unfolding: (\ (a :: GHC.Types.Int)
+                   (ds :: SystemMessages.SystemMessage) ->
+                 case ds of wild {
+                   SystemMessages.SMRequest b1
+                   -> case a of wild1 { GHC.Types.I# x ->
+                      let {
+                        g :: GHC.Base.String -> GHC.Base.String
+                        = SystemMessages.$w$cshowsPrec1 11# b1
+                      } in
+                      case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.>=# x 11#) of wild2 {
+                        GHC.Types.False
+                        -> \ (x1 :: GHC.Base.String) ->
+                           GHC.Base.++
+                             @ GHC.Types.Char
+                             SystemMessages.$fShowSystemMessage6
+                             (g x1)
+                        GHC.Types.True
+                        -> \ (x1 :: GHC.Base.String) ->
+                           GHC.Types.:
+                             @ GHC.Types.Char
+                             GHC.Show.shows7
+                             (GHC.Base.++
+                                @ GHC.Types.Char
+                                SystemMessages.$fShowSystemMessage6
+                                (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 x1))) } }
+                   SystemMessages.SMEvent b1
+                   -> case a of wild1 { GHC.Types.I# x ->
+                      case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.>=# x 11#) of wild2 {
+                        GHC.Types.False
+                        -> \ (x1 :: GHC.Base.String) ->
+                           GHC.Base.++
+                             @ GHC.Types.Char
+                             SystemMessages.$fShowSystemMessage5
+                             (SystemMessages.$w$cshowsPrec 11# b1 x1)
+                        GHC.Types.True
+                        -> \ (x1 :: GHC.Base.String) ->
+                           GHC.Types.:
+                             @ GHC.Types.Char
+                             GHC.Show.shows7
+                             (GHC.Base.++
+                                @ GHC.Types.Char
+                                SystemMessages.$fShowSystemMessage5
+                                (SystemMessages.$w$cshowsPrec
+                                   11#
+                                   b1
+                                   (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 x1))) } }
+                   SystemMessages.SMStop -> SystemMessages.$fShowSystemMessage3 }) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fShowSystemRequest :: GHC.Show.Show SystemMessages.SystemRequest
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ SystemMessages.SystemRequest
+                  SystemMessages.$fShowSystemRequest_$cshowsPrec
+                  SystemMessages.$fShowSystemRequest_$cshow
+                  SystemMessages.$fShowSystemRequest_$cshowList -}
+3c41eaf611e5736537d8b36316d349e4
+  $fShowSystemRequest1 ::
+    SystemMessages.SystemRequest -> GHC.Show.ShowS
+  {- Arity: 1,
+     Unfolding: (\ (w :: SystemMessages.SystemRequest) ->
+                 SystemMessages.$w$cshowsPrec1 0# w) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fShowSystemRequest_$cshow ::
+    SystemMessages.SystemRequest -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: SystemMessages.SystemRequest) ->
+                 SystemMessages.$fShowSystemRequest_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fShowSystemRequest_$cshowList ::
+    [SystemMessages.SystemRequest] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ SystemMessages.SystemRequest
+                   SystemMessages.$fShowSystemRequest1) -}
+3c41eaf611e5736537d8b36316d349e4
+  $fShowSystemRequest_$cshowsPrec ::
+    GHC.Types.Int -> SystemMessages.SystemRequest -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S(S),1*U(U)><S,1*U>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Types.Int) (w1 :: SystemMessages.SystemRequest) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 SystemMessages.$w$cshowsPrec1 ww1 w1 }) -}
+661812ff77cc0e7ebecbd2626d0ee76a
+  $tc'SEAllProjectsStoreError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2907084104364568931##
+                   1740321716885231746##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEAllProjectsStoreError1) -}
+4fb61e5f1691e0004c7d4617eb0c09d0
+  $tc'SEAllProjectsStoreError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEAllProjectsStoreError"#) -}
+f56f5e5d47e74b146d074309a5129760
+  $tc'SEAllProjectsStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6364101222967417929##
+                   11608351098790548950##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEAllProjectsStored1) -}
+47dd99e27e07dfb9f2102e86ff8808c0
+  $tc'SEAllProjectsStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEAllProjectsStored"#) -}
+532390ad1304747181372f4861402982
+  $tc'SEProjectLoadError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   11367439974142617824##
+                   13219929741878995771##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEProjectLoadError1) -}
+7fb25601ee3140f06bfba22bc4d2714b
+  $tc'SEProjectLoadError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEProjectLoadError"#) -}
+ccbe1576d1324e6c38446aaf5954107a
+  $tc'SEProjectLoaded :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2019664565552940269##
+                   1698437089645072538##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEProjectLoaded1) -}
+d147d479589e2ed9c241222ec0d20e66
+  $tc'SEProjectLoaded1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEProjectLoaded"#) -}
+aca7630ea35743bc43e7a53d0589813f
+  $tc'SEProjectStoreError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10495119215715601334##
+                   8611889516174752092##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEProjectStoreError1) -}
+922d41df87d6725239673ac063638f5c
+  $tc'SEProjectStoreError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEProjectStoreError"#) -}
+71f2b6010fd66b490567a765e920f648
+  $tc'SEProjectStored :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   1064670040262428323##
+                   3148111373047412951##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SEProjectStored1) -}
+d89a5f7c31b7d05e1fd3dfe1fa0e761c
+  $tc'SEProjectStored1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SEProjectStored"#) -}
+cbadaeabe4aeef08e3a1977fa96ed848
+  $tc'SMEvent :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8578377117186075509##
+                   13933858509899635224##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SMEvent1) -}
+5fba964ddcf1eddf9b91c57e30d67209
+  $tc'SMEvent1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SMEvent"#) -}
+3d9c8d58a3a60b017793c1467fdeb23d
+  $tc'SMRequest :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9538172779306730155##
+                   15028853408912467076##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SMRequest1) -}
+433276353977266ee1bb85274b7055c7
+  $tc'SMRequest1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SMRequest"#) -}
+4f1c251b249a6c24ebc7f0fec07111fe
+  $tc'SMStop :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6149866811155747607##
+                   4477051143255360996##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SMStop1) -}
+7a8924fd076661772c34a73f0ce5b8b4
+  $tc'SMStop1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SMStop"#) -}
+e88de0060c2af08b26a1f0b4e7cfc64f
+  $tc'SRAllProjects :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16945355561150367985##
+                   876802046297116151##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRAllProjects1) -}
+05a507a77b813f4b3d8ef4653a4ead34
+  $tc'SRAllProjects1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRAllProjects"#) -}
+4f2012c88196d5c64553560f4ae37efe
+  $tc'SRFunctions :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   455405693273459193##
+                   17514567197315850423##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRFunctions1) -}
+c598b828aa5b7dbfcd1fecd19d657d93
+  $tc'SRFunctions1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRFunctions"#) -}
+12e95015e9ea6a2a728f46ad51027b8c
+  $tc'SRLoadCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16171325705768662783##
+                   14177004026352335188##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRLoadCalculation1) -}
+cfabcec0b49780a56b6e1a2ca9643922
+  $tc'SRLoadCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRLoadCalculation"#) -}
+1b4196551d52a75d89754c75c4ec60d2
+  $tc'SRLoadMap :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8833070162610743537##
+                   5924535166963231978##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRLoadMap1) -}
+bf542b79508c496401cb4336842990d8
+  $tc'SRLoadMap1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRLoadMap"#) -}
+b2b5c968547aee4264728390ae0b092e
+  $tc'SRLoadView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5580809120631981955##
+                   13370600455998584505##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRLoadView1) -}
+a1753f28c6ca2a96afcd95629b3cf912
+  $tc'SRLoadView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRLoadView"#) -}
+345e95458e1b4d08d116a9ab72fbca18
+  $tc'SRMapsInProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13111227634250072289##
+                   9205467845807691069##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRMapsInProject1) -}
+de94f0b043614c8b8937bed16ba8323f
+  $tc'SRMapsInProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRMapsInProject"#) -}
+40565764936b5c860e8a1e9afd4c8d39
+  $tc'SRNewProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13161254552838306978##
+                   9681769316298025538##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRNewProject1) -}
+db4802d4d9fce889b67bd7a0a41f3fd5
+  $tc'SRNewProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRNewProject"#) -}
+7da05c9871d233df8bac05af84fe0231
+  $tc'SRStoreCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13809805741633642375##
+                   13491586904260891895##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRStoreCalculation1) -}
+2fca2868de97739b2477b4d711d6d831
+  $tc'SRStoreCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRStoreCalculation"#) -}
+6f07fd35f0524c0f718c78daa9ad9074
+  $tc'SRStoreMap :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4049149888263390951##
+                   13018533500068557447##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRStoreMap1) -}
+65bec7575ca4bb8f76d92dcc76badcd2
+  $tc'SRStoreMap1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRStoreMap"#) -}
+d8debeb9e7f8c44d246a55f76b8a3ea8
+  $tc'SRStoreView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   6166945836183332710##
+                   15700497708763372627##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRStoreView1) -}
+6d2c418822bd9338cb8b20643869d76b
+  $tc'SRStoreView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRStoreView"#) -}
+c385cf814d63c3b09b8940a2422368b7
+  $tc'SRSubscribeToProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   3284377238414470477##
+                   12265622042921956688##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRSubscribeToProject1) -}
+4c57fa04f5871df3931cf254013b8faa
+  $tc'SRSubscribeToProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRSubscribeToProject"#) -}
+24c9f9c732dfc96290168634a16e48f3
+  $tc'SRSubscribeToView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2513507916523678803##
+                   7262348967322550021##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRSubscribeToView1) -}
+2f859de28fef2ec5f8b6a26966cc7d09
+  $tc'SRSubscribeToView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRSubscribeToView"#) -}
+97232cef70c14a17b8484ead63411e1f
+  $tc'SRUnsubscribeFromProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   7266444521033360329##
+                   7867863130238587295##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRUnsubscribeFromProject1) -}
+53615a7be047f58327934cb9605ed2cf
+  $tc'SRUnsubscribeFromProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRUnsubscribeFromProject"#) -}
+7091bf3d5299d421ddbaa062f1577fe2
+  $tc'SRUnsubscribeFromView :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8580106632541124926##
+                   17772117350824574940##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRUnsubscribeFromView1) -}
+e03dee92b1c37bd9f597a1b5cb049555
+  $tc'SRUnsubscribeFromView1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRUnsubscribeFromView"#) -}
+d6db2baa617664eac98bac19ddf2b119
+  $tc'SRUpdateProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   8820150893329225138##
+                   11014812371738833306##
+                   SystemMessages.$trModule
+                   SystemMessages.$tc'SRUpdateProject1) -}
+6aeb1bd769f8d59788f4a5dc7405d45b
+  $tc'SRUpdateProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'SRUpdateProject"#) -}
+e2ad227dbed6d04a022283c22dfb4839
+  $tcSystemEvent :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14384983015677951289##
+                   13667790645109034234##
+                   SystemMessages.$trModule
+                   SystemMessages.$tcSystemEvent1) -}
+9103e5a040be4842bc19d54c914cf8bb
+  $tcSystemEvent1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "SystemEvent"#) -}
+91660832717788f10d0c391a34c1d52d
+  $tcSystemMessage :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9484747212339049967##
+                   12138978780272954070##
+                   SystemMessages.$trModule
+                   SystemMessages.$tcSystemMessage1) -}
+54282609b040017f08776d46392d94fc
+  $tcSystemMessage1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "SystemMessage"#) -}
+cc47e60d45eb657b1c9609a606698fbc
+  $tcSystemRequest :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5622358702418687604##
+                   3364906107790028232##
+                   SystemMessages.$trModule
+                   SystemMessages.$tcSystemRequest1) -}
+99500f5f3ed70d78cc2349dcdf7de517
+  $tcSystemRequest1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "SystemRequest"#) -}
+e16e21cf88999e1146e891a794f150af
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   SystemMessages.$trModule2
+                   SystemMessages.$trModule1) -}
+1a871db0cff875b7ada01c2c78b2ca95
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "SystemMessages"#) -}
+b1e26639110935981692da620dead02d
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+9fecfcb2f9a452f205b1f2acf7048cba
+  $w$cshowsPrec ::
+    GHC.Prim.Int#
+    -> SystemMessages.SystemEvent -> GHC.Base.String -> GHC.Base.String
+  {- Arity: 3, Strictness: <S,U><S,1*U><L,U>, Inline: [0] -}
+3c41eaf611e5736537d8b36316d349e4
+  $w$cshowsPrec1 ::
+    GHC.Prim.Int# -> SystemMessages.SystemRequest -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,U><S,1*U>, Inline: [0] -}
+071ec073d696ba528a27629f4c54c968
+  type SystemChan =
+    Control.Concurrent.STM.TChan.TChan SystemMessages.SystemMessage
+9fecfcb2f9a452f205b1f2acf7048cba
+  data SystemEvent
+    = SEProjectLoaded WebClients.WAClient
+                      Project.Project
+                      [Calculation.Calculation]
+    | SEProjectLoadError WebClients.WAClient
+                         Project.ProjectName
+                         Errors.Error
+    | SEProjectStored WebClients.WAClient Project.Project
+    | SEProjectStoreError WebClients.WAClient
+                          Project.Project
+                          Errors.Error
+    | SEAllProjectsStored WebClients.WAClient Project.AllProjects
+    | SEAllProjectsStoreError WebClients.WAClient
+                              Project.AllProjects
+                              Errors.Error
+4d3b7d3190f2e5ac7b2fa81e1c355b51
+  data SystemMessage
+    = SMRequest SystemMessages.SystemRequest
+    | SMEvent SystemMessages.SystemEvent
+    | SMStop
+3c41eaf611e5736537d8b36316d349e4
+  data SystemRequest
+    = SRSubscribeToProject WebClients.WAClient Project.ProjectName
+    | SRUnsubscribeFromProject WebClients.WAClient Project.ProjectName
+    | SRNewProject WebClients.WAClient Project.Project
+    | SRUpdateProject WebClients.WAClient Project.Project
+    | SRAllProjects WebClients.WAClient
+    | SRLoadMap WebClients.WAClient
+                Project.ProjectName
+                XMapTypes.XMapName
+    | SRStoreMap WebClients.WAClient
+                 Project.ProjectName
+                 XMapTypes.XNamedMap
+    | SRSubscribeToView WebClients.WAClient
+                        Project.ProjectName
+                        View.ViewName
+    | SRUnsubscribeFromView WebClients.WAClient
+                            Project.ProjectName
+                            View.ViewName
+    | SRMapsInProject WebClients.WAClient Project.ProjectName
+    | SRLoadView WebClients.WAClient Project.ProjectName View.ViewName
+    | SRStoreView WebClients.WAClient Project.ProjectName View.View
+    | SRLoadCalculation WebClients.WAClient
+                        Project.ProjectName
+                        Calculation.CalculationName
+    | SRStoreCalculation WebClients.WAClient
+                         Project.ProjectName
+                         Calculation.CalculationSource
+    | SRFunctions WebClients.WAClient
+instance GHC.Classes.Eq [SystemMessages.SystemEvent]
+  = SystemMessages.$fEqSystemEvent
+instance GHC.Classes.Eq [SystemMessages.SystemMessage]
+  = SystemMessages.$fEqSystemMessage
+instance GHC.Classes.Eq [SystemMessages.SystemRequest]
+  = SystemMessages.$fEqSystemRequest
+instance GHC.Show.Show [SystemMessages.SystemEvent]
+  = SystemMessages.$fShowSystemEvent
+instance GHC.Show.Show [SystemMessages.SystemMessage]
+  = SystemMessages.$fShowSystemMessage
+instance GHC.Show.Show [SystemMessages.SystemRequest]
+  = SystemMessages.$fShowSystemRequest
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

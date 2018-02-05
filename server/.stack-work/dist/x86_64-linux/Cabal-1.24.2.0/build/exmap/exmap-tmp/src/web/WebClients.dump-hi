@@ -1,0 +1,747 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-27 06:38:35.67946248 UTC
+
+interface main@main:WebClients 8002
+  interface hash: a3db6e078a0d74ceec96f93706ccc9cf
+  ABI hash: 26a0ed9f44dfca5e83dd031a39f224a0
+  export-list hash: 9e20b0962809e2ead168d9d96578b360
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 85c62bb38ef90b008a19d0e7fa11d888
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  WebClients.sameClientId
+  WebClients.sendTextToClient
+  WebClients.sendToClient
+  WebClients.sendToClients
+  WebClients.WAClient{WebClients.WAClient clientId connection}
+  WebClients.WAClientId{WebClients.WAClientId}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson TextEnums View WebMessages
+                     WebMessagesJson XFunction XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson 2e25d14a91e9ff13092f56c3ec0cd425
+import  -/  base-4.9.1.0:Data.Foldable 3e0b6967a1da89945d0e2d47266337a2
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy 710f3c92800106372d9fdf1463052e70
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy.Internal d9ce1975b5e9af58da7ffcb0a039c72e
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+  exports: b86ad7b8a0b44a02b28cdac11545ea56
+  WebEvent 6df2a76ec9950bbeadbcb273faa1370e
+import  -/  WebMessagesJson 8c67daf3c09ebfb70f97ef111afabeaf
+  exports: 836b865dc702f419a711e93a8452704c
+import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets dac061edf008b1b72780269f7fae6494
+import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets.Connection 461242369db54ba20a4c709a7c262225
+b08796f2cd72dc596a7814e2532ade2f
+  $fEqWAClient :: GHC.Classes.Eq WebClients.WAClient
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebClients.WAClient
+                  WebClients.$fEqWAClient_$c==
+                  WebClients.$fEqWAClient_$c/= -}
+844e172315c6fa8cc39c38914dce9731
+  $fEqWAClientId :: GHC.Classes.Eq WebClients.WAClientId
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebClients.WAClientId
+                  WebClients.$fEqWAClientId_$c==
+                  WebClients.$fEqWAClientId_$c/= -}
+844e172315c6fa8cc39c38914dce9731
+  $fEqWAClientId_$c/= ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.neInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fEqWAClientId_$c== ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.eqInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fEqWAClient_$c/= ::
+    WebClients.WAClient -> WebClients.WAClient -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,U><L,U>,
+     Inline: INLINE (sat-args=2),
+     Unfolding: InlineRule (2, False, False)
+                (\ (x :: WebClients.WAClient) (y :: WebClients.WAClient) ->
+                 GHC.Classes.not (WebClients.$fEqWAClient_$c== x y)) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fEqWAClient_$c== ::
+    WebClients.WAClient -> WebClients.WAClient -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(S)L),1*U(1*U(U),A)><S(S(S)L),1*U(1*U(U),A)>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: WebClients.WAClient) (b :: WebClients.WAClient) ->
+                 case a of wild { WebClients.WAClient ds ds1 ->
+                 case b of wild1 { WebClients.WAClient ds2 ds3 ->
+                 GHC.Classes.eqInt
+                   ds `cast` (WebClients.N:WAClientId[0])
+                   ds2 `cast` (WebClients.N:WAClientId[0]) } }) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId :: GHC.Classes.Ord WebClients.WAClientId
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebClients.WAClientId
+                  WebClients.$fEqWAClientId
+                  WebClients.$fOrdWAClientId_$ccompare
+                  WebClients.$fOrdWAClientId_$c<
+                  WebClients.$fOrdWAClientId_$c<=
+                  WebClients.$fOrdWAClientId_$c>
+                  WebClients.$fOrdWAClientId_$c>=
+                  WebClients.$fOrdWAClientId_$cmax
+                  WebClients.$fOrdWAClientId_$cmin -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$c< ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.ltInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$c<= ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.leInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$c> ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.gtInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$c>= ::
+    WebClients.WAClientId -> WebClients.WAClientId -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.geInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Bool>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$ccompare ::
+    WebClients.WAClientId
+    -> WebClients.WAClientId -> GHC.Types.Ordering
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.compareInt
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R <GHC.Types.Ordering>_R) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$cmax ::
+    WebClients.WAClientId
+    -> WebClients.WAClientId -> WebClients.WAClientId
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>m,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.$fOrdInt_$cmax
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])) -}
+844e172315c6fa8cc39c38914dce9731
+  $fOrdWAClientId_$cmin ::
+    WebClients.WAClientId
+    -> WebClients.WAClientId -> WebClients.WAClientId
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>m,
+     Unfolding: InlineRule (0, True, True)
+                GHC.Classes.$fOrdInt_$cmin
+                  `cast`
+                (Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])
+                 ->_R Sym (WebClients.N:WAClientId[0])) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fShowWAClient :: GHC.Show.Show WebClients.WAClient
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebClients.WAClient
+                  WebClients.$fShowWAClient_$cshowsPrec
+                  WebClients.$fShowWAClient_$cshow
+                  WebClients.$fShowWAClient_$cshowList -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fShowWAClient1 ::
+    WebClients.WAClient -> GHC.Base.String -> [GHC.Types.Char]
+  {- Arity: 2,
+     Unfolding: (\ (x :: WebClients.WAClient)
+                   (s :: GHC.Base.String)[OneShot] ->
+                 GHC.Base.++
+                   @ GHC.Types.Char
+                   (GHC.Base.++
+                      @ GHC.Types.Char
+                      WebClients.$fShowWAClient2
+                      (case x of wild { WebClients.WAClient ds ds1 ->
+                       case ds
+                              `cast`
+                            (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                       case GHC.Show.$wshowSignedInt
+                              11#
+                              ww3
+                              (GHC.Types.[] @ GHC.Types.Char) of ww4 { (#,#) ww5 ww6 ->
+                       GHC.Types.: @ GHC.Types.Char ww5 ww6 } } }))
+                   s) -}
+446a6ffc91744a80d3be876e629cfb7a
+  $fShowWAClient2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "WAClientId "#) -}
+844e172315c6fa8cc39c38914dce9731
+  $fShowWAClientId :: GHC.Show.Show WebClients.WAClientId
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ WebClients.WAClientId
+                  WebClients.$fShowWAClientId_$cshowsPrec
+                  WebClients.$fShowWAClientId_$cshow
+                  WebClients.$fShowWAClientId_$cshowList -}
+844e172315c6fa8cc39c38914dce9731
+  $fShowWAClientId1 :: WebClients.WAClientId -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: WebClients.WAClientId)
+                   (w1 :: GHC.Base.String) ->
+                 WebClients.$w$cshowsPrec1 0# w w1) -}
+844e172315c6fa8cc39c38914dce9731
+  $fShowWAClientId_$cshow :: WebClients.WAClientId -> GHC.Base.String
+  {- Arity: 1, Strictness: <L,1*U(U)>,
+     Unfolding: (\ (x :: WebClients.WAClientId) ->
+                 GHC.Base.++
+                   @ GHC.Types.Char
+                   WebClients.$fShowWAClient2
+                   (case x `cast`
+                         (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                    case GHC.Show.$wshowSignedInt
+                           11#
+                           ww3
+                           (GHC.Types.[] @ GHC.Types.Char) of ww4 { (#,#) ww5 ww6 ->
+                    GHC.Types.: @ GHC.Types.Char ww5 ww6 } })) -}
+844e172315c6fa8cc39c38914dce9731
+  $fShowWAClientId_$cshowList ::
+    [WebClients.WAClientId] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ WebClients.WAClientId
+                   WebClients.$fShowWAClientId1) -}
+844e172315c6fa8cc39c38914dce9731
+  $fShowWAClientId_$cshowsPrec ::
+    GHC.Types.Int -> WebClients.WAClientId -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><L,1*U(U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: WebClients.WAClientId)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 WebClients.$w$cshowsPrec1 ww1 w1 w2 }) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fShowWAClient_$cshow :: WebClients.WAClient -> GHC.Base.String
+  {- Arity: 1, Strictness: <L,1*U(1*U(U),A)>,
+     Unfolding: (\ (x :: WebClients.WAClient) ->
+                 GHC.Base.++
+                   @ GHC.Types.Char
+                   WebClients.$fShowWAClient2
+                   (case x of wild { WebClients.WAClient ds ds1 ->
+                    case ds
+                           `cast`
+                         (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                    case GHC.Show.$wshowSignedInt
+                           11#
+                           ww3
+                           (GHC.Types.[] @ GHC.Types.Char) of ww4 { (#,#) ww5 ww6 ->
+                    GHC.Types.: @ GHC.Types.Char ww5 ww6 } } })) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fShowWAClient_$cshowList ::
+    [WebClients.WAClient] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: (\ (ls :: [WebClients.WAClient])
+                   (s :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ WebClients.WAClient
+                   WebClients.$fShowWAClient1
+                   ls
+                   s) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $fShowWAClient_$cshowsPrec ::
+    GHC.Types.Int -> WebClients.WAClient -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,A><L,1*U(1*U(U),A)><L,1*U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, True)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: GHC.Base.String) ->
+                 WebClients.$w$cshowsPrec w1 w2) -}
+a330f4ffe6102700f5e0bcda1219fa61
+  $tc'WAClient :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   2394480444091843011##
+                   11137580564806446229##
+                   WebClients.$trModule
+                   WebClients.$tc'WAClient1) -}
+d01bfe27a976e15aa4f7dd1e98790d8f
+  $tc'WAClient1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WAClient"#) -}
+3ef838c610062d3544781c42303584a8
+  $tc'WAClientId :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16785037018452179700##
+                   16506612766701657984##
+                   WebClients.$trModule
+                   WebClients.$tc'WAClientId1) -}
+ef4cd19a8d3837cf820c421551e2f07c
+  $tc'WAClientId1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'WAClientId"#) -}
+98fc01656b4815875f729a7e381ec28c
+  $tcWAClient :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   10709996006675245607##
+                   1267928919736284503##
+                   WebClients.$trModule
+                   WebClients.$tcWAClient1) -}
+4ec47ff2336bfe575e4bb7147b02e916
+  $tcWAClient1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WAClient"#) -}
+b4e793de0b74f2d4805f88becb8cba1b
+  $tcWAClientId :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4761061091483108319##
+                   8749364913773468083##
+                   WebClients.$trModule
+                   WebClients.$tcWAClientId1) -}
+b79897aa6fe67eda0c06a34ded450501
+  $tcWAClientId1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WAClientId"#) -}
+ff4e4824f269c02dbe343c60add7eeea
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   WebClients.$trModule2
+                   WebClients.$trModule1) -}
+44d75b6351bd2c42a434a5002ae908f1
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "WebClients"#) -}
+46f55e40667dcf88f743a8a6f5191942
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+b08796f2cd72dc596a7814e2532ade2f
+  $w$cshowsPrec ::
+    WebClients.WAClient -> GHC.Base.String -> [GHC.Types.Char]
+  {- Arity: 2, Strictness: <L,1*U(1*U(U),A)><L,1*U>, Inline: [0],
+     Unfolding: (\ (w :: WebClients.WAClient) (w1 :: GHC.Base.String) ->
+                 GHC.Base.++
+                   @ GHC.Types.Char
+                   (GHC.Base.++
+                      @ GHC.Types.Char
+                      WebClients.$fShowWAClient2
+                      (case w of wild { WebClients.WAClient ds ds1 ->
+                       case ds
+                              `cast`
+                            (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                       case GHC.Show.$wshowSignedInt
+                              11#
+                              ww3
+                              (GHC.Types.[] @ GHC.Types.Char) of ww4 { (#,#) ww5 ww6 ->
+                       GHC.Types.: @ GHC.Types.Char ww5 ww6 } } }))
+                   w1) -}
+844e172315c6fa8cc39c38914dce9731
+  $w$cshowsPrec1 ::
+    GHC.Prim.Int#
+    -> WebClients.WAClientId -> GHC.Base.String -> GHC.Base.String
+  {- Arity: 3, Strictness: <S,U><L,1*U(U)><L,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (w :: WebClients.WAClientId)
+                   (w1 :: GHC.Base.String) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 11#) of wild {
+                   GHC.Types.False
+                   -> GHC.Base.++
+                        @ GHC.Types.Char
+                        WebClients.$fShowWAClient2
+                        (case w `cast`
+                              (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                         case GHC.Show.$wshowSignedInt 11# ww3 w1 of ww4 { (#,#) ww5 ww6 ->
+                         GHC.Types.: @ GHC.Types.Char ww5 ww6 } })
+                   GHC.Types.True
+                   -> GHC.Types.:
+                        @ GHC.Types.Char
+                        GHC.Show.shows7
+                        (GHC.Base.++
+                           @ GHC.Types.Char
+                           WebClients.$fShowWAClient2
+                           (case w `cast`
+                                 (WebClients.N:WAClientId[0]) of ww2 { GHC.Types.I# ww3 ->
+                            case GHC.Show.$wshowSignedInt
+                                   11#
+                                   ww3
+                                   (GHC.Types.:
+                                      @ GHC.Types.Char
+                                      GHC.Show.shows4
+                                      w1) of ww4 { (#,#) ww5 ww6 ->
+                            GHC.Types.: @ GHC.Types.Char ww5 ww6 } })) }) -}
+e6fc47a437a179086350bb8881e8056e
+  $wsendToClient ::
+    ([Network.WebSockets.Types.Message] -> GHC.Types.IO ())
+    -> GHC.Prim.MutVar# GHC.Prim.RealWorld GHC.Types.Bool
+    -> WebMessages.WebEvent
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 4, Strictness: <C(C(S)),C1(C1(U(U,U)))><L,U><L,1*U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (ww :: [Network.WebSockets.Types.Message]
+                          -> GHC.Types.IO ())
+                   (ww1 :: GHC.Prim.MutVar# GHC.Prim.RealWorld GHC.Types.Bool)
+                   (w :: WebMessages.WebEvent)
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 let {
+                   w3 :: [Network.WebSockets.Types.Message]
+                   = GHC.Base.map
+                       @ Network.WebSockets.Types.DataMessage
+                       @ Network.WebSockets.Types.Message
+                       Network.WebSockets.Types.DataMessage
+                       (GHC.Base.map
+                          @ Data.ByteString.Lazy.Internal.ByteString
+                          @ Network.WebSockets.Types.DataMessage
+                          Network.WebSockets.Types.Text
+                          (GHC.Types.:
+                             @ Data.ByteString.Lazy.Internal.ByteString
+                             (Data.ByteString.Builder.toLazyByteString
+                                (case WebMessagesJson.$w$ctoJSON w of ww2 { Unit# ww3 ->
+                                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                                   (Data.Aeson.Types.Internal.Object ww3) }))
+                             (GHC.Types.[] @ Data.ByteString.Lazy.Internal.ByteString)))
+                 } in
+                 case (Network.WebSockets.Connection.forkPingThread_go w3)
+                        `cast`
+                      (Data.Monoid.N:Any[0]) of wild {
+                   GHC.Types.False -> (ww w3) `cast` (GHC.Types.N:IO[0] <()>_R) w1
+                   GHC.Types.True
+                   -> case GHC.Prim.writeMutVar#
+                             @ GHC.Prim.RealWorld
+                             @ GHC.Types.Bool
+                             ww1
+                             GHC.Types.True
+                             w1 of s2# { DEFAULT ->
+                      (ww w3) `cast` (GHC.Types.N:IO[0] <()>_R) s2# } }) -}
+b08796f2cd72dc596a7814e2532ade2f
+  data WAClient
+    = WAClient {clientId :: WebClients.WAClientId,
+                connection :: Network.WebSockets.Connection.Connection}
+844e172315c6fa8cc39c38914dce9731
+  newtype WAClientId = WAClientId GHC.Types.Int
+486e8228a12f4ea92aa92310f040677c
+  clientId :: WebClients.WAClient -> WebClients.WAClientId
+  RecSel Left WebClients.WAClient
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(SL),1*U(1*U(U),A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: WebClients.WAClient) ->
+                 case ds of wild { WebClients.WAClient ds1 ds2 -> ds1 }) -}
+d29ff0ad0b89210ee6e064020b202853
+  connection ::
+    WebClients.WAClient -> Network.WebSockets.Connection.Connection
+  RecSel Left WebClients.WAClient
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LS),1*U(A,1*U(U,U,U,U,U))>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: WebClients.WAClient) ->
+                 case ds of wild { WebClients.WAClient ds1 ds2 -> ds2 }) -}
+f4fed56fdc880a09dd0daf4bec1456c6
+  sameClientId ::
+    WebClients.WAClient -> WebClients.WAClient -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(S)L),1*U(1*U(U),A)><S(S(S)L),1*U(1*U(U),A)>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: WebClients.WAClient) (b :: WebClients.WAClient) ->
+                 case a of wild { WebClients.WAClient ds ds1 ->
+                 case b of wild1 { WebClients.WAClient ds2 ds3 ->
+                 GHC.Classes.eqInt
+                   ds `cast` (WebClients.N:WAClientId[0])
+                   ds2 `cast` (WebClients.N:WAClientId[0]) } }) -}
+3805c255a2bcbe62dfbce1845d85e21a
+  sendTextToClient ::
+    WebClients.WAClient
+    -> Data.ByteString.Lazy.Internal.ByteString -> GHC.Types.IO ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LS(LLLC(C(S))L)),1*U(A,1*U(A,A,A,C1(C1(U(U,U))),U))><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                WebClients.sendTextToClient1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <Data.ByteString.Lazy.Internal.ByteString>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
+71ce6af9500f00acbbededc51e3889e9
+  sendTextToClient1 ::
+    WebClients.WAClient
+    -> Data.ByteString.Lazy.Internal.ByteString
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LS(LLLC(C(S))L)),1*U(A,1*U(A,A,A,C1(C1(U(U,U))),U))><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: Data.ByteString.Lazy.Internal.ByteString)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w of ww { WebClients.WAClient ww1 ww2 ->
+                 case ww2 of ww3 { Network.WebSockets.Connection.Connection ww4 ww5 ww6 ww7 ww8 ->
+                 let {
+                   w3 :: [Network.WebSockets.Types.Message]
+                   = GHC.Base.map
+                       @ Network.WebSockets.Types.DataMessage
+                       @ Network.WebSockets.Types.Message
+                       Network.WebSockets.Types.DataMessage
+                       (GHC.Base.map
+                          @ Data.ByteString.Lazy.Internal.ByteString
+                          @ Network.WebSockets.Types.DataMessage
+                          Network.WebSockets.Types.Text
+                          (GHC.Types.:
+                             @ Data.ByteString.Lazy.Internal.ByteString
+                             w1
+                             (GHC.Types.[] @ Data.ByteString.Lazy.Internal.ByteString)))
+                 } in
+                 case (Network.WebSockets.Connection.forkPingThread_go w3)
+                        `cast`
+                      (Data.Monoid.N:Any[0]) of wild {
+                   GHC.Types.False -> (ww7 w3) `cast` (GHC.Types.N:IO[0] <()>_R) w2
+                   GHC.Types.True
+                   -> case GHC.Prim.writeMutVar#
+                             @ GHC.Prim.RealWorld
+                             @ GHC.Types.Bool
+                             ww8
+                             GHC.Types.True
+                             w2 of s2# { DEFAULT ->
+                      (ww7 w3) `cast` (GHC.Types.N:IO[0] <()>_R) s2# } } } }) -}
+5e2c6866ac2f7339f1df23ec3bc79e37
+  sendToClient ::
+    WebClients.WAClient -> WebMessages.WebEvent -> GHC.Types.IO ()
+  {- Arity: 3,
+     Strictness: <S(LS(LLLC(C(S))L)),1*U(A,1*U(A,A,A,C1(C1(U(U,U))),U))><L,1*U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                WebClients.sendToClient1
+                  `cast`
+                (<WebClients.WAClient>_R
+                 ->_R <WebMessages.WebEvent>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
+798ecf67a5e9ed2a8517f1959baa1c14
+  sendToClient1 ::
+    WebClients.WAClient
+    -> WebMessages.WebEvent
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3,
+     Strictness: <S(LS(LLLC(C(S))L)),1*U(A,1*U(A,A,A,C1(C1(U(U,U))),U))><L,1*U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: WebClients.WAClient)
+                   (w1 :: WebMessages.WebEvent)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w of ww { WebClients.WAClient ww1 ww2 ->
+                 case ww2 of ww3 { Network.WebSockets.Connection.Connection ww4 ww5 ww6 ww7 ww8 ->
+                 WebClients.$wsendToClient ww7 ww8 w1 w2 } }) -}
+e0b80ecef0e19c6a93886dd6dcd30ac5
+  sendToClients ::
+    [WebClients.WAClient] -> WebMessages.WebEvent -> GHC.Types.IO ()
+  {- Arity: 3, Strictness: <S,1*U><L,1*U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                WebClients.sendToClients1
+                  `cast`
+                (<[WebClients.WAClient]>_R
+                 ->_R <WebMessages.WebEvent>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
+ae30fe6c9d7618742506d3a173e384ab
+  sendToClients1 ::
+    [WebClients.WAClient]
+    -> WebMessages.WebEvent
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, Strictness: <S,1*U><L,1*U><S,U>,
+     Unfolding: (\ (cs :: [WebClients.WAClient])
+                   (e :: WebMessages.WebEvent)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 let {
+                   w3 :: [Network.WebSockets.Types.Message]
+                   = GHC.Base.map
+                       @ Network.WebSockets.Types.DataMessage
+                       @ Network.WebSockets.Types.Message
+                       Network.WebSockets.Types.DataMessage
+                       (GHC.Base.map
+                          @ Data.ByteString.Lazy.Internal.ByteString
+                          @ Network.WebSockets.Types.DataMessage
+                          Network.WebSockets.Types.Text
+                          (GHC.Types.:
+                             @ Data.ByteString.Lazy.Internal.ByteString
+                             (Data.ByteString.Builder.toLazyByteString
+                                (case WebMessagesJson.$w$ctoJSON e of ww { Unit# ww1 ->
+                                 Data.Aeson.Encoding.Builder.encodeToBuilder
+                                   (Data.Aeson.Types.Internal.Object ww1) }))
+                             (GHC.Types.[] @ Data.ByteString.Lazy.Internal.ByteString)))
+                 } in
+                 let {
+                   lvl :: Data.Monoid.Any
+                   = Network.WebSockets.Connection.forkPingThread_go w3
+                 } in
+                 letrec {
+                   go :: [WebClients.WAClient]
+                         -> GHC.Prim.State# GHC.Prim.RealWorld
+                         -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+                     {- Arity: 2, Strictness: <S,1*U><S,U> -}
+                   = \ (ds :: [WebClients.WAClient])
+                       (eta1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                     case ds of wild {
+                       [] -> (# eta1, GHC.Tuple.() #)
+                       : y ys
+                       -> case y of wild1 { WebClients.WAClient ds1 ds2 ->
+                          case ds2 of ww { Network.WebSockets.Connection.Connection ww1 ww2 ww3 ww4 ww5 ->
+                          case lvl `cast` (Data.Monoid.N:Any[0]) of wild2 {
+                            GHC.Types.False
+                            -> case (ww4 w3) `cast` (GHC.Types.N:IO[0] <()>_R)
+                                      eta1 of ds3 { (#,#) ipv ipv1 ->
+                               go ys ipv }
+                            GHC.Types.True
+                            -> case GHC.Prim.writeMutVar#
+                                      @ GHC.Prim.RealWorld
+                                      @ GHC.Types.Bool
+                                      ww5
+                                      GHC.Types.True
+                                      eta1 of s2# { DEFAULT ->
+                               case (ww4 w3) `cast` (GHC.Types.N:IO[0] <()>_R)
+                                      s2# of ds3 { (#,#) ipv ipv1 ->
+                               go ys ipv } } } } } }
+                 } in
+                 go cs eta) -}
+instance GHC.Classes.Eq [WebClients.WAClient]
+  = WebClients.$fEqWAClient
+instance GHC.Classes.Eq [WebClients.WAClientId]
+  = WebClients.$fEqWAClientId
+instance GHC.Classes.Ord [WebClients.WAClientId]
+  = WebClients.$fOrdWAClientId
+instance GHC.Show.Show [WebClients.WAClient]
+  = WebClients.$fShowWAClient
+instance GHC.Show.Show [WebClients.WAClientId]
+  = WebClients.$fShowWAClientId
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

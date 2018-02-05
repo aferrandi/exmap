@@ -1,0 +1,549 @@
+
+==================== FINAL INTERFACE ====================
+2017-11-08 08:29:11.68505521 UTC
+
+interface main@main:Store 8002
+  interface hash: b8af3e432f6e9530756459b3f09d7525
+  ABI hash: 6bcbc733a11b5c184b1cb48bfb9db8ed
+  export-list hash: eb33522e4c46c324a6a69ed592284f72
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: d426797dced5f2cc541098c0bd9180c3
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Store.storeAvailableProjects
+  Store.storeCalculation
+  Store.storeProject
+  Store.storeView
+  Store.storeXMap
+  Store.tryWriteFile
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Paths Project ProjectJson TextEnums View XFunction
+                     XMapJson XMapTypes XValues
+package dependencies: aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 directory-1.3.0.0@directory-1.3.0.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      filepath-1.4.1.1@filepath-1.4.1.1
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:XMapJson
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK:Data.Aeson 2e25d14a91e9ff13092f56c3ec0cd425
+import  -/  base-4.9.1.0:Control.Exception a76dd9666251322fe34dbcca3a0817bf
+import  -/  base-4.9.1.0:Control.Exception.Base 1e106916283856f4d9caeddab92cd861
+import  -/  base-4.9.1.0:Data.Either 20b09ef8d0a5b74fdec011c40c1587f5
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
+import  -/  base-4.9.1.0:GHC.IO.Exception 5064be4c355632a1d1c4f2322f56ac52
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy 710f3c92800106372d9fdf1463052e70
+import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy.Internal d9ce1975b5e9af58da7ffcb0a039c72e
+import  -/  directory-1.3.0.0@directory-1.3.0.0:System.Directory 0639d8cfeb46b10c8980240d51e436f3
+import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath a3d1d13ac7dd86705b5dfaf58a5c0b9e
+import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath.Posix 6a5e3ee74184fdcc5da09a368e7c40f5
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  calculationName 1f5a4a1ff915162dab157f63a0e9b230
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+  mkError 7d208924c59e97ae369ea175e422a035
+import  -/  Paths d6afa50f03923c71e909cfba47da3e4b
+  exports: 0fd3c9275ac57dd0007f4b8d0e9a5665
+  allProjectsPath 79ed3c954b712528343807d0b61d97d8
+  calculationPath 5d446fe19740d784f30b70131c573b86
+  projectPath f7fe536b3e5d4c1b134c7116a4e49f50
+  viewPath d89e64586051443c7421a56ef6e947eb
+  xMapPath 8b479787baaf93bed823d89ff2679dfe
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  AllProjects 5112a5d43849857c03604773be3e85a2
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+  projectName cb7533641bc632f228a4a92ccb44abc9
+import  -/  ProjectJson acf18b712df8a0f901e55f49f516e8ae
+  exports: 7c021a43116ce3cd9ba9642848771ff1
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  View 3a2375be1f5189e91eb0fabfa84fd0be
+  viewName 42649ec3eca0aa81869dee042d61646f
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+  xmapName 57bc60d3cae24066ad31097c7544b0c7
+1719a1e93822d53c1e1d34e5d7594720
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module Store.$trModule2 Store.$trModule1) -}
+ec9e2ec0ed3fe0665883a79878f37996
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Store"#) -}
+34589831e9d72204bd65b28699b551bf
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+8a398b7c864e51b6e9c925a210af71f7
+  $wouter ::
+    GHC.Prim.MutableByteArray# GHC.Prim.RealWorld
+    -> GHC.Prim.Int#
+    -> [GHC.Types.Char]
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Text.Internal.Text #)
+  {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
+     Inline: [0] -}
+a3fc7dd959f8157b3454a6c501047d1a
+  storeAvailableProjects ::
+    GHC.IO.FilePath
+    -> Project.AllProjects
+    -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 2, Strictness: <L,1*U><L,1*U>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeAvailableProjects1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Project.AllProjects>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+b18a030cefd6c38b415d30d5da3fe4f8
+  storeAvailableProjects1 ::
+    GHC.IO.FilePath
+    -> Project.AllProjects
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 2, Strictness: <L,1*U><L,1*U>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (ap :: Project.AllProjects) ->
+                 Store.storeAvailableProjects4
+                   (Paths.allProjectsPath root)
+                   (Data.ByteString.Builder.toLazyByteString
+                      (case GHC.Magic.runRW#
+                              @ 'GHC.Types.PtrRepLifted
+                              @ (Data.Vector.Vector Data.Aeson.Types.Internal.Value)
+                              (\ (s1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                               case GHC.Prim.newArray#
+                                      @ Data.Aeson.Types.Internal.Value
+                                      @ (Control.Monad.Primitive.PrimState
+                                           (GHC.ST.ST GHC.Prim.RealWorld))
+                                      0#
+                                      (Data.Vector.Mutable.uninitialised
+                                         @ Data.Aeson.Types.Internal.Value)
+                                      s1
+                                        `cast`
+                                      (GHC.Prim.State#
+                                         (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                   <GHC.Prim.RealWorld>_N)))_R of ds1 { (#,#) ipv ipv1 ->
+                               case Store.storeAvailableProjects3
+                                      GHC.Types.SPEC
+                                      ((Data.Vector.Mutable.MVector
+                                          @ (Control.Monad.Primitive.PrimState
+                                               (GHC.ST.ST GHC.Prim.RealWorld))
+                                          @ Data.Aeson.Types.Internal.Value
+                                          0#
+                                          0#
+                                          ipv1)
+                                         `cast`
+                                       (Sub (Sym (Data.Vector.D:R:MutableVector[0])) <Control.Monad.Primitive.PrimState
+                                                                                        (GHC.ST.ST
+                                                                                           GHC.Prim.RealWorld)>_N <Data.Aeson.Types.Internal.Value>_N),
+                                       Store.storeAvailableProjects2)
+                                      (GHC.Base.map
+                                         @ Project.ProjectName
+                                         @ Data.Aeson.Types.Internal.Value
+                                         Data.Aeson.Types.Internal.$WString
+                                           `cast`
+                                         (Sym (Project.N:ProjectName[0])
+                                          ->_R <Data.Aeson.Types.Internal.Value>_R)
+                                         ap `cast` (Project.N:AllProjects[0]))
+                                      ipv
+                                        `cast`
+                                      (GHC.Prim.State#
+                                         (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                              <GHC.Prim.RealWorld>_N))_R of ds2 { (#,#) ipv6 ipv7 ->
+                               case ipv7 of wild5 { (,) v' n ->
+                               case v'
+                                      `cast`
+                                    (Sub (Data.Vector.D:R:MutableVector[0]) <Control.Monad.Primitive.PrimState
+                                                                               (GHC.ST.ST
+                                                                                  GHC.Prim.RealWorld)>_N <Data.Aeson.Types.Internal.Value>_N) of wild { Data.Vector.Mutable.MVector dt dt1 dt2 ->
+                               case n of dt5 { GHC.Types.I# dt6 ->
+                               case GHC.Prim.unsafeFreezeArray#
+                                      @ (Control.Monad.Primitive.PrimState
+                                           (GHC.ST.ST GHC.Prim.RealWorld))
+                                      @ Data.Aeson.Types.Internal.Value
+                                      dt2
+                                      ipv6
+                                        `cast`
+                                      (GHC.Prim.State#
+                                         (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                   <GHC.Prim.RealWorld>_N)))_R of ds { (#,#) ipv2 ipv3 ->
+                               (# ipv2
+                                    `cast`
+                                  (GHC.Prim.State#
+                                     (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                          <GHC.Prim.RealWorld>_N))_R,
+                                  Data.Vector.Vector
+                                    @ Data.Aeson.Types.Internal.Value
+                                    dt
+                                    dt6
+                                    ipv3 #) } } } } } }) of ds1 { (#,#) ipv1 ipv2 ->
+                       case ipv2 of dt1 { Data.Vector.Vector ipv ipv4 ipv5 ->
+                       Data.Aeson.Encoding.Builder.encodeToBuilder
+                         (Data.Aeson.Types.Internal.Array dt1) } }))) -}
+56f8820d86296e8401500e36a9d28d05
+  storeAvailableProjects2 :: GHC.Types.Int
+  {- HasNoCafRefs, Unfolding: (GHC.Types.I# 0#) -}
+9779a9aaaab278975ab1dcf94597caf5
+  storeAvailableProjects3 ::
+    GHC.Types.SPEC
+    -> (Data.Vector.Generic.Base.Mutable
+          Data.Vector.Vector
+          (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
+          Data.Aeson.Types.Internal.Value,
+        GHC.Types.Int)
+    -> [Data.Aeson.Types.Internal.Value]
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          (Data.Vector.Generic.Base.Mutable
+             Data.Vector.Vector
+             (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
+             Data.Aeson.Types.Internal.Value,
+           GHC.Types.Int) #)
+  {- Arity: 4, Strictness: <S,1*U><L,U(U(U,U,U),U(U))><S,1*U><S,U> -}
+8745f0afc1828d8e4392943c3a40ae79
+  storeAvailableProjects4 ::
+    GHC.IO.FilePath
+    -> Data.ByteString.Lazy.Internal.ByteString
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 3, Strictness: <L,U><L,U><S,U>,
+     Unfolding: (\ (p :: GHC.IO.FilePath)
+                   (c :: Data.ByteString.Lazy.Internal.ByteString)
+                   (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.catch#
+                        @ (Data.Either.Either GHC.IO.Exception.IOError ())
+                        @ GHC.Exception.SomeException
+                        (GHC.Magic.lazy
+                           @ (GHC.Types.IO (Data.Either.Either GHC.IO.Exception.IOError ()))
+                           (\ (s1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                            case Data.ByteString.Lazy.writeFile1
+                                   p
+                                   c
+                                   s1 of ds1 { (#,#) ipv ipv1 ->
+                            (# ipv,
+                               Data.Either.Right @ GHC.IO.Exception.IOError @ () ipv1 #) })
+                             `cast`
+                           (Sym (GHC.Types.N:IO[0]
+                                     <Data.Either.Either GHC.IO.Exception.IOError ()>_R)))
+                          `cast`
+                        (GHC.Types.N:IO[0]
+                             <Data.Either.Either GHC.IO.Exception.IOError ()>_R)
+                        Store.storeAvailableProjects5
+                        s of ds1 { (#,#) ipv ipv1 ->
+                 (# ipv,
+                    case ipv1 of wild {
+                      Data.Either.Left e
+                      -> GHC.Base.Just
+                           @ Errors.Error
+                           (case e of ww { GHC.IO.Exception.IOError ww1 ww2 ww3 ww4 ww5 ww6 ->
+                            case GHC.IO.Exception.$w$cshowsPrec2
+                                   ww1
+                                   ww2
+                                   ww3
+                                   ww4
+                                   ww6
+                                   (GHC.Types.[] @ GHC.Types.Char) of dt { DEFAULT ->
+                            case GHC.Magic.runRW#
+                                   @ 'GHC.Types.PtrRepLifted
+                                   @ Data.Text.Internal.Text
+                                   (\ (s1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                                    case GHC.Prim.newByteArray#
+                                           @ GHC.Prim.RealWorld
+                                           10#
+                                           s1 of ds2 { (#,#) ipv2 ipv3 ->
+                                    Store.$wouter ipv3 4# dt 0# ipv2 }) of ds2 { (#,#) ipv2 ipv3 ->
+                            ipv3 `cast` (Sym (Errors.N:Error[0])) } } })
+                      Data.Either.Right ds -> GHC.Base.Nothing @ Errors.Error } #) }) -}
+b50a1a520f2dac77ffa1b3d239fa38d8
+  storeAvailableProjects5 ::
+    GHC.Exception.SomeException
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          Data.Either.Either GHC.IO.Exception.IOError () #)
+  {- Arity: 2,
+     Unfolding: (\ (e1 :: GHC.Exception.SomeException)[OneShot]
+                   (eta1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case e1 of wild { GHC.Exception.SomeException e100 $dException1 e2 ->
+                 case (GHC.Exception.$p1Exception @ e100 $dException1)
+                        `cast`
+                      (Data.Typeable.Internal.N:Typeable[0] <*>_N <e100>_N)
+                        (GHC.Prim.proxy#
+                           @ *
+                           @ e100) of wild1 { Data.Typeable.Internal.TypeRep dt dt1 ds2 ds3 ds4 ->
+                 case GHC.IO.Exception.$fExceptionIOException3 of wild2 { Data.Typeable.Internal.TypeRep dt2 dt3 ds5 ds6 ds7 ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.eqWord# dt dt2) of wild3 {
+                   GHC.Types.False
+                   -> GHC.Prim.raiseIO#
+                        @ GHC.Exception.SomeException
+                        @ (Data.Either.Either GHC.IO.Exception.IOError ())
+                        wild
+                        eta1
+                   GHC.Types.True
+                   -> case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.eqWord# dt1 dt3) of wild4 {
+                        GHC.Types.False
+                        -> GHC.Prim.raiseIO#
+                             @ GHC.Exception.SomeException
+                             @ (Data.Either.Either GHC.IO.Exception.IOError ())
+                             wild
+                             eta1
+                        GHC.Types.True
+                        -> (# eta1,
+                              Data.Either.Left
+                                @ GHC.IO.Exception.IOError
+                                @ ()
+                                e2
+                                  `cast`
+                                (UnsafeCo representational e100 GHC.IO.Exception.IOException) #) } } } } }) -}
+064f58a8f2ac18a5970e7d15346f7d08
+  storeCalculation ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> Calculation.Calculation
+    -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 3,
+     Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U(U,U,U),1*U,1*U,1*U)>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeCalculation1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Project.ProjectName>_R
+                 ->_R <Calculation.Calculation>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+687ce8ba1576c801f7ec3affb78b13ef
+  storeCalculation1 ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> Calculation.Calculation
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 3,
+     Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U(U,U,U),1*U,1*U,1*U)>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (pn :: Project.ProjectName)
+                   (c :: Calculation.Calculation) ->
+                 Store.storeAvailableProjects4
+                   (case c of wild { Calculation.Calculation ds1 ds2 ds3 ds4 ->
+                    case ds1
+                           `cast`
+                         (Calculation.N:CalculationName[0]) of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                    Paths.$wcalculationPath root pn ww1 ww2 ww3 } })
+                   (Data.ByteString.Builder.toLazyByteString
+                      (Data.Aeson.Encoding.Builder.encodeToBuilder
+                         (ProjectJson.$fToJSONCalculation_$ctoJSON c)))) -}
+c61b566838746ce8f0bef9c1c18d8626
+  storeProject ::
+    GHC.IO.FilePath
+    -> Project.Project -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 3, Strictness: <L,1*U><L,U(U(U,U,U),1*U,1*U,1*U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeProject1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Project.Project>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+9ac37aacf6840dad6874912b131193c5
+  storeProject1 ::
+    GHC.IO.FilePath
+    -> Project.Project
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 3, Strictness: <L,1*U><L,U(U(U,U,U),1*U,1*U,1*U)><S,U>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (pr :: Project.Project)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 let {
+                   path :: GHC.IO.FilePath
+                   = System.FilePath.Posix.combine
+                       (case pr of wild { Project.Project ds1 ds2 ds3 ds4 ->
+                        case ds1
+                               `cast`
+                             (Project.N:ProjectName[0]) of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                        Paths.$wprojectDir root ww1 ww2 ww3 } })
+                       Paths.projectPath1
+                 } in
+                 case System.Directory.createDirectoryIfMissing1
+                        GHC.Types.False
+                        (System.FilePath.Posix.dropFileName path)
+                        eta of ds1 { (#,#) ipv ipv1 ->
+                 Store.storeAvailableProjects4
+                   path
+                   (Data.ByteString.Builder.toLazyByteString
+                      (Data.Aeson.Encoding.Builder.encodeToBuilder
+                         (ProjectJson.$fToJSONProject_$ctoJSON pr)))
+                   ipv }) -}
+802311e6fce3cca33f063d6b6bdf6ce6
+  storeView ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> View.View
+    -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 3, Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U(U,U,U),1*U)>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeView1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Project.ProjectName>_R
+                 ->_R <View.View>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+84ff0d59e16e984b217c1e05bdd5d44b
+  storeView1 ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> View.View
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 3, Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U(U,U,U),1*U)>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (pn :: Project.ProjectName)
+                   (v :: View.View) ->
+                 Store.storeAvailableProjects4
+                   (case v of wild { View.View ds1 ds2 ->
+                    case ds1
+                           `cast`
+                         (View.N:ViewName[0]) of ww { Data.Text.Internal.Text ww1 ww2 ww3 ->
+                    Paths.$wviewPath root pn ww1 ww2 ww3 } })
+                   (Data.ByteString.Builder.toLazyByteString
+                      (Data.Aeson.Encoding.Builder.encodeToBuilder
+                         (ProjectJson.$fToJSONView_$ctoJSON v)))) -}
+b24232abace707761e35fff00ad626b9
+  storeXMap ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> XMapTypes.XNamedMap
+    -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 3, Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U,1*U)>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeXMap1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Project.ProjectName>_R
+                 ->_R <XMapTypes.XNamedMap>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+ee677ce64c7d9c6eabce4663fa768b37
+  storeXMap1 ::
+    GHC.IO.FilePath
+    -> Project.ProjectName
+    -> XMapTypes.XNamedMap
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld,
+          GHC.Base.Maybe Errors.Error #)
+  {- Arity: 3, Strictness: <L,1*U><L,1*U(U,U,U)><L,U(U,1*U)>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (pn :: Project.ProjectName)
+                   (m :: XMapTypes.XNamedMap) ->
+                 Store.storeAvailableProjects4
+                   (Paths.xMapPath root pn (XMapTypes.xmapName m))
+                   (Data.ByteString.Builder.toLazyByteString
+                      (Data.Aeson.Encoding.Builder.encodeToBuilder
+                         (XMapJson.$fToJSONXNamedMap_$ctoJSON m)))) -}
+f343a89a465ffbec84b02f34d4f793e3
+  tryWriteFile ::
+    GHC.IO.FilePath
+    -> Data.ByteString.Lazy.Internal.ByteString
+    -> GHC.Types.IO (GHC.Base.Maybe Errors.Error)
+  {- Arity: 3, Strictness: <L,U><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Store.storeAvailableProjects4
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <Data.ByteString.Lazy.Internal.ByteString>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

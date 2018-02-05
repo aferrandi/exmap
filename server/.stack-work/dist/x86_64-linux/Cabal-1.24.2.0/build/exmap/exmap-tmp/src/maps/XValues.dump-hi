@@ -1,0 +1,487 @@
+
+==================== FINAL INTERFACE ====================
+2017-08-25 19:23:04.456893648 UTC
+
+interface main@main:XValues 8002
+  interface hash: a71d9a54ddb6c3282e2664b58ea137bd
+  ABI hash: 8370e5750859f06c13b7ee533fb35483
+  export-list hash: cc2566eb9be7b2dcc61185c0615e3508
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 4b456a4477f896f211e109903201dfd9
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  XValues.BinaryXMapFun
+  XValues.UnaryXMapFun
+  XValues.XValue{XValues.buildMap XValues.defaultValue XValues.extractMap XValues.extractMapFirst XValues.extractMapSecond}
+module dependencies: Errors XMapTypes
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:Data.Either 20b09ef8d0a5b74fdec011c40c1587f5
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  Errors 9e2eacbd48b81b9837c6ecee675125d1
+  Error 7256d6e5b58cf659563f724d4f20fd1c
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  MapValue 091b014dbd91c2f853dc1177b37dd931
+  XMap c2ed918b428722f1755c470b6338cf45
+  XMapBool fc0289d5a53ceeb40b9eaf72c324dfad
+  XMapDouble 64dca8f535e90282d4c575c17aea9c9a
+  XMapInt d7e7675449f1dd11565e3e9279db009c
+  XMapString 31f61ddbcce00d56a11eab12eda7e3f5
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+65b85043b237e4feb39186536eb5171e
+  $fXValueBool :: XValues.XValue GHC.Types.Bool
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ GHC.Types.Bool
+                  XValues.$fXValueBool_$cextractMap
+                  XValues.$fXValueBool_$cextractMapFirst
+                  XValues.$fXValueBool_$cextractMapSecond
+                  XMapTypes.XMapBool
+                  GHC.Types.False -}
+7f86205213fa2d33e1942620c7d0ce91
+  $fXValueBool1 ::
+    Data.Either.Either Errors.Error (XMapTypes.MapValue GHC.Types.Bool)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue GHC.Types.Bool)
+                   XValues.$fXValueBool2 `cast` (Sym (Errors.N:Error[0]))) -}
+56469e054b67920a5feea83a3baa9829
+  $fXValueBool2 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString#
+                   "The map must be of type double"#) -}
+34e6b3f08e9190bfeb2ad2e45e91c47a
+  $fXValueBool3 ::
+    Data.Either.Either Errors.Error (XMapTypes.MapValue GHC.Types.Bool)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue GHC.Types.Bool)
+                   XValues.$fXValueBool4 `cast` (Sym (Errors.N:Error[0]))) -}
+e785a1d7ff41e7eb0713bed3a3df840a
+  $fXValueBool4 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString#
+                   "The map must be of type bool"#) -}
+5188805f14421394aa83d80fa13d11f3
+  $fXValueBool_$cextractMap ::
+    XMapTypes.XMap
+    -> XValues.UnaryXMapFun GHC.Types.Bool r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Bool)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.UnaryXMapFun GHC.Types.Bool r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueBool3
+                   XMapTypes.XMapBool m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Bool)
+                        m }) -}
+b5d5cdb90d105885464c2304725292b2
+  $fXValueBool_$cextractMapFirst ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun GHC.Types.Bool s r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Bool)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun GHC.Types.Bool s r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueBool1
+                   XMapTypes.XMapBool m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Bool)
+                        m }) -}
+c94674d2914e1b6c817be1b39648eca1
+  $fXValueBool_$cextractMapSecond ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun s GHC.Types.Bool r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Bool)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun s GHC.Types.Bool r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueBool1
+                   XMapTypes.XMapBool m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Bool)
+                        m }) -}
+65b85043b237e4feb39186536eb5171e
+  $fXValueDouble :: XValues.XValue GHC.Types.Double
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ GHC.Types.Double
+                  XValues.$fXValueDouble_$cextractMap
+                  XValues.$fXValueDouble_$cextractMapFirst
+                  XValues.$fXValueDouble_$cextractMapSecond
+                  XMapTypes.XMapDouble
+                  XValues.$fXValueDouble_$cdefaultValue -}
+02e3d3504dcbe42a538f0311c27de591
+  $fXValueDouble1 ::
+    Data.Either.Either
+      Errors.Error (XMapTypes.MapValue GHC.Types.Double)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue GHC.Types.Double)
+                   XValues.$fXValueBool2 `cast` (Sym (Errors.N:Error[0]))) -}
+d21e7149af1328b8fda60ba4e3b7c5fb
+  $fXValueDouble_$cdefaultValue :: GHC.Types.Double
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.D# 0.0##) -}
+1e4b73c968f4905cd81a6be8bbd0cf1c
+  $fXValueDouble_$cextractMap ::
+    XMapTypes.XMap
+    -> XValues.UnaryXMapFun GHC.Types.Double r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Double)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.UnaryXMapFun GHC.Types.Double r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueDouble1
+                   XMapTypes.XMapDouble m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Double)
+                        m }) -}
+c87ca1b702f721beb2753b13066d29ec
+  $fXValueDouble_$cextractMapFirst ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun GHC.Types.Double s r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Double)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun GHC.Types.Double s r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueDouble1
+                   XMapTypes.XMapDouble m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Double)
+                        m }) -}
+a6bac09640609e52f4b303517d73897c
+  $fXValueDouble_$cextractMapSecond ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun s GHC.Types.Double r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Double)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun s GHC.Types.Double r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueDouble1
+                   XMapTypes.XMapDouble m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Double)
+                        m }) -}
+65b85043b237e4feb39186536eb5171e
+  $fXValueInt :: XValues.XValue GHC.Types.Int
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ GHC.Types.Int
+                  XValues.$fXValueInt_$cextractMap
+                  XValues.$fXValueInt_$cextractMapFirst
+                  XValues.$fXValueInt_$cextractMapSecond
+                  XMapTypes.XMapInt
+                  XValues.$fXValueInt_$cdefaultValue -}
+b8113b76b3ab5b7571d1781d98f46749
+  $fXValueInt1 ::
+    Data.Either.Either Errors.Error (XMapTypes.MapValue GHC.Types.Int)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue GHC.Types.Int)
+                   XValues.$fXValueBool2 `cast` (Sym (Errors.N:Error[0]))) -}
+6fca787ebdd67096326874fcdd04d252
+  $fXValueInt2 ::
+    Data.Either.Either Errors.Error (XMapTypes.MapValue GHC.Types.Int)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue GHC.Types.Int)
+                   XValues.$fXValueInt3 `cast` (Sym (Errors.N:Error[0]))) -}
+f7f3b46d0e82b2985eddb956bc2d9c77
+  $fXValueInt3 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString#
+                   "The map must be of type int"#) -}
+6ba241c9d5f647bd9b1b33378a86dbb1
+  $fXValueInt_$cdefaultValue :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+74a2a2f657edb7e9ff9aab5ef01a1f22
+  $fXValueInt_$cextractMap ::
+    XMapTypes.XMap
+    -> XValues.UnaryXMapFun GHC.Types.Int r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Int)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.UnaryXMapFun GHC.Types.Int r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueInt2
+                   XMapTypes.XMapInt m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Int)
+                        m }) -}
+5b14242d6f0fb7a94e7daab07bdd55a7
+  $fXValueInt_$cextractMapFirst ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun GHC.Types.Int s r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Int)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun GHC.Types.Int s r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueInt1
+                   XMapTypes.XMapInt m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Int)
+                        m }) -}
+2a839215e62c2c0f4a6197c7441bef0f
+  $fXValueInt_$cextractMapSecond ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun s GHC.Types.Int r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue GHC.Types.Int)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun s GHC.Types.Int r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueInt1
+                   XMapTypes.XMapInt m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue GHC.Types.Int)
+                        m }) -}
+65b85043b237e4feb39186536eb5171e
+  $fXValueText :: XValues.XValue Data.Text.Internal.Text
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Data.Text.Internal.Text
+                  XValues.$fXValueText_$cextractMap
+                  XValues.$fXValueText_$cextractMapFirst
+                  XValues.$fXValueText_$cextractMapSecond
+                  XMapTypes.XMapString
+                  XValues.$fXValueText_$cdefaultValue -}
+611d7512078b098be11dc2eaa22cfac9
+  $fXValueText1 ::
+    Data.Either.Either
+      Errors.Error (XMapTypes.MapValue Data.Text.Internal.Text)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue Data.Text.Internal.Text)
+                   XValues.$fXValueBool2 `cast` (Sym (Errors.N:Error[0]))) -}
+a9f2e46b4c82d84b4eb0e3b29136ad9d
+  $fXValueText2 ::
+    Data.Either.Either
+      Errors.Error (XMapTypes.MapValue Data.Text.Internal.Text)
+  {- Strictness: m1,
+     Unfolding: (Data.Either.Left
+                   @ Errors.Error
+                   @ (XMapTypes.MapValue Data.Text.Internal.Text)
+                   XValues.$fXValueText3 `cast` (Sym (Errors.N:Error[0]))) -}
+76fcdc4e8e35a134a2a1b1ecd3ffaef2
+  $fXValueText3 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.unpackCString#
+                   "The map must be of type string"#) -}
+52b51573614d29ba1704b38ac0174205
+  $fXValueText_$cdefaultValue :: Data.Text.Internal.Text
+  {- Unfolding: InlineRule (0, True, True)
+                Data.Text.Internal.empty_ -}
+8f0b4ac556bdbfd0b3f5da77041775f9
+  $fXValueText_$cextractMap ::
+    XMapTypes.XMap
+    -> XValues.UnaryXMapFun Data.Text.Internal.Text r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue Data.Text.Internal.Text)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.UnaryXMapFun Data.Text.Internal.Text r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueText2
+                   XMapTypes.XMapString m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue Data.Text.Internal.Text)
+                        m }) -}
+248ee22d533682bf7ad952a64effef21
+  $fXValueText_$cextractMapFirst ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun Data.Text.Internal.Text s r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue Data.Text.Internal.Text)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun Data.Text.Internal.Text s r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueText1
+                   XMapTypes.XMapString m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue Data.Text.Internal.Text)
+                        m }) -}
+9bf0246a041e3901e503cedad6044ca9
+  $fXValueText_$cextractMapSecond ::
+    XMapTypes.XMap
+    -> XValues.BinaryXMapFun s Data.Text.Internal.Text r
+    -> Data.Either.Either
+         Errors.Error (XMapTypes.MapValue Data.Text.Internal.Text)
+  {- Arity: 2, Strictness: <S,1*U><L,A>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   @ r
+                   (ds :: XMapTypes.XMap)
+                   (ds1 :: XValues.BinaryXMapFun s Data.Text.Internal.Text r) ->
+                 case ds of wild {
+                   DEFAULT -> XValues.$fXValueText1
+                   XMapTypes.XMapString m
+                   -> Data.Either.Right
+                        @ Errors.Error
+                        @ (XMapTypes.MapValue Data.Text.Internal.Text)
+                        m }) -}
+eb2d413e05fba7361bc00b6c3a349211
+  $tc'C:XValue :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   16494689525319995690##
+                   11475002689690531960##
+                   XValues.$trModule
+                   XValues.$tc'C:XValue1) -}
+796b208c06edca4119f9c09265e22000
+  $tc'C:XValue1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'C:XValue"#) -}
+a6e73fcbfbe1b1674cd48be7d1a9861d
+  $tcXValue :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   15041861146916120965##
+                   18055624265109658476##
+                   XValues.$trModule
+                   XValues.$tcXValue1) -}
+3e1cd5df394a75beb4e571b8959c6435
+  $tcXValue1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "XValue"#) -}
+64e587ea0d314d64ec29de5e29293937
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   XValues.$trModule2
+                   XValues.$trModule1) -}
+2ed7ed2c41497444dbb2b2123b021d0d
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "XValues"#) -}
+b985018b60e25ff4bddb00147c67defb
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+6b0b801cec94512eebb2018a3c40a8f0
+  type AggregateXMapFun a r = a -> r
+c20475c38a4c03e49d9118a4b0a48b93
+  type BinaryXMapFun a b r = a -> b -> r
+a361318ef5cc91bd9664801be98c7ac4
+  type UnaryXMapFun a r = a -> r
+65b85043b237e4feb39186536eb5171e
+  class XValue a where
+    extractMap :: XMapTypes.XMap
+                  -> XValues.UnaryXMapFun a r
+                  -> Data.Either.Either Errors.Error (XMapTypes.MapValue a)
+    extractMapFirst :: XMapTypes.XMap
+                       -> XValues.BinaryXMapFun a s r
+                       -> Data.Either.Either Errors.Error (XMapTypes.MapValue a)
+    extractMapSecond :: XMapTypes.XMap
+                        -> XValues.BinaryXMapFun s a r
+                        -> Data.Either.Either Errors.Error (XMapTypes.MapValue a)
+    buildMap :: XMapTypes.MapValue a -> XMapTypes.XMap
+    defaultValue :: a
+    {-# MINIMAL extractMap, extractMapFirst, extractMapSecond,
+                buildMap, defaultValue #-}
+instance [safe] XValues.XValue [GHC.Types.Bool]
+  = XValues.$fXValueBool
+instance [safe] XValues.XValue [GHC.Types.Double]
+  = XValues.$fXValueDouble
+instance [safe] XValues.XValue [GHC.Types.Int]
+  = XValues.$fXValueInt
+instance [safe] XValues.XValue [Data.Text.Internal.Text]
+  = XValues.$fXValueText
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

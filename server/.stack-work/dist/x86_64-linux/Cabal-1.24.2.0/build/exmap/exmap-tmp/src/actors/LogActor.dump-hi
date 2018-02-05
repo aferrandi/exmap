@@ -1,0 +1,144 @@
+
+==================== FINAL INTERFACE ====================
+2017-09-25 06:33:22.794918734 UTC
+
+interface main@main:LogActor 8002
+  interface hash: f00b54ac068d6d53bc310d57e8b52098
+  ABI hash: 677b50c6b0b879e2e9bfaf169376c6b3
+  export-list hash: df56b0d3ab16b2593c7dcbe69bf08724
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 3eeefb146dc97c851cab19b415b4ae7e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  LogActor.actorLog
+module dependencies: Errors LogMessages
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1 stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve*
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 7256d6e5b58cf659563f724d4f20fd1c
+import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
+  exports: 7ec54aab985649a6202fd26be75d5d43
+  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
+  LogMLog a9cb60fe0c90338b51152114aaaf42a0
+  LogMStop 53627622b506ae885f81be663c1a6b73
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.IO e1e0f468baf65e2595fd999fed6d368d
+885b6e8f53b02f9e0f2e7a45899a7541
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   LogActor.$trModule2
+                   LogActor.$trModule1) -}
+40a7b49b69e48b985b8bb4d4be70fb25
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "LogActor"#) -}
+2f3e769fc57e4895a27cc2337cccf8e0
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+b460ed157e8b2be1d6d34c5c2da13b53
+  $wactorLog ::
+    GHC.Prim.TVar#
+      GHC.Prim.RealWorld
+      (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage)
+    -> GHC.Prim.TVar#
+         GHC.Prim.RealWorld
+         (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage)
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, Strictness: <S,U><L,A><S,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld
+                            (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage))
+                   (ww1 :: GHC.Prim.TVar#
+                             GHC.Prim.RealWorld
+                             (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage))
+                   (w :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 letrec {
+                   loop :: GHC.Prim.State# GHC.Prim.RealWorld
+                           -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+                     {- Arity: 1, Strictness: <S,U> -}
+                   = \ (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                     case GHC.Prim.atomically#
+                            @ LogMessages.LogMessage
+                            (\ (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                             Control.Concurrent.STM.TChan.$wreadTChan
+                               @ LogMessages.LogMessage
+                               ww
+                               ww1
+                               w1)
+                            s of ds1 { (#,#) ipv ipv1 ->
+                     case ipv1 of wild {
+                       LogMessages.LogMLog ds
+                       -> case Data.Text.IO.appendFile2
+                                 GHC.IO.Handle.FD.stdout
+                                 ds `cast` (Errors.N:Error[0])
+                                 ipv of ds2 { (#,#) ipv2 ipv3 ->
+                          case GHC.IO.Handle.Text.$whPutChar
+                                 GHC.IO.Handle.FD.stdout
+                                 '\n'#
+                                 ipv2 of ds3 { (#,#) ipv4 ipv5 ->
+                          loop ipv4 } }
+                       LogMessages.LogMStop -> (# ipv, GHC.Tuple.() #) } }
+                 } in
+                 loop w) -}
+bc61f274c905fbf400050d57417776fa
+  actorLog :: LogMessages.LogChan -> GHC.Types.IO ()
+  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                LogActor.actorLog1
+                  `cast`
+                (<LogMessages.LogChan>_R ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
+a4a6d288ac36877412d3d48e7026e062
+  actorLog1 ::
+    LogMessages.LogChan
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: LogMessages.LogChan)
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
+                 LogActor.$wactorLog ww1 ww2 w1 }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

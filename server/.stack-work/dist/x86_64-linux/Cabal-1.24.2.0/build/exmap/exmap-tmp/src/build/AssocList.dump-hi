@@ -1,0 +1,130 @@
+
+==================== FINAL INTERFACE ====================
+2017-08-16 05:46:54.901957423 UTC
+
+interface main@main:AssocList 8002
+  interface hash: ac40e522a8c63e633b13ce00b6ca839c
+  ABI hash: 285e8ffbf4f31be2d9dbc0e99d5a3fed
+  export-list hash: 0afb1cf80f007ad39360a1007b7a8727
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 96b542d537f655ad583e6de1a6ed0c0e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  AssocList.groupAssocListByKey
+  AssocList.mapWithNothingValues
+module dependencies:
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      containers-0.5.7.1@containers-0.5.7.1*
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+import  -/  base-4.9.1.0:Data.List 07ae2acca6538aa0800bd0a993ac6ac1
+import  -/  base-4.9.1.0:Data.OldList 27987919d8da2f92e3f472ca81f730f8
+import  -/  base-4.9.1.0:Data.Tuple 7dc4bbb45d2e69c991ffac438beeca11
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.List ab8c4e523e6c479c549d3bcd5fc4a439
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+5eb59ff171542441f909747906bc6953
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   AssocList.$trModule2
+                   AssocList.$trModule1) -}
+75cc861d26cda4807372bf61978a77c8
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "AssocList"#) -}
+fb392b8e475724db388143986547ac8d
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+81ac85ca0964f9a8e61e338fad4a6a04
+  groupAssocListByKey :: GHC.Classes.Eq k => [(k, a)] -> [(k, [a])]
+  {- Arity: 2, Strictness: <L,U(C(C1(U)),A)><S,1*U>,
+     Unfolding: (\ @ k
+                   @ a
+                   ($dEq :: GHC.Classes.Eq k)
+                   (xs :: [(k, a)]) ->
+                 GHC.Base.map
+                   @ [(k, a)]
+                   @ (k, [a])
+                   (AssocList.groupAssocListByKey1 @ k @ a)
+                   (Data.OldList.groupBy
+                      @ (k, a)
+                      (\ (ds :: (k, a)) (ds1 :: (k, a)) ->
+                       case ds of wild { (,) k1 ds2 ->
+                       case ds1 of wild1 { (,) k2 ds3 ->
+                       GHC.Classes.== @ k $dEq k1 k2 } })
+                      xs)) -}
+343c7b2045ed47cbd8083dac4c22b350
+  groupAssocListByKey1 :: [(k, a)] -> (k, [a])
+  {- Arity: 1, Strictness: <L,U>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ @ k @ a (ys :: [(k, a)]) ->
+                 (case ys of wild {
+                    [] -> case GHC.List.badHead ret_ty k of {}
+                    : x ds1 -> case x of wild1 { (,) x1 ds2 -> x1 } },
+                  GHC.Base.build
+                    @ a
+                    (\ @ b1 (c :: a -> b1 -> b1)[OneShot] (n :: b1)[OneShot] ->
+                     GHC.Base.foldr
+                       @ (k, a)
+                       @ b1
+                       (GHC.Base.mapFB @ a @ b1 @ (k, a) c (Data.Tuple.snd @ k @ a))
+                       n
+                       ys))) -}
+1344436074be7d26125b5d33c4a3180d
+  mapWithNothingValues ::
+    GHC.Classes.Ord k => [k] -> Data.Map.Base.Map k (GHC.Base.Maybe a)
+  {- Arity: 2,
+     Strictness: <L,U(A,C(C1(U)),A,A,A,C(C1(U)),A,A)><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ k @ a ($dOrd :: GHC.Classes.Ord k) (eta :: [k]) ->
+                 Data.Map.Strict.fromList
+                   @ k
+                   @ (GHC.Base.Maybe a)
+                   $dOrd
+                   (GHC.Base.build
+                      @ (k, GHC.Base.Maybe a)
+                      (\ @ b1
+                         (c :: (k, GHC.Base.Maybe a) -> b1 -> b1)[OneShot]
+                         (n :: b1)[OneShot] ->
+                       GHC.Base.foldr
+                         @ k
+                         @ b1
+                         (GHC.Base.mapFB
+                            @ (k, GHC.Base.Maybe a)
+                            @ b1
+                            @ k
+                            c
+                            (AssocList.mapWithNothingValues1 @ a @ k))
+                         n
+                         eta))) -}
+ae26635890322e673c22ee77e2f2e21b
+  mapWithNothingValues1 :: k -> (k, GHC.Base.Maybe a)
+  {- Arity: 1, HasNoCafRefs, Strictness: <L,U>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ @ a @ k (p :: k) -> (p, GHC.Base.Nothing @ a)) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

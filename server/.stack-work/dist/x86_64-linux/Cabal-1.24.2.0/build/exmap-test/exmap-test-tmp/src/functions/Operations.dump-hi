@@ -1,0 +1,119 @@
+
+==================== FINAL INTERFACE ====================
+2017-10-31 21:26:50.262776439 UTC
+
+interface main@main:Operations 8002
+  interface hash: 95cdc7e117f462c98ac5a609214536d9
+  ABI hash: 4f7f659bc11083106f43505cdb8994c7
+  export-list hash: 494f1bcd2b9c618b52ead64473dd4e04
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 41cb72183c02d3fc92944c2d624cbf35
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Operations.operationRepository
+  OperationTypes.OperationName{OperationTypes.Add OperationTypes.Subtract}
+  Operations.OperationFun
+module dependencies: Errors OperationTypes XFunction XMapTypes
+                     XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Num 00bfaa7b2f9d6084913c0697a8a49ec8
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
+  exports: 1a323fe5f5d42124be5996496a88719d
+  Add d4bf159d115e70a795286354456ea2ee
+  OperationName a5a60b294983bcb41d5e4136aac111fd
+  Subtract 6903c995800fbe4485eda7a754f5c732
+import  -/  XFunction daf3a8fe929e99b13bb1482148441fb5
+  exports: e4744bd862d5d39381a3b81764a14b8c
+  OperationMode ba1024ee7488d74e75d2aa7e9c371660
+  operate c2f35057a2a529dbe06ec7dbc830d4f4
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMap c2ed918b428722f1755c470b6338cf45
+  XMapErr b49ed57204d25dc35d651e4ad165d1a3
+a4f3dd9aa1aa4221f83ffe0677a5a975
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Operations.$trModule2
+                   Operations.$trModule1) -}
+dea32fee31792be603a9e5f6d3630b48
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Operations"#) -}
+4f04cd375ea7b4d6f822e5359383fa8c
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+4a13308559e07165579ba7a4c7493dc7
+  type OperationFun =
+    XFunction.OperationMode
+    -> XMapTypes.XMap -> XMapTypes.XMap -> XMapTypes.XMapErr
+e5830781f02b05073047cc047b17f812
+  operationRepository ::
+    OperationTypes.OperationName -> Operations.OperationFun
+  {- Arity: 4, Strictness: <S,1*U><L,1*U><L,U><L,U>,
+     Unfolding: (\ (ds :: OperationTypes.OperationName)
+                   (eta :: XFunction.OperationMode)
+                   (eta1 :: XMapTypes.XMap)
+                   (eta2 :: XMapTypes.XMap) ->
+                 case ds of wild {
+                   OperationTypes.Add
+                   -> XFunction.operate
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        eta
+                        GHC.Float.plusDouble
+                        eta1
+                        eta2
+                   OperationTypes.Subtract
+                   -> XFunction.operate
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        eta
+                        GHC.Float.minusDouble
+                        eta1
+                        eta2 }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

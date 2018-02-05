@@ -1,0 +1,125 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-29 07:03:31.36205445 UTC
+
+interface main@main:FormulaText 8002
+  interface hash: 0abd0e5228cb6bd4c0aa6fbf062142f9
+  ABI hash: 2f3ed4ca604cf5c6356f359bac84378c
+  export-list hash: c1da147e6c20863e0692d2adabb1c46b
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: eb8b914f601e09a0a641fe0c1e5960eb
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  FormulaText.formulaToText
+  FormulaText.mapNameToText
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes XFunction XMapTypes XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
+                      binary-0.8.3.0@binary-0.8.3.0
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  CalculationFormulaText 190506ef3f5899e15e830e35f1934183
+  CalculationFormulaText fd38426093a918ee049ab7c4fb1fb4f2
+import  -/  Formula 09444ea12c0441bd37404b175a926171
+  exports: d6ceee93beb5ac820afa97f35b5fa611
+  XFApplication eb8c3b77bcb22eb578439fc9251971f9
+  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
+  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
+  XFormula fb924f832976f886aefc5a3d03a23b47
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName 0be109e6102724ac02eab934889766c9
+  XMapName aed4e1c98ee09424176ec799b4e99672
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show 516b88f1e0e0dbed91cb925542602306
+6cb41cb89affae04775d1e443841b7e5
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   FormulaText.$trModule2
+                   FormulaText.$trModule1) -}
+65777048b25f469a3fcaa9d293e4a292
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "FormulaText"#) -}
+26bd041be0d2c790cd7c9bfa2e254d18
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+02b86d83a95ea30e0557f055688010a1
+  formulaToText ::
+    Formula.XFormula -> Calculation.CalculationFormulaText
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (0, True, True)
+                FormulaText.formulaToText1
+                  `cast`
+                (<Formula.XFormula>_R
+                 ->_R Sym (Calculation.N:CalculationFormulaText[0])) -}
+4fa359c6291a0a94cc2b3945ea12fb8e
+  formulaToText1 :: Formula.XFormula -> Data.Text.Internal.Text
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Formula.XFormula) ->
+                 FormulaText.formulaToTextRec
+                   (GHC.Base.id @ Data.Text.Internal.Text)
+                   x) -}
+e6fd3135ac8c5566c4272852de9b6e03
+  formulaToTextRec ::
+    (Data.Text.Internal.Text -> Data.Text.Internal.Text)
+    -> Formula.XFormula -> Data.Text.Internal.Text
+  {- Arity: 2, Strictness: <L,1*C1(U(U,U,U))><S,1*U> -}
+78d91a546e14695096e17f8934fe69f6
+  mapNameToText :: XMapTypes.XMapName -> Data.Text.Internal.Text
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: XMapTypes.XMapName) ->
+                 Data.Text.concat
+                   (Data.Text.Internal.Functions.intersperse
+                      @ Data.Text.Internal.Text
+                      FormulaText.mapNameToText1
+                      ds `cast` (XMapTypes.N:XMapName[0]))) -}
+e68d37f4987ebc62088ffca20554af67
+  mapNameToText1 :: Data.Text.Internal.Text
+  {- Unfolding: (Data.Text.Show.singleton_
+                   FormulaText.mapNameToText2) -}
+fb8f840176ba0a073fe03c053ec3a7fc
+  mapNameToText2 :: GHC.Types.Char
+  {- HasNoCafRefs, Unfolding: (GHC.Types.C# '/'#) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

@@ -1,0 +1,286 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-30 11:06:52.007055591 UTC
+
+interface main@main:CalculationMessages 8002
+  interface hash: eb1c366252f6323db8ae075e40259f2d
+  ABI hash: cc9d4f53e4cdd89393c32f99d3d216d7
+  export-list hash: 38997434d1eadadff28c77fbb028d629
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 9581e73690371ffaaf5c309a49faabb5
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  CalculationMessages.CalculationChan
+  CalculationMessages.CalculationMessage{CalculationMessages.CMError CalculationMessages.CMMaps CalculationMessages.CMStop CalculationMessages.CMUpdateCalculation CalculationMessages.CMViewStarted}
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     OperationTypes Project ProjectJson TextEnums View ViewMessages
+                     WebClients WebMessages WebMessagesJson XFunction XMapJson XMapTypes
+                     XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  Calculation d417b5b8b099f384a090c1e4806d4f1d
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  Error 6c4a3f7f4bcf5556b15f204ca16cf217
+import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
+  exports: 4f259910ac4dde7df97333a484b49710
+  ViewChan a8e7d5732ce960f93aa79f3505166fc7
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
+74acf4261761144a397a9c65fdfd50b7
+  $fEqCalculationMessage ::
+    GHC.Classes.Eq CalculationMessages.CalculationMessage
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ CalculationMessages.CalculationMessage
+                  CalculationMessages.$fEqCalculationMessage_$c==
+                  CalculationMessages.$fEqCalculationMessage_$c/= -}
+74acf4261761144a397a9c65fdfd50b7
+  $fEqCalculationMessage_$c/= ::
+    CalculationMessages.CalculationMessage
+    -> CalculationMessages.CalculationMessage -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: CalculationMessages.CalculationMessage)
+                   (b :: CalculationMessages.CalculationMessage) ->
+                 case CalculationMessages.$fEqCalculationMessage_$c== a b of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+74acf4261761144a397a9c65fdfd50b7
+  $fEqCalculationMessage_$c== ::
+    CalculationMessages.CalculationMessage
+    -> CalculationMessages.CalculationMessage -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>,
+     Unfolding: (\ (ds :: CalculationMessages.CalculationMessage)
+                   (ds1 :: CalculationMessages.CalculationMessage) ->
+                 case ds of wild {
+                   CalculationMessages.CMMaps a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        CalculationMessages.CMMaps b1
+                        -> GHC.Classes.$fEq[]_$c==
+                             @ XMapTypes.XNamedMap
+                             XMapTypes.$fEqXNamedMap
+                             a1
+                             b1 }
+                   CalculationMessages.CMError a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        CalculationMessages.CMError b1
+                        -> Data.Text.$fEqText_$c==
+                             a1 `cast` (Errors.N:Error[0])
+                             b1 `cast` (Errors.N:Error[0]) }
+                   CalculationMessages.CMUpdateCalculation a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        CalculationMessages.CMUpdateCalculation b1
+                        -> Calculation.$fEqCalculation_$c== a1 b1 }
+                   CalculationMessages.CMViewStarted a1
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        CalculationMessages.CMViewStarted b1
+                        -> Control.Concurrent.STM.TChan.$fEqTChan_$c==
+                             @ ViewMessages.ViewMessage
+                             a1
+                             b1 }
+                   CalculationMessages.CMStop
+                   -> case ds1 of wild1 {
+                        DEFAULT -> GHC.Types.False
+                        CalculationMessages.CMStop -> GHC.Types.True } }) -}
+d4513cc500ff60422a22a6b614728806
+  $tc'CMError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5237650108910648566##
+                   10306895419102772101##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tc'CMError1) -}
+78ccd12859c22a24cd0d9cd149d78228
+  $tc'CMError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'CMError"#) -}
+704baf2e1bbb500dd598f51f2fb6195f
+  $tc'CMMaps :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   524116895018874150##
+                   3854964797303930888##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tc'CMMaps1) -}
+7eddb8d4de0f9ef331d14a943f5e69bb
+  $tc'CMMaps1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'CMMaps"#) -}
+9f5ff265d81c44d1d77b31e88c0bc42f
+  $tc'CMStop :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   4997545494196644206##
+                   5227576162959335387##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tc'CMStop1) -}
+84016478911d342402af0f9f55f4e15f
+  $tc'CMStop1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'CMStop"#) -}
+42cf81eb12a5daeb0a566a6d4c28b7be
+  $tc'CMUpdateCalculation :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   3992760325520790841##
+                   2803558358825242405##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tc'CMUpdateCalculation1) -}
+8a0bb2ba0a98bd1f636c87f12d4d800f
+  $tc'CMUpdateCalculation1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'CMUpdateCalculation"#) -}
+aa21b7b675643d650df293a44a9f242d
+  $tc'CMViewStarted :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   113916025882359818##
+                   7610002324184862501##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tc'CMViewStarted1) -}
+06d49255d9ac2a74dcb394e79582f129
+  $tc'CMViewStarted1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'CMViewStarted"#) -}
+49a35a0770a5b5e474e497a46528956a
+  $tcCalculationMessage :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12006928397595591738##
+                   3334466888796653770##
+                   CalculationMessages.$trModule
+                   CalculationMessages.$tcCalculationMessage1) -}
+1cba54173519ce020097ad2f274aa987
+  $tcCalculationMessage1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "CalculationMessage"#) -}
+9071968dd2363a47d07f272f766d1d48
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   CalculationMessages.$trModule2
+                   CalculationMessages.$trModule1) -}
+32c39c797f5b77de710ccb9631e29ab0
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "CalculationMessages"#) -}
+9b8e7b61588c7e73989b03af10861342
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+6b33731f780f07df39838a7cd12da2cb
+  type CalculationChan =
+    Control.Concurrent.STM.TChan.TChan
+      CalculationMessages.CalculationMessage
+74acf4261761144a397a9c65fdfd50b7
+  data CalculationMessage
+    = CMMaps [XMapTypes.XNamedMap]
+    | CMError Errors.Error
+    | CMUpdateCalculation Calculation.Calculation
+    | CMViewStarted ViewMessages.ViewChan
+    | CMStop
+instance GHC.Classes.Eq [CalculationMessages.CalculationMessage]
+  = CalculationMessages.$fEqCalculationMessage
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

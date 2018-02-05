@@ -1,0 +1,555 @@
+
+==================== FINAL INTERFACE ====================
+2017-08-16 05:46:54.967989267 UTC
+
+interface main@main:ApplicationTypes 8002
+  interface hash: 773e815a4a0331103350c6b051d5a6d7
+  ABI hash: 143822343c6f7fa9393e7f65b91b4440
+  export-list hash: c8a509b10500b8e668c0d339e53814fa
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: a7730481eefeeb73580882460d408341
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  ApplicationTypes.ApplicationName{ApplicationTypes.Negate}
+module dependencies:
+package dependencies: base-4.9.1.0* ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+family instance modules: base-4.9.1.0:Control.Applicative
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Const
+                         base-4.9.1.0:Data.Monoid base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:GHC.Generics base-4.9.1.0:GHC.IO.Exception
+                         base-4.9.1.0:GHC.TypeLits
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Enum 3811281f7b5f26da514529cf3ed44009
+import  -/  base-4.9.1.0:GHC.Err 3bba35a16538d33d424682ce66876cdd
+import  -/  base-4.9.1.0:GHC.Num 00bfaa7b2f9d6084913c0697a8a49ec8
+import  -/  base-4.9.1.0:GHC.Read b6821365d2d5fa2155c9e910160e7f57
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  base-4.9.1.0:Text.Read.Lex 16199fac3c6c2d64cc7c268f3c0d2269
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fBoundedApplicationName ::
+    GHC.Enum.Bounded ApplicationTypes.ApplicationName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ ApplicationTypes.ApplicationName
+                  ApplicationTypes.Negate
+                  ApplicationTypes.Negate -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName ::
+    GHC.Enum.Enum ApplicationTypes.ApplicationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ ApplicationTypes.ApplicationName
+                  ApplicationTypes.$fEnumApplicationName_$csucc
+                  ApplicationTypes.$fEnumApplicationName_$cpred
+                  ApplicationTypes.$fEnumApplicationName_$ctoEnum
+                  ApplicationTypes.$fEnumApplicationName_$cfromEnum
+                  ApplicationTypes.$fEnumApplicationName_$cenumFrom
+                  ApplicationTypes.$fEnumApplicationName_$cenumFromThen
+                  ApplicationTypes.$fEnumApplicationName_$cenumFromTo
+                  ApplicationTypes.$fEnumApplicationName_$cenumFromThenTo -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName1 :: [ApplicationTypes.ApplicationName]
+  {- Unfolding: (GHC.Enum.efdtIntUpFB
+                   @ [ApplicationTypes.ApplicationName]
+                   ApplicationTypes.$fEnumApplicationName2
+                   (GHC.Types.[] @ ApplicationTypes.ApplicationName)
+                   0#
+                   0#
+                   0#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName2 ::
+    GHC.Types.Int
+    -> [ApplicationTypes.ApplicationName]
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 2,
+     Unfolding: (\ (x :: GHC.Types.Int)
+                   (ys :: [ApplicationTypes.ApplicationName])[OneShot] ->
+                 GHC.Types.:
+                   @ ApplicationTypes.ApplicationName
+                   (ApplicationTypes.$fEnumApplicationName_$ctoEnum x)
+                   ys) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName3 ::
+    GHC.Prim.Int# -> ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <L,U>x -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName4 :: [ApplicationTypes.ApplicationName]
+  {- Unfolding: (ApplicationTypes.$fEnumApplicationName_go 0#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName5 :: [ApplicationTypes.ApplicationName]
+  {- Unfolding: (GHC.Enum.efdtIntUpFB
+                   @ [ApplicationTypes.ApplicationName]
+                   ApplicationTypes.$fEnumApplicationName6
+                   (GHC.Types.[] @ ApplicationTypes.ApplicationName)
+                   0#
+                   0#
+                   0#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName6 ::
+    GHC.Types.Int
+    -> [ApplicationTypes.ApplicationName]
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 2, HasNoCafRefs,
+     Unfolding: (\ (x :: GHC.Types.Int)
+                   (ys :: [ApplicationTypes.ApplicationName])[OneShot] ->
+                 GHC.Types.:
+                   @ ApplicationTypes.ApplicationName
+                   (case x of wild { GHC.Types.I# a ->
+                    GHC.Prim.tagToEnum# @ ApplicationTypes.ApplicationName a })
+                   ys) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName7 :: [ApplicationTypes.ApplicationName]
+  {- Unfolding: (ApplicationTypes.$fEnumApplicationName_go1 0#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName8 :: ApplicationTypes.ApplicationName
+  {- Strictness: x -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName9 :: ApplicationTypes.ApplicationName
+  {- Strictness: x -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cenumFrom ::
+    ApplicationTypes.ApplicationName
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 1, Strictness: <S,1*H>, Inline: INLINE[0],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: ApplicationTypes.ApplicationName) ->
+                 case w of w1 { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName7 }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cenumFromThen ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 2, Strictness: <S,1*H><S,1*H>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: ApplicationTypes.ApplicationName)
+                   (w1 :: ApplicationTypes.ApplicationName) ->
+                 case w of w2 { ApplicationTypes.Negate ->
+                 case w1 of w3 { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName5 } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cenumFromThenTo ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 3, Strictness: <S,1*H><S,1*H><S,1*H>, Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: ApplicationTypes.ApplicationName)
+                   (w1 :: ApplicationTypes.ApplicationName)
+                   (w2 :: ApplicationTypes.ApplicationName) ->
+                 case w of w3 { ApplicationTypes.Negate ->
+                 case w1 of w4 { ApplicationTypes.Negate ->
+                 case w2 of w5 { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName1 } } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cenumFromTo ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+    -> [ApplicationTypes.ApplicationName]
+  {- Arity: 2, Strictness: <S,1*H><S,1*H>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: ApplicationTypes.ApplicationName)
+                   (w1 :: ApplicationTypes.ApplicationName) ->
+                 case w of w2 { ApplicationTypes.Negate ->
+                 case w1 of w3 { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName4 } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cfromEnum ::
+    ApplicationTypes.ApplicationName -> GHC.Types.Int
+  {- Arity: 1, HasNoCafRefs, Strictness: <S,1*H>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: ApplicationTypes.ApplicationName) ->
+                 case a of wild { ApplicationTypes.Negate -> GHC.Types.I# 0# }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$cpred ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <B,1*H>x,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: ApplicationTypes.ApplicationName) ->
+                 case a of wild { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName8 }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$csucc ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <B,1*H>x,
+     Unfolding: InlineRule (1, True, False)
+                (\ (a :: ApplicationTypes.ApplicationName) ->
+                 case a of wild { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fEnumApplicationName9 }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_$ctoEnum ::
+    GHC.Types.Int -> ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <S(S),1*U(U)>, Inline: INLINE[0],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: GHC.Types.Int) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 ApplicationTypes.$w$ctoEnum ww1 }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_go ::
+    GHC.Prim.Int# -> [ApplicationTypes.ApplicationName]
+  {- Arity: 1, Strictness: <L,U> -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEnumApplicationName_go1 ::
+    GHC.Prim.Int# -> [ApplicationTypes.ApplicationName]
+  {- Arity: 1, HasNoCafRefs, Strictness: <L,U> -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEqApplicationName ::
+    GHC.Classes.Eq ApplicationTypes.ApplicationName
+  DFunId
+  {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ ApplicationTypes.ApplicationName
+                  ApplicationTypes.$fEqApplicationName_$c==
+                  ApplicationTypes.$fEqApplicationName_$c/= -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEqApplicationName_$c/= ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*H><S,1*H>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: ApplicationTypes.ApplicationName)
+                   (b :: ApplicationTypes.ApplicationName) ->
+                 case a of wild { ApplicationTypes.Negate ->
+                 case b of wild1 { ApplicationTypes.Negate ->
+                 GHC.Types.False } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fEqApplicationName_$c== ::
+    ApplicationTypes.ApplicationName
+    -> ApplicationTypes.ApplicationName -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*H><S,1*H>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: ApplicationTypes.ApplicationName)
+                   (ds1 :: ApplicationTypes.ApplicationName) ->
+                 case ds of wild { ApplicationTypes.Negate ->
+                 case ds1 of wild1 { ApplicationTypes.Negate ->
+                 GHC.Types.True } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName ::
+    GHC.Read.Read ApplicationTypes.ApplicationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ ApplicationTypes.ApplicationName
+                  ApplicationTypes.$fReadApplicationName_$creadsPrec
+                  ApplicationTypes.$fReadApplicationName_$creadList
+                  ApplicationTypes.$fReadApplicationName_$creadPrec
+                  ApplicationTypes.$fReadApplicationName_$creadListPrec -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName1 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b.
+       ([ApplicationTypes.ApplicationName]
+        -> Text.ParserCombinators.ReadP.P b)
+       -> Text.ParserCombinators.ReadP.P b
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (eta :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b
+                   (eta1 :: [ApplicationTypes.ApplicationName]
+                            -> Text.ParserCombinators.ReadP.P b) ->
+                 GHC.Read.list1
+                   @ ApplicationTypes.ApplicationName
+                   ApplicationTypes.$fReadApplicationName2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <ApplicationTypes.ApplicationName>_R))
+                   eta
+                   @ b
+                   eta1) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName2 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> Text.ParserCombinators.ReadP.ReadP
+         ApplicationTypes.ApplicationName
+  {- Arity: 1,
+     Unfolding: (GHC.Read.parens1
+                   @ ApplicationTypes.ApplicationName
+                   ApplicationTypes.$fReadApplicationName3
+                     `cast`
+                   (Trans
+                        (<Text.ParserCombinators.ReadPrec.Prec>_R
+                         ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                       <ApplicationTypes.ApplicationName>_R))
+                        (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                  <ApplicationTypes.ApplicationName>_R)))) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName3 ::
+    Text.ParserCombinators.ReadPrec.Prec
+    -> forall b1.
+       (ApplicationTypes.ApplicationName
+        -> Text.ParserCombinators.ReadP.P b1)
+       -> Text.ParserCombinators.ReadP.P b1
+  {- Arity: 2, Strictness: <L,A><L,1*C1(U)>m2, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Text.ParserCombinators.ReadPrec.Prec)
+                   @ b1
+                   (w1 :: ApplicationTypes.ApplicationName
+                          -> Text.ParserCombinators.ReadP.P b1) ->
+                 case ApplicationTypes.$w$creadPrec @ b1 w1 of ww { Unit# ww1 ->
+                 Text.ParserCombinators.ReadP.Look @ b1 ww1 }) -}
+0311d486346a9c92a08e0a6e33321abc
+  $fReadApplicationName4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Negate"#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName5 ::
+    Text.ParserCombinators.ReadP.P [ApplicationTypes.ApplicationName]
+  {- Unfolding: (GHC.Read.list1
+                   @ ApplicationTypes.ApplicationName
+                   ApplicationTypes.$fReadApplicationName2
+                     `cast`
+                   (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                             <ApplicationTypes.ApplicationName>_R))
+                   GHC.Read.$fRead()5
+                   @ [ApplicationTypes.ApplicationName]
+                   (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                      @ [ApplicationTypes.ApplicationName])) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName_$creadList ::
+    Text.ParserCombinators.ReadP.ReadS
+      [ApplicationTypes.ApplicationName]
+  {- Arity: 1,
+     Unfolding: (Text.ParserCombinators.ReadP.run
+                   @ [ApplicationTypes.ApplicationName]
+                   ApplicationTypes.$fReadApplicationName5) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName_$creadListPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec
+      [ApplicationTypes.ApplicationName]
+  {- Arity: 2, Strictness: <L,U><L,U>,
+     Unfolding: InlineRule (0, True, True)
+                ApplicationTypes.$fReadApplicationName1
+                  `cast`
+                (Trans
+                     (<Text.ParserCombinators.ReadPrec.Prec>_R
+                      ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                    <[ApplicationTypes.ApplicationName]>_R))
+                     (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                               <[ApplicationTypes.ApplicationName]>_R))) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName_$creadPrec ::
+    Text.ParserCombinators.ReadPrec.ReadPrec
+      ApplicationTypes.ApplicationName
+  {- Arity: 1,
+     Unfolding: InlineRule (0, True, True)
+                ApplicationTypes.$fReadApplicationName2
+                  `cast`
+                (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                          <ApplicationTypes.ApplicationName>_R)) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fReadApplicationName_$creadsPrec ::
+    GHC.Types.Int
+    -> Text.ParserCombinators.ReadP.ReadS
+         ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (eta :: GHC.Types.Int) ->
+                 Text.ParserCombinators.ReadP.run
+                   @ ApplicationTypes.ApplicationName
+                   ((GHC.Read.parens1
+                       @ ApplicationTypes.ApplicationName
+                       ApplicationTypes.$fReadApplicationName3
+                         `cast`
+                       (Trans
+                            (<Text.ParserCombinators.ReadPrec.Prec>_R
+                             ->_R Sym (Text.ParserCombinators.ReadP.N:ReadP[0]
+                                           <ApplicationTypes.ApplicationName>_R))
+                            (Sym (Text.ParserCombinators.ReadPrec.N:ReadPrec[0]
+                                      <ApplicationTypes.ApplicationName>_R)))
+                       eta)
+                      `cast`
+                    (Text.ParserCombinators.ReadP.N:ReadP[0]
+                         <ApplicationTypes.ApplicationName>_R)
+                      @ ApplicationTypes.ApplicationName
+                      (Text.ParserCombinators.ReadP.$fApplicativeP_$cpure
+                         @ ApplicationTypes.ApplicationName))) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fShowApplicationName ::
+    GHC.Show.Show ApplicationTypes.ApplicationName
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ ApplicationTypes.ApplicationName
+                  ApplicationTypes.$fShowApplicationName_$cshowsPrec
+                  ApplicationTypes.$fShowApplicationName_$cshow
+                  ApplicationTypes.$fShowApplicationName_$cshowList -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fShowApplicationName1 ::
+    ApplicationTypes.ApplicationName -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*H><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: ApplicationTypes.ApplicationName)
+                   (eta :: GHC.Base.String) ->
+                 case ds of wild { ApplicationTypes.Negate ->
+                 GHC.Base.augment
+                   @ GHC.Types.Char
+                   (\ @ b
+                      (c :: GHC.Types.Char -> b -> b)[OneShot]
+                      (n :: b)[OneShot] ->
+                    GHC.Base.foldr
+                      @ GHC.Types.Char
+                      @ b
+                      c
+                      n
+                      ApplicationTypes.$fReadApplicationName4)
+                   eta }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fShowApplicationName_$cshow ::
+    ApplicationTypes.ApplicationName -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*H>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: ApplicationTypes.ApplicationName) ->
+                 case x of wild { ApplicationTypes.Negate ->
+                 ApplicationTypes.$fReadApplicationName4 }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fShowApplicationName_$cshowList ::
+    [ApplicationTypes.ApplicationName] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ ApplicationTypes.ApplicationName
+                   ApplicationTypes.$fShowApplicationName1) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $fShowApplicationName_$cshowsPrec ::
+    GHC.Types.Int -> ApplicationTypes.ApplicationName -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,A><S,1*H><L,1*U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (ds :: GHC.Types.Int)
+                   (ds1 :: ApplicationTypes.ApplicationName)
+                   (eta :: GHC.Base.String) ->
+                 case ds1 of wild { ApplicationTypes.Negate ->
+                 GHC.Base.augment
+                   @ GHC.Types.Char
+                   (\ @ b
+                      (c :: GHC.Types.Char -> b -> b)[OneShot]
+                      (n :: b)[OneShot] ->
+                    GHC.Base.foldr
+                      @ GHC.Types.Char
+                      @ b
+                      c
+                      n
+                      ApplicationTypes.$fReadApplicationName4)
+                   eta }) -}
+b0c72724324911cb5fa41a97e4df8f9b
+  $tc'Negate :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   18254125813597377260##
+                   12760028128647572417##
+                   ApplicationTypes.$trModule
+                   ApplicationTypes.$tc'Negate1) -}
+b941da730d162446ab7d444d0dc38b15
+  $tc'Negate1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Negate"#) -}
+001cd952de0097bc3abed18aa5446512
+  $tcApplicationName :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   5988876476794334313##
+                   13984164090077841913##
+                   ApplicationTypes.$trModule
+                   ApplicationTypes.$tcApplicationName1) -}
+a60dbc651cd75de837c321c4e2520607
+  $tcApplicationName1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ApplicationName"#) -}
+ee18db167ffd3ce39ea4a3f326efd275
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   ApplicationTypes.$trModule2
+                   ApplicationTypes.$trModule1) -}
+8b4c1481213479e3053f9617af3ef04a
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ApplicationTypes"#) -}
+87e1563a1915fa79c5d91a4dc016b4c3
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $w$creadPrec ::
+    (ApplicationTypes.ApplicationName
+     -> Text.ParserCombinators.ReadP.P b1)
+    -> (# GHC.Base.String -> Text.ParserCombinators.ReadP.P b1 #)
+  {- Arity: 1, Strictness: <L,1*C1(U)>, Inline: [0],
+     Unfolding: (\ @ b1
+                   (w :: ApplicationTypes.ApplicationName
+                         -> Text.ParserCombinators.ReadP.P b1) ->
+                 let {
+                   lvl81 :: Text.ParserCombinators.ReadP.P b1
+                   = let {
+                       lvl82 :: Text.ParserCombinators.ReadP.P b1
+                       = w ApplicationTypes.Negate
+                     } in
+                     Text.Read.Lex.expect2
+                       @ b1
+                       (\ (a1 :: Text.Read.Lex.Lexeme) ->
+                        case a1 of wild {
+                          DEFAULT -> Text.ParserCombinators.ReadP.Fail @ b1
+                          Text.Read.Lex.Ident a2
+                          -> case GHC.Base.eqString
+                                    a2
+                                    ApplicationTypes.$fReadApplicationName4 of wild1 {
+                               GHC.Types.False -> Text.ParserCombinators.ReadP.Fail @ b1
+                               GHC.Types.True -> lvl82 } })
+                 } in
+                 let {
+                   k :: () -> Text.ParserCombinators.ReadP.P b1
+                     {- Arity: 1, Strictness: <L,A>, Inline: INLINE[0],
+                        Unfolding: InlineRule (1, True, True) (\ (w4 :: ()) -> lvl81) -}
+                   = \ (w4 :: ()) -> lvl81
+                 } in
+                 (# \ (a :: GHC.Base.String) ->
+                    (Text.ParserCombinators.ReadP.skipSpaces_skip a)
+                      `cast`
+                    (Text.ParserCombinators.ReadP.N:ReadP[0] <()>_R)
+                      @ b1
+                      k #)) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  $w$ctoEnum :: GHC.Prim.Int# -> ApplicationTypes.ApplicationName
+  {- Arity: 1, Strictness: <S,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.Int#) ->
+                 case GHC.Prim.tagToEnum#
+                        @ GHC.Types.Bool
+                        (GHC.Prim.>=# ww 0#) of wild {
+                   GHC.Types.False -> ApplicationTypes.$fEnumApplicationName3 ww
+                   GHC.Types.True
+                   -> case GHC.Prim.tagToEnum#
+                             @ GHC.Types.Bool
+                             (GHC.Prim.<=# ww 0#) of wild1 {
+                        GHC.Types.False -> ApplicationTypes.$fEnumApplicationName3 ww
+                        GHC.Types.True
+                        -> GHC.Prim.tagToEnum#
+                             @ ApplicationTypes.ApplicationName
+                             ww } }) -}
+7d51253c4c8955e3629ff4b12eb2b14e
+  data ApplicationName = Negate
+instance [safe] GHC.Enum.Bounded [ApplicationTypes.ApplicationName]
+  = ApplicationTypes.$fBoundedApplicationName
+instance [safe] GHC.Enum.Enum [ApplicationTypes.ApplicationName]
+  = ApplicationTypes.$fEnumApplicationName
+instance [safe] GHC.Classes.Eq [ApplicationTypes.ApplicationName]
+  = ApplicationTypes.$fEqApplicationName
+instance [safe] GHC.Read.Read [ApplicationTypes.ApplicationName]
+  = ApplicationTypes.$fReadApplicationName
+instance [safe] GHC.Show.Show [ApplicationTypes.ApplicationName]
+  = ApplicationTypes.$fShowApplicationName
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

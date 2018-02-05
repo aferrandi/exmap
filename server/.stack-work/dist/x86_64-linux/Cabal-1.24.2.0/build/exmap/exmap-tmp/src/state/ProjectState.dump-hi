@@ -1,0 +1,348 @@
+
+==================== FINAL INTERFACE ====================
+2017-12-30 11:07:10.897372295 UTC
+
+interface main@main:ProjectState 8002
+  interface hash: 9c55b60a4b2836aedaf9d4703956be84
+  ABI hash: b9445036ca91c8f8f17466da52a590df
+  export-list hash: 45f061a0a4b72f3842496805809fba9c
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 7466539132b6c2c803b3afb4c7151c0e
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  ProjectState.evtChan
+  ProjectState.prjName
+  ProjectState.CalculationByResult
+  ProjectState.CalculationChanByMap
+  ProjectState.CalculationChanByName
+  ProjectState.RuntimeProject{ProjectState.RuntimeProject calculationByResult calculationChanByMap calculationChanByName chans project subscribedClients viewChanByMap viewChanByName}
+  ProjectState.ViewChanByMap
+  ProjectState.ViewChanByName
+module dependencies: ApplicationTypes Calculation
+                     CalculationMessages CommonChannels Errors EventMessages Formula
+                     LoadMessages LogMessages OperationTypes Project ProjectJson
+                     ProjectMessages StoreMessages SystemMessages TextEnums View
+                     ViewMessages WebClients WebMessages WebMessagesJson XFunction
+                     XMapJson XMapTypes XValues
+package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
+                      aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
+                      array-0.5.1.1@array-0.5.1.1
+                      attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna
+                      base-4.9.1.0
+                      base-compat-0.9.3@base-compat-0.9.3-KeJp8zYMpcS9WibvTcxU22
+                      base64-bytestring-1.0.0.1@base64-bytestring-1.0.0.1-4O9TExPPz6eI82Yj7L4SIj
+                      binary-0.8.3.0@binary-0.8.3.0
+                      blaze-builder-0.4.0.2@blaze-builder-0.4.0.2-LxClHUTiKUUAxWtvJ5Oeoy
+                      bytestring-0.10.8.1@bytestring-0.10.8.1
+                      case-insensitive-1.2.0.10@case-insensitive-1.2.0.10-1D5OUKQ7UrJ7IpOe0di4Un
+                      containers-0.5.7.1@containers-0.5.7.1
+                      deepseq-1.4.2.0@deepseq-1.4.2.0
+                      dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk
+                      entropy-0.3.8@entropy-0.3.8-14HIw40nRRY968j6AdY1H4
+                      ghc-boot-th-8.0.2@ghc-boot-th-8.0.2 ghc-prim-0.5.0.0
+                      hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol
+                      integer-gmp-1.0.0.1
+                      integer-logarithms-1.0.2@integer-logarithms-1.0.2-92lMiWV9mmYAwfMEYgfQ0D
+                      network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz
+                      primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh
+                      random-1.1@random-1.1-9tceXaeYIMZ4JrKq20Egog
+                      scientific-0.3.5.1@scientific-0.3.5.1-JHsAAp34Yyd8e5v3sK3O5Q
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt
+                      template-haskell-2.11.1.0
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1
+                      time-locale-compat-0.1.1.3@time-locale-compat-0.1.1.3-KZ1jqNx8uhlHjmuPPj6V1Y
+                      transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.1@unix-2.7.2.1
+                      unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC
+                      uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ
+                      vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ
+                      websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc
+orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.ByteString.Char8
+         attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Text.Internal
+         base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
+         binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
+         bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
+         hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
+         main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
+         network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Fusion.Bundle
+         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Attoparsec.Internal.Types
+                         base-4.9.1.0:Control.Applicative base-4.9.1.0:Data.Complex
+                         base-4.9.1.0:Data.Either base-4.9.1.0:Data.Functor.Compose
+                         base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
+                         base-4.9.1.0:Data.Functor.Product base-4.9.1.0:Data.Functor.Sum
+                         base-4.9.1.0:Data.List.NonEmpty base-4.9.1.0:Data.Monoid
+                         base-4.9.1.0:Data.Semigroup base-4.9.1.0:Data.Type.Equality
+                         base-4.9.1.0:Data.Version base-4.9.1.0:Data.Void
+                         base-4.9.1.0:GHC.Exts base-4.9.1.0:GHC.Generics
+                         base-4.9.1.0:GHC.IO.Exception base-4.9.1.0:GHC.TypeLits
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntMap.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.IntSet.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
+                         containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
+                         dlist-0.8.0.3@dlist-0.8.0.3-BHFBNaw8k6n9WiaUNzoXpk:Data.DList
+                         ghc-boot-th-8.0.2@ghc-boot-th-8.0.2:GHC.LanguageExtensions.Type
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Control.Monad.Primitive
+                         primitive-0.6.2.0@primitive-0.6.2.0-4578caNkWQ54Gt1mxLF2Yh:Data.Primitive.Array
+                         tagged-0.8.5@tagged-0.8.5-1mTloBSoUxv8dqUr8XBGBt:Data.Tagged
+                         template-haskell-2.11.1.0:Language.Haskell.TH.Syntax
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashMap.Base
+                         unordered-containers-0.2.8.0@unordered-containers-0.2.8.0-Bp9XgxjuHxcI4tFehVMDGC:Data.HashSet
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal
+                         uuid-types-1.0.3@uuid-types-1.0.3-HQOuja9trySCcuflACyDTJ:Data.UUID.Types.Internal.Builder
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Primitive
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
+                         vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
+import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
+import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
+import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+  exports: 5c332b8fd8fef070186c5200f58f2914
+  CalculationName 7681f69b2581ed31254c1a456f024695
+import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
+  exports: 38997434d1eadadff28c77fbb028d629
+  CalculationChan 6b33731f780f07df39838a7cd12da2cb
+import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
+  exports: aedbb846b4b45e6fdfa51d3b8e071d11
+  CommonChans 01f4f6e44c2bf343b2159eaf4a6ad6cb
+  eventChan 3911ebeee801f26152ba5083ce7c3d9d
+import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
+  exports: 64db4fd1ac7c8985ea6ceddadc69d169
+  EventChan 2fbf9ecb2263a4b748008f48f08708ef
+import  -/  Project e9aaa611811a510eec90fd878cb1c85f
+  exports: a1b12012f0f388e6620b2d764b9da9c5
+  Project c7f6766f61d0b63c7ab6927b16e914f3
+  ProjectName dc3277e72c5d1fd0c29f02dc48899838
+  projectName cb7533641bc632f228a4a92ccb44abc9
+import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
+  exports: 566a2406a41a78f1d65d3176e307799b
+  ViewName 105e058b0f915624ee10874cf1c9d091
+import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
+  exports: 4f259910ac4dde7df97333a484b49710
+  ViewChan a8e7d5732ce960f93aa79f3505166fc7
+import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
+  exports: 9e20b0962809e2ead168d9d96578b360
+  WAClient b08796f2cd72dc596a7814e2532ade2f
+import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
+  exports: 63a1ffc24fb40991afaa24415fd501be
+  XMapName aed4e1c98ee09424176ec799b4e99672
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
+import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TVar 8271fdeaf6f41f205dbe31243cf91390
+fd3e6ee03940e2f61fe38ea60042c300
+  $tc'RuntimeProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9524871383572152062##
+                   15888849375228600704##
+                   ProjectState.$trModule
+                   ProjectState.$tc'RuntimeProject1) -}
+472b6c0a553c13a9326b752f1833684a
+  $tc'RuntimeProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'RuntimeProject"#) -}
+76cad91b2d5a667a5a8c719e66ea1ef0
+  $tcRuntimeProject :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13634416896545705814##
+                   6461021736011302177##
+                   ProjectState.$trModule
+                   ProjectState.$tcRuntimeProject1) -}
+750ee7c9f8a79f098e5cc663403d5c4f
+  $tcRuntimeProject1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "RuntimeProject"#) -}
+39494e930469883b57b93bc8c2a1b1b6
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   ProjectState.$trModule2
+                   ProjectState.$trModule1) -}
+d6b2142d61301d17a2556800a55cd3bd
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "ProjectState"#) -}
+14edc826236b42c869777fd142849c82
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "main"#) -}
+c4bfbd941f59c98480f1a3407e9df4d8
+  type CalculationByResult =
+    Data.Map.Base.Map XMapTypes.XMapName Calculation.CalculationName
+8f4ae96e16545acd2db509dff8801825
+  type CalculationChanByMap =
+    Data.Map.Base.Map
+      XMapTypes.XMapName [CalculationMessages.CalculationChan]
+36e290b6476eeda7363f213148c77323
+  type CalculationChanByName =
+    Data.Map.Base.Map
+      Calculation.CalculationName CalculationMessages.CalculationChan
+6f800b4257f0a40180517de20dd96d62
+  data RuntimeProject
+    = RuntimeProject {project :: GHC.Conc.Sync.TVar Project.Project,
+                      calculationChanByName :: GHC.Conc.Sync.TVar
+                                                 ProjectState.CalculationChanByName,
+                      calculationChanByMap :: GHC.Conc.Sync.TVar
+                                                ProjectState.CalculationChanByMap,
+                      calculationByResult :: GHC.Conc.Sync.TVar
+                                               ProjectState.CalculationByResult,
+                      viewChanByMap :: GHC.Conc.Sync.TVar ProjectState.ViewChanByMap,
+                      viewChanByName :: GHC.Conc.Sync.TVar ProjectState.ViewChanByName,
+                      chans :: CommonChannels.CommonChans,
+                      subscribedClients :: GHC.Conc.Sync.TVar [WebClients.WAClient]}
+b0fb1ada2a395684fbc42f68f5da9c22
+  type ViewChanByMap =
+    Data.Map.Base.Map XMapTypes.XMapName [ViewMessages.ViewChan]
+1f536336e7b042ab6d9004b0c2d08e96
+  type ViewChanByName =
+    Data.Map.Base.Map View.ViewName ViewMessages.ViewChan
+19c7c825961eea5395b8246623ae44f0
+  calculationByResult ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationByResult
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLSLLLL),1*U(A,A,A,1*U(U),A,A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds4 }) -}
+a28473bfc3c6b477e078f13f04196323
+  calculationChanByMap ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByMap
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLSLLLLL),1*U(A,A,1*U(U),A,A,A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds3 }) -}
+bde3e6a746f9c3d285a836ac8a4146dd
+  calculationChanByName ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByName
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LSLLLLLL),1*U(A,1*U(U),A,A,A,A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds2 }) -}
+63f09138dc269f54560c3785a96964ae
+  chans :: ProjectState.RuntimeProject -> CommonChannels.CommonChans
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLLLSL),1*U(A,A,A,A,A,A,1*U(U,U,U,U),A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds7 }) -}
+e0b2534d40c3837a7812ce382d0887a3
+  evtChan :: ProjectState.RuntimeProject -> EventMessages.EventChan
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLLLS(SLLL)L),1*U(A,A,A,A,A,A,1*U(1*U(U,U),A,A,A),A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (rp :: ProjectState.RuntimeProject) ->
+                 case rp of wild { ProjectState.RuntimeProject ds ds1 ds2 ds3 ds4 ds5 ds6 ds7 ->
+                 case ds6 of wild1 { CommonChannels.CommonChans ds8 ds9 ds10 ds11 ->
+                 ds8 } }) -}
+94ca58664f6ec802577ccd8dd03213a1
+  prjName ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.STM Project.ProjectName
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(S)LLLLLLL),1*U(1*U(U),A,A,A,A,A,A,A)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectState.prjName1
+                  `cast`
+                (<ProjectState.RuntimeProject>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <Project.ProjectName>_R)) -}
+11e9711c2301fecdf8c52643ec516269
+  prjName1 ::
+    ProjectState.RuntimeProject
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, Project.ProjectName #)
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S(S)LLLLLLL),1*U(1*U(U),A,A,A,A,A,A,A)><S,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (rp :: ProjectState.RuntimeProject)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case rp of wild { ProjectState.RuntimeProject ds ds1 ds2 ds3 ds4 ds5 ds6 ds7 ->
+                 case ds of wild1 { GHC.Conc.Sync.TVar tvar# ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ Project.Project
+                        tvar#
+                        eta of ds8 { (#,#) ipv ipv1 ->
+                 (# ipv, Project.projectName ipv1 #) } } }) -}
+a30b6ea9329cfba1f64ba26587a1f242
+  project ::
+    ProjectState.RuntimeProject -> GHC.Conc.Sync.TVar Project.Project
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(SLLLLLLL),1*U(1*U(U),A,A,A,A,A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds1 }) -}
+2bb0e33d2fba454b4b07fa0a8b1b476c
+  subscribedClients ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar [WebClients.WAClient]
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLLLLS),1*U(A,A,A,A,A,A,A,1*U(U))>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds8 }) -}
+36060019209c722c563d0b4187284040
+  viewChanByMap ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar ProjectState.ViewChanByMap
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLSLLL),1*U(A,A,A,A,1*U(U),A,A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds5 }) -}
+626b2130a672e67aa9cdc67025db420c
+  viewChanByName ::
+    ProjectState.RuntimeProject
+    -> GHC.Conc.Sync.TVar ProjectState.ViewChanByName
+  RecSel Left ProjectState.RuntimeProject
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLLSLL),1*U(A,A,A,A,A,1*U(U),A,A)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ProjectState.RuntimeProject) ->
+                 case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
+                 ds6 }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+
