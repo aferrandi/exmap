@@ -94,6 +94,9 @@ executable exmap
                      , FormulaText
                      , ProjectActorEvents
                      , ProjectActorRequests
+                     , ProjectActorEventsForCalculation
+                     , ProjectActorEventsForView
+                     , WebAppState
 
 test-suite exmap-test
   type:                exitcode-stdio-1.0

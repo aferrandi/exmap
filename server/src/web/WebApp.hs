@@ -27,8 +27,6 @@ import Errors
 import SystemMessages
 import WebAppState
 
-
-
 runWebApp :: SystemChan -> LogChan -> IO ()
 runWebApp sc lc = do
   state <- Concurrent.newMVar WAState {
@@ -51,7 +49,19 @@ wsApp stateRef pendingConn = do
     (disconnectClient cid stateRef)
 
 httpApp :: Wai.Application
-httpApp _ respond = respond $ Wai.responseLBS Http.status400 [] "Not a websocket request"
+httpApp request respond =  respond  $ case Wai.rawPathInfo request of
+    "/"     -> httpServeIndex
+    _       -> httpNotFound
+
+httpServeIndex :: Wai.Response
+httpServeIndex = Wai.responseFile
+                     Http.status200
+                     [("Content-Type", "text/html")]
+                     "index.html"
+                     Nothing
+
+httpNotFound :: Wai.Response
+httpNotFound =  Wai.responseLBS Http.status400 [] "Not a websocket request"
 
 connectClient :: WS.Connection -> Concurrent.MVar WAState -> IO WAClientId
 connectClient conn stateRef = Concurrent.modifyMVar stateRef $ \state -> do

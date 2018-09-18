@@ -1,1 +1,2 @@
 elm-make src/Main.elm
+cp index.html ../server
