@@ -64,7 +64,7 @@ calculationNameExample = CalculationName (T.pack "calculation")
 calculationExample = Calculation {
         calculationName = calculationNameExample,
         resultName = mapName ["res"],
-        formula = XFOperation Subtract (XFMap . mapName $ ["one"]) (XFMap . mapName $ ["two"]),
+        formula = XFOperation Subtract [XFMap . mapName $ ["one"], XFMap . mapName $ ["two"]],
         operationMode = Intersection
         }
 

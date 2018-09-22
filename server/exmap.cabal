@@ -39,11 +39,9 @@ executable exmap
                      , TChans
                      , ExecFormula
                      , Operations
-                     , Applications
                      , XFunction
                      , XMapTypes
                      , OperationTypes
-                     , ApplicationTypes
                      , XValues
                      , FormulaParser
                      , TextEnums
@@ -117,11 +115,9 @@ test-suite exmap-test
                        Formula
                      , ExecFormula
                      , Operations
-                     , Applications
                      , XFunction
                      , FormulaText
                      , XMapTypes
-                     , ApplicationTypes
                      , OperationTypes
                      , XValues
                      , FormulaParser

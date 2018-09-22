@@ -8,7 +8,6 @@ import Control.Monad (fail)
 
 import Formula
 import Operations
-import Applications
 import XMapTypes
 import TextEnums
 import Calculation
@@ -19,13 +18,11 @@ parseFormula (CalculationFormulaText s) = P.parseOnly (parseFormulaRootNode <* P
 parseFormulaRootNode :: P.Parser XFormula
 parseFormulaRootNode = do
    parseOperation
-    <|> parseApplication
     <|> parseMap
 
 parseFormulaNode :: P.Parser XFormula
 parseFormulaNode = do
     parseOperationInPars
-        <|> parseApplicationInPars
         <|> parseMap
 
 skipSpaceAndChar :: Char -> P.Parser ()
@@ -40,19 +37,6 @@ skipClosePar = skipSpaceAndChar ')'
 skipOpenPar :: P.Parser()
 skipOpenPar = skipSpaceAndChar '('
 
-parseOperationInPars :: P.Parser XFormula
-parseOperationInPars = do
-    skipOpenPar
-    f <- parseOperation
-    skipClosePar
-    return f
-
-parseApplicationInPars :: P.Parser XFormula
-parseApplicationInPars = do
-    skipOpenPar
-    f <- parseApplication
-    skipClosePar
-    return f
 
 parseMap :: P.Parser XFormula
 parseMap = do
@@ -80,7 +64,6 @@ parseVar = do
 isVarLetter :: Char -> Bool
 isVarLetter c = C.isAlphaNum c || c == '_'
 
-
 parseOperationName :: P.Parser OperationName
 parseOperationName = do
     s <- parseName
@@ -88,25 +71,16 @@ parseOperationName = do
         Just n -> return n
         Nothing -> fail $ "not an operation name " ++ T.unpack s
 
-
-parseApplicationName :: P.Parser ApplicationName
-parseApplicationName = do
-    s <- parseName
-    case enumWithTextCaseInsensitive enumValues s of
-        Just n -> return n
-        Nothing -> fail $ "not an application name " ++ T.unpack s
-
-
 parseOperation :: P.Parser XFormula
 parseOperation = do
     op <- parseOperationName
-    f1 <- parseFormulaNode
-    f2 <- parseFormulaNode
-    return $ XFOperation op f1 f2
+    fs <- P.many' parseFormulaNode
+    return $ XFOperation op fs
 
-parseApplication :: P.Parser XFormula
-parseApplication = do
-    ap <- parseApplicationName
-    f1 <- parseFormulaNode
-    return $ XFApplication ap f1
-
+parseOperationInPars :: P.Parser XFormula
+parseOperationInPars = do
+    skipOpenPar
+    op <- parseOperationName
+    fs <- P.many' parseFormulaNode
+    skipClosePar
+    return $ XFOperation op fs

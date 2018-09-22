@@ -10,8 +10,7 @@ import Calculation
 
 formulaDependencies :: XFormula -> [XMapName]
 formulaDependencies (XFMap n) = [n]
-formulaDependencies (XFOperation _ a b) = union (formulaDependencies a) (formulaDependencies b)
-formulaDependencies (XFApplication _ a) = formulaDependencies a
+formulaDependencies (XFOperation _ fs) = nub (concatMap formulaDependencies fs)
 
 viewDependencies :: View -> [XMapName]
 viewDependencies (View _ rs)= concatMap rowDependencies rs

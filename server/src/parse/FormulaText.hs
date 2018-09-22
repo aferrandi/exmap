@@ -11,8 +11,7 @@ formulaToText = CalculationFormulaText . formulaToTextRec id
 
 formulaToTextRec :: (T.Text -> T.Text) -> XFormula -> T.Text
 formulaToTextRec _ (XFMap mn) = mapNameToText mn
-formulaToTextRec t (XFOperation on f1 f2) = t $ T.unwords  [showT on, formulaToTextRec pars f1, formulaToTextRec pars f2]
-formulaToTextRec t (XFApplication an f) = t $ T.unwords [showT an, formulaToTextRec pars f]
+formulaToTextRec t (XFOperation on fs) = t $ T.unwords $ showT on : map (formulaToTextRec pars) fs
 
 mapNameToText :: XMapName -> T.Text
 mapNameToText (XMapName mn) = T.intercalate (T.singleton '/') mn

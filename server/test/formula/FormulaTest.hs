@@ -1,4 +1,4 @@
-module FormulaTest(execFormula_trivialFormula_originalMap, execFormula_operationFormula_expectedMap, execFormula_applicationFormula_expectedMap) where
+module FormulaTest(execFormula_trivialFormula_originalMap, execFormula_operationFormulaTwoParameters_expectedMap, execFormula_operationFormulaOneParameter_expectedMap) where
 
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
@@ -13,7 +13,6 @@ import ExecFormula
 import XMapTypes
 import qualified XFunction
 import qualified Operations as Ops
-import qualified Applications as Apps
 
 import TestTypes
 
@@ -24,17 +23,17 @@ execFormula_trivialFormula_originalMap = TestCase (assertEqual "exec trivial for
           m = M.singleton ka r
           f = XFMap ka
 
-execFormula_operationFormula_expectedMap = TestCase (assertEqual "exec operation formula" (Right r) (execFormula f m XFunction.Intersection))
+execFormula_operationFormulaTwoParameters_expectedMap = TestCase (assertEqual "exec operation two parameters formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
           m = M.fromList [(ka ,makeDoubleXMap [("k",13)]), (kb ,makeDoubleXMap [("k",12)])]
           r = makeDoubleXMap [("k",25)]
-          f = XFOperation Ops.Add (XFMap ka) (XFMap kb)
+          f = XFOperation Ops.Add [XFMap ka, XFMap kb]
 
-execFormula_applicationFormula_expectedMap = TestCase (assertEqual "exec application formula" (Right r) (execFormula f m XFunction.Intersection))
+execFormula_operationFormulaOneParameter_expectedMap = TestCase (assertEqual "exec operation one parameter formula" (Right r) (execFormula f m XFunction.Intersection))
     where ka = mapName ["a"]
           kb = mapName ["b"]
           m = M.fromList [(ka ,makeDoubleXMap [("k",13)]), (kb ,makeDoubleXMap [("k",12)])]
           r = makeDoubleXMap [("k",-13)]
-          f = XFApplication Apps.Negate (XFMap ka)
+          f = XFOperation Ops.Negate [XFMap ka]
 

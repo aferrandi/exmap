@@ -6,23 +6,17 @@ import qualified Data.Text as T
 import XMapTypes
 import XFunction
 import Operations
-import Applications
 import Formula
 import FormulaText (mapNameToText)
 
 execFormula :: XFormula ->  XMapByName -> OperationMode -> XMapErr
-execFormula xf rm m = case xf of
+execFormula xf rm om = case xf of
     XFMap n -> case M.lookup n rm of
-        Just om -> Right om
+        Just m -> Right m
         Nothing -> Left (Error $ T.pack ("map " ++ T.unpack (mapNameToText n) ++ " not found"))
-    XFOperation f a b -> do
-        oa <- execFormula a rm m
-        ob <- execFormula b rm m
-        let rf = operationRepository f
-        rf m oa ob
-    XFApplication f a -> do
-        oa  <- execFormula a rm m
-        let rf = applicationRepository f
-        rf oa
+    XFOperation fn ms -> do
+        tms <- mapM (\m -> execFormula m rm om) ms
+        let f = operationRepository fn
+        f om tms
 
 

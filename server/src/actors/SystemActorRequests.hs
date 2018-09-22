@@ -20,7 +20,6 @@ import WebClients
 import Project
 import Calculation
 import OperationTypes
-import ApplicationTypes
 
 handleRequest :: SystemChan -> RuntimeSystem -> SystemRequest -> STM ()
 handleRequest chan sys r = case r of
@@ -59,15 +58,10 @@ pipeToProject c pn sys msg = do
 
 sendFunctions :: RuntimeSystem -> WAClient -> STM()
 sendFunctions sys c = do
-    let fs = Functions {
-        operationNames = operations,
-        applicationNames = applications
-    }
+    let fs = Functions { operationNames = operations }
     writeTChan (evtChan sys) (EMWebEvent [c] $ WEFunctions fs)
     where operations :: [OperationName]
           operations = enumValues
-          applications :: [ApplicationName]
-          applications = enumValues
 
 newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()
 newProjectIfNotAlreadyRunning chan sys c p = do

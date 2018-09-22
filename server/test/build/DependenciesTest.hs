@@ -18,7 +18,6 @@ import Dependencies
 import XMapTypes
 import TestTypes
 import qualified Operations as Ops
-import qualified Applications as Apps
 import Formula
 import View
 import XFunction
@@ -32,11 +31,11 @@ formulaDependencies_trivialFormula_originalMap = TestCase (assertEqual "dependen
 formulaDependencies_complexFormula_maps = TestCase (assertEqual "dependencies complex formula" [ka, kb] (formulaDependencies f))
     where ka = mapName ["a"]
           kb = mapName ["b"]
-          f = XFApplication Apps.Negate (XFOperation Ops.Add (XFMap ka) (XFMap kb))
+          f = XFOperation Ops.Negate [XFOperation Ops.Add [XFMap ka, XFMap kb]]
 
 formulaDependencies_duplicates_onlyOnce = TestCase (assertEqual "dependencies formula with duplicates" [ka] (formulaDependencies f))
     where ka = mapName ["a"]
-          f = XFOperation Ops.Add (XFMap ka) (XFApplication Apps.Negate(XFMap ka))
+          f = XFOperation Ops.Add [XFMap ka, XFOperation Ops.Negate [XFMap ka]]
 
 viewDependencies_empty_empty = TestCase (assertEqual "dependencies empty view" [] (viewDependencies v))
     where v = View {

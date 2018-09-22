@@ -15,15 +15,13 @@ import Formula
 import XFunction
 import TextEnums
 import OperationTypes
-import ApplicationTypes
 import View
 import XMapJson ()
 
 instance FromJSON XFormula where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "map") -> XFMap <$> v .: "name"
-      Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "formula1" <*> v .: "formula2"
-      Just (String "application") ->  XFApplication <$> v .: "name" <*> v .: "formula"
+      Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "formulas"
       _ -> mempty
    parseJSON _ = mempty
 
@@ -31,16 +29,10 @@ instance ToJSON XFormula where
      toJSON (XFMap n) = object [ "type"  .= T.pack "map"
                               , "name"   .= n
                               ]
-     toJSON (XFOperation n f1 f2) = object [ "type" .=  T.pack "operation"
+     toJSON (XFOperation n fs) = object [ "type" .=  T.pack "operation"
                                             , "name" .= n
-                                            , "formula1" .= f1
-                                            , "formula2" .= f2
+                                            , "formulas" .= fs
                                             ]
-     toJSON (XFApplication n f) = object [ "type"  .=  T.pack "application"
-                                            , "name" .= n
-                                            , "formula" .= f
-                                            ]
-
 instance FromJSON OperationMode where
    parseJSON (String v) = readT <$> pure v
    parseJSON _ = mempty
@@ -54,13 +46,6 @@ instance FromJSON OperationName where
    parseJSON _ = mempty
 
 instance ToJSON OperationName where
-   toJSON v = String $ showT v
-
-instance FromJSON ApplicationName where
-   parseJSON (String v) = readT <$> pure v
-   parseJSON _ = mempty
-
-instance ToJSON ApplicationName where
    toJSON v = String $ showT v
 
 instance FromJSON CalculationName where
@@ -108,10 +93,8 @@ instance ToJSON CalculationSource where
                  ]
 
 instance ToJSON Functions where
-     toJSON (Functions operations applications) =
-        object [ "operations" .= operations
-               , "applications" .= applications
-                 ]
+     toJSON (Functions operations) =
+        object [ "operations" .= operations ]
 
 instance FromJSON SourceType where
    parseJSON (Object v) = case HML.lookup "type" v of

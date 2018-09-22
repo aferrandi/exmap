@@ -17,20 +17,19 @@ main :: IO Counts
 main = runTestTT tests
        where tests = TestList [
                 FormulaTest.execFormula_trivialFormula_originalMap,
-                FormulaTest.execFormula_operationFormula_expectedMap,
-                FormulaTest.execFormula_applicationFormula_expectedMap,
+                FormulaTest.execFormula_operationFormulaTwoParameters_expectedMap,
+                FormulaTest.execFormula_operationFormulaOneParameter_expectedMap,
 
                 FormulaParserTest.parseFormula_formulaWithMap_map,
-                FormulaParserTest.parseFormula_formulaApplication_application,
+                FormulaParserTest.parseFormula_formulaOperation_negate,
+                FormulaParserTest.parseFormula_formulaWrongOperationName_error,
                 FormulaParserTest.parseFormula_formulaOperation_operation,
                 FormulaParserTest.parseFormula_complex_operation,
                 FormulaParserTest.parseFormula_formulaWithSpaces_map,
 
-                TextEnumsTest.enumValues_ApplicationName_containNegate,
-                TextEnumsTest.enumWithTextCI_ApplicationName_containNegate,
-                TextEnumsTest.enumWithTextCI_ApplicationName_notContainNegate,
-
-                FormulaParserTest.parseFormula_formulaWrongApplicationName_error,
+                TextEnumsTest.enumValues_OperationName_containNegate,
+                TextEnumsTest.enumWithTextCI_OperationName_containNegate,
+                TextEnumsTest.enumWithTextCI_OperationName_notContainNegate,
 
                 ProjectJsonTest.toParseJSON_calculation_same,
                 ProjectJsonTest.toParseJSON_view_same,

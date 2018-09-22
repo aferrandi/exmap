@@ -6,7 +6,6 @@ import Formula
 import XMapTypes
 import XFunction
 import OperationTypes
-import ApplicationTypes
 
 
 newtype CalculationName = CalculationName T.Text
@@ -30,6 +29,5 @@ data CalculationSource = CalculationSource {
 } deriving (Show, Eq)
 
 data Functions = Functions {
-    operationNames :: [OperationName],
-    applicationNames :: [ApplicationName]
+    operationNames :: [OperationName]
 } deriving (Show, Eq)

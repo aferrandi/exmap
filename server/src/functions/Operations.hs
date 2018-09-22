@@ -4,26 +4,31 @@ import XFunction
 import XMapTypes
 import OperationTypes
 
-type OperationFun = OperationMode -> XMap -> XMap -> XMapErr
+type OperationFun = OperationMode -> [XMap] -> XMapErr
 
-addo :: OperationMode -> XMap -> XMap -> XMapErr
-addo om = operate om add
+oAdd :: OperationMode -> [XMap] -> XMapErr
+oAdd om = operate om add
     where add :: Double -> Double -> Double
           add = (+)
 
-subtracto :: OperationMode -> XMap -> XMap -> XMapErr
-subtracto om = operate om subtrct
+oSubtract :: OperationMode -> [XMap] -> XMapErr
+oSubtract om = operate om subtrct
     where subtrct :: Double -> Double -> Double
           subtrct = (-)
 
-timeso :: OperationMode -> XMap -> XMap -> XMapErr
-timeso om = operate om times
+oTimes :: OperationMode -> [XMap] -> XMapErr
+oTimes om = operate om times
     where times :: Double -> Double -> Double
           times = (*)
 
+oNegate :: OperationMode -> [XMap] -> XMapErr
+oNegate om = XFunction.apply negatev
+    where negatev :: Double -> Double
+          negatev = Prelude.negate
 
 
 operationRepository :: OperationName -> OperationFun
-operationRepository Add = addo
-operationRepository Subtract = subtracto
-operationRepository Times = timeso
+operationRepository Add = oAdd
+operationRepository Subtract = oSubtract
+operationRepository Times = oTimes
+operationRepository Negate = oNegate

@@ -9,10 +9,10 @@ import Control.Monad
 import qualified Data.Text as T
 
 import TextEnums
-import Applications
+import OperationTypes
 
-enumValues_ApplicationName_containNegate = TestCase (assertBool "contain negate in application names" (elem Negate enumValues) )
+enumValues_OperationName_containNegate = TestCase (assertBool "contain negate in operations names" (elem Negate enumValues) )
 
-enumWithTextCI_ApplicationName_containNegate = TestCase (assertEqual "contains negate in application names texts" (Just Negate) (enumWithTextCaseInsensitive enumValues (T.pack "negate")))
+enumWithTextCI_OperationName_containNegate = TestCase (assertEqual "contains negate in operation names texts" (Just Negate) (enumWithTextCaseInsensitive enumValues (T.pack "negate")))
 
-enumWithTextCI_ApplicationName_notContainNegate = TestCase (assertEqual "does not contain nogate in application names texts" Nothing (enumWithTextCaseInsensitive (enumValues :: [ApplicationName]) (T.pack "nogate") ))
+enumWithTextCI_OperationName_notContainNegate = TestCase (assertEqual "does not contain nogate in operation names texts" Nothing (enumWithTextCaseInsensitive (enumValues :: [OperationName]) (T.pack "nogate") ))
