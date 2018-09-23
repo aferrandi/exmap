@@ -110,20 +110,14 @@ mapsInProjectList model  =
 
 functionsList : Model -> Html Msg
 functionsList model  =
-    let applicationListItem an = Lists.li []
-                           [ Lists.content
-                               [ Options.attribute <| Html.Events.onClick (Internal (AddApplicationToCalculation an)) ]
-                               [ Lists.avatarIcon "fast_forward" [], text an ]
-                           ]
-        operationListItem on = Lists.li []
+    let operationListItem on = Lists.li []
                            [ Lists.content
                                [ Options.attribute <| Html.Events.onClick (Internal (AddOperationToCalculation on)) ]
                                [ Lists.avatarIcon "play_arrow" [], text on ]
                            ]
-        functions = Maybe.withDefault { applications = [], operations= [] }  model.functions
-        applicationList = List.map applicationListItem functions.applications
+        functions = Maybe.withDefault { operations= [] }  model.functions
         operationList = List.map operationListItem functions.operations
-    in Lists.ul (scrollableListStyle 40) ( List.append applicationList operationList)
+    in Lists.ul (scrollableListStyle 40) operationList
 
 calculationTextArea : Model  -> Html Msg
 calculationTextArea model = Textfield.render Mdl [calcEditorIdx, 2] model.mdl

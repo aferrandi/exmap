@@ -23,4 +23,3 @@ calculationSourceDecoder = decode CalculationSource
 functionsDecoder : Decoder Functions
 functionsDecoder = decode Functions
                    |> required "operations" (list string)
-                   |> required "applications" (list string)

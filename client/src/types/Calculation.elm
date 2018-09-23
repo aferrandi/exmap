@@ -12,12 +12,11 @@ type alias CalculationSource = {
     calculationName : CalculationName,
     resultName : XMapName,
     formulaText : CalculationFormulaText,
-    operationMode : OperationMode}
+    operationMode : OperationMode
+    }
 
 type alias OperationName = String
 
-type alias ApplicationName = String
-
 type alias Functions = {
-    operations : List OperationName,
-    applications : List ApplicationName}
+    operations : List OperationName
+    }

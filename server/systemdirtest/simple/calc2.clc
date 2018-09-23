@@ -1,1 +1,32 @@
-{"formula":{"formula2":{"name":"map1","type":"map"},"name":"Add","formula1":{"formula":{"name":"map2","type":"map"},"name":"Negate","type":"application"},"type":"operation"},"calculationName":"calc2","resultName":"calcres","operationMode":"Union"}
+{
+  "formula": {
+    "name": "Add",
+    "parameters": [
+      {
+        "name": "map1",
+        "type": "map"
+      },
+      {
+        "name": "Negate",
+        "parameters": [
+          {
+            "name": "map2",
+            "type": "map"
+          }],
+          "type"
+          :
+          "operation"
+          }
+        ],
+        "type": "operation"
+      },
+      "calculationName"
+      :
+      "calc2",
+      "resultName"
+      :
+      "calcres",
+      "operationMode"
+      :
+      "Union"
+      }

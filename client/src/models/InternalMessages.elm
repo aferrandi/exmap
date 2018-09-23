@@ -28,7 +28,6 @@ type InternalMsg =
   | TextToCalculationTextArea String
   | TextToResultNameText String
   | AddMapToCalculation XMapName
-  | AddApplicationToCalculation ApplicationName
   | AddOperationToCalculation OperationName
   | ChangeOperationMode OperationMode
   | ChangeMapType XMapType

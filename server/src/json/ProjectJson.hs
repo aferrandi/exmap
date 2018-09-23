@@ -21,7 +21,7 @@ import XMapJson ()
 instance FromJSON XFormula where
    parseJSON (Object v) = case HML.lookup "type" v of
       Just (String "map") -> XFMap <$> v .: "name"
-      Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "formulas"
+      Just (String "operation") ->  XFOperation <$> v .: "name" <*> v .: "parameters"
       _ -> mempty
    parseJSON _ = mempty
 
@@ -31,7 +31,7 @@ instance ToJSON XFormula where
                               ]
      toJSON (XFOperation n fs) = object [ "type" .=  T.pack "operation"
                                             , "name" .= n
-                                            , "formulas" .= fs
+                                            , "parameters" .= fs
                                             ]
 instance FromJSON OperationMode where
    parseJSON (String v) = readT <$> pure v

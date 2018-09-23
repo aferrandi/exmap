@@ -40,7 +40,6 @@ updateInternal msg model = case msg of
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
     TextToResultNameText mn -> (handleTextToResultNameText model mn, Cmd.none)
     AddMapToCalculation mn -> ( appendToFormulaText model (xmapNameToString mn), Cmd.none)
-    AddApplicationToCalculation an -> ( appendToFormulaText model (an ++ " p"), Cmd.none)
     AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
     ChangeOperationMode om -> (handleChangeOperationMode model om, Cmd.none)
     ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
