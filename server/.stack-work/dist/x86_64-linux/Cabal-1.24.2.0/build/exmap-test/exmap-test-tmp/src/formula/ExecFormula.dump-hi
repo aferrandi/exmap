@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-29 07:03:31.466487639 UTC
+2018-01-05 07:14:42.075017683 UTC
 
 interface main@main:ExecFormula 8002
-  interface hash: dfa768d9f4d95dc14879e57aa5aca38c
-  ABI hash: 6c7746668689732f76b00c885081f87e
+  interface hash: 7378022234c26037a34b5a3e3ee9f252
+  ABI hash: 5ccbcebfa3a093a492d5431b695ce895
   export-list hash: 2ed3d69e118fdc888275691748e8b280
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 6b43bcf0d0fcc7d012381db7acf9daf0
@@ -52,18 +52,18 @@ import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
   applicationRepository a6774b9a28b10b895f67d61dc42b3b12
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   Error 7256d6e5b58cf659563f724d4f20fd1c
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-  XFormula fb924f832976f886aefc5a3d03a23b47
-import  -/  FormulaText 2f3ed4ca604cf5c6356f359bac84378c
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+  XFormula bc1628deb5228885a088bc7a3859d8f0
+import  -/  FormulaText b120cc3e4e788971ebd9036cbd3e89b4
   exports: c1da147e6c20863e0692d2adabb1c46b
   mapNameToText 78d91a546e14695096e17f8934fe69f6
-import  -/  Operations 4f7f659bc11083106f43505cdb8994c7
-  exports: 494f1bcd2b9c618b52ead64473dd4e04
-  operationRepository e5830781f02b05073047cc047b17f812
+import  -/  Operations 4effa12f203215b111d4734b130c5a94
+  exports: 05deaa373fd38ce0542cfa0b94f31c61
+  operationRepository 9c500fd0c008db6ee165619ebf2581f3
 import  -/  XFunction daf3a8fe929e99b13bb1482148441fb5
   exports: e4744bd862d5d39381a3b81764a14b8c
   OperationMode ba1024ee7488d74e75d2aa7e9c371660
@@ -92,7 +92,7 @@ fe0440e5a48fd623e90a2a9d68f072fa
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-dd8fe68726b317681b5a0cfdd8ea0257
+0b932a8538d10e6f0ee9da20358225f8
   execFormula ::
     Formula.XFormula
     -> XMapTypes.XMapByName

@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-29 18:56:24.897890402 UTC
+2018-01-05 07:14:41.522792937 UTC
 
 interface main@main:FormulaParser 8002
-  interface hash: d2ed52578c1e63e5e6a20784f4207ab7
-  ABI hash: b03d0271c6a28942ff4e806d02eb31bb
+  interface hash: 7424a62f1c2b3f08dc5b6edbd1b08554
+  ABI hash: 5bf96e2a41f30b158532545cdde0502e
   export-list hash: 7b913b3a450dd5a92a0c06728e74471f
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: eb8b914f601e09a0a641fe0c1e5960eb
@@ -68,24 +68,25 @@ import  -/  base-4.9.1.0:Data.Either 20b09ef8d0a5b74fdec011c40c1587f5
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Unicode a175ecf20bf1272d9ae31337e7da43ab
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
 import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   ApplicationName 7d51253c4c8955e3629ff4b12eb2b14e
 import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
   exports: fa080d0cbd35b542fbba1bdbc55030ec
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationFormulaText 190506ef3f5899e15e830e35f1934183
   CalculationFormulaText fd38426093a918ee049ab7c4fb1fb4f2
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-  XFormula fb924f832976f886aefc5a3d03a23b47
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  OperationName a5a60b294983bcb41d5e4136aac111fd
-import  -/  Operations 4f7f659bc11083106f43505cdb8994c7
-  exports: 494f1bcd2b9c618b52ead64473dd4e04
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+  XFormula bc1628deb5228885a088bc7a3859d8f0
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  OperationName 46463e9f9365b8e7feadaccabf8a68b6
+import  -/  Operations 4effa12f203215b111d4734b130c5a94
+  exports: 05deaa373fd38ce0542cfa0b94f31c61
 import  -/  TextEnums 5bbcd69e17f621fccc64fe2d0e459af9
   exports: 6670f372a6b818595c7e6b6021015eca
   enumValues 5f8ca7f4b08d6d096fde94beda6f6883
@@ -110,14 +111,14 @@ b8582430acff2d333314b0bcdfda20f0
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-7046d78cc8ffb946b614b3f60220a664
+d433521a86886e47bcf838e257989067
   $wparseFormula ::
     GHC.Prim.ByteArray#
     -> GHC.Prim.Int#
     -> GHC.Prim.Int#
     -> Data.Either.Either GHC.Base.String Formula.XFormula
   {- Arity: 3, Strictness: <L,U><L,U><S,U>, Inline: [0] -}
-25c9b1841afce8db855f2d5dbc16bf33
+6633e3c1b8a8488c1747fda875200771
   parseFormula ::
     Calculation.CalculationFormulaText
     -> Data.Either.Either GHC.Base.String Formula.XFormula

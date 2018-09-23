@@ -1,21 +1,22 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 15:14:08.009770929 UTC
+2018-01-17 08:44:57.3851277 UTC
 
 interface main@main:ViewState 8002
-  interface hash: fbd6e37c45cbcdd44176363d6f266c6a
-  ABI hash: 8829825235e49e6633efccbcf381cba0
-  export-list hash: 26ed2c4cc8a9cd015f67700d8d8aed16
+  interface hash: 889878c4a647b75c5d71d767695707b8
+  ABI hash: 339fa560a939bcfa1b9b489aa5e388c0
+  export-list hash: ae975134bc33332ad9f1b7beea942424
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 7466539132b6c2c803b3afb4c7151c0e
   sig of: Nothing
   used TH splices: False
   where
 exports:
-  ViewState.RuntimeView{ViewState.RuntimeView mapsInView ownerProjectName runtimeViewName subscribedClients view}
+  ViewState.RuntimeView{ViewState.RuntimeView logChan mapsInView ownerProjectName runtimeViewName subscribedClients view}
 module dependencies: ApplicationTypes Calculation Errors Formula
-                     OperationTypes Project ProjectJson TextEnums View WebClients
-                     WebMessages WebMessagesJson XFunction XMapJson XMapTypes XValues
+                     LogMessages OperationTypes Project ProjectJson TextEnums View
+                     WebClients WebMessages WebMessagesJson XFunction XMapJson XMapTypes
+                     XValues
 package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
                       aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
                       array-0.5.1.1@array-0.5.1.1
@@ -58,6 +59,7 @@ orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Att
          hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
          main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
          network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
@@ -101,15 +103,18 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
 import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -153,59 +158,69 @@ ae16a56a0fbf2c8af2521eacfa6cbab1
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-81b78cacdc88335398633ded129fee09
+52858ab0d180c1bd4ff43f2a5a621f8e
   data RuntimeView
     = RuntimeView {runtimeViewName :: View.ViewName,
                    ownerProjectName :: Project.ProjectName,
                    view :: GHC.Conc.Sync.TVar View.View,
                    subscribedClients :: GHC.Conc.Sync.TVar [WebClients.WAClient],
-                   mapsInView :: GHC.Conc.Sync.TVar XMapTypes.XMapByName}
-06f7584fa7b5edde326aea69f58f0d9b
+                   mapsInView :: GHC.Conc.Sync.TVar XMapTypes.XMapByName,
+                   logChan :: LogMessages.LogChan}
+654f3afd4fe6df9a19fa9cbeca47ef32
+  logChan :: ViewState.RuntimeView -> LogMessages.LogChan
+  RecSel Left ViewState.RuntimeView
+  {- Arity: 1, HasNoCafRefs,
+     Strictness: <S(LLLLLS),1*U(A,A,A,A,A,1*U(U,U))>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: ViewState.RuntimeView) ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
+                 ds6 }) -}
+3ca4a1fae3a93a625a8995e4d3fc45cd
   mapsInView ::
     ViewState.RuntimeView -> GHC.Conc.Sync.TVar XMapTypes.XMapByName
   RecSel Left ViewState.RuntimeView
   {- Arity: 1, HasNoCafRefs,
-     Strictness: <S(LLLLS),1*U(A,A,A,A,1*U(U))>m,
+     Strictness: <S(LLLLSL),1*U(A,A,A,A,1*U(U),A)>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: ViewState.RuntimeView) ->
-                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds5 }) -}
-5a53b2e49a427955b74556f17b6b4b47
+813355df7ff9ae0cccdcd4b66ee898e8
   ownerProjectName :: ViewState.RuntimeView -> Project.ProjectName
   RecSel Left ViewState.RuntimeView
   {- Arity: 1, HasNoCafRefs,
-     Strictness: <S(LSLLL),1*U(A,1*U(U,U,U),A,A,A)>m,
+     Strictness: <S(LSLLLL),1*U(A,1*U(U,U,U),A,A,A,A)>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: ViewState.RuntimeView) ->
-                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds2 }) -}
-d6ccea246080bfccffd5a78f5f98ea94
+8c858ec3fee1e512ebc717ffe593291e
   runtimeViewName :: ViewState.RuntimeView -> View.ViewName
   RecSel Left ViewState.RuntimeView
   {- Arity: 1, HasNoCafRefs,
-     Strictness: <S(SLLLL),1*U(1*U(U,U,U),A,A,A,A)>m,
+     Strictness: <S(SLLLLL),1*U(1*U(U,U,U),A,A,A,A,A)>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: ViewState.RuntimeView) ->
-                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds1 }) -}
-c21b9a3851f74c2574e307ddbe92b017
+d907ad6a2bbfc6e43102a18ef638d3df
   subscribedClients ::
     ViewState.RuntimeView -> GHC.Conc.Sync.TVar [WebClients.WAClient]
   RecSel Left ViewState.RuntimeView
   {- Arity: 1, HasNoCafRefs,
-     Strictness: <S(LLLSL),1*U(A,A,A,1*U(U),A)>m,
+     Strictness: <S(LLLSLL),1*U(A,A,A,1*U(U),A,A)>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: ViewState.RuntimeView) ->
-                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds4 }) -}
-5018c2e2a21c4f905e4baa8f0cbc9c98
+7037ebb3b6fb03fbf9b260d1d347ac71
   view :: ViewState.RuntimeView -> GHC.Conc.Sync.TVar View.View
   RecSel Left ViewState.RuntimeView
   {- Arity: 1, HasNoCafRefs,
-     Strictness: <S(LLSLL),1*U(A,A,1*U(U),A,A)>m,
+     Strictness: <S(LLSLLL),1*U(A,A,1*U(U),A,A,A)>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: ViewState.RuntimeView) ->
-                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ->
+                 case ds of wild { ViewState.RuntimeView ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds3 }) -}
 vectorised variables:
 vectorised tycons:

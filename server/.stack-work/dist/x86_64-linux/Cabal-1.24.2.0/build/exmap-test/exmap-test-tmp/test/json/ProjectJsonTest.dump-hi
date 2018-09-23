@@ -1,12 +1,12 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-08 21:52:25.842859782 UTC
+2018-01-05 07:14:48.129270587 UTC
 
 interface main@main:ProjectJsonTest 8002
-  interface hash: 55766a1420839d421e91e735f2e7727e
-  ABI hash: 9b674bc3e6db1b6b998acea3e7222550
-  export-list hash: 857ebf89eb21e70196a4ce8684653f6d
-  orphan hash: bc99138ec919a3c9af06a89995bf6203
+  interface hash: e9e6e6e1a3b4b91c8613a8efd21f5ab5
+  ABI hash: 40de3fee7cc8db5085ee6c077fa377b4
+  export-list hash: 6a4edb2ff38cb0271f4f95d8a21280e7
+  orphan hash: 3912d18e36b74967c8d75a1383fc39f9
   flag hash: 763114b071eaad17bb2ef72fa5afab4f
   sig of: Nothing
   used TH splices: False
@@ -119,23 +119,23 @@ import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy 710f3c92800106372d9fdf1463052e70
 import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy.Internal d9ce1975b5e9af58da7ffcb0a039c72e
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation 03698bd51c60bb7b5080d27c1b8658b8
+  Calculation 04f488c4628c8ddd53166a03b879fe0e
   CalculationName 33a8590d875a915188f9bbf7f53d4cad
-  calculationName 1f5a4a1ff915162dab157f63a0e9b230
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
-  operationMode ea1aee21e5a70c0c32eede2861da9f4e
-  resultName e0da4fa6227b34a0c0bbd4851b78e25e
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+  formula 36e31cbf1e2802459fc7e3d2501a5368
+  operationMode 3048b3c7897fbd4be8fe8e74be0b85c4
+  resultName 9745333b74ea054b6eca9188292a9cfb
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  exports: 1a323fe5f5d42124be5996496a88719d
-  Subtract 6903c995800fbe4485eda7a754f5c732
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  exports: 247f2282832b1244ce9ee08cb96eb811
+  Subtract ba2cb8f524138a9172c68ee0c64fad44
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   AllProjects 35135f9c77587ad25ef5fedd60d3f572
   FileSource 257fe49100eecd56f874d64683d51d99
   Project 0c411bbbdb86d102b55e0b64ae3c6841
@@ -151,8 +151,8 @@ import  -/  Project e9aaa611811a510eec90fd878cb1c85f
   sources c571d266f08a7212dea141c7ba655b5a
   userId 79117b49c7401bb10f9a822f3ad09f25
   views feffc535db2a1ff9a1a46a2d4b6a5274
-import  -/  ProjectJson acf18b712df8a0f901e55f49f516e8ae
-  exports: 7c021a43116ce3cd9ba9642848771ff1
+import  -/  ProjectJson 8ebba936e781d04d45f1312ce4329b61
+  exports: ef16f918449c05c84b2c4746ab18f29d
 import  -/  TestTypes e1faf5df45b087c8121b96368eb41d27
   exports: 92fe1f9c8cb1615074e99dc4e14a7099
   mapName d0f61e53a569858e1479cb4117ca27d7
@@ -197,7 +197,7 @@ bf032830921caf6e0f7b6f25b6221d5d
                   @ (GHC.Base.Maybe View.View)
                   ProjectJsonTest.$s$fEqMaybe_$s$fEqMaybe_$c==2
                   (GHC.Base.$fEqMaybe_$c/= @ View.View View.$fEqView) -}
-a2395a1727a14528cec001973d41773a
+7e0b02b663e54d920aef28e34d534a1e
   $s$fEqMaybe3 ::
     GHC.Classes.Eq (GHC.Base.Maybe Calculation.Calculation)
   {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -265,7 +265,7 @@ daa4baa913c07e3dba800185b843436b
                    -> case ds1 of wild1 {
                         GHC.Base.Nothing -> GHC.Types.False
                         GHC.Base.Just b1 -> View.$fEqView_$c== a1 b1 } }) -}
-d9b8e5ceb16041f297dd3793f1f6182d
+201698f4fe5b43706a9cad3bb67cc5b1
   $s$fEqMaybe_$s$fEqMaybe_$c==3 ::
     GHC.Base.Maybe Calculation.Calculation
     -> GHC.Base.Maybe Calculation.Calculation -> GHC.Types.Bool
@@ -330,7 +330,7 @@ d9b8e5ceb16041f297dd3793f1f6182d
                   (GHC.Show.$fShowMaybe_$cshowsPrec @ View.View View.$fShowView)
                   (GHC.Show.$fShowMaybe_$cshow @ View.View View.$fShowView)
                   ProjectJsonTest.$s$fShowMaybe_$s$fShowMaybe_$cshowList2 -}
-df0c929b7021513ff72f589bd4689576
+138f56c5808de0f4328f22c8aabfaeb1
   $s$fShowMaybe3 ::
     GHC.Show.Show (GHC.Base.Maybe Calculation.Calculation)
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -399,7 +399,7 @@ baf258ac035b395103486cd0f29b7897
                       GHC.Show.shows22)
                    eta
                    eta1) -}
-5734b7518364bccbf4e635bcf78eecc1
+c8364edb1a11538027dd6aaab2393def
   $s$fShowMaybe_$s$fShowMaybe_$cshowList3 ::
     [GHC.Base.Maybe Calculation.Calculation] -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <S,1*U><L,U>,
@@ -509,7 +509,7 @@ a8688b7143e68d3a99fcef5df09485cf
           Data.Text.Internal.Text #)
   {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
      Inline: [0] -}
-62c6487f37808969e70182aa8cf49847
+a2fff40ef93558b60a2ac13bcf395098
   calculationExample :: Calculation.Calculation
   {- Strictness: m,
      Unfolding: (Calculation.Calculation
@@ -881,12 +881,12 @@ e228884e0aaea510a13f34de429eb18e
                      `cast`
                    (Sym (Project.N:ProjectName[0]))
                    ProjectJsonTest.toParseJSON_allProjects_same10) -}
-5c023e4d2d7ff1f5aca4449cefc15818
+810b722076e245a6f44cdede17fa4813
   toParseJSON_calculation_same :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    ProjectJsonTest.toParseJSON_calculation_same1) -}
-cb3b3c8864711902a705d914433c0b92
+99a33e96ac3e34bad3a0818559469b0f
   toParseJSON_calculation_same1 :: Test.HUnit.Lang.Assertion
   {- Unfolding: (ProjectJsonTest.toParseJSON_calculation_same24
                    ProjectJsonTest.toParseJSON_calculation_same23
@@ -913,7 +913,7 @@ cb3b3c8864711902a705d914433c0b92
 47a31f5e22849f8fb6b25c0ff9acc975
   toParseJSON_calculation_same11 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "two"#) -}
-e66e4cb4729388eb2a8f58c20708725c
+49788112d1e1ef7c5d7d97cd94b8a4cc
   toParseJSON_calculation_same12 :: Formula.XFormula
   {- Strictness: m1,
      Unfolding: (Formula.XFMap
@@ -987,7 +987,7 @@ b9775674b12fdce4ec765d43b4ac23f0
                    ProjectJsonTest.toParseJSON_calculation_same20
                    0#
                    ipv }) -}
-8f86c215fa9790caf54b5e969fdd29e6
+8acefac805f6cf571fcb331fd46c1d34
   toParseJSON_calculation_same2 ::
     GHC.Base.Maybe Calculation.Calculation
   {- Unfolding: (case ProjectJsonTest.toParseJSON_allProjects_same15
@@ -1069,7 +1069,7 @@ b9775674b12fdce4ec765d43b4ac23f0
 c1a889d321581f0e2cc58447125f9568
   toParseJSON_calculation_same21 :: Data.Text.Internal.Text
   {- Unfolding: (Data.Text.Show.unpackCString# "calculation"#) -}
-0f9d46c3a11db6b53706e1dda9759bca
+b1e3c20f63f0dcc94431035ea2e50f3a
   toParseJSON_calculation_same22 ::
     GHC.Base.Maybe Calculation.Calculation
   {- Unfolding: (GHC.Base.Just
@@ -1079,7 +1079,7 @@ cd0786e2df75e3281bc7ccb28f5aecb2
   toParseJSON_calculation_same23 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString#
                    "calculation -> json -> calculation"#) -}
-78e6e5a935c500cc632173cb8f5c1923
+6c7e101025bcc890b4a46158ff12e9ca
   toParseJSON_calculation_same24 ::
     GHC.Base.String
     -> GHC.Base.Maybe Calculation.Calculation
@@ -1115,7 +1115,7 @@ d08664586ebe874d1d72e33cc15da641
 b19c8d2f05f4c0b6d94dfab7a308060c
   toParseJSON_calculation_same28 :: GHC.Types.Int
   {- HasNoCafRefs, Unfolding: (GHC.Types.I# 28#) -}
-d537548570ee13dd9b572a54590bd7b0
+669343210ecd97793b0244226c8da382
   toParseJSON_calculation_same3 ::
     Data.Aeson.Types.Internal.JSONPath
     -> GHC.Base.String
@@ -1124,12 +1124,12 @@ d537548570ee13dd9b572a54590bd7b0
      Unfolding: (\ (ds :: Data.Aeson.Types.Internal.JSONPath)
                    (eta :: GHC.Base.String) ->
                  Data.Aeson.Types.Internal.Error @ Calculation.Calculation eta) -}
-fd2c5c0573a50e1ee63edbd1927b35d5
+d0689ed8a7f638f158e651afabd312dc
   toParseJSON_calculation_same4 ::
     Data.ByteString.Lazy.Internal.ByteString
   {- Unfolding: (Data.ByteString.Builder.toLazyByteString
                    ProjectJsonTest.toParseJSON_calculation_same5) -}
-515ae8e6b9ec3250666824c3af6b7b72
+e9debb39568ec84fa98689871a5bb92b
   toParseJSON_calculation_same5 ::
     Data.ByteString.Builder.Internal.Builder
   {- Unfolding: (case ProjectJson.$w$ctoJSON
@@ -1143,14 +1143,14 @@ fd2c5c0573a50e1ee63edbd1927b35d5
                         XFunction.Intersection of ww5 { Unit# ww6 ->
                  Data.Aeson.Encoding.Builder.encodeToBuilder
                    (Data.Aeson.Types.Internal.Object ww6) }) -}
-a5b35858e42468490ec2c2c84fca9c6c
+7fdc56d5c09e7c816395cbb4b3e357cc
   toParseJSON_calculation_same6 :: Formula.XFormula
   {- Strictness: m2,
      Unfolding: (Formula.XFOperation
                    OperationTypes.Subtract
                    ProjectJsonTest.toParseJSON_calculation_same12
                    ProjectJsonTest.toParseJSON_calculation_same7) -}
-49a7997df159e8c6ca5288e56c20fe60
+628025b3cc1950b0762cc2ab342564df
   toParseJSON_calculation_same7 :: Formula.XFormula
   {- Strictness: m1,
      Unfolding: (Formula.XFMap

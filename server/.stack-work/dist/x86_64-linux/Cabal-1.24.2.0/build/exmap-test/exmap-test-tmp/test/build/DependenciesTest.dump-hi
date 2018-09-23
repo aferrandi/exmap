@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-08 09:10:53.125423969 UTC
+2018-01-05 07:14:41.130355503 UTC
 
 interface main@main:DependenciesTest 8002
-  interface hash: 86a8526335d379d09638ef7202885cf9
-  ABI hash: 656d346a06d51531236c355f1cb1799b
+  interface hash: 6d40aa4f528d4ab9b64b5e2e712b7757
+  ABI hash: 805f1f1b273a29b7862458845ae21885
   export-list hash: 656b6e9e3e7ba07fd6018216d5d193e6
   orphan hash: 1e8c220a31afa965bf213d73d22e0946
   flag hash: 937d0c2bd3b84dfe3f5052b6211df1ef
@@ -75,30 +75,30 @@ import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   Negate d603bbcf06356a8b8861fc3d38c6370d
 import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
   exports: fa080d0cbd35b542fbba1bdbc55030ec
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation 03698bd51c60bb7b5080d27c1b8658b8
+  Calculation 04f488c4628c8ddd53166a03b879fe0e
   CalculationName 33a8590d875a915188f9bbf7f53d4cad
-  calculationName 1f5a4a1ff915162dab157f63a0e9b230
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
-  operationMode ea1aee21e5a70c0c32eede2861da9f4e
-  resultName e0da4fa6227b34a0c0bbd4851b78e25e
-import  -/  Dependencies a723d54c72c01bd2a5ee203d99d2eadd
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+  formula 36e31cbf1e2802459fc7e3d2501a5368
+  operationMode 3048b3c7897fbd4be8fe8e74be0b85c4
+  resultName 9745333b74ea054b6eca9188292a9cfb
+import  -/  Dependencies 2682563f91e3d23a42cb16389596bc50
   exports: 096cd46840d6f203fb2e09f6684e6a6f
-  calculationDependencies 4f6c4e98b80d8fbd4365cd85d1eb9d8a
-  formulaDependencies ece3cfd0c92ae1b94d4d8837afe0721a
+  calculationDependencies a94719d55581ff925a765383947ed723
+  formulaDependencies 632de15ae6ad8c7abb2d48aec482140b
   viewDependencies a26b5393ecbb1ded8a793844ef751f29
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  Add d4bf159d115e70a795286354456ea2ee
-import  -/  Operations 4f7f659bc11083106f43505cdb8994c7
-  exports: 494f1bcd2b9c618b52ead64473dd4e04
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  Add e434f746388b9a88c8fbab9412599b6f
+import  -/  Operations 4effa12f203215b111d4734b130c5a94
+  exports: 05deaa373fd38ce0542cfa0b94f31c61
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
 import  -/  TestTypes e1faf5df45b087c8121b96368eb41d27
   exports: 92fe1f9c8cb1615074e99dc4e14a7099
   mapName d0f61e53a569858e1479cb4117ca27d7
@@ -270,13 +270,13 @@ e97efa1c161b42db83d890d3036bd692
           Data.Text.Internal.Text #)
   {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
      Inline: [0] -}
-9b62fb3a3a9301884563abf0d596c8ba
+2f02bb5f2267c1f51aff88782a9a36c7
   calculationDependencies_simpleCalculation_originalMap ::
     Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    DependenciesTest.calculationDependencies_simpleCalculation_originalMap1) -}
-815f0626a3079a857074e159e3354e43
+d67bec645839df02df66f7d67c782e77
   calculationDependencies_simpleCalculation_originalMap1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (DependenciesTest.calculationDependencies_simpleCalculation_originalMap10
@@ -344,12 +344,12 @@ f4066841746b9facf6d34813a19c7140
   calculationDependencies_simpleCalculation_originalMap19 ::
     [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "assertEqual"#) -}
-acfa1425aa616ac4c5be2f8f52063818
+204c7f712f92e0ddd7c96d7db7ca715f
   calculationDependencies_simpleCalculation_originalMap2 ::
     [XMapTypes.XMapName]
   {- Unfolding: (Dependencies.formulaDependencies
                    DependenciesTest.calculationDependencies_simpleCalculation_originalMap3) -}
-856e06c2802eeca54ba5318106399e4d
+af322138d78a47bd157d206709bc1bc8
   calculationDependencies_simpleCalculation_originalMap3 ::
     Formula.XFormula
   {- Unfolding: (Formula.XFMap
@@ -408,19 +408,19 @@ e79b90312ad74269ce89d08be6736e1e
     [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString#
                    "dependencies simple calculatiom"#) -}
-efe266bca0abf19e1d079b7cfcd9d537
+92c366edc21f9f594395a6821e4a7c99
   formulaDependencies_complexFormula_maps :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    DependenciesTest.formulaDependencies_complexFormula_maps1) -}
-fc81fdd16d155c1a417b012729db2b7c
+4c202c07cb8ceca422a7d8b3ace17463
   formulaDependencies_complexFormula_maps1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (DependenciesTest.formulaDependencies_complexFormula_maps17
                    DependenciesTest.formulaDependencies_complexFormula_maps16
                    DependenciesTest.formulaDependencies_complexFormula_maps14
                    DependenciesTest.formulaDependencies_complexFormula_maps2) -}
-bd2727346d6b9bbb16a5cf35efa93956
+a38870a8453cc86e4aa0d8d485c8b19b
   formulaDependencies_complexFormula_maps10 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    DependenciesTest.formulaDependencies_complexFormula_maps11
@@ -511,7 +511,7 @@ b4cba6fbd75394393358b51d911b9d8c
                    DependenciesTest.formulaDependencies_complexFormula_maps21
                    DependenciesTest.formulaDependencies_complexFormula_maps22
                    DependenciesTest.formulaDependencies_complexFormula_maps20) -}
-c89f564699dfe03717521b1a2daaeac3
+03bc9d3583e7c024fbb0c409a620c898
   formulaDependencies_complexFormula_maps2 :: [XMapTypes.XMapName]
   {- Unfolding: (Dependencies.formulaDependencies
                    DependenciesTest.formulaDependencies_complexFormula_maps3) -}
@@ -524,18 +524,18 @@ c89f564699dfe03717521b1a2daaeac3
 ca989ca3aa588ab36c615f7f83f564fe
   formulaDependencies_complexFormula_maps22 :: GHC.Types.Int
   {- HasNoCafRefs, Unfolding: (GHC.Types.I# 32#) -}
-a386da07e4f3ff2f4456a874cda13c7a
+d5718b0499470e1ca5ce4ae80bf144f1
   formulaDependencies_complexFormula_maps3 :: Formula.XFormula
   {- Unfolding: (Formula.XFApplication
                    ApplicationTypes.Negate
                    DependenciesTest.formulaDependencies_complexFormula_maps4) -}
-425a7787af1663314699598c96fa4db2
+3bb7b74990203d005eaeabe85e21f562
   formulaDependencies_complexFormula_maps4 :: Formula.XFormula
   {- Unfolding: (Formula.XFOperation
                    OperationTypes.Add
                    DependenciesTest.formulaDependencies_complexFormula_maps10
                    DependenciesTest.formulaDependencies_complexFormula_maps5) -}
-9e635bf0181e5720f4d74ef376762cae
+5ab1af7f2007f95c0fce56d47700d553
   formulaDependencies_complexFormula_maps5 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    DependenciesTest.formulaDependencies_complexFormula_maps6
@@ -577,12 +577,12 @@ a386da07e4f3ff2f4456a874cda13c7a
 f252a826bad64fe9b5a5d8fdeefe2d4b
   formulaDependencies_complexFormula_maps9 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "b"#) -}
-6dfa927637ea03093bb90432bd1e545f
+b6d67b5af963fb9b42b41dca4cbdd480
   formulaDependencies_duplicates_onlyOnce :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce1) -}
-1d8db41df57725695aed54a002dc0f01
+aac362ee77601486485a1c13e33b983d
   formulaDependencies_duplicates_onlyOnce1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (DependenciesTest.formulaDependencies_duplicates_onlyOnce11
@@ -630,22 +630,22 @@ a580b4b608e7c7bb2a45b8bc99194b46
 e0034b2c00b0b2f41977d50dbf712492
   formulaDependencies_duplicates_onlyOnce15 :: GHC.Types.Int
   {- HasNoCafRefs, Unfolding: (GHC.Types.I# 37#) -}
-555eea01c62111eba4741115f9bbd78b
+e26c7548e1ca5f7983a6cb028963e5e2
   formulaDependencies_duplicates_onlyOnce2 :: [XMapTypes.XMapName]
   {- Unfolding: (Dependencies.formulaDependencies
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce3) -}
-c8a736df4bdb1b447b709f63097d3eed
+ca21672c11920507283055b6018fa6fd
   formulaDependencies_duplicates_onlyOnce3 :: Formula.XFormula
   {- Unfolding: (Formula.XFOperation
                    OperationTypes.Add
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce5
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce4) -}
-1922e3256fee47fbaf57fc0560266a94
+bebdd5d09f35d16d7eb6dda751d6dc50
   formulaDependencies_duplicates_onlyOnce4 :: Formula.XFormula
   {- Unfolding: (Formula.XFApplication
                    ApplicationTypes.Negate
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce5) -}
-990e2929e7b0f77391ca7c7ae128d49c
+70fbdffff4276bff6e0253aaba00ac16
   formulaDependencies_duplicates_onlyOnce5 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    DependenciesTest.formulaDependencies_duplicates_onlyOnce6
@@ -692,13 +692,13 @@ a6b6a6602f67280699a0db0fd4bff8a4
                      `cast`
                    (Sym (XMapTypes.N:XMapName[0]))
                    (GHC.Types.[] @ XMapTypes.XMapName)) -}
-d4dd6312d2c0d6d69b49527b1def339b
+0d39adff5a2e67be1f89b24ae03e121e
   formulaDependencies_trivialFormula_originalMap ::
     Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    DependenciesTest.formulaDependencies_trivialFormula_originalMap1) -}
-8f96c1b7a57095e7fef7fdefbedeadfd
+420b3b51dc83bebef1d5c078acaac082
   formulaDependencies_trivialFormula_originalMap1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (DependenciesTest.formulaDependencies_trivialFormula_originalMap9
@@ -732,12 +732,12 @@ c5d1556c02d89b629750a125ae91a8cc
 85481b6a3ac1f7781acbd76a391b52ba
   formulaDependencies_trivialFormula_originalMap14 :: GHC.Types.Int
   {- HasNoCafRefs, Unfolding: (GHC.Types.I# 28#) -}
-b0f57130e4b23e299799e6df3c8a8656
+50fd8dcc458c4f0a6d0a7b01144dd272
   formulaDependencies_trivialFormula_originalMap2 ::
     [XMapTypes.XMapName]
   {- Unfolding: (Dependencies.formulaDependencies
                    DependenciesTest.formulaDependencies_trivialFormula_originalMap3) -}
-62286b354a5c2be9075c0aac08b21806
+e31407a6f63971d008059915a16c7701
   formulaDependencies_trivialFormula_originalMap3 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    DependenciesTest.formulaDependencies_trivialFormula_originalMap4

@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:06:52.007055591 UTC
+2018-01-14 21:56:53.200621411 UTC
 
 interface main@main:CalculationMessages 8002
-  interface hash: eb1c366252f6323db8ae075e40259f2d
-  ABI hash: cc9d4f53e4cdd89393c32f99d3d216d7
-  export-list hash: 38997434d1eadadff28c77fbb028d629
+  interface hash: 09d13ac523f9f6c996ea7941465153ea
+  ABI hash: 3afc977efd0bd03a50f6417c854268c2
+  export-list hash: 0ae2098e7818c22c0f347121d6a6bccf
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 9581e73690371ffaaf5c309a49faabb5
   sig of: Nothing
@@ -103,20 +103,20 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  Calculation 41a99fbb51f5318f902af52762efce14
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   ViewChan a8e7d5732ce960f93aa79f3505166fc7
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
-74acf4261761144a397a9c65fdfd50b7
+27d1a6ea725ec6e55bf168cbe0dd2113
   $fEqCalculationMessage ::
     GHC.Classes.Eq CalculationMessages.CalculationMessage
   DFunId
@@ -125,7 +125,7 @@ import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.ST
                   @ CalculationMessages.CalculationMessage
                   CalculationMessages.$fEqCalculationMessage_$c==
                   CalculationMessages.$fEqCalculationMessage_$c/= -}
-74acf4261761144a397a9c65fdfd50b7
+27d1a6ea725ec6e55bf168cbe0dd2113
   $fEqCalculationMessage_$c/= ::
     CalculationMessages.CalculationMessage
     -> CalculationMessages.CalculationMessage -> GHC.Types.Bool
@@ -136,7 +136,7 @@ import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.ST
                  case CalculationMessages.$fEqCalculationMessage_$c== a b of wild {
                    GHC.Types.False -> GHC.Types.True
                    GHC.Types.True -> GHC.Types.False }) -}
-74acf4261761144a397a9c65fdfd50b7
+27d1a6ea725ec6e55bf168cbe0dd2113
   $fEqCalculationMessage_$c== ::
     CalculationMessages.CalculationMessage
     -> CalculationMessages.CalculationMessage -> GHC.Types.Bool
@@ -263,11 +263,11 @@ aa21b7b675643d650df293a44a9f242d
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-6b33731f780f07df39838a7cd12da2cb
+1fbbb04c6675ddf15163c151f014403e
   type CalculationChan =
     Control.Concurrent.STM.TChan.TChan
       CalculationMessages.CalculationMessage
-74acf4261761144a397a9c65fdfd50b7
+27d1a6ea725ec6e55bf168cbe0dd2113
   data CalculationMessage
     = CMMaps [XMapTypes.XNamedMap]
     | CMError Errors.Error

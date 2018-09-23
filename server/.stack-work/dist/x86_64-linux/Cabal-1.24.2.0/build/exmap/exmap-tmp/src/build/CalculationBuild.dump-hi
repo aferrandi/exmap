@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:09:49.251554744 UTC
+2018-01-17 08:49:44.717484817 UTC
 
 interface main@main:CalculationBuild 8002
-  interface hash: 21a57a2ea82ea382810d8b5c12f8fae6
-  ABI hash: 9f2e646013564d5d9b1726324c113fca
-  export-list hash: 4f533e748d6540ffa88c6568fb4ab39e
+  interface hash: 66a76835797f89f59a68cb5b65469041
+  ABI hash: 85ae85b6bdd485652c3dd12ffc11942c
+  export-list hash: f160ea42ee62b0ad870111d1113cf44a
   orphan hash: d5b8af8a1f98c806b21f2465b0424ced
   flag hash: 96b542d537f655ad583e6de1a6ed0c0e
   sig of: Nothing
@@ -112,32 +112,32 @@ import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
 import  -/  AssocList 285e8ffbf4f31be2d9dbc0e99d5a3fed
   exports: 0afb1cf80f007ad39360a1007b7a8727
   mapWithNothingValues 1344436074be7d26125b5d33c4a3180d
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
-import  -/  CalculationActor a176b987ec500fe414b039321b161801
-  exports: e2fb82a380b8feeec445c74ef77d9425
-  actorCalculation 09086ff060a58eaf9c67d0e12cfe15d2
-import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
-  exports: 38997434d1eadadff28c77fbb028d629
-  CalculationChan 6b33731f780f07df39838a7cd12da2cb
-import  -/  CalculationState bb13e56d22c495cb55629a7c1de5eb5f
-  exports: e46d1b59ab4dff4dad527460d1d17272
-  RuntimeCalculation a969e2c78f28493a8f937bf91b6080a3
-  RuntimeCalculation ff29bc771d3b3d65652af415292078aa
-  calculation 7de3d787050f413ad64b9198dc0f144d
-  calculationsToNotify 845418f3ac0c797f6f2e8c18b42383a1
-  currentResult bacb02542b56424d258990902285431f
-  logChan 94d885d67565347c817751fedf41a49a
-  repository 186995d4c87708c93cb3f409618f4466
-  viewsToNotify a3b0691b6fb15f4db2d4fdd8d9940988
-import  -/  Dependencies a723d54c72c01bd2a5ee203d99d2eadd
+  Calculation 41a99fbb51f5318f902af52762efce14
+  formula 36e31cbf1e2802459fc7e3d2501a5368
+import  -/  CalculationActor db32024d6f8adc84b18912853937c675
+  exports: 16923946657717c985cae0ed1729c08a
+  actorCalculation 268233fb295f8c7c90c6a6b82953e847
+import  -/  CalculationMessages 3afc977efd0bd03a50f6417c854268c2
+  exports: 0ae2098e7818c22c0f347121d6a6bccf
+  CalculationChan 1fbbb04c6675ddf15163c151f014403e
+import  -/  CalculationState 792b6a808fd61fb1fe69585de918e92b
+  exports: 4a116e9f65c8d9fc646d9dcb1a279db6
+  RuntimeCalculation 50341f8e24968141950a2e907fd07642
+  RuntimeCalculation fb3901266423671780fd638b9aae3ffa
+  calculation 0237d7671042bca7d3c1add1da285980
+  calculationsToNotify b8a7cc3db08767b806db8b5d880d0572
+  currentResult 6369534968ced4e887c81ecda058ae16
+  logChan fd212d23093c2e3f5b99df9c47424d8a
+  repository 03112b590629fe2068c834555a177b0e
+  viewsToNotify 9a529add4f4b6ac022943b6a62e68fe6
+import  -/  Dependencies 2682563f91e3d23a42cb16389596bc50
   exports: 096cd46840d6f203fb2e09f6684e6a6f
-  formulaDependencies ece3cfd0c92ae1b94d4d8837afe0721a
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
+  formulaDependencies 632de15ae6ad8c7abb2d48aec482140b
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TVar 8271fdeaf6f41f205dbe31243cf91390
@@ -232,7 +232,7 @@ dad070f4e1dbd42bdc58d984f0f14c33
     -> [(XMapTypes.XMapName, a)]
     -> Data.Map.Base.Map XMapTypes.XMapName a
   {- Arity: 3, Strictness: <L,U><S,1*U><S,1*U>, Inline: [0] -}
-39a631b60175b304ec521ddfe8c3fd61
+7ad09efb6097c6640f9a8ffb4f4abc7e
   calculationToChan ::
     LogMessages.LogChan
     -> Calculation.Calculation
@@ -245,7 +245,7 @@ dad070f4e1dbd42bdc58d984f0f14c33
                  ->_R <Calculation.Calculation>_R
                  ->_R Sym (GHC.Types.N:IO[0]
                                <CalculationMessages.CalculationChan>_R)) -}
-51101951ea90f27af51494a624e7237f
+aedd1bbda0bb6183bf81af2cf3ef1c25
   calculationToChan1 ::
     LogMessages.LogChan
     -> Calculation.Calculation
@@ -298,7 +298,18 @@ dad070f4e1dbd42bdc58d984f0f14c33
                            @ ()
                            @ GHC.Exception.SomeException
                            (\ (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                            CalculationActor.$wactorCalculation ipv5 ipv7 ipv1 w2)
+                            case ipv1 of ww3 { CalculationState.RuntimeCalculation ww4 ww5 ww6 ww7 ww8 ww9 ->
+                            case ww4 of ww10 { GHC.Conc.Sync.TVar ww11 ->
+                            CalculationActor.$wactorCalculation
+                              ipv5
+                              ipv7
+                              ww11
+                              ww5
+                              ww6
+                              ww7
+                              ww8
+                              ww9
+                              w2 } })
                            GHC.Conc.Sync.childHandler1
                            eta)
                           `cast`
@@ -309,7 +320,7 @@ dad070f4e1dbd42bdc58d984f0f14c33
                       @ CalculationMessages.CalculationMessage
                       ipv5
                       ipv7 #) } } } } }) -}
-09313e56a4819862077fdaeebea3844c
+5059f740dbbdf41d15a8471e23d32c91
   calculationToChan2 ::
     LogMessages.LogChan
     -> Calculation.Calculation
@@ -366,7 +377,7 @@ dad070f4e1dbd42bdc58d984f0f14c33
                       (GHC.Conc.Sync.TVar @ [CalculationMessages.CalculationChan] ipv9)
                       (GHC.Conc.Sync.TVar @ [ViewMessages.ViewChan] ipv7)
                       lc #) } } } } }) -}
-dd5f8f0c66a198b194391ded903b3bf2
+ef2d372b3c157d5e0369f02b36803da4
   calculationToRuntime ::
     LogMessages.LogChan
     -> Calculation.Calculation

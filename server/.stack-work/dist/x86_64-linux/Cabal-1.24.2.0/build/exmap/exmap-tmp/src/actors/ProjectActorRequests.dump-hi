@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:07:11.199602148 UTC
+2018-01-17 19:19:29.017279227 UTC
 
 interface main@main:ProjectActorRequests 8002
-  interface hash: 252c6c2e09b4c13ad18e5750e73a6931
-  ABI hash: 61eb12d5a4bca6655e6b73c40ce081ec
-  export-list hash: e6a62972aa9f8a75b714638ea6de0723
+  interface hash: 5e8732c3c35dceccce9aa271e147e6f9
+  ABI hash: 5eedbb4ac7906278b238247396780169
+  export-list hash: 43cc9eb9d876ad85608128c9173c8890
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -13,6 +13,8 @@ interface main@main:ProjectActorRequests 8002
   where
 exports:
   ProjectActorRequests.addSubscriber
+  ProjectActorRequests.calculationFromFormula
+  ProjectActorRequests.disconnectClient
   ProjectActorRequests.handleRequests
   ProjectActorRequests.loadCalculation
   ProjectActorRequests.loadMapForClient
@@ -129,94 +131,99 @@ import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation 03698bd51c60bb7b5080d27c1b8658b8
+  Calculation 04f488c4628c8ddd53166a03b879fe0e
+  Calculation 41a99fbb51f5318f902af52762efce14
   CalculationName 7681f69b2581ed31254c1a456f024695
   CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
-  calculationName 1f5a4a1ff915162dab157f63a0e9b230
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+  formula 36e31cbf1e2802459fc7e3d2501a5368
   formulaText 863770ecc9a039140641dbc28654318b
-  operationMode ea1aee21e5a70c0c32eede2861da9f4e
-  resultName e0da4fa6227b34a0c0bbd4851b78e25e
+  operationMode 3048b3c7897fbd4be8fe8e74be0b85c4
+  resultName 9745333b74ea054b6eca9188292a9cfb
   sourceCalculationName 5ef42190299a691828fe18f7e25144de
   sourceOperationMode bb7a1fcb2335252e1bd5ab1463badec5
   sourceResultName 590a450538852796b3e550f6fb98cc72
-import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
-  exports: aedbb846b4b45e6fdfa51d3b8e071d11
-  loadChan e6d2de703534e0deb289b93806cdfee5
-  storeChan 989c77daf92ad23347a4de106a15da86
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EMWebEvent c941e172c95073a52dd73b2c44ff45f1
-  sendStringError b3eae56a2a7d17ad08032d27aeb84213
-import  -/  FormulaParser b03d0271c6a28942ff4e806d02eb31bb
+import  -/  CommonChannels c013d3c6d0e37678816363497cd84d4a
+  exports: 40cf9c65678e962f25678cbf8f519487
+  loadChan 97c0425fd4c708a94f96fdbff31d381f
+  storeChan 8e52b8e5c96683305838eaf14e4a6ba6
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EMWebEvent 6855fd08a9b75fbb72139d790cf82596
+  sendStringError 6d3f0e10019cac48f42e902cd33b2e40
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
+  exports: d6ceee93beb5ac820afa97f35b5fa611
+  XFormula bc1628deb5228885a088bc7a3859d8f0
+import  -/  FormulaParser 5bf96e2a41f30b158532545cdde0502e
   exports: 7b913b3a450dd5a92a0c06728e74471f
-  parseFormula 25c9b1841afce8db855f2d5dbc16bf33
-import  -/  LoadMessages 86f7ef1ae97b59e6e38a3ad92beb7909
-  exports: 447fbd5d495b4d5cddbcbb2fe0139815
-  LMLoadCalculation 228fae6c8b65f194e916100e6a8f7d46
-  LMLoadMapForClient 73f3ad9f8010dd40468514aba6d7076d
-  LMLoadMapsForCalculations f70c0358b0e2f8f448bb02cce0c158da
-  LMLoadViewForClient 666c24f0ae863b98684b0b38b1471f13
-  LMLoadViewForProject 0f5f2764215c644edffde5460f05d365
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  parseFormula 6633e3c1b8a8488c1747fda875200771
+import  -/  LoadMessages 59247eb4fa93f25a94519344b3738ad9
+  exports: c5cc904a2c912cd972dfb2fd047d2c25
+  LMLoadCalculation d403cc5cd9d5a474d516ebb79c994f21
+  LMLoadMapForClient 3e95ad36fb47826e35bbcb29ea12a728
+  LMLoadMapsForCalculations 0c4b1fa1788bf4bbf5944f0ccf4d6e16
+  LMLoadViewForClient df70d3c70106b0a8b346056787466dbf
+  LMLoadViewForProject 86b632ea52e9d6fa85cb156ea12ebdba
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   FileSource 257fe49100eecd56f874d64683d51d99
   Project c7f6766f61d0b63c7ab6927b16e914f3
   projectName cb7533641bc632f228a4a92ccb44abc9
   sourceOfMaps b117b52c0a3033f4e54e011d62f34511
   sourceType ebf4a57d65de6a6ac97bf31643e10d62
   sources c571d266f08a7212dea141c7ba655b5a
-import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
-  exports: 7b16c99942b55c7a72be31fd4804ba3f
-  PRLoadCalculationForClient bda2e06c18f1ee39613d4b8adf51acad
-  PRLoadMapForClient 82ec154c3050f064be2178528faedf54
-  PRLoadViewForClient 4506f4d888da2ab7de18d9179cf35436
-  PRMapsInProject edd20695948d51cb39112f82d9498448
-  PRStartCalculations 11fcf4fb20dfea49425bdd2e61af209d
-  PRStoreCalculation 491f8d04b7f73cd2b2cf752b6d201f64
-  PRStoreMap 3eb7c6801d0193c9d9993ea434568661
-  PRStoreView 00b987625ce9364cd227fcc6f0e21ba7
-  PRSubscribeToProject 503970d77f7140be3f6d89e18fde64f3
-  PRSubscribeToView ef838a6d30acdf495823d986acd38461
-  PRUnsubscribeFromProject 061be65d6ed8ef32ba7a6bc9a2236220
-  PRUnsubscribeFromView 35e5980f26e3ae750345d8bf7b5ca8b1
-  PRUpdateProject 2acbd7cdff253436e5747fc3158d39f5
-  ProjectChan 091f44512dd4db2ee61640a0a30b9371
-  ProjectRequest be50552ae6df018fa5306afd01f4475e
-import  -/  ProjectState b9445036ca91c8f8f17466da52a590df
-  exports: 45f061a0a4b72f3842496805809fba9c
-  RuntimeProject 6f800b4257f0a40180517de20dd96d62
-  calculationByResult 19c7c825961eea5395b8246623ae44f0
-  calculationChanByMap a28473bfc3c6b477e078f13f04196323
-  chans 63f09138dc269f54560c3785a96964ae
-  evtChan e0b2534d40c3837a7812ce382d0887a3
-  prjName 94ca58664f6ec802577ccd8dd03213a1
-  project a30b6ea9329cfba1f64ba26587a1f242
-  subscribedClients 2bb0e33d2fba454b4b07fa0a8b1b476c
-  viewChanByName 626b2130a672e67aa9cdc67025db420c
-import  -/  StoreMessages 604a62eda95aa09d4755ba38bd251a8e
-  exports: c031e914ea8fc941321bb1e578fc587f
-  StMStoreCalculation c65c17fc2af41d23269106b85c2872bc
-  StMStoreExistingProject 5514b7c48a205e09b7f2dd2aae126836
-  StMStoreMap f8a36bc87e5aad4c4a678b3db74a6ac7
-  StMStoreView 18f6bbb0faeeb15259dbb64d867586e4
+import  -/  ProjectMessages 2f75b74a80f546d5b67047299653bd86
+  exports: 28934ffa1b42a9db9c37d00fb218487a
+  PRDisconnect 4fd918797daf3a4f2ceaff43725c602e
+  PRLoadCalculationForClient db46829b65770215944e73215c01a666
+  PRLoadMapForClient 4662ef0ab284e744c137f26bcb23538e
+  PRLoadViewForClient 4aa95dc2f65356e16b97695d58be3066
+  PRMapsInProject dbd316b09a07e5ede2a789268989b1da
+  PRStartCalculations ead34cd78fb9efc95a896967cf814939
+  PRStoreCalculation 7f464fa352acb70c41986dd95f16af57
+  PRStoreMap ce993bfd196fd6edd3668e545b26cbc9
+  PRStoreView 31f07cad2ae06792507dde66c8001e3b
+  PRSubscribeToProject 9d1e82bec53511cfe922958d57932071
+  PRSubscribeToView 687603c559f5067d8a68fdfad2f29116
+  PRUnsubscribeFromProject f37c5254aa5f60d9dc316f8490d133f9
+  PRUnsubscribeFromView e1041ae6922b62256930a7f2e76cf788
+  PRUpdateProject 446ce71249a1a30847437fc9ed343c6b
+  ProjectChan b74b68c96fec4f477ddf0aae0d38e500
+  ProjectRequest 4cbcf6a51ed5da96731d062c906433d1
+import  -/  ProjectState 22e38013a51b1c430f1e9dfad37f81f6
+  exports: f1a926b33839773ad23f3ae1e194b7c0
+  RuntimeProject 765ed7b63e28192250c3bc7202fd6276
+  calculationByResult d450bad7cdac7a555d4fae8a0fc0a942
+  calculationChanByMap e2cd5747fff6fd3fd5cecfe935d0f01d
+  chans 5b36d778c41f489fe7eed0897f3e1fea
+  evtChan d6a41974ba8ffbdd8bcf219ef4b27186
+  prjName cbd11a75d8480f8f1ecfb02231849094
+  project ee01e9ef9b8ee2e3b944ddac0596c0c8
+  subscribedClients 3af02fe6726c7a81c7d25655f3a80b36
+  viewChanByName 826daebefc3e20502309b91477032f06
+import  -/  StoreMessages f58dda69829b9c6217296b0ca236df58
+  exports: f0ddc1aebe84de99133735532f82b249
+  StMStoreCalculation 1562575de27847246a31cf83e8927fcc
+  StMStoreExistingProject 822ca1873e4c988cf8cf4a24d8138127
+  StMStoreMap 80277d508bfbb4f15a33a9a11ac0a8a0
+  StMStoreView 23cdb6915a20490ad852b5f84b6bc6b8
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   VMSubscribeToView f6a64aa1a3403807bce7e07837c89f83
   VMUnsubscribeFromView ec2213fda9126b2cac68a4fd267486e5
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
-import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+import  -/  WebMessages c909a0398a7086eab215b3ace24705da
   exports: b86ad7b8a0b44a02b28cdac11545ea56
-  WEMapsInProject f6ece629ee42247daa8c01faffed2242
-  WEProjectContent f15fe3d556e47377c3afa966f5c1b8f2
+  WEMapsInProject 412726def3be1edf0032dd197c8ecba1
+  WEProjectContent 4bfbdca708ad2b0e04fed7dfa7a05f53
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XMapName aed4e1c98ee09424176ec799b4e99672
@@ -238,7 +245,108 @@ e12044fa2685933825e7e33b83ba1681
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-b14821f2ce826e71d3555401eb89de8e
+136af7513028a8ec973f9f04b609ffde
+  $wdisconnectClient ::
+    GHC.Prim.TVar# GHC.Prim.RealWorld ProjectState.ViewChanByName
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 4, HasNoCafRefs, Strictness: <S,U><S,U><L,U><S,U>,
+     Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld ProjectState.ViewChanByName)
+                   (ww1 :: GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient])
+                   (w :: WebClients.WAClient)
+                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww1
+                        w1 of ds1 { (#,#) ipv ipv1 ->
+                 case GHC.Prim.writeTVar#
+                        @ GHC.Prim.RealWorld
+                        @ [WebClients.WAClient]
+                        ww1
+                        (GHC.List.filter
+                           @ WebClients.WAClient
+                           (\ (ci :: WebClients.WAClient) ->
+                            WebClients.$fEqWAClient_$c/= ci w)
+                           ipv1)
+                        ipv of s2# { DEFAULT ->
+                 case GHC.Prim.readTVar#
+                        @ GHC.Prim.RealWorld
+                        @ ProjectState.ViewChanByName
+                        ww
+                        s2# of ds2 { (#,#) ipv2 ipv3 ->
+                 let {
+                   lvl :: ViewMessages.ViewMessage
+                   = ViewMessages.VMUnsubscribeFromView w
+                 } in
+                 letrec {
+                   go10 :: GHC.Conc.Sync.STM ()
+                           -> Data.Map.Base.Map
+                                View.ViewName
+                                (Control.Concurrent.STM.TChan.TChan ViewMessages.ViewMessage)
+                           -> GHC.Prim.State# GHC.Prim.RealWorld
+                           -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+                     {- Arity: 3, Strictness: <C(S),1*C1(U(U,U))><S,1*U><S,U> -}
+                   = \ (z' :: GHC.Conc.Sync.STM ())
+                       (ds :: Data.Map.Base.Map
+                                View.ViewName
+                                (Control.Concurrent.STM.TChan.TChan ViewMessages.ViewMessage))
+                       (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                     case ds of wild {
+                       Data.Map.Base.Bin dt kx x l r
+                       -> go10
+                            (\ (eta1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                             case x of wild1 { Control.Concurrent.STM.TChan.TChan dt1 dt2 ->
+                             case GHC.Prim.readTVar#
+                                    @ GHC.Prim.RealWorld
+                                    @ (Control.Concurrent.STM.TChan.TVarList
+                                         ViewMessages.ViewMessage)
+                                    dt2
+                                    eta1 of ds3 { (#,#) ipv4 ipv5 ->
+                             case GHC.Prim.newTVar#
+                                    @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                                    @ GHC.Prim.RealWorld
+                                    (Control.Concurrent.STM.TChan.TNil @ ViewMessages.ViewMessage)
+                                    ipv4 of ds4 { (#,#) ipv6 ipv7 ->
+                             case ipv5 of wild2 { GHC.Conc.Sync.TVar tvar# ->
+                             case GHC.Prim.writeTVar#
+                                    @ GHC.Prim.RealWorld
+                                    @ (Control.Concurrent.STM.TChan.TList ViewMessages.ViewMessage)
+                                    tvar#
+                                    (Control.Concurrent.STM.TChan.TCons
+                                       @ ViewMessages.ViewMessage
+                                       lvl
+                                       ipv7)
+                                    ipv6 of s2#1 { DEFAULT ->
+                             case GHC.Prim.writeTVar#
+                                    @ GHC.Prim.RealWorld
+                                    @ (Control.Concurrent.STM.TChan.TVarList
+                                         ViewMessages.ViewMessage)
+                                    dt2
+                                    (GHC.Conc.Sync.TVar
+                                       @ (Control.Concurrent.STM.TChan.TList
+                                            ViewMessages.ViewMessage)
+                                       ipv7)
+                                    s2#1 of s2#2 { DEFAULT ->
+                             go10 z' r s2#2 } } } } } })
+                              `cast`
+                            (Sym (GHC.Conc.Sync.N:STM[0] <()>_R))
+                            l
+                            eta
+                       Data.Map.Base.Tip
+                       -> z' `cast` (GHC.Conc.Sync.N:STM[0] <()>_R) eta }
+                 } in
+                 go10
+                   ProjectActorRequests.disconnectClient2
+                     `cast`
+                   (Sym (GHC.Conc.Sync.N:STM[0] <()>_R))
+                   ipv3
+                   ipv2 } } }) -}
+a1a7c56398fd3d6d83cc15e9c62b0343
   $whandleRequests ::
     ProjectMessages.ProjectChan
     -> GHC.Conc.Sync.TVar Project.Project
@@ -253,7 +361,7 @@ b14821f2ce826e71d3555401eb89de8e
   {- Arity: 9,
      Strictness: <L,U><L,1*U(U)><L,1*U(U)><L,1*U(U)><L,1*U(U)><L,1*U(1*U(1*U,U),1*U(A,U),1*U(A,U),A)><L,1*U(U)><S,1*U><S,U>,
      Inline: [0] -}
-89d572753847f058e1d49d49306de282
+3a126b632b251ffe84013de78b3ed3a7
   $wloadCalculation ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -318,7 +426,7 @@ b14821f2ce826e71d3555401eb89de8e
                            ipv5)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } } }) -}
-91fd4e2629fb3cb03d7d033b0b844459
+d93e890d4b47d81196e7de5bc369e1ff
   $wloadMapForClient ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -383,7 +491,7 @@ b14821f2ce826e71d3555401eb89de8e
                            ipv5)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } } }) -}
-ec23a0c79d1c3dfa80f739f85c961aee
+1b50a68ca6f1ab702ca489d8e101ae12
   $wloadView ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -448,7 +556,7 @@ ec23a0c79d1c3dfa80f739f85c961aee
                            ipv5)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } } }) -}
-cf402cad71a8b72532c3d5e897d8b33e
+c0bc11d6be6445e3bb81e4b27010ce77
   $wmapsInProject ::
     GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
     -> GHC.Prim.TVar#
@@ -569,16 +677,17 @@ cf402cad71a8b72532c3d5e897d8b33e
     -> GHC.Base.Maybe a
   {- Arity: 4, HasNoCafRefs, Strictness: <L,U><L,U><L,U><S,1*U>,
      Inline: [0] -}
-cf1127e3fbb8cc974b3de81083a9b805
+a03f5e225fc33365bc160612d2823d39
   $wremoveSubscriber ::
-    WebClients.WAClient
-    -> GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    -> WebClients.WAClient
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 3, HasNoCafRefs, Strictness: <L,U><S,U><S,U>,
+  {- Arity: 3, HasNoCafRefs, Strictness: <S,U><L,U><S,U>,
      Inline: [0],
-     Unfolding: (\ (w :: WebClients.WAClient)
-                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient])
+     Unfolding: (\ (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld [WebClients.WAClient])
+                   (w :: WebClients.WAClient)
                    (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case GHC.Prim.readTVar#
                         @ GHC.Prim.RealWorld
@@ -596,7 +705,7 @@ cf1127e3fbb8cc974b3de81083a9b805
                            ipv1)
                         ipv of s2# { DEFAULT ->
                  (# s2#, GHC.Tuple.() #) } }) -}
-210e3d223df5b35998b59c0917709a3a
+eff020920a79b60da0455aca9be00f33
   $wstartCalculations ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -679,7 +788,7 @@ cf1127e3fbb8cc974b3de81083a9b805
                                 ipv7)
                              s2# of s2#1 { DEFAULT ->
                       (# s2#1, GHC.Tuple.() #) } } } } } } } } } } } }) -}
-77f74bf88a918d13c0e69f1cc945c58a
+7da04aee203cd24e53bb394118ae9249
   $wstoreCalculation ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -781,7 +890,7 @@ cf1127e3fbb8cc974b3de81083a9b805
                                 ipv5)
                              s2# of s2#1 { DEFAULT ->
                       (# s2#1, GHC.Tuple.() #) } } } } } } } }) -}
-dbcdcbba18515df6226b7ea477551a66
+89324d869e9063289e820cf187607903
   $wstoreMap ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -848,7 +957,7 @@ dbcdcbba18515df6226b7ea477551a66
                            ipv5)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } } }) -}
-8c5de30ef3926421b315f25d7d700068
+959185c1ec1095f0057432ea4119da57
   $wstoreView ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -915,10 +1024,9 @@ dbcdcbba18515df6226b7ea477551a66
                            ipv5)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } } }) -}
-3fb63a3baab0c8c594507dd23016ae3e
+830788c766f50aa17be2a99958eb63fb
   $wsubscribeToProject ::
-    WebClients.WAClient
-    -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
+    GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
     -> GHC.Prim.TVar#
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
@@ -926,12 +1034,13 @@ dbcdcbba18515df6226b7ea477551a66
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
     -> GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient]
+    -> WebClients.WAClient
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 6, HasNoCafRefs,
-     Strictness: <L,U><S,U><L,A><S,U><S,U><S,U>, Inline: [0],
-     Unfolding: (\ (w :: WebClients.WAClient)
-                   (ww :: GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project)
+     Strictness: <S,U><L,A><S,U><S,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (ww :: GHC.Prim.TVar#
+                            GHC.Prim.RealWorld Project.Project)
                    (ww1 :: GHC.Prim.TVar#
                              GHC.Prim.RealWorld
                              (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
@@ -939,6 +1048,7 @@ dbcdcbba18515df6226b7ea477551a66
                              GHC.Prim.RealWorld
                              (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
                    (ww3 :: GHC.Prim.TVar# GHC.Prim.RealWorld [WebClients.WAClient])
+                   (w :: WebClients.WAClient)
                    (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case GHC.Prim.readTVar#
                         @ GHC.Prim.RealWorld
@@ -992,7 +1102,7 @@ dbcdcbba18515df6226b7ea477551a66
                            ipv7)
                         s2#1 of s2#2 { DEFAULT ->
                  (# s2#2, GHC.Tuple.() #) } } } } } } } }) -}
-e780844b652661f45beeeb436b0d9d5d
+6d6ff2eaa5f75c5276eab8327959cab9
   $wsubscribeToView ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar# GHC.Prim.RealWorld Project.Project
@@ -1103,7 +1213,7 @@ e780844b652661f45beeeb436b0d9d5d
                                 ipv7)
                              s2# of s2#1 { DEFAULT ->
                       (# s2#1, GHC.Tuple.() #) } } } } } } } } }) -}
-7e4290530920863bae4fa568956a0e32
+38b598b36fe7db65a00c2bc81dbb2eae
   $wunsubscribeFromView ::
     WebClients.WAClient
     -> GHC.Prim.ByteArray#
@@ -1206,7 +1316,7 @@ e780844b652661f45beeeb436b0d9d5d
                                 ipv7)
                              s2# of s2#1 { DEFAULT ->
                       (# s2#1, GHC.Tuple.() #) } } } } } } } } }) -}
-8e7212310397f470cfd275a95338a157
+c515008ed1c6fbfa301af48cb09f4619
   $wupdateProject ::
     ProjectMessages.ProjectChan
     -> GHC.Prim.TVar#
@@ -1262,7 +1372,7 @@ e780844b652661f45beeeb436b0d9d5d
                            ipv3)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } }) -}
-3ece46d8206c10b4fcfd255503624222
+18257156bd1c06a6b6ac0e2f8bcbbd98
   addSubscriber ::
     ProjectState.RuntimeProject
     -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
@@ -1274,7 +1384,7 @@ e780844b652661f45beeeb436b0d9d5d
                 (<ProjectState.RuntimeProject>_R
                  ->_R <WebClients.WAClient>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-9999d78eda6218f04e85b3f736dd40e1
+18a2dac345c20e606be1212679ecc8e4
   addSubscriber1 ::
     ProjectState.RuntimeProject
     -> WebClients.WAClient
@@ -1300,7 +1410,56 @@ e780844b652661f45beeeb436b0d9d5d
                         (GHC.Types.: @ WebClients.WAClient c ipv1)
                         ipv of s2# { DEFAULT ->
                  (# s2#, GHC.Tuple.() #) } } } }) -}
-c74474bdcdbb783aadcf87919c4f3d44
+2230ebb3c96a36afeae61a76366072cd
+  calculationFromFormula ::
+    Calculation.CalculationSource
+    -> Formula.XFormula -> Calculation.Calculation
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <L,U(1*U(U,U,U),1*U,A,1*U)><L,U>m,
+     Unfolding: InlineRule (2, True, False)
+                (\ (cs :: Calculation.CalculationSource) (f :: Formula.XFormula) ->
+                 Calculation.Calculation
+                   (Calculation.sourceCalculationName cs)
+                   (Calculation.sourceResultName cs)
+                   f
+                   (Calculation.sourceOperationMode cs)) -}
+f5123238657ee5065cf8653f27cad230
+  disconnectClient ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LLLLLS(S)LS(S)),1*U(A,A,A,A,A,1*U(U),A,1*U(U))><L,U><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                ProjectActorRequests.disconnectClient1
+                  `cast`
+                (<ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
+                 ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
+d91c2ec26636a561763bc06fdc19a69b
+  disconnectClient1 ::
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient
+    -> GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 3, HasNoCafRefs,
+     Strictness: <S(LLLLLS(S)LS(S)),1*U(A,A,A,A,A,1*U(U),A,1*U(U))><L,U><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: ProjectState.RuntimeProject)
+                   (w1 :: WebClients.WAClient)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case w of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case ww6 of ww9 { GHC.Conc.Sync.TVar ww10 ->
+                 case ww8 of ww11 { GHC.Conc.Sync.TVar ww12 ->
+                 ProjectActorRequests.$wdisconnectClient ww10 ww12 w1 w2 } } }) -}
+c8479dabcd7b0e807e525e9674f9778a
+  disconnectClient2 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 1, HasNoCafRefs,
+     Unfolding: (\ (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 (# s, GHC.Tuple.() #)) -}
+38d0c6e3022d5a6bbef320fd63e7e81e
   handleRequests ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1315,7 +1474,7 @@ c74474bdcdbb783aadcf87919c4f3d44
                  ->_R <ProjectState.RuntimeProject>_R
                  ->_R <ProjectMessages.ProjectRequest>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-84aa9b04c9918fe2ddec6bfd604f5182
+ec5d0169c7dd5de839ab9fe7dc98f132
   handleRequests1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1341,7 +1500,7 @@ c74474bdcdbb783aadcf87919c4f3d44
                    ww8
                    w2
                    w3 }) -}
-a6493221996de9071fc64b5a6e4cb44e
+948fdf3cb8995e7a59cdd3acc1952e45
   loadCalculation ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1358,7 +1517,7 @@ a6493221996de9071fc64b5a6e4cb44e
                  ->_R <WebClients.WAClient>_R
                  ->_R <Calculation.CalculationName>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-93b95fec6456cb8948f69dd3106b4f56
+5636607fd48caacfca4c21682f029b14
   loadCalculation1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1387,7 +1546,7 @@ a6493221996de9071fc64b5a6e4cb44e
                    w2
                    w3
                    w4 } } } }) -}
-fce0d83a3295276b6c70a6f698c3068e
+fcdb4103996abb894b2e2f0b94f2c733
   loadMapForClient ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -1404,7 +1563,7 @@ fce0d83a3295276b6c70a6f698c3068e
                  ->_R <ProjectState.RuntimeProject>_R
                  ->_R <XMapTypes.XMapName>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-c612b39e722bf61d871f8a35cc7c002f
+dd6b3e0d000b7c77f3b1a6cde9e2227b
   loadMapForClient1 ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -1433,7 +1592,7 @@ c612b39e722bf61d871f8a35cc7c002f
                    ww18
                    w3
                    w4 } } } }) -}
-a85fe2d5887b899461de7ee99c89a5d4
+02e9116ccabe854bc2ad742796cbaf39
   loadView ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1450,7 +1609,7 @@ a85fe2d5887b899461de7ee99c89a5d4
                  ->_R <WebClients.WAClient>_R
                  ->_R <View.ViewName>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-90ca283ed4add68a2aa81438dd955963
+fa3f1442f6d9d29eb27a0df102456a0c
   loadView1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1479,7 +1638,7 @@ a85fe2d5887b899461de7ee99c89a5d4
                    w2
                    w3
                    w4 } } } }) -}
-9d766aa1a45508c9508a4e2a1878df4a
+67f7286d558f90d0ba7f6e8b9a24565b
   mapsInProject ::
     ProjectState.RuntimeProject
     -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
@@ -1491,7 +1650,7 @@ a85fe2d5887b899461de7ee99c89a5d4
                 (<ProjectState.RuntimeProject>_R
                  ->_R <WebClients.WAClient>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-a49dac9288a1bb2201cfb26f73944b66
+4f7f24c7b5cbc975e4926c027f548e41
   mapsInProject1 ::
     ProjectState.RuntimeProject
     -> WebClients.WAClient
@@ -1518,42 +1677,42 @@ a49dac9288a1bb2201cfb26f73944b66
                    ww22
                    w1
                    w2 } } } } } }) -}
-4c60fc5d764035215bb7086fc172fbb7
+e9a8a5a444e8a70b864a43a6253cca47
   mapsInProject_go10 ::
     [XMapTypes.XMapName]
     -> Data.Map.Base.Map
          XMapTypes.XMapName [CalculationMessages.CalculationChan]
     -> [XMapTypes.XMapName]
   {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U><S,1*U> -}
-1b4b633d2528e897d735fc508bae0703
+d615790b6f01c139c11062a1015eebfa
   removeSubscriber ::
-    WebClients.WAClient
-    -> ProjectState.RuntimeProject -> GHC.Conc.Sync.STM ()
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
   {- Arity: 3, HasNoCafRefs,
-     Strictness: <L,U><S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><S,U>,
+     Strictness: <S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><L,U><S,U>,
      Unfolding: InlineRule (0, True, True)
                 ProjectActorRequests.removeSubscriber1
                   `cast`
-                (<WebClients.WAClient>_R
-                 ->_R <ProjectState.RuntimeProject>_R
+                (<ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-8038ca5b223cf0fdb8301ae26763d360
+8b52b0e2242f17ab3ac4a327010a3d06
   removeSubscriber1 ::
-    WebClients.WAClient
-    -> ProjectState.RuntimeProject
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 3, HasNoCafRefs,
-     Strictness: <L,U><S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><S,U>,
+     Strictness: <S(LLLLLLLS(S)),1*U(A,A,A,A,A,A,A,1*U(U))><L,U><S,U>,
      Inline: INLINE[0],
      Unfolding: InlineRule (3, True, False)
-                (\ (w :: WebClients.WAClient)
-                   (w1 :: ProjectState.RuntimeProject)
+                (\ (w :: ProjectState.RuntimeProject)
+                   (w1 :: WebClients.WAClient)
                    (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case w of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
                  case ww8 of ww9 { GHC.Conc.Sync.TVar ww10 ->
-                 ProjectActorRequests.$wremoveSubscriber w ww10 w2 } }) -}
-cbfd33ad8f871cec18cd98f47678ce4b
+                 ProjectActorRequests.$wremoveSubscriber ww10 w1 w2 } }) -}
+53ea42a06c911712b9b93eb89e704162
   startCalculations ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1568,7 +1727,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                  ->_R <ProjectState.RuntimeProject>_R
                  ->_R <WebClients.WAClient>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-64c3d7c08b4a8af75a607cc02460583a
+c4237b854a476575370dc9b6c31abed8
   startCalculations1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1596,7 +1755,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
   startCalculations_go ::
     [Project.Source] -> Data.Monoid.First Project.Source
   {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U> -}
-01e50fd45dcb0405e7dc3b3fc69acc91
+19e13a08361f2f6d411ad88221a5ec2a
   storeCalculation ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1613,7 +1772,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                  ->_R <WebClients.WAClient>_R
                  ->_R <Calculation.CalculationSource>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-3362d76aba7fba90b2447e29bdd6d990
+483902fa1d395235969661403776732c
   storeCalculation1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1657,7 +1816,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                    @ GHC.Types.Char
                    GHC.Show.shows6
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-589e73a6f9a6e8c7b12c99aa2723ab08
+221c0c219b044cd40c5d3dbb559c4468
   storeMap ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -1674,7 +1833,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                  ->_R <ProjectState.RuntimeProject>_R
                  ->_R <XMapTypes.XNamedMap>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-15c16935d2131c3432855db0b892ed89
+6e3663a7292a3be77f4f2c0c23bfdaef
   storeMap1 ::
     WebClients.WAClient
     -> ProjectMessages.ProjectChan
@@ -1703,7 +1862,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                    ww18
                    w3
                    w4 } } } }) -}
-3b60222df5290de046ae3f72e999e9c5
+be945ac668e8aa277a683bdec0b565c7
   storeView ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1720,7 +1879,7 @@ cbfd33ad8f871cec18cd98f47678ce4b
                  ->_R <WebClients.WAClient>_R
                  ->_R <View.View>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-ecb975d18e0103a661df9014c07080cb
+c8d69d25264bf620c87db0d9d080e204
   storeView1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1749,44 +1908,44 @@ ecb975d18e0103a661df9014c07080cb
                    w2
                    w3
                    w4 } } } }) -}
-fe9ad2d97f501e77f9ff90fee1e8c879
+4670ebcb88ba1f8e1de619891e94734d
   subscribeToProject ::
-    WebClients.WAClient
-    -> ProjectState.RuntimeProject -> GHC.Conc.Sync.STM ()
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient -> GHC.Conc.Sync.STM ()
   {- Arity: 3, HasNoCafRefs,
-     Strictness: <L,U><S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><S,U>,
+     Strictness: <S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><L,U><S,U>,
      Unfolding: InlineRule (0, True, True)
                 ProjectActorRequests.subscribeToProject1
                   `cast`
-                (<WebClients.WAClient>_R
-                 ->_R <ProjectState.RuntimeProject>_R
+                (<ProjectState.RuntimeProject>_R
+                 ->_R <WebClients.WAClient>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-b1860855772dde1e5bdb61fb997f044c
+f46ab3fb4c442a44dfdab91f036909f5
   subscribeToProject1 ::
-    WebClients.WAClient
-    -> ProjectState.RuntimeProject
+    ProjectState.RuntimeProject
+    -> WebClients.WAClient
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 3, HasNoCafRefs,
-     Strictness: <L,U><S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><S,U>,
+     Strictness: <S(S(S)LLLLLS(S(LS)LLL)S(S)),1*U(1*U(U),A,A,A,A,A,1*U(1*U(A,U),A,A,A),1*U(U))><L,U><S,U>,
      Inline: INLINE[0],
      Unfolding: InlineRule (3, True, False)
-                (\ (w :: WebClients.WAClient)
-                   (w1 :: ProjectState.RuntimeProject)
+                (\ (w :: ProjectState.RuntimeProject)
+                   (w1 :: WebClients.WAClient)
                    (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                 case w1 of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
+                 case w of ww { ProjectState.RuntimeProject ww1 ww2 ww3 ww4 ww5 ww6 ww7 ww8 ->
                  case ww1 of ww9 { GHC.Conc.Sync.TVar ww10 ->
                  case ww7 of ww11 { CommonChannels.CommonChans ww12 ww13 ww14 ww15 ->
                  case ww12 of ww16 { Control.Concurrent.STM.TChan.TChan ww17 ww18 ->
                  case ww8 of ww19 { GHC.Conc.Sync.TVar ww20 ->
                  ProjectActorRequests.$wsubscribeToProject
-                   w
                    ww10
                    ww17
                    ww18
                    ww20
+                   w1
                    w2 } } } } }) -}
-da39e969fa1bb987c351fad34663dd13
+1fa013b91ca6029fe6c299fbd6cf2dd4
   subscribeToView ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1803,7 +1962,7 @@ da39e969fa1bb987c351fad34663dd13
                  ->_R <WebClients.WAClient>_R
                  ->_R <View.ViewName>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-e4f6668910aefc737b1d817419003b49
+62322f130daf3d966d8fe4738fc01a7b
   subscribeToView1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1836,7 +1995,7 @@ e4f6668910aefc737b1d817419003b49
                    ww15
                    ww16
                    w4 } } } }) -}
-3392d51617308e7f419f1f9ed8b40081
+78d8077669526556cfc2e9e6a3f0347b
   unsubscribeFromView ::
     WebClients.WAClient
     -> View.ViewName
@@ -1851,7 +2010,7 @@ e4f6668910aefc737b1d817419003b49
                  ->_R <View.ViewName>_R
                  ->_R <ProjectState.RuntimeProject>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-f743dde7263f61ae851c982c8ce09fc2
+53374fd38490b2cf3ddd265447bd8a2a
   unsubscribeFromView1 ::
     WebClients.WAClient
     -> View.ViewName
@@ -1881,7 +2040,7 @@ f743dde7263f61ae851c982c8ce09fc2
                    ww16
                    ww11
                    w3 } } } }) -}
-69bc838fa4e4e257f6a0212ef2642792
+53f6cacff756ec7d565f7cacf2fe3794
   updateProject ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject
@@ -1898,7 +2057,7 @@ f743dde7263f61ae851c982c8ce09fc2
                  ->_R <WebClients.WAClient>_R
                  ->_R <Project.Project>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-c524189057ce717c0c92b0da7f5c5e4d
+cf1068c141be03d195442f5b9c383f4a
   updateProject1 ::
     ProjectMessages.ProjectChan
     -> ProjectState.RuntimeProject

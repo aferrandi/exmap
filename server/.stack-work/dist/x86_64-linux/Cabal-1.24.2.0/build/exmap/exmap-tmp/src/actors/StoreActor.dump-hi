@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:42:03.205544948 UTC
+2018-01-17 08:46:53.128221067 UTC
 
 interface main@main:StoreActor 8002
-  interface hash: 530b227e8980f4de7cb766fd921e37f6
-  ABI hash: 3182345e7627519ac8e9f40affcefe99
-  export-list hash: 4149139e56b8da6dd7afa562e333401f
+  interface hash: b7edc4758e2390bca9f2564b305181c5
+  ABI hash: cf69b4a2730c1a2c5f19e8320a5bf0b1
+  export-list hash: 05f16006e57c0b39d4ff4142864fdd2b
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -14,9 +14,10 @@ interface main@main:StoreActor 8002
 exports:
   StoreActor.actorStore
 module dependencies: ApplicationTypes Calculation Errors Formula
-                     OperationTypes Paths Project ProjectJson ProjectMessages Store
-                     StoreMessages SystemMessages TextEnums View WebClients WebMessages
-                     WebMessagesJson XFunction XMapJson XMapTypes XValues
+                     LogMessages OperationTypes Paths Project ProjectJson
+                     ProjectMessages Store StoreMessages SystemMessages TextEnums View
+                     WebClients WebMessages WebMessagesJson XFunction XMapJson XMapTypes
+                     XValues
 package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
                       aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
                       array-0.5.1.1@array-0.5.1.1
@@ -105,62 +106,70 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  Calculation 41a99fbb51f5318f902af52762efce14
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+  logDebug fe6a28772bd88f0bf20bab75e1fbfa1e
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   AllProjects 5112a5d43849857c03604773be3e85a2
   Project c7f6766f61d0b63c7ab6927b16e914f3
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
-import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
-  exports: 7b16c99942b55c7a72be31fd4804ba3f
-  PECalculationStoreError 3fcfab94653d5ea57f2b3089fedb313c
-  PECalculationStored bb67d5bc7682e908cb9bc9656ef03a9b
-  PEMapStoreError cd6705463153ba2a0474911e1d7c7aa1
-  PEMapStored eeb5fc3163d81aac04e1d71bc94493a3
-  PEProjectStoreError db8d63c2e6a0dbfd653a1351a5c2e4da
-  PEProjectStored 02d0b8eb668c08225070c5b5f6e7adf1
-  PEViewStoreError 6822e6d8a3908140a812fa11471910d8
-  PEViewStored fa5a60c9c3bf9b3cd981dc4935004fde
-  PMEvent 4fd5eaca8e8e125ecbd326e566a4a170
-  ProjectChan 091f44512dd4db2ee61640a0a30b9371
-import  -/  Store 6bcbc733a11b5c184b1cb48bfb9db8ed
-  exports: eb33522e4c46c324a6a69ed592284f72
+import  -/  ProjectMessages 2f75b74a80f546d5b67047299653bd86
+  exports: 28934ffa1b42a9db9c37d00fb218487a
+  PECalculationStoreError 6c99f95412711eadae5eea03e0181b93
+  PECalculationStored 196083ae1405f71ff6881dba07a7aaa8
+  PEMapStoreError 4fcdfc947520214939314e2cbd1370f7
+  PEMapStored 58ec0990cbced362240b3c00301e6c67
+  PEProjectStoreError 488dae1889672a4c3d44d3d7eb57dbe0
+  PEProjectStored 1fc94329fd4bc07c2bc58feae0b52bc1
+  PEViewStoreError 6640f71af5c20f531c572c0766853452
+  PEViewStored 529fcc1b13f2737ce52e40f88576f548
+  PMEvent 59013f43274a598816558ea34ed11211
+  ProjectChan b74b68c96fec4f477ddf0aae0d38e500
+import  -/  Store 51f4adba21da54a331455a7c8a34acca
+  exports: 12d67c3ce7fe45de1afe4b4b4eb607c1
   storeAvailableProjects a3fc7dd959f8157b3454a6c501047d1a
-  storeCalculation 064f58a8f2ac18a5970e7d15346f7d08
+  storeCalculation 23c60b9631efb33c249a9021a5d55a6e
   storeProject c61b566838746ce8f0bef9c1c18d8626
   storeView 802311e6fce3cca33f063d6b6bdf6ce6
   storeXMap b24232abace707761e35fff00ad626b9
-import  -/  StoreMessages 604a62eda95aa09d4755ba38bd251a8e
-  exports: c031e914ea8fc941321bb1e578fc587f
-  StMStop 8bbf4cd3d42131f97186b09edb1dd8a1
-  StMStoreAllProjects 4c4d596d7273e097a123e5c13a0a03a7
-  StMStoreCalculation c65c17fc2af41d23269106b85c2872bc
-  StMStoreExistingProject 5514b7c48a205e09b7f2dd2aae126836
-  StMStoreMap f8a36bc87e5aad4c4a678b3db74a6ac7
-  StMStoreNewProject b692c2c13ff9a50455c01a4275aa209d
-  StMStoreView 18f6bbb0faeeb15259dbb64d867586e4
-  StoreChan 0d93dc7c316e89c9d449610e6f2caa49
-import  -/  SystemMessages 79d62c960f37bee63ab3490932f6d9bb
-  exports: 40bfc0a8cd3b65b3f3992016996f2ea2
-  SEAllProjectsStoreError cff9f46614fa0157b33ff3f775a0eaa0
-  SEAllProjectsStored a1ba249b275ed433cd345d25da289788
-  SEProjectStoreError f81ad090e7525a7c7af66e7149154d32
-  SEProjectStored d05fc3047f6fa583653d18ac54e523d4
-  SMEvent daf47bf5ab692b6c3c801377887e0ed6
-  SystemChan 071ec073d696ba528a27629f4c54c968
+import  -/  StoreMessages f58dda69829b9c6217296b0ca236df58
+  exports: f0ddc1aebe84de99133735532f82b249
+  StMStop 422a5c31d691ff7fcb63495c7ec02e39
+  StMStoreAllProjects e63299675f3888570cc84bf2e075ad57
+  StMStoreCalculation 1562575de27847246a31cf83e8927fcc
+  StMStoreExistingProject 822ca1873e4c988cf8cf4a24d8138127
+  StMStoreMap 80277d508bfbb4f15a33a9a11ac0a8a0
+  StMStoreNewProject 70fc9faf139d8fd5f1570eadd397457a
+  StMStoreView 23cdb6915a20490ad852b5f84b6bc6b8
+  StoreChan 9fe9c67c790bf9c31a90ce2fb7989597
+import  -/  SystemMessages 60ba975a726d9f5bafcfb14a2f4b8b89
+  exports: 3c0f78d227c8a8df8c117c19d3c2e0dc
+  SEAllProjectsStoreError 51c2bbed85bcf097126632756afdc3c2
+  SEAllProjectsStored 2e8507b57706baa66d6ef9c4c2293738
+  SEProjectStoreError a30789b6a980d34aba67aa67ffec3250
+  SEProjectStored 17d82d5145c53928f86b29f735c39408
+  SMEvent 41b0a8f4d0e30cd1c97d4c3bb3e9d50f
+  SystemChan 50bc5e34c8888b571af79a04d7d19ae3
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+  viewName 42649ec3eca0aa81869dee042d61646f
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
+  xmapName 57bc60d3cae24066ad31097c7544b0c7
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
 280d1708d00947f426a6e3a75efdac18
@@ -177,7 +186,7 @@ import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.ST
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-cf18353689ffbb8afdc11bb6cbbd54bc
+7f8ee7b15caba118bc470bbce082ddc0
   $wactorStore ::
     GHC.IO.FilePath
     -> GHC.Prim.TVar#
@@ -186,33 +195,41 @@ cf18353689ffbb8afdc11bb6cbbd54bc
     -> GHC.Prim.TVar#
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList StoreMessages.StoreMessage)
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 4, Strictness: <L,U><S,U><L,A><S,U>, Inline: [0] -}
-a323920f8d62667a098694e7853c66e6
+  {- Arity: 5, Strictness: <L,U><S,U><L,A><L,U(U,U)><S,U>,
+     Inline: [0] -}
+3911a0ab2dbae4a8e097ba7c59b94cae
   actorStore ::
-    GHC.IO.FilePath -> StoreMessages.StoreChan -> GHC.Types.IO ()
-  {- Arity: 3, Strictness: <L,U><S(SL),U(U,A)><S,U>,
+    GHC.IO.FilePath
+    -> StoreMessages.StoreChan
+    -> LogMessages.LogChan
+    -> GHC.Types.IO ()
+  {- Arity: 4, Strictness: <L,U><S(SL),U(U,A)><L,U(U,U)><S,U>,
      Unfolding: InlineRule (0, True, True)
                 StoreActor.actorStore1
                   `cast`
                 (<GHC.IO.FilePath>_R
                  ->_R <StoreMessages.StoreChan>_R
+                 ->_R <LogMessages.LogChan>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-59044e1705af9da55b0e0d03888bec74
+9ad21ef3b3f13f6ece66108f9a69fbf3
   actorStore1 ::
     GHC.IO.FilePath
     -> StoreMessages.StoreChan
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 3, Strictness: <L,U><S(SL),U(U,A)><S,U>,
+  {- Arity: 4, Strictness: <L,U><S(SL),U(U,A)><L,U(U,U)><S,U>,
      Inline: INLINE[0],
-     Unfolding: InlineRule (3, True, False)
+     Unfolding: InlineRule (4, True, False)
                 (\ (w :: GHC.IO.FilePath)
                    (w1 :: StoreMessages.StoreChan)
-                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                   (w2 :: LogMessages.LogChan)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w1 of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
-                 StoreActor.$wactorStore w ww1 ww2 w2 }) -}
+                 StoreActor.$wactorStore w ww1 ww2 w2 w3 }) -}
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:

@@ -1,12 +1,12 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 06:38:35.340426459 UTC
+2018-01-04 07:11:13.392022445 UTC
 
 interface main@main:WebMessagesJson [orphan module] 8002
-  interface hash: 728ccabb190c5bf86e7bb2e9f3e0488a
-  ABI hash: 8c67daf3c09ebfb70f97ef111afabeaf
-  export-list hash: 836b865dc702f419a711e93a8452704c
-  orphan hash: 87670469a50b0b1c843c2fee6c8fdfde
+  interface hash: 767839f594f20dfd2f28b375bbb9222f
+  ABI hash: bf9425df7691e9af88f7175833bc74d5
+  export-list hash: f56eaf40a3cd7d583c1caf548d86eca2
+  orphan hash: dfc37a57bbb91ea8743cb0e4581f956b
   flag hash: 73a3d7fa5cb5ccfee42bfbaa2a11c30b
   sig of: Nothing
   used TH splices: False
@@ -99,26 +99,26 @@ import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 7256d6e5b58cf659563f724d4f20fd1c
-import  -/  ProjectJson acf18b712df8a0f901e55f49f516e8ae
-  exports: 7c021a43116ce3cd9ba9642848771ff1
-import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+import  -/  ProjectJson 8ebba936e781d04d45f1312ce4329b61
+  exports: ef16f918449c05c84b2c4746ab18f29d
+import  -/  WebMessages c909a0398a7086eab215b3ace24705da
   exports: b86ad7b8a0b44a02b28cdac11545ea56
-  WEAllProjects 18b5c4d698562f78292940d9cfb30a38
-  WECalculationLoaded 0699b5908a3ec5c38083ddb072b82bd8
-  WECalculationStored 4e0614255bd54b52eb2efa9678decf6e
-  WEError 1d83df9216403449f39d3318ecf8c398
-  WEFunctions a85b95138c63adf14476455c73854dc8
-  WEInfo 6a075aff2643ba80bd6703cfa7ed7f86
-  WEMapLoaded 49a5d16a3bf4d0695337a29fa8c165c3
-  WEMapStored ff0f5271b9f80815e24ef8474ee6cbda
-  WEMapsInProject f6ece629ee42247daa8c01faffed2242
-  WEProjectContent f15fe3d556e47377c3afa966f5c1b8f2
-  WEProjectStored 6f6c9b70fd49e547c3d58fa840e80150
-  WEUnsubscribedFromView 6b31b1836e7eb16ac9a9cca345745d57
-  WEViewChanged f96d8b4393a206d07e4b847cd480c87e
-  WEViewLoaded 7474f966340436b3b8604dfe32a51740
-  WEViewStatus ba5b7d323a8227fb2c47613f2c0ee10b
-  WEViewStored 597c1228ff4c316b97119e7ac86559c9
+  WEAllProjects b78b9dc2fc84822b4eff054332567d21
+  WECalculationLoaded 9bb0c03d4be8cee7af505104051a081c
+  WECalculationStored 7b949859eb531acdcde36e42c04e47d7
+  WEError e847e2ef88999243c53c87ea4ce2cfe5
+  WEFunctions 6636b66a120434c341e25d1f9224ed4d
+  WEInfo 30a443d803ab32969d11850335bb4206
+  WEMapLoaded 1404f2afa48f4094593d31dddc89dac3
+  WEMapStored aed0c4d5027c67321d27f68a2d28a40d
+  WEMapsInProject 412726def3be1edf0032dd197c8ecba1
+  WEProjectContent 4bfbdca708ad2b0e04fed7dfa7a05f53
+  WEProjectStored a80ec51b03b0443201d348ef689ddf7f
+  WEUnsubscribedFromView f2ecfca526786b5995072330c95cef60
+  WEViewChanged aa6bf41c646fb11c1cfc358c833732b9
+  WEViewLoaded 6abc3c978fdfe60b04d4fbe5ffd8bcd0
+  WEViewStatus 2a1c43effa398161a0047ca0687dda1e
+  WEViewStored a6b13688de34b23437663b403f34c92a
   WRAllProjects 48e8b3426c930048a110b11169a8f278
   WRFunctions 104adea5ace4e07e75a402003b68a8ef
   WRLoadCalculation bed9b4031403a62162788af0b7153ec7
@@ -133,7 +133,7 @@ import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
   WRSubscribeToView 8492566b0b6a1f63cef2294878b12ef7
   WRUnsubscribeFromView cda3dfc72bc0737e98865e2c5beee082
   WRUpdateProject b8e66e408cdde1ee740ccb3be9fd0f45
-  WebEvent 6df2a76ec9950bbeadbcb273faa1370e
+  WebEvent a8934fa5df14c2244bee8b7537104981
   WebRequest 9c5be6678bd16407fd69eeb65c613b94
 import  -/  XMapJson c20984cd2df0cdd5c0b86c8fb49b2e16
   exports: 4ac2a0aa4bf208de6d454547f1cdad95
@@ -209,7 +209,7 @@ e1289a8f95d741cc4a32002b9b5e2d03
     -> [Data.Aeson.Types.Internal.Value]
     -> [Data.Aeson.Types.Internal.Parser WebMessages.WebRequest]
   {- Arity: 2, Strictness: <L,U><S,1*U> -}
-4e03c3a3c42c99f921dad326de4e8b0d
+3588ca24ead2980857afa2edc99f3109
   $fToJSONWebEvent ::
     Data.Aeson.Types.ToJSON.ToJSON WebMessages.WebEvent
   DFunId
@@ -220,7 +220,7 @@ e1289a8f95d741cc4a32002b9b5e2d03
                   WebMessagesJson.$fToJSONWebEvent_$ctoEncoding
                   WebMessagesJson.$fToJSONWebEvent_$ctoJSONList
                   WebMessagesJson.$fToJSONWebEvent_$ctoEncodingList -}
-e9d49b17e4bf13e327d9caaa13769ebe
+76f01b59099e3df11ea04147e93a1af3
   $fToJSONWebEvent_$ctoEncoding ::
     WebMessages.WebEvent -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -228,7 +228,7 @@ e9d49b17e4bf13e327d9caaa13769ebe
                 (\ (eta :: WebMessages.WebEvent) ->
                  Data.Aeson.Encoding.Internal.value
                    (WebMessagesJson.$fToJSONWebEvent_$ctoJSON eta)) -}
-7268f7fecf2c052af71febf94333f64c
+1e41c4a11e7f7d370ab33397e808d0b8
   $fToJSONWebEvent_$ctoEncodingList ::
     [WebMessages.WebEvent] -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -293,7 +293,7 @@ e9d49b17e4bf13e327d9caaa13769ebe
                         `cast`
                       (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
                                 <Data.Aeson.Types.Internal.Value>_P)) }) -}
-ff5d27f5b5011eb26f12384d21d4cd9e
+f9434adedbffabe05acca59412a71b28
   $fToJSONWebEvent_$ctoJSON ::
     WebMessages.WebEvent -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m1, Inline: INLINE[0],
@@ -301,7 +301,7 @@ ff5d27f5b5011eb26f12384d21d4cd9e
                 (\ (w :: WebMessages.WebEvent) ->
                  case WebMessagesJson.$w$ctoJSON w of ww { Unit# ww1 ->
                  Data.Aeson.Types.Internal.Object ww1 }) -}
-5c4527eb13c56b22abb5b6fd4731a829
+40871b23027dfc1cdccf4e7206804145
   $fToJSONWebEvent_$ctoJSONList ::
     [WebMessages.WebEvent] -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
@@ -352,7 +352,7 @@ ebdda9e7f44ca695adf3e378cc1365ea
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-230278a271903cc8a92c36becb3c8c13
+2ca248fc7a4a27a6a9bb2aa842998c35
   $w$ctoJSON ::
     WebMessages.WebEvent -> (# Data.Aeson.Types.Internal.Object #)
   {- Arity: 1, Strictness: <S,1*U>, Inline: [0] -}

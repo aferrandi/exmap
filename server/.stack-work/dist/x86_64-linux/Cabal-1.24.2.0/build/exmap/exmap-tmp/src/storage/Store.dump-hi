@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-08 08:29:11.68505521 UTC
+2018-01-18 07:06:47.152284632 UTC
 
 interface main@main:Store 8002
-  interface hash: b8af3e432f6e9530756459b3f09d7525
-  ABI hash: 6bcbc733a11b5c184b1cb48bfb9db8ed
-  export-list hash: eb33522e4c46c324a6a69ed592284f72
+  interface hash: 2f8588cae6329688aafd83bc9b4674be
+  ABI hash: 51f4adba21da54a331455a7c8a34acca
+  export-list hash: 12d67c3ce7fe45de1afe4b4b4eb607c1
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: d426797dced5f2cc541098c0bd9180c3
   sig of: Nothing
@@ -111,29 +111,29 @@ import  -/  directory-1.3.0.0@directory-1.3.0.0:System.Directory 0639d8cfeb46b10
 import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath a3d1d13ac7dd86705b5dfaf58a5c0b9e
 import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath.Posix 6a5e3ee74184fdcc5da09a368e7c40f5
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-  calculationName 1f5a4a1ff915162dab157f63a0e9b230
+  Calculation 41a99fbb51f5318f902af52762efce14
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
   mkError 7d208924c59e97ae369ea175e422a035
-import  -/  Paths d6afa50f03923c71e909cfba47da3e4b
-  exports: 0fd3c9275ac57dd0007f4b8d0e9a5665
+import  -/  Paths 326c42bfbeaa2cb90439554594d77d0c
+  exports: 7b230f844f66b2a32955151a16872b2c
   allProjectsPath 79ed3c954b712528343807d0b61d97d8
   calculationPath 5d446fe19740d784f30b70131c573b86
   projectPath f7fe536b3e5d4c1b134c7116a4e49f50
   viewPath d89e64586051443c7421a56ef6e947eb
   xMapPath 8b479787baaf93bed823d89ff2679dfe
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   AllProjects 5112a5d43849857c03604773be3e85a2
   Project c7f6766f61d0b63c7ab6927b16e914f3
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
   projectName cb7533641bc632f228a4a92ccb44abc9
-import  -/  ProjectJson acf18b712df8a0f901e55f49f516e8ae
-  exports: 7c021a43116ce3cd9ba9642848771ff1
+import  -/  ProjectJson 8ebba936e781d04d45f1312ce4329b61
+  exports: ef16f918449c05c84b2c4746ab18f29d
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
@@ -382,7 +382,7 @@ b50a1a520f2dac77ffa1b3d239fa38d8
                                 e2
                                   `cast`
                                 (UnsafeCo representational e100 GHC.IO.Exception.IOException) #) } } } } }) -}
-064f58a8f2ac18a5970e7d15346f7d08
+23c60b9631efb33c249a9021a5d55a6e
   storeCalculation ::
     GHC.IO.FilePath
     -> Project.ProjectName
@@ -397,7 +397,7 @@ b50a1a520f2dac77ffa1b3d239fa38d8
                  ->_R <Project.ProjectName>_R
                  ->_R <Calculation.Calculation>_R
                  ->_R Sym (GHC.Types.N:IO[0] <GHC.Base.Maybe Errors.Error>_R)) -}
-687ce8ba1576c801f7ec3affb78b13ef
+5c553e53ca60a2322b9c09c6c304426d
   storeCalculation1 ::
     GHC.IO.FilePath
     -> Project.ProjectName

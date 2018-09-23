@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-17 06:06:57.850634374 UTC
+2018-01-04 07:11:05.076840581 UTC
 
 interface main@main:Dependencies 8002
-  interface hash: ac8ab6b75d58003117f8268ba3852508
-  ABI hash: a723d54c72c01bd2a5ee203d99d2eadd
+  interface hash: 7bb107cadad218ae984773f96b7106c2
+  ABI hash: 2682563f91e3d23a42cb16389596bc50
   export-list hash: 096cd46840d6f203fb2e09f6684e6a6f
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 96b542d537f655ad583e6de1a6ed0c0e
@@ -48,16 +48,16 @@ import  -/  base-4.9.1.0:Data.List 07ae2acca6538aa0800bd0a993ac6ac1
 import  -/  base-4.9.1.0:Data.Maybe d876c4ffe4b3c43755a781e8ad860d88
 import  -/  base-4.9.1.0:Data.OldList 27987919d8da2f92e3f472ca81f730f8
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+  Calculation 41a99fbb51f5318f902af52762efce14
+  formula 36e31cbf1e2802459fc7e3d2501a5368
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-  XFormula fb924f832976f886aefc5a3d03a23b47
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+  XFormula bc1628deb5228885a088bc7a3859d8f0
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   LabelItem 3434f01a13626dc85c51091e03fdb138
@@ -82,14 +82,14 @@ import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-4f6c4e98b80d8fbd4365cd85d1eb9d8a
+a94719d55581ff925a765383947ed723
   calculationDependencies ::
     Calculation.Calculation -> [XMapTypes.XMapName]
   {- Arity: 1, HasNoCafRefs, Strictness: <S(LLSL),1*U(A,A,1*U,A)>,
      Unfolding: InlineRule (1, True, False)
                 (\ (c :: Calculation.Calculation) ->
                  Dependencies.formulaDependencies (Calculation.formula c)) -}
-ece3cfd0c92ae1b94d4d8837afe0721a
+632de15ae6ad8c7abb2d48aec482140b
   formulaDependencies :: Formula.XFormula -> [XMapTypes.XMapName]
   {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U> -}
 a26b5393ecbb1ded8a793844ef751f29

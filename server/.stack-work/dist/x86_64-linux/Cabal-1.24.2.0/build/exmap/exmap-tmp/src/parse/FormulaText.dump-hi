@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-29 07:02:52.042102399 UTC
+2018-01-04 07:11:05.606826949 UTC
 
 interface main@main:FormulaText 8002
-  interface hash: 0abd0e5228cb6bd4c0aa6fbf062142f9
-  ABI hash: 2f3ed4ca604cf5c6356f359bac84378c
+  interface hash: 775664449af831dcd3b5bc22405a144e
+  ABI hash: b120cc3e4e788971ebd9036cbd3e89b4
   export-list hash: c1da147e6c20863e0692d2adabb1c46b
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 394c66fe9f3b576fa0a7a2678f1b5670
@@ -45,16 +45,16 @@ family instance modules: base-4.9.1.0:Control.Applicative
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationFormulaText 190506ef3f5899e15e830e35f1934183
   CalculationFormulaText fd38426093a918ee049ab7c4fb1fb4f2
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-  XFormula fb924f832976f886aefc5a3d03a23b47
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+  XFormula bc1628deb5228885a088bc7a3859d8f0
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XMapName 0be109e6102724ac02eab934889766c9
@@ -76,7 +76,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show 516b
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-02b86d83a95ea30e0557f055688010a1
+376d951e1098bd844c9aa6eee9397b7a
   formulaToText ::
     Formula.XFormula -> Calculation.CalculationFormulaText
   {- Arity: 1, Strictness: <S,1*U>,
@@ -85,7 +85,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show 516b
                   `cast`
                 (<Formula.XFormula>_R
                  ->_R Sym (Calculation.N:CalculationFormulaText[0])) -}
-4fa359c6291a0a94cc2b3945ea12fb8e
+e93dee288d808f28b746a405151ab088
   formulaToText1 :: Formula.XFormula -> Data.Text.Internal.Text
   {- Arity: 1, Strictness: <S,1*U>,
      Unfolding: InlineRule (1, True, False)
@@ -93,7 +93,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show 516b
                  FormulaText.formulaToTextRec
                    (GHC.Base.id @ Data.Text.Internal.Text)
                    x) -}
-e6fd3135ac8c5566c4272852de9b6e03
+306aae4572896123ff1cd4d534ad8ef6
   formulaToTextRec ::
     (Data.Text.Internal.Text -> Data.Text.Internal.Text)
     -> Formula.XFormula -> Data.Text.Internal.Text

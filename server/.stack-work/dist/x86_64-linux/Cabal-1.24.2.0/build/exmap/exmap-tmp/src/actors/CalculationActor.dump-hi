@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:09:49.097810653 UTC
+2018-01-18 00:19:02.349819539 UTC
 
 interface main@main:CalculationActor 8002
-  interface hash: e170f9aa4e765382ba9654c239968584
-  ABI hash: a176b987ec500fe414b039321b161801
-  export-list hash: e2fb82a380b8feeec445c74ef77d9425
+  interface hash: e29a921dec1b32377ca2ac275d110276
+  ABI hash: db32024d6f8adc84b18912853937c675
+  export-list hash: 16923946657717c985cae0ed1729c08a
   orphan hash: 8989f90b7666ca6e159640d80208abce
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -107,52 +107,53 @@ import  -/  base-4.9.1.0:Data.Foldable 3e0b6967a1da89945d0e2d47266337a2
 import  -/  base-4.9.1.0:Data.List 07ae2acca6538aa0800bd0a993ac6ac1
 import  -/  base-4.9.1.0:Data.OldList 27987919d8da2f92e3f472ca81f730f8
 import  -/  base-4.9.1.0:Data.Traversable 556020d7cf3c4a34a774600512918a37
-import  -/  base-4.9.1.0:Debug.Trace a9edf3aec504f4423d8ba829ab373a25
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  base-4.9.1.0:System.IO e4a64a8e3dce8616da54f0ee7104f7db
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-  formula 7e30c2b44fc021bfe0b0b9dee1abff77
-  operationMode ea1aee21e5a70c0c32eede2861da9f4e
-  resultName e0da4fa6227b34a0c0bbd4851b78e25e
-import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
-  exports: 38997434d1eadadff28c77fbb028d629
-  CMError 7ea51eb5f9203255b78205337dd8e015
-  CMMaps 11763584a34288448e31527c373e5eca
-  CMStop c9e43d71adfeee549d22c4f2aa81aee4
-  CMUpdateCalculation 0170234762e0d18f36897c0a94c9a133
-  CMViewStarted 686af77eaa2d425de4fdb77c50bac366
-  CalculationChan 6b33731f780f07df39838a7cd12da2cb
-import  -/  CalculationState bb13e56d22c495cb55629a7c1de5eb5f
-  exports: e46d1b59ab4dff4dad527460d1d17272
+  Calculation 41a99fbb51f5318f902af52762efce14
+  CalculationName 7681f69b2581ed31254c1a456f024695
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+  formula 36e31cbf1e2802459fc7e3d2501a5368
+  operationMode 3048b3c7897fbd4be8fe8e74be0b85c4
+  resultName 9745333b74ea054b6eca9188292a9cfb
+import  -/  CalculationMessages 3afc977efd0bd03a50f6417c854268c2
+  exports: 0ae2098e7818c22c0f347121d6a6bccf
+  CMError 9f9366beb52963cfe44b194ba913bccc
+  CMMaps 25e07bec06585896eba7ed7298bfe8f5
+  CMStop f32c21094a02fd925afa5fbda871c6d8
+  CMUpdateCalculation 22e481c096c46bc6c3fbc276884bb805
+  CMViewStarted 37bf69e5c60c13b26290c2ea80e560fe
+  CalculationChan 1fbbb04c6675ddf15163c151f014403e
+import  -/  CalculationState 792b6a808fd61fb1fe69585de918e92b
+  exports: 4a116e9f65c8d9fc646d9dcb1a279db6
   MapRepository d515bb66e369e83f7ea5da900124282b
-  RuntimeCalculation ff29bc771d3b3d65652af415292078aa
-  calculation 7de3d787050f413ad64b9198dc0f144d
-  calculationsToNotify 845418f3ac0c797f6f2e8c18b42383a1
-  currentResult bacb02542b56424d258990902285431f
-  logChan 94d885d67565347c817751fedf41a49a
-  repository 186995d4c87708c93cb3f409618f4466
-  viewsToNotify a3b0691b6fb15f4db2d4fdd8d9940988
+  RuntimeCalculation fb3901266423671780fd638b9aae3ffa
+  calculation 0237d7671042bca7d3c1add1da285980
+  calculationsToNotify b8a7cc3db08767b806db8b5d880d0572
+  currentResult 6369534968ced4e887c81ecda058ae16
+  logChan fd212d23093c2e3f5b99df9c47424d8a
+  repository 03112b590629fe2068c834555a177b0e
+  viewsToNotify 9a529add4f4b6ac022943b6a62e68fe6
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
-import  -/  ExecFormula 6c7746668689732f76b00c885081f87e
+import  -/  ExecFormula 5ccbcebfa3a093a492d5431b695ce895
   exports: 2ed3d69e118fdc888275691748e8b280
-  execFormula dd8fe68726b317681b5a0cfdd8ea0257
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogMLog a9cb60fe0c90338b51152114aaaf42a0
+  execFormula 0b932a8538d10e6f0ee9da20358225f8
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  logDebug fe6a28772bd88f0bf20bab75e1fbfa1e
+  logError d8cdd2f093767b3cf289fe8a50227809
 import  -/  TChans 72063c1ca4cb154316c09f256635af81
   exports: 59e1347423dba129fc78fbf863d86490
   sendToAll b797095a641614450e357183b6fb6b73
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   VMError 79f5a28b13ce6ec9df15f57c3936cd54
   VMMaps 668efcc838bfb24ad9de40fc50f9e4c0
   ViewChan a8e7d5732ce960f93aa79f3505166fc7
@@ -251,7 +252,7 @@ c744362b417f46400c296d6d4704ee47
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-0a2d0f92b9cb9ac60af8d3a5ac85291f
+728ffbfd5eb9ac4c828f1a8afe8bf1b6
   $wactorCalculation ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -261,11 +262,16 @@ c744362b417f46400c296d6d4704ee47
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList
             CalculationMessages.CalculationMessage)
-    -> CalculationState.RuntimeCalculation
+    -> GHC.Prim.TVar# GHC.Prim.RealWorld Calculation.Calculation
+    -> GHC.Conc.Sync.TVar CalculationState.MapRepository
+    -> GHC.Conc.Sync.TVar (GHC.Base.Maybe XMapTypes.XNamedMap)
+    -> GHC.Conc.Sync.TVar [CalculationMessages.CalculationChan]
+    -> GHC.Conc.Sync.TVar [ViewMessages.ViewChan]
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 4,
-     Strictness: <S,U><L,A><L,U(U(U),U(U),U(U),U(U),U(U),U(A,U))><S,U>,
+  {- Arity: 9,
+     Strictness: <S,U><L,A><S,U><L,U(U)><L,U(U)><L,U(U)><L,U(U)><L,U(U,U)><S,U>,
      Inline: [0] -}
 72317f75a7b3c38b69348dfc3a266115
   $wpoly_go4 ::
@@ -274,33 +280,44 @@ c744362b417f46400c296d6d4704ee47
     -> [(XMapTypes.XMapName, a)]
     -> Data.Map.Base.Map XMapTypes.XMapName a
   {- Arity: 3, Strictness: <L,U><S,1*U><S,1*U>, Inline: [0] -}
-09086ff060a58eaf9c67d0e12cfe15d2
+268233fb295f8c7c90c6a6b82953e847
   actorCalculation ::
     CalculationMessages.CalculationChan
     -> CalculationState.RuntimeCalculation -> GHC.Types.IO ()
   {- Arity: 3,
-     Strictness: <S(SL),U(U,A)><L,U(U(U),U(U),U(U),U(U),U(U),U(A,U))><S,U>,
+     Strictness: <S(SL),U(U,A)><S(S(S)LLLLL),U(U(U),U(U),U(U),U(U),U(U),U(U,U))><S,U>,
      Unfolding: InlineRule (0, True, True)
                 CalculationActor.actorCalculation1
                   `cast`
                 (<CalculationMessages.CalculationChan>_R
                  ->_R <CalculationState.RuntimeCalculation>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-16d4e26001b5910f537d6d7a01c521ec
+8a214f66d31697711f4b744e2cafa512
   actorCalculation1 ::
     CalculationMessages.CalculationChan
     -> CalculationState.RuntimeCalculation
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 3,
-     Strictness: <S(SL),U(U,A)><L,U(U(U),U(U),U(U),U(U),U(U),U(A,U))><S,U>,
+     Strictness: <S(SL),U(U,A)><S(S(S)LLLLL),U(U(U),U(U),U(U),U(U),U(U),U(U,U))><S,U>,
      Inline: INLINE[0],
      Unfolding: InlineRule (3, True, False)
                 (\ (w :: CalculationMessages.CalculationChan)
                    (w1 :: CalculationState.RuntimeCalculation)
                    (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
-                 CalculationActor.$wactorCalculation ww1 ww2 w1 w2 }) -}
+                 case w1 of ww3 { CalculationState.RuntimeCalculation ww4 ww5 ww6 ww7 ww8 ww9 ->
+                 case ww4 of ww10 { GHC.Conc.Sync.TVar ww11 ->
+                 CalculationActor.$wactorCalculation
+                   ww1
+                   ww2
+                   ww11
+                   ww5
+                   ww6
+                   ww7
+                   ww8
+                   ww9
+                   w2 } } }) -}
 "SPEC/CalculationActor fromList @ XMapName _" [ALWAYS] forall @ a
                                                               ($dOrd :: GHC.Classes.Ord
                                                                           XMapTypes.XMapName)

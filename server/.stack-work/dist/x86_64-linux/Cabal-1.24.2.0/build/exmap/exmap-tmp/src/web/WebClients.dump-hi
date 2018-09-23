@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 06:38:35.67946248 UTC
+2018-01-04 07:11:13.659293749 UTC
 
 interface main@main:WebClients 8002
-  interface hash: a3db6e078a0d74ceec96f93706ccc9cf
-  ABI hash: 26a0ed9f44dfca5e83dd031a39f224a0
-  export-list hash: 9e20b0962809e2ead168d9d96578b360
+  interface hash: ff99825be80083b05d6526384d18aff1
+  ABI hash: e9e95635cc3e8e84c4f22ce14960cb6b
+  export-list hash: df65d2f152b91244d7e272371a6ca9aa
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 85c62bb38ef90b008a19d0e7fa11d888
   sig of: Nothing
@@ -112,11 +112,11 @@ import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy 710f3c9
 import  -/  bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Lazy.Internal d9ce1975b5e9af58da7ffcb0a039c72e
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+import  -/  WebMessages c909a0398a7086eab215b3ace24705da
   exports: b86ad7b8a0b44a02b28cdac11545ea56
-  WebEvent 6df2a76ec9950bbeadbcb273faa1370e
-import  -/  WebMessagesJson 8c67daf3c09ebfb70f97ef111afabeaf
-  exports: 836b865dc702f419a711e93a8452704c
+  WebEvent a8934fa5df14c2244bee8b7537104981
+import  -/  WebMessagesJson bf9425df7691e9af88f7175833bc74d5
+  exports: f56eaf40a3cd7d583c1caf548d86eca2
 import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets dac061edf008b1b72780269f7fae6494
 import  -/  websockets-0.10.0.0@websockets-0.10.0.0-HkVKC4y8PYIGLvr4yNOGwc:Network.WebSockets.Connection 461242369db54ba20a4c709a7c262225
 b08796f2cd72dc596a7814e2532ade2f
@@ -497,7 +497,7 @@ b08796f2cd72dc596a7814e2532ade2f
                                       GHC.Show.shows4
                                       w1) of ww4 { (#,#) ww5 ww6 ->
                             GHC.Types.: @ GHC.Types.Char ww5 ww6 } })) }) -}
-e6fc47a437a179086350bb8881e8056e
+b029c84853db379df96e76c9a1c51ed5
   $wsendToClient ::
     ([Network.WebSockets.Types.Message] -> GHC.Types.IO ())
     -> GHC.Prim.MutVar# GHC.Prim.RealWorld GHC.Types.Bool
@@ -629,7 +629,7 @@ f4fed56fdc880a09dd0daf4bec1456c6
                              GHC.Types.True
                              w2 of s2# { DEFAULT ->
                       (ww7 w3) `cast` (GHC.Types.N:IO[0] <()>_R) s2# } } } }) -}
-5e2c6866ac2f7339f1df23ec3bc79e37
+03b7615f7e0c6eb611440d42190481b7
   sendToClient ::
     WebClients.WAClient -> WebMessages.WebEvent -> GHC.Types.IO ()
   {- Arity: 3,
@@ -640,7 +640,7 @@ f4fed56fdc880a09dd0daf4bec1456c6
                 (<WebClients.WAClient>_R
                  ->_R <WebMessages.WebEvent>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-798ecf67a5e9ed2a8517f1959baa1c14
+6855676083c1b67188d9f4ed19ee5978
   sendToClient1 ::
     WebClients.WAClient
     -> WebMessages.WebEvent
@@ -656,7 +656,7 @@ f4fed56fdc880a09dd0daf4bec1456c6
                  case w of ww { WebClients.WAClient ww1 ww2 ->
                  case ww2 of ww3 { Network.WebSockets.Connection.Connection ww4 ww5 ww6 ww7 ww8 ->
                  WebClients.$wsendToClient ww7 ww8 w1 w2 } }) -}
-e0b80ecef0e19c6a93886dd6dcd30ac5
+e33fc9a225cf99d72cd095449359a92b
   sendToClients ::
     [WebClients.WAClient] -> WebMessages.WebEvent -> GHC.Types.IO ()
   {- Arity: 3, Strictness: <S,1*U><L,1*U><S,U>,
@@ -666,7 +666,7 @@ e0b80ecef0e19c6a93886dd6dcd30ac5
                 (<[WebClients.WAClient]>_R
                  ->_R <WebMessages.WebEvent>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-ae30fe6c9d7618742506d3a173e384ab
+47b85637601e7f96eebdde4c6d6ce90c
   sendToClients1 ::
     [WebClients.WAClient]
     -> WebMessages.WebEvent

@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:42:02.702048339 UTC
+2018-01-17 08:44:57.018132556 UTC
 
 interface main@main:CommonChannels 8002
-  interface hash: 207ffe4f8621ee189b76f8406618a124
-  ABI hash: f1e36ad70f6366a6c90b83b10a9f9917
-  export-list hash: aedbb846b4b45e6fdfa51d3b8e071d11
+  interface hash: 0d3fa651e610a2c3847d71ef08a1340c
+  ABI hash: c013d3c6d0e37678816363497cd84d4a
+  export-list hash: 40cf9c65678e962f25678cbf8f519487
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 7466539132b6c2c803b3afb4c7151c0e
   sig of: Nothing
@@ -103,18 +103,18 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EventChan 2fbf9ecb2263a4b748008f48f08708ef
-import  -/  LoadMessages 86f7ef1ae97b59e6e38a3ad92beb7909
-  exports: 447fbd5d495b4d5cddbcbb2fe0139815
-  LoadChan 0582d7646f233c2a02ce10b950c59316
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
-import  -/  StoreMessages 604a62eda95aa09d4755ba38bd251a8e
-  exports: c031e914ea8fc941321bb1e578fc587f
-  StoreChan 0d93dc7c316e89c9d449610e6f2caa49
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EventChan 19651a89be2c7077e0e222e46c89d533
+import  -/  LoadMessages 59247eb4fa93f25a94519344b3738ad9
+  exports: c5cc904a2c912cd972dfb2fd047d2c25
+  LoadChan c53dd4b1222eac64b17155e939139ea5
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+import  -/  StoreMessages f58dda69829b9c6217296b0ca236df58
+  exports: f0ddc1aebe84de99133735532f82b249
+  StoreChan 9fe9c67c790bf9c31a90ce2fb7989597
 1a0b25cf508593084ea24a9e03c06e0f
   $tc'CommonChans :: GHC.Types.TyCon
   {- HasNoCafRefs, Strictness: m,
@@ -153,13 +153,13 @@ ccb81152b9d53a0dba6682a8aa52202d
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-01f4f6e44c2bf343b2159eaf4a6ad6cb
+b489f70a96007556397179ae59fd5e8a
   data CommonChans
     = CommonChans {eventChan :: EventMessages.EventChan,
                    loadChan :: LoadMessages.LoadChan,
                    storeChan :: StoreMessages.StoreChan,
                    logChan :: LogMessages.LogChan}
-3911ebeee801f26152ba5083ce7c3d9d
+aa902a7d180b4b09b70b2c6dea7b88fd
   eventChan :: CommonChannels.CommonChans -> EventMessages.EventChan
   RecSel Left CommonChannels.CommonChans
   {- Arity: 1, HasNoCafRefs,
@@ -168,7 +168,7 @@ ccb81152b9d53a0dba6682a8aa52202d
                 (\ (ds :: CommonChannels.CommonChans) ->
                  case ds of wild { CommonChannels.CommonChans ds1 ds2 ds3 ds4 ->
                  ds1 }) -}
-e6d2de703534e0deb289b93806cdfee5
+97c0425fd4c708a94f96fdbff31d381f
   loadChan :: CommonChannels.CommonChans -> LoadMessages.LoadChan
   RecSel Left CommonChannels.CommonChans
   {- Arity: 1, HasNoCafRefs,
@@ -177,7 +177,7 @@ e6d2de703534e0deb289b93806cdfee5
                 (\ (ds :: CommonChannels.CommonChans) ->
                  case ds of wild { CommonChannels.CommonChans ds1 ds2 ds3 ds4 ->
                  ds2 }) -}
-e458e652eda033623916e4c3d135435e
+bd86f3edb638658505f6c2a9c08d50da
   logChan :: CommonChannels.CommonChans -> LogMessages.LogChan
   RecSel Left CommonChannels.CommonChans
   {- Arity: 1, HasNoCafRefs,
@@ -186,7 +186,7 @@ e458e652eda033623916e4c3d135435e
                 (\ (ds :: CommonChannels.CommonChans) ->
                  case ds of wild { CommonChannels.CommonChans ds1 ds2 ds3 ds4 ->
                  ds4 }) -}
-989c77daf92ad23347a4de106a15da86
+8e52b8e5c96683305838eaf14e4a6ba6
   storeChan :: CommonChannels.CommonChans -> StoreMessages.StoreChan
   RecSel Left CommonChannels.CommonChans
   {- Arity: 1, HasNoCafRefs,

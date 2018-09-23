@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:41:30.849726344 UTC
+2018-01-14 21:56:52.167951974 UTC
 
 interface main@main:LoadMessages 8002
-  interface hash: 9bdff6c5b0e307a37a0406cdd1a697c7
-  ABI hash: 86f7ef1ae97b59e6e38a3ad92beb7909
-  export-list hash: 447fbd5d495b4d5cddbcbb2fe0139815
+  interface hash: f48489787102c4361b0e40cdbb2ba1d9
+  ABI hash: 59247eb4fa93f25a94519344b3738ad9
+  export-list hash: c5cc904a2c912cd972dfb2fd047d2c25
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 9581e73690371ffaaf5c309a49faabb5
   sig of: Nothing
@@ -102,23 +102,23 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationName 7681f69b2581ed31254c1a456f024695
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
-import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
-  exports: 7b16c99942b55c7a72be31fd4804ba3f
-  ProjectChan 091f44512dd4db2ee61640a0a30b9371
-import  -/  SystemMessages 79d62c960f37bee63ab3490932f6d9bb
-  exports: 40bfc0a8cd3b65b3f3992016996f2ea2
-  SystemChan 071ec073d696ba528a27629f4c54c968
+import  -/  ProjectMessages 2f75b74a80f546d5b67047299653bd86
+  exports: 28934ffa1b42a9db9c37d00fb218487a
+  ProjectChan b74b68c96fec4f477ddf0aae0d38e500
+import  -/  SystemMessages 60ba975a726d9f5bafcfb14a2f4b8b89
+  exports: 3c0f78d227c8a8df8c117c19d3c2e0dc
+  SystemChan 50bc5e34c8888b571af79a04d7d19ae3
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -258,10 +258,10 @@ a535b66c25f519bcfe62d07ed93eea0d
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-0582d7646f233c2a02ce10b950c59316
+c53dd4b1222eac64b17155e939139ea5
   type LoadChan =
     Control.Concurrent.STM.TChan.TChan LoadMessages.LoadMessage
-1fe86d4bffb19bca592315e6ed282fb6
+fb70a61d24de12c6c0378b407e3410c3
   data LoadMessage
     = LMLoadViewForClient ProjectMessages.ProjectChan
                           WebClients.WAClient

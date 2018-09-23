@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:07:10.897372295 UTC
+2018-01-17 08:44:57.094505748 UTC
 
 interface main@main:ProjectState 8002
-  interface hash: 9c55b60a4b2836aedaf9d4703956be84
-  ABI hash: b9445036ca91c8f8f17466da52a590df
-  export-list hash: 45f061a0a4b72f3842496805809fba9c
+  interface hash: a880a6d44bf42c29e75b97f03d386330
+  ABI hash: 22e38013a51b1c430f1e9dfad37f81f6
+  export-list hash: f1a926b33839773ad23f3ae1e194b7c0
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 7466539132b6c2c803b3afb4c7151c0e
   sig of: Nothing
@@ -115,32 +115,32 @@ import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationName 7681f69b2581ed31254c1a456f024695
-import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
-  exports: 38997434d1eadadff28c77fbb028d629
-  CalculationChan 6b33731f780f07df39838a7cd12da2cb
-import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
-  exports: aedbb846b4b45e6fdfa51d3b8e071d11
-  CommonChans 01f4f6e44c2bf343b2159eaf4a6ad6cb
-  eventChan 3911ebeee801f26152ba5083ce7c3d9d
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EventChan 2fbf9ecb2263a4b748008f48f08708ef
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  CalculationMessages 3afc977efd0bd03a50f6417c854268c2
+  exports: 0ae2098e7818c22c0f347121d6a6bccf
+  CalculationChan 1fbbb04c6675ddf15163c151f014403e
+import  -/  CommonChannels c013d3c6d0e37678816363497cd84d4a
+  exports: 40cf9c65678e962f25678cbf8f519487
+  CommonChans b489f70a96007556397179ae59fd5e8a
+  eventChan aa902a7d180b4b09b70b2c6dea7b88fd
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EventChan 19651a89be2c7077e0e222e46c89d533
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   Project c7f6766f61d0b63c7ab6927b16e914f3
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
   projectName cb7533641bc632f228a4a92ccb44abc9
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   ViewChan a8e7d5732ce960f93aa79f3505166fc7
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -188,15 +188,15 @@ d6b2142d61301d17a2556800a55cd3bd
 c4bfbd941f59c98480f1a3407e9df4d8
   type CalculationByResult =
     Data.Map.Base.Map XMapTypes.XMapName Calculation.CalculationName
-8f4ae96e16545acd2db509dff8801825
+4199a552295e6ace96376c290a368d8e
   type CalculationChanByMap =
     Data.Map.Base.Map
       XMapTypes.XMapName [CalculationMessages.CalculationChan]
-36e290b6476eeda7363f213148c77323
+1b0b875b09494470c8b80dcd39f3322f
   type CalculationChanByName =
     Data.Map.Base.Map
       Calculation.CalculationName CalculationMessages.CalculationChan
-6f800b4257f0a40180517de20dd96d62
+765ed7b63e28192250c3bc7202fd6276
   data RuntimeProject
     = RuntimeProject {project :: GHC.Conc.Sync.TVar Project.Project,
                       calculationChanByName :: GHC.Conc.Sync.TVar
@@ -215,7 +215,7 @@ b0fb1ada2a395684fbc42f68f5da9c22
 1f536336e7b042ab6d9004b0c2d08e96
   type ViewChanByName =
     Data.Map.Base.Map View.ViewName ViewMessages.ViewChan
-19c7c825961eea5395b8246623ae44f0
+d450bad7cdac7a555d4fae8a0fc0a942
   calculationByResult ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar ProjectState.CalculationByResult
@@ -226,7 +226,7 @@ b0fb1ada2a395684fbc42f68f5da9c22
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds4 }) -}
-a28473bfc3c6b477e078f13f04196323
+e2cd5747fff6fd3fd5cecfe935d0f01d
   calculationChanByMap ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByMap
@@ -237,7 +237,7 @@ a28473bfc3c6b477e078f13f04196323
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds3 }) -}
-bde3e6a746f9c3d285a836ac8a4146dd
+243572f858e3f71cbf55bdf9b8dc83a5
   calculationChanByName ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar ProjectState.CalculationChanByName
@@ -248,7 +248,7 @@ bde3e6a746f9c3d285a836ac8a4146dd
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds2 }) -}
-63f09138dc269f54560c3785a96964ae
+5b36d778c41f489fe7eed0897f3e1fea
   chans :: ProjectState.RuntimeProject -> CommonChannels.CommonChans
   RecSel Left ProjectState.RuntimeProject
   {- Arity: 1, HasNoCafRefs,
@@ -257,7 +257,7 @@ bde3e6a746f9c3d285a836ac8a4146dd
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds7 }) -}
-e0b2534d40c3837a7812ce382d0887a3
+d6a41974ba8ffbdd8bcf219ef4b27186
   evtChan :: ProjectState.RuntimeProject -> EventMessages.EventChan
   {- Arity: 1, HasNoCafRefs,
      Strictness: <S(LLLLLLS(SLLL)L),1*U(A,A,A,A,A,A,1*U(1*U(U,U),A,A,A),A)>m,
@@ -266,7 +266,7 @@ e0b2534d40c3837a7812ce382d0887a3
                  case rp of wild { ProjectState.RuntimeProject ds ds1 ds2 ds3 ds4 ds5 ds6 ds7 ->
                  case ds6 of wild1 { CommonChannels.CommonChans ds8 ds9 ds10 ds11 ->
                  ds8 } }) -}
-94ca58664f6ec802577ccd8dd03213a1
+cbd11a75d8480f8f1ecfb02231849094
   prjName ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.STM Project.ProjectName
@@ -277,7 +277,7 @@ e0b2534d40c3837a7812ce382d0887a3
                   `cast`
                 (<ProjectState.RuntimeProject>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <Project.ProjectName>_R)) -}
-11e9711c2301fecdf8c52643ec516269
+325ef6fa19765b6852b74e41b291cf33
   prjName1 ::
     ProjectState.RuntimeProject
     -> GHC.Prim.State# GHC.Prim.RealWorld
@@ -295,7 +295,7 @@ e0b2534d40c3837a7812ce382d0887a3
                         tvar#
                         eta of ds8 { (#,#) ipv ipv1 ->
                  (# ipv, Project.projectName ipv1 #) } } }) -}
-a30b6ea9329cfba1f64ba26587a1f242
+ee01e9ef9b8ee2e3b944ddac0596c0c8
   project ::
     ProjectState.RuntimeProject -> GHC.Conc.Sync.TVar Project.Project
   RecSel Left ProjectState.RuntimeProject
@@ -305,7 +305,7 @@ a30b6ea9329cfba1f64ba26587a1f242
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds1 }) -}
-2bb0e33d2fba454b4b07fa0a8b1b476c
+3af02fe6726c7a81c7d25655f3a80b36
   subscribedClients ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar [WebClients.WAClient]
@@ -316,7 +316,7 @@ a30b6ea9329cfba1f64ba26587a1f242
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds8 }) -}
-36060019209c722c563d0b4187284040
+6e61d381ded9894347222d4a5fb8b957
   viewChanByMap ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar ProjectState.ViewChanByMap
@@ -327,7 +327,7 @@ a30b6ea9329cfba1f64ba26587a1f242
                 (\ (ds :: ProjectState.RuntimeProject) ->
                  case ds of wild { ProjectState.RuntimeProject ds1 ds2 ds3 ds4 ds5 ds6 ds7 ds8 ->
                  ds5 }) -}
-626b2130a672e67aa9cdc67025db420c
+826daebefc3e20502309b91477032f06
   viewChanByName ::
     ProjectState.RuntimeProject
     -> GHC.Conc.Sync.TVar ProjectState.ViewChanByName

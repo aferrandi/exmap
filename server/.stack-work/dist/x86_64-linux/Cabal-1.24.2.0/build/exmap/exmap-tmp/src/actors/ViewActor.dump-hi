@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 15:14:08.234786265 UTC
+2018-01-18 00:20:24.271884872 UTC
 
 interface main@main:ViewActor 8002
-  interface hash: 8ff1d3d028d0045df92df109573d25dd
-  ABI hash: 98434608e7e26d31cf4fae31206a48c5
-  export-list hash: 84ec3b7815c651ea28ffdbb5b08322a7
+  interface hash: 493b2f1357076ed038a0307a6bacca66
+  ABI hash: 44f513ebc63c77919b18deddd6df4f55
+  export-list hash: 84ba0c5d457161da1f7798e895feb243
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -14,9 +14,9 @@ interface main@main:ViewActor 8002
 exports:
   ViewActor.actorView
 module dependencies: ApplicationTypes Calculation Errors
-                     EventMessages Formula OperationTypes Project ProjectJson TextEnums
-                     View ViewMessages ViewState WebClients WebMessages WebMessagesJson
-                     XFunction XMapJson XMapTypes XValues
+                     EventMessages Formula LogMessages OperationTypes Project
+                     ProjectJson TextEnums View ViewMessages ViewState WebClients
+                     WebMessages WebMessagesJson XFunction XMapJson XMapTypes XValues
 package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
                       aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
                       array-0.5.1.1@array-0.5.1.1
@@ -107,22 +107,24 @@ import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:GHC.List ab8c4e523e6c479c549d3bcd5fc4a439
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  base-4.9.1.0:System.IO e4a64a8e3dce8616da54f0ee7104f7db
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EMWebEvent c941e172c95073a52dd73b2c44ff45f1
-  EventChan 2fbf9ecb2263a4b748008f48f08708ef
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EMWebEvent 6855fd08a9b75fbb72139d790cf82596
+  EventChan 19651a89be2c7077e0e222e46c89d533
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  logDebug fe6a28772bd88f0bf20bab75e1fbfa1e
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   VMError 79f5a28b13ce6ec9df15f57c3936cd54
   VMMaps 668efcc838bfb24ad9de40fc50f9e4c0
   VMStop 5016fcf56fc5a4a76d8d8811b0e9e83b
@@ -130,24 +132,25 @@ import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
   VMUnsubscribeFromView ec2213fda9126b2cac68a4fd267486e5
   VMUpdate 7a8d32294426c735fa547d9f4b583356
   ViewChan a8e7d5732ce960f93aa79f3505166fc7
-import  -/  ViewState 8829825235e49e6633efccbcf381cba0
-  exports: 26ed2c4cc8a9cd015f67700d8d8aed16
-  RuntimeView 81b78cacdc88335398633ded129fee09
-  mapsInView 06f7584fa7b5edde326aea69f58f0d9b
-  ownerProjectName 5a53b2e49a427955b74556f17b6b4b47
-  runtimeViewName d6ccea246080bfccffd5a78f5f98ea94
-  subscribedClients c21b9a3851f74c2574e307ddbe92b017
-  view 5018c2e2a21c4f905e4baa8f0cbc9c98
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  ViewState 339fa560a939bcfa1b9b489aa5e388c0
+  exports: ae975134bc33332ad9f1b7beea942424
+  RuntimeView 52858ab0d180c1bd4ff43f2a5a621f8e
+  logChan 654f3afd4fe6df9a19fa9cbeca47ef32
+  mapsInView 3ca4a1fae3a93a625a8995e4d3fc45cd
+  ownerProjectName 813355df7ff9ae0cccdcd4b66ee898e8
+  runtimeViewName 8c858ec3fee1e512ebc717ffe593291e
+  subscribedClients d907ad6a2bbfc6e43102a18ef638d3df
+  view 7037ebb3b6fb03fbf9b260d1d347ac71
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
   sameClientId f4fed56fdc880a09dd0daf4bec1456c6
-import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+import  -/  WebMessages c909a0398a7086eab215b3ace24705da
   exports: b86ad7b8a0b44a02b28cdac11545ea56
-  WEError 1d83df9216403449f39d3318ecf8c398
-  WEUnsubscribedFromView 6b31b1836e7eb16ac9a9cca345745d57
-  WEViewChanged f96d8b4393a206d07e4b847cd480c87e
-  WEViewStatus ba5b7d323a8227fb2c47613f2c0ee10b
+  WEError e847e2ef88999243c53c87ea4ce2cfe5
+  WEUnsubscribedFromView f2ecfca526786b5995072330c95cef60
+  WEViewChanged aa6bf41c646fb11c1cfc358c833732b9
+  WEViewStatus 2a1c43effa398161a0047ca0687dda1e
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XMapByName 698558df7afe852e774ef8fc50cf3f0a
@@ -179,7 +182,7 @@ ef65103d521a83b3fc9f5e557b2ae2ad
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-24b83f350ac8bdb082072e3d42d077a6
+6170214126c1cf789e424bbd9f9d7c7d
   $wactorView ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -192,16 +195,16 @@ ef65103d521a83b3fc9f5e557b2ae2ad
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 5,
-     Strictness: <S,U><L,A><L,U(U,U,U(U),U(U),U(U))><L,U(A,U)><S,U>,
+     Strictness: <S,U><L,A><L,U(U(U,U,U),U,U(U),U(U),U(U),U(U,U))><L,U(A,U)><S,U>,
      Inline: [0] -}
-ca6cb091db94dcb606f51dd84385ee26
+7a6879f02e801c1efcacdd24cc5fba7f
   actorView ::
     ViewMessages.ViewChan
     -> ViewState.RuntimeView
     -> EventMessages.EventChan
     -> GHC.Types.IO ()
   {- Arity: 4,
-     Strictness: <S(SL),U(U,A)><L,U(U,U,U(U),U(U),U(U))><L,U(A,U)><S,U>,
+     Strictness: <S(SL),U(U,A)><L,U(U(U,U,U),U,U(U),U(U),U(U),U(U,U))><L,U(A,U)><S,U>,
      Unfolding: InlineRule (0, True, True)
                 ViewActor.actorView1
                   `cast`
@@ -209,7 +212,7 @@ ca6cb091db94dcb606f51dd84385ee26
                  ->_R <ViewState.RuntimeView>_R
                  ->_R <EventMessages.EventChan>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-325c2d612ca73542798835ad11560448
+f1ac445d292dd63cba009134ba515949
   actorView1 ::
     ViewMessages.ViewChan
     -> ViewState.RuntimeView
@@ -217,7 +220,7 @@ ca6cb091db94dcb606f51dd84385ee26
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
   {- Arity: 4,
-     Strictness: <S(SL),U(U,A)><L,U(U,U,U(U),U(U),U(U))><L,U(A,U)><S,U>,
+     Strictness: <S(SL),U(U,A)><L,U(U(U,U,U),U,U(U),U(U),U(U),U(U,U))><L,U(A,U)><S,U>,
      Inline: INLINE[0],
      Unfolding: InlineRule (4, True, False)
                 (\ (w :: ViewMessages.ViewChan)

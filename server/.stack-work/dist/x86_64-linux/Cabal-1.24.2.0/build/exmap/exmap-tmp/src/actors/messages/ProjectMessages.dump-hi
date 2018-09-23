@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:41:29.321908438 UTC
+2018-01-14 21:56:51.372424118 UTC
 
 interface main@main:ProjectMessages 8002
-  interface hash: 53ce88d7167985cf4b520f8e854539de
-  ABI hash: aea94a272f7c999975273b338208baa3
-  export-list hash: 7b16c99942b55c7a72be31fd4804ba3f
+  interface hash: 9ea04721b528b01fa3515c3f9b1a39d5
+  ABI hash: 2f75b74a80f546d5b67047299653bd86
+  export-list hash: 28934ffa1b42a9db9c37d00fb218487a
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 9581e73690371ffaaf5c309a49faabb5
   sig of: Nothing
@@ -15,7 +15,7 @@ exports:
   ProjectMessages.ProjectChan
   ProjectMessages.ProjectEvent{ProjectMessages.PECalculationForClientLoadError ProjectMessages.PECalculationForClientLoaded ProjectMessages.PECalculationStoreError ProjectMessages.PECalculationStored ProjectMessages.PEMapForClientLoadError ProjectMessages.PEMapForClientLoaded ProjectMessages.PEMapStoreError ProjectMessages.PEMapStored ProjectMessages.PEMapsForCalculationLoadError ProjectMessages.PEMapsForCalculationLoaded ProjectMessages.PEMapsForCalculationsLoadError ProjectMessages.PEMapsForCalculationsLoaded ProjectMessages.PEMapsForViewLoadError ProjectMessages.PEMapsForViewLoaded ProjectMessages.PEProjectStoreError ProjectMessages.PEProjectStored ProjectMessages.PEViewForClientLoadError ProjectMessages.PEViewForClientLoaded ProjectMessages.PEViewForProjectLoadError ProjectMessages.PEViewForProjectLoaded ProjectMessages.PEViewStoreError ProjectMessages.PEViewStored}
   ProjectMessages.ProjectMessage{ProjectMessages.PMEvent ProjectMessages.PMRequest ProjectMessages.PMStop}
-  ProjectMessages.ProjectRequest{ProjectMessages.PRLoadCalculationForClient ProjectMessages.PRLoadMapForClient ProjectMessages.PRLoadViewForClient ProjectMessages.PRMapsInProject ProjectMessages.PRStartCalculations ProjectMessages.PRStoreCalculation ProjectMessages.PRStoreMap ProjectMessages.PRStoreView ProjectMessages.PRSubscribeToProject ProjectMessages.PRSubscribeToView ProjectMessages.PRUnsubscribeFromProject ProjectMessages.PRUnsubscribeFromView ProjectMessages.PRUpdateProject}
+  ProjectMessages.ProjectRequest{ProjectMessages.PRDisconnect ProjectMessages.PRLoadCalculationForClient ProjectMessages.PRLoadMapForClient ProjectMessages.PRLoadViewForClient ProjectMessages.PRMapsInProject ProjectMessages.PRStartCalculations ProjectMessages.PRStoreCalculation ProjectMessages.PRStoreMap ProjectMessages.PRStoreView ProjectMessages.PRSubscribeToProject ProjectMessages.PRSubscribeToView ProjectMessages.PRUnsubscribeFromProject ProjectMessages.PRUnsubscribeFromView ProjectMessages.PRUpdateProject}
 module dependencies: ApplicationTypes Calculation Errors Formula
                      OperationTypes Project ProjectJson TextEnums View WebClients
                      WebMessages WebMessagesJson XFunction XMapJson XMapTypes XValues
@@ -106,29 +106,29 @@ import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  Calculation 41a99fbb51f5318f902af52762efce14
   CalculationName 7681f69b2581ed31254c1a456f024695
   CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   Project c7f6766f61d0b63c7ab6927b16e914f3
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XMapName aed4e1c98ee09424176ec799b4e99672
   XNamedMap eb3d1aa1ee70c44efd717a55a4d51a32
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fEqProjectEvent :: GHC.Classes.Eq ProjectMessages.ProjectEvent
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -136,7 +136,7 @@ a6fafe6e82013794468620034aa1e62d
                   @ ProjectMessages.ProjectEvent
                   ProjectMessages.$fEqProjectEvent_$c==
                   ProjectMessages.$fEqProjectEvent_$c/= -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fEqProjectEvent_$c/= ::
     ProjectMessages.ProjectEvent
     -> ProjectMessages.ProjectEvent -> GHC.Types.Bool
@@ -147,12 +147,12 @@ a6fafe6e82013794468620034aa1e62d
                  case ProjectMessages.$fEqProjectEvent_$c== a b of wild {
                    GHC.Types.False -> GHC.Types.True
                    GHC.Types.True -> GHC.Types.False }) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fEqProjectEvent_$c== ::
     ProjectMessages.ProjectEvent
     -> ProjectMessages.ProjectEvent -> GHC.Types.Bool
   {- Arity: 2, Strictness: <S,1*U><S,1*U> -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fEqProjectMessage :: GHC.Classes.Eq ProjectMessages.ProjectMessage
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -160,7 +160,7 @@ af5cafe03ced1bfa45730cfd58a08296
                   @ ProjectMessages.ProjectMessage
                   ProjectMessages.$fEqProjectMessage_$c==1
                   ProjectMessages.$fEqProjectMessage_$c/= -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fEqProjectMessage_$c/= ::
     ProjectMessages.ProjectMessage
     -> ProjectMessages.ProjectMessage -> GHC.Types.Bool
@@ -186,12 +186,12 @@ af5cafe03ced1bfa45730cfd58a08296
                    -> case b of wild1 {
                         DEFAULT -> GHC.Types.True
                         ProjectMessages.PMStop -> GHC.Types.False } }) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fEqProjectMessage_$c== ::
     ProjectMessages.ProjectRequest
     -> ProjectMessages.ProjectRequest -> GHC.Types.Bool
   {- Arity: 2, Strictness: <S,1*U><S,1*U> -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fEqProjectMessage_$c==1 ::
     ProjectMessages.ProjectMessage
     -> ProjectMessages.ProjectMessage -> GHC.Types.Bool
@@ -213,7 +213,7 @@ af5cafe03ced1bfa45730cfd58a08296
                    -> case ds1 of wild1 {
                         DEFAULT -> GHC.Types.False
                         ProjectMessages.PMStop -> GHC.Types.True } }) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fEqProjectRequest :: GHC.Classes.Eq ProjectMessages.ProjectRequest
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -221,7 +221,7 @@ be50552ae6df018fa5306afd01f4475e
                   @ ProjectMessages.ProjectRequest
                   ProjectMessages.$fEqProjectMessage_$c==
                   ProjectMessages.$fEqProjectRequest_$c/= -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fEqProjectRequest_$c/= ::
     ProjectMessages.ProjectRequest
     -> ProjectMessages.ProjectRequest -> GHC.Types.Bool
@@ -232,7 +232,7 @@ be50552ae6df018fa5306afd01f4475e
                  case ProjectMessages.$fEqProjectMessage_$c== a b of wild {
                    GHC.Types.False -> GHC.Types.True
                    GHC.Types.True -> GHC.Types.False }) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fShowProjectEvent :: GHC.Show.Show ProjectMessages.ProjectEvent
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -241,13 +241,13 @@ a6fafe6e82013794468620034aa1e62d
                   ProjectMessages.$fShowProjectEvent_$cshowsPrec
                   ProjectMessages.$fShowProjectEvent_$cshow
                   ProjectMessages.$fShowProjectEvent_$cshowList -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fShowProjectEvent1 ::
     ProjectMessages.ProjectEvent -> GHC.Show.ShowS
   {- Arity: 1,
      Unfolding: (\ (w :: ProjectMessages.ProjectEvent) ->
                  ProjectMessages.$w$cshowsPrec 0# w) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fShowProjectEvent_$cshow ::
     ProjectMessages.ProjectEvent -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U>,
@@ -257,14 +257,14 @@ a6fafe6e82013794468620034aa1e62d
                    GHC.Show.shows22
                    x
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fShowProjectEvent_$cshowList ::
     [ProjectMessages.ProjectEvent] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ ProjectMessages.ProjectEvent
                    ProjectMessages.$fShowProjectEvent1) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $fShowProjectEvent_$cshowsPrec ::
     GHC.Types.Int -> ProjectMessages.ProjectEvent -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <S(S),1*U(U)><S,1*U>, Inline: INLINE[0],
@@ -272,7 +272,7 @@ a6fafe6e82013794468620034aa1e62d
                 (\ (w :: GHC.Types.Int) (w1 :: ProjectMessages.ProjectEvent) ->
                  case w of ww { GHC.Types.I# ww1 ->
                  ProjectMessages.$w$cshowsPrec ww1 w1 }) -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fShowProjectMessage ::
     GHC.Show.Show ProjectMessages.ProjectMessage
   DFunId
@@ -282,7 +282,7 @@ af5cafe03ced1bfa45730cfd58a08296
                   ProjectMessages.$fShowProjectMessage_$cshowsPrec
                   ProjectMessages.$fShowProjectMessage_$cshow
                   ProjectMessages.$fShowProjectMessage_$cshowList -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fShowProjectMessage1 ::
     ProjectMessages.ProjectMessage -> GHC.Show.ShowS
   {- Arity: 1,
@@ -312,7 +312,7 @@ bac3beee2b3459d1a7a84fbc04d1fb74
                    @ GHC.Types.Char
                    ProjectMessages.$fShowProjectMessage4
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fShowProjectMessage_$cshow ::
     ProjectMessages.ProjectMessage -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U>,
@@ -336,14 +336,14 @@ af5cafe03ced1bfa45730cfd58a08296
                            (GHC.Types.[] @ GHC.Types.Char))
                    ProjectMessages.PMStop
                    -> ProjectMessages.$fShowProjectMessage7 }) -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fShowProjectMessage_$cshowList ::
     [ProjectMessages.ProjectMessage] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ ProjectMessages.ProjectMessage
                    ProjectMessages.$fShowProjectMessage1) -}
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   $fShowProjectMessage_$cshowsPrec ::
     GHC.Types.Int -> ProjectMessages.ProjectMessage -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <L,1*U(U)><S,1*U>,
@@ -400,7 +400,7 @@ af5cafe03ced1bfa45730cfd58a08296
                                 (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 x1))) } }
                    ProjectMessages.PMStop
                    -> ProjectMessages.$fShowProjectMessage3 }) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fShowProjectRequest ::
     GHC.Show.Show ProjectMessages.ProjectRequest
   DFunId
@@ -410,13 +410,13 @@ be50552ae6df018fa5306afd01f4475e
                   ProjectMessages.$fShowProjectRequest_$cshowsPrec
                   ProjectMessages.$fShowProjectRequest_$cshow
                   ProjectMessages.$fShowProjectRequest_$cshowList -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fShowProjectRequest1 ::
     ProjectMessages.ProjectRequest -> GHC.Show.ShowS
   {- Arity: 1,
      Unfolding: (\ (w :: ProjectMessages.ProjectRequest) ->
                  ProjectMessages.$w$cshowsPrec1 0# w) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fShowProjectRequest_$cshow ::
     ProjectMessages.ProjectRequest -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U>,
@@ -426,14 +426,14 @@ be50552ae6df018fa5306afd01f4475e
                    GHC.Show.shows22
                    x
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fShowProjectRequest_$cshowList ::
     [ProjectMessages.ProjectRequest] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ ProjectMessages.ProjectRequest
                    ProjectMessages.$fShowProjectRequest1) -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $fShowProjectRequest_$cshowsPrec ::
     GHC.Types.Int -> ProjectMessages.ProjectRequest -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <S(S),1*U(U)><S,1*U>, Inline: INLINE[0],
@@ -743,6 +743,18 @@ cf0d203aa33d2c527b4ea2b667924d4c
   $tc'PMStop1 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "'PMStop"#) -}
+bb1867c686808c7c1e9374452482c4e7
+  $tc'PRDisconnect :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   9005573523620018197##
+                   3425209553646769252##
+                   ProjectMessages.$trModule
+                   ProjectMessages.$tc'PRDisconnect1) -}
+4d610e3289bc805b3db41210c08a78b4
+  $tc'PRDisconnect1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'PRDisconnect"#) -}
 775af4090029475c164fe6ddc98644aa
   $tc'PRLoadCalculationForClient :: GHC.Types.TyCon
   {- HasNoCafRefs, Strictness: m,
@@ -949,18 +961,18 @@ d81ab8cbc2b41314d33f6b9a033690e7
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   $w$cshowsPrec ::
     GHC.Prim.Int# -> ProjectMessages.ProjectEvent -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <S,U><S,1*U>, Inline: [0] -}
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   $w$cshowsPrec1 ::
     GHC.Prim.Int# -> ProjectMessages.ProjectRequest -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <S,U><S,1*U>, Inline: [0] -}
-091f44512dd4db2ee61640a0a30b9371
+b74b68c96fec4f477ddf0aae0d38e500
   type ProjectChan =
     Control.Concurrent.STM.TChan.TChan ProjectMessages.ProjectMessage
-a6fafe6e82013794468620034aa1e62d
+0345f9dfa2a20900c12e8be3302af0b5
   data ProjectEvent
     = PEViewForClientLoaded WebClients.WAClient View.View
     | PEViewForClientLoadError WebClients.WAClient
@@ -1012,12 +1024,12 @@ a6fafe6e82013794468620034aa1e62d
     | PEViewForProjectLoadError WebClients.WAClient
                                 View.ViewName
                                 Errors.Error
-af5cafe03ced1bfa45730cfd58a08296
+e091c0061d24a0e754c7c43cbb34452a
   data ProjectMessage
     = PMRequest ProjectMessages.ProjectRequest
     | PMEvent ProjectMessages.ProjectEvent
     | PMStop
-be50552ae6df018fa5306afd01f4475e
+4cbcf6a51ed5da96731d062c906433d1
   data ProjectRequest
     = PRSubscribeToProject WebClients.WAClient
     | PRUnsubscribeFromProject WebClients.WAClient
@@ -1034,6 +1046,7 @@ be50552ae6df018fa5306afd01f4475e
     | PRLoadViewForClient WebClients.WAClient View.ViewName
     | PRStoreView WebClients.WAClient View.View
     | PRStartCalculations WebClients.WAClient
+    | PRDisconnect WebClients.WAClient
 instance GHC.Classes.Eq [ProjectMessages.ProjectEvent]
   = ProjectMessages.$fEqProjectEvent
 instance GHC.Classes.Eq [ProjectMessages.ProjectMessage]

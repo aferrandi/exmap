@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:06:52.342881769 UTC
+2018-01-17 08:44:57.06810148 UTC
 
 interface main@main:CalculationState 8002
-  interface hash: 7c831ae4e0567fa9f1ea255b4c992be2
-  ABI hash: bb13e56d22c495cb55629a7c1de5eb5f
-  export-list hash: e46d1b59ab4dff4dad527460d1d17272
+  interface hash: a044212ba523bb48a78c2142383a0953
+  ABI hash: 792b6a808fd61fb1fe69585de918e92b
+  export-list hash: 4a116e9f65c8d9fc646d9dcb1a279db6
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 7466539132b6c2c803b3afb4c7151c0e
   sig of: Nothing
@@ -60,6 +60,7 @@ orphans: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aHCxOEHna:Data.Att
          hashable-1.2.6.1@hashable-1.2.6.1-2ZLNuHq395GGIHwEHuqZol:Data.Hashable.Generic
          main@main:ProjectJson main@main:WebMessagesJson main@main:XMapJson
          network-2.6.3.2@network-2.6.3.2-IsLM4TXcLoRI0fmmBYVyQz:Network.Socket
+         stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
@@ -105,17 +106,17 @@ import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
-  exports: 38997434d1eadadff28c77fbb028d629
-  CalculationChan 6b33731f780f07df39838a7cd12da2cb
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
-import  -/  ViewMessages e0a0e25d9bb584b801476dc003b69f21
-  exports: 4f259910ac4dde7df97333a484b49710
+  Calculation 41a99fbb51f5318f902af52762efce14
+import  -/  CalculationMessages 3afc977efd0bd03a50f6417c854268c2
+  exports: 0ae2098e7818c22c0f347121d6a6bccf
+  CalculationChan 1fbbb04c6675ddf15163c151f014403e
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+import  -/  ViewMessages c7726cefdab8625f4aae7cc324dd009c
+  exports: 51d3ee2f53b80e0a402c60fd337b70f5
   ViewChan a8e7d5732ce960f93aa79f3505166fc7
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -165,7 +166,7 @@ d515bb66e369e83f7ea5da900124282b
   type MapRepository =
     Data.Map.Base.Map
       XMapTypes.XMapName (GHC.Base.Maybe XMapTypes.XMap)
-ff29bc771d3b3d65652af415292078aa
+fb3901266423671780fd638b9aae3ffa
   data RuntimeCalculation
     = RuntimeCalculation {calculation :: GHC.Conc.Sync.TVar
                                            Calculation.Calculation,
@@ -176,7 +177,7 @@ ff29bc771d3b3d65652af415292078aa
                                                     [CalculationMessages.CalculationChan],
                           viewsToNotify :: GHC.Conc.Sync.TVar [ViewMessages.ViewChan],
                           logChan :: LogMessages.LogChan}
-7de3d787050f413ad64b9198dc0f144d
+0237d7671042bca7d3c1add1da285980
   calculation ::
     CalculationState.RuntimeCalculation
     -> GHC.Conc.Sync.TVar Calculation.Calculation
@@ -187,7 +188,7 @@ ff29bc771d3b3d65652af415292078aa
                 (\ (ds :: CalculationState.RuntimeCalculation) ->
                  case ds of wild { CalculationState.RuntimeCalculation ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds1 }) -}
-845418f3ac0c797f6f2e8c18b42383a1
+b8a7cc3db08767b806db8b5d880d0572
   calculationsToNotify ::
     CalculationState.RuntimeCalculation
     -> GHC.Conc.Sync.TVar [CalculationMessages.CalculationChan]
@@ -198,7 +199,7 @@ ff29bc771d3b3d65652af415292078aa
                 (\ (ds :: CalculationState.RuntimeCalculation) ->
                  case ds of wild { CalculationState.RuntimeCalculation ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds4 }) -}
-bacb02542b56424d258990902285431f
+6369534968ced4e887c81ecda058ae16
   currentResult ::
     CalculationState.RuntimeCalculation
     -> GHC.Conc.Sync.TVar (GHC.Base.Maybe XMapTypes.XNamedMap)
@@ -209,7 +210,7 @@ bacb02542b56424d258990902285431f
                 (\ (ds :: CalculationState.RuntimeCalculation) ->
                  case ds of wild { CalculationState.RuntimeCalculation ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds3 }) -}
-94d885d67565347c817751fedf41a49a
+fd212d23093c2e3f5b99df9c47424d8a
   logChan ::
     CalculationState.RuntimeCalculation -> LogMessages.LogChan
   RecSel Left CalculationState.RuntimeCalculation
@@ -219,7 +220,7 @@ bacb02542b56424d258990902285431f
                 (\ (ds :: CalculationState.RuntimeCalculation) ->
                  case ds of wild { CalculationState.RuntimeCalculation ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds6 }) -}
-186995d4c87708c93cb3f409618f4466
+03112b590629fe2068c834555a177b0e
   repository ::
     CalculationState.RuntimeCalculation
     -> GHC.Conc.Sync.TVar CalculationState.MapRepository
@@ -230,7 +231,7 @@ bacb02542b56424d258990902285431f
                 (\ (ds :: CalculationState.RuntimeCalculation) ->
                  case ds of wild { CalculationState.RuntimeCalculation ds1 ds2 ds3 ds4 ds5 ds6 ->
                  ds2 }) -}
-a3b0691b6fb15f4db2d4fdd8d9940988
+9a529add4f4b6ac022943b6a62e68fe6
   viewsToNotify ::
     CalculationState.RuntimeCalculation
     -> GHC.Conc.Sync.TVar [ViewMessages.ViewChan]

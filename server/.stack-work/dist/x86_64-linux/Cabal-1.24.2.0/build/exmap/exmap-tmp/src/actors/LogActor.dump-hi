@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-09-25 06:33:22.794918734 UTC
+2018-01-18 22:23:11.568925423 UTC
 
 interface main@main:LogActor 8002
-  interface hash: f00b54ac068d6d53bc310d57e8b52098
-  ABI hash: 677b50c6b0b879e2e9bfaf169376c6b3
-  export-list hash: df56b0d3ab16b2593c7dcbe69bf08724
+  interface hash: 2cf2757f7ff791c249ef7c6dcd3ec488
+  ABI hash: ba616a1d6fdae0762a27ab16854c66b1
+  export-list hash: 9aa7be2c04d18afbf0eaaa711b4fcdff
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -13,20 +13,36 @@ interface main@main:LogActor 8002
   where
 exports:
   LogActor.actorLog
-module dependencies: Errors LogMessages
-package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.1.0*
-                      binary-0.8.3.0@binary-0.8.3.0
+module dependencies: ApplicationTypes Calculation Errors Formula
+                     LogMessages OperationTypes Paths Project View XFunction XMapTypes
+                     XValues
+package dependencies: array-0.5.1.1@array-0.5.1.1
+                      auto-update-0.1.4@auto-update-0.1.4-EmUvNdmhEju51bHrtaEMpz
+                      base-4.9.1.0 binary-0.8.3.0@binary-0.8.3.0
                       bytestring-0.10.8.1@bytestring-0.10.8.1
                       containers-0.5.7.1@containers-0.5.7.1
-                      deepseq-1.4.2.0@deepseq-1.4.2.0 ghc-prim-0.5.0.0
-                      integer-gmp-1.0.0.1 stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve*
-                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00*
+                      deepseq-1.4.2.0@deepseq-1.4.2.0 directory-1.3.0.0@directory-1.3.0.0
+                      easy-file-0.2.1@easy-file-0.2.1-rguMBNaECxLikt4CCDx0D
+                      fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm
+                      filepath-1.4.1.1@filepath-1.4.1.1 ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+                      old-locale-1.0.0.7@old-locale-1.0.0.7-KGBP1BSKxH5GCm0LnZP04j
+                      old-time-1.1.0.3@old-time-1.1.0.3-KWRsMSdY26c2L27Y9n9cyq
+                      stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve
+                      text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00
+                      time-1.6.0.1@time-1.6.0.1 unix-2.7.2.1@unix-2.7.2.1
+                      unix-time-0.3.7@unix-time-0.3.7-EhnEKT4D7hJajV74Sk5BE
 orphans: base-4.9.1.0:GHC.Base base-4.9.1.0:GHC.Float
          binary-0.8.3.0@binary-0.8.3.0:Data.Binary.Generic
          bytestring-0.10.8.1@bytestring-0.10.8.1:Data.ByteString.Builder
          stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Monad.STM
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Show
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Calendar.Gregorian
+         time-1.6.0.1@time-1.6.0.1:Data.Time.Format.Parse
+         time-1.6.0.1@time-1.6.0.1:Data.Time.LocalTime.LocalTime
+         unix-time-0.3.7@unix-time-0.3.7-EhnEKT4D7hJajV74Sk5BE:Data.UnixTime.Diff
 family instance modules: base-4.9.1.0:Control.Applicative
                          base-4.9.1.0:Data.Complex base-4.9.1.0:Data.Either
                          base-4.9.1.0:Data.Functor.Const base-4.9.1.0:Data.Functor.Identity
@@ -41,21 +57,141 @@ family instance modules: base-4.9.1.0:Control.Applicative
                          containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
                          containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
                          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+                         text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Lazy
+import  -/  base-4.9.1.0:Data.Monoid 51cc9cd8c130d49ba96b7c2c2406022b
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
+import  -/  base-4.9.1.0:GHC.Real 82e4e59051a13dba1da63e1e970a69e6
+import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
+import  -/  fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm:System.Log.FastLogger 5a43ced11067508474533690c5485a78
+import  -/  fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm:System.Log.FastLogger.Date bbe339abbd98a58bd4112f64036f98ff
+import  -/  fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm:System.Log.FastLogger.File 930f021f8931a565511978b48139da7f
+import  -/  fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm:System.Log.FastLogger.IO 7cd3065c6210a616e3199fcfe43c078d
+import  -/  fast-logger-2.4.10@fast-logger-2.4.10-7GMVhEi1femFXwSQxV5ynm:System.Log.FastLogger.LogStr a8b541fee0833622375d3e1310ef17b6
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
+import  -/  integer-gmp-1.0.0.1:GHC.Integer.Type 318df275d77dcdb18e0006d8d7870c2a
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 7256d6e5b58cf659563f724d4f20fd1c
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
-  LogMLog a9cb60fe0c90338b51152114aaaf42a0
-  LogMStop 53627622b506ae885f81be663c1a6b73
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+  LogMDebug 6bcc7b3d3b5be3c843436e2c2c21c272
+  LogMErr 07fe47c2f78ab4a4602fe7ddd32703f2
+  LogMStop d1dd3861933ae1962dcd5921e0cfacf7
+import  -/  Paths 326c42bfbeaa2cb90439554594d77d0c
+  exports: 7b230f844f66b2a32955151a16872b2c
+  logPath 568c1ac93c67da1c129d4331c6a5543e
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
-import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.IO e1e0f468baf65e2595fd999fed6d368d
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
+import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
+ecc80f4b4e349144cbf999fab4bc8bcd
+  $fShowTypeLog :: GHC.Show.Show LogActor.TypeLog
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ LogActor.TypeLog
+                  LogActor.$fShowTypeLog_$cshowsPrec
+                  LogActor.$fShowTypeLog_$cshow
+                  LogActor.$fShowTypeLog_$cshowList -}
+ecc80f4b4e349144cbf999fab4bc8bcd
+  $fShowTypeLog1 ::
+    LogActor.TypeLog -> GHC.Base.String -> [GHC.Types.Char]
+  {- Arity: 2,
+     Unfolding: (\ (x :: LogActor.TypeLog)
+                   (s :: GHC.Base.String)[OneShot] ->
+                 case x of wild {
+                   LogActor.LogDebug
+                   -> GHC.Base.++ @ GHC.Types.Char LogActor.$fShowTypeLog3 s
+                   LogActor.LogError
+                   -> GHC.Base.++ @ GHC.Types.Char LogActor.$fShowTypeLog2 s }) -}
+be7d717906b93f93d38e04a14152cd1c
+  $fShowTypeLog2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "ERROR "#) -}
+cd9c8dd3b59827385a9effece93ec152
+  $fShowTypeLog3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "DEBUG "#) -}
+ecc80f4b4e349144cbf999fab4bc8bcd
+  $fShowTypeLog_$cshow :: LogActor.TypeLog -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: LogActor.TypeLog) ->
+                 case ds of wild {
+                   LogActor.LogDebug -> LogActor.$fShowTypeLog3
+                   LogActor.LogError -> LogActor.$fShowTypeLog2 }) -}
+ecc80f4b4e349144cbf999fab4bc8bcd
+  $fShowTypeLog_$cshowList :: [LogActor.TypeLog] -> GHC.Show.ShowS
+  {- Arity: 2, Strictness: <S,1*U><L,U>,
+     Unfolding: (\ (ls :: [LogActor.TypeLog]) (s :: GHC.Base.String) ->
+                 GHC.Show.showList__
+                   @ LogActor.TypeLog
+                   LogActor.$fShowTypeLog1
+                   ls
+                   s) -}
+ecc80f4b4e349144cbf999fab4bc8bcd
+  $fShowTypeLog_$cshowsPrec ::
+    GHC.Types.Int -> LogActor.TypeLog -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <L,A><S,1*U><L,1*U>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (ds :: GHC.Types.Int)
+                   (x :: LogActor.TypeLog)
+                   (s :: GHC.Base.String) ->
+                 case x of wild {
+                   LogActor.LogDebug
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr @ GHC.Types.Char @ b c n LogActor.$fShowTypeLog3)
+                        s
+                   LogActor.LogError
+                   -> GHC.Base.augment
+                        @ GHC.Types.Char
+                        (\ @ b
+                           (c :: GHC.Types.Char -> b -> b)[OneShot]
+                           (n :: b)[OneShot] ->
+                         GHC.Base.foldr @ GHC.Types.Char @ b c n LogActor.$fShowTypeLog2)
+                        s }) -}
+110e26932460de75ef8a20acb8f3bfe7
+  $tc'LogDebug :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   7510786592932720922##
+                   219154936095199680##
+                   LogActor.$trModule
+                   LogActor.$tc'LogDebug1) -}
+c07508f138a352ff653053d1d4e37564
+  $tc'LogDebug1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogDebug"#) -}
+87902778a1a583407e88f8e60cdb97fe
+  $tc'LogError :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   13827893319871215998##
+                   13839995186384489486##
+                   LogActor.$trModule
+                   LogActor.$tc'LogError1) -}
+44ebc530084111cdcbdb9c0e59f043f3
+  $tc'LogError1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'LogError"#) -}
+d52bc895aa6b08414f57d66036ce2b1f
+  $tcTypeLog :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   14979366638788835952##
+                   1123840113179120440##
+                   LogActor.$trModule
+                   LogActor.$tcTypeLog1) -}
+4525db0e674541c558a11fd83e3bc186
+  $tcTypeLog1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "TypeLog"#) -}
 885b6e8f53b02f9e0f2e7a45899a7541
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
@@ -70,24 +206,46 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.IO e1e0f4
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-b460ed157e8b2be1d6d34c5c2da13b53
-  $wactorLog ::
-    GHC.Prim.TVar#
-      GHC.Prim.RealWorld
-      (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage)
-    -> GHC.Prim.TVar#
-         GHC.Prim.RealWorld
-         (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage)
+ecc80f4b4e349144cbf999fab4bc8bcd
+  data TypeLog = LogDebug | LogError
+bfac34c2aa4c28e8d34b40e6004cc931
+  actorLog ::
+    GHC.IO.FilePath -> LogMessages.LogChan -> GHC.Types.IO ()
+  {- Arity: 3, Strictness: <L,1*U><L,U(U,A)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                LogActor.actorLog1
+                  `cast`
+                (<GHC.IO.FilePath>_R
+                 ->_R <LogMessages.LogChan>_R
+                 ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
+297a095057c15be21a3ee245704c0557
+  actorLog1 ::
+    GHC.IO.FilePath
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 3, Strictness: <S,U><L,A><S,U>, Inline: [0],
-     Unfolding: (\ (ww :: GHC.Prim.TVar#
-                            GHC.Prim.RealWorld
-                            (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage))
-                   (ww1 :: GHC.Prim.TVar#
-                             GHC.Prim.RealWorld
-                             (Control.Concurrent.STM.TChan.TVarList LogMessages.LogMessage))
-                   (w :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+  {- Arity: 3, Strictness: <L,1*U><L,U(U,A)><S,U>,
+     Unfolding: (\ (root :: GHC.IO.FilePath)
+                   (chan :: LogMessages.LogChan)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 case System.Log.FastLogger.Date.newTimeCache1
+                        System.Log.FastLogger.Date.simpleTimeFormat'
+                        eta of ds1 { (#,#) ipv ipv1 ->
+                 case System.Log.FastLogger.newTimedFastLogger1
+                        ipv1
+                        LogActor.actorLog13
+                        ipv of ds2 { (#,#) ipv2 ipv3 ->
+                 case ipv3 of wild { (,) consoleLog consoleCleanUp ->
+                 case System.Log.FastLogger.newTimedFastLogger1
+                        ipv1
+                        (System.Log.FastLogger.LogFile
+                           (System.Log.FastLogger.File.FileLogSpec
+                              (System.FilePath.Posix.combine root Paths.logPath1)
+                              LogActor.actorLog10
+                              LogActor.actorLog9)
+                           System.Log.FastLogger.IO.defaultBufSize)
+                        ipv2 of ds3 { (#,#) ipv4 ipv5 ->
+                 case ipv5 of wild1 { (,) fileLog fileCleanUp ->
                  letrec {
                    loop :: GHC.Prim.State# GHC.Prim.RealWorld
                            -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
@@ -95,50 +253,179 @@ b460ed157e8b2be1d6d34c5c2da13b53
                    = \ (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                      case GHC.Prim.atomically#
                             @ LogMessages.LogMessage
-                            (\ (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                             Control.Concurrent.STM.TChan.$wreadTChan
+                            (Control.Concurrent.STM.TChan.readTChan1
                                @ LogMessages.LogMessage
-                               ww
-                               ww1
-                               w1)
-                            s of ds1 { (#,#) ipv ipv1 ->
-                     case ipv1 of wild {
-                       LogMessages.LogMLog ds
-                       -> case Data.Text.IO.appendFile2
-                                 GHC.IO.Handle.FD.stdout
+                               chan)
+                            s of ds4 { (#,#) ipv6 ipv7 ->
+                     case ipv7 of wild2 {
+                       LogMessages.LogMErr source ds
+                       -> case LogActor.actorLog2
+                                 fileLog
+                                 LogActor.LogError
+                                 source
                                  ds `cast` (Errors.N:Error[0])
-                                 ipv of ds2 { (#,#) ipv2 ipv3 ->
-                          case GHC.IO.Handle.Text.$whPutChar
-                                 GHC.IO.Handle.FD.stdout
-                                 '\n'#
-                                 ipv2 of ds3 { (#,#) ipv4 ipv5 ->
-                          loop ipv4 } }
-                       LogMessages.LogMStop -> (# ipv, GHC.Tuple.() #) } }
+                                 ipv6 of ds5 { (#,#) ipv8 ipv9 ->
+                          case LogActor.actorLog2
+                                 consoleLog
+                                 LogActor.LogError
+                                 source
+                                 ds `cast` (Errors.N:Error[0])
+                                 ipv8 of ds6 { (#,#) ipv10 ipv11 ->
+                          loop ipv10 } }
+                       LogMessages.LogMDebug source s1
+                       -> case LogActor.actorLog2
+                                 fileLog
+                                 LogActor.LogDebug
+                                 source
+                                 s1
+                                 ipv6 of ds5 { (#,#) ipv8 ipv9 ->
+                          loop ipv8 }
+                       LogMessages.LogMStop -> (# ipv6, GHC.Tuple.() #) } }
                  } in
-                 loop w) -}
-bc61f274c905fbf400050d57417776fa
-  actorLog :: LogMessages.LogChan -> GHC.Types.IO ()
-  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>,
-     Unfolding: InlineRule (0, True, True)
-                LogActor.actorLog1
-                  `cast`
-                (<LogMessages.LogChan>_R ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-a4a6d288ac36877412d3d48e7026e062
-  actorLog1 ::
-    LogMessages.LogChan
+                 case loop ipv4 of ds4 { (#,#) ipv6 ipv7 ->
+                 GHC.Base.thenIO1
+                   @ ()
+                   @ ()
+                   consoleCleanUp
+                   fileCleanUp
+                   ipv6 } } } } } }) -}
+4bbe987f420c1965622faeb114609ad3
+  actorLog10 :: GHC.Integer.Type.Integer
+  {- Unfolding: (GHC.Real.^_$s^
+                   LogActor.actorLog12
+                   LogActor.actorLog11) -}
+5a59c44303832adf32f9c01cb253d641
+  actorLog11 :: GHC.Integer.Type.Integer
+  {- HasNoCafRefs, Unfolding: (6) -}
+dd8bf2b0786aef752c6671b385a8b73c
+  actorLog12 :: GHC.Integer.Type.Integer
+  {- HasNoCafRefs, Unfolding: (10) -}
+35fcc3605018d4f502805a2e2fd98967
+  actorLog13 :: System.Log.FastLogger.LogType
+  {- HasNoCafRefs, Strictness: m2,
+     Unfolding: (System.Log.FastLogger.LogStdout
+                   System.Log.FastLogger.IO.defaultBufSize) -}
+5fd735c1f6752218ae256c5b2cc62d05
+  actorLog2 ::
+    System.Log.FastLogger.TimedFastLogger
+    -> LogActor.TypeLog
+    -> GHC.Base.String
+    -> Data.Text.Internal.Text
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>, Inline: INLINE[0],
-     Unfolding: InlineRule (2, True, False)
-                (\ (w :: LogMessages.LogChan)
-                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                 case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
-                 LogActor.$wactorLog ww1 ww2 w1 }) -}
+  {- Arity: 5,
+     Strictness: <C(C(S)),1*C1(C1(U(U,U)))><L,1*U><L,1*U><L,1*U(U,U,1*U)><S,U>,
+     Unfolding: (\ (logger :: System.Log.FastLogger.TimedFastLogger)
+                   (typ :: LogActor.TypeLog)
+                   (src :: GHC.Base.String)
+                   (msg :: Data.Text.Internal.Text)
+                   (eta :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                 let {
+                   lvl :: System.Log.FastLogger.LogStr.LogStr
+                   = case LogActor.actorLog7 of wild { System.Log.FastLogger.LogStr.LogStr dt b1 ->
+                     let {
+                       $w$j :: GHC.Prim.Int#
+                               -> Data.ByteString.Builder.Internal.Builder
+                               -> (# GHC.Prim.Int#, Data.ByteString.Builder.Internal.Builder #)
+                         {- Arity: 2, Strictness: <S,U><L,C(U)>, Inline: [0] -}
+                       = \ (w :: GHC.Prim.Int#)[OneShot]
+                           (w1 :: Data.ByteString.Builder.Internal.Builder)[OneShot] ->
+                         case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                                src of ww { (#,#) ww1 ww2 ->
+                         case LogActor.actorLog5 of wild1 { System.Log.FastLogger.LogStr.LogStr dt1 b2 ->
+                         case msg of ww4 { Data.Text.Internal.Text ww5 ww6 ww3 ->
+                         case Data.Text.Encoding.$wencodeUtf8
+                                ww5
+                                ww6
+                                ww3 of ww7 { Data.ByteString.Internal.PS ww8 ww9 ww10 ww11 ->
+                         case System.Log.FastLogger.LogStr.$w$ctoLogStr
+                                ww8
+                                ww9
+                                ww10
+                                ww11 of ww12 { (#,#) ww13 ww14 ->
+                         case LogActor.actorLog3 of wild2 { System.Log.FastLogger.LogStr.LogStr dt2 b3 ->
+                         (# GHC.Prim.+#
+                              w
+                              (GHC.Prim.+# ww1 (GHC.Prim.+# dt1 (GHC.Prim.+# ww13 dt2))),
+                            (\ @ r (eta1 :: Data.ByteString.Builder.Internal.BuildStep r) ->
+                             w1 `cast` (Data.ByteString.Builder.Internal.N:Builder[0])
+                               @ r
+                               (ww2 `cast` (Data.ByteString.Builder.Internal.N:Builder[0])
+                                  @ r
+                                  (b2 `cast` (Data.ByteString.Builder.Internal.N:Builder[0])
+                                     @ r
+                                     (ww14 `cast` (Data.ByteString.Builder.Internal.N:Builder[0])
+                                        @ r
+                                        (b3 `cast` (Data.ByteString.Builder.Internal.N:Builder[0])
+                                           @ r
+                                           eta1)))))
+                              `cast`
+                            (Sym (Data.ByteString.Builder.Internal.N:Builder[0])) #) } } } } } }
+                     } in
+                     case typ of wild1 {
+                       LogActor.LogDebug
+                       -> case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                                 LogActor.$fShowTypeLog3 of ww { (#,#) ww1 ww2 ->
+                          case $w$j ww1 ww2 of ww4 { (#,#) ww5 ww6 ->
+                          System.Log.FastLogger.LogStr.LogStr
+                            (GHC.Prim.+# dt ww5)
+                            (Data.ByteString.Builder.Internal.append b1 ww6) } }
+                       LogActor.LogError
+                       -> case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                                 LogActor.$fShowTypeLog2 of ww { (#,#) ww1 ww2 ->
+                          case $w$j ww1 ww2 of ww4 { (#,#) ww5 ww6 ->
+                          System.Log.FastLogger.LogStr.LogStr
+                            (GHC.Prim.+# dt ww5)
+                            (Data.ByteString.Builder.Internal.append b1 ww6) } } } }
+                 } in
+                 (logger
+                    (\ (ft :: System.Log.FastLogger.Date.FormattedTime) ->
+                     case ft of ww { Data.ByteString.Internal.PS ww1 ww2 ww3 ww4 ->
+                     case System.Log.FastLogger.LogStr.$w$ctoLogStr
+                            ww1
+                            ww2
+                            ww3
+                            ww4 of ww5 { (#,#) ww6 ww7 ->
+                     case lvl of wild1 { System.Log.FastLogger.LogStr.LogStr dt1 b2 ->
+                     System.Log.FastLogger.LogStr.LogStr
+                       (GHC.Prim.+# ww6 dt1)
+                       (Data.ByteString.Builder.Internal.append ww7 b2) } } }))
+                   `cast`
+                 (GHC.Types.N:IO[0] <()>_R)
+                   eta) -}
+6d34aec2786ad793bc7ea230b70c3230
+  actorLog3 :: System.Log.FastLogger.LogStr.LogStr
+  {- Unfolding: (case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                        LogActor.actorLog4 of ww { (#,#) ww1 ww2 ->
+                 System.Log.FastLogger.LogStr.LogStr ww1 ww2 }) -}
+6b504da662cea42edc9cc51bf232ba72
+  actorLog4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "\n"#) -}
+3d6678a680db41a92e5a4a6126c41c7c
+  actorLog5 :: System.Log.FastLogger.LogStr.LogStr
+  {- Unfolding: (case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                        LogActor.actorLog6 of ww { (#,#) ww1 ww2 ->
+                 System.Log.FastLogger.LogStr.LogStr ww1 ww2 }) -}
+bd5298d28510d97bfad1b3f2fb840313
+  actorLog6 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# ": "#) -}
+f831f88dca8a462a3d4c2a5b12841ad8
+  actorLog7 :: System.Log.FastLogger.LogStr.LogStr
+  {- Unfolding: (case System.Log.FastLogger.LogStr.$w$ctoLogStr1
+                        LogActor.actorLog8 of ww { (#,#) ww1 ww2 ->
+                 System.Log.FastLogger.LogStr.LogStr ww1 ww2 }) -}
+a2a362733d8854f8610369b4922a34f8
+  actorLog8 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# " "#) -}
+280976116e7a617e6a07c97109f48f01
+  actorLog9 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 4#) -}
+instance GHC.Show.Show [LogActor.TypeLog] = LogActor.$fShowTypeLog
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:
 parallel variables:
 parallel tycons:
-trusted: safe
+trusted: none
 require own pkg trusted: False
 

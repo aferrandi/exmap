@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 06:38:35.815196793 UTC
+2018-01-04 07:11:13.765003707 UTC
 
 interface main@main:EventMessages 8002
-  interface hash: 83feb4307a388a8434f70d4e598f5862
-  ABI hash: a07955b4a0da9cf1b9eb7f17e564dc00
-  export-list hash: 64db4fd1ac7c8985ea6ceddadc69d169
+  interface hash: 95e99199d80c8442b3e6919f8e98dc8e
+  ABI hash: 7d9b85b54cefda913a5d998a9c866f9e
+  export-list hash: 75ec05aec3d2105dceba14323afaca7f
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 9581e73690371ffaaf5c309a49faabb5
   sig of: Nothing
@@ -114,18 +114,18 @@ import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
   mkError 7d208924c59e97ae369ea175e422a035
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
-import  -/  WebMessages 4e2e4b8978c35e53f8847f3038c867e8
+import  -/  WebMessages c909a0398a7086eab215b3ace24705da
   exports: b86ad7b8a0b44a02b28cdac11545ea56
-  WEError 1d83df9216403449f39d3318ecf8c398
-  WEInfo 6a075aff2643ba80bd6703cfa7ed7f86
-  WebEvent 6df2a76ec9950bbeadbcb273faa1370e
+  WEError e847e2ef88999243c53c87ea4ce2cfe5
+  WEInfo 30a443d803ab32969d11850335bb4206
+  WebEvent a8934fa5df14c2244bee8b7537104981
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
 import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fEqEventMessage :: GHC.Classes.Eq EventMessages.EventMessage
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -133,7 +133,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d
                   @ EventMessages.EventMessage
                   EventMessages.$fEqEventMessage_$c==
                   EventMessages.$fEqEventMessage_$c/= -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fEqEventMessage_$c/= ::
     EventMessages.EventMessage
     -> EventMessages.EventMessage -> GHC.Types.Bool
@@ -159,7 +159,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d
                    -> case b of wild1 {
                         EventMessages.EMWebEvent ipv ipv1 -> GHC.Types.True
                         EventMessages.EMStop -> GHC.Types.False } }) -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fEqEventMessage_$c== ::
     EventMessages.EventMessage
     -> EventMessages.EventMessage -> GHC.Types.Bool
@@ -182,7 +182,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d
                    -> case ds1 of wild1 {
                         EventMessages.EMWebEvent ipv ipv1 -> GHC.Types.False
                         EventMessages.EMStop -> GHC.Types.True } }) -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fShowEventMessage :: GHC.Show.Show EventMessages.EventMessage
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -191,7 +191,7 @@ import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d
                   EventMessages.$fShowEventMessage_$cshowsPrec
                   EventMessages.$fShowEventMessage_$cshow
                   EventMessages.$fShowEventMessage_$cshowList -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fShowEventMessage1 :: EventMessages.EventMessage -> GHC.Show.ShowS
   {- Arity: 1,
      Unfolding: (EventMessages.$fShowEventMessage_$cshowsPrec
@@ -211,7 +211,7 @@ dc784c03c6be596aa7f228e08d87b3e3
 eff0d38b27eca95328b01b3fa812bab8
   $fShowEventMessage5 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "EMWebEvent "#) -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fShowEventMessage_$cshow ::
     EventMessages.EventMessage -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U>,
@@ -233,14 +233,14 @@ eff0d38b27eca95328b01b3fa812bab8
                                  b2
                                  (GHC.Types.[] @ GHC.Types.Char))))
                    EventMessages.EMStop -> EventMessages.$fShowEventMessage4 }) -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fShowEventMessage_$cshowList ::
     [EventMessages.EventMessage] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ EventMessages.EventMessage
                    EventMessages.$fShowEventMessage1) -}
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   $fShowEventMessage_$cshowsPrec ::
     GHC.Types.Int -> EventMessages.EventMessage -> GHC.Show.ShowS
   {- Arity: 2, Strictness: <L,1*U(U)><S,1*U>,
@@ -359,7 +359,7 @@ b5bc2e0cbfe8dbe2e2a67b21bb452825
           Data.Text.Internal.Text #)
   {- Arity: 5, Strictness: <L,U><L,U><S,1*U><S,U><S,U>,
      Inline: [0] -}
-c593fbae7478104a2a644d3e51ec456b
+49483b25b254ed0f12f61aae7823d408
   $wsendError ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -413,7 +413,7 @@ c593fbae7478104a2a644d3e51ec456b
                            ipv3)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } }) -}
-1b1cd0e088bca436883127ffdd8228a0
+54fade769701ddb1a2f008dc7820ceae
   $wsendInfo ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -483,7 +483,7 @@ c593fbae7478104a2a644d3e51ec456b
                            ipv3)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } }) -}
-58d5f0b1fdb3c3c60388526d64ef0a06
+c8c8dc846c7624838d9b8d6f8a6ef976
   $wsendStringError ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -553,13 +553,13 @@ c593fbae7478104a2a644d3e51ec456b
                            ipv3)
                         s2# of s2#1 { DEFAULT ->
                  (# s2#1, GHC.Tuple.() #) } } } } }) -}
-2fbf9ecb2263a4b748008f48f08708ef
+19651a89be2c7077e0e222e46c89d533
   type EventChan =
     Control.Concurrent.STM.TChan.TChan EventMessages.EventMessage
-5fe8df19411a7bd3e2203b1175420da0
+d4e2198e98bb29665333c870e139827e
   data EventMessage
     = EMWebEvent [WebClients.WAClient] WebMessages.WebEvent | EMStop
-9006905b3aa1e1b31b99d8f5bfc22f29
+b3ead4e40b938cd2b8373600c689ee1f
   mkErrorEvent :: GHC.Base.String -> WebMessages.WebEvent
   {- Arity: 1, Strictness: <L,1*U>m16, Inline: INLINE[0],
      Unfolding: InlineRule (1, True, False)
@@ -580,7 +580,7 @@ c593fbae7478104a2a644d3e51ec456b
                               0#
                               ipv }) of ds1 { (#,#) ipv ipv1 ->
                     ipv1 `cast` (Sym (Errors.N:Error[0])) })) -}
-98203275b313bcdaf989a2aef8bcf0b8
+93c14c7c769625450c75b937e2db12b4
   sendError ::
     EventMessages.EventChan
     -> [WebClients.WAClient] -> Errors.Error -> GHC.Conc.Sync.STM ()
@@ -593,7 +593,7 @@ c593fbae7478104a2a644d3e51ec456b
                  ->_R <[WebClients.WAClient]>_R
                  ->_R <Errors.Error>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-14651a470544698a808c8c81208f3358
+bc61fe9d48545f5f1bfb6051169793aa
   sendError1 ::
     EventMessages.EventChan
     -> [WebClients.WAClient]
@@ -609,7 +609,7 @@ c593fbae7478104a2a644d3e51ec456b
                    (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
                  EventMessages.$wsendError ww1 ww2 w1 w2 w3 }) -}
-020689515f2a731573f9f52cd2d7457a
+c52ff1cdd5135a5259a7e8aca483e441
   sendInfo ::
     EventMessages.EventChan
     -> [WebClients.WAClient] -> GHC.Base.String -> GHC.Conc.Sync.STM ()
@@ -621,7 +621,7 @@ c593fbae7478104a2a644d3e51ec456b
                  ->_R <[WebClients.WAClient]>_R
                  ->_R <GHC.Base.String>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-3f030c797d1c93dfdb8931c4ae52d376
+bdc268948d8e21e0365bbb09a91e21fd
   sendInfo1 ::
     EventMessages.EventChan
     -> [WebClients.WAClient]
@@ -637,7 +637,7 @@ c593fbae7478104a2a644d3e51ec456b
                    (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
                  EventMessages.$wsendInfo ww1 ww2 w1 w2 w3 }) -}
-b3eae56a2a7d17ad08032d27aeb84213
+6d3f0e10019cac48f42e902cd33b2e40
   sendStringError ::
     EventMessages.EventChan
     -> [WebClients.WAClient] -> GHC.Base.String -> GHC.Conc.Sync.STM ()
@@ -649,7 +649,7 @@ b3eae56a2a7d17ad08032d27aeb84213
                  ->_R <[WebClients.WAClient]>_R
                  ->_R <GHC.Base.String>_R
                  ->_R Sym (GHC.Conc.Sync.N:STM[0] <()>_R)) -}
-eabd3885bd48a5003d497765cc05a6ff
+4044a67d9fd483a21ca6404e92df6797
   sendStringError1 ::
     EventMessages.EventChan
     -> [WebClients.WAClient]

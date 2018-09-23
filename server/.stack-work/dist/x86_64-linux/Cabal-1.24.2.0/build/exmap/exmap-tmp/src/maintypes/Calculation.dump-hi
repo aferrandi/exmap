@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-17 06:06:57.069231393 UTC
+2018-01-04 07:11:04.397824565 UTC
 
 interface main@main:Calculation 8002
-  interface hash: f6b906a52701cda0943166360ec4de3d
-  ABI hash: 2ffc34f2be3e84d0a1939c6ca84c8da7
+  interface hash: 70ab10a3e2b1259e70ce70160f5c9806
+  ABI hash: 51545031305913fd47c825885d93bfc2
   export-list hash: 5c332b8fd8fef070186c5200f58f2914
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 90d6aceb9d0ad52e223e6b2f956157d2
@@ -53,13 +53,13 @@ import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
 import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   exports: c8a509b10500b8e668c0d339e53814fa
   ApplicationName 7d51253c4c8955e3629ff4b12eb2b14e
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFormula fb924f832976f886aefc5a3d03a23b47
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  exports: 1a323fe5f5d42124be5996496a88719d
-  OperationName a5a60b294983bcb41d5e4136aac111fd
-import  -/  XFunction bec8a66c7661d34fbdc693714232edf1
+  XFormula bc1628deb5228885a088bc7a3859d8f0
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  exports: 247f2282832b1244ce9ee08cb96eb811
+  OperationName 46463e9f9365b8e7feadaccabf8a68b6
+import  -/  XFunction daf3a8fe929e99b13bb1482148441fb5
   exports: e4744bd862d5d39381a3b81764a14b8c
   OperationMode ba1024ee7488d74e75d2aa7e9c371660
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
@@ -67,7 +67,7 @@ import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   XMapName aed4e1c98ee09424176ec799b4e99672
 import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text 28074c70d3351fb3368d27c0a438ae07
 import  -/  text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text.Internal 9bfcbbbe07ecef48f631025a838df7da
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fEqCalculation :: GHC.Classes.Eq Calculation.Calculation
   DFunId
   {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -190,7 +190,7 @@ fd38426093a918ee049ab7c4fb1fb4f2
                    ww11
                    ww12
                    ww13 } } } }) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fEqCalculation_$c/= ::
     Calculation.Calculation
     -> Calculation.Calculation -> GHC.Types.Bool
@@ -201,7 +201,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                  case Calculation.$fEqCalculation_$c== a b of wild {
                    GHC.Types.False -> GHC.Types.True
                    GHC.Types.True -> GHC.Types.False }) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fEqCalculation_$c== ::
     Calculation.Calculation
     -> Calculation.Calculation -> GHC.Types.Bool
@@ -232,7 +232,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                    ww11
                    ww12
                    ww13 } } } }) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fEqFunctions :: GHC.Classes.Eq Calculation.Functions
   DFunId
   {- HasNoCafRefs, Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -240,7 +240,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                   @ Calculation.Functions
                   Calculation.$fEqFunctions_$c==
                   Calculation.$fEqFunctions_$c/= -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fEqFunctions_$c/= ::
     Calculation.Functions -> Calculation.Functions -> GHC.Types.Bool
   {- Arity: 2, HasNoCafRefs,
@@ -250,7 +250,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                  case Calculation.$fEqFunctions_$c== a b of wild {
                    GHC.Types.False -> GHC.Types.True
                    GHC.Types.True -> GHC.Types.False }) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fEqFunctions_$c== ::
     Calculation.Functions -> Calculation.Functions -> GHC.Types.Bool
   {- Arity: 2, HasNoCafRefs,
@@ -460,7 +460,7 @@ fd38426093a918ee049ab7c4fb1fb4f2
                 (Sym (Calculation.N:CalculationName[0])
                  ->_R Sym (Calculation.N:CalculationName[0])
                  ->_R Sym (Calculation.N:CalculationName[0])) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fShowCalculation :: GHC.Show.Show Calculation.Calculation
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -469,7 +469,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                   Calculation.$fShowCalculation_$cshowsPrec
                   Calculation.$fShowCalculation_$cshow
                   Calculation.$fShowCalculation_$cshowList -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fShowCalculation1 :: Calculation.Calculation -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (\ (w :: Calculation.Calculation)
@@ -683,7 +683,7 @@ e4bed02acb7951200cae2b992896e4fa
                  case w of ww { GHC.Types.I# ww1 ->
                  case w1 of ww2 { Calculation.CalculationSource ww3 ww4 ww5 ww6 ->
                  Calculation.$w$cshowsPrec3 ww1 ww3 ww4 ww5 ww6 w2 } }) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fShowCalculation_$cshow ::
     Calculation.Calculation -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U(1*U(U,U,U),1*U,1*U,1*U)>,
@@ -693,14 +693,14 @@ d417b5b8b099f384a090c1e4806d4f1d
                    GHC.Show.shows22
                    x
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fShowCalculation_$cshowList ::
     [Calculation.Calculation] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ Calculation.Calculation
                    Calculation.$fShowCalculation1) -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   $fShowCalculation_$cshowsPrec ::
     GHC.Types.Int -> Calculation.Calculation -> GHC.Show.ShowS
   {- Arity: 3,
@@ -713,7 +713,7 @@ d417b5b8b099f384a090c1e4806d4f1d
                  case w of ww { GHC.Types.I# ww1 ->
                  case w1 of ww2 { Calculation.Calculation ww3 ww4 ww5 ww6 ->
                  Calculation.$w$cshowsPrec ww1 ww3 ww4 ww5 ww6 w2 } }) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fShowFunctions :: GHC.Show.Show Calculation.Functions
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -722,14 +722,14 @@ d417b5b8b099f384a090c1e4806d4f1d
                   Calculation.$fShowFunctions_$cshowsPrec
                   Calculation.$fShowFunctions_$cshow
                   Calculation.$fShowFunctions_$cshowList -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fShowFunctions1 :: Calculation.Functions -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (\ (w :: Calculation.Functions)
                    (w1 :: GHC.Base.String) ->
                  case w of ww { Calculation.Functions ww1 ww2 ->
                  Calculation.$w$cshowsPrec4 0# ww1 ww2 w1 }) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fShowFunctions_$cshow :: Calculation.Functions -> GHC.Base.String
   {- Arity: 1, Strictness: <S,1*U(1*U,1*U)>,
      Unfolding: InlineRule (1, True, False)
@@ -738,14 +738,14 @@ d417b5b8b099f384a090c1e4806d4f1d
                    GHC.Show.shows22
                    x
                    (GHC.Types.[] @ GHC.Types.Char)) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fShowFunctions_$cshowList ::
     [Calculation.Functions] -> GHC.Show.ShowS
   {- Arity: 2,
      Unfolding: (GHC.Show.showList__
                    @ Calculation.Functions
                    Calculation.$fShowFunctions1) -}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   $fShowFunctions_$cshowsPrec ::
     GHC.Types.Int -> Calculation.Functions -> GHC.Show.ShowS
   {- Arity: 3, Strictness: <S(S),1*U(U)><S,1*U(1*U,1*U)><L,U>,
@@ -887,7 +887,7 @@ b3caddeaf708b8c2345fbaa5d28ea450
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-abdc471cca96feb79f7931f9c1bc783c
+b6b217d662cf3ad6781b941d977ec933
   $w$c== ::
     GHC.Prim.ByteArray#
     -> GHC.Prim.Int#
@@ -1046,7 +1046,7 @@ abdc471cca96feb79f7931f9c1bc783c
                                        -> XFunction.$fEqOperationMode_$c==
                                             ww5
                                             ww11 } } } } } } } } }) -}
-6c8a82ec1ba15a0d6e46f587ca6c7fea
+b6e3ed6b9cb58f75a7ee184d4831487b
   $w$c==2 ::
     [OperationTypes.OperationName]
     -> [ApplicationTypes.ApplicationName]
@@ -1071,7 +1071,7 @@ abdc471cca96feb79f7931f9c1bc783c
                         ApplicationTypes.$fEqApplicationName
                         ww1
                         ww3 }) -}
-99b72a75dd748f181fb946c2c674053f
+ac178d3c0041d2f04264b5184e4a3a1c
   $w$cshowsPrec ::
     GHC.Prim.Int#
     -> Calculation.CalculationName
@@ -1303,7 +1303,7 @@ ad05f942e7adf00c0581e3ceca5e26b3
                         @ GHC.Types.Char
                         GHC.Show.shows7
                         (p (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 w)) }) -}
-446f56c0313f61053b835628e353be48
+8dd8bd5d0ce214ac1e669decbde5e089
   $w$cshowsPrec4 ::
     GHC.Prim.Int#
     -> [OperationTypes.OperationName]
@@ -1311,7 +1311,7 @@ ad05f942e7adf00c0581e3ceca5e26b3
     -> GHC.Base.String
     -> GHC.Base.String
   {- Arity: 4, Strictness: <S,U><L,1*U><L,1*U><L,U>, Inline: [0] -}
-d417b5b8b099f384a090c1e4806d4f1d
+41a99fbb51f5318f902af52762efce14
   data Calculation
     = Calculation {calculationName :: Calculation.CalculationName,
                    resultName :: XMapTypes.XMapName,
@@ -1328,11 +1328,11 @@ fd38426093a918ee049ab7c4fb1fb4f2
                          sourceResultName :: XMapTypes.XMapName,
                          formulaText :: Calculation.CalculationFormulaText,
                          sourceOperationMode :: XFunction.OperationMode}
-76913b8c92b440c4f1a034f58c20c5b1
+4df293f0919d46047d66231c8a02e631
   data Functions
     = Functions {operationNames :: [OperationTypes.OperationName],
                  applicationNames :: [ApplicationTypes.ApplicationName]}
-5eb400ce6bb82a691a1fbb49bbcec2c0
+6798683abd4d516998a0f73a8324cb4f
   applicationNames ::
     Calculation.Functions -> [ApplicationTypes.ApplicationName]
   RecSel Left Calculation.Functions
@@ -1340,7 +1340,7 @@ fd38426093a918ee049ab7c4fb1fb4f2
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: Calculation.Functions) ->
                  case ds of wild { Calculation.Functions ds1 ds2 -> ds2 }) -}
-1f5a4a1ff915162dab157f63a0e9b230
+6eec82ceaa7a7b90646be8090e5cc4a3
   calculationName ::
     Calculation.Calculation -> Calculation.CalculationName
   RecSel Left Calculation.Calculation
@@ -1350,7 +1350,7 @@ fd38426093a918ee049ab7c4fb1fb4f2
                 (\ (ds :: Calculation.Calculation) ->
                  case ds of wild { Calculation.Calculation ds1 ds2 ds3 ds4 ->
                  ds1 }) -}
-7e30c2b44fc021bfe0b0b9dee1abff77
+36e31cbf1e2802459fc7e3d2501a5368
   formula :: Calculation.Calculation -> Formula.XFormula
   RecSel Left Calculation.Calculation
   {- Arity: 1, HasNoCafRefs, Strictness: <S(LLSL),1*U(A,A,1*U,A)>,
@@ -1368,7 +1368,7 @@ fd38426093a918ee049ab7c4fb1fb4f2
                 (\ (ds :: Calculation.CalculationSource) ->
                  case ds of wild { Calculation.CalculationSource ds1 ds2 ds3 ds4 ->
                  ds3 }) -}
-ea1aee21e5a70c0c32eede2861da9f4e
+3048b3c7897fbd4be8fe8e74be0b85c4
   operationMode :: Calculation.Calculation -> XFunction.OperationMode
   RecSel Left Calculation.Calculation
   {- Arity: 1, HasNoCafRefs, Strictness: <S(LLLS),1*U(A,A,A,1*U)>,
@@ -1376,7 +1376,7 @@ ea1aee21e5a70c0c32eede2861da9f4e
                 (\ (ds :: Calculation.Calculation) ->
                  case ds of wild { Calculation.Calculation ds1 ds2 ds3 ds4 ->
                  ds4 }) -}
-abba7d9d42f853782c750b3b0064c78f
+70158455bcb333758f46c832e9f32569
   operationNames ::
     Calculation.Functions -> [OperationTypes.OperationName]
   RecSel Left Calculation.Functions
@@ -1384,7 +1384,7 @@ abba7d9d42f853782c750b3b0064c78f
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: Calculation.Functions) ->
                  case ds of wild { Calculation.Functions ds1 ds2 -> ds1 }) -}
-e0da4fa6227b34a0c0bbd4851b78e25e
+9745333b74ea054b6eca9188292a9cfb
   resultName :: Calculation.Calculation -> XMapTypes.XMapName
   RecSel Left Calculation.Calculation
   {- Arity: 1, HasNoCafRefs, Strictness: <S(LSLL),1*U(A,1*U,A,A)>,

@@ -1,17 +1,18 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-17 06:06:57.336839179 UTC
+2018-01-05 07:03:12.609051445 UTC
 
 interface main@main:Project 8002
-  interface hash: 0afbfad1ddb1d6c9d1a0d64c1fe5081e
-  ABI hash: e9aaa611811a510eec90fd878cb1c85f
-  export-list hash: a1b12012f0f388e6620b2d764b9da9c5
+  interface hash: fe7294ab1bfd957d8f19eef423a58839
+  ABI hash: 8ddbc555c991d908c26bf4ebc2b3413a
+  export-list hash: 37bfb87e192e7fcbd3e19ef7bca9334e
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 90d6aceb9d0ad52e223e6b2f956157d2
   sig of: Nothing
   used TH splices: False
   where
 exports:
+  Project.sourcesOfTypeInProject
   Project.AllProjects{Project.AllProjects}
   Project.Project{Project.Project calculations projectName sources views}
   Project.ProjectName{Project.ProjectName}
@@ -46,12 +47,14 @@ family instance modules: base-4.9.1.0:Control.Applicative
                          containers-0.5.7.1@containers-0.5.7.1:Data.Sequence
                          containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
                          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
+import  -/  base-4.9.1.0:Data.Foldable 3e0b6967a1da89945d0e2d47266337a2
+import  -/  base-4.9.1.0:Data.List 07ae2acca6538aa0800bd0a993ac6ac1
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationName 7681f69b2581ed31254c1a456f024695
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
@@ -1343,6 +1346,38 @@ dc3277e72c5d1fd0c29f02dc48899838
                            @ GHC.Types.Char
                            Project.$fShowUser2
                            (g (GHC.Types.: @ GHC.Types.Char GHC.Show.shows4 w))) }) -}
+92e0b6c5a488083da6a2e9f942c7e232
+  $wsourcesOfTypeInProject ::
+    Project.SourceType
+    -> [Project.Source] -> GHC.Base.Maybe [XMapTypes.XMapName]
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,U><S,1*U>, Inline: [0],
+     Unfolding: (\ (w :: Project.SourceType) (ww :: [Project.Source]) ->
+                 letrec {
+                   go :: [Project.Source] -> Data.Monoid.First Project.Source
+                     {- Arity: 1, Strictness: <S,1*U> -}
+                   = \ (ds :: [Project.Source]) ->
+                     case ds of wild {
+                       []
+                       -> (GHC.Base.Nothing @ Project.Source)
+                            `cast`
+                          (Sym (Data.Monoid.N:First[0]) <Project.Source>_N)
+                       : y ys
+                       -> case y of wild1 { Project.Source ds1 ds2 ->
+                          case Project.$fEqSource_$c==1 ds1 w of wild2 {
+                            GHC.Types.False -> go ys
+                            GHC.Types.True
+                            -> (GHC.Base.Just @ Project.Source wild1)
+                                 `cast`
+                               (Sym (Data.Monoid.N:First[0]) <Project.Source>_N) } } }
+                 } in
+                 case (go ww)
+                        `cast`
+                      (Data.Monoid.N:First[0] <Project.Source>_N) of wild {
+                   GHC.Base.Nothing -> GHC.Base.Nothing @ [XMapTypes.XMapName]
+                   GHC.Base.Just x
+                   -> GHC.Base.Just
+                        @ [XMapTypes.XMapName]
+                        (case x of wild1 { Project.Source ds ds1 -> ds1 }) }) -}
 5112a5d43849857c03604773be3e85a2
   newtype AllProjects = AllProjects [Project.ProjectName]
 c7f6766f61d0b63c7ab6927b16e914f3
@@ -1422,6 +1457,16 @@ c571d266f08a7212dea141c7ba655b5a
      Unfolding: InlineRule (1, True, False)
                 (\ (ds :: Project.Project) ->
                  case ds of wild { Project.Project ds1 ds2 ds3 ds4 -> ds4 }) -}
+422acbcb0a61adbf2e39361710171af7
+  sourcesOfTypeInProject ::
+    Project.SourceType
+    -> Project.Project -> GHC.Base.Maybe [XMapTypes.XMapName]
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <L,U><S(LLLS),1*U(A,A,A,1*U)>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Project.SourceType) (w1 :: Project.Project) ->
+                 case w1 of ww { Project.Project ww1 ww2 ww3 ww4 ->
+                 Project.$wsourcesOfTypeInProject w ww4 }) -}
 4a8bd053ebed6121974e06a356d22382
   sqlQuery :: Project.SourceType -> Data.Text.Internal.Text
   RecSel Left Project.SourceType

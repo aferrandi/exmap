@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 06:38:35.938015597 UTC
+2018-01-17 08:46:52.772955201 UTC
 
 interface main@main:EventActor 8002
-  interface hash: 81c91506d76d53e2e9d4185a9d2a3a9d
-  ABI hash: aa938c4a71de8f10e617c434897356a6
-  export-list hash: 76c7f344739ddf4e1572900de877970b
+  interface hash: 58c7a0094ff23d34d4f0b227d8e1cf6c
+  ABI hash: a845f2e493684e55eb54681b59b2c764
+  export-list hash: 50c9a43a384488870fbd7feae367c000
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -14,9 +14,9 @@ interface main@main:EventActor 8002
 exports:
   EventActor.actorEvent
 module dependencies: ApplicationTypes Calculation Errors
-                     EventMessages Formula OperationTypes Project ProjectJson TextEnums
-                     View WebClients WebMessages WebMessagesJson XFunction XMapJson
-                     XMapTypes XValues
+                     EventMessages Formula LogMessages OperationTypes Project
+                     ProjectJson TextEnums View WebClients WebMessages WebMessagesJson
+                     XFunction XMapJson XMapTypes XValues
 package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
                       aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
                       array-0.5.1.1@array-0.5.1.1
@@ -101,21 +101,31 @@ family instance modules: attoparsec-0.13.1.0@attoparsec-0.13.1.0-8bUdsjh6UCE83aH
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Storable
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed
                          vector-0.12.0.1@vector-0.12.0.1-692PQMDMB6pIQ1uGwefDcQ:Data.Vector.Unboxed.Base
+import  -/  base-4.9.1.0:Control.Exception a76dd9666251322fe34dbcca3a0817bf
+import  -/  base-4.9.1.0:Control.Exception.Base 1e106916283856f4d9caeddab92cd861
 import  -/  base-4.9.1.0:GHC.Base c4231c43c07e46080a26bf94094c7aa1
 import  -/  base-4.9.1.0:GHC.Conc.Sync 8d0a228e5fc4d8c110495066f4d52ea1
+import  -/  base-4.9.1.0:GHC.Exception e38fa3e73d54022fb9e3ce06477dfd07
 import  -/  base-4.9.1.0:GHC.List ab8c4e523e6c479c549d3bcd5fc4a439
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  base-4.9.1.0:System.IO e4a64a8e3dce8616da54f0ee7104f7db
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EMStop 808d02780f311afc77e3a5f3146f4d3c
-  EMWebEvent c941e172c95073a52dd73b2c44ff45f1
-  EventChan 2fbf9ecb2263a4b748008f48f08708ef
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
-  sendToClients e0b80ecef0e19c6a93886dd6dcd30ac5
+import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
+  exports: e3dd544808018109fc76edc1671a8fea
+  mkError 7d208924c59e97ae369ea175e422a035
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EMStop 018e24c738007bed43ee1e290926fbd0
+  EMWebEvent 6855fd08a9b75fbb72139d790cf82596
+  EventChan 19651a89be2c7077e0e222e46c89d533
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+  logDebug fe6a28772bd88f0bf20bab75e1fbfa1e
+  logError d8cdd2f093767b3cf289fe8a50227809
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
+  sendToClients e33fc9a225cf99d72cd095449359a92b
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM 3662559905a40ae5adbc3e935ac706c8
 import  -/  stm-2.4.4.1@stm-2.4.4.1-JQn4hNPyYjP5m9AcbI88Ve:Control.Concurrent.STM.TChan 791cd378857d88a7ed4d753121139423
 d36634a0058774f6a4010a46036b50fe
@@ -132,7 +142,7 @@ cdea8ba4e6e308d5f14f9f791a7154d1
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-c637da732f4a7666a61978e9296c9a23
+ade1fb3bbfa9641a8d1df433b2686b8c
   $wactorEvent ::
     GHC.Prim.TVar#
       GHC.Prim.RealWorld
@@ -140,110 +150,34 @@ c637da732f4a7666a61978e9296c9a23
     -> GHC.Prim.TVar#
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage)
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 3, Strictness: <S,U><L,A><S,U>, Inline: [0],
-     Unfolding: (\ (ww :: GHC.Prim.TVar#
-                            GHC.Prim.RealWorld
-                            (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
-                   (ww1 :: GHC.Prim.TVar#
-                             GHC.Prim.RealWorld
-                             (Control.Concurrent.STM.TChan.TVarList EventMessages.EventMessage))
-                   (w :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                 letrec {
-                   loop :: GHC.Prim.State# GHC.Prim.RealWorld
-                           -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-                     {- Arity: 1, Strictness: <S,U> -}
-                   = \ (s :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                     case GHC.Prim.atomically#
-                            @ EventMessages.EventMessage
-                            (\ (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
-                             Control.Concurrent.STM.TChan.$wreadTChan
-                               @ EventMessages.EventMessage
-                               ww
-                               ww1
-                               w1)
-                            s of ds1 { (#,#) ipv ipv1 ->
-                     case ipv1 of wild {
-                       EventMessages.EMWebEvent cs e
-                       -> case GHC.IO.Handle.Text.hPutStr2
-                                 GHC.IO.Handle.FD.stdout
-                                 (GHC.Types.:
-                                    @ GHC.Types.Char
-                                    GHC.Show.shows6
-                                    (GHC.Show.showLitString
-                                       (GHC.CString.unpackAppendCString#
-                                          "send "#
-                                          (let {
-                                             n :: [GHC.Types.Char]
-                                             = GHC.CString.unpackAppendCString#
-                                                 " to clients "#
-                                                 (GHC.Show.showList__
-                                                    @ WebClients.WAClient
-                                                    WebClients.$fShowWAClient1
-                                                    cs
-                                                    (GHC.Types.[] @ GHC.Types.Char))
-                                           } in
-                                           letrec {
-                                             $wgo :: [GHC.Types.Char]
-                                                     -> GHC.Prim.Int# -> [GHC.Types.Char]
-                                               {- Arity: 2, Strictness: <S,1*U><L,1*U>,
-                                                  Inline: [0] -}
-                                             = \ (w1 :: [GHC.Types.Char]) (ww2 :: GHC.Prim.Int#) ->
-                                               case w1 of wild1 {
-                                                 [] -> n
-                                                 : y ys
-                                                 -> case ww2 of ds2 {
-                                                      DEFAULT
-                                                      -> GHC.Types.:
-                                                           @ GHC.Types.Char
-                                                           y
-                                                           ($wgo ys (GHC.Prim.-# ds2 1#))
-                                                      1# -> GHC.Types.: @ GHC.Types.Char y n } }
-                                           } in
-                                           $wgo
-                                             (WebMessages.$w$cshowsPrec
-                                                0#
-                                                e
-                                                (GHC.Types.[] @ GHC.Types.Char))
-                                             200#))
-                                       EventActor.actorEvent2))
-                                 GHC.Types.True
-                                 ipv of ds2 { (#,#) ipv2 ipv3 ->
-                          case WebClients.sendToClients1
-                                 cs
-                                 e
-                                 ipv2 of ds3 { (#,#) ipv4 ipv5 ->
-                          loop ipv4 } }
-                       EventMessages.EMStop -> (# ipv, GHC.Tuple.() #) } }
-                 } in
-                 loop w) -}
-3324d65e6b3ca32144c5b389598ca1ca
-  actorEvent :: EventMessages.EventChan -> GHC.Types.IO ()
-  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>,
+  {- Arity: 4, Strictness: <S,U><L,A><L,U(U,U)><S,U>, Inline: [0] -}
+cf6dc26a3ec55618f9b7a7aeaef4930e
+  actorEvent ::
+    EventMessages.EventChan -> LogMessages.LogChan -> GHC.Types.IO ()
+  {- Arity: 3, Strictness: <S(SL),U(U,A)><L,U(U,U)><S,U>,
      Unfolding: InlineRule (0, True, True)
                 EventActor.actorEvent1
                   `cast`
                 (<EventMessages.EventChan>_R
+                 ->_R <LogMessages.LogChan>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-572a96cdda2fe65379209935fc44189e
+e428df8cc7d25137215abc851a78799a
   actorEvent1 ::
     EventMessages.EventChan
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 2, Strictness: <S(SL),U(U,A)><S,U>, Inline: INLINE[0],
-     Unfolding: InlineRule (2, True, False)
+  {- Arity: 3, Strictness: <S(SL),U(U,A)><L,U(U,U)><S,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
                 (\ (w :: EventMessages.EventChan)
-                   (w1 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                   (w1 :: LogMessages.LogChan)
+                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
-                 EventActor.$wactorEvent ww1 ww2 w1 }) -}
-d1fb967624b21c832d2b4ded9686fd87
-  actorEvent2 :: [GHC.Types.Char]
-  {- HasNoCafRefs,
-     Unfolding: (GHC.Types.:
-                   @ GHC.Types.Char
-                   GHC.Show.shows6
-                   (GHC.Types.[] @ GHC.Types.Char)) -}
+                 EventActor.$wactorEvent ww1 ww2 w1 w2 }) -}
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:

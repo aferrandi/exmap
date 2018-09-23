@@ -1,9 +1,9 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-24 17:50:33.601745924 UTC
+2018-01-05 07:14:40.511619807 UTC
 
 interface main@main:TextEnumsTest 8002
-  interface hash: 58723134e37003b30c0145b9039dc4b5
+  interface hash: a87bc069b20b7c54a0b9d6972c68301e
   ABI hash: 97fd9a5df677871047a49edbe2e919df
   export-list hash: 4a74f7a1611ebdb5f8d728090f71262f
   orphan hash: 70ac63559a4c6b1696a440b4c2d2b19f
@@ -71,7 +71,7 @@ import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   ApplicationName 7d51253c4c8955e3629ff4b12eb2b14e
   Negate d603bbcf06356a8b8861fc3d38c6370d
-import  -/  Applications adbc3ccf9796fe3b73f21ecbf3d8570d
+import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
   exports: fa080d0cbd35b542fbba1bdbc55030ec
 import  -/  TextEnums 5bbcd69e17f621fccc64fe2d0e459af9
   exports: 6670f372a6b818595c7e6b6021015eca

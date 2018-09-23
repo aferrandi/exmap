@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-08 19:12:35.153611091 UTC
+2018-01-05 07:14:42.225576272 UTC
 
 interface main@main:FormulaTest 8002
-  interface hash: c55f8619afdbc2c12b708a7760e74875
-  ABI hash: b22481bbe98ba9183098775b8f371551
+  interface hash: 005fbee4da069906937acfa02ebd2599
+  ABI hash: 5f58b044cfc571e7220c28abc4adbea5
   export-list hash: c5c870e691baaf8595aaed9a9151447a
   orphan hash: b18be8b5f0293826b9b61a2e185e36de
   flag hash: 40bca7d3ee34e603ae4c0b4583f30c47
@@ -15,9 +15,9 @@ exports:
   FormulaTest.execFormula_applicationFormula_expectedMap
   FormulaTest.execFormula_operationFormula_expectedMap
   FormulaTest.execFormula_trivialFormula_originalMap
-module dependencies: ApplicationTypes Applications Errors
-                     ExecFormula Formula OperationTypes Operations TestTypes XFunction
-                     XMapTypes XValues
+module dependencies: ApplicationTypes Applications Calculation
+                     Errors ExecFormula Formula FormulaText OperationTypes Operations
+                     TestTypes XFunction XMapTypes XValues
 package dependencies: HUnit-1.5.0.0@HUnit-1.5.0.0-DvjF79OHhCC7SzfeEty4OI
                       ansi-terminal-0.6.3.1@ansi-terminal-0.6.3.1-3RTqikoQf47ajVD9m8zgB
                       ansi-wl-pprint-0.6.7.3@ansi-wl-pprint-0.6.7.3-A79v826bgPr574HtaZPPqC
@@ -74,18 +74,18 @@ import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   Negate d603bbcf06356a8b8861fc3d38c6370d
 import  -/  Applications 3d3f451dae3e1f48aff38fd638aa473d
   exports: fa080d0cbd35b542fbba1bdbc55030ec
-import  -/  ExecFormula 6c7746668689732f76b00c885081f87e
+import  -/  ExecFormula 5ccbcebfa3a093a492d5431b695ce895
   exports: 2ed3d69e118fdc888275691748e8b280
-  execFormula dd8fe68726b317681b5a0cfdd8ea0257
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+  execFormula 0b932a8538d10e6f0ee9da20358225f8
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  Add d4bf159d115e70a795286354456ea2ee
-import  -/  Operations 4f7f659bc11083106f43505cdb8994c7
-  exports: 494f1bcd2b9c618b52ead64473dd4e04
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  Add e434f746388b9a88c8fbab9412599b6f
+import  -/  Operations 4effa12f203215b111d4734b130c5a94
+  exports: 05deaa373fd38ce0542cfa0b94f31c61
 import  -/  TestTypes e1faf5df45b087c8121b96368eb41d27
   exports: 92fe1f9c8cb1615074e99dc4e14a7099
   makeDoubleXMap bbb5743e401cc72cb2388fb0561dfee0
@@ -294,12 +294,12 @@ a8f6abc1a3aa381f561f3c25ae789088
     -> [(XMapTypes.XMapName, a)]
     -> Data.Map.Base.Map XMapTypes.XMapName a
   {- Arity: 3, Strictness: <L,U><S,1*U><S,1*U>, Inline: [0] -}
-3cee56c22f7f59b58859b3a04f342bd8
+2cc0e537d6b93bd8cc0de8f970735473
   execFormula_applicationFormula_expectedMap :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    FormulaTest.execFormula_applicationFormula_expectedMap1) -}
-0ac324799497ce118b6697eded695336
+2129cc50db0f6e4e3ef15dbe8a3bc929
   execFormula_applicationFormula_expectedMap1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (FormulaTest.execFormula_applicationFormula_expectedMap38
@@ -385,7 +385,7 @@ f503d3e3ea6292079efa88d61594bd26
                     `cast`
                   (Sym (XMapTypes.N:XMapName[0])),
                   FormulaTest.execFormula_applicationFormula_expectedMap20)) -}
-e365e34dc299312b7496846539f3e9ff
+a6466d6273c0fda8c27de25a1bf15918
   execFormula_applicationFormula_expectedMap2 :: XMapTypes.XMapErr
   {- Unfolding: (ExecFormula.execFormula
                    FormulaTest.execFormula_applicationFormula_expectedMap29
@@ -453,7 +453,7 @@ eeac82c0fe04efef18ab4c34466219c8
 aeacf62cc6f5d4fd82c0a97a33940a25
   execFormula_applicationFormula_expectedMap28 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "a"#) -}
-f8b1eac2351929cf5afd4c366af0772b
+9aa2eafd5566f1be63584c466f898dc7
   execFormula_applicationFormula_expectedMap29 :: Formula.XFormula
   {- Unfolding: (Formula.XFApplication
                    ApplicationTypes.Negate
@@ -464,7 +464,7 @@ b65358361c3948bc083098675fa8fb18
   {- Unfolding: (FormulaTest.$sfromList
                    @ XMapTypes.XMap
                    FormulaTest.execFormula_applicationFormula_expectedMap4) -}
-314b14060100d73e4258b0ff0700d1e3
+c53e2c4defbe3520160f9dd6fec21c5e
   execFormula_applicationFormula_expectedMap30 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    FormulaTest.execFormula_applicationFormula_expectedMap25
@@ -598,12 +598,12 @@ d3fbce000e4e24115435e982d99190a3
                    @ (XMapTypes.XMapKey, GHC.Types.Double)
                    FormulaTest.execFormula_applicationFormula_expectedMap10
                    (GHC.Types.[] @ (XMapTypes.XMapKey, GHC.Types.Double))) -}
-b25acca2b295a55cd5589b8b0f4ba7cd
+22ca49c7b00dc50d189915ff5a42d3d5
   execFormula_operationFormula_expectedMap :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    FormulaTest.execFormula_operationFormula_expectedMap1) -}
-ebe6c2c018be4ac95c67468530390a03
+c3c565431132b86faf6c27335f9a4a1d
   execFormula_operationFormula_expectedMap1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (FormulaTest.execFormula_operationFormula_expectedMap24
@@ -651,19 +651,19 @@ c0a97cdfa42bf8b24c006e83c9fee4ab
                    FormulaTest.execFormula_applicationFormula_expectedMap28
                    0#
                    ipv }) -}
-27f1d8a99e4c07b01f935dc5c340450c
+73712e6e32baf7ad62ba8823768e7522
   execFormula_operationFormula_expectedMap14 :: Formula.XFormula
   {- Unfolding: (Formula.XFOperation
                    OperationTypes.Add
                    FormulaTest.execFormula_operationFormula_expectedMap16
                    FormulaTest.execFormula_operationFormula_expectedMap15) -}
-a8b97b99aee8356cd03d0487cd81d5df
+d5012a8966fd233e9c4f7a692f1e1561
   execFormula_operationFormula_expectedMap15 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    FormulaTest.execFormula_operationFormula_expectedMap7
                      `cast`
                    (Sym (XMapTypes.N:XMapName[0]))) -}
-5195df3c41eb3b718cee4f36bb670234
+17c4fc803eb9c82af7c5c0cf314e9105
   execFormula_operationFormula_expectedMap16 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    FormulaTest.execFormula_operationFormula_expectedMap11
@@ -686,7 +686,7 @@ cedeb654765ac83cc273379257c6e9e7
   {- Unfolding: (TestTypes.$sfromList
                    @ GHC.Types.Double
                    FormulaTest.execFormula_operationFormula_expectedMap20) -}
-e613ad1d1033c357137fadd6fd2e6b23
+00ef5f774df291dd05fb498d15256cba
   execFormula_operationFormula_expectedMap2 :: XMapTypes.XMapErr
   {- Unfolding: (ExecFormula.execFormula
                    FormulaTest.execFormula_operationFormula_expectedMap14
@@ -813,12 +813,12 @@ ee64cf6394c4084cbdd0960c0a047e36
                    FormulaTest.execFormula_applicationFormula_expectedMap18
                    0#
                    ipv }) -}
-6860fbb7b77ce85807cc302dc691aaad
+8ed01445f6cee659f4e5e40c0777cf3d
   execFormula_trivialFormula_originalMap :: Test.HUnit.Base.Test
   {- Strictness: m1,
      Unfolding: (Test.HUnit.Base.TestCase
                    FormulaTest.execFormula_trivialFormula_originalMap1) -}
-37aa591462831b7e5bc3ec63c658a304
+6899104821684dbaaa157f7ba2cd97bf
   execFormula_trivialFormula_originalMap1 ::
     Test.HUnit.Lang.Assertion
   {- Unfolding: (FormulaTest.execFormula_trivialFormula_originalMap14
@@ -843,7 +843,7 @@ d2578e1570055edc58af3c5b0ff774e6
                    FormulaTest.execFormula_applicationFormula_expectedMap28
                    0#
                    ipv }) -}
-216ce3bd1a917890eba81bb1ef7c79eb
+400c91bcec35f3de68cd1ca0e58d2393
   execFormula_trivialFormula_originalMap11 :: Formula.XFormula
   {- Unfolding: (Formula.XFMap
                    FormulaTest.execFormula_trivialFormula_originalMap8
@@ -900,7 +900,7 @@ b094779b8bbf34bb5dbf044ce5d4cf15
 8555ab2593d491ba6f92a3e312040ff0
   execFormula_trivialFormula_originalMap19 :: GHC.Types.Int
   {- HasNoCafRefs, Unfolding: (GHC.Types.I# 21#) -}
-1a7ddf1ff4136850f4ef9a8ef27034fc
+c1669978f6b6d8ae3608f1be7235e895
   execFormula_trivialFormula_originalMap2 :: XMapTypes.XMapErr
   {- Unfolding: (ExecFormula.execFormula
                    FormulaTest.execFormula_trivialFormula_originalMap11

@@ -1,12 +1,12 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-08 08:29:10.080018607 UTC
+2018-01-05 07:03:19.062554725 UTC
 
 interface main@main:ProjectJson [orphan module] 8002
-  interface hash: 1956c4f000ca04d005bb5af5b3c6f698
-  ABI hash: acf18b712df8a0f901e55f49f516e8ae
-  export-list hash: 7c021a43116ce3cd9ba9642848771ff1
-  orphan hash: 9b7406d6e5175cfe90ea4a75f3365919
+  interface hash: bc9b6fb2259e917bcc20705a38cdbd7a
+  ABI hash: 8ebba936e781d04d45f1312ce4329b61
+  export-list hash: ef16f918449c05c84b2c4746ab18f29d
+  orphan hash: f8573e517cee9b09496035fa97ccbc7b
   flag hash: 73a3d7fa5cb5ccfee42bfbaa2a11c30b
   sig of: Nothing
   used TH splices: False
@@ -99,29 +99,29 @@ import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  ApplicationTypes 143822343c6f7fa9393e7f65b91b4440
   exports: c8a509b10500b8e668c0d339e53814fa
   ApplicationName 7d51253c4c8955e3629ff4b12eb2b14e
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation 03698bd51c60bb7b5080d27c1b8658b8
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  Calculation 04f488c4628c8ddd53166a03b879fe0e
+  Calculation 41a99fbb51f5318f902af52762efce14
   CalculationFormulaText 190506ef3f5899e15e830e35f1934183
   CalculationFormulaText fd38426093a918ee049ab7c4fb1fb4f2
   CalculationName 33a8590d875a915188f9bbf7f53d4cad
   CalculationName 7681f69b2581ed31254c1a456f024695
   CalculationSource 47b955d852fafbfdbe394604d83bca66
   CalculationSource 4d7c220a24400e7a90de59dfe2149dc6
-  Functions e32b57de328035550337609ef7cf4c68
-  Functions 76913b8c92b440c4f1a034f58c20c5b1
-import  -/  Formula 09444ea12c0441bd37404b175a926171
+  Functions dd840d93b3767ba962f9317d686e0476
+  Functions 4df293f0919d46047d66231c8a02e631
+import  -/  Formula e75f4be3c58a26f5cb098a337ce89579
   exports: d6ceee93beb5ac820afa97f35b5fa611
-  XFApplication eb8c3b77bcb22eb578439fc9251971f9
-  XFMap 7dbf5543fca58ffc0e04840d8a0f5725
-  XFOperation 81ff2bf2a641ffbde51c62d91ea8aaf4
-  XFormula fb924f832976f886aefc5a3d03a23b47
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  exports: 1a323fe5f5d42124be5996496a88719d
-  OperationName a5a60b294983bcb41d5e4136aac111fd
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  XFApplication 89904a3fd5f5d68199c6c08fb3e2375b
+  XFMap 10643a0300385d92610dd5504640d6d7
+  XFOperation 6fa76c3b0b06e8a191cd2b4dc71aa593
+  XFormula bc1628deb5228885a088bc7a3859d8f0
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  exports: 247f2282832b1244ce9ee08cb96eb811
+  OperationName 46463e9f9365b8e7feadaccabf8a68b6
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   AllProjects 35135f9c77587ad25ef5fedd60d3f572
   AllProjects 5112a5d43849857c03604773be3e85a2
   FileSource 257fe49100eecd56f874d64683d51d99
@@ -413,7 +413,7 @@ b86d68739ba4dfc64441451352378f65
     -> [Data.Aeson.Types.Internal.Parser
           ApplicationTypes.ApplicationName]
   {- Arity: 2, Strictness: <L,U><S,1*U> -}
-4690ad6a4991a8f611201ad0a112a800
+cf30bfa017094ebd6802789fed0a4a67
   $fFromJSONCalculation ::
     Data.Aeson.Types.FromJSON.FromJSON Calculation.Calculation
   DFunId
@@ -422,7 +422,7 @@ b86d68739ba4dfc64441451352378f65
                   @ Calculation.Calculation
                   ProjectJson.$fFromJSONCalculation_$cparseJSON
                   ProjectJson.$fFromJSONCalculation_$cparseJSONList -}
-91ac05b4c5fc6b55f34ebf5be109185d
+d9d657fd4fab675486a02a67d2502597
   $fFromJSONCalculation1 ::
     [Data.Aeson.Types.Internal.Parser Calculation.Calculation]
     -> forall (f :: * -> *) r.
@@ -706,12 +706,12 @@ f951dcccde34fd82a46949e7978b72fb
     -> [Data.Aeson.Types.Internal.Value]
     -> [Data.Aeson.Types.Internal.Parser Calculation.CalculationSource]
   {- Arity: 2, Strictness: <L,U><S,1*U> -}
-bee481f23daa55535a4effba68b92969
+10c323a9c47400008ddf548963c40237
   $fFromJSONCalculation_$cparseJSON ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser Calculation.Calculation
   {- Arity: 1, Strictness: <S,1*U> -}
-ddc73c30ef886c2ac112dfc9f323d502
+ab0f549a62fe13c879c2289a44efeef4
   $fFromJSONCalculation_$cparseJSONList ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser [Calculation.Calculation]
@@ -748,7 +748,7 @@ ddc73c30ef886c2ac112dfc9f323d502
                         `cast`
                       (Sym (Data.Aeson.Types.Internal.N:Parser[0]
                                 <[Calculation.Calculation]>_R)) } }) -}
-d3f8fb292048b34f562af4724eb21a2a
+140d5b6e68584c212b52a2e605be35a4
   $fFromJSONCalculation_go ::
     GHC.Prim.Int#
     -> [Data.Aeson.Types.Internal.Value]
@@ -853,7 +853,7 @@ e58dc810094496b2fefe14bac9738bbc
     -> [Data.Aeson.Types.Internal.Value]
     -> [Data.Aeson.Types.Internal.Parser XFunction.OperationMode]
   {- Arity: 2, Strictness: <L,U><S,1*U> -}
-18cf105d2b9a66b93520bd797831e182
+0f6bc7b1b1578ae884bb09d7d0ef27b0
   $fFromJSONOperationName ::
     Data.Aeson.Types.FromJSON.FromJSON OperationTypes.OperationName
   DFunId
@@ -862,7 +862,7 @@ e58dc810094496b2fefe14bac9738bbc
                   @ OperationTypes.OperationName
                   ProjectJson.$fFromJSONOperationName_$cparseJSON
                   ProjectJson.$fFromJSONOperationName_$cparseJSONList -}
-27e200fb04164cb46106fa0e4e5c4268
+330fc1ccae64d23c0843734faf08e933
   $fFromJSONOperationName1 ::
     [Data.Aeson.Types.Internal.Parser OperationTypes.OperationName]
     -> forall (f :: * -> *) r.
@@ -872,7 +872,7 @@ e58dc810094496b2fefe14bac9738bbc
             [OperationTypes.OperationName] f r
        -> f r
   {- Arity: 4, HasNoCafRefs, Strictness: <S,1*U><L,U><L,U><L,C(U)> -}
-a58650a4c9722a17ad8dd228de3f4f64
+96fd3e78d21eac78b490f14798e2465c
   $fFromJSONOperationName2 ::
     Data.Aeson.Types.Internal.Value
     -> forall (f :: * -> *) r.
@@ -900,7 +900,7 @@ a58650a4c9722a17ad8dd228de3f4f64
                            @ OperationTypes.OperationName
                            OperationTypes.$fReadOperationName
                            v) }) -}
-40f19b9722e8031c51f800497ded3089
+030ab9e9c7aba6438934e2e5d5c44de7
   $fFromJSONOperationName_$cparseJSON ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser OperationTypes.OperationName
@@ -911,7 +911,7 @@ a58650a4c9722a17ad8dd228de3f4f64
                 (<Data.Aeson.Types.Internal.Value>_R
                  ->_R Sym (Data.Aeson.Types.Internal.N:Parser[0]
                                <OperationTypes.OperationName>_R)) -}
-6dc9911f187e5665a912e0937086ffeb
+0b9490d5ce135d299195c4f4132b65d7
   $fFromJSONOperationName_$cparseJSONList ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser [OperationTypes.OperationName]
@@ -948,7 +948,7 @@ a58650a4c9722a17ad8dd228de3f4f64
                         `cast`
                       (Sym (Data.Aeson.Types.Internal.N:Parser[0]
                                 <[OperationTypes.OperationName]>_R)) } }) -}
-fc7369cec0c81efcbfdc1b8655ec4342
+44fad6905380f2a6fe81607eb0b0cbf6
   $fFromJSONOperationName_go ::
     GHC.Prim.Int#
     -> [Data.Aeson.Types.Internal.Value]
@@ -2289,7 +2289,7 @@ d5ced51d9b84b915ef05fecf956b504c
     Data.Aeson.Types.Internal.JSONPathElement
   {- Unfolding: (Data.Aeson.Types.Internal.Key
                    ProjectJson.$fFromJSONView6) -}
-7d95c7083f5dca4923074954b8a585e9
+b95e0a9db378df1fb13d61617c4f18a1
   $fFromJSONXFormula ::
     Data.Aeson.Types.FromJSON.FromJSON Formula.XFormula
   DFunId
@@ -2298,7 +2298,7 @@ d5ced51d9b84b915ef05fecf956b504c
                   @ Formula.XFormula
                   ProjectJson.$fFromJSONXFormula_$cparseJSON
                   ProjectJson.$fFromJSONXFormula_$cparseJSONList -}
-8161189f281a5c41abdda313633861ae
+248fedee8f98bb3f5d6ccee9bcaafa61
   $fFromJSONXFormula1 ::
     [Data.Aeson.Types.Internal.Parser Formula.XFormula]
     -> forall (f :: * -> *) r.
@@ -2307,12 +2307,12 @@ d5ced51d9b84b915ef05fecf956b504c
        -> Data.Aeson.Types.Internal.Success [Formula.XFormula] f r
        -> f r
   {- Arity: 4, HasNoCafRefs, Strictness: <S,1*U><L,U><L,U><L,C(U)> -}
-ff0ec5156a6c8cba5fadd216415b57aa
+fa3c20e85022ef44b2c7c8885c44b5bb
   $fFromJSONXFormula_$cparseJSON ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser Formula.XFormula
   {- Arity: 1, Strictness: <S,1*U> -}
-74a10402e725a9db3a2344db4d86df3f
+c587be53a802dc35c3fa98601929df17
   $fFromJSONXFormula_$cparseJSONList ::
     Data.Aeson.Types.Internal.Value
     -> Data.Aeson.Types.Internal.Parser [Formula.XFormula]
@@ -2349,7 +2349,7 @@ ff0ec5156a6c8cba5fadd216415b57aa
                         `cast`
                       (Sym (Data.Aeson.Types.Internal.N:Parser[0]
                                 <[Formula.XFormula]>_R)) } }) -}
-25466442deb43182ffa27f3c48c57efe
+f10bad88542efb3b6ecf1cc062fd9485
   $fFromJSONXFormula_go ::
     GHC.Prim.Int#
     -> [Data.Aeson.Types.Internal.Value]
@@ -2672,7 +2672,7 @@ a03376f3ee4183c566e618d768198173
                                     n
                                     eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
                  Data.Aeson.Types.Internal.Array dt1 }) -}
-380c705c79c9f3d399b9247fb380f5c3
+628e66f49d4eaeebc8ca669ac469de28
   $fToJSONCalculation ::
     Data.Aeson.Types.ToJSON.ToJSON Calculation.Calculation
   DFunId
@@ -3082,7 +3082,7 @@ f4c2eb8c4a06f65b0a99601ea24783c4
                                     n
                                     eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
                  Data.Aeson.Types.Internal.Array dt1 }) -}
-16ad7b4ef50d0018f3957b64751a7001
+b098ed3d3e2b87709de7676f00ddac73
   $fToJSONCalculation_$ctoEncoding ::
     Calculation.Calculation -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U(U,1*U,1*U,1*U)>,
@@ -3091,7 +3091,7 @@ f4c2eb8c4a06f65b0a99601ea24783c4
                 (\ (eta :: Calculation.Calculation) ->
                  Data.Aeson.Encoding.Internal.value
                    (ProjectJson.$fToJSONCalculation_$ctoJSON eta)) -}
-0561a43f26b6f5eed0591d237a16a645
+fea8f46360190d8f6ea0f626c7c15b50
   $fToJSONCalculation_$ctoEncodingList ::
     [Calculation.Calculation] -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -3156,7 +3156,7 @@ f4c2eb8c4a06f65b0a99601ea24783c4
                         `cast`
                       (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
                                 <Data.Aeson.Types.Internal.Value>_P)) }) -}
-8edb7e1b2887ee86f062acdc67c6b2ef
+4c9af1c2eeccaeaa6ba6513e649efad8
   $fToJSONCalculation_$ctoJSON ::
     Calculation.Calculation -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U(U,1*U,1*U,1*U)>m1,
@@ -3174,7 +3174,7 @@ cd925fae6dbb8c5fd1352b3e27100a82
                 (\ (w :: XFunction.OperationMode) ->
                  case ProjectJson.$w$ctoJSON1 w of ww { Unit# ww1 ->
                  Data.Aeson.Types.Internal.String ww1 }) -}
-6f5ac2775087c960c100c9eae4c59431
+7a826a3dbae94c36db571ab894dd650d
   $fToJSONCalculation_$ctoJSON2 ::
     Formula.XFormula -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m1, Inline: INLINE[0],
@@ -3182,7 +3182,7 @@ cd925fae6dbb8c5fd1352b3e27100a82
                 (\ (w :: Formula.XFormula) ->
                  case ProjectJson.$w$ctoJSON2 w of ww { Unit# ww1 ->
                  Data.Aeson.Types.Internal.Object ww1 }) -}
-afc6c6c7c41ad3c9f12093118664674e
+3b1f46bcbef61fc8119d986ab221946b
   $fToJSONCalculation_$ctoJSONList ::
     [Calculation.Calculation] -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
@@ -3219,7 +3219,7 @@ afc6c6c7c41ad3c9f12093118664674e
                                     n
                                     eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
                  Data.Aeson.Types.Internal.Array dt1 }) -}
-423c8a107be15e9b03f949fb53680cd2
+97e27f5f0674c4335b7aa65f98ed2d05
   $fToJSONFunctions ::
     Data.Aeson.Types.ToJSON.ToJSON Calculation.Functions
   DFunId
@@ -3273,7 +3273,7 @@ f6a55ed5c4ad4febffb64e8d5ae0bc80
 f4ebd082f2c088597442945a124409f2
   $fToJSONFunctions5 :: Data.Text.Internal.Text
   {- Unfolding: (Data.Text.Show.unpackCString# "operations"#) -}
-11bedd5e77f9e6197506cf25ac6c523c
+9760ff76a4a98b07f70fe2bddc081419
   $fToJSONFunctions_$ctoEncoding ::
     Calculation.Functions -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U(1*U,1*U)>,
@@ -3282,7 +3282,7 @@ f4ebd082f2c088597442945a124409f2
                 (\ (eta :: Calculation.Functions) ->
                  Data.Aeson.Encoding.Internal.value
                    (ProjectJson.$fToJSONFunctions_$ctoJSON eta)) -}
-3553210594db5535566fbe760c3f190e
+f16577c9c73126a9d4d6f8002f94dcd1
   $fToJSONFunctions_$ctoEncodingList ::
     [Calculation.Functions] -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -3347,7 +3347,7 @@ f4ebd082f2c088597442945a124409f2
                         `cast`
                       (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
                                 <Data.Aeson.Types.Internal.Value>_P)) }) -}
-684e8dc70ce142e93ed4a46a07b62121
+de76d227db7f797c48a3df96b7973daf
   $fToJSONFunctions_$ctoJSON ::
     Calculation.Functions -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U(1*U,1*U)>m1, Inline: INLINE[0],
@@ -3356,7 +3356,7 @@ f4ebd082f2c088597442945a124409f2
                  case w of ww { Calculation.Functions ww1 ww2 ->
                  case ProjectJson.$w$ctoJSON4 ww1 ww2 of ww3 { Unit# ww4 ->
                  Data.Aeson.Types.Internal.Object ww4 } }) -}
-85b32bf4d933da8762bf33ece0e7a3c0
+9348f984ca66cdc192e9c88b9bd57010
   $fToJSONFunctions_$ctoJSON1 ::
     OperationTypes.OperationName -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m3, Inline: INLINE[0],
@@ -3364,7 +3364,7 @@ f4ebd082f2c088597442945a124409f2
                 (\ (w :: OperationTypes.OperationName) ->
                  case ProjectJson.$w$ctoJSON5 w of ww { Unit# ww1 ->
                  Data.Aeson.Types.Internal.String ww1 }) -}
-11a402b7c1a85c433948b5c61b578e31
+e17ab34309baff46cd7c818ee4f58ca5
   $fToJSONFunctions_$ctoJSONList ::
     [Calculation.Functions] -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
@@ -3522,7 +3522,7 @@ b2196f06d44c73dc66f9d722759de4e9
                                     n
                                     eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
                  Data.Aeson.Types.Internal.Array dt1 }) -}
-36ab7f9883974590805eb1ace7fe7b78
+e68c5cef5dc4fcee7952cb5360aeba32
   $fToJSONOperationName ::
     Data.Aeson.Types.ToJSON.ToJSON OperationTypes.OperationName
   DFunId
@@ -3533,7 +3533,7 @@ b2196f06d44c73dc66f9d722759de4e9
                   ProjectJson.$fToJSONOperationName_$ctoEncoding
                   ProjectJson.$fToJSONOperationName_$ctoJSONList
                   ProjectJson.$fToJSONOperationName_$ctoEncodingList -}
-9ab9cedbc0d519c24098f10235d132e0
+754e6083b24fa0517734fb813e60de25
   $fToJSONOperationName_$ctoEncoding ::
     OperationTypes.OperationName
     -> Data.Aeson.Encoding.Internal.Encoding
@@ -3542,7 +3542,7 @@ b2196f06d44c73dc66f9d722759de4e9
                 (\ (eta :: OperationTypes.OperationName) ->
                  Data.Aeson.Encoding.Internal.value
                    (ProjectJson.$fToJSONFunctions_$ctoJSON1 eta)) -}
-124799875ab33e09b65d568e22755641
+9d8d20967b2eb216db2154c353091ac6
   $fToJSONOperationName_$ctoEncodingList ::
     [OperationTypes.OperationName]
     -> Data.Aeson.Encoding.Internal.Encoding
@@ -3608,7 +3608,7 @@ b2196f06d44c73dc66f9d722759de4e9
                         `cast`
                       (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
                                 <Data.Aeson.Types.Internal.Value>_P)) }) -}
-d23eadcde597546349341c0dc7521794
+743611b4e5b4acb5496f9eaf7bbf0dc4
   $fToJSONOperationName_$ctoJSONList ::
     [OperationTypes.OperationName] -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
@@ -5064,7 +5064,7 @@ fb76255c954f22df83a5d9c838ceec24
                                     n
                                     eta)))) of dt1 { Data.Vector.Vector ipv ipv1 ipv2 ->
                  Data.Aeson.Types.Internal.Array dt1 }) -}
-4ae97b6b20a161bc479769ed38f15cc0
+4c4df7d309e7946d753b11090225c1db
   $fToJSONXFormula :: Data.Aeson.Types.ToJSON.ToJSON Formula.XFormula
   DFunId
   {- Strictness: m, Inline: [ALWAYS] CONLIKE,
@@ -5074,7 +5074,7 @@ fb76255c954f22df83a5d9c838ceec24
                   ProjectJson.$fToJSONXFormula_$ctoEncoding
                   ProjectJson.$fToJSONXFormula_$ctoJSONList
                   ProjectJson.$fToJSONXFormula_$ctoEncodingList -}
-97e315250951ffc23071835831d84a28
+baf0b3258b923a28af32bcc624c67b33
   $fToJSONXFormula_$ctoEncoding ::
     Formula.XFormula -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -5082,7 +5082,7 @@ fb76255c954f22df83a5d9c838ceec24
                 (\ (eta :: Formula.XFormula) ->
                  Data.Aeson.Encoding.Internal.value
                    (ProjectJson.$fToJSONCalculation_$ctoJSON2 eta)) -}
-e70fe2e6e6be627d73cd3438f7600193
+0d3c14c990d0ed2d5f6688eae49a227a
   $fToJSONXFormula_$ctoEncodingList ::
     [Formula.XFormula] -> Data.Aeson.Encoding.Internal.Encoding
   {- Arity: 1, Strictness: <S,1*U>, Inline: INLINE (sat-args=0),
@@ -5147,7 +5147,7 @@ e70fe2e6e6be627d73cd3438f7600193
                         `cast`
                       (Sym (Data.Aeson.Encoding.Internal.N:Encoding'[0]
                                 <Data.Aeson.Types.Internal.Value>_P)) }) -}
-bf232756f936bc3f47bbb8fcf3a13a50
+2cc7f251321b2ad6c748760674700eeb
   $fToJSONXFormula_$ctoJSONList ::
     [Formula.XFormula] -> Data.Aeson.Types.Internal.Value
   {- Arity: 1, Strictness: <S,1*U>m2, Inline: INLINE (sat-args=0),
@@ -5198,7 +5198,7 @@ bf232756f936bc3f47bbb8fcf3a13a50
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-ce8751848683596db6eab5e8f8f518b6
+be97e9334cae5c75fbb2972b49fc1d84
   $w$ctoJSON ::
     Calculation.CalculationName
     -> XMapTypes.XMapName
@@ -5375,7 +5375,7 @@ c51dbcad8d2002b9644cc554ce86a106
                                 @ Data.Text.Internal.Text
                                 @ Data.Aeson.Types.Internal.Value) of dt { DEFAULT ->
                       (# dt #) } }) -}
-41f5c702e6061dcf6f802e09b4be9f27
+47225207a8f5fd4cfd27b7f23b13bace
   $w$ctoJSON2 ::
     Formula.XFormula -> (# Data.Aeson.Types.Internal.Object #)
   {- Arity: 1, Strictness: <S,1*U>, Inline: [0] -}
@@ -5416,7 +5416,7 @@ e2465f7fd0d120ee4810d00685e606d0
                            @ Data.Text.Internal.Text
                            @ Data.Aeson.Types.Internal.Value) of dt { DEFAULT ->
                  (# dt #) }) -}
-91763083f6bba5c2f3ece9e707ca17c5
+5a63aa5026026fc4e1caa6a6221edb02
   $w$ctoJSON4 ::
     [OperationTypes.OperationName]
     -> [ApplicationTypes.ApplicationName]
@@ -5575,15 +5575,16 @@ e2465f7fd0d120ee4810d00685e606d0
                            @ Data.Text.Internal.Text
                            @ Data.Aeson.Types.Internal.Value) of dt { DEFAULT ->
                  (# dt #) }) -}
-115164f96ace27e3937faca2ffb1bbfa
+93ab4dc5f1ab08ba35ddcd33b85fd8cf
   $w$ctoJSON5 ::
     OperationTypes.OperationName -> (# Data.Text.Internal.Text #)
   {- Arity: 1, Strictness: <S,1*U>, Inline: [0],
      Unfolding: (\ (w :: OperationTypes.OperationName) ->
                  case case w of wild {
-                        OperationTypes.Add -> OperationTypes.$fReadOperationName11
-                        OperationTypes.Subtract
-                        -> OperationTypes.$fReadOperationName8 } of dt { DEFAULT ->
+                        OperationTypes.Add -> OperationTypes.$fReadOperationName15
+                        OperationTypes.Subtract -> OperationTypes.$fReadOperationName12
+                        OperationTypes.Times
+                        -> OperationTypes.$fReadOperationName9 } of dt { DEFAULT ->
                  case GHC.Magic.runRW#
                         @ 'GHC.Types.PtrRepLifted
                         @ Data.Text.Internal.Text

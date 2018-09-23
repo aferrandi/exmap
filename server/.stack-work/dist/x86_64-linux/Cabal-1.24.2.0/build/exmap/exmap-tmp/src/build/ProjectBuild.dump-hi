@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 11:09:49.379310247 UTC
+2018-01-17 08:49:45.082827225 UTC
 
 interface main@main:ProjectBuild 8002
-  interface hash: 356857d8d6e0c54f3fa1ed63d3f694fa
-  ABI hash: 528e438993e3ba9b42f8dbead96f0f36
-  export-list hash: e6c27fa2b52543bcea7fcc78c009477a
+  interface hash: f4db2c98b577694650983d4c9f84cebb
+  ABI hash: fbaec480e4639fb71110dd31e7c16685
+  export-list hash: 1b983ed14e1201b4fc7e662f60410a80
   orphan hash: a7bdb9291c64ceb3289fa442a5c97e93
   flag hash: 96b542d537f655ad583e6de1a6ed0c0e
   sig of: Nothing
@@ -116,45 +116,45 @@ import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
 import  -/  AssocList 285e8ffbf4f31be2d9dbc0e99d5a3fed
   exports: 0afb1cf80f007ad39360a1007b7a8727
   groupAssocListByKey 81ac85ca0964f9a8e61e338fad4a6a04
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
-  calculationName 1f5a4a1ff915162dab157f63a0e9b230
-  resultName e0da4fa6227b34a0c0bbd4851b78e25e
-import  -/  CalculationBuild 9f2e646013564d5d9b1726324c113fca
-  exports: 4f533e748d6540ffa88c6568fb4ab39e
-  calculationToChan 39a631b60175b304ec521ddfe8c3fd61
-import  -/  CalculationMessages cc9d4f53e4cdd89393c32f99d3d216d7
-  exports: 38997434d1eadadff28c77fbb028d629
-  CalculationChan 6b33731f780f07df39838a7cd12da2cb
-import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
-  exports: aedbb846b4b45e6fdfa51d3b8e071d11
-  CommonChans 01f4f6e44c2bf343b2159eaf4a6ad6cb
-  logChan e458e652eda033623916e4c3d135435e
-import  -/  Dependencies a723d54c72c01bd2a5ee203d99d2eadd
+  Calculation 41a99fbb51f5318f902af52762efce14
+  calculationName 6eec82ceaa7a7b90646be8090e5cc4a3
+  resultName 9745333b74ea054b6eca9188292a9cfb
+import  -/  CalculationBuild 85ae85b6bdd485652c3dd12ffc11942c
+  exports: f160ea42ee62b0ad870111d1113cf44a
+  calculationToChan 7ad09efb6097c6640f9a8ffb4f4abc7e
+import  -/  CalculationMessages 3afc977efd0bd03a50f6417c854268c2
+  exports: 0ae2098e7818c22c0f347121d6a6bccf
+  CalculationChan 1fbbb04c6675ddf15163c151f014403e
+import  -/  CommonChannels c013d3c6d0e37678816363497cd84d4a
+  exports: 40cf9c65678e962f25678cbf8f519487
+  CommonChans b489f70a96007556397179ae59fd5e8a
+  logChan bd86f3edb638658505f6c2a9c08d50da
+import  -/  Dependencies 2682563f91e3d23a42cb16389596bc50
   exports: 096cd46840d6f203fb2e09f6684e6a6f
-  calculationDependencies 4f6c4e98b80d8fbd4365cd85d1eb9d8a
-import  -/  LogMessages 3b3c448fca5ca0c1efa93e191f557ed1
-  exports: 7ec54aab985649a6202fd26be75d5d43
-  LogChan 8117d7ae5c4d9909c5f1d1bed0680791
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+  calculationDependencies a94719d55581ff925a765383947ed723
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   Project c7f6766f61d0b63c7ab6927b16e914f3
-import  -/  ProjectState b9445036ca91c8f8f17466da52a590df
-  exports: 45f061a0a4b72f3842496805809fba9c
+import  -/  ProjectState 22e38013a51b1c430f1e9dfad37f81f6
+  exports: f1a926b33839773ad23f3ae1e194b7c0
   CalculationByResult c4bfbd941f59c98480f1a3407e9df4d8
-  CalculationChanByMap 8f4ae96e16545acd2db509dff8801825
-  CalculationChanByName 36e290b6476eeda7363f213148c77323
-  RuntimeProject 686d79ed45ec38151db09d59e747e3e9
-  RuntimeProject 6f800b4257f0a40180517de20dd96d62
-  calculationByResult 19c7c825961eea5395b8246623ae44f0
-  calculationChanByMap a28473bfc3c6b477e078f13f04196323
-  calculationChanByName bde3e6a746f9c3d285a836ac8a4146dd
-  chans 63f09138dc269f54560c3785a96964ae
-  project a30b6ea9329cfba1f64ba26587a1f242
-  subscribedClients 2bb0e33d2fba454b4b07fa0a8b1b476c
-  viewChanByMap 36060019209c722c563d0b4187284040
-  viewChanByName 626b2130a672e67aa9cdc67025db420c
+  CalculationChanByMap 4199a552295e6ace96376c290a368d8e
+  CalculationChanByName 1b0b875b09494470c8b80dcd39f3322f
+  RuntimeProject 4a9f3a330b9a7c153e60dc16054df7a9
+  RuntimeProject 765ed7b63e28192250c3bc7202fd6276
+  calculationByResult d450bad7cdac7a555d4fae8a0fc0a942
+  calculationChanByMap e2cd5747fff6fd3fd5cecfe935d0f01d
+  calculationChanByName 243572f858e3f71cbf55bdf9b8dc83a5
+  chans 5b36d778c41f489fe7eed0897f3e1fea
+  project ee01e9ef9b8ee2e3b944ddac0596c0c8
+  subscribedClients 3af02fe6726c7a81c7d25655f3a80b36
+  viewChanByMap 6e61d381ded9894347222d4a5fb8b957
+  viewChanByName 826daebefc3e20502309b91477032f06
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
   XMapName aed4e1c98ee09424176ec799b4e99672
@@ -362,11 +362,11 @@ fab24c2ea90139bcea52ef49fb38a817
     -> [(Calculation.CalculationName, a)]
     -> Data.Map.Base.Map Calculation.CalculationName a
   {- Arity: 3, Strictness: <L,U><S,1*U><S,1*U>, Inline: [0] -}
-357c496dc8850fb396a0d25e573c52d7
+e02be9f5cb06992044203bea4adccb9a
   data CalculationWithChan
     = CalculationWithChan {calculation :: Calculation.Calculation,
                            chan :: CalculationMessages.CalculationChan}
-44a395b6a548f5e6ce6b69ca70908aa7
+f1c811f24dfd1b9330518e43d7c4dbd2
   calculation ::
     ProjectBuild.CalculationWithChan -> Calculation.Calculation
   RecSel Left ProjectBuild.CalculationWithChan
@@ -376,7 +376,7 @@ fab24c2ea90139bcea52ef49fb38a817
                 (\ (ds :: ProjectBuild.CalculationWithChan) ->
                  case ds of wild { ProjectBuild.CalculationWithChan ds1 ds2 ->
                  ds1 }) -}
-1931ed2c25afb6c1c8411983a1367a2b
+a238d995298b73bee2d8b85bb1b16f5f
   chan ::
     ProjectBuild.CalculationWithChan
     -> CalculationMessages.CalculationChan
@@ -386,7 +386,7 @@ fab24c2ea90139bcea52ef49fb38a817
                 (\ (ds :: ProjectBuild.CalculationWithChan) ->
                  case ds of wild { ProjectBuild.CalculationWithChan ds1 ds2 ->
                  ds2 }) -}
-343f3e45104a1767210a4a21372ada7c
+1d40753494d6c59e72e7d1fa18cd94f1
   projectToRuntime ::
     CommonChannels.CommonChans
     -> Project.Project
@@ -400,7 +400,7 @@ fab24c2ea90139bcea52ef49fb38a817
                  ->_R <Project.Project>_R
                  ->_R <[Calculation.Calculation]>_R
                  ->_R Sym (GHC.Types.N:IO[0] <ProjectState.RuntimeProject>_R)) -}
-8d032ed0d3258cb1c3842925492bea8f
+5e4b41c89c4a787779ff46927abc40cb
   projectToRuntime1 ::
     CommonChannels.CommonChans
     -> Project.Project
@@ -521,7 +521,7 @@ fab24c2ea90139bcea52ef49fb38a817
                             @ [WebClients.WAClient]
                             ipv15) #) } } } } } } })
                    ipv }) -}
-c5b2568a055f2f913ca10d460ca997cc
+12f3042c4c10a9e72247deb68b4f7bb8
   projectToRuntime2 ::
     Calculation.Calculation
     -> (XMapTypes.XMapName, Calculation.CalculationName)
@@ -529,7 +529,7 @@ c5b2568a055f2f913ca10d460ca997cc
      Unfolding: InlineRule (1, True, False)
                 (\ (c :: Calculation.Calculation) ->
                  (Calculation.resultName c, Calculation.calculationName c)) -}
-39b637572feba12411c4df523006499f
+de0c7e9a6cab7724718310fd18579a21
   projectToRuntime3 ::
     (XMapTypes.XMapName, CalculationMessages.CalculationChan)
     -> (XMapTypes.XMapName, CalculationMessages.CalculationChan)
@@ -546,7 +546,7 @@ c5b2568a055f2f913ca10d460ca997cc
                    Data.Text.$fEqText
                    k1 `cast` (XMapTypes.N:XMapName[0])
                    k2 `cast` (XMapTypes.N:XMapName[0]) } }) -}
-583fc3a630c541f7cdf3e01313172d08
+d4ae2a841a06d71d9be13a02d8fbfd7d
   projectToRuntime4 ::
     ProjectBuild.CalculationWithChan
     -> (Calculation.CalculationName,
@@ -559,7 +559,7 @@ c5b2568a055f2f913ca10d460ca997cc
                   ds2 } },
                   case cc of wild { ProjectBuild.CalculationWithChan ds ds1 ->
                   ds1 })) -}
-4bd91b33827ed020b5023ee26f2f5509
+0c8004dbb7b7d7bdeefd3d4f4bce66b6
   projectToRuntime_go ::
     [ProjectBuild.CalculationWithChan]
     -> [(XMapTypes.XMapName, CalculationMessages.CalculationChan)]

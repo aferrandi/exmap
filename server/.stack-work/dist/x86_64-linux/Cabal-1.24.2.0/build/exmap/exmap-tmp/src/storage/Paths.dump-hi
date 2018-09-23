@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-17 06:06:57.475720937 UTC
+2018-01-18 07:06:34.686561182 UTC
 
 interface main@main:Paths 8002
-  interface hash: 341d8379b89207785650cdbb4749f7d3
-  ABI hash: d6afa50f03923c71e909cfba47da3e4b
-  export-list hash: 0fd3c9275ac57dd0007f4b8d0e9a5665
+  interface hash: a1b7ef11c9fdb7c3659d322ac57decf1
+  ABI hash: 326c42bfbeaa2cb90439554594d77d0c
+  export-list hash: 7b230f844f66b2a32955151a16872b2c
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: d426797dced5f2cc541098c0bd9180c3
   sig of: Nothing
@@ -14,6 +14,7 @@ interface main@main:Paths 8002
 exports:
   Paths.allProjectsPath
   Paths.calculationPath
+  Paths.logPath
   Paths.projectDir
   Paths.projectPath
   Paths.viewPath
@@ -51,12 +52,12 @@ import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath a3d1d13ac7dd86705b5dfaf58a5c0b9e
 import  -/  filepath-1.4.1.1@filepath-1.4.1.1:System.FilePath.Posix 6a5e3ee74184fdcc5da09a368e7c40f5
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
   CalculationName 33a8590d875a915188f9bbf7f53d4cad
   CalculationName 7681f69b2581ed31254c1a456f024695
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   ProjectName 88a5198f7b44b8586232adf22e56ae2a
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
@@ -303,6 +304,23 @@ c39286148916b4690bcd89ca980d710f
 d5bef6d87487558a9e726b475a2353e9
   calculationPath1 :: [GHC.Types.Char]
   {- Unfolding: (GHC.CString.unpackCString# "clc"#) -}
+568c1ac93c67da1c129d4331c6a5543e
+  logPath :: GHC.IO.FilePath -> GHC.IO.FilePath
+  {- Arity: 1, Strictness: <L,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (root :: GHC.IO.FilePath) ->
+                 System.FilePath.Posix.combine root Paths.logPath1) -}
+405af405cbcd24f37d8281c6c14a3199
+  logPath1 :: GHC.IO.FilePath
+  {- Unfolding: (System.FilePath.Posix.addExtension
+                   Paths.logPath3
+                   Paths.logPath2) -}
+1715a22fa5cd45af7f399a419fbc8293
+  logPath2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "log"#) -}
+622ec490d002c9c0b716ef7bb52b1059
+  logPath3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "exmap"#) -}
 f003e4b449c0a571cc3414fcac50ab5b
   projectDir ::
     GHC.IO.FilePath -> Project.ProjectName -> GHC.IO.FilePath

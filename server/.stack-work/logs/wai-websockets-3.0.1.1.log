@@ -1,11 +1,11 @@
 Configuring wai-websockets-3.0.1.1...
 Building wai-websockets-3.0.1.1...
 Preprocessing library wai-websockets-3.0.1.1...
-[1 of 1] Compiling Network.Wai.Handler.WebSockets ( Network/Wai/Handler/WebSockets.hs, .stack-work/dist/x86_64-linux/Cabal-1.24.2.0/build/Network/Wai/Handler/WebSockets.o )
+[1 of 1] Compiling Network.Wai.Handler.WebSockets ( Network/Wai/Handler/WebSockets.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/Network/Wai/Handler/WebSockets.o )
 Preprocessing executable 'wai-websockets-example' for
 wai-websockets-3.0.1.1...
-[1 of 2] Compiling Network.Wai.Handler.WebSockets ( Network/Wai/Handler/WebSockets.hs, .stack-work/dist/x86_64-linux/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example-tmp/Network/Wai/Handler/WebSockets.o )
-[2 of 2] Compiling Main             ( server.lhs, .stack-work/dist/x86_64-linux/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example-tmp/Main.o )
+[1 of 2] Compiling Network.Wai.Handler.WebSockets ( Network/Wai/Handler/WebSockets.hs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example-tmp/Network/Wai/Handler/WebSockets.o )
+[2 of 2] Compiling Main             ( server.lhs, .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example-tmp/Main.o )
 
 server.lhs:16:3: warning: [-Wunused-imports]
     The import of ‘forkIO’
@@ -13,9 +13,9 @@ server.lhs:16:3: warning: [-Wunused-imports]
 
 server.lhs:47:3: warning: [-Wunused-top-binds]
     Defined but not used: ‘numClients’
-Linking .stack-work/dist/x86_64-linux/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example ...
+Linking .stack-work/dist/x86_64-linux-nopie/Cabal-1.24.2.0/build/wai-websockets-example/wai-websockets-example ...
 Installing library in
-/home/andrea/.stack/snapshots/x86_64-linux/lts-9.0/8.0.2/lib/x86_64-linux-ghc-8.0.2/wai-websockets-3.0.1.1-EWamZZc3JrL9kdmOSaQ81H
+/home/andrea/.stack/snapshots/x86_64-linux-nopie/lts-9.0/8.0.2/lib/x86_64-linux-ghc-8.0.2/wai-websockets-3.0.1.1-EWamZZc3JrL9kdmOSaQ81H
 Installing executable(s) in
-/home/andrea/.stack/snapshots/x86_64-linux/lts-9.0/8.0.2/bin
+/home/andrea/.stack/snapshots/x86_64-linux-nopie/lts-9.0/8.0.2/bin
 Registering wai-websockets-3.0.1.1...

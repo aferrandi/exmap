@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:42:03.25315262 UTC
+2018-01-17 08:44:57.042652294 UTC
 
 interface main@main:SystemState 8002
-  interface hash: 6f3a5725a8792cae13326ff414a3ef16
-  ABI hash: 646fecc138b7305d4a35c1399a33a272
-  export-list hash: 7f548a1df3df773b7000f84c8a834472
+  interface hash: cf9622775b6e36f24b6fd51315a34958
+  ABI hash: 8e3d712e91e89534c81a36cf42d2245b
+  export-list hash: d31ea6077fb9c155f425e1f1b997248e
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 7466539132b6c2c803b3afb4c7151c0e
   sig of: Nothing
@@ -110,21 +110,21 @@ import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Base a29df8c78ba14cbcd4d90f97bd8d22e9
 import  -/  containers-0.5.7.1@containers-0.5.7.1:Data.Map.Strict f8f0196205d496398718e13b2f098e5d
-import  -/  CommonChannels f1e36ad70f6366a6c90b83b10a9f9917
-  exports: aedbb846b4b45e6fdfa51d3b8e071d11
-  CommonChans 01f4f6e44c2bf343b2159eaf4a6ad6cb
-  eventChan 3911ebeee801f26152ba5083ce7c3d9d
-import  -/  EventMessages a07955b4a0da9cf1b9eb7f17e564dc00
-  exports: 64db4fd1ac7c8985ea6ceddadc69d169
-  EventChan 2fbf9ecb2263a4b748008f48f08708ef
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  CommonChannels c013d3c6d0e37678816363497cd84d4a
+  exports: 40cf9c65678e962f25678cbf8f519487
+  CommonChans b489f70a96007556397179ae59fd5e8a
+  eventChan aa902a7d180b4b09b70b2c6dea7b88fd
+import  -/  EventMessages 7d9b85b54cefda913a5d998a9c866f9e
+  exports: 75ec05aec3d2105dceba14323afaca7f
+  EventChan 19651a89be2c7077e0e222e46c89d533
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
-import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
-  exports: 7b16c99942b55c7a72be31fd4804ba3f
-  ProjectChan 091f44512dd4db2ee61640a0a30b9371
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  ProjectMessages 2f75b74a80f546d5b67047299653bd86
+  exports: 28934ffa1b42a9db9c37d00fb218487a
+  ProjectChan b74b68c96fec4f477ddf0aae0d38e500
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -168,14 +168,14 @@ b81d15bd045312a0e653566b383a6717
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-afb0437d7256dba9be7636325bafa77e
+306499596e53713b14262000d5c4093b
   type ProjectChanByName =
     Data.Map.Base.Map
       Project.ProjectName (GHC.Base.Maybe ProjectMessages.ProjectChan)
-c1680d956486351de00d50d18fb8bb68
+1bc856b9f724a62d5f5c2f9a018bb26b
   type ProjectChansByMapName =
     Data.Map.Base.Map XMapTypes.XMapName [ProjectMessages.ProjectChan]
-824e676155bd4294aee4669ff44822c8
+4de567f873ba72d4772a6abac2d21f8c
   data RuntimeSystem
     = RuntimeSystem {projectByName :: GHC.Conc.Sync.TVar
                                         SystemState.ProjectChanByName,
@@ -184,7 +184,7 @@ c1680d956486351de00d50d18fb8bb68
                      chans :: CommonChannels.CommonChans,
                      root :: GHC.IO.FilePath,
                      subscribedClients :: GHC.Conc.Sync.TVar [WebClients.WAClient]}
-a12fcddbc70f669760745250ade7991f
+ffaeda17c78429c7f66f688bf5bc4033
   chans :: SystemState.RuntimeSystem -> CommonChannels.CommonChans
   RecSel Left SystemState.RuntimeSystem
   {- Arity: 1, HasNoCafRefs,
@@ -193,7 +193,7 @@ a12fcddbc70f669760745250ade7991f
                 (\ (ds :: SystemState.RuntimeSystem) ->
                  case ds of wild { SystemState.RuntimeSystem ds1 ds2 ds3 ds4 ds5 ->
                  ds3 }) -}
-4a44a3428b680cceac6cf4b34265e3b2
+07c364f52c71ada38e86df3baca48d9b
   evtChan :: SystemState.RuntimeSystem -> EventMessages.EventChan
   {- Arity: 1, HasNoCafRefs,
      Strictness: <S(LLS(SLLL)LL),1*U(A,A,1*U(1*U(U,U),A,A,A),A,A)>m,
@@ -202,7 +202,7 @@ a12fcddbc70f669760745250ade7991f
                  case sys of wild { SystemState.RuntimeSystem ds ds1 ds2 ds3 ds4 ->
                  case ds2 of wild1 { CommonChannels.CommonChans ds5 ds6 ds7 ds8 ->
                  ds5 } }) -}
-eef2376eb5a49d1a683725643c63d0e3
+bc36151bad73f335f096e53e13abd0c3
   projectByMapName ::
     SystemState.RuntimeSystem
     -> GHC.Conc.Sync.TVar SystemState.ProjectChansByMapName
@@ -213,7 +213,7 @@ eef2376eb5a49d1a683725643c63d0e3
                 (\ (ds :: SystemState.RuntimeSystem) ->
                  case ds of wild { SystemState.RuntimeSystem ds1 ds2 ds3 ds4 ds5 ->
                  ds2 }) -}
-008ba591d411f7782ad7b00ecfab058c
+86627f4abecd19c318a0a29e7e148135
   projectByName ::
     SystemState.RuntimeSystem
     -> GHC.Conc.Sync.TVar SystemState.ProjectChanByName
@@ -224,7 +224,7 @@ eef2376eb5a49d1a683725643c63d0e3
                 (\ (ds :: SystemState.RuntimeSystem) ->
                  case ds of wild { SystemState.RuntimeSystem ds1 ds2 ds3 ds4 ds5 ->
                  ds1 }) -}
-3e0fec38e6a040c1e77e1d9c8a572eba
+6f816a94bacbfb37db1f223b570f9c81
   root :: SystemState.RuntimeSystem -> GHC.IO.FilePath
   RecSel Left SystemState.RuntimeSystem
   {- Arity: 1, HasNoCafRefs, Strictness: <S(LLLSL),1*U(A,A,A,1*U,A)>,
@@ -232,7 +232,7 @@ eef2376eb5a49d1a683725643c63d0e3
                 (\ (ds :: SystemState.RuntimeSystem) ->
                  case ds of wild { SystemState.RuntimeSystem ds1 ds2 ds3 ds4 ds5 ->
                  ds4 }) -}
-9d32482ed63746494c2ab7d90baf52c9
+d0a40acfc202053e46f31a36acfeb47d
   subscribedClients ::
     SystemState.RuntimeSystem
     -> GHC.Conc.Sync.TVar [WebClients.WAClient]

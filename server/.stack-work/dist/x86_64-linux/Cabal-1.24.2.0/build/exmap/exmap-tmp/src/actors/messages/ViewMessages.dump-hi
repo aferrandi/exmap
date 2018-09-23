@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-11-27 06:39:47.737890883 UTC
+2018-01-14 21:56:53.165950539 UTC
 
 interface main@main:ViewMessages 8002
-  interface hash: 36400a970e430f8ae6322e741b0eef02
-  ABI hash: e0a0e25d9bb584b801476dc003b69f21
-  export-list hash: 4f259910ac4dde7df97333a484b49710
+  interface hash: 042cd8a2cfda1a7863b2519f95bb530c
+  ABI hash: c7726cefdab8625f4aae7cc324dd009c
+  export-list hash: 51d3ee2f53b80e0a402c60fd337b70f5
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 9581e73690371ffaaf5c309a49faabb5
   sig of: Nothing
@@ -110,8 +110,8 @@ import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   View 3a2375be1f5189e91eb0fabfa84fd0be
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be

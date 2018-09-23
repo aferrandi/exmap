@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-12-30 00:42:04.230044107 UTC
+2018-01-17 08:46:52.948982228 UTC
 
 interface main@main:LoadActor 8002
-  interface hash: d5783eecb9c6d751444d023d6baef503
-  ABI hash: afb1fb18ad84e4d0c8c6d6b43d81d60d
-  export-list hash: b13e298e35d9486f2b0114f7ce36b4ae
+  interface hash: 4516415ea7f8324203af3bbbeabfb00d
+  ABI hash: cd90c48d7431dd2e105ea174166b7196
+  export-list hash: 4c51875ffd8b9f6bde22477c317bee1a
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 3eeefb146dc97c851cab19b415b4ae7e
   sig of: Nothing
@@ -14,9 +14,10 @@ interface main@main:LoadActor 8002
 exports:
   LoadActor.actorLoad
 module dependencies: ApplicationTypes Calculation Errors Formula
-                     Load LoadMessages OperationTypes Paths Project ProjectJson
-                     ProjectMessages SystemMessages TextEnums View WebClients
-                     WebMessages WebMessagesJson XFunction XMapJson XMapTypes XValues
+                     Load LoadMessages LogMessages OperationTypes Paths Project
+                     ProjectJson ProjectMessages SystemMessages TextEnums View
+                     WebClients WebMessages WebMessagesJson XFunction XMapJson XMapTypes
+                     XValues
 package dependencies: SHA-1.6.4.2@SHA-1.6.4.2-6ZuKopcglGG4yoCGsd9koJ
                       aeson-1.1.2.0@aeson-1.1.2.0-H8KqCgI8gcq2RuIUkNEZvK
                       array-0.5.1.1@array-0.5.1.1
@@ -113,70 +114,73 @@ import  -/  base-4.9.1.0:GHC.IO eb504c57b397cf133849f8586f15dafb
 import  -/  base-4.9.1.0:GHC.List ab8c4e523e6c479c549d3bcd5fc4a439
 import  -/  base-4.9.1.0:GHC.Show a027f5ac24879eaba752f44aa90fe511
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  base-4.9.1.0:System.IO e4a64a8e3dce8616da54f0ee7104f7db
 import  -/  ghc-prim-0.5.0.0:GHC.Types 89f8de4f08018c9177c98d979eae0e45
-import  -/  Calculation 2ffc34f2be3e84d0a1939c6ca84c8da7
+import  -/  Calculation 51545031305913fd47c825885d93bfc2
   exports: 5c332b8fd8fef070186c5200f58f2914
-  Calculation d417b5b8b099f384a090c1e4806d4f1d
+  Calculation 41a99fbb51f5318f902af52762efce14
   CalculationName 7681f69b2581ed31254c1a456f024695
 import  -/  Errors 6e8521c5d6029ad354ecc2d54ee8d87a
   exports: e3dd544808018109fc76edc1671a8fea
   Error 6c4a3f7f4bcf5556b15f204ca16cf217
   compose 198a54e831b1c0467bf21cab001d704f
-import  -/  Load 16c453ca838a18fd06b411c65c02c299
-  exports: 33b36c594bb249d10cfc70af5ce4f4be
-  loadCalculation 8ef27a55c7ff079592a828d3fba221d2
+import  -/  Load 5f2efab939a4bfe59a92841c98457536
+  exports: a66c132fff3dd7d2a4114ad4df3822df
+  loadCalculation 2b97b1300ba531384cdfb794ef027024
   loadProject 41e84e8a1e0d4231cd0c319891bf70da
   loadView 458732e9257751a9abe9b677c5229e59
   loadXMap da51421c204b10f868d8c69c07dec034
-import  -/  LoadMessages 86f7ef1ae97b59e6e38a3ad92beb7909
-  exports: 447fbd5d495b4d5cddbcbb2fe0139815
-  LMLoadCalculation 228fae6c8b65f194e916100e6a8f7d46
-  LMLoadMapForClient 73f3ad9f8010dd40468514aba6d7076d
-  LMLoadMapsForCalculation 4542a94bcf9815f81e72e7c5b5b204c8
-  LMLoadMapsForCalculations f70c0358b0e2f8f448bb02cce0c158da
-  LMLoadMapsForView c7efb9367654e02f3a3890d8ec537f06
-  LMLoadProject c07efe647c060fd32fde91241b638872
-  LMLoadViewForClient 666c24f0ae863b98684b0b38b1471f13
-  LMLoadViewForProject 0f5f2764215c644edffde5460f05d365
-  LMStop 3f387543defe19c114911c4aa8588c2e
-  LoadChan 0582d7646f233c2a02ce10b950c59316
-import  -/  Project e9aaa611811a510eec90fd878cb1c85f
-  exports: a1b12012f0f388e6620b2d764b9da9c5
+import  -/  LoadMessages 59247eb4fa93f25a94519344b3738ad9
+  exports: c5cc904a2c912cd972dfb2fd047d2c25
+  LMLoadCalculation d403cc5cd9d5a474d516ebb79c994f21
+  LMLoadMapForClient 3e95ad36fb47826e35bbcb29ea12a728
+  LMLoadMapsForCalculation 792e5345f8d1cbaafa48b14cedc208bc
+  LMLoadMapsForCalculations 0c4b1fa1788bf4bbf5944f0ccf4d6e16
+  LMLoadMapsForView 6ee0e02cced62cc4190436cb8558089a
+  LMLoadProject 327d0de621228f2d5159cf10260fb0f9
+  LMLoadViewForClient df70d3c70106b0a8b346056787466dbf
+  LMLoadViewForProject 86b632ea52e9d6fa85cb156ea12ebdba
+  LMStop a7e4957b36071d40222dd151123969cc
+  LoadChan c53dd4b1222eac64b17155e939139ea5
+import  -/  LogMessages 14b2b4745a8450afc3f7c8a481029d47
+  exports: 3d718afa9bc9d51acf609d591b1b5727
+  LogChan 95399ed67760efeb1807b4482d65d85f
+  logDebug fe6a28772bd88f0bf20bab75e1fbfa1e
+import  -/  Project 8ddbc555c991d908c26bf4ebc2b3413a
+  exports: 37bfb87e192e7fcbd3e19ef7bca9334e
   Project c7f6766f61d0b63c7ab6927b16e914f3
   ProjectName dc3277e72c5d1fd0c29f02dc48899838
   calculations 947a3359d7ec290cee67001543df1f1d
   projectName cb7533641bc632f228a4a92ccb44abc9
-import  -/  ProjectMessages aea94a272f7c999975273b338208baa3
-  exports: 7b16c99942b55c7a72be31fd4804ba3f
-  PECalculationForClientLoadError c0eab562d1d7937ba0f24d97aaba2fd2
-  PECalculationForClientLoaded ad956013195590baece566e4b820154e
-  PEMapForClientLoadError cba3152f31e8d8504bad5daf7ec2bb4a
-  PEMapForClientLoaded 0bc9c8f0498e740b87f9494a6470fe49
-  PEMapsForCalculationLoadError 518e839ab9894b4fa93c47a0fd2c7253
-  PEMapsForCalculationLoaded a0c942055ed8ccf541400a0b83f41f78
-  PEMapsForCalculationsLoadError 0fe48cfa064b5d7d20c6cdc5e4b2ca4b
-  PEMapsForCalculationsLoaded dc2fdba7bb28e804ae8bdd5680772536
-  PEMapsForViewLoadError 72bf7dc00766bbc6ce208b4b60fc3a8e
-  PEMapsForViewLoaded 8086ae9bd56bee6236f93b592c2e5a5b
-  PEViewForClientLoadError 0fdfc08f357f9fe97bd6934ce1318f25
-  PEViewForClientLoaded ec8d36a185db97d46fb1ed427498ab71
-  PEViewForProjectLoadError 96d9f77b4f141c7ab2384ffe0ebdf374
-  PEViewForProjectLoaded 3df4462b4af920a9c4f2c6b89b6b9123
-  PMEvent 4fd5eaca8e8e125ecbd326e566a4a170
-  ProjectChan 091f44512dd4db2ee61640a0a30b9371
-  ProjectEvent a6fafe6e82013794468620034aa1e62d
-import  -/  SystemMessages 79d62c960f37bee63ab3490932f6d9bb
-  exports: 40bfc0a8cd3b65b3f3992016996f2ea2
-  SEProjectLoadError cc6051ee7ae62d3dbc04502169ae8302
-  SEProjectLoaded 2dc9ee3710204121f22ac8ad27b74c28
-  SMEvent daf47bf5ab692b6c3c801377887e0ed6
-  SystemChan 071ec073d696ba528a27629f4c54c968
+import  -/  ProjectMessages 2f75b74a80f546d5b67047299653bd86
+  exports: 28934ffa1b42a9db9c37d00fb218487a
+  PECalculationForClientLoadError b2d7912c0b7c1766ea694f81c45066a0
+  PECalculationForClientLoaded 1dd819d37c4434eb9ad81b601a65447b
+  PEMapForClientLoadError 25d1eb4b3f30e2293bf4fb7f8207873b
+  PEMapForClientLoaded d2e351a07760898518453a9e101130b7
+  PEMapsForCalculationLoadError 01b02f0ba5023a3bff29ba3f5e7d9851
+  PEMapsForCalculationLoaded 8d1957b6d7221aae445e97a1c688e470
+  PEMapsForCalculationsLoadError ef04773aa7939d8253501c4f53778b7d
+  PEMapsForCalculationsLoaded e5010fd3e2d6094e6594ec3a7c1ada86
+  PEMapsForViewLoadError 2c97facb921ea02ed069ec96f4047f52
+  PEMapsForViewLoaded 3e300702bec6d39c085af82e5b83837d
+  PEViewForClientLoadError 9cacc15017bd7ee38738f1337b9a87a2
+  PEViewForClientLoaded 64608184dcfb0231f10b51c4d334b134
+  PEViewForProjectLoadError 1630101f8802ab4ea3d8123f88405e23
+  PEViewForProjectLoaded 5e0bb24a8544378c358a5c37c637e598
+  PMEvent 59013f43274a598816558ea34ed11211
+  ProjectChan b74b68c96fec4f477ddf0aae0d38e500
+  ProjectEvent 0345f9dfa2a20900c12e8be3302af0b5
+import  -/  SystemMessages 60ba975a726d9f5bafcfb14a2f4b8b89
+  exports: 3c0f78d227c8a8df8c117c19d3c2e0dc
+  SEProjectLoadError a695a9179d42f577ab97531a8c4d53c7
+  SEProjectLoaded 3c5406068f1b10432cf6b8dd971efd99
+  SMEvent 41b0a8f4d0e30cd1c97d4c3bb3e9d50f
+  SystemChan 50bc5e34c8888b571af79a04d7d19ae3
 import  -/  View 02361d7faa292e39c3bd07eb3d6b6b8e
   exports: 566a2406a41a78f1d65d3176e307799b
   ViewName 105e058b0f915624ee10874cf1c9d091
-import  -/  WebClients 26a0ed9f44dfca5e83dd031a39f224a0
-  exports: 9e20b0962809e2ead168d9d96578b360
+import  -/  WebClients e9e95635cc3e8e84c4f22ce14960cb6b
+  exports: df65d2f152b91244d7e272371a6ca9aa
   WAClient b08796f2cd72dc596a7814e2532ade2f
 import  -/  XMapTypes 83c3b05a6c33968c2e0bd82cfc322a5e
   exports: 63a1ffc24fb40991afaa24415fd501be
@@ -198,7 +202,7 @@ e7e9ff3e31c1a191c582c0acb8b21a56
   $trModule2 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS "main"#) -}
-a69666ce5106ad63b920a9f013b8666c
+c94970859344b392dec99b9120c43c9e
   $wactorLoad ::
     GHC.IO.FilePath
     -> GHC.Prim.TVar#
@@ -207,40 +211,46 @@ a69666ce5106ad63b920a9f013b8666c
     -> GHC.Prim.TVar#
          GHC.Prim.RealWorld
          (Control.Concurrent.STM.TChan.TVarList LoadMessages.LoadMessage)
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 4, Strictness: <L,U><S,U><L,A><S,U>, Inline: [0] -}
-c57f3799aa1a386cee4dce0d2d93fdc3
+  {- Arity: 5, Strictness: <L,U><S,U><L,A><L,U(U,U)><S,U>,
+     Inline: [0] -}
+2624ec2968f72c5044afdece60c36c2c
   type MapsLoadErrorEvent =
     [XMapTypes.XMapName]
     -> Errors.Error -> ProjectMessages.ProjectEvent
-b74319565f31bdfe6c237907539911f6
+eb118b1377e543554a0986895f7a45e7
   type MapsLoadedEvent =
     [XMapTypes.XNamedMap] -> ProjectMessages.ProjectEvent
-0b50ce22c031ae10f7143dac6f47e762
+cac9045dc52691c642240ef0b8f0f0ca
   actorLoad ::
-    GHC.IO.FilePath -> LoadMessages.LoadChan -> GHC.Types.IO ()
-  {- Arity: 3, Strictness: <L,U><S(SL),U(U,A)><S,U>,
+    GHC.IO.FilePath
+    -> LoadMessages.LoadChan -> LogMessages.LogChan -> GHC.Types.IO ()
+  {- Arity: 4, Strictness: <L,U><S(SL),U(U,A)><L,U(U,U)><S,U>,
      Unfolding: InlineRule (0, True, True)
                 LoadActor.actorLoad1
                   `cast`
                 (<GHC.IO.FilePath>_R
                  ->_R <LoadMessages.LoadChan>_R
+                 ->_R <LogMessages.LogChan>_R
                  ->_R Sym (GHC.Types.N:IO[0] <()>_R)) -}
-032869cca3904fea1c1087d0b35471a8
+00218f6f30c06811dedd17a15b19bb5a
   actorLoad1 ::
     GHC.IO.FilePath
     -> LoadMessages.LoadChan
+    -> LogMessages.LogChan
     -> GHC.Prim.State# GHC.Prim.RealWorld
     -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
-  {- Arity: 3, Strictness: <L,U><S(SL),U(U,A)><S,U>,
+  {- Arity: 4, Strictness: <L,U><S(SL),U(U,A)><L,U(U,U)><S,U>,
      Inline: INLINE[0],
-     Unfolding: InlineRule (3, True, False)
+     Unfolding: InlineRule (4, True, False)
                 (\ (w :: GHC.IO.FilePath)
                    (w1 :: LoadMessages.LoadChan)
-                   (w2 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
+                   (w2 :: LogMessages.LogChan)
+                   (w3 :: GHC.Prim.State# GHC.Prim.RealWorld)[OneShot] ->
                  case w1 of ww { Control.Concurrent.STM.TChan.TChan ww1 ww2 ->
-                 LoadActor.$wactorLoad w ww1 ww2 w2 }) -}
+                 LoadActor.$wactorLoad w ww1 ww2 w2 w3 }) -}
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:

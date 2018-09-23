@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2017-10-31 21:26:10.836725181 UTC
+2018-01-04 07:11:04.10621067 UTC
 
 interface main@main:Operations 8002
-  interface hash: 95cdc7e117f462c98ac5a609214536d9
-  ABI hash: 4f7f659bc11083106f43505cdb8994c7
-  export-list hash: 494f1bcd2b9c618b52ead64473dd4e04
+  interface hash: 6b400695f3693b98c8b478dacd3fcff1
+  ABI hash: 4effa12f203215b111d4734b130c5a94
+  export-list hash: 05deaa373fd38ce0542cfa0b94f31c61
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: a7730481eefeeb73580882460d408341
   sig of: Nothing
@@ -13,7 +13,7 @@ interface main@main:Operations 8002
   where
 exports:
   Operations.operationRepository
-  OperationTypes.OperationName{OperationTypes.Add OperationTypes.Subtract}
+  OperationTypes.OperationName{OperationTypes.Add OperationTypes.Subtract OperationTypes.Times}
   Operations.OperationFun
 module dependencies: Errors OperationTypes XFunction XMapTypes
                      XValues
@@ -45,11 +45,12 @@ family instance modules: base-4.9.1.0:Control.Applicative
                          text-1.2.2.2@text-1.2.2.2-9UQZjEJZQFSGMffj1Z5g00:Data.Text
 import  -/  base-4.9.1.0:GHC.Num 00bfaa7b2f9d6084913c0697a8a49ec8
 import  -/  base-4.9.1.0:Prelude 22dd289b8469a8fa8dc81cab7b237771
-import  -/  OperationTypes 6975e529b4a89f8050baa8dcbf38831a
-  exports: 1a323fe5f5d42124be5996496a88719d
-  Add d4bf159d115e70a795286354456ea2ee
-  OperationName a5a60b294983bcb41d5e4136aac111fd
-  Subtract 6903c995800fbe4485eda7a754f5c732
+import  -/  OperationTypes 51ffae5f1297e94c77a1f70c3d53e18f
+  exports: 247f2282832b1244ce9ee08cb96eb811
+  Add e434f746388b9a88c8fbab9412599b6f
+  OperationName 46463e9f9365b8e7feadaccabf8a68b6
+  Subtract ba2cb8f524138a9172c68ee0c64fad44
+  Times 0c98a2188551f19ed3136acd676c5234
 import  -/  XFunction daf3a8fe929e99b13bb1482148441fb5
   exports: e4744bd862d5d39381a3b81764a14b8c
   OperationMode ba1024ee7488d74e75d2aa7e9c371660
@@ -76,7 +77,7 @@ dea32fee31792be603a9e5f6d3630b48
   type OperationFun =
     XFunction.OperationMode
     -> XMapTypes.XMap -> XMapTypes.XMap -> XMapTypes.XMapErr
-e5830781f02b05073047cc047b17f812
+9c500fd0c008db6ee165619ebf2581f3
   operationRepository ::
     OperationTypes.OperationName -> Operations.OperationFun
   {- Arity: 4, Strictness: <S,1*U><L,1*U><L,U><L,U>,
@@ -107,6 +108,18 @@ e5830781f02b05073047cc047b17f812
                         XValues.$fXValueDouble
                         eta
                         GHC.Float.minusDouble
+                        eta1
+                        eta2
+                   OperationTypes.Times
+                   -> XFunction.operate
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        @ GHC.Types.Double
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        XValues.$fXValueDouble
+                        eta
+                        GHC.Float.timesDouble
                         eta1
                         eta2 }) -}
 vectorised variables:
