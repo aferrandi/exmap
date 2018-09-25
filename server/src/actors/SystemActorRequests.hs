@@ -58,10 +58,8 @@ pipeToProject c pn sys msg = do
 
 sendFunctions :: RuntimeSystem -> WAClient -> STM()
 sendFunctions sys c = do
-    let fs = Functions { operationNames = operations }
+    let fs = Functions { operationTypes = allOperationTypes }
     writeTChan (evtChan sys) (EMWebEvent [c] $ WEFunctions fs)
-    where operations :: [OperationName]
-          operations = enumValues
 
 newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()
 newProjectIfNotAlreadyRunning chan sys c p = do

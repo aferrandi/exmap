@@ -10,18 +10,21 @@ data OperationName =
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationType = OperationType {
-    parametersTypes :: [XType],
-    returnType :: XType
+    name :: OperationName,
+    parametersTypes :: [XMapType],
+    returnType :: XMapType
 } deriving (Show, Eq)
 
-newOpType :: [XType] -> XType -> OperationType
-newOpType pts rt = OperationType { parametersTypes = pts, returnType =  rt }
+newOpType :: OperationName -> [XMapType] -> XMapType -> OperationType
+newOpType nm pts rt = OperationType { name = nm, parametersTypes = pts, returnType =  rt }
 
 oarametersNumber :: OperationType -> Int
 oarametersNumber ot = length $ parametersTypes ot
 
-operationType :: OperationName -> OperationType
-operationType Add = newOpType  [XTypeDouble, XTypeDouble] XTypeDouble
-operationType Subtract = newOpType  [XTypeDouble, XTypeDouble] XTypeDouble
-operationType Times = newOpType  [XTypeDouble, XTypeDouble] XTypeDouble
-operationType Negate = newOpType [XTypeDouble] XTypeDouble
+allOperationTypes :: [OperationType]
+allOperationTypes = [
+    newOpType Add [TypeDouble, TypeDouble] TypeDouble,
+    newOpType Subtract [TypeDouble, TypeDouble] TypeDouble,
+    newOpType Times [TypeDouble, TypeDouble] TypeDouble,
+    newOpType Negate [TypeDouble] TypeDouble
+    ]

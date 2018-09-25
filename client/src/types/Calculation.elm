@@ -17,6 +17,12 @@ type alias CalculationSource = {
 
 type alias OperationName = String
 
+type alias OperationType = {
+    name : OperationName,
+    parametersTypes : List XMapType,
+    returnType : XMapType
+    }
+
 type alias Functions = {
-    operations : List OperationName
+    operations : List OperationType
     }

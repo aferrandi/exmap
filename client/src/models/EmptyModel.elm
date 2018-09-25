@@ -2,6 +2,7 @@ module EmptyModel exposing (..)
 
 import Material
 import Html exposing (Html)
+import Dict as Dict
 
 import XMapTypes exposing (..)
 import ProjectModel exposing (..)
@@ -12,6 +13,13 @@ emptyTableConfiguration : TableConfiguration
 emptyTableConfiguration = {
     columnsWidths = []
     }
+
+emptyFunctionModel : FunctionsModel
+emptyFunctionModel = {
+    operationNames = [],
+    typesByName = Dict.empty
+    }
+
 
 emptyViewEditorModel : ViewEditorModel
 emptyViewEditorModel = {
@@ -48,7 +56,7 @@ emptyModel = { openProjects = []
                , currentView = Nothing
                , newProjectName = ""
                , messages = ["Client started"]
-               , mdl =Material.model
+               , mdl = Material.model
                , xmapEditorModel = emptyXMapEditorModel
                , viewEditorModel = emptyViewEditorModel
                , calculationEditorModel = emptyCalculationEditorModel

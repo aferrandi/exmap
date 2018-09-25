@@ -100,7 +100,9 @@ propagateDisconnection state cs cid = case M.lookup cid cs of
 
 sendErrorToClient :: WAState -> WAClientId -> Error -> IO ()
 sendErrorToClient state cid err = case M.lookup cid (clients state) of
-                                        Just c -> sendToClient c (WEError err)
+                                        Just c -> do
+                                                    sendToClient c (WEError err)
+                                                    atomically $ webLogErr state err
                                         Nothing -> atomically $ webLogErr state (mkError $ "sending error clientId not found " ++ show cid) -- nothing else to do.
 
 stateWithClient :: WAState ->  WAClient -> WAState

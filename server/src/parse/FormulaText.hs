@@ -5,6 +5,7 @@ import qualified Data.Text as T
 import Formula
 import XMapTypes
 import Calculation
+import ShowText
 
 formulaToText :: XFormula -> CalculationFormulaText
 formulaToText = CalculationFormulaText . formulaToTextRec id
@@ -15,9 +16,6 @@ formulaToTextRec t (XFOperation on fs) = t $ T.unwords $ showT on : map (formula
 
 mapNameToText :: XMapName -> T.Text
 mapNameToText (XMapName mn) = T.intercalate (T.singleton '/') mn
-
-showT :: Show a => a -> T.Text
-showT v = T.pack $ show v
 
 pars :: T.Text -> T.Text
 pars t = T.cons '(' $ T.snoc t ')'

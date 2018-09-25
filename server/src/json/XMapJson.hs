@@ -8,6 +8,7 @@ import Data.Aeson
 import Data.Aeson.Types
 import qualified Data.HashMap.Lazy as HML        ( lookup )
 import qualified Data.Text as T
+import ShowText
 
 import XMapTypes
 
@@ -30,7 +31,12 @@ instance ToJSONKey XMapKey where
 instance FromJSONKey XMapKey where
     fromJSONKey = FromJSONKeyText XMapKey
 
-
+instance ToJSON XMapType where
+   toJSON v = String $ case v of
+        TypeDouble -> "double"
+        TypeInt -> "int"
+        TypeText -> "string"
+        TypeBool -> "bool"
 
 instance FromJSON XMap where
    parseJSON (Object v) = case HML.lookup "type" v of

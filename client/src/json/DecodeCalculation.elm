@@ -20,6 +20,11 @@ calculationSourceDecoder = decode CalculationSource
                    |> required "formulaText" string
                    |> required "operationMode" operationModeDecoder
 
+operationTypeDecoder = decode OperationType
+                   |> required "name" string
+                   |> required "parametersTypes" (list xmapTypeDecoder)
+                   |> required "returnType" xmapTypeDecoder
+
 functionsDecoder : Decoder Functions
 functionsDecoder = decode Functions
-                   |> required "operations" (list string)
+                   |> required "operationTypes" (list operationTypeDecoder)

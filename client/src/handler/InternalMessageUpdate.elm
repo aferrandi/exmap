@@ -2,6 +2,7 @@ module InternalMessageUpdate exposing (updateInternal)
 
 import List.Extra as ListX
 import Maybe as Maybe
+import Dict as Dict
 
 import ProjectModel exposing (..)
 
@@ -40,7 +41,7 @@ updateInternal msg model = case msg of
     TextToCalculationTextArea s -> ( updateCalculationEditorModel model (\cm ->{ cm | calculationFormulaText = Just s }), Cmd.none)
     TextToResultNameText mn -> (handleTextToResultNameText model mn, Cmd.none)
     AddMapToCalculation mn -> ( appendToFormulaText model (xmapNameToString mn), Cmd.none)
-    AddOperationToCalculation on ->  ( appendToFormulaText model (on ++ " p1 p2"), Cmd.none)
+    AddOperationToCalculation on ->  ( handleAddOperationToCalculation model on, Cmd.none)
     ChangeOperationMode om -> (handleChangeOperationMode model om, Cmd.none)
     ChangeMapType mt -> (handleChangeMapType model mt, Cmd.none)
     AddItemToView row it -> (handleAddItemToView model row it, Cmd.none)
@@ -143,12 +144,19 @@ handleMapToTable model = let xmapEditorModel = model.xmapEditorModel
                                    Just (Err e) -> showMessage model e
                                    Nothing -> model
 
+handleAddOperationToCalculation : Model -> OperationName -> Model
+handleAddOperationToCalculation model on = let text = model.functions
+                                                |> Maybe.andThen (\fm -> Dict.get on fm.typesByName)
+                                                |> Maybe.map operationTypeToText
+                                           in appendToFormulaText model (Maybe.withDefault " " text)
 
 appendToFormulaText : Model -> String -> Model
 appendToFormulaText model s =
     let updateFormulaText cm = (Maybe.withDefault "" cm.calculationFormulaText) ++ " " ++ s
     in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
 
+operationTypeToText : OperationType -> String
+operationTypeToText ot = ot.name ++ String.join " " (List.map xmapTypeToText ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
@@ -156,3 +164,8 @@ handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditi
 emptyRow : ViewRow
 emptyRow = ViewRow []
 
+xmapTypeToText t = case t of
+                        TypeDouble -> "double"
+                        TypeInt -> "int"
+                        TypeString -> "string"
+                        TypeBool -> "bool"

@@ -34,3 +34,13 @@ xNamedMapDecoder : Decoder XNamedMap
 xNamedMapDecoder = decode XNamedMap
                    |> required "mapName" xmapNameDecoder
                    |> required "xmap" xmapDecoder
+
+xmapTypeDecoder : Decoder XMapType
+xmapTypeDecoder =
+    let decodeFromType t = case t of
+                            "double" -> succeed TypeDouble
+                            "int" -> succeed TypeInt
+                            "string" -> succeed TypeString
+                            "bool" -> succeed TypeBool
+                            otherwise -> fail ("xmap type " ++ t ++ " not recognized")
+    in decodeType decodeFromType

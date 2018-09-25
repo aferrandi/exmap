@@ -16,8 +16,15 @@ type alias Mdl = Material.Model
 
 type alias XMapByName = Dict.Dict XMapName XMap
 
+type alias OperationTypesByName = Dict.Dict OperationName OperationType
+
 type alias TableConfiguration = {
     columnsWidths : List Int
+    }
+
+type alias FunctionsModel = {
+    operationNames : List OperationName,
+    typesByName : OperationTypesByName
     }
 
 type alias ViewModel = {
@@ -55,6 +62,7 @@ type alias CalculationEditorModel = {
     , newCalculationName : CalculationName
     }
 
+
 type alias Model = {
     mdl : Material.Model
     , openProjects : List ProjectModel
@@ -68,7 +76,7 @@ type alias Model = {
     , calculationEditorModel : CalculationEditorModel
     , currentProjectForm : ProjectFormType
     , mapsInProject : List XMapName
-    , functions : Maybe Functions
+    , functions : Maybe FunctionsModel
     }
 
 type Msg

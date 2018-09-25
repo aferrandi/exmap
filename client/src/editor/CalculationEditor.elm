@@ -22,6 +22,7 @@ import Project exposing (..)
 import XMapTypes exposing(..)
 import Views exposing (..)
 import ProjectModel exposing (..)
+import EmptyModel exposing (emptyFunctionModel)
 import WebMessages exposing (WebRequest(..))
 import NameParser exposing (..)
 import ViewUI exposing (..)
@@ -115,8 +116,8 @@ functionsList model  =
                                [ Options.attribute <| Html.Events.onClick (Internal (AddOperationToCalculation on)) ]
                                [ Lists.avatarIcon "play_arrow" [], text on ]
                            ]
-        functions = Maybe.withDefault { operations= [] }  model.functions
-        operationList = List.map operationListItem functions.operations
+        functions = Maybe.withDefault emptyFunctionModel model.functions
+        operationList = List.map operationListItem functions.operationNames
     in Lists.ul (scrollableListStyle 40) operationList
 
 calculationTextArea : Model  -> Html Msg

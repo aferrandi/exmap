@@ -68,7 +68,11 @@ handleCalculationLoaded model cs =
                                                     })
 
 handleFunctions : Model -> Functions -> Model
-handleFunctions model fs =  { model | functions = Just fs }
+handleFunctions model fs =  { model | functions = Just {
+            operationNames = List.map (\o -> o.name) fs.operations,
+            typesByName = Dict.fromList (List.map (\o -> (o.name, o)) fs.operations)
+        }
+    }
 
 handleMapsInProject : Model -> List XMapName -> Model
 handleMapsInProject model mns = { model | mapsInProject = mns }
@@ -118,8 +122,6 @@ updateWithWebEvent json model = let _ = Debug.log ("Event " ++ json)
 
 updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel
 updateIfProjectHasSameName pn m2m ops = updateIf (sameProjectName pn) m2m ops
-
-
 
 sameProjectName : ProjectName -> ProjectModel -> Bool
 sameProjectName pn pm = pm.project.projectName == pn

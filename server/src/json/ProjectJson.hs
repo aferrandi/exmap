@@ -92,9 +92,15 @@ instance ToJSON CalculationSource where
                , "operationMode" .= operationMode
                  ]
 
+instance ToJSON OperationType where
+     toJSON (OperationType name parametersTypes returnType) =
+        object [ "name" .= name
+               , "parametersTypes" .= parametersTypes
+               , "returnType" .= returnType
+                 ]
 instance ToJSON Functions where
-     toJSON (Functions operations) =
-        object [ "operations" .= operations ]
+     toJSON (Functions operationTypes) =
+        object [ "operationTypes" .= operationTypes ]
 
 instance FromJSON SourceType where
    parseJSON (Object v) = case HML.lookup "type" v of

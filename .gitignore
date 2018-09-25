@@ -1,0 +1,40 @@
+
+# Built application files
+/*/build/
+
+# Crashlytics configuations
+com_crashlytics_export_strings.xml
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Signing files
+.signing/
+
+# User-specific configurations
+server/.idea/libraries/
+server/.idea/workspace.xml
+server/.idea/tasks.xml
+server/.idea/.name
+server/.idea/compiler.xml
+server/.idea/copyright/profiles_settings.xml
+server/.idea/encodings.xml
+server/.idea/misc.xml
+server/.idea/modules.xml
+server/.idea/scopes/scope_settings.xml
+server/.idea/vcs.xml
+server/.stack-work/**/*
+server/index.html
+*.iml
+client/.idea
+client/elm-stuff
+client/index.html
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

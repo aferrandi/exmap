@@ -29,5 +29,5 @@ data CalculationSource = CalculationSource {
 } deriving (Show, Eq)
 
 data Functions = Functions {
-    operationNames :: [OperationName]
+    operationTypes :: [OperationType]
 } deriving (Show, Eq)

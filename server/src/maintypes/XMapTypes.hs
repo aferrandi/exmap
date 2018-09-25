@@ -1,4 +1,4 @@
-module XMapTypes (Error(Error), XMapName(XMapName), XType(..), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
+module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
 
 
 import qualified Data.Map.Strict as M
@@ -12,11 +12,11 @@ newtype XMapKey = XMapKey T.Text deriving (Show, Eq, Ord)
 newtype XMapName = XMapName [T.Text] deriving (Show, Eq, Ord)
 
 
-data XType = XTypeDouble |
-             XTypeInt |
-             XTypeText |
-             XTypeBool
-             deriving (Show, Eq)
+data XMapType = TypeDouble |
+                TypeInt |
+                TypeText |
+                TypeBool
+                deriving (Show, Eq)
 
 type MapValue a = M.Map XMapKey a
 
