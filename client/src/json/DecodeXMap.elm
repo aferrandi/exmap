@@ -43,4 +43,4 @@ xmapTypeDecoder =
                             "string" -> succeed TypeString
                             "bool" -> succeed TypeBool
                             otherwise -> fail ("xmap type " ++ t ++ " not recognized")
-    in decodeType decodeFromType
+    in string |> andThen decodeFromType

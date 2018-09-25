@@ -156,7 +156,8 @@ appendToFormulaText model s =
     in updateCalculationEditorModel model (\cm -> {cm | calculationFormulaText = Just (updateFormulaText cm)})
 
 operationTypeToText : OperationType -> String
-operationTypeToText ot = ot.name ++ String.join " " (List.map xmapTypeToText ot.parametersTypes)
+operationTypeToText ot = let insidePars s = "[" ++ s ++ "]"
+                         in ot.name ++ " " ++ String.join " " (List.map (xmapTypeToText >> insidePars) ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })

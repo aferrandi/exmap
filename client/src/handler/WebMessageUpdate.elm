@@ -111,14 +111,11 @@ updateOpenViewMapsInView ms vm =
     let updateMaps msn ms = List.foldr (\m msni -> Dict.insert m.xmapName m.xmap msni) msn ms
     in{ vm | view = vm.view, maps = updateMaps vm.maps ms }
 
-
-
-
 updateWithWebEvent : String -> Model -> (Model, Cmd Msg)
 updateWithWebEvent json model = let _ = Debug.log ("Event " ++ json)
                                 in case decodeString webEventDecoder json of
                                       Ok evt -> updateEvent evt model
-                                      Err err -> updateEvent (WEError err) model
+                                      Err err ->  (showMessage model ("Error: " ++ err ++ " decoding Json " ++ json), Cmd.none)
 
 updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel
 updateIfProjectHasSameName pn m2m ops = updateIf (sameProjectName pn) m2m ops
