@@ -16,6 +16,7 @@ executable exmap
   hs-source-dirs:      src src/maintypes src/json src/functions src/formula src/parse src/state src/web src/storage src/actors src/actors/messages src/build
   main-is:             Main.hs
   default-language:    Haskell2010
+  ld-options:          -static
   build-depends:       base >= 4.7 && < 5
                      , text
                      , wai

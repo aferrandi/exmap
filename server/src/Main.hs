@@ -16,25 +16,25 @@ import LogActor
 import qualified WebApp
 
 
-startFromRootPath :: String -> IO ()
-startFromRootPath rt = do
-    print $ "loading system from " ++ rt
+startFromRootPath :: String -> String -> IO ()
+startFromRootPath index root = do
+    print $ "loading index.html from " ++ index ++" and projects from " ++ root
     logChan <- newTChanIO
-    _ <- forkIO $ actorLog rt logChan
-    system <- startSystem rt logChan
+    _ <- forkIO $ actorLog root logChan
+    system <- startSystem root logChan
     ps <- atomically $ readTVar (projectByName system)
     print $ "System loaded with " ++ show (M.size ps) ++ " projects"
     systemChan <- newTChanIO
     _ <- forkIO $ actorSystem systemChan system
-    WebApp.runWebApp systemChan logChan
+    WebApp.runWebApp systemChan logChan index
 
 main :: IO ()
 main = do
     args <- getArgs
-    case B.listToMaybe args of
-        Just rt -> startFromRootPath rt
-        Nothing -> do
-            print "exmap <rootPath>"
+    case args of
+        (index : root : xs) -> startFromRootPath index root
+        _ -> do
+            print "exmap <indexHtmlPath> <projectsRootPath>"
             return ()
 
 

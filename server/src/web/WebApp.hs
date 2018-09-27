@@ -27,8 +27,8 @@ import Errors
 import SystemMessages
 import WebAppState
 
-runWebApp :: SystemChan -> LogChan -> IO ()
-runWebApp sc lc = do
+runWebApp :: SystemChan -> LogChan -> String -> IO ()
+runWebApp sc lc idx = do
   state <- Concurrent.newMVar WAState {
    systemChan = sc,
    logChan = lc,
@@ -37,7 +37,7 @@ runWebApp sc lc = do
   Warp.run 3000 $ WS.websocketsOr
     WS.defaultConnectionOptions
     (wsApp state)
-    httpApp
+    (httpApp idx)
 
 wsApp :: Concurrent.MVar WAState -> WS.ServerApp
 wsApp stateRef pendingConn = do
@@ -48,16 +48,16 @@ wsApp stateRef pendingConn = do
     (listen conn cid stateRef)
     (disconnectClient cid stateRef)
 
-httpApp :: Wai.Application
-httpApp request respond =  respond  $ case Wai.rawPathInfo request of
-    "/"     -> httpServeIndex
+httpApp :: String -> Wai.Application
+httpApp idx request respond =  respond  $ case Wai.rawPathInfo request of
+    "/"     -> httpServeIndex idx
     _       -> httpNotFound
 
-httpServeIndex :: Wai.Response
-httpServeIndex = Wai.responseFile
+httpServeIndex :: String -> Wai.Response
+httpServeIndex idx = Wai.responseFile
                      Http.status200
                      [("Content-Type", "text/html")]
-                     "index.html"
+                     idx
                      Nothing
 
 httpNotFound :: Wai.Response
