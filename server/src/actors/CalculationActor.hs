@@ -110,6 +110,7 @@ repositoryIfFull rm = do
 execAndSend :: RuntimeCalculation -> [CalculationChan]  -> [ViewChan] -> XMapByName -> STM (Either Error ())
 execAndSend rc cs vs mbn = do
     calc <- readTVar $ calculation rc
+    logDebug (logChan rc) "calc" $ "calculating formula " ++ show (calculationName calc)
     let ers = execFormula (formula calc) mbn (operationMode calc)
     mapM (sendToDependents rc cs vs) ers
 
