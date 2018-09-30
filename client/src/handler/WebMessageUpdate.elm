@@ -25,7 +25,7 @@ updateEvent evt model = case evt of
                             WEMapsInProject pn mns -> (handleMapsInProject model mns, Cmd.none)
                             WEViewChanged pn vn ms -> (updateOpenProjects model (updateOpenViewMaps  pn vn ms), Cmd.none)
                             WEMapLoaded pn m -> (handleMapLoaded model m, Cmd.none)
-                            WEMapStored pn mn -> (handleMapStored model pn mn, Cmd.none)
+                            WEMapStored pn mn sz -> (handleMapStored model pn mn sz, Cmd.none)
                             WEViewLoaded pn v -> (handleViewLoaded model v, Cmd.none)
                             WECalculationLoaded pn cs -> (handleCalculationLoaded model cs, Cmd.none)
                             WECalculationStored pn cn -> (handleCalculationStored model pn cn, Cmd.none)
@@ -47,10 +47,10 @@ handleCalculationStored model pn cn =
     in showMessage mdlCleaned ("Calculation:" ++ cn ++ " of project:"++ pn ++ " stored")
 
 
-handleMapStored : Model -> ProjectName ->  XMapName -> Model
-handleMapStored model pn mn =
+handleMapStored : Model -> ProjectName ->  XMapName -> Int -> Model
+handleMapStored model pn mn sz =
     let mdlCleaned = updateXMapEditorModel model (\mm -> { mm| newXmapName = "" })
-    in showMessage mdlCleaned ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " stored")
+    in showMessage mdlCleaned ("Map:" ++ (xmapNameToString mn) ++ " of project:"++ pn ++ " with size " ++ (toString sz) ++ " stored")
 
 
 handleViewLoaded : Model -> View -> Model

@@ -66,7 +66,7 @@ mapStored chan rp c m = do
         sendToAllCalculations mn
         sendToAllViews mn
         let pn = projectName p
-        writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn)
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn (size $ xmap m))
         where sendToAllCalculations mn = do
                     cbm <- readTVar $ calculationChanByMap rp
                     mapM_ (flip sendToAll (CMMaps [m]) ) (M.lookup mn cbm)

@@ -10,12 +10,12 @@ import Formula
 import FormulaText (mapNameToText)
 
 execFormula :: XFormula ->  XMapByName -> OperationMode -> XMapErr
-execFormula xf rm om = case xf of
-    XFMap n -> case M.lookup n rm of
+execFormula xf mbn om = case xf of
+    XFMap n -> case M.lookup n mbn of
         Just m -> Right m
         Nothing -> Left (Error $ T.pack ("map " ++ T.unpack (mapNameToText n) ++ " not found"))
-    XFOperation fn ms -> do
-        tms <- mapM (\m -> execFormula m rm om) ms
+    XFOperation fn subfs -> do
+        tms <- mapM (\m -> execFormula m mbn om) subfs
         let f = operationRepository fn
         f om tms
 

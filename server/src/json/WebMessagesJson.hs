@@ -33,9 +33,10 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "map" .= m
                                         ]
-     toJSON (WEMapStored pn mn) = object [ "type" .=  T.pack "mapStored"
+     toJSON (WEMapStored pn mn sz) = object [ "type" .=  T.pack "mapStored"
                                         , "projectName" .= pn
                                         , "mapName" .= mn
+                                        , "size" .= sz
                                         ]
      toJSON (WEUnsubscribedFromView pn vn) = object [ "type" .=  T.pack "unsubscribedFromView"
                                         , "projectName" .= pn

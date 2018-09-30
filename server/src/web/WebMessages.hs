@@ -30,7 +30,7 @@ data WebEvent =
     | WEProjectContent Project
     | WEProjectStored Project
     | WEMapLoaded ProjectName XNamedMap
-    | WEMapStored ProjectName XMapName
+    | WEMapStored ProjectName XMapName Int
     | WEUnsubscribedFromView ProjectName ViewName
     | WEMapsInProject ProjectName [XMapName]
     | WEViewStatus ProjectName View [XNamedMap]

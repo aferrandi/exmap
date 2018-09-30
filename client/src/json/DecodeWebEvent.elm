@@ -28,6 +28,7 @@ webEventDecoder =
                             "mapStored" -> decode WEMapStored
                                                 |> required "projectName" string
                                                 |> required "mapName" xmapNameDecoder
+                                                |> required "size" int
                             "unsubscribedFromView" -> decode WEUnsubscribedFromView
                                                 |> required "projectName" string
                                                 |> required "viewName" string

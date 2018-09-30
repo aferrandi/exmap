@@ -1,4 +1,4 @@
-module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
+module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName, size) where
 
 
 import qualified Data.Map.Strict as M
@@ -25,6 +25,12 @@ data XMap = XMapDouble (MapValue Double) |
             XMapString (MapValue T.Text) |
             XMapBool (MapValue Bool)
             deriving (Show, Eq)
+
+size :: XMap -> Int
+size (XMapDouble m) = M.size m
+size (XMapInt m) = M.size m
+size (XMapString m) = M.size m
+size (XMapBool m) = M.size m
 
 data XNamedMap = XNamedMap {
     xmapName :: XMapName,
