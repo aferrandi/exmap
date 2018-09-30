@@ -35,6 +35,7 @@ executable exmap
                      , stm
                      , base
                      , fast-logger
+                     , stringsearch
   other-modules:
                        Formula
                      , TChans

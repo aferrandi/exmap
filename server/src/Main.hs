@@ -8,6 +8,7 @@ import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import Control.Concurrent
+import qualified Data.ByteString.Lazy as BL
 
 import SystemState
 import SystemBuild
@@ -26,7 +27,8 @@ startFromRootPath index root = do
     print $ "System loaded with " ++ show (M.size ps) ++ " projects"
     systemChan <- newTChanIO
     _ <- forkIO $ actorSystem systemChan system
-    WebApp.runWebApp systemChan logChan index
+    indexContent <- BL.readFile index
+    WebApp.runWebApp systemChan logChan indexContent
 
 main :: IO ()
 main = do

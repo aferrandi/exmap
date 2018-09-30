@@ -1,1 +1,1 @@
-stack exec exmap ./systemdirtest
+stack exec exmap webclient/index.html ./systemdirtest

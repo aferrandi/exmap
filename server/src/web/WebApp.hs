@@ -6,8 +6,10 @@ module WebApp (runWebApp) where
 import qualified Control.Concurrent as Concurrent
 import qualified Control.Exception as EX
 import qualified Control.Monad as Monad
+import qualified Data.ByteString.Lazy as BL
 import qualified Data.Map.Strict as M
 import qualified Data.Maybe as B
+import qualified Data.ByteString.Lazy.Search as BS
 import qualified Network.HTTP.Types as Http
 import qualified Network.Wai as Wai
 import qualified Network.Wai.Handler.Warp as Warp
@@ -15,7 +17,6 @@ import qualified Network.Wai.Handler.WebSockets as WS
 import qualified Network.WebSockets as WS
 import qualified Safe
 import Data.Aeson
-import qualified Data.ByteString.Lazy as B
 import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM
 
@@ -27,7 +28,7 @@ import Errors
 import SystemMessages
 import WebAppState
 
-runWebApp :: SystemChan -> LogChan -> String -> IO ()
+runWebApp :: SystemChan -> LogChan -> BL.ByteString -> IO ()
 runWebApp sc lc idx = do
   state <- Concurrent.newMVar WAState {
    systemChan = sc,
@@ -48,17 +49,22 @@ wsApp stateRef pendingConn = do
     (listen conn cid stateRef)
     (disconnectClient cid stateRef)
 
-httpApp :: String -> Wai.Application
+httpApp :: BL.ByteString -> Wai.Application
 httpApp idx request respond =  respond  $ case Wai.rawPathInfo request of
-    "/"     -> httpServeIndex idx
+    "/"     -> httpServeIndex idx request
     _       -> httpNotFound
 
-httpServeIndex :: String -> Wai.Response
-httpServeIndex idx = Wai.responseFile
-                     Http.status200
-                     [("Content-Type", "text/html")]
-                     idx
-                     Nothing
+httpServeIndex :: BL.ByteString -> Wai.Request -> Wai.Response
+httpServeIndex idx req = Wai.responseLBS
+                           Http.status200
+                           [("Content-Type", "text/html")]
+                           content
+    where content = case Wai.requestHeaderHost req of
+                        Just host -> fixWSUrl idx (BL.fromStrict host)
+                        Nothing -> idx
+
+fixWSUrl :: BL.ByteString -> BL.ByteString -> BL.ByteString
+fixWSUrl idx host = BS.replace "localhost:3000" host idx
 
 httpNotFound :: Wai.Response
 httpNotFound =  Wai.responseLBS Http.status400 [] "Not a websocket request"
@@ -83,7 +89,7 @@ listen :: WS.Connection -> WAClientId -> Concurrent.MVar WAState -> IO ()
 listen conn cid stateRef = Monad.forever receive
   where receive = WS.receiveData conn >>= handleMessage cid stateRef
 
-handleMessage :: WAClientId -> Concurrent.MVar WAState -> B.ByteString -> IO ()
+handleMessage :: WAClientId -> Concurrent.MVar WAState -> BL.ByteString -> IO ()
 handleMessage cid stateRef jsn = do
     state <- Concurrent.readMVar stateRef
     atomically $ webLogDbg state $ "got request " ++ show jsn ++ " from " ++ show cid
