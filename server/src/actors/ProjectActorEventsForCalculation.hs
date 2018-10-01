@@ -23,15 +23,17 @@ import Calculation
 import CalculationBuild
 import FormulaText
 
-addCalculation :: RuntimeProject -> Calculation -> IO()
-addCalculation rp cc = do
+addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO()
+addCalculation chan rp c cc = do
     cch <- calculationToChan (logChan (chans rp)) cc
     atomically $ do
                     let cn = calculationName cc
                     modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
+                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch (calculationDependencies cc)
                     writeTChan cch (CMUpdateCalculation cc)
+                    sendDependedMapsToCalculation chan rp c cc
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()
 updateCalculation chan rp c cc = do
@@ -42,7 +44,7 @@ updateCalculation chan rp c cc = do
         Just cch -> updateFoundCalculation cch
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
     where updateFoundCalculation cch =  do
-                                       modifyTVar (calculationChanByMap rp) $ updateCalculationChanByMap cch (calculationDependencies cc)
+                                       modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependencies cc)
                                        writeTChan cch (CMUpdateCalculation cc)
                                        sendDependedMapsToCalculation chan rp c cc
 
@@ -81,18 +83,21 @@ calculationStored chan rp c cc = do
     p <- readTVarIO $ project rp
     if elem (calculationName cc) (calculations p)
         then atomically $ updateCalculation chan rp c cc
-        else addCalculation rp cc
+        else addCalculation chan rp c cc
     atomically $ do
         storeProject chan rp c
         sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
 
-updateCalculationChanByMap :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
-updateCalculationChanByMap cch mns = trace ("updateCalculation:" ++ show mns) $ updated . cleaned
-    where cleaned :: CalculationChanByMap -> CalculationChanByMap
-          cleaned = M.map (filter (/= cch))
-          updated :: CalculationChanByMap -> CalculationChanByMap
-          updated cbm = foldr addToMultimap cbm mns
-          addToMultimap :: XMapName -> CalculationChanByMap -> CalculationChanByMap
+rebuildCalculationChanByMapForChan :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
+rebuildCalculationChanByMapForChan cch mns = trace ("updateCalculation:" ++ show mns) $ reintroduceChanToMap . removeChanFromMap
+    where removeChanFromMap :: CalculationChanByMap -> CalculationChanByMap
+          removeChanFromMap = M.map (filter (/= cch))
+          reintroduceChanToMap :: CalculationChanByMap -> CalculationChanByMap
+          reintroduceChanToMap ccbm = introduceChanToMap cch mns ccbm
+
+introduceChanToMap :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
+introduceChanToMap cch mns ccbm = foldr addToMultimap ccbm mns
+    where addToMultimap :: XMapName -> CalculationChanByMap -> CalculationChanByMap
           addToMultimap mn = M.insertWith (++) mn [cch]
 
 sendDependedMapsToCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM ()

@@ -16,6 +16,7 @@ import ExecFormula
 import CalculationMessages
 import ViewMessages
 import LogMessages
+import Errors (mkError)
 
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rc = loop
@@ -90,15 +91,21 @@ errorToAll rc  e = do
 
 execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
 execAndSendIfFull rc = do
-        rm <- readTVar $ repository rc
-        let mmbn = repositoryIfFull rm
-        case mmbn of
-           Just mbn -> execAndSendCalc mbn
-           Nothing -> return $ Right ()
+    cn <- runtimeCalcName rc
+    logDebug (logChan rc) "calc" $ "ready to calculate formula " ++ show cn
+    rm <- readTVar $ repository rc
+    let mmbn = repositoryIfFull rm
+    case mmbn of
+       Just mbn -> execAndSendCalc mbn
+       Nothing -> do
+            logError (logChan rc) "calc" $ mkError ("no maps found to calculate formula " ++ show cn)
+            return $ Right ()
     where execAndSendCalc mbn = do
-             chs <- readTVar $ calculationsToNotify rc
-             vs <- readTVar $ viewsToNotify rc
-             execAndSend rc chs vs mbn
+            cn <- runtimeCalcName rc
+            logDebug (logChan rc) "calc" $ "got maps to calculate formula" ++ show cn
+            chs <- readTVar $ calculationsToNotify rc
+            vs <- readTVar $ viewsToNotify rc
+            execAndSend rc chs vs mbn
 
 repositoryIfFull :: MapRepository -> Maybe XMapByName
 repositoryIfFull rm = do
