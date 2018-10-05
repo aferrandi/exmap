@@ -21,7 +21,7 @@ operate :: (XValue a, XValue b, XValue r) => OperationMode -> BinaryXMapFun a b 
 operate om f (a:b:_) = do
     ea  <- extractMapFirst a f
     eb  <- extractMapSecond b f
-    return (buildMap (buildWithMode ea eb))
+    return $ buildMap (buildWithMode ea eb)
     where buildWithMode ea eb = case om of Intersection -> M.intersectionWith f ea eb
                                            Union -> unionWith3 f ea eb
 
@@ -29,5 +29,4 @@ apply :: (XValue a, XValue r) => UnaryXMapFun a r-> [XMap] -> XMapErr
 apply f ms = do
     em  <- extractMap (head ms) f
     return (buildMap $ M.map f em)
-
 

@@ -1,9 +1,10 @@
 {-# LANGUAGE OverloadedStrings   #-}
 
-module XValues(XValue, defaultValue, extractMap, extractMapFirst, extractMapSecond, buildMap, UnaryXMapFun, BinaryXMapFun) where
+module XValues(XValue, defaultValue, extractMap, extractMapFirst, extractMapSecond, toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size) where
 
 import XMapTypes
 import qualified Data.Text as T
+import qualified Data.Map.Strict as M
 
 type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
@@ -35,7 +36,7 @@ instance XValue Int where
     extractMapFirst _ _ = Left $ Error "The map must be of type int"
     extractMapSecond (XMapInt m) _ = Right m
     extractMapSecond _ _ = Left $ Error "The map must be of type int"
-    buildMap = XMapInt
+    buildMap  = XMapInt
     defaultValue = 0
 
 instance XValue T.Text where
@@ -45,7 +46,7 @@ instance XValue T.Text where
     extractMapFirst _ _ = Left $ Error "The map must be of type string"
     extractMapSecond (XMapString m) _ = Right m
     extractMapSecond _ _ = Left $ Error "The map must be of type string"
-    buildMap = XMapString
+    buildMap  = XMapString
     defaultValue = ""
 
 instance XValue Bool where
@@ -58,4 +59,29 @@ instance XValue Bool where
     buildMap = XMapBool
     defaultValue = False
 
+size :: XMap -> Int
+size (XMapDouble m) = M.size m
+size (XMapInt m) = M.size m
+size (XMapString m) = M.size m
+size (XMapBool m) = M.size m
 
+mapToMapList :: XMap -> XMapList
+mapToMapList (XMapDouble x) = XMapDoubleList [x]
+mapToMapList (XMapInt x) = XMapIntList [x]
+mapToMapList (XMapString x) = XMapStringList [x]
+mapToMapList (XMapBool x) = XMapBoolList [x]
+
+
+composeMapList :: XMapList -> XMap -> Either Error XMapList
+composeMapList (XMapDoubleList xs) (XMapDouble x) = Right (XMapDoubleList (x:xs))
+composeMapList (XMapIntList xs) (XMapInt x) = Right (XMapIntList (x:xs))
+composeMapList (XMapStringList xs) (XMapString x) = Right (XMapStringList (x:xs))
+composeMapList (XMapBoolList xs) (XMapBool x) = Right (XMapBoolList (x:xs))
+composeMapList _ _ = Left $ Error "List of different types of maps"
+
+
+toMapList:: [XMap] -> Either Error XMapList
+toMapList (x:y:xs) = do
+                    ms <- toMapList (y:xs)
+                    composeMapList ms x
+toMapList (x:_) = Right (mapToMapList x)

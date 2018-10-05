@@ -68,6 +68,8 @@ executable exmap
                      , WebClients
                      , WebApp
                      , XMapJson
+                     , CalculationJson
+                     , ViewJson
                      , ProjectJson
                      , Paths
                      , Load

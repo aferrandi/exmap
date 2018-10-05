@@ -4,9 +4,20 @@ import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Dict exposing (Dict, get, fromList)
 
-import DecodeXMap exposing (..)
+import DecodeXMap exposing (xmapNameDecoder)
 import Calculation exposing (..)
 import EnumToString exposing (..)
+
+parameterTypeDecoder : Decoder ParameterType
+parameterTypeDecoder =
+    let decodeFromType t = case t of
+                            "double" -> succeed ParameterDouble
+                            "int" -> succeed ParameterInt
+                            "string" -> succeed ParameterString
+                            "bool" -> succeed ParameterBool
+                            "any" -> succeed ParameterAny
+                            otherwise -> fail ("parameter type " ++ t ++ " not recognized")
+    in string |> andThen decodeFromType
 
 operationModeDecoder : Decoder OperationMode
 operationModeDecoder =
@@ -23,8 +34,8 @@ calculationSourceDecoder = decode CalculationSource
 operationTypeDecoder : Decoder OperationType
 operationTypeDecoder = decode OperationType
                    |> required "name" string
-                   |> required "parametersTypes" (list xmapTypeDecoder)
-                   |> required "returnType" xmapTypeDecoder
+                   |> required "parametersTypes" (list parameterTypeDecoder)
+                   |> required "returnType" parameterTypeDecoder
 
 functionsDecoder : Decoder Functions
 functionsDecoder = decode Functions

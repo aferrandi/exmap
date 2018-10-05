@@ -19,6 +19,7 @@ import CommonChannels
 import CalculationMessages
 import WebClients
 import XMapTypes
+import XValues (size)
 import Project
 import ProjectActorEventsForCalculation
 import ProjectActorEventsForView

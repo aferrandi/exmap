@@ -157,7 +157,7 @@ appendToFormulaText model s =
 
 operationTypeToText : OperationType -> String
 operationTypeToText ot = let insidePars s = "[" ++ s ++ "]"
-                         in ot.name ++ " " ++ String.join " " (List.map (xmapTypeToText >> insidePars) ot.parametersTypes)
+                         in ot.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
@@ -165,8 +165,9 @@ handleMapToTextArea model = updateXMapEditorModel model (\xm -> { xm | xmapEditi
 emptyRow : ViewRow
 emptyRow = ViewRow []
 
-xmapTypeToText t = case t of
-                        TypeDouble -> "double"
-                        TypeInt -> "int"
-                        TypeString -> "string"
-                        TypeBool -> "bool"
+parameterTypeToText t = case t of
+                        ParameterDouble -> "double"
+                        ParameterInt -> "int"
+                        ParameterString -> "string"
+                        ParameterBool -> "bool"
+                        ParameterAny -> "any"
