@@ -17,8 +17,8 @@ import LogActor
 import qualified WebApp
 
 
-startFromRootPath :: String -> String -> IO ()
-startFromRootPath index root = do
+startFromRootPath :: Int -> String -> String -> IO ()
+startFromRootPath port index root = do
     print $ "loading index.html from " ++ index ++" and projects from " ++ root
     logChan <- newTChanIO
     _ <- forkIO $ actorLog root logChan
@@ -28,15 +28,18 @@ startFromRootPath index root = do
     systemChan <- newTChanIO
     _ <- forkIO $ actorSystem systemChan system
     indexContent <- BL.readFile index
-    WebApp.runWebApp systemChan logChan indexContent
+    print $ "Web server starting on port " ++ show(port)
+    WebApp.runWebApp port systemChan logChan indexContent
 
 main :: IO ()
 main = do
     args <- getArgs
     case args of
-        (index : root : xs) -> startFromRootPath index root
+        (port : index : root : xs) -> do
+            let p = read port
+            startFromRootPath p index root
         _ -> do
-            print "exmap <indexHtmlPath> <projectsRootPath>"
+            print "exmap <port> <indexHtmlPath> <projectsRootPath>"
             return ()
 
 

@@ -28,14 +28,14 @@ import Errors
 import SystemMessages
 import WebAppState
 
-runWebApp :: SystemChan -> LogChan -> BL.ByteString -> IO ()
-runWebApp sc lc idx = do
+runWebApp :: Int -> SystemChan -> LogChan -> BL.ByteString -> IO ()
+runWebApp port sc lc idx = do
   state <- Concurrent.newMVar WAState {
    systemChan = sc,
    logChan = lc,
    clients = M.empty
    }
-  Warp.run 3000 $ WS.websocketsOr
+  Warp.run port $ WS.websocketsOr
     WS.defaultConnectionOptions
     (wsApp state)
     (httpApp idx)
