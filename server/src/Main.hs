@@ -8,6 +8,7 @@ import Control.Concurrent.STM.TChan
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import Control.Concurrent
+import Text.Read (readMaybe)
 import qualified Data.ByteString.Lazy as BL
 
 import SystemState
@@ -35,9 +36,12 @@ main :: IO ()
 main = do
     args <- getArgs
     case args of
-        (port : index : root : xs) -> do
-            let p = read port
-            startFromRootPath p index root
+        (port : index : root : xs) ->
+            case readMaybe port of
+                Just p -> startFromRootPath p index root
+                Nothing -> do
+                    print "port must be an integer value"
+                    return ()
         _ -> do
             print "exmap <port> <indexHtmlPath> <projectsRootPath>"
             return ()
