@@ -1,9 +1,11 @@
 module UIWrapper exposing (..)
 
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import List.Extra as ListX
 import Material.Button as Button
 
+import Material.FormField as FormField
 import Material.Icon as Icon
 import Material.Options as Options
 import Material.RadioButton as RadioButton
@@ -88,11 +90,15 @@ titleWithIcon s i c =
 
 toggle : Model -> String -> String -> String -> Bool -> Msg -> Html Msg
 toggle model idx txt gp val msg =
-    RadioButton.view Mdc
+     FormField.view [ Options.css "margin" "0 10px" ]
+    [RadioButton.view Mdc
         idx
         model.mdc
         [ RadioButton.selected |> Options.when val
         --, RadioButton.group gp
         , Options.onClick msg
         ]
-        [ text txt ]
+        []
+        , Html.label [ Html.for idx ] [ text txt ]
+        ]
+

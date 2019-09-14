@@ -25,14 +25,10 @@ mapEditorView model pm =
     let
         xmapEditorModel =
             model.xmapEditorModel
-
         title =
             case xmapEditorModel.xmapName of
-                Just xmapName ->
-                    "Editing map: " ++ xmapNameToString xmapName
-
-                Nothing ->
-                    "Map Editor"
+                Just xmapName -> "Editing map: " ++ xmapNameToString xmapName
+                Nothing -> "Map Editor"
     in
     div []
         [ titleWithIcon title "layers" "DarkOrange"
@@ -64,7 +60,6 @@ mapEditorViewForMap model pm =
                     , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
-
         Nothing ->
             div [] []
 
@@ -72,15 +67,14 @@ mapEditorViewForMap model pm =
 xmapTypeChoice : Model -> Html Msg
 xmapTypeChoice model =
     let
-        hasType t =
-            model.xmapEditorModel.xmapType == t
+        hasType t = model.xmapEditorModel.xmapType == t
     in
-    div []
-        [ toggle model (makeIndex mapEditorIdx 4) "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
-        , toggle model (makeIndex mapEditorIdx 5) "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
-        , toggle model (makeIndex mapEditorIdx 6) "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
-        , toggle model (makeIndex mapEditorIdx 7) "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
-        ]
+        div []
+            [ toggle model (makeIndex mapEditorIdx 4) "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
+            , toggle model (makeIndex mapEditorIdx 5) "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
+            , toggle model (makeIndex mapEditorIdx 6) "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
+            , toggle model (makeIndex mapEditorIdx 7) "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+            ]
 
 
 newMapButton : Model -> Html Msg
@@ -91,11 +85,8 @@ newMapButton model =
 
         storeNewMap =
             case xmapNameFromString xmapEditorModel.newXmapName of
-                Ok mn ->
-                    Internal (NewMapWithName mn xmapEditorModel.xmapType)
-
-                Err e ->
-                    Internal (ShowMessage e)
+                Ok mn -> Internal (NewMapWithName mn xmapEditorModel.xmapType)
+                Err e -> Internal (ShowMessage e)
     in
     div []
         [ xmapTypeChoice model
