@@ -78,10 +78,11 @@ sendListMsg toMsg list index = case (ListX.getAt index list) of
 
 
 
+
 titleWithIcon : String -> String -> String -> Html Msg
 titleWithIcon s i c =
     Options.styled Html.label
-        [ Typo.display1 ]
+        [ Typo.headline3 ]
         [ Icon.view  [Options.css "color" c, Icon.size36 ] i, text s ]
 
 
