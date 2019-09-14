@@ -7,40 +7,28 @@ import EnumToString exposing (..)
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
-
 parameterTypeDecoder : Decoder ParameterType
 parameterTypeDecoder =
     let
         decodeFromType t =
             case t of
-                "double" ->
-                    succeed ParameterDouble
-
-                "int" ->
-                    succeed ParameterInt
-
-                "string" ->
-                    succeed ParameterString
-
-                "bool" ->
-                    succeed ParameterBool
-
-                "any" ->
-                    succeed ParameterAny
-
+                "double" -> succeed ParameterDouble
+                "int" -> succeed ParameterInt
+                "string" -> succeed ParameterString
+                "bool" -> succeed ParameterBool
+                "any" ->succeed ParameterAny
                 otherwise ->
                     fail ("parameter type " ++ t ++ " not recognized")
     in
-    string |> andThen decodeFromType
+        string |> andThen decodeFromType
 
 
 operationModeDecoder : Decoder OperationMode
 operationModeDecoder =
     let
-        m =
-            fromList [ ( "Union", Union ), ( "Intersection", Intersection ) ]
+        m = fromList [ ( "Union", Union ), ( "Intersection", Intersection ) ]
     in
-    string |> andThen (stringToEnum m)
+        string |> andThen (stringToEnum m)
 
 
 calculationSourceDecoder : Decoder CalculationSource

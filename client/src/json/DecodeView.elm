@@ -13,18 +13,11 @@ viewItemDecoder =
     let
         decodeFromType t =
             case t of
-                "map" ->
-                    map MapItem
-                        (field "mapName" xmapNameDecoder)
-
-                "label" ->
-                    map LabelItem
-                        (field "label" string)
-
-                _ ->
-                    fail ("view item type " ++ t ++ " not recognized")
+                "map" -> map MapItem (field "mapName" xmapNameDecoder)
+                "label" -> map LabelItem (field "label" string)
+                _ ->   fail ("view item type " ++ t ++ " not recognized")
     in
-    decodeType decodeFromType
+        decodeType decodeFromType
 
 
 viewRowDecoder : Decoder ViewRow

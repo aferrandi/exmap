@@ -31,16 +31,12 @@ xmapDecoder =
             case d of
                 "double" ->
                     field "values" (keyValuePairs float) |> andThen (\s -> succeed (XMapDouble (buildMapContent s)))
-
                 "int" ->
                     field "values" (keyValuePairs int) |> andThen (\s -> succeed (XMapInt (buildMapContent s)))
-
                 "string" ->
                     field "values" (keyValuePairs string) |> andThen (\s -> succeed (XMapString (buildMapContent s)))
-
                 "bool" ->
                     field "values" (keyValuePairs bool) |> andThen (\s -> succeed (XMapBool (buildMapContent s)))
-
                 _ ->
                     fail ("map type " ++ d ++ " not recognized")
     in
@@ -59,19 +55,10 @@ xmapTypeDecoder =
     let
         decodeFromType t =
             case t of
-                "double" ->
-                    succeed TypeDouble
-
-                "int" ->
-                    succeed TypeInt
-
-                "string" ->
-                    succeed TypeString
-
-                "bool" ->
-                    succeed TypeBool
-
-                otherwise ->
-                    fail ("xmap type " ++ t ++ " not recognized")
+                "double" -> succeed TypeDouble
+                "int" -> succeed TypeInt
+                "string" -> succeed TypeString
+                "bool" -> succeed TypeBool
+                otherwise -> fail ("xmap type " ++ t ++ " not recognized")
     in
-    string |> andThen decodeFromType
+        string |> andThen decodeFromType

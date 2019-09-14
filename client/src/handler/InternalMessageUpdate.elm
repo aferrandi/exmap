@@ -137,21 +137,18 @@ handleOpenProject model pn =
     let
         command =
             case openProjectWithName model pn of
-                Just pm ->
-                    Cmd.none
-
-                Nothing ->
-                    sendToServer (WRSubscribeToProject pn)
+                Just pm -> Cmd.none
+                Nothing ->sendToServer (WRSubscribeToProject pn)
     in
-    ( { model
-        | currentProject = Just pn
-        , currentView = Nothing
-        , xmapEditorModel = emptyXMapEditorModel
-        , viewEditorModel = emptyViewEditorModel
-        , calculationEditorModel = emptyCalculationEditorModel
-      }
-    , command
-    )
+        ( { model
+            | currentProject = Just pn
+            , currentView = Nothing
+            , xmapEditorModel = emptyXMapEditorModel
+            , viewEditorModel = emptyViewEditorModel
+            , calculationEditorModel = emptyCalculationEditorModel
+          }
+        , command
+        )
 
 
 handleOpenView : Model -> ViewName -> ( Model, Cmd Msg )
@@ -159,19 +156,14 @@ handleOpenView model vn =
     let
         command =
             case openViewWithName model vn of
-                Just v ->
-                    Cmd.none
-
-                Nothing ->
-                    Maybe.withDefault Cmd.none (Maybe.map (\pn -> sendToServer (WRSubscribeToView pn vn)) model.currentProject)
+                Just v -> Cmd.none
+                Nothing -> Maybe.withDefault Cmd.none (Maybe.map (\pn -> sendToServer (WRSubscribeToView pn vn)) model.currentProject)
     in
-    ( { model | currentView = Just vn }, command )
-
+        ( { model | currentView = Just vn }, command )
 
 handleNewViewWithName : Model -> CalculationName -> Model
 handleNewViewWithName model vn =
     { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [ emptyRow ] } } }
-
 
 handleNewMapWithName : Model -> XMapName -> XMapType -> Model
 handleNewMapWithName model mn mt =
@@ -218,11 +210,8 @@ handleSwitchProjectViewTo model vt =
         functionRequest : Maybe (Cmd Msg)
         functionRequest =
             case model.functions of
-                Just fs ->
-                    Nothing
-                Nothing ->
-                    Just (sendToServer WRFunctions)
-
+                Just fs -> Nothing
+                Nothing -> Just (sendToServer WRFunctions)
         mapsInProjectRequest =
             Maybe.map (\pm -> sendToServer (WRMapsInProject pm.project.projectName)) (currentProjectModel model)
     in
@@ -239,39 +228,23 @@ handleTextToResultNameText model mn =
 handleShowMapInEditor : Model -> XMapName -> ( Model, Cmd Msg )
 handleShowMapInEditor model mn =
     let
-        cleanup =
-            updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing })
-
-        command pn =
-            sendToServer (WRLoadMap pn mn)
+        cleanup = updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing })
+        command pn = sendToServer (WRLoadMap pn mn)
     in
-    case model.currentProject of
-        Just pn ->
-            ( cleanup, command pn )
-
-        Nothing ->
-            ( model, Cmd.none )
-
+        case model.currentProject of
+            Just pn -> ( cleanup, command pn )
+            Nothing -> ( model, Cmd.none )
 
 handleMapToTable : Model -> Model
 handleMapToTable model =
     let
-        xmapEditorModel =
-            model.xmapEditorModel
-
-        mm =
-            Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
+        xmapEditorModel =model.xmapEditorModel
+        mm = Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
     in
     case mm of
-        Just (Ok m) ->
-            updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
-
-        Just (Err e) ->
-            showMessage model e
-
-        Nothing ->
-            model
-
+        Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
+        Just (Err e) -> showMessage model e
+        Nothing -> model
 
 handleAddOperationToCalculation : Model -> OperationName -> Model
 handleAddOperationToCalculation model on =
@@ -281,7 +254,7 @@ handleAddOperationToCalculation model on =
                 |> Maybe.andThen (\fm -> Dict.get on fm.typesByName)
                 |> Maybe.map operationTypeToText
     in
-    appendToFormulaText model (Maybe.withDefault " " text)
+        appendToFormulaText model (Maybe.withDefault " " text)
 
 
 appendToFormulaText : Model -> String -> Model
@@ -290,7 +263,7 @@ appendToFormulaText model s =
         updateFormulaText cm =
             Maybe.withDefault "" cm.calculationFormulaText ++ " " ++ s
     in
-    updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
+        updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
 
 
 operationTypeToText : OperationType -> String
@@ -299,32 +272,19 @@ operationTypeToText ot =
         insidePars s =
             "[" ++ s ++ "]"
     in
-    ot.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
-
+        ot.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model =
     updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
 
-
 emptyRow : ViewRow
-emptyRow =
-    ViewRow []
-
+emptyRow = ViewRow []
 
 parameterTypeToText t =
     case t of
-        ParameterDouble ->
-            "double"
-
-        ParameterInt ->
-            "int"
-
-        ParameterString ->
-            "string"
-
-        ParameterBool ->
-            "bool"
-
-        ParameterAny ->
-            "any"
+        ParameterDouble -> "double"
+        ParameterInt -> "int"
+        ParameterString -> "string"
+        ParameterBool -> "bool"
+        ParameterAny -> "any"

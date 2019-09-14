@@ -21,8 +21,7 @@ toBool b =
 textToMatrix : String -> List (List String)
 textToMatrix s =
     let
-        textToRow r =
-            String.split " " r
+        textToRow r = String.split " " r
     in
         String.split "\n" s |> List.map textToRow
 

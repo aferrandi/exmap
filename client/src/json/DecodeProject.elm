@@ -28,19 +28,12 @@ sourceTypeDecoder =
     let
         decodeFromType t =
             case t of
-                "fileSource" ->
-                    succeed FileSource
-
-                "odbcSource" ->
-                    decodeOdbcSource |> andThen (\s -> succeed (OdbcSource s))
-
-                "httpSource" ->
-                    decodeHttpSource |> andThen (\s -> succeed (HttpSource s))
-
-                otherwise ->
-                    fail ("source type " ++ t ++ " not recognized")
+                "fileSource" -> succeed FileSource
+                "odbcSource" -> decodeOdbcSource |> andThen (\s -> succeed (OdbcSource s))
+                "httpSource" -> decodeHttpSource |> andThen (\s -> succeed (HttpSource s))
+                otherwise -> fail ("source type " ++ t ++ " not recognized")
     in
-    decodeType decodeFromType
+        decodeType decodeFromType
 
 
 sourceDecoder : Decoder Source

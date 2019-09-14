@@ -24,12 +24,9 @@ encodeViewItem i =
 encodeViewRow : ViewRow -> Value
 encodeViewRow r =
     let
-        items (ViewRow is) =
-            is
+        items (ViewRow is) = is
     in
-    object
-        [ ( "items", list encodeViewItem (items r))
-        ]
+        object [ ( "items", list encodeViewItem (items r)) ]
 
 
 encodeView : View -> Value

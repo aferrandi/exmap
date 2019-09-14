@@ -9,10 +9,9 @@ import XMapTypes exposing (..)
 mapToText : XMap -> String
 mapToText m =
     let
-        rowToText r =
-            String.join " " r
+        rowToText r = String.join " " r
     in
-    mapToTransposedMatrix m |> List.map rowToText |> String.join "\n"
+        mapToTransposedMatrix m |> List.map rowToText |> String.join "\n"
 
 
 mapToMatrix : XMap -> List (List String)
