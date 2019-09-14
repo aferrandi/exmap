@@ -20,12 +20,10 @@ topAppBar model  =
     TopAppBar.view Mdc
         (makeIndex projectsUIIdx 1)
         model.mdc
-        [TopAppBar.fixedAdjust]
+        []
         [ TopAppBar.section
-            [
-                TopAppBar.alignStart
-            ] []
-            , TopAppBar.title [] [ text (title model) ]
+            [TopAppBar.alignStart]
+            [TopAppBar.title [] [ text (title model) ]]
         ]
 
 title : Model -> String
@@ -41,8 +39,8 @@ viewProjects : Model -> Html Msg
 viewProjects model =
     div []
         [
-         topAppBar model
-        , viewProjectsContent model
+         div [] [topAppBar model]
+        ,  Options.styled div [ TopAppBar.fixedAdjust] [viewProjectsContent model ]
         ]
 
 
