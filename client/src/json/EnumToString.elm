@@ -1,9 +1,14 @@
 module EnumToString exposing (..)
 
-import Json.Decode exposing (..)
 import Dict exposing (Dict, get)
+import Json.Decode exposing (..)
+
 
 stringToEnum : Dict String a -> String -> Decoder a
-stringToEnum m s = case get s m of
-                        Just e -> succeed e
-                        Nothing -> fail <| "Unknown : " ++ s
+stringToEnum m s =
+    case get s m of
+        Just e ->
+            succeed e
+
+        Nothing ->
+            fail <| "Unknown : " ++ s

@@ -1,2 +1,4 @@
-elm-make src/Main.elm
-cp index.html ../server/webclient
+elm make src/Main.elm --output app.js
+cp src/index.html .
+cp src/index.js .
+#cp index.html ../server/webclient

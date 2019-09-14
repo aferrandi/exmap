@@ -1,32 +1,40 @@
 module EncodeView exposing (..)
 
-import Json.Encode exposing (..)
-
 import EncodeXMap exposing (..)
+import Json.Encode exposing (..)
 import Views exposing (..)
 
 
 encodeViewItem : ViewItem -> Value
-encodeViewItem i = case i of
-                    MapItem mn -> object
-                          [ ("type", string "map")
-                          , ("mapName", encodeXmapName mn)
-                          ]
-                    LabelItem l -> object
-                         [ ("type", string "label")
-                         , ("label", string l)
-                         ]
+encodeViewItem i =
+    case i of
+        MapItem mn ->
+            object
+                [ ( "type", string "map" )
+                , ( "mapName", encodeXmapName mn )
+                ]
+
+        LabelItem l ->
+            object
+                [ ( "type", string "label" )
+                , ( "label", string l )
+                ]
+
 
 encodeViewRow : ViewRow -> Value
 encodeViewRow r =
-    let items (ViewRow is) = is
-    in object
-         [ ("items", List.map encodeViewItem (items r) |> list)
-          ]
+    let
+        items (ViewRow is) =
+            is
+    in
+    object
+        [ ( "items", list encodeViewItem (items r))
+        ]
 
 
 encodeView : View -> Value
-encodeView v = object
-                 [ ("viewName", string v.viewName)
-                 , ("rows", List.map encodeViewRow v.rows |> list)
-                  ]
+encodeView v =
+    object
+        [ ( "viewName", string v.viewName )
+        , ( "rows", list encodeViewRow v.rows)
+        ]

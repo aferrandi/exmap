@@ -1,18 +1,26 @@
 module ServerMessaging exposing (..)
 
-import WebSocket exposing (..)
+import EncodeWebRequest exposing (..)
+import Json.Encode exposing (encode)
 import ProjectModel exposing (..)
 import WebMessages exposing (..)
-import Json.Encode exposing (encode)
-import EncodeWebRequest exposing (..)
+import Ports exposing(..)
+
+
 
 wsUrl : String
 wsUrl = "ws://localhost:3000"
 
+
 sendToServer : WebRequest -> Cmd Msg
-sendToServer req = WebSocket.send wsUrl (encode 0 (encodeWebRequest req))
+sendToServer req =
+    Ports.sendMessage (encodeWebRequest req)
+
 
 subscriptionsToServer : Model -> Sub Msg
 subscriptionsToServer model =
-  WebSocket.listen wsUrl Receive
+    Ports.onServerMessage Receive
 
+onConnected : Model -> Sub Msg
+onConnected model =
+   Ports.onWebSocketChange WebSocketConnected

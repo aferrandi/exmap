@@ -1,9 +1,13 @@
 module MdlIndexes exposing (..)
 
-projectsUIIdx = 1
-projectUIIdx = 2
-viewsUIIdx = 3
-viewUIIdx = 4
-calcEditorIdx = 5
-mapEditorIdx = 6
-viewEditorIdx = 7
+
+projectsUIIdx = "prjs"
+projectUIIdx = "prj"
+viewsUIIdx = "vws"
+viewUIIdx = "vw"
+calcEditorIdx = "clce"
+mapEditorIdx = "mape"
+viewEditorIdx = "vwe"
+
+makeIndex: String -> Int -> String
+makeIndex idx sub = idx ++ String.fromInt(sub)

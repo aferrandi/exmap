@@ -1,159 +1,209 @@
 module MapEditor exposing (mapEditorView)
 
-import Dict as Dict
-import Html        exposing (..)
-import Html.Events exposing (onClick)
-import Material
-import Material.Button as Button exposing (render)
-import Material.Textfield as Textfield
-import Material.Grid as Grid
-import Material.List as Lists
-import Material.Table as Table
-import Material.Color as Color
-import Material.Icon as Icon
-import Material.Options as Options exposing (css)
-import List.Extra as ListX exposing (transpose, find)
-
-import ProjectModel exposing (..)
-import XMapTypes exposing(..)
-import MapsExtraction exposing (..)
-import Project exposing (..)
-import WebMessages exposing (WebRequest(..))
+import Html exposing (..)
+import Html.Events
 import InternalMessages exposing (..)
-import XMapText exposing (..)
-import XMapParse exposing (..)
-import UIWrapper exposing (..)
-import ModelUpdate exposing (..)
+import List.Extra as ListX
+import MapsExtraction exposing (..)
+
+import Material.LayoutGrid as LayoutGrid
+import Material.List as Lists
+import Material.Options as Options
+import Material.DataTable as DataTable
+import Material.TextField as TextField
 import MdlIndexes exposing (..)
+import Project exposing (..)
+import ProjectModel exposing (..)
+import UIWrapper exposing (..)
+import WebMessages exposing (WebRequest(..))
+import XMapText exposing (..)
+import XMapTypes exposing (..)
 
 
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
-    let  xmapEditorModel = model.xmapEditorModel
-         title = case xmapEditorModel.xmapName of
-                        Just xmapName -> "Editing map: " ++ xmapNameToString xmapName
-                        Nothing -> "Map Editor"
-    in div [] [
-           titleWithIcon title "layers" Color.DeepOrange,
-           Grid.grid [ Grid.noSpacing, heightInView 70 ]
-              [ cell 2 2 1 [] [ mapEditorMapList pm.project, newMapButton model]
-              , cell 6 10 3 [] [ mapEditorViewForMap model pm]
-           ]
-  ]
+    let
+        xmapEditorModel =
+            model.xmapEditorModel
+
+        title =
+            case xmapEditorModel.xmapName of
+                Just xmapName ->
+                    "Editing map: " ++ xmapNameToString xmapName
+
+                Nothing ->
+                    "Map Editor"
+    in
+    div []
+        [ titleWithIcon title "layers" "DarkOrange"
+        , LayoutGrid.view [ heightInView 70 ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ mapEditorMapList model pm.project, newMapButton model ]
+            , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ mapEditorViewForMap model pm ]
+            ]
+        ]
+-- Grid.noSpacing
 
 mapEditorViewForMap : Model -> ProjectModel -> Html Msg
 mapEditorViewForMap model pm =
-    let  xmapEditorModel = model.xmapEditorModel
-    in case model.xmapEditorModel.xmapName of
-        Just mn -> div [] [
-               Grid.grid [ Grid.noSpacing, heightInView 60 ]
-                  [ cell 3 5 1 [] [ mapEditorTextArea model pm]
-                  , cell 5 7 3 [] [ mapEditorTable xmapEditorModel.xmapToEdit ]
-               ],
-               Grid.grid [ Grid.noSpacing]
-                  [ cell 1 4 3 [] [ buttonClick model [mapEditorIdx, 1] "To Table >" (Internal MapToTable) ]
-                  , cell 2 4 3 [] [ buttonClick model [mapEditorIdx, 2] "< To Text" (Internal MapToTextArea) ]
-                  , cell 1 4 2 [] [ buttonMaybe model [mapEditorIdx, 3] "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit)   ]
-              ]
-            ]
-        Nothing -> div [][]
+    let
+        xmapEditorModel =
+            model.xmapEditorModel
+    in
+    case model.xmapEditorModel.xmapName of
+        Just mn ->
+            div []
+                   -- Grid.noSpacing,
+                [ LayoutGrid.view [ heightInView 60 ]
+                    [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ mapEditorTextArea model pm ]
+                    , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone] [ mapEditorTable xmapEditorModel.xmapToEdit ]
+                    ]
+                    --Grid.noSpacing
+                , LayoutGrid.view [  ]
+                    [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone] [ buttonClick model (makeIndex mapEditorIdx 1) "To Table >" (Internal MapToTable) ]
+                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone] [ buttonClick model (makeIndex mapEditorIdx 2) "< To Text" (Internal MapToTextArea) ]
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
+                    ]
+                ]
+
+        Nothing ->
+            div [] []
 
 
-
-xmapTypeChoice : Model  -> Html Msg
-xmapTypeChoice  model =
-  let hasType t = model.xmapEditorModel.xmapType == t
-  in div []
-  [
-    toggle model [mapEditorIdx, 4] "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble)),
-    toggle model [mapEditorIdx, 5] "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt)),
-    toggle model [mapEditorIdx, 6] "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString)),
-    toggle model [mapEditorIdx, 7] "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
-    ]
+xmapTypeChoice : Model -> Html Msg
+xmapTypeChoice model =
+    let
+        hasType t =
+            model.xmapEditorModel.xmapType == t
+    in
+    div []
+        [ toggle model (makeIndex mapEditorIdx 4) "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
+        , toggle model (makeIndex mapEditorIdx 5) "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
+        , toggle model (makeIndex mapEditorIdx 6) "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
+        , toggle model (makeIndex mapEditorIdx 7) "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+        ]
 
 
 newMapButton : Model -> Html Msg
-newMapButton model=
-    let xmapEditorModel = model.xmapEditorModel
-        storeNewMap = case xmapNameFromString xmapEditorModel.newXmapName of
-                          Ok mn -> Internal (NewMapWithName mn xmapEditorModel.xmapType)
-                          Err e -> Internal (ShowMessage e)
-    in div[] [
-        xmapTypeChoice model,
-        Textfield.render Mdl [mapEditorIdx, 8] model.mdl
-                                             [ Textfield.label "New map name"
-                                             , Textfield.floatingLabel
-                                             , Textfield.text_
-                                             , Options.onInput (\s -> Internal (UpdateMapName s))
-                                             , Textfield.value xmapEditorModel.newXmapName
-                                             ]
-                                             [],
-        buttonClick model [mapEditorIdx, 9] "New map" storeNewMap
-           ]
+newMapButton model =
+    let
+        xmapEditorModel =
+            model.xmapEditorModel
+
+        storeNewMap =
+            case xmapNameFromString xmapEditorModel.newXmapName of
+                Ok mn ->
+                    Internal (NewMapWithName mn xmapEditorModel.xmapType)
+
+                Err e ->
+                    Internal (ShowMessage e)
+    in
+    div []
+        [ xmapTypeChoice model
+        , TextField.view Mdc
+            (makeIndex mapEditorIdx  8)
+            model.mdc
+            [ TextField.label "New map name"
+            --, TextField.floatingLabel
+            -- , TextField.text_
+            , Options.onInput (\s -> Internal (UpdateMapName s))
+            , TextField.value xmapEditorModel.newXmapName
+            ]
+            []
+        , buttonClick model (makeIndex mapEditorIdx 9) "New map" storeNewMap
+        ]
 
 
-mapEditorMapList : Project -> Html Msg
-mapEditorMapList p =
-    let listItem mn = Lists.li []
-                           [ Lists.content
-                               [ Options.attribute <| Html.Events.onClick (Internal (ShowMapInEditor mn)) ]
-                               [ Lists.avatarIcon "list" [], text (xmapNameToString mn) ]
-                           ]
-    in Lists.ul (scrollableListStyle 50) (List.map listItem (fileSourcesOfProject p))
+mapEditorMapList : Model -> Project -> Html Msg
+mapEditorMapList model p =
+    let
+        sendShowMap index = sendListMsg (\mn -> Internal (ShowMapInEditor mn)) (fileSourcesOfProject p) index
+        listItem mn =
+            Lists.li []
+                [
+                    Lists.graphicIcon [] "list",
+                    text (xmapNameToString mn)
+                ]
+    in
+    Lists.ul Mdc (makeIndex mapEditorIdx 11) model.mdc
+        [ Lists.onSelectListItem sendShowMap ]  -- (scrollableListStyle 50)
+        (List.map listItem (fileSourcesOfProject p))
+
 
 storeMap : ProjectModel -> XMapName -> XMap -> Msg
-storeMap pm n m =  WRStoreMap  pm.project.projectName { xmapName = n , xmap = m } |> Send
+storeMap pm n m =
+    WRStoreMap pm.project.projectName { xmapName = n, xmap = m } |> Send
+
 
 fileSourcesOfProject : Project -> List XMapName
 fileSourcesOfProject p =
-    let maybeMaps : Maybe (List XMapName)
-        maybeMaps = ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
-    in Maybe.withDefault [] maybeMaps
+    let
+        maybeMaps : Maybe (List XMapName)
+        maybeMaps =
+            ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
+    in
+    Maybe.withDefault [] maybeMaps
+
 
 mapEditorTextArea : Model -> ProjectModel -> Html Msg
-mapEditorTextArea model pm = Textfield.render Mdl [mapEditorIdx, 10] model.mdl
-                              [ Textfield.label "Enter the map data"
-                              , Textfield.floatingLabel
-                              , Textfield.textarea
-                              , Textfield.rows 20
-                              , Textfield.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
-                              , Options.onInput (\s -> Internal (TextToMapTextArea s))
-                              ]
-                              []
+mapEditorTextArea model pm =
+    TextField.view Mdc
+        (makeIndex mapEditorIdx 10)
+        model.mdc
+        [ TextField.label "Enter the map data"
+        --, TextField.floatingLabel
+        , TextField.textarea
+        , TextField.rows 20
+        , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
+        , Options.onInput (\s -> Internal (TextToMapTextArea s))
+        ]
+        []
 
-mapEditorTableFull  : XMap -> Html Msg
-mapEditorTableFull m = Table.table (scrollableTableStyle 50) [
-                                                           mapHeader,
-                                                           mapRows m
-                                                           ]
+
+mapEditorTableFull : XMap -> Html Msg
+mapEditorTableFull m =
+    DataTable.table (scrollableTableStyle 50)
+        [ mapHeader
+        , mapRows m
+        ]
+
 
 mapEditorTableEmpty : Html Msg
-mapEditorTableEmpty = Table.table [] [
-                                        mapHeader,
-                                        Table.tbody [] []
-                                        ]
+mapEditorTableEmpty =
+    DataTable.table []
+        [ mapHeader
+        , DataTable.tbody [] []
+        ]
+
 
 mapEditorTable : Maybe XMap -> Html Msg
-mapEditorTable mm = case mm of
-                        Just m -> mapEditorTableFull m
-                        Nothing -> mapEditorTableEmpty
+mapEditorTable mm =
+    case mm of
+        Just m ->
+            mapEditorTableFull m
+
+        Nothing ->
+            mapEditorTableEmpty
+
 
 mapHeader : Html Msg
-mapHeader = Table.thead []
-                     [ Table.tr []
-                        [
-                        Table.th bold [ text "Ids" ],
-                        Table.th bold [ text "Values" ]
-                        ]
-                     ]
+mapHeader =
+    DataTable.thead []
+        [ DataTable.tr []
+            [ DataTable.th bold [ text "Ids" ]
+            , DataTable.th bold [ text "Values" ]
+            ]
+        ]
+
 
 mapRows : XMap -> Html Msg
-mapRows m = let rows = List.map lineToTableRow (mapToTransposedMatrix m)
-            in Table.tbody [] rows
+mapRows m =
+    let
+        rows =
+            List.map lineToTableRow (mapToTransposedMatrix m)
+    in
+    DataTable.tbody [] rows
 
-lineToTableRow : List String  -> Html Msg
-lineToTableRow line = Table.tr [] (List.map (\v ->Table.td [] [ text v ]) line)
 
-
-
-
+lineToTableRow : List String -> Html Msg
+lineToTableRow line =
+    DataTable.tr [] (List.map (\v -> DataTable.td [] [ text v ]) line)
