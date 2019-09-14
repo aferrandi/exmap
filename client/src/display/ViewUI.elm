@@ -54,13 +54,11 @@ rowLineToTableRow line =
 rowToTable : ViewRow -> ViewModel -> List (List String)
 rowToTable row vm =
     let
-        ids =
-            rowIds row vm.maps
-
+        ids = rowIds row vm.maps
         values (ViewRow items) =
             List.map (itemToTable vm.maps ids) items
     in
-    Set.toList ids :: values row
+        Set.toList ids :: values row
 
 
 rowIds : ViewRow -> XMapByName -> Set.Set XMapKey

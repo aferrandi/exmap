@@ -26,19 +26,16 @@ viewViewsEditor model pm =
     let
         title =
             case model.viewEditorModel.viewName of
-                Just viewName ->
-                    "Editing view: " ++ viewName
-
-                Nothing ->
-                    "View Editor"
+                Just viewName -> "Editing view: " ++ viewName
+                Nothing -> "View Editor"
     in
-    div []
-        [ titleWithIcon title "view_module" "Pink"
-        , LayoutGrid.view [ heightInView 70 ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
-            , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
+        div []
+            [ titleWithIcon title "view_module" "Pink"
+            , LayoutGrid.view [ heightInView 70 ]
+                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
+                , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
+                ]
             ]
-        ]
 
 
 viewEditorForView model pm =
@@ -98,13 +95,8 @@ viewsList model p =
 viewEditorTable : Model -> Maybe View -> Html Msg
 viewEditorTable model mv =
     case mv of
-        Just v ->
-            DataTable.table []
-                [ viewRows model v ]
-
-        Nothing ->
-            DataTable.table []
-                [ DataTable.tbody [] [] ]
+        Just v -> DataTable.table [] [ viewRows model v ]
+        Nothing -> DataTable.table [] [ DataTable.tbody [] [] ]
 
 
 viewRows : Model -> View -> Html Msg
@@ -113,7 +105,7 @@ viewRows model v =
         rows =
             ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewRowToTableCells model) |> List.map (DataTable.tr [])
     in
-    DataTable.tbody [] rows
+        DataTable.tbody [] rows
 
 
 viewChoice model rowI =
@@ -134,7 +126,6 @@ viewCell i =
     case i of
         MapItem mn ->
             DataTable.td [ Options.css "background" "Coral"] [ text (xmapNameToString mn) ]
-
         LabelItem l ->
             DataTable.td [ Options.css "background" "DarkTurquoise"] [ text l ]
 

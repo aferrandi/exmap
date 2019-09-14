@@ -54,7 +54,6 @@ viewProjectsContent model =
         , viewMessages model
         ]
 
-
 viewAllProjectsList : Model -> Html Msg
 viewAllProjectsList model =
     let
@@ -64,15 +63,13 @@ viewAllProjectsList model =
             [ Lists.onSelectListItem sendOpenProject ] -- (scrollableListStyle 65)
             (List.map viewAllProjectsItem model.allProjects)
 
-
 viewAllProjectsItem : ProjectName -> Lists.ListItem Msg
 viewAllProjectsItem pn =
     Lists.li []
         [
-          Lists.graphicImage [] "folder",
+          Lists.graphicIcon [] "folder",
           text pn
         ]
-
 
 viewCurrentProject : Model -> Html Msg
 viewCurrentProject model =
@@ -87,7 +84,6 @@ viewMessagesItem msg =
         [ Lists.graphicIcon [] "inbox"
         , text msg
         ]
-
 
 viewMessages : Model -> Html Msg
 viewMessages model =
