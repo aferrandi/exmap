@@ -44,6 +44,7 @@ scrollableTableStyle h =
     , Options.css "overflow-y" "auto"
     , Options.css "display" "block"
     , Options.css "float" "left"
+    , Options.css "background" "WhiteSmoke"
     ]
 
 
