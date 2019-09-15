@@ -1,7 +1,6 @@
 module MapEditor exposing (mapEditorView)
 
 import Html exposing (..)
-import Html.Events
 import InternalMessages exposing (..)
 import List.Extra as ListX
 import MapsExtraction exposing (..)
@@ -24,20 +23,21 @@ import XMapTypes exposing (..)
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
     let
-        xmapEditorModel =
-            model.xmapEditorModel
+        xmapEditorModel = model.xmapEditorModel
         title =
             case xmapEditorModel.xmapName of
                 Just xmapName -> "Editing map: " ++ xmapNameToString xmapName
                 Nothing -> "Map Editor"
     in
-    div []
-        [ titleWithIcon title "layers" "DarkOrange"
-        , LayoutGrid.view [ heightInView 70 ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ mapEditorMapList model pm.project, newMapButton model ]
-            , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ mapEditorViewForMap model pm ]
+        div []
+            [ titleWithIcon title "layers" "DarkOrange"
+            , LayoutGrid.view [ heightInView 70 ]
+                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone]
+                    [ mapEditorMapList model pm.project, newMapButton model ]
+                , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
+                    [ mapEditorViewForMap model pm ]
+                ]
             ]
-        ]
 -- Grid.noSpacing
 
 mapEditorViewForMap : Model -> ProjectModel -> Html Msg
@@ -50,9 +50,11 @@ mapEditorViewForMap model pm =
         Just mn ->
             div []
                    -- Grid.noSpacing,
-                [ LayoutGrid.view [ heightInView 60 ]
-                    [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ mapEditorTextArea model pm ]
-                    , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone] [ mapEditorTable xmapEditorModel.xmapToEdit ]
+                [ LayoutGrid.view [ heightInView 50 ]
+                    [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone]
+                        [ mapEditorTextArea model pm ]
+                    , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone]
+                        [ mapEditorTable xmapEditorModel.xmapToEdit ]
                     ]
                     --Grid.noSpacing
                 , LayoutGrid.view [  ]
@@ -61,7 +63,8 @@ mapEditorViewForMap model pm =
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
                     [ buttonClick model (makeIndex mapEditorIdx 2) "< To Text" (Internal MapToTextArea) ]
                     , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]
-                    [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
+                    [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store"
+                        (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
         Nothing -> div [] []
@@ -110,7 +113,7 @@ mapEditorMapList model p =
                 ]
     in
         Lists.ul Mdc (makeIndex mapEditorIdx 11) model.mdc
-            ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 50))
+            ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 45))
             (List.map listItem (fileSourcesOfProject p))
 
 
@@ -137,7 +140,7 @@ mapEditorTextArea model pm =
         [ TextField.label "Enter the map data"
         --, TextField.floatingLabel
         , TextField.textarea
-        , heightInView 55
+        , heightInView 50
         , TextField.rows 20
         , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
         , Options.onInput (\s -> Internal (TextToMapTextArea s))

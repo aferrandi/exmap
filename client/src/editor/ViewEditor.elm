@@ -43,15 +43,17 @@ viewEditorForView model pm =
     case model.viewEditorModel.viewName of
         Just vn ->
             div []
-                [ LayoutGrid.view [ heightInView 60 ]
-                    [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone] [ viewEditorTable model model.viewEditorModel.viewToEdit ]
-                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ viewEditorMapList model, addLabelButton model ]
+                [ LayoutGrid.view [ heightInView 55 ]
+                    [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone]
+                            [ viewEditorTable model model.viewEditorModel.viewToEdit ]
+                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
+                            [ viewEditorMapList model, addLabelButton model ]
                     ]
                     -- Grid.noSpacing
                 , LayoutGrid.view [  ]
-                    [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span6Desktop, LayoutGrid.span4Phone] []
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ storeButton model pm ]
+                    [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] []
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ storeButton model pm ]
                     ]
                 ]
         Nothing -> div [] []
