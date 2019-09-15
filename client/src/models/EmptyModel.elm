@@ -67,5 +67,6 @@ emptyModel =
     , calculationEditorModel = emptyCalculationEditorModel
     , currentProjectForm = ViewsForm
     , mapsInProject = []
+    , openDialog = Nothing
     , functions = Nothing
     }

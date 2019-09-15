@@ -85,6 +85,7 @@ type alias Model =
     , currentProjectForm : ProjectFormType
     , mapsInProject : List XMapName
     , functions : Maybe FunctionsModel
+    , openDialog : Maybe String
     }
 
 

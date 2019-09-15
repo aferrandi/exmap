@@ -12,6 +12,7 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import MdlIndexes exposing (..)
+import NameDialog exposing (nameDialog)
 import Project exposing (..)
 import ProjectModel exposing (..)
 import UIWrapper exposing (..)
@@ -92,17 +93,8 @@ newMapButton model =
     in
     div []
         [ xmapTypeChoice model
-        , TextField.view Mdc
-            (makeIndex mapEditorIdx  8)
-            model.mdc
-            [ TextField.label "New map name"
-            --, TextField.floatingLabel
-            -- , TextField.text_
-            , Options.onInput (\s -> Internal (UpdateMapName s))
-            , TextField.value xmapEditorModel.newXmapName
-            ]
-            []
-        , buttonClick model (makeIndex mapEditorIdx 9) "New map" storeNewMap
+        , nameDialog (makeIndex mapEditorIdx 11) model "New map" (\s -> Internal (UpdateMapName s)) storeNewMap
+        , buttonClick model (makeIndex mapEditorIdx 9) "New map" (Internal (ShowDialog (makeIndex mapEditorIdx 11)))
         ]
 
 

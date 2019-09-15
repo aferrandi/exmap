@@ -71,6 +71,10 @@ updateInternal msg model =
             ( handleAddRowToView model, Cmd.none )
         ChangeViewEditSelectedRow row ->
             ( handleChangeViewEditSelectedRow model row, Cmd.none )
+        ShowDialog index ->
+             ( handleShowDialog model index, Cmd.none)
+        CloseDialog ->
+             ( handleCloseDialog model, Cmd.none)
 
 
 handleChangeViewEditSelectedRow : Model -> Int -> Model
@@ -114,7 +118,7 @@ handleOpenProject model pn =
         command =
             case openProjectWithName model pn of
                 Just pm -> Cmd.none
-                Nothing ->sendToServer (WRSubscribeToProject pn)
+                Nothing -> sendToServer (WRSubscribeToProject pn)
     in
         ( { model
             | currentProject = Just pn
@@ -164,16 +168,11 @@ handleAddRowToView model =
 handleAddItemToView : Model -> Int -> ViewItem -> Model
 handleAddItemToView model ri it =
     let
-        updateRow (ViewRow r) =
-            List.append r [ it ] |> ViewRow
-        updateRows rs =
-            ListX.updateAt ri updateRow rs
-            -- |> Maybe.withDefault rs
-        updateView mv =
-            Maybe.map (\v -> { v | rows = updateRows v.rows }) mv
+        updateRow (ViewRow r) = List.append r [ it ] |> ViewRow
+        updateRows rs = ListX.updateAt ri updateRow rs
+        updateView mv = Maybe.map (\v -> { v | rows = updateRows v.rows }) mv
     in
         updateViewEditorModel model (\vm -> { vm | viewToEdit = updateView vm.viewToEdit })
-
 
 handleChangeOperationMode : Model -> OperationMode -> Model
 handleChangeOperationMode model om =
@@ -236,8 +235,7 @@ handleAddOperationToCalculation model on =
 appendToFormulaText : Model -> String -> Model
 appendToFormulaText model s =
     let
-        updateFormulaText cm =
-            Maybe.withDefault "" cm.calculationFormulaText ++ " " ++ s
+        updateFormulaText cm = Maybe.withDefault "" cm.calculationFormulaText ++ " " ++ s
     in
         updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
 
@@ -254,6 +252,12 @@ handleMapToTextArea : Model -> Model
 handleMapToTextArea model =
     updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
 
+handleCloseDialog : Model ->  Model
+handleCloseDialog model = { model | openDialog = Nothing }
+
+handleShowDialog : Model -> String -> Model
+handleShowDialog model index = { model | openDialog = Just index }
+
 emptyRow : ViewRow
 emptyRow = ViewRow []
 
@@ -264,3 +268,4 @@ parameterTypeToText t =
         ParameterString -> "string"
         ParameterBool -> "bool"
         ParameterAny -> "any"
+

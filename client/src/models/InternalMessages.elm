@@ -39,3 +39,5 @@ type InternalMsg
     | NewMapWithName XMapName XMapType
     | ChangeViewEditSelectedRow Int
     | AddRowToView
+    | ShowDialog String
+    | CloseDialog
