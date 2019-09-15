@@ -37,6 +37,7 @@ type InternalMsg
     | NewCalculationWithName CalculationName
     | NewViewWithName ViewName
     | NewMapWithName XMapName XMapType
+    | NewProjectWithName ProjectName
     | ChangeViewEditSelectedRow Int
     | AddRowToView
     | ShowDialog String

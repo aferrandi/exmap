@@ -25,7 +25,7 @@ nameDialog index model title onInput onOk =
             ]
         , Dialog.content [] [
             TextField.view Mdc
-            index
+            (index ++ "-textfield")
             model.mdc
             [ TextField.label "Name"
             --, TextField.floatingLabel

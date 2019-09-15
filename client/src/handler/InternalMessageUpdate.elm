@@ -47,6 +47,8 @@ updateInternal msg model =
             ( handleNewViewWithName model vn, Cmd.none )
         NewMapWithName mn mt ->
             ( handleNewMapWithName model mn mt, Cmd.none )
+        NewProjectWithName pn ->
+            handleNewProjectWithName model pn
         ShowMessage s ->
             ( showMessage model s, Cmd.none )
         ShowMapInEditor mn ->
@@ -109,7 +111,7 @@ handleUpdateViewLabel model s =
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn =
-    { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn } }
+    closeDialog { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn } }
 
 
 handleOpenProject : Model -> ProjectName -> ( Model, Cmd Msg )
@@ -143,12 +145,21 @@ handleOpenView model vn =
 
 handleNewViewWithName : Model -> CalculationName -> Model
 handleNewViewWithName model vn =
-    { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [ emptyRow ] } } }
+    closeDialog { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [ emptyRow ] } } }
 
 handleNewMapWithName : Model -> XMapName -> XMapType -> Model
 handleNewMapWithName model mn mt =
-    { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt } }
+    closeDialog { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt } }
 
+handleNewProjectWithName : Model -> ProjectName -> ( Model, Cmd Msg )
+handleNewProjectWithName model pn =
+    ( closeDialog model, sendToServer (WRNewProject
+                                              { projectName = model.newProjectName
+                                              , calculations = []
+                                              , viewNames = []
+                                              , sources = []
+                                              }
+                                          ))
 
 handleChangeMapType : Model -> XMapType -> Model
 handleChangeMapType model mt =
@@ -253,7 +264,7 @@ handleMapToTextArea model =
     updateXMapEditorModel model (\xm -> { xm | xmapEditing = Maybe.map mapToText xm.xmapToEdit })
 
 handleCloseDialog : Model ->  Model
-handleCloseDialog model = { model | openDialog = Nothing }
+handleCloseDialog = closeDialog
 
 handleShowDialog : Model -> String -> Model
 handleShowDialog model index = { model | openDialog = Just index }
@@ -269,3 +280,5 @@ parameterTypeToText t =
         ParameterBool -> "bool"
         ParameterAny -> "any"
 
+closeDialog : Model ->  Model
+closeDialog model = { model | openDialog = Nothing }

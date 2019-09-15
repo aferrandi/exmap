@@ -9,6 +9,7 @@ import Material.Options as Options
 import Material.TextField as TextField
 import Material.TopAppBar as TopAppBar
 import MdlIndexes exposing (..)
+import NameDialog exposing (nameDialog)
 import Project exposing (Error, ProjectName)
 import ProjectModel exposing (..)
 import ProjectUI exposing (..)
@@ -91,26 +92,10 @@ viewMessages model =
 newProjectButton : Model -> Html Msg
 newProjectButton model =
     let
-        newProjectMessage =
-            Send
-                (WRNewProject
-                    { projectName = model.newProjectName
-                    , calculations = []
-                    , viewNames = []
-                    , sources = []
-                    }
-                )
+        newProjectMessage = Internal (NewProjectWithName model.newProjectName)
     in
         div []
-            [ TextField.view Mdc
-                (makeIndex projectsUIIdx 2)
-                model.mdc
-                [ TextField.label "New project name"
-                -- , TextField.floatingLabel
-                -- , TextField.text_
-                , TextField.value model.newProjectName
-                , Options.onInput (\s -> Internal (UpdateProjectName s))
-                ]
-                []
-            , buttonClick model (makeIndex projectsUIIdx 2) "Create and store project" newProjectMessage
-            ]
+        [
+          nameDialog (makeIndex projectsUIIdx 3) model "Create and store project" (\s -> Internal (UpdateProjectName s)) newProjectMessage
+        , buttonClick model (makeIndex projectsUIIdx 2) "Create and store project"  (Internal (ShowDialog (makeIndex projectsUIIdx 3)))
+        ]

@@ -10,6 +10,7 @@ import Material.List as Lists
 import Material.Options as Options
 import Material.TextField as TextField
 import MdlIndexes exposing (..)
+import NameDialog exposing (nameDialog)
 import NameParser exposing (..)
 import Project exposing (..)
 import ProjectModel exposing (..)
@@ -207,15 +208,7 @@ newCalculationButton model =
                 Err err -> Internal (ShowMessage err)
     in
     div []
-        [ TextField.view Mdc
-            (makeIndex calcEditorIdx 6)
-            model.mdc
-            [ TextField.label "New Calculation Name"
-            --, TextField.floatingLabel
-            ---- , TextField.text_
-            , TextField.value calculationEditorModel.newCalculationName
-            , Options.onInput (\s -> Internal (UpdateCalculationName s))
-            ]
-            []
-        , buttonClick model (makeIndex calcEditorIdx 7) "New Calculation" newCalculationMessage
+        [
+          nameDialog (makeIndex calcEditorIdx 8) model "New Calculation" (\s -> Internal (UpdateCalculationName s)) newCalculationMessage
+        , buttonClick model (makeIndex calcEditorIdx 7) "New Calculation"  (Internal (ShowDialog (makeIndex calcEditorIdx 8)))
         ]

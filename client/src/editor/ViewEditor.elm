@@ -13,6 +13,7 @@ import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Material.RadioButton as RadioButton
 import MdlIndexes exposing (..)
+import NameDialog exposing (nameDialog)
 import NameParser exposing (..)
 import Project exposing (..)
 import ProjectModel exposing (..)
@@ -161,17 +162,9 @@ newViewButton model =
                 Err err -> Internal (ShowMessage err)
     in
     div []
-        [ TextField.view Mdc
-            (makeIndex viewEditorIdx 3)
-            model.mdc
-            [ TextField.label "New view name"
-            --, TextField.floatingLabel
-            ---- , TextField.text_
-            , TextField.value model.viewEditorModel.newViewName
-            , Options.onInput (\s -> Internal (UpdateViewName s))
-            ]
-            []
-        , buttonClick model (makeIndex viewEditorIdx 4) "New view" newViewMessage
+        [
+          nameDialog (makeIndex viewEditorIdx 3) model "New view" (\s -> Internal (UpdateViewName s)) newViewMessage
+        , buttonClick model (makeIndex viewEditorIdx 4) "New view"  (Internal (ShowDialog (makeIndex viewEditorIdx 3)))
         ]
 
 
