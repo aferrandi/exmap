@@ -89,7 +89,7 @@ newMapButton model =
         storeNewMap =
             case xmapNameFromString xmapEditorModel.newXmapName of
                 Ok mn -> Internal (NewMapWithName mn xmapEditorModel.xmapType)
-                Err e -> Internal (ShowMessage e)
+                Err e -> Internal (CloseDialogWithError e)
     in
     div []
         [ xmapTypeChoice model

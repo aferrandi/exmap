@@ -159,7 +159,7 @@ newViewButton model =
         newViewMessage =
             case nameFromString model.viewEditorModel.newViewName of
                 Ok newViewName -> Internal (NewViewWithName newViewName)
-                Err err -> Internal (ShowMessage err)
+                Err err -> Internal (CloseDialogWithError err)
     in
     div []
         [

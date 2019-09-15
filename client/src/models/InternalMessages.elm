@@ -42,3 +42,4 @@ type InternalMsg
     | AddRowToView
     | ShowDialog String
     | CloseDialog
+    | CloseDialogWithError String

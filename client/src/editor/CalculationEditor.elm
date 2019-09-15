@@ -204,8 +204,8 @@ newCalculationButton model =
 
         newCalculationMessage =
             case nameFromString calculationEditorModel.newCalculationName of
-                Ok newCalculationName -> Internal (NewCalculationWithName calculationEditorModel.newCalculationName)
-                Err err -> Internal (ShowMessage err)
+                Ok newCalculationName -> Internal (NewCalculationWithName newCalculationName)
+                Err err -> Internal (CloseDialogWithError err)
     in
     div []
         [

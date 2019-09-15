@@ -77,6 +77,8 @@ updateInternal msg model =
              ( handleShowDialog model index, Cmd.none)
         CloseDialog ->
              ( handleCloseDialog model, Cmd.none)
+        CloseDialogWithError err ->
+            ( showMessage model err |> closeDialog, Cmd.none )
 
 
 handleChangeViewEditSelectedRow : Model -> Int -> Model
@@ -254,8 +256,7 @@ appendToFormulaText model s =
 operationTypeToText : OperationType -> String
 operationTypeToText ot =
     let
-        insidePars s =
-            "[" ++ s ++ "]"
+        insidePars s = "[" ++ s ++ "]"
     in
         ot.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
 
