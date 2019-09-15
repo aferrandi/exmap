@@ -29,8 +29,7 @@ topAppBar model  =
 title : Model -> String
 title model =
     let
-        titleWithProject =
-            Maybe.map (\p -> ". Project " ++ p) model.currentProject
+        titleWithProject = Maybe.map (\p -> ". Project " ++ p) model.currentProject
     in
         "EXMAP" ++ Maybe.withDefault "" titleWithProject
 
@@ -87,7 +86,7 @@ viewMessagesItem msg =
 
 viewMessages : Model -> Html Msg
 viewMessages model =
-    Lists.ul Mdc (makeIndex projectsUIIdx 3) model.mdc [] (List.map viewMessagesItem model.messages)
+    Lists.ul Mdc (makeIndex projectsUIIdx 3) model.mdc  (scrollableListStyle 10) (List.map viewMessagesItem model.messages)
 
 newProjectButton : Model -> Html Msg
 newProjectButton model =

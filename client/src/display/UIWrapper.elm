@@ -60,7 +60,7 @@ scrollableListStyle h =
     [ heightInView h
     , Options.css "overflow-y" "auto"
     , Options.css "display" "block"
-    , Options.css "background" "LightGray"
+    , Options.css "background" "Gainsboro"
     ]
 
 

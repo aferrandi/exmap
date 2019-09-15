@@ -40,7 +40,7 @@ viewAllViewsList model pm =
                 ]
     in
     Lists.ul Mdc (makeIndex viewsUIIdx 1) model.mdc
-    ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 65))
+    ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 60))
     (List.map viewViewName pm.project.viewNames)
 
 viewCurrentView : Model -> ProjectModel -> Html Msg
