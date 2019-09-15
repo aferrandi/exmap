@@ -7,6 +7,7 @@ import Material.Button as Button
 
 import Material.FormField as FormField
 import Material.Icon as Icon
+import Material.List as List
 import Material.Options as Options
 import Material.RadioButton as RadioButton
 import Material.Typography as Typo
@@ -54,7 +55,7 @@ scrollableTableStyle h =
     ]
 
 
-scrollableListStyle : Int -> List (Options.Property c Msg)
+scrollableListStyle : Int -> List (List.Property m)
 scrollableListStyle h =
     [ heightInView h
     , Options.css "overflow-y" "auto"
@@ -68,7 +69,7 @@ bold =
     [ Options.css "font-weight" "1000" ]
 
 
-heightInView : Int -> Options.Property c Msg
+heightInView : Int -> Options.Property c m
 heightInView h =
     Options.css "height" (String.fromInt h ++ "vh")
 

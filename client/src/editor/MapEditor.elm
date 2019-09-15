@@ -116,7 +116,7 @@ mapEditorMapList model p =
                 ]
     in
     Lists.ul Mdc (makeIndex mapEditorIdx 11) model.mdc
-        [ Lists.onSelectListItem sendShowMap ]  -- (scrollableListStyle 50)
+        ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 50))
         (List.map listItem (fileSourcesOfProject p))
 
 

@@ -88,7 +88,7 @@ viewsList model p =
                 ]
     in
     Lists.ul Mdc (makeIndex viewEditorIdx 3) model.mdc
-        [ Lists.onSelectListItem sendLoadView ] -- (scrollableListStyle 55)
+        ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
         (List.map listItem p.viewNames)
 
 
@@ -148,7 +148,7 @@ viewEditorMapList model =
                 ]
     in
     Lists.ul Mdc (makeIndex viewEditorIdx 4) model.mdc
-        [ Lists.onSelectListItem sendAddItem ] -- (scrollableListStyle 40)
+        ((Lists.onSelectListItem sendAddItem) :: (scrollableListStyle 40))
         (List.map listItem model.mapsInProject)
 
 

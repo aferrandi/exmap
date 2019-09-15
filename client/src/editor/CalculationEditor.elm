@@ -127,7 +127,7 @@ calculationsInProjectList model pm =
     in
         Lists.ul Mdc (makeIndex calcEditorIdx 10)
                 model.mdc
-                 [ Lists.onSelectListItem sendCalculation ] --(scrollableListStyle 55) (
+                 ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 55) )
                  (List.map listItem pm.project.calculations)
 
 
@@ -145,7 +145,7 @@ mapsInProjectList model =
     Lists.ul Mdc
                 (makeIndex calcEditorIdx 9)
                 model.mdc
-                [ Lists.onSelectListItem sendAddMap ] -- (scrollableListStyle 40)
+                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 40))
                 (List.map listItem model.mapsInProject)
 
 
@@ -167,7 +167,7 @@ functionsList model =
     Lists.ul Mdc
         (makeIndex calcEditorIdx 8)
         model.mdc
-        [ Lists.onSelectListItem sendAddOperation ]-- (scrollableListStyle 40)
+        (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 40))
         operationList
 
 

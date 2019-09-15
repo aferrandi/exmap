@@ -60,7 +60,7 @@ viewAllProjectsList model =
         sendOpenProject index = sendListMsg (\pn -> Internal (OpenProject pn)) model.allProjects index
     in
         Lists.ul Mdc (makeIndex projectsUIIdx 4) model.mdc
-            [ Lists.onSelectListItem sendOpenProject ] -- (scrollableListStyle 65)
+            ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 65))
             (List.map viewAllProjectsItem model.allProjects)
 
 viewAllProjectsItem : ProjectName -> Lists.ListItem Msg
