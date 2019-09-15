@@ -178,6 +178,7 @@ calculationTextArea model =
         model.mdc
         [ TextField.label "Enter the formula"
         , TextField.textarea
+        , heightInView 40
         , TextField.rows 20
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
         , Options.onInput (\s -> Internal (TextToCalculationTextArea s))

@@ -143,6 +143,7 @@ mapEditorTextArea model pm =
         [ TextField.label "Enter the map data"
         --, TextField.floatingLabel
         , TextField.textarea
+        , heightInView 55
         , TextField.rows 20
         , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
         , Options.onInput (\s -> Internal (TextToMapTextArea s))
