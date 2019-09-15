@@ -68,13 +68,11 @@ storeView pm vm =
     case vm.viewName of
         Just vn ->
             case vm.viewToEdit of
-                Just v ->Send
-                        (WRStoreView pm.project.projectName
-                            { viewName = vn
-                            , rows = v.rows
-                            }
-                        )
-
+                Just v ->Send (WRStoreView pm.project.projectName
+                                { viewName = vn
+                                , rows = v.rows
+                                }
+                            )
                 Nothing -> Internal (ShowMessage "Please fill the view")
         Nothing -> Internal (ShowMessage "Please enter a view name")
 
@@ -90,9 +88,9 @@ viewsList model p =
                     , text vn
                 ]
     in
-    Lists.ul Mdc (makeIndex viewEditorIdx 3) model.mdc
-        ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
-        (List.map listItem p.viewNames)
+        Lists.ul Mdc (makeIndex viewEditorIdx 3) model.mdc
+            ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
+            (List.map listItem p.viewNames)
 
 
 viewEditorTable : Model -> Maybe View -> Html Msg
@@ -123,14 +121,11 @@ viewChoice model rowI =
             []
         ]
 
-
 viewCell : ViewItem -> Html Msg
 viewCell i =
     case i of
-        MapItem mn ->
-            DataTable.td [ Options.css "background" "Coral"] [ text (xmapNameToString mn) ]
-        LabelItem l ->
-            DataTable.td [ Options.css "background" "DarkTurquoise"] [ text l ]
+        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ text (xmapNameToString mn) ]
+        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ text l ]
 
 
 viewRowToTableCells : Model -> ( Int, ViewRow ) -> List (Html Msg)
@@ -163,11 +158,11 @@ newViewButton model =
                 Ok newViewName -> Internal (NewViewWithName newViewName)
                 Err err -> Internal (CloseDialogWithError err)
     in
-    div []
-        [
-          nameDialog (makeIndex viewEditorIdx 3) model "New view" (\s -> Internal (UpdateViewName s)) newViewMessage
-        , buttonClick model (makeIndex viewEditorIdx 4) "New view"  (Internal (ShowDialog (makeIndex viewEditorIdx 3)))
-        ]
+        div []
+            [
+              nameDialog (makeIndex viewEditorIdx 3) model "New view" (\s -> Internal (UpdateViewName s)) newViewMessage
+            , buttonClick model (makeIndex viewEditorIdx 4) "New view"  (Internal (ShowDialog (makeIndex viewEditorIdx 3)))
+            ]
 
 
 addLabelButton : Model -> Html Msg
@@ -181,15 +176,12 @@ addLabelButton model =
             (makeIndex viewEditorIdx 5)
             model.mdc
             [ TextField.label "Label name"
-            -- , TextField.floatingLabel
-            -- , TextField.text_
             , TextField.value viewEditorModel.labelEditing
             , Options.onInput (\s -> Internal (UpdateViewLabel s))
             ]
             []
         , buttonClick model (makeIndex viewEditorIdx 6) "Add label" newLabelMessage
         ]
-
 
 addRowButton : Model -> Html Msg
 addRowButton model =
