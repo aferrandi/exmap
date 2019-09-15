@@ -1,16 +1,9 @@
 module ServerMessaging exposing (..)
 
 import EncodeWebRequest exposing (..)
-import Json.Encode exposing (encode)
 import ProjectModel exposing (..)
 import WebMessages exposing (..)
 import Ports exposing(..)
-
-
-
-wsUrl : String
-wsUrl = "ws://localhost:3000"
-
 
 sendToServer : WebRequest -> Cmd Msg
 sendToServer req =

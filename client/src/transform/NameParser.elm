@@ -2,7 +2,6 @@ module NameParser exposing (..)
 
 import Regex as Regex exposing (..)
 
-
 nameFromString : String -> Result String String
 nameFromString t =
     if Regex.contains (Maybe.withDefault Regex.never <| Regex.fromString "\\w[\\w\\d]*") t then
