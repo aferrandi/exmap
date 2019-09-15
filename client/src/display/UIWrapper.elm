@@ -52,9 +52,8 @@ scrollableListStyle h =
     [ heightInView h
     , Options.css "overflow-y" "auto"
     , Options.css "display" "block"
-    , Options.css "background" "Gainsboro"
+    , Options.css "background" "WhiteSmoke"
     ]
-
 
 bold : List (Options.Property c Msg)
 bold = [ Options.css "font-weight" "1000" ]
@@ -70,10 +69,16 @@ sendListMsg toMsg list index =
         Nothing -> None
 
 titleWithIcon : String -> String -> String -> Html Msg
-titleWithIcon s i c =
+titleWithIcon txt iconName color =
     Options.styled Html.label
-        [ Typo.headline3 ]
-        [ Icon.view  [Options.css "color" c, Icon.size36 ] i, text s ]
+        [ Typo.headline4 ]
+        [ Icon.view
+            [
+                Options.css "margin" "4px",
+                Options.css "color" color,
+                Icon.size36
+            ] iconName,
+            text txt ]
 
 radio : Model -> String -> String -> String -> Bool -> Msg -> Html Msg
 radio model idx txt gp val msg =
