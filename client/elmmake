@@ -1,4 +1,5 @@
 elm make src/Main.elm --output app.js
 cp src/index.html .
-cp src/index.js .
+cp src/websockets.js .
+cp elm-mdc/material-components-web.css .
 #cp index.html ../server/webclient
