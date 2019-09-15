@@ -55,13 +55,15 @@ mapEditorViewForMap model pm =
                     ]
                     --Grid.noSpacing
                 , LayoutGrid.view [  ]
-                    [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone] [ buttonClick model (makeIndex mapEditorIdx 1) "To Table >" (Internal MapToTable) ]
-                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone] [ buttonClick model (makeIndex mapEditorIdx 2) "< To Text" (Internal MapToTextArea) ]
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
+                    [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
+                    [ buttonClick model (makeIndex mapEditorIdx 1) "To Table >" (Internal MapToTable) ]
+                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
+                    [ buttonClick model (makeIndex mapEditorIdx 2) "< To Text" (Internal MapToTextArea) ]
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]
+                    [ buttonMaybe model (makeIndex mapEditorIdx 3) "Store" (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
-        Nothing ->
-            div [] []
+        Nothing -> div [] []
 
 
 xmapTypeChoice : Model -> Html Msg
@@ -115,9 +117,9 @@ mapEditorMapList model p =
                     text (xmapNameToString mn)
                 ]
     in
-    Lists.ul Mdc (makeIndex mapEditorIdx 11) model.mdc
-        ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 50))
-        (List.map listItem (fileSourcesOfProject p))
+        Lists.ul Mdc (makeIndex mapEditorIdx 11) model.mdc
+            ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 50))
+            (List.map listItem (fileSourcesOfProject p))
 
 
 storeMap : ProjectModel -> XMapName -> XMap -> Msg
@@ -132,7 +134,7 @@ fileSourcesOfProject p =
         maybeMaps =
             ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
     in
-    Maybe.withDefault [] maybeMaps
+        Maybe.withDefault [] maybeMaps
 
 
 mapEditorTextArea : Model -> ProjectModel -> Html Msg
@@ -170,11 +172,8 @@ mapEditorTableEmpty =
 mapEditorTable : Maybe XMap -> Html Msg
 mapEditorTable mm =
     case mm of
-        Just m ->
-            mapEditorTableFull m
-
-        Nothing ->
-            mapEditorTableEmpty
+        Just m -> mapEditorTableFull m
+        Nothing -> mapEditorTableEmpty
 
 
 mapHeader : Html Msg
@@ -190,10 +189,9 @@ mapHeader =
 mapRows : XMap -> Html Msg
 mapRows m =
     let
-        rows =
-            List.map lineToTableRow (mapToTransposedMatrix m)
+        rows = List.map lineToTableRow (mapToTransposedMatrix m)
     in
-    DataTable.tbody [] rows
+        DataTable.tbody [] rows
 
 
 lineToTableRow : List String -> Html Msg

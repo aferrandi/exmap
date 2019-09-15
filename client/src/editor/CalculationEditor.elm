@@ -3,31 +3,18 @@ module CalculationEditor exposing (viewCalculationsEditor)
 import Calculation exposing (..)
 import EmptyModel exposing (emptyFunctionModel)
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (class, href, style)
-import Html.Events exposing (onClick)
 import InternalMessages exposing (..)
-import List.Extra as ListX exposing (transpose)
 import MapsExtraction exposing (xmapNameFromString, xmapNameToString)
-import Material.Dialog as Dialog
-import Material.Elevation as Elevation
 import Material.LayoutGrid as LayoutGrid
-import Material.Icon as Icon
 import Material.List as Lists
-import Material.Menu as Menu exposing (Item)
-import Material.Options as Options exposing (css)
-import Material.DataTable as DataTable
-import Material.TabBar as TabBar
+import Material.Options as Options
 import Material.TextField as TextField
-import Material.RadioButton as RadioButton
 import MdlIndexes exposing (..)
 import NameParser exposing (..)
 import Project exposing (..)
 import ProjectModel exposing (..)
 import UIWrapper exposing (..)
-import ViewUI exposing (..)
-import Views exposing (..)
 import WebMessages exposing (WebRequest(..))
-import XMapTypes exposing (..)
 
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
@@ -35,19 +22,16 @@ viewCalculationsEditor model pm =
     let
         title =
             case model.calculationEditorModel.calculationName of
-                Just calculationName ->
-                    "Editing calculation: " ++ calculationName
-
-                Nothing ->
-                    "Calculation Editor"
+                Just calculationName -> "Editing calculation: " ++ calculationName
+                Nothing -> "Calculation Editor"
     in
-    div []
-        [ titleWithIcon title "functions" "Green"
-        , LayoutGrid.view [ heightInView 70 ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ div [] [ calculationsInProjectList model pm, newCalculationButton model ] ]
-            , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCalculationEditor model pm ]
+        div []
+            [ titleWithIcon title "functions" "Green"
+            , LayoutGrid.view [ heightInView 70 ]
+                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ div [] [ calculationsInProjectList model pm, newCalculationButton model ] ]
+                , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCalculationEditor model pm ]
+                ]
             ]
-        ]
 
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
@@ -142,7 +126,7 @@ mapsInProjectList model =
                     text (xmapNameToString mn)
                 ]
     in
-    Lists.ul Mdc
+        Lists.ul Mdc
                 (makeIndex calcEditorIdx 9)
                 model.mdc
                 ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 40))

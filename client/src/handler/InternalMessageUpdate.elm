@@ -23,76 +23,52 @@ updateInternal msg model =
     case msg of
         MapToTextArea ->
             ( handleMapToTextArea model, Cmd.none )
-
         MapToTable ->
             ( handleMapToTable model, Cmd.none )
-
         OpenProject pn ->
             handleOpenProject model pn
-
         OpenView vn ->
             handleOpenView model vn
-
         TextToMapTextArea s ->
             ( updateXMapEditorModel model (\xm -> { xm | xmapEditing = Just s }), Cmd.none )
-
         UpdateMapName s ->
             ( handleUpdateMapName model s, Cmd.none )
-
         UpdateCalculationName s ->
             ( handleUpdateCalculationName model s, Cmd.none )
-
         UpdateViewName s ->
             ( handleUpdateViewName model s, Cmd.none )
-
         UpdateProjectName s ->
             ( handleUpdateProjectName model s, Cmd.none )
-
         UpdateViewLabel s ->
             ( handleUpdateViewLabel model s, Cmd.none )
-
         NewCalculationWithName cn ->
             ( handleNewCalculationWithName model cn, Cmd.none )
-
         NewViewWithName vn ->
             ( handleNewViewWithName model vn, Cmd.none )
-
         NewMapWithName mn mt ->
             ( handleNewMapWithName model mn mt, Cmd.none )
-
         ShowMessage s ->
             ( showMessage model s, Cmd.none )
-
         ShowMapInEditor mn ->
             handleShowMapInEditor model mn
-
         SwitchProjectViewTo vt ->
             handleSwitchProjectViewTo model vt
-
         TextToCalculationTextArea s ->
             ( updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just s }), Cmd.none )
-
         TextToResultNameText mn ->
             ( handleTextToResultNameText model mn, Cmd.none )
-
         AddMapToCalculation mn ->
             ( appendToFormulaText model (xmapNameToString mn), Cmd.none )
-
         AddOperationToCalculation on ->
             ( handleAddOperationToCalculation model on, Cmd.none )
-
         ChangeOperationMode om ->
             ( handleChangeOperationMode model om, Cmd.none )
-
         ChangeMapType mt ->
             ( handleChangeMapType model mt, Cmd.none )
-
         AddItemToView row it ->
             ( handleAddItemToView model row it, Cmd.none )
-
         AddRowToView ->
             ( handleAddRowToView model, Cmd.none )
-
         ChangeViewEditSelectedRow row ->
             ( handleChangeViewEditSelectedRow model row, Cmd.none )
 
@@ -238,13 +214,13 @@ handleShowMapInEditor model mn =
 handleMapToTable : Model -> Model
 handleMapToTable model =
     let
-        xmapEditorModel =model.xmapEditorModel
+        xmapEditorModel = model.xmapEditorModel
         mm = Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
     in
-    case mm of
-        Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
-        Just (Err e) -> showMessage model e
-        Nothing -> model
+        case mm of
+            Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
+            Just (Err e) -> showMessage model e
+            Nothing -> model
 
 handleAddOperationToCalculation : Model -> OperationName -> Model
 handleAddOperationToCalculation model on =

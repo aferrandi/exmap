@@ -21,9 +21,9 @@ toBool b =
 textToMatrix : String -> List (List String)
 textToMatrix s =
     let
-        textToRow r = String.split " " r
+        textToRow r = String.words (String.trim r)
     in
-        String.split "\n" s |> List.map textToRow
+        String.lines (String.trim s) |> List.map textToRow
 
 
 matrixToMap : XMapType -> List (List String) -> Result String XMap
@@ -37,11 +37,7 @@ matrixToMap t ll =
         toInt v = String.toInt v |> Result.fromMaybe (v++" is not an int")
     in
         case t of
-            TypeDouble ->
-                List.map toFloat vs |> compose |> toDict |> Result.map XMapDouble
-            TypeInt ->
-                List.map toInt vs |> compose |> toDict |> Result.map XMapInt
-            TypeString ->
-                Ok vs |> toDict |> Result.map XMapString
-            TypeBool ->
-                List.map toBool vs |> compose |> toDict |> Result.map XMapBool
+            TypeDouble -> List.map toFloat vs |> compose |> toDict |> Result.map XMapDouble
+            TypeInt -> List.map toInt vs |> compose |> toDict |> Result.map XMapInt
+            TypeString -> Ok vs |> toDict |> Result.map XMapString
+            TypeBool -> List.map toBool vs |> compose |> toDict |> Result.map XMapBool
