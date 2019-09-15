@@ -89,8 +89,8 @@ titleWithIcon s i c =
         [ Icon.view  [Options.css "color" c, Icon.size36 ] i, text s ]
 
 
-toggle : Model -> String -> String -> String -> Bool -> Msg -> Html Msg
-toggle model idx txt gp val msg =
+radio : Model -> String -> String -> String -> Bool -> Msg -> Html Msg
+radio model idx txt gp val msg =
      FormField.view [ Options.css "margin" "0 10px" ]
     [RadioButton.view Mdc
         idx

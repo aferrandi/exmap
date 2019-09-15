@@ -72,10 +72,10 @@ xmapTypeChoice model =
         hasType t = model.xmapEditorModel.xmapType == t
     in
         div []
-            [ toggle model (makeIndex mapEditorIdx 4) "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
-            , toggle model (makeIndex mapEditorIdx 5) "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
-            , toggle model (makeIndex mapEditorIdx 6) "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
-            , toggle model (makeIndex mapEditorIdx 7) "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+            [ radio model (makeIndex mapEditorIdx 4) "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
+            , radio model (makeIndex mapEditorIdx 5) "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
+            , radio model (makeIndex mapEditorIdx 6) "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
+            , radio model (makeIndex mapEditorIdx 7) "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
             ]
 
 

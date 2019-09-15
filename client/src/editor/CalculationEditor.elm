@@ -190,8 +190,8 @@ operationNameChoice model =
             model.calculationEditorModel.operationMode == m
     in
     div []
-        [ toggle model (makeIndex calcEditorIdx 4) "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
-        , toggle model (makeIndex calcEditorIdx 5) "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
+        [ radio model (makeIndex calcEditorIdx 4) "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
+        , radio model (makeIndex calcEditorIdx 5) "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
         ]
 
 
