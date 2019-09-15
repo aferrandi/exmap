@@ -13,37 +13,29 @@ import Material.RadioButton as RadioButton
 import Material.Typography as Typo
 import ProjectModel exposing (..)
 
-
 buttonNoClick : Model -> String -> String -> List (Button.Property Msg) -> Html Msg
 buttonNoClick model index txt props =
     Button.view Mdc
         index
         model.mdc
         ([ Button.raised
-         -- , Button.colored
-         ]
-            ++ props
+         , Options.css "margin" "4px"
+         ] ++ props
         )
         [ text txt ]
-
 
 buttonClick : Model -> String -> String -> Msg -> Html Msg
 buttonClick model index txt msg =
     buttonNoClick model index txt [ Options.onClick msg ]
 
-
 buttonMaybe : Model -> String -> String -> Maybe Msg -> Html Msg
 buttonMaybe model index txt mmsg =
     let
-        msgProp =
-            case mmsg of
-                Just msg ->
-                    [ Options.onClick msg ]
-
-                Nothing ->
-                    []
+        msgProp = case mmsg of
+                    Just msg -> [ Options.onClick msg ]
+                    Nothing -> []
     in
-    buttonNoClick model index txt msgProp
+        buttonNoClick model index txt msgProp
 
 
 scrollableTableStyle : Int -> List (Options.Property c Msg)
@@ -65,29 +57,23 @@ scrollableListStyle h =
 
 
 bold : List (Options.Property c Msg)
-bold =
-    [ Options.css "font-weight" "1000" ]
-
+bold = [ Options.css "font-weight" "1000" ]
 
 heightInView : Int -> Options.Property c m
 heightInView h =
     Options.css "height" (String.fromInt h ++ "vh")
 
-
 sendListMsg : (a -> Msg) -> List a -> Int -> Msg
-sendListMsg toMsg list index = case (ListX.getAt index list) of
-                            Just v -> toMsg v
-                            Nothing -> None
-
-
-
+sendListMsg toMsg list index =
+    case (ListX.getAt index list) of
+        Just v -> toMsg v
+        Nothing -> None
 
 titleWithIcon : String -> String -> String -> Html Msg
 titleWithIcon s i c =
     Options.styled Html.label
         [ Typo.headline3 ]
         [ Icon.view  [Options.css "color" c, Icon.size36 ] i, text s ]
-
 
 radio : Model -> String -> String -> String -> Bool -> Msg -> Html Msg
 radio model idx txt gp val msg =
