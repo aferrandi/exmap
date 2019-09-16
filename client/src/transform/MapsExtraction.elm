@@ -35,7 +35,7 @@ xmapNameToString mn =
 
 xmapNameFromString : String -> Result String XMapName
 xmapNameFromString t =
-    if Regex.contains (Maybe.withDefault Regex.never <| Regex.fromString "^\\w[\\w\\d]*(/\\w[\\w\\d]*)*") t then
+    if Regex.contains (Maybe.withDefault Regex.never <| Regex.fromString "^[a-zA-Z]\\w*(\\/[a-zA-Z]\\w*)*$") t then
         Ok (String.split "/" t |> List.map String.trim)
     else
         Err "The text must start with a letter and contain only letters, numbers and slashes"
