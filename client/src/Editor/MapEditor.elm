@@ -144,6 +144,7 @@ mapEditorTextArea model pm =
         , TextField.rows 20
         , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
         , Options.onInput (\s -> Internal (TextToMapTextArea s))
+        , useWholeWidth
         ]
         []
 

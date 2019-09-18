@@ -53,7 +53,6 @@ viewEditorForCalculation model pm cn =
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ functionsList model ]
             ]
-            -- LayoutGrid.noSpacing
         , LayoutGrid.view [  ]
             [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span8Desktop, LayoutGrid.span4Phone]  []
             , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]  [ storeButton model pm ]
@@ -144,10 +143,8 @@ functionsList model =
                   Lists.graphicIcon  [] "play_arrow",
                   text on
                 ]
-        functions =
-            Maybe.withDefault emptyFunctionModel model.functions
-        operationList =
-            List.map operationListItem functions.operationNames
+        functions = Maybe.withDefault emptyFunctionModel model.functions
+        operationList = List.map operationListItem functions.operationNames
     in
     Lists.ul Mdc
         (makeIndex calcEditorIdx 8)
@@ -167,9 +164,9 @@ calculationTextArea model =
         , TextField.rows 20
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
         , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
+        , useWholeWidth
         ]
         []
-
 
 resultMapNameText : Model -> Html Msg
 resultMapNameText model =
@@ -177,12 +174,10 @@ resultMapNameText model =
         (makeIndex calcEditorIdx 3)
         model.mdc
         [ TextField.label "Enter the result map name"
-        -- , TextField.floatingLabel
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.resultMapName)
         , Options.onInput (\s -> Internal (TextToResultNameText s))
         ]
         []
-
 
 operationNameChoice : Model -> Html Msg
 operationNameChoice model =
@@ -190,25 +185,23 @@ operationNameChoice model =
         hasMode m =
             model.calculationEditorModel.operationMode == m
     in
-    div []
-        [ radio model (makeIndex calcEditorIdx 4) "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
-        , radio model (makeIndex calcEditorIdx 5) "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
-        ]
+        div []
+            [ radio model (makeIndex calcEditorIdx 4) "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
+            , radio model (makeIndex calcEditorIdx 5) "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
+            ]
 
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =
     let
-        calculationEditorModel =
-            model.calculationEditorModel
-
+        calculationEditorModel = model.calculationEditorModel
         newCalculationMessage =
             case nameFromString calculationEditorModel.newCalculationName of
                 Ok newCalculationName -> Internal (NewCalculationWithName newCalculationName)
                 Err err -> Internal (CloseDialogWithError err)
     in
-    div []
-        [
-          nameDialog (makeIndex calcEditorIdx 8) model "New Calculation" (\s -> Internal (UpdateCalculationName s)) newCalculationMessage
-        , buttonClick model (makeIndex calcEditorIdx 7) "New Calculation"  (Internal (ShowDialog (makeIndex calcEditorIdx 8)))
-        ]
+        div []
+            [
+              nameDialog (makeIndex calcEditorIdx 8) model "New Calculation" (\s -> Internal (UpdateCalculationName s)) newCalculationMessage
+            , buttonClick model (makeIndex calcEditorIdx 7) "New Calculation"  (Internal (ShowDialog (makeIndex calcEditorIdx 8)))
+            ]

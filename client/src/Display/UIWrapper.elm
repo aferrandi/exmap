@@ -63,6 +63,10 @@ heightInView : Int -> Options.Property c m
 heightInView h =
     Options.css "height" (String.fromInt h ++ "vh")
 
+useWholeWidth: Options.Property c m
+useWholeWidth =
+    Options.css "width" "100%"
+
 sendListMsg : (a -> Msg) -> List a -> Int -> Msg
 sendListMsg toMsg list index =
     case (ListX.getAt index list) of
