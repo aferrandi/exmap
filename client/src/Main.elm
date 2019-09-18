@@ -4,15 +4,15 @@ import Browser
 import Html        exposing (..)
 import Material
 
-import InternalMessageUpdate exposing (..)
-import EmptyModel exposing (emptyModel)
-import ModelUpdate exposing (showMessage)
+import Handler.InternalMessageUpdate exposing (..)
+import Models.EmptyModel exposing (emptyModel)
+import Handler.ModelUpdate exposing (showMessage)
 import Platform.Cmd exposing (batch)
-import WebMessages exposing (..)
-import ProjectModel exposing (..)
-import ProjectsUI exposing (..)
-import WebMessageUpdate exposing (..)
-import ServerMessaging exposing (..)
+import Models.WebMessages exposing (..)
+import Models.ProjectModel exposing (..)
+import Display.ProjectsUI exposing (..)
+import Handler.WebMessageUpdate exposing (..)
+import Server.ServerMessaging exposing (..)
 
 main : Program () Model Msg
 main =
