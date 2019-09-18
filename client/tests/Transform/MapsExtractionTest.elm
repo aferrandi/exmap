@@ -1,12 +1,11 @@
-module MapsExtractionTest exposing (..)
+module Transform.MapsExtractionTest exposing (..)
 
 import Expect exposing (Expectation)
-import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 import Dict exposing (..)
 
-import MapsExtraction exposing (..)
-import XMapTypes exposing (..)
+import Transform.MapsExtraction as MapsExtraction exposing (..)
+import Types.XMapTypes exposing (..)
 
 
 

@@ -1,9 +1,8 @@
 module MatrixTest exposing (..)
 
 import Expect exposing (Expectation)
-import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
-import List.Extra exposing (uncons, transpose)
+import List.Extra exposing (transpose)
 
 
 
