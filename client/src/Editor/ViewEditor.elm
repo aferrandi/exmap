@@ -11,7 +11,7 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Material.RadioButton as RadioButton
-import Display.MdlIndexes exposing (..)
+import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Transform.NameParser exposing (..)
 import Types.Project exposing (..)
@@ -59,7 +59,7 @@ viewEditorForView model pm =
 
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
-    storeView pm model.viewEditorModel |> buttonClick model (makeIndex viewEditorIdx 1) "Store"
+    storeView pm model.viewEditorModel |> buttonClick model (makeIndex viewEditorIdx "btnStr") "Store"
 
 
 storeView : ProjectModel -> ViewEditorModel -> Msg
@@ -87,7 +87,7 @@ viewsList model p =
                     , text vn
                 ]
     in
-        Lists.ul Mdc (makeIndex viewEditorIdx 3) model.mdc
+        Lists.ul Mdc (makeIndex viewEditorIdx "lstVew") model.mdc
             ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
             (List.map listItem p.viewNames)
 
@@ -111,10 +111,9 @@ viewRows model v =
 viewChoice model rowI =
     DataTable.td []
         [ RadioButton.view Mdc
-            (makeIndex viewEditorIdx 2)
+            (makeIndex viewEditorIdx "radChc")
             model.mdc
             [ RadioButton.selected |> Options.when (model.viewEditorModel.rowToAddTo == rowI)
-            --, RadioButton.group "tableGroup"
             , Options.onClick (Internal (ChangeViewEditSelectedRow rowI))
             ]
             []
@@ -144,7 +143,7 @@ viewEditorMapList model =
                     text (xmapNameToString mn)
                 ]
     in
-    Lists.ul Mdc (makeIndex viewEditorIdx 4) model.mdc
+    Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
         ((Lists.onSelectListItem sendAddItem) :: (scrollableListStyle 40))
         (List.map listItem model.mapsInProject)
 
@@ -156,11 +155,12 @@ newViewButton model =
             case nameFromString model.viewEditorModel.newViewName of
                 Ok newViewName -> Internal (NewViewWithName newViewName)
                 Err err -> Internal (CloseDialogWithError err)
+        idxDialog = makeIndex viewEditorIdx "dlgNewVew"
     in
         div []
             [
-              nameDialog (makeIndex viewEditorIdx 3) model "New view" (\s -> Internal (UpdateViewName s)) newViewMessage
-            , buttonClick model (makeIndex viewEditorIdx 4) "New view"  (Internal (ShowDialog (makeIndex viewEditorIdx 3)))
+              nameDialog idxDialog model "New view" (\s -> Internal (UpdateViewName s)) newViewMessage
+            , buttonClick model (makeIndex viewEditorIdx "btnNewVew") "New view"  (Internal (ShowDialog idxDialog))
             ]
 
 
@@ -172,16 +172,16 @@ addLabelButton model =
     in
     div []
         [ TextField.view Mdc
-            (makeIndex viewEditorIdx 5)
+            (makeIndex viewEditorIdx "txtAddLbl")
             model.mdc
             [ TextField.label "Label name"
             , TextField.value viewEditorModel.labelEditing
             , Options.onInput (\s -> Internal (UpdateViewLabel s))
             ]
             []
-        , buttonClick model (makeIndex viewEditorIdx 6) "Add label" newLabelMessage
+        , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
         ]
 
 addRowButton : Model -> Html Msg
 addRowButton model =
-    buttonClick model (makeIndex viewEditorIdx 7) "Add row" (Internal AddRowToView)
+    buttonClick model (makeIndex viewEditorIdx "btnAddRow") "Add row" (Internal AddRowToView)

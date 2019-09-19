@@ -9,7 +9,7 @@ import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
 import Material.Options as Options
 import Material.TextField as TextField
-import Display.MdlIndexes exposing (..)
+import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Transform.NameParser exposing (..)
 import Types.Project exposing (..)
@@ -62,7 +62,7 @@ viewEditorForCalculation model pm cn =
 
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
-    storeCalculation pm model.calculationEditorModel |> buttonClick model (makeIndex calcEditorIdx 1) "Store"
+    storeCalculation pm model.calculationEditorModel |> buttonClick model (makeIndex calcEditorIdx "btnStr") "Store"
 
 
 storeCalculation : ProjectModel -> CalculationEditorModel -> Msg
@@ -109,7 +109,7 @@ calculationsInProjectList model pm =
                     text cn
                 ]
     in
-        Lists.ul Mdc (makeIndex calcEditorIdx 10)
+        Lists.ul Mdc (makeIndex calcEditorIdx "lstClcInPrj")
                 model.mdc
                  ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 55) )
                  (List.map listItem pm.project.calculations)
@@ -127,7 +127,7 @@ mapsInProjectList model =
                 ]
     in
         Lists.ul Mdc
-                (makeIndex calcEditorIdx 9)
+                (makeIndex calcEditorIdx "lstMapInPrj")
                 model.mdc
                 ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 40))
                 (List.map listItem model.mapsInProject)
@@ -147,7 +147,7 @@ functionsList model =
         operationList = List.map operationListItem functions.operationNames
     in
     Lists.ul Mdc
-        (makeIndex calcEditorIdx 8)
+        (makeIndex calcEditorIdx "lstFnc")
         model.mdc
         (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 40))
         operationList
@@ -156,7 +156,7 @@ functionsList model =
 calculationTextArea : Model -> Html Msg
 calculationTextArea model =
     TextField.view Mdc
-        (makeIndex calcEditorIdx 2)
+        (makeIndex calcEditorIdx "txaClc")
         model.mdc
         [ TextField.label "Enter the formula"
         , TextField.textarea
@@ -171,7 +171,7 @@ calculationTextArea model =
 resultMapNameText : Model -> Html Msg
 resultMapNameText model =
     TextField.view Mdc
-        (makeIndex calcEditorIdx 3)
+        (makeIndex calcEditorIdx "txtResMapNme")
         model.mdc
         [ TextField.label "Enter the result map name"
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.resultMapName)
@@ -186,8 +186,8 @@ operationNameChoice model =
             model.calculationEditorModel.operationMode == m
     in
         div []
-            [ radio model (makeIndex calcEditorIdx 4) "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
-            , radio model (makeIndex calcEditorIdx 5) "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
+            [ radio model (makeIndex calcEditorIdx "opeNamUni") "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
+            , radio model (makeIndex calcEditorIdx "opeNamInt") "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
             ]
 
 
@@ -199,9 +199,10 @@ newCalculationButton model =
             case nameFromString calculationEditorModel.newCalculationName of
                 Ok newCalculationName -> Internal (NewCalculationWithName newCalculationName)
                 Err err -> Internal (CloseDialogWithError err)
+        idxDialog = makeIndex calcEditorIdx "dlgNewClc"
     in
         div []
             [
-              nameDialog (makeIndex calcEditorIdx 8) model "New Calculation" (\s -> Internal (UpdateCalculationName s)) newCalculationMessage
-            , buttonClick model (makeIndex calcEditorIdx 7) "New Calculation"  (Internal (ShowDialog (makeIndex calcEditorIdx 8)))
+              nameDialog idxDialog model "New Calculation" (\s -> Internal (UpdateCalculationName s)) newCalculationMessage
+            , buttonClick model (makeIndex calcEditorIdx "btnNewClc") "New Calculation"  (Internal (ShowDialog idxDialog))
             ]

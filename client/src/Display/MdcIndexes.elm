@@ -1,5 +1,4 @@
-module Display.MdlIndexes exposing (..)
-
+module Display.MdcIndexes exposing (..)
 
 projectsUIIdx = "prjs"
 projectUIIdx = "prj"
@@ -9,5 +8,5 @@ calcEditorIdx = "clce"
 mapEditorIdx = "mape"
 viewEditorIdx = "vwe"
 
-makeIndex: String -> Int -> String
-makeIndex idx sub = idx ++ String.fromInt(sub)
+makeIndex: String -> String -> String
+makeIndex viewIdx compIdx = viewIdx ++ "." ++ compIdx

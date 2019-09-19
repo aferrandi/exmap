@@ -7,7 +7,7 @@ import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
 import Material.Options as Options
 import Material.TopAppBar as TopAppBar
-import Display.MdlIndexes exposing (..)
+import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Types.Project exposing (Error, ProjectName)
 import Models.ProjectModel exposing (..)
@@ -17,7 +17,7 @@ import Display.UIWrapper exposing (..)
 topAppBar : Model -> Html Msg
 topAppBar model  =
     TopAppBar.view Mdc
-        (makeIndex projectsUIIdx 1)
+        (makeIndex projectsUIIdx "topAppBar")
         model.mdc
         []
         [ TopAppBar.section
@@ -57,7 +57,7 @@ viewAllProjectsList model =
     let
         sendOpenProject index = sendListMsg (\pn -> Internal (OpenProject pn)) model.allProjects index
     in
-        Lists.ul Mdc (makeIndex projectsUIIdx 4) model.mdc
+        Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
             ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 65))
             (List.map viewAllProjectsItem model.allProjects)
 
@@ -85,15 +85,16 @@ viewMessagesItem msg =
 
 viewMessages : Model -> Html Msg
 viewMessages model =
-    Lists.ul Mdc (makeIndex projectsUIIdx 3) model.mdc  (scrollableListStyle 10) (List.map viewMessagesItem model.messages)
+    Lists.ul Mdc (makeIndex projectsUIIdx "lstMsg") model.mdc  (scrollableListStyle 10) (List.map viewMessagesItem model.messages)
 
 newProjectButton : Model -> Html Msg
 newProjectButton model =
     let
         newProjectMessage = Internal (NewProjectWithName model.newProjectName)
+        idxDialog = makeIndex projectsUIIdx "dlgNewPrj"
     in
         div []
         [
-          nameDialog (makeIndex projectsUIIdx 3) model "Create and store project" (\s -> Internal (UpdateProjectName s)) newProjectMessage
-        , buttonClick model (makeIndex projectsUIIdx 2) "Create and store project"  (Internal (ShowDialog (makeIndex projectsUIIdx 3)))
+          nameDialog idxDialog model "Create and store project" (\s -> Internal (UpdateProjectName s)) newProjectMessage
+        , buttonClick model (makeIndex projectsUIIdx "btnNewPrj") "Create and store project"  (Internal (ShowDialog idxDialog))
         ]

@@ -28,10 +28,7 @@ nameDialog index model title onInput onOk =
             (index ++ "-textfield")
             model.mdc
             [ TextField.label "Name"
-            --, TextField.floatingLabel
-            -- , TextField.text_
             , Options.onInput onInput
-            --, TextField.value xmapEditorModel.newXmapName
             ]
             []
             ]

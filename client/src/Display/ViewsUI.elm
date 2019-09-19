@@ -6,7 +6,7 @@ import List.Extra as ListX
 
 import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
-import Display.MdlIndexes exposing (makeIndex, viewsUIIdx)
+import Display.MdcIndexes exposing (makeIndex, viewsUIIdx)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
 import Display.ViewUI exposing (..)
@@ -39,7 +39,7 @@ viewAllViewsList model pm =
                     text vn
                 ]
     in
-    Lists.ul Mdc (makeIndex viewsUIIdx 1) model.mdc
+    Lists.ul Mdc (makeIndex viewsUIIdx "lstAllVew") model.mdc
     ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 60))
     (List.map viewViewName pm.project.viewNames)
 

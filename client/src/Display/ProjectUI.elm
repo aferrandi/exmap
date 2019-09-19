@@ -8,7 +8,7 @@ import Editor.MapEditor exposing (..)
 
 import Material.Options as Options
 import Material.TabBar as TabBar
-import Display.MdlIndexes exposing (..)
+import Display.MdcIndexes exposing (..)
 import Models.ProjectModel exposing (..)
 import Editor.ViewEditor exposing (..)
 import Display.ViewsUI exposing (..)
@@ -37,11 +37,10 @@ viewProjectTabs model =
                 [text title]
     in
     TabBar.view Mdc
-        (makeIndex projectUIIdx 1)
+        (makeIndex projectUIIdx "tbsPrj")
         model.mdc
         [
           TabBar.activeTab (projectFormToTab model.currentProjectForm)
-        --, TabBar.text <| pastel Color.Blue
         ]
         [ tab "view_comfy" "Views" ViewsForm
         , tab "layers" "Map Editor" MapEditorForm
