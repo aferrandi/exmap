@@ -5,7 +5,6 @@ const app = Elm.Main.init({
     },
 })
 
-const endpoint = 'ws://'+window.location.hostname+':3000'
 let socket = null
 
 app.ports.messages.subscribe((message) => {
@@ -16,16 +15,18 @@ app.ports.messages.subscribe((message) => {
     }
 })
 
-connect()
+app.ports.connection.subscribe((port) => {
+    connect(port);
+});
 
-function connect(attempts = 0) {
+function connect(port, attempts = 0) {
     if (socket) {
         socket.close()
         return
     }
-
+    endpoint = 'ws://'+window.location.hostname+':'+port
+    console.log('connect to '+endpoint)
     socket = new WebSocket(endpoint)
-
     socket.onopen = () => {
         attempts = 0
         app.ports.onWebSocketChange.send(true)

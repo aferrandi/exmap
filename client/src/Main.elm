@@ -24,7 +24,7 @@ main =
          }
 
 init : (Model, Cmd Msg)
-init = (emptyModel, Material.init Mdc )
+init = (emptyModel, Cmd.batch [Material.init Mdc, connect 3000] )
 
 view : Model -> Html Msg
 view model = viewProjects model
