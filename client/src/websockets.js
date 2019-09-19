@@ -5,7 +5,7 @@ const app = Elm.Main.init({
     },
 })
 
-const endpoint = 'ws://localhost:3000'
+const endpoint = 'ws://'+window.location.hostname+':3000'
 let socket = null
 
 app.ports.messages.subscribe((message) => {
