@@ -14,17 +14,21 @@ import Display.ProjectsUI exposing (..)
 import Handler.WebMessageUpdate exposing (..)
 import Server.ServerMessaging exposing (..)
 
-main : Program () Model Msg
+type alias Flags = {
+        wsPort : Int
+    }
+
+main : Program Flags Model Msg
 main =
     Browser.element
-        { init = \_ -> init
+        { init = \flags -> init flags
         , view = view
         , update = update
         , subscriptions = subscriptions
          }
 
-init : (Model, Cmd Msg)
-init = (emptyModel, Cmd.batch [Material.init Mdc, connect 3000] )
+init : Flags -> (Model, Cmd Msg)
+init flags = (emptyModel, Cmd.batch [Material.init Mdc, connect flags.wsPort] )
 
 view : Model -> Html Msg
 view model = viewProjects model

@@ -1,10 +1,3 @@
-const app = Elm.Main.init({
-    node: document.getElementById('elm'),
-    flags: {
-        uname: window.location.hash.slice(1) || '',
-    },
-})
-
 let socket = null;
 
 app.ports.messages.subscribe((message) => {
