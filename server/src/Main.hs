@@ -19,8 +19,8 @@ import qualified WebApp
 
 
 startFromRootPath :: Int -> String -> String -> IO ()
-startFromRootPath port index root = do
-    print $ "loading index.html from " ++ index ++" and projects from " ++ root
+startFromRootPath port pagesPath root = do
+    print $ "loading index.html from " ++ pagesPath ++" and projects from " ++ root ++ ". Server starting on port " ++ (show port)
     logChan <- newTChanIO
     _ <- forkIO $ actorLog root logChan
     system <- startSystem root logChan
@@ -28,22 +28,22 @@ startFromRootPath port index root = do
     print $ "System loaded with " ++ show (M.size ps) ++ " projects"
     systemChan <- newTChanIO
     _ <- forkIO $ actorSystem systemChan system
-    indexContent <- BL.readFile index
+    -- indexContent <- BL.readFile index
     print $ "Web server starting on port " ++ show(port)
-    WebApp.runWebApp port systemChan logChan indexContent
+    WebApp.runWebApp port systemChan logChan pagesPath
 
 main :: IO ()
 main = do
     args <- getArgs
     case args of
-        (port : index : root : xs) ->
+        (port : pagesPath : root : xs) ->
             case readMaybe port of
-                Just p -> startFromRootPath p index root
+                Just p -> startFromRootPath p pagesPath root
                 Nothing -> do
                     print "port must be an integer value"
                     return ()
         _ -> do
-            print "exmap <port> <indexHtmlPath> <projectsRootPath>"
+            print "exmap <port> <pagesHtmlPath> <projectsRootPath>"
             return ()
 
 

@@ -1,1 +1,1 @@
-stack image container
+docker build -t aferrandi/exmap .

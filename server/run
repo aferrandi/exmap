@@ -1,1 +1,1 @@
-stack exec exmap 3000 webclient/index.html ./systemdirtest
+stack exec exmap 3000 webclient ./systemdirtest
