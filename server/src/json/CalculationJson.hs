@@ -49,6 +49,13 @@ instance ToJSON OperationMode where
    toJSON v = String $ showT v
 
 
+instance FromJSON OperationCategory where
+   parseJSON (String v) = readT <$> pure v
+   parseJSON _ = mempty
+
+instance ToJSON OperationCategory where
+   toJSON v = String $ showT v
+
 instance FromJSON OperationName where
    parseJSON (String v) = readT <$> pure v
    parseJSON _ = mempty
@@ -100,12 +107,19 @@ instance ToJSON CalculationSource where
                , "operationMode" .= operationMode
                  ]
 
+instance ToJSON OperationId where
+     toJSON (OperationId category name) =
+        object [ "category" .= category
+               , "name" .= name
+                 ]
+
 instance ToJSON OperationType where
-     toJSON (OperationType name parametersTypes returnType) =
-        object [ "name" .= name
+     toJSON (OperationType operationId parametersTypes returnType) =
+        object [ "operationId" .= operationId
                , "parametersTypes" .= parametersTypes
                , "returnType" .= returnType
                  ]
+
 instance ToJSON Functions where
      toJSON (Functions operationTypes) =
         object [ "operationTypes" .= operationTypes ]
