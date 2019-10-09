@@ -41,8 +41,8 @@ calculationSourceDecoder =
 operationIdDecoder : Decoder OperationId
 operationIdDecoder =
     map2 OperationId
-        (field "name" string)
         (field "category" string)
+        (field "name" string)
 
 operationTypeDecoder : Decoder OperationType
 operationTypeDecoder =

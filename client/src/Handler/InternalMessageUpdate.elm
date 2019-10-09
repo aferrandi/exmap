@@ -237,8 +237,7 @@ handleMapToTable model =
 handleAddOperationToCalculation : Model -> OperationId -> Model
 handleAddOperationToCalculation model id =
     let
-        text =
-            model.functions
+        text = model.functions
                 |> Maybe.andThen (\fm -> Dict.get (operationIdToTuple id) fm.typesById)
                 |> Maybe.map operationTypeToText
     in
