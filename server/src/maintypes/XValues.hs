@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings   #-}
 
-module XValues(XValue, defaultValue, extractMap, extractMapFirst, extractMapSecond, toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size) where
+module XValues(XValue, defaultValue, extractMapByFun, extractMapFirstByFun, extractMapSecondByFun, mapMapKeys, toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size) where
 
 import XMapTypes
 import qualified Data.Text as T
@@ -10,52 +10,54 @@ type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
 --type AggregateXMapFun a r = a -> r
 
+mapBoth :: Ord k => ((k, a) -> (k, a)) -> M.Map k a -> M.Map k a
+mapBoth f m = M.fromList $ map f (M.toList m)
 
+-- the whole class is made to extract the matrices from the XMap depending by the types of the function
 class XValue a where
-    extractMap :: XMap -> UnaryXMapFun a r -> Either Error (MapValue a)
-    extractMapFirst :: XMap -> BinaryXMapFun a s r -> Either Error (MapValue a)
-    extractMapSecond :: XMap -> BinaryXMapFun s a r -> Either Error (MapValue a)
+    extractMapByFun :: XMap -> UnaryXMapFun a r -> Either Error (MapValue a)
+    extractMapFirstByFun :: XMap -> BinaryXMapFun a s r -> Either Error (MapValue a)
+    extractMapSecondByFun :: XMap -> BinaryXMapFun s a r -> Either Error (MapValue a)
     buildMap :: MapValue a -> XMap
     defaultValue :: a
 
-
 instance XValue Double where
-    extractMap (XMapDouble m) _ = Right m
-    extractMap _ _ = Left $ Error "The map must be of type double"
-    extractMapFirst (XMapDouble m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type double"
-    extractMapSecond (XMapDouble m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type double"
+    extractMapByFun (XMapDouble m) _ = Right m
+    extractMapByFun _ _ = Left $ Error "The map must be of type double"
+    extractMapFirstByFun (XMapDouble m) _ = Right m
+    extractMapFirstByFun _ _ = Left $ Error "The map must be of type double"
+    extractMapSecondByFun (XMapDouble m) _ = Right m
+    extractMapSecondByFun _ _ = Left $ Error "The map must be of type double"
     buildMap  = XMapDouble
     defaultValue = 0.0
 
 instance XValue Int where
-    extractMap (XMapInt m) _ = Right m
-    extractMap _ _ = Left $ Error "The map must be of type int"
-    extractMapFirst (XMapInt m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type int"
-    extractMapSecond (XMapInt m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type int"
+    extractMapByFun (XMapInt m) _ = Right m
+    extractMapByFun _ _ = Left $ Error "The map must be of type int"
+    extractMapFirstByFun (XMapInt m) _ = Right m
+    extractMapFirstByFun _ _ = Left $ Error "The map must be of type int"
+    extractMapSecondByFun (XMapInt m) _ = Right m
+    extractMapSecondByFun _ _ = Left $ Error "The map must be of type int"
     buildMap  = XMapInt
     defaultValue = 0
 
 instance XValue T.Text where
-    extractMap (XMapString m) _ = Right m
-    extractMap _ _ = Left $ Error "The map must be of type string"
-    extractMapFirst (XMapString m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type string"
-    extractMapSecond (XMapString m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type string"
+    extractMapByFun (XMapString m) _ = Right m
+    extractMapByFun _ _ = Left $ Error "The map must be of type string"
+    extractMapFirstByFun (XMapString m) _ = Right m
+    extractMapFirstByFun _ _ = Left $ Error "The map must be of type string"
+    extractMapSecondByFun (XMapString m) _ = Right m
+    extractMapSecondByFun _ _ = Left $ Error "The map must be of type string"
     buildMap  = XMapString
     defaultValue = ""
 
 instance XValue Bool where
-    extractMap (XMapBool m) _ = Right m
-    extractMap _ _ = Left $ Error "The map must be of type bool"
-    extractMapFirst (XMapBool m) _ = Right m
-    extractMapFirst _ _ = Left $ Error "The map must be of type bool"
-    extractMapSecond (XMapBool m) _ = Right m
-    extractMapSecond _ _ = Left $ Error "The map must be of type bool"
+    extractMapByFun (XMapBool m) _ = Right m
+    extractMapByFun _ _ = Left $ Error "The map must be of type bool"
+    extractMapFirstByFun (XMapBool m) _ = Right m
+    extractMapFirstByFun _ _ = Left $ Error "The map must be of type bool"
+    extractMapSecondByFun (XMapBool m) _ = Right m
+    extractMapSecondByFun _ _ = Left $ Error "The map must be of type bool"
     buildMap = XMapBool
     defaultValue = False
 
@@ -64,6 +66,13 @@ size (XMapDouble m) = M.size m
 size (XMapInt m) = M.size m
 size (XMapString m) = M.size m
 size (XMapBool m) = M.size m
+
+
+mapMapKeys :: (XMapKey -> XMapKey) -> XMap -> XMap
+mapMapKeys f (XMapDouble m) = XMapDouble $  M.mapKeys f m
+mapMapKeys f (XMapInt m) = XMapInt $ M.mapKeys f m
+mapMapKeys f (XMapString m) = XMapString $ M.mapKeys f m
+mapMapKeys f (XMapBool m) = XMapBool $ M.mapKeys f m
 
 mapToMapList :: XMap -> XMapList
 mapToMapList (XMapDouble x) = XMapDoubleList [x]

@@ -5,6 +5,12 @@ data OperationName =
     | Subtract
     | Times
     | Negate
+    | Sin
+    | Cos
+    | Tan
+    | Exp
+    | Log
+    | KeysTo
     | Merge
     deriving (Bounded, Enum, Show, Eq, Read)
 
@@ -33,5 +39,11 @@ allOperationTypes = [
     newOpType Subtract [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType Times [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType Negate [ParameterDouble] ParameterDouble,
+    newOpType Sin [ParameterDouble] ParameterDouble,
+    newOpType Cos [ParameterDouble] ParameterDouble,
+    newOpType Tan [ParameterDouble] ParameterDouble,
+    newOpType Exp [ParameterDouble] ParameterDouble,
+    newOpType Log [ParameterDouble] ParameterDouble,
+    newOpType KeysTo [ParameterText, ParameterAny] ParameterAny,
     newOpType Merge [ParameterAny, ParameterAny] ParameterAny
     ]
