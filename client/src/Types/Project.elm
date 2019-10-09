@@ -5,16 +5,14 @@ import Types.Views exposing (..)
 import Types.XMapTypes exposing (..)
 
 
-type alias Error =
-    String
+type alias Error = String
 
+type alias ProjectName = String
 
-type alias ProjectName =
-    String
-
-
-type alias OdbcSourceType =
-    { connectionString : String, sqlQuery : String }
+type alias OdbcSourceType = {
+    connectionString : String,
+    sqlQuery : String
+ }
 
 
 type alias HttpSourceType =
@@ -40,10 +38,5 @@ type alias Project =
     , sources : List Source
     }
 
-
-
 -- maps could come from different sources
-
-
-type alias AllProjects =
-    List ProjectName
+type alias AllProjects = List ProjectName

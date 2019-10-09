@@ -38,14 +38,18 @@ calculationSourceDecoder =
         (field "formulaText" string)
         (field "operationMode" operationModeDecoder)
 
+operationIdDecoder : Decoder OperationId
+operationIdDecoder =
+    map2 OperationId
+        (field "name" string)
+        (field "category" string)
 
 operationTypeDecoder : Decoder OperationType
 operationTypeDecoder =
     map3 OperationType
-        (field "name" string)
+        (field "operationId" operationIdDecoder)
         (field "parametersTypes" (list parameterTypeDecoder))
         (field "returnType" parameterTypeDecoder)
-
 
 functionsDecoder : Decoder Functions
 functionsDecoder =

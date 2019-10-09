@@ -136,15 +136,15 @@ mapsInProjectList model =
 functionsList : Model -> Html Msg
 functionsList model =
     let
-        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) functions.operationNames index
+        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) functions.operationIds index
         operationListItem on =
             Lists.li []
                 [
                   Lists.graphicIcon  [] "play_arrow",
-                  text on
+                  text on.name
                 ]
         functions = Maybe.withDefault emptyFunctionModel model.functions
-        operationList = List.map operationListItem functions.operationNames
+        operationList = List.map operationListItem functions.operationIds
     in
     Lists.ul Mdc
         (makeIndex calcEditorIdx "lstFnc")

@@ -234,12 +234,12 @@ handleMapToTable model =
             Just (Err e) -> showMessage model e
             Nothing -> model
 
-handleAddOperationToCalculation : Model -> OperationName -> Model
-handleAddOperationToCalculation model on =
+handleAddOperationToCalculation : Model -> OperationId -> Model
+handleAddOperationToCalculation model id =
     let
         text =
             model.functions
-                |> Maybe.andThen (\fm -> Dict.get on fm.typesByName)
+                |> Maybe.andThen (\fm -> Dict.get (operationIdToTuple id) fm.typesById)
                 |> Maybe.map operationTypeToText
     in
         appendToFormulaText model (Maybe.withDefault " " text)
@@ -253,12 +253,15 @@ appendToFormulaText model s =
         updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
 
 
+operationIdToText : OperationId -> String
+operationIdToText id = id.category ++ " " ++ id.name
+
 operationTypeToText : OperationType -> String
 operationTypeToText ot =
     let
         insidePars s = "[" ++ s ++ "]"
     in
-        ot.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
+        (operationIdToText ot.operationId) ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model =

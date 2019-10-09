@@ -16,7 +16,7 @@ encodeMapContent encodeMapValue (MapValue mv) =
     let
         encodeMapItem _ v = encodeMapValue v
     in
-    Dict.map encodeMapItem mv
+        Dict.map encodeMapItem mv
         |> toList
         |> object
 
@@ -29,19 +29,16 @@ encodeXMap m =
                 [ ( "type", string "double" )
                 , ( "values", encodeMapContent float v )
                 ]
-
         XMapInt v ->
             object
                 [ ( "type", string "int" )
                 , ( "values", encodeMapContent int v )
                 ]
-
         XMapString v ->
             object
                 [ ( "type", string "string" )
                 , ( "values", encodeMapContent string v )
                 ]
-
         XMapBool v ->
             object
                 [ ( "type", string "bool" )

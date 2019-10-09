@@ -16,31 +16,27 @@ type alias XMapByName =
 
 
 type alias OperationTypesByName =
-    Dict.Dict OperationName OperationType
+    Dict.Dict (OperationCategory, OperationName) OperationType
 
 
 type alias TableConfiguration =
     { columnsWidths : List Int
     }
 
-
 type alias FunctionsModel =
-    { operationNames : List OperationName
-    , typesByName : OperationTypesByName
+    { operationIds : List OperationId
+    , typesById : OperationTypesByName
     }
-
 
 type alias ViewModel =
     { view : View
     , maps : XMapByName
     }
 
-
 type alias ProjectModel =
     { project : Project
     , openViews : List ViewModel
     }
-
 
 type alias XMapEditorModel =
     { xmapName : Maybe XMapName

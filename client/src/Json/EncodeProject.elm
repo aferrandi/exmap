@@ -31,14 +31,9 @@ encodeOdbcSource st =
 encodeSourceType : SourceType -> Value
 encodeSourceType st =
     case st of
-        FileSource ->
-            encodeInternalSource
-
-        HttpSource v ->
-            encodeHttpSource v
-
-        OdbcSource v ->
-            encodeOdbcSource v
+        FileSource -> encodeInternalSource
+        HttpSource v -> encodeHttpSource v
+        OdbcSource v -> encodeOdbcSource v
 
 
 encodeSource : Source -> Value

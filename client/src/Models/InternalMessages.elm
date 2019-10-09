@@ -30,7 +30,7 @@ type InternalMsg
     | TextToCalculationTextArea String
     | TextToResultNameText String
     | AddMapToCalculation XMapName
-    | AddOperationToCalculation OperationName
+    | AddOperationToCalculation OperationId
     | ChangeOperationMode OperationMode
     | ChangeMapType XMapType
     | AddItemToView Int ViewItem

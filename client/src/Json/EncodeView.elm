@@ -4,7 +4,6 @@ import Json.EncodeXMap exposing (..)
 import Json.Encode exposing (..)
 import Types.Views exposing (..)
 
-
 encodeViewItem : ViewItem -> Value
 encodeViewItem i =
     case i of
@@ -13,13 +12,11 @@ encodeViewItem i =
                 [ ( "type", string "map" )
                 , ( "mapName", encodeXmapName mn )
                 ]
-
         LabelItem l ->
             object
                 [ ( "type", string "label" )
                 , ( "label", string l )
                 ]
-
 
 encodeViewRow : ViewRow -> Value
 encodeViewRow r =
@@ -27,7 +24,6 @@ encodeViewRow r =
         items (ViewRow is) = is
     in
         object [ ( "items", list encodeViewItem (items r)) ]
-
 
 encodeView : View -> Value
 encodeView v =

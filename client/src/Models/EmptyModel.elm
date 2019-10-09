@@ -16,8 +16,8 @@ emptyTableConfiguration =
 
 emptyFunctionModel : FunctionsModel
 emptyFunctionModel =
-    { operationNames = []
-    , typesByName = Dict.empty
+    { operationIds = []
+    , typesById = Dict.empty
     }
 
 

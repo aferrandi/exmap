@@ -19,46 +19,32 @@ updateEvent evt model =
     case evt of
         WEAllProjects ap ->
             ( { model | allProjects = ap }, Cmd.none )
-
         WEError e ->
             ( showMessage model ("Server Error: " ++ e), Cmd.none )
-
         WEInfo i ->
             ( showMessage model ("Server Info: " ++ i), Cmd.none )
-
         WEProjectContent p ->
             ( updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none )
-
         WEProjectStored p ->
             ( updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none )
-
         WEViewStatus pn v ms ->
             ( updateOpenProjects model (updateOpenViews pn v ms), Cmd.none )
-
         WEMapsInProject pn mns ->
             ( handleMapsInProject model mns, Cmd.none )
-
         WEViewChanged pn vn ms ->
             ( updateOpenProjects model (updateOpenViewMaps pn vn ms), Cmd.none )
-
         WEMapLoaded pn m ->
             ( handleMapLoaded model m, Cmd.none )
-
         WEMapStored pn mn sz ->
             ( handleMapStored model pn mn sz, Cmd.none )
-
         WEViewLoaded pn v ->
             ( handleViewLoaded model v, Cmd.none )
-
         WECalculationLoaded pn cs ->
             ( handleCalculationLoaded model cs, Cmd.none )
-
         WECalculationStored pn cn ->
             ( handleCalculationStored model pn cn, Cmd.none )
-
         WEFunctions fs ->
             ( handleFunctions model fs, Cmd.none )
-
         _ ->
             ( showMessage model ("Message from server " ++ Debug.toString evt ++ " not recognized"), Cmd.none )
 
@@ -118,11 +104,10 @@ handleCalculationLoaded model cs =
 
 handleFunctions : Model -> Functions -> Model
 handleFunctions model fs =
-    { model
-        | functions =
+    { model | functions =
             Just
-                { operationNames = List.map (\o -> o.name) fs.operations
-                , typesByName = Dict.fromList (List.map (\o -> ( o.name, o )) fs.operations)
+                { operationIds = List.map (\o -> o.operationId) fs.operations
+                , typesById = Dict.fromList (List.map (\o -> ( operationIdToTuple o.operationId, o )) fs.operations)
                 }
     }
 
@@ -135,15 +120,11 @@ handleMapsInProject model mns =
 updateOpenProjectsWithProject : Project -> List ProjectModel -> List ProjectModel
 updateOpenProjectsWithProject p ops =
     let
-        pn =
-            p.projectName
+        pn = p.projectName
     in
-    case find (sameProjectName pn) ops of
-        Just _ ->
-            updateIf (sameProjectName pn) (\pm -> { pm | project = p }) ops
-
-        Nothing ->
-            { project = p, openViews = [] } :: ops
+        case find (sameProjectName pn) ops of
+            Just _ -> updateIf (sameProjectName pn) (\pm -> { pm | project = p }) ops
+            Nothing -> { project = p, openViews = [] } :: ops
 
 
 updateOpenViews : ProjectName -> View -> List XNamedMap -> List ProjectModel -> List ProjectModel
@@ -154,24 +135,14 @@ updateOpenViews pn v ms ops =
 updateOpenViewsInProject : View -> List XNamedMap -> ProjectModel -> ProjectModel
 updateOpenViewsInProject v ms pm =
     let
-        msn =
-            Dict.fromList (List.map (\m -> ( m.xmapName, m.xmap )) ms)
-
-        sameViewName vm =
-            vm.view.viewName == v.viewName
-
-        ovs =
-            pm.openViews
-
-        newOvs =
-            case find sameViewName ovs of
-                Just _ ->
-                    updateIf sameViewName (\vm -> { vm | view = v, maps = msn }) ovs
-
-                Nothing ->
-                    { view = v, maps = msn } :: ovs
+        msn = Dict.fromList (List.map (\m -> ( m.xmapName, m.xmap )) ms)
+        sameViewName vm = vm.view.viewName == v.viewName
+        ovs = pm.openViews
+        newOvs = case find sameViewName ovs of
+                Just _ -> updateIf sameViewName (\vm -> { vm | view = v, maps = msn }) ovs
+                Nothing -> { view = v, maps = msn } :: ovs
     in
-    { pm | openViews = newOvs }
+        { pm | openViews = newOvs }
 
 
 updateOpenViewMaps : ProjectName -> ViewName -> List XNamedMap -> List ProjectModel -> List ProjectModel
@@ -188,7 +159,7 @@ updateOpenViewMapsInProject vn ms pm =
         updatedOvs =
             updateIf sameViewName (updateOpenViewMapsInView ms) pm.openViews
     in
-    { pm | openViews = updatedOvs }
+        { pm | openViews = updatedOvs }
 
 
 updateOpenViewMapsInView : List XNamedMap -> ViewModel -> ViewModel
@@ -197,7 +168,7 @@ updateOpenViewMapsInView ms vm =
         updateMaps msn mss =
             List.foldr (\m msni -> Dict.insert m.xmapName m.xmap msni) msn mss
     in
-    { vm | view = vm.view, maps = updateMaps vm.maps ms }
+        { vm | view = vm.view, maps = updateMaps vm.maps ms }
 
 
 updateWithWebEvent : String -> Model -> ( Model, Cmd Msg )
@@ -205,9 +176,9 @@ updateWithWebEvent json model =
     let
         _ = Debug.log ("Event " ++ json)
     in
-    case decodeString webEventDecoder json of
-        Ok evt -> updateEvent evt model
-        Err err -> ( showMessage model ("Error: " ++ Debug.toString err ++ " decoding Json " ++ json), Cmd.none )
+        case decodeString webEventDecoder json of
+            Ok evt -> updateEvent evt model
+            Err err -> ( showMessage model ("Error: " ++ Debug.toString err ++ " decoding Json " ++ json), Cmd.none )
 
 
 updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel

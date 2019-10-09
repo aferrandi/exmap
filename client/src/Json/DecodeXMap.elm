@@ -17,8 +17,7 @@ decodeType decodeFromType =
 
 
 buildMapContent : List ( String, a ) -> MapValue a
-buildMapContent l =
-    MapValue (fromList l)
+buildMapContent l = MapValue (fromList l)
 
 
 xmapDecoder : Decoder XMap
@@ -37,7 +36,7 @@ xmapDecoder =
                 _ ->
                     fail ("map type " ++ d ++ " not recognized")
     in
-    decodeType decodeFromType
+        decodeType decodeFromType
 
 
 xNamedMapDecoder : Decoder XNamedMap
