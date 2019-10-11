@@ -55,6 +55,8 @@ updateInternal msg model =
             handleShowMapInEditor model mn
         SwitchProjectViewTo vt ->
             handleSwitchProjectViewTo model vt
+        SwitchCategoryTo ct ->
+            ( handleSwitchCategoryTo model ct, Cmd.none )
         TextToCalculationTextArea s ->
             ( updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just s }), Cmd.none )
         TextToResultNameText mn ->
@@ -206,6 +208,9 @@ handleSwitchProjectViewTo model vt =
     ( { model | currentProjectForm = vt }
     , Cmd.batch (List.filterMap identity [ functionRequest, mapsInProjectRequest ])
     )
+
+handleSwitchCategoryTo : Model -> OperationCategory -> Model
+handleSwitchCategoryTo model ct = { model | currentCategory = Just ct }
 
 
 handleTextToResultNameText : Model -> String -> Model

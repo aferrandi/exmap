@@ -20,7 +20,6 @@ import Display.UIWrapper exposing (..)
 import Types.Views exposing (..)
 import Models.WebMessages exposing (WebRequest(..))
 
-
 viewViewsEditor : Model -> ProjectModel -> Html Msg
 viewViewsEditor model pm =
     let
@@ -36,7 +35,6 @@ viewViewsEditor model pm =
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
                 ]
             ]
-
 
 viewEditorForView model pm =
     case model.viewEditorModel.viewName of
@@ -60,7 +58,6 @@ viewEditorForView model pm =
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
     storeView pm model.viewEditorModel |> buttonClick model (makeIndex viewEditorIdx "btnStr") "Store"
-
 
 storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm =
@@ -97,7 +94,6 @@ viewEditorTable model mv =
     case mv of
         Just v -> DataTable.table [] [ viewRows model v ]
         Nothing -> DataTable.table [] [ DataTable.tbody [] [] ]
-
 
 viewRows : Model -> View -> Html Msg
 viewRows model v =
@@ -143,10 +139,9 @@ viewEditorMapList model =
                     text (xmapNameToString mn)
                 ]
     in
-    Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-        ((Lists.onSelectListItem sendAddItem) :: (scrollableListStyle 40))
-        (List.map listItem model.mapsInProject)
-
+        Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
+            ((Lists.onSelectListItem sendAddItem) :: (scrollableListStyle 40))
+            (List.map listItem model.mapsInProject)
 
 newViewButton : Model -> Html Msg
 newViewButton model =
@@ -170,17 +165,17 @@ addLabelButton model =
         viewEditorModel = model.viewEditorModel
         newLabelMessage = Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing))
     in
-    div []
-        [ TextField.view Mdc
-            (makeIndex viewEditorIdx "txtAddLbl")
-            model.mdc
-            [ TextField.label "Label name"
-            , TextField.value viewEditorModel.labelEditing
-            , Options.onInput (\s -> Internal (UpdateViewLabel s))
+        div []
+            [ TextField.view Mdc
+                (makeIndex viewEditorIdx "txtAddLbl")
+                model.mdc
+                [ TextField.label "Label name"
+                , TextField.value viewEditorModel.labelEditing
+                , Options.onInput (\s -> Internal (UpdateViewLabel s))
+                ]
+                []
+            , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
             ]
-            []
-        , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
-        ]
 
 addRowButton : Model -> Html Msg
 addRowButton model =

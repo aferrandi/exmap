@@ -49,14 +49,12 @@ mapEditorViewForMap model pm =
     case model.xmapEditorModel.xmapName of
         Just mn ->
             div []
-                   -- Grid.noSpacing,
                 [ LayoutGrid.view [ heightInView 50 ]
                     [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone]
                         [ mapEditorTextArea model pm ]
                     , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone]
                         [ mapEditorTable xmapEditorModel.xmapToEdit ]
                     ]
-                    --Grid.noSpacing
                 , LayoutGrid.view [  ]
                     [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
                     [ buttonClick model (makeIndex mapEditorIdx "btnToTbl") "To Table >" (Internal MapToTable) ]

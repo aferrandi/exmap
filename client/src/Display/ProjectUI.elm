@@ -23,9 +23,6 @@ viewProject model pm =
 
 tabArray = [ ViewsForm, MapEditorForm, ViewEditorForm, CalculationEditorForm ]
 
-
--- Options.center, Color.text <| pastel Color.Blue
--- TabBar.ripple
 viewProjectTabs : Model -> Html Msg
 viewProjectTabs model =
     let tab icon title id =
@@ -49,14 +46,10 @@ viewProjectTabs model =
         ]
 
 tabToProjectForm : Int -> Maybe ProjectFormType
-tabToProjectForm tabI =
-    ListX.getAt tabI tabArray
-
+tabToProjectForm tabI = ListX.getAt tabI tabArray
 
 projectFormToTab : ProjectFormType -> Int
-projectFormToTab pf =
-    Maybe.withDefault 0 (ListX.elemIndex pf tabArray)
-
+projectFormToTab pf = Maybe.withDefault 0 (ListX.elemIndex pf tabArray)
 
 viewProjectContent : Model -> ProjectModel -> Html Msg
 viewProjectContent model pm =

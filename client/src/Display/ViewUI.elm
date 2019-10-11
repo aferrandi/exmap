@@ -55,8 +55,7 @@ rowToTable : ViewRow -> ViewModel -> List (List String)
 rowToTable row vm =
     let
         ids = rowIds row vm.maps
-        values (ViewRow items) =
-            List.map (itemToTable vm.maps ids) items
+        values (ViewRow items) = List.map (itemToTable vm.maps ids) items
     in
         Set.toList ids :: values row
 
@@ -64,8 +63,7 @@ rowToTable row vm =
 rowIds : ViewRow -> XMapByName -> Set.Set XMapKey
 rowIds (ViewRow items) ms =
     let
-        keysForMap item =
-            case item of
+        keysForMap item = case item of
                 MapItem xmapName ->
                     case Dict.get xmapName ms of
                         Just m -> Set.fromList (mapKeys m)
@@ -78,8 +76,7 @@ rowIds (ViewRow items) ms =
 rowNames : ViewRow -> List String
 rowNames (ViewRow items) =
     let
-        name item =
-            case item of
+        name item = case item of
                 MapItem xmapName -> xmapNameToString xmapName
                 LabelItem label -> label
     in
@@ -97,6 +94,6 @@ itemToTable ms ids item =
         mapValuesForEachId xmapName =
             Dict.values (Dict.union (mapValuesInDict xmapName) idsMap)
     in
-    case item of
-        MapItem xmapName -> mapValuesForEachId xmapName
-        LabelItem _ -> Dict.values idsMap
+        case item of
+            MapItem xmapName -> mapValuesForEachId xmapName
+            LabelItem _ -> Dict.values idsMap

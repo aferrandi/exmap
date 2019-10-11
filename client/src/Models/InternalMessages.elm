@@ -27,6 +27,7 @@ type InternalMsg
     | ShowMessage String
     | ShowMapInEditor XMapName
     | SwitchProjectViewTo ProjectFormType
+    | SwitchCategoryTo OperationCategory
     | TextToCalculationTextArea String
     | TextToResultNameText String
     | AddMapToCalculation XMapName

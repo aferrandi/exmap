@@ -12,6 +12,7 @@ import Models.ProjectModel exposing (..)
 import Types.Views exposing (..)
 import Models.WebMessages exposing (..)
 import Types.XMapTypes exposing (..)
+import Dict.Extra as DictX
 
 
 updateEvent : WebEvent -> Model -> ( Model, Cmd Msg )
@@ -104,12 +105,15 @@ handleCalculationLoaded model cs =
 
 handleFunctions : Model -> Functions -> Model
 handleFunctions model fs =
-    { model | functions =
-            Just
-                { operationIds = List.map (\o -> o.operationId) fs.operations
-                , typesById = Dict.fromList (List.map (\o -> ( operationIdToTuple o.operationId, o )) fs.operations)
-                }
-    }
+    let
+        operationIds = List.map (\o -> o.operationId) fs.operations
+    in
+        { model | functions =
+                Just
+                    { idsByCategory = DictX.groupBy (\id -> id.category) operationIds
+                    , typesById = Dict.fromList (List.map (\o -> ( operationIdToTuple o.operationId, o )) fs.operations)
+                    }
+        }
 
 
 handleMapsInProject : Model -> List XMapName -> Model

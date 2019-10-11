@@ -1,7 +1,7 @@
 module Editor.CalculationEditor exposing (viewCalculationsEditor)
 
+import Editor.FunctionChooser exposing (viewFunctions)
 import Types.Calculation exposing (..)
-import Models.EmptyModel exposing (emptyFunctionModel)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameFromString, xmapNameToString)
@@ -16,7 +16,6 @@ import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
 import Models.WebMessages exposing (WebRequest(..))
-
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
@@ -51,14 +50,13 @@ viewEditorForCalculation model pm cn =
         , LayoutGrid.view [ heightInView 45 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
-            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ functionsList model ]
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
         , LayoutGrid.view [  ]
             [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span8Desktop, LayoutGrid.span4Phone]  []
             , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]  [ storeButton model pm ]
             ]
         ]
-
 
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
@@ -133,24 +131,6 @@ mapsInProjectList model =
                 (List.map listItem model.mapsInProject)
 
 
-functionsList : Model -> Html Msg
-functionsList model =
-    let
-        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) functions.operationIds index
-        operationListItem on =
-            Lists.li []
-                [
-                  Lists.graphicIcon  [] "play_arrow",
-                  text on.name
-                ]
-        functions = Maybe.withDefault emptyFunctionModel model.functions
-        operationList = List.map operationListItem functions.operationIds
-    in
-    Lists.ul Mdc
-        (makeIndex calcEditorIdx "lstFnc")
-        model.mdc
-        (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 40))
-        operationList
 
 
 calculationTextArea : Model -> Html Msg

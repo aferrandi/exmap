@@ -1,4 +1,4 @@
-module Display.NameDialog exposing (..)
+module Display.NameDialog exposing (nameDialog)
 
 import Html exposing (Html, text)
 import Models.InternalMessages exposing (InternalMsg(..))

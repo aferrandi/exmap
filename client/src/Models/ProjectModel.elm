@@ -18,13 +18,15 @@ type alias XMapByName =
 type alias OperationTypesByName =
     Dict.Dict (OperationCategory, OperationName) OperationType
 
+type alias OperationIdByCategory =
+    Dict.Dict OperationCategory (List OperationId)
 
 type alias TableConfiguration =
     { columnsWidths : List Int
     }
 
 type alias FunctionsModel =
-    { operationIds : List OperationId
+    { idsByCategory : OperationIdByCategory
     , typesById : OperationTypesByName
     }
 
@@ -46,7 +48,6 @@ type alias XMapEditorModel =
     , newXmapName : String
     , tableConf : TableConfiguration
     }
-
 
 type alias ViewEditorModel =
     { viewName : Maybe ViewName
@@ -78,6 +79,7 @@ type alias Model =
     , viewEditorModel : ViewEditorModel
     , calculationEditorModel : CalculationEditorModel
     , currentProjectForm : ProjectFormType
+    , currentCategory : Maybe OperationCategory
     , mapsInProject : List XMapName
     , functions : Maybe FunctionsModel
     , openDialog : Maybe String

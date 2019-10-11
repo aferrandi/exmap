@@ -16,7 +16,7 @@ emptyTableConfiguration =
 
 emptyFunctionModel : FunctionsModel
 emptyFunctionModel =
-    { operationIds = []
+    { idsByCategory = Dict.empty
     , typesById = Dict.empty
     }
 
@@ -65,6 +65,7 @@ emptyModel =
     , viewEditorModel = emptyViewEditorModel
     , calculationEditorModel = emptyCalculationEditorModel
     , currentProjectForm = ViewsForm
+    , currentCategory = Nothing
     , mapsInProject = []
     , openDialog = Nothing
     , functions = Nothing
