@@ -23,28 +23,34 @@ viewFunctions model  =
 functions : Model -> FunctionsModel
 functions model = Maybe.withDefault emptyFunctionModel model.functions
 
+categories : Model -> List OperationCategory
+categories model = Dict.keys (functions model).idsByCategory
+
 functionsCategoriesTabs : Model -> Html Msg
 functionsCategoriesTabs model =
     let
-        categories = Dict.keys (functions model).idsByCategory
         tab category =
             TabBar.tab
-                [ Options.css "width" "4px"
+                [ Options.css "width" "2px"
                 , Options.onClick (Internal (SwitchCategoryTo category))
                 ]
                 [text category]
-        categoryToTab ct = Maybe.withDefault 0 (Maybe.andThen (\c -> ListX.elemIndex c categories) ct)
+        indexOfCategory ct = ListX.elemIndex ct (categories model)
+        categoryToTab ct = Maybe.withDefault 0 (Maybe.andThen indexOfCategory ct)
     in
         TabBar.view Mdc
             (makeIndex calcEditorIdx "tbsCat")
             model.mdc [ TabBar.activeTab (categoryToTab model.currentCategory) ]
-            (List.map (\c -> tab c) categories)
+            (List.map tab (categories model))
 
 
 functionsNamesList : Model -> Html Msg
 functionsNamesList model  =
     let
-        operationIdsForCategoryMaybe = Maybe.andThen (\c -> Dict.get c (functions model).idsByCategory) model.currentCategory
+        currentOrFirstCategory = case model.currentCategory of
+                Nothing -> List.head (categories model)
+                _ ->  model.currentCategory
+        operationIdsForCategoryMaybe = Maybe.andThen (\c -> Dict.get c (functions model).idsByCategory) currentOrFirstCategory
         operationIdsForCategory = Maybe.withDefault [] operationIdsForCategoryMaybe
         sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationIdsForCategory index
         operationListItem on =
@@ -58,6 +64,6 @@ functionsNamesList model  =
         Lists.ul Mdc
             (makeIndex calcEditorIdx "lstFnc")
             model.mdc
-            (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 40))
+            (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 32))
             operationList
 
