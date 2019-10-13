@@ -257,15 +257,12 @@ appendToFormulaText model s =
         updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
 
 
-operationIdToText : OperationId -> String
-operationIdToText id = id.category ++ " " ++ id.name
-
 operationTypeToText : OperationType -> String
 operationTypeToText ot =
     let
         insidePars s = "[" ++ s ++ "]"
     in
-        (operationIdToText ot.operationId) ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
+        ot.operationId.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
 
 handleMapToTextArea : Model -> Model
 handleMapToTextArea model =
