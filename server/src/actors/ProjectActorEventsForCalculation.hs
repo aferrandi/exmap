@@ -12,6 +12,7 @@ import ProjectMessages
 import EventMessages
 import WebMessages
 import LoadMessages
+import LogMessages
 import StoreMessages
 import CommonChannels
 import CalculationMessages
@@ -26,14 +27,18 @@ import FormulaText
 addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO()
 addCalculation chan rp c cc = do
     cch <- calculationToChan (logChan (chans rp)) cc
+    let deps = calculationDependencies cc
+    let cn = calculationName cc
+    logDbg $ "Calculation dependencies for " ++ (show cn) ++ ":" ++ (show deps)
     atomically $ do
-                    let cn = calculationName cc
                     modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
-                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch (calculationDependencies cc)
+                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch deps
                     writeTChan cch (CMUpdateCalculation cc)
                     sendDependedMapsToCalculation chan rp c cc
+    where logDbg t = atomically $ logDebug (logChan $ chans rp) "project" t
+
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()
 updateCalculation chan rp c cc = do
@@ -59,13 +64,15 @@ mapsForCalculationLoaded rp c cn ms = do
 mapsForCalculationsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
 mapsForCalculationsLoaded rp _ ms = do
     cbm <- readTVar $ calculationChanByMap rp
-    mapM_ (findAndSend cbm) ms
-    where findAndSend cbm m = do
-            let mn = xmapName m
-            mapM_ (sendMapToCalculations m) (M.lookup mn cbm)
-          sendMapToCalculations m = mapM_ (\c -> writeTChan c (CMMaps [traceMap m]))
-          traceMap :: XNamedMap -> XNamedMap
-          traceMap m = trace ("sending map " ++ show (xmapName m) ++ " to calculations") m
+    mapM_ (findAndSend rp cbm) ms
+
+findAndSend :: RuntimeProject -> CalculationChanByMap -> XNamedMap -> STM ()
+findAndSend rp cbm m = do
+    let mn = xmapName m
+    let cs = M.lookup mn cbm
+    logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to calculations"
+    mapM_ (\ch -> sendMapToCalculations m ch) cs
+    where sendMapToCalculations m ch = mapM_ (\c -> writeTChan c (CMMaps [m])) ch
 
 calculationForClientLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
 calculationForClientLoaded rp c cc = do

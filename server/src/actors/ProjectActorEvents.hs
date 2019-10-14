@@ -26,8 +26,10 @@ import ProjectActorEventsForView
 
 handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
-    PEViewForClientLoaded c v -> atomically $ viewForClientLoaded c rp v
-    PEViewForClientLoadError c _ err -> atomically $ sendError ec [c] err
+    PECalculationForClientLoaded c cc -> atomically $ calculationForClientLoaded rp c cc
+    PECalculationForClientLoadError c _ err -> atomically $ sendError ec [c] err
+    PECalculationStored c cc -> calculationStored chan rp c cc
+    PECalculationStoreError c _ err -> atomically $ sendError ec [c] err
     PEMapForClientLoaded c m -> atomically $ mapForClientLoaded rp c m
     PEMapForClientLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsForViewLoaded c vn ms -> atomically $ mapsForViewLoaded rp c vn ms
@@ -38,16 +40,14 @@ handleEvent chan rp e = case e of
     PEMapsForCalculationLoadError c _  _ err -> atomically $ sendError ec [c] err
     PEMapStored c m -> atomically $ mapStored chan rp c m
     PEMapStoreError c _ err -> atomically $ sendError ec [c] err
-    PECalculationStored c cc -> calculationStored chan rp c cc
-    PECalculationStoreError c _ err -> atomically $ sendError ec [c] err
-    PEViewStored c v -> viewStored chan rp c v
-    PEViewStoreError c _ err -> atomically $ sendError ec [c] err
     PEProjectStored _ p -> atomically $ projectStored rp p
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
+    PEViewForClientLoaded c v -> atomically $ viewForClientLoaded c rp v
+    PEViewForClientLoadError c _ err -> atomically $ sendError ec [c] err
+    PEViewStored c v -> viewStored chan rp c v
+    PEViewStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewForProjectLoaded c v -> viewForProjectLoaded chan rp c v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
-    PECalculationForClientLoaded c cc -> atomically $ calculationForClientLoaded rp c cc
-    PECalculationForClientLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
 
 mapForClientLoaded :: RuntimeProject -> WAClient -> XNamedMap -> STM ()
