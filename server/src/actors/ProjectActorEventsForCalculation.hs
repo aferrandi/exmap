@@ -64,14 +64,14 @@ mapsForCalculationLoaded rp c cn ms = do
 mapsForCalculationsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
 mapsForCalculationsLoaded rp _ ms = do
     cbm <- readTVar $ calculationChanByMap rp
-    mapM_ (findAndSend rp cbm) ms
+    mapM_ (findCalculationsAndSendMap rp cbm) ms
 
-findAndSend :: RuntimeProject -> CalculationChanByMap -> XNamedMap -> STM ()
-findAndSend rp cbm m = do
+findCalculationsAndSendMap :: RuntimeProject -> CalculationChanByMap -> XNamedMap -> STM ()
+findCalculationsAndSendMap rp cbm m = do
     let mn = xmapName m
     let cs = M.lookup mn cbm
     logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to calculations"
-    mapM_ (\ch -> sendMapToCalculations m ch) cs
+    mapM_ (sendMapToCalculations m) cs
     where sendMapToCalculations m ch = mapM_ (\c -> writeTChan c (CMMaps [m])) ch
 
 calculationForClientLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
