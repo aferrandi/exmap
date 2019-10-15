@@ -80,8 +80,8 @@ merge _ xs = do
           mergeList (XMapStringList xs) = XMapString $ M.unions xs
           mergeList (XMapBoolList xs) = XMapBool $ M.unions xs
 
-sum :: OperationMode -> [XMap] -> XMapErr
-sum om xs = do
+fsum :: OperationMode -> [XMap] -> XMapErr
+fsum om xs = do
               vs <- extractMapDouble (head xs) "values"
               let sum = L.sum $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "sum") sum)
@@ -96,4 +96,5 @@ operationRepository Cos = fcos
 operationRepository Tan = ftan
 operationRepository Exp = fexp
 operationRepository Log = flog
+operationRepository Sum = fsum
 operationRepository Merge = merge
