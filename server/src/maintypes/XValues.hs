@@ -1,10 +1,14 @@
 {-# LANGUAGE OverloadedStrings   #-}
 
-module XValues(XValue, defaultValue, extractMapByFun, extractMapFirstByFun, extractMapSecondByFun, mapMapKeys, toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size) where
+module XValues(XValue, defaultValue, extractMapByFun,
+extractMapFirstByFun, extractMapSecondByFun, mapMapKeys,
+toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size,
+extractMapDouble, extractMapInt, extractMapString, extractMapBool) where
 
 import XMapTypes
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
+import Errors (mkError)
 
 type UnaryXMapFun a r = a -> r
 type BinaryXMapFun a b r = a -> b -> r
@@ -94,3 +98,20 @@ toMapList (x:y:xs) = do
                     ms <- toMapList (y:xs)
                     composeMapList ms x
 toMapList (x:_) = Right (mapToMapList x)
+
+
+extractMapDouble :: XMap -> T.Text -> Either Error (MapValue Double)
+extractMapDouble (XMapDouble x) _ = Right x
+extractMapDouble _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of type double")
+
+extractMapInt :: XMap -> T.Text -> Either Error (MapValue Int)
+extractMapInt (XMapInt x) _ = Right x
+extractMapInt _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of type int")
+
+extractMapString :: XMap -> T.Text -> Either Error (MapValue T.Text)
+extractMapString (XMapString x) _ = Right x
+extractMapString _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of type text")
+
+extractMapBool :: XMap -> T.Text -> Either Error (MapValue Bool)
+extractMapBool (XMapBool x) _ = Right x
+extractMapBool _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of type bool")

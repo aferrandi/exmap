@@ -9,6 +9,7 @@ import OperationTypes
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import qualified Data.Maybe as B
+import qualified Data.List as L
 
 type OperationFun = OperationMode -> [XMap] -> XMapErr
 
@@ -64,12 +65,9 @@ keysTo _ xs =
        2 -> keysTo
        _ -> Left $ Error "keysTo <keys> <map>"
     where
-        extractKeysMap :: XMap -> Either Error (MapValue T.Text)
-        extractKeysMap (XMapString x) = Right x
-        extractKeysMap _ = Left $ Error "The 'keys' map must be of type text"
         replaceKey mk k = B.fromMaybe k (fmap XMapKey (M.lookup k mk))
         keysTo = do
-              mk <- extractKeysMap (head xs)
+              mk <- extractMapString (head xs) "keys"
               let mv = mapMapKeys (\k -> replaceKey mk k) (head (tail xs))
               return mv
 
@@ -82,6 +80,11 @@ merge _ xs = do
           mergeList (XMapStringList xs) = XMapString $ M.unions xs
           mergeList (XMapBoolList xs) = XMapBool $ M.unions xs
 
+sum :: OperationMode -> [XMap] -> XMapErr
+sum om xs = do
+              vs <- extractMapDouble (head xs) "values"
+              let sum = L.sum $ M.elems vs
+              return $ XMapDouble (M.singleton (XMapKey "sum") sum)
 
 operationRepository :: OperationName -> OperationFun
 operationRepository Add = add

@@ -10,6 +10,7 @@ data OperationName =
     | Tan
     | Exp
     | Log
+    | Sum
     | KeysTo
     | Merge
     deriving (Bounded, Enum, Show, Eq, Read)
@@ -57,6 +58,7 @@ allOperationTypes = [
     newOpType (newOpId Math Tan) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Exp) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny
     ]
