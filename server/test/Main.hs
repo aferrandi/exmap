@@ -12,6 +12,7 @@ import qualified TextEnumsTest
 import qualified ProjectJsonTest
 import qualified XMapJsonTest
 import qualified DependenciesTest
+import qualified AssocListTest
 
 main :: IO Counts
 main = runTestTT tests
@@ -44,5 +45,8 @@ main = runTestTT tests
                 DependenciesTest.formulaDependencies_duplicates_onlyOnce,
                 DependenciesTest.viewDependencies_empty_empty,
                 DependenciesTest.viewDependencies_complex_maps,
-                DependenciesTest.calculationDependencies_simpleCalculation_originalMap
+                DependenciesTest.calculationDependencies_simpleCalculation_originalMap,
+
+                AssocListTest.groupAssocListByKey_lookup_gets_list,
+                AssocListTest.groupAssocListByKey_final_list_expected
                 ]

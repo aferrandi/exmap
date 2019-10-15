@@ -70,7 +70,7 @@ findCalculationsAndSendMap :: RuntimeProject -> CalculationChanByMap -> XNamedMa
 findCalculationsAndSendMap rp cbm m = do
     let mn = xmapName m
     let cs = M.lookup mn cbm
-    logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to calculations"
+    logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to " ++ (show $ length cs) ++ " calculations"
     mapM_ (sendMapToCalculations m) cs
     where sendMapToCalculations m ch = mapM_ (\c -> writeTChan c (CMMaps [m])) ch
 

@@ -20,6 +20,7 @@ calculationToRuntime lc c = do
     cr <- newTVar Nothing
     vs <- newTVar []
     cs <- newTVar []
+    logDebug lc "calc" $ "Dependencies of calculation " ++ show (calculationName c) ++ ": " ++ (show deps)
     return RuntimeCalculation {
         calculation = rc,
         repository = rp,

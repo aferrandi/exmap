@@ -141,6 +141,13 @@ test-suite exmap-test
                      , XMapJsonTest
                      , DependenciesTest
                      , Errors
+                     , CalculationJson
+                     , ShowText
+                     , ViewJson
+                     , AssocList
+                     , AssocListTest
+
+
 
 
 
