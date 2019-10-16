@@ -103,7 +103,7 @@ executable exmap
 
 test-suite exmap-test
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      test test/parse test/json test/formula test/build test/testtypes src/maintypes src/json src/functions src/formula src/state src/parse src/storage src/build
+  hs-source-dirs:      test test/parse test/json test/formula test/build test/testtypes test/functions src/maintypes src/json src/functions src/formula src/state src/parse src/storage src/build
   main-is:             Main.hs
   build-depends:       base
                      , test-framework
@@ -146,6 +146,7 @@ test-suite exmap-test
                      , ViewJson
                      , AssocList
                      , AssocListTest
+                     , OperationsTest
 
 
 

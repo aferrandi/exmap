@@ -3,7 +3,7 @@
 module XValues(XValue, defaultValue, extractMapByFun,
 extractMapFirstByFun, extractMapSecondByFun, mapMapKeys,
 toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size,
-extractMapDouble, extractMapInt, extractMapString, extractMapBool) where
+extractMapDouble, extractMapInt, extractMapString, extractMapBool, checkMapsNumber) where
 
 import XMapTypes
 import qualified Data.Text as T
@@ -115,3 +115,9 @@ extractMapString _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of 
 extractMapBool :: XMap -> T.Text -> Either Error (MapValue Bool)
 extractMapBool (XMapBool x) _ = Right x
 extractMapBool _ nm = Left $ mkError ("The " ++ (show nm) ++ " map must be of type bool")
+
+checkMapsNumber :: [XMap] -> Int -> Either Error ()
+checkMapsNumber xs n = if length xs < n then
+                          Left $ mkError ("Too few maps. Should be at least " ++ show n)
+                       else
+                          Right ()

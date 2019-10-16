@@ -13,6 +13,7 @@ import qualified ProjectJsonTest
 import qualified XMapJsonTest
 import qualified DependenciesTest
 import qualified AssocListTest
+import qualified OperationsTest
 
 main :: IO Counts
 main = runTestTT tests
@@ -48,5 +49,7 @@ main = runTestTT tests
                 DependenciesTest.calculationDependencies_simpleCalculation_originalMap,
 
                 AssocListTest.groupAssocListByKey_lookup_gets_list,
-                AssocListTest.groupAssocListByKey_final_list_expected
+                AssocListTest.groupAssocListByKey_final_list_expected,
+
+                OperationsTest.add_standard
                 ]

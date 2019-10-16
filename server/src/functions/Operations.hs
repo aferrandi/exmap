@@ -61,15 +61,14 @@ flog om = XFunction.apply logv
 
 keysTo :: OperationMode -> [XMap] -> XMapErr
 keysTo _ xs =
-    case length xs of
-       2 -> keysTo
-       _ -> Left $ Error "keysTo <keys> <map>"
-    where
-        replaceKey mk k = B.fromMaybe k (fmap XMapKey (M.lookup k mk))
-        keysTo = do
+        do
+              checkMapsNumber xs 2
               mk <- extractMapString (head xs) "keys"
               let mv = mapMapKeys (\k -> replaceKey mk k) (head (tail xs))
               return mv
+        where
+              replaceKey mk k = B.fromMaybe k (fmap XMapKey (M.lookup k mk))
+
 
 merge :: OperationMode -> [XMap] -> XMapErr
 merge _ xs = do
@@ -82,6 +81,7 @@ merge _ xs = do
 
 fsum :: OperationMode -> [XMap] -> XMapErr
 fsum om xs = do
+              checkMapsNumber xs 1
               vs <- extractMapDouble (head xs) "values"
               let sum = L.sum $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "sum") sum)
