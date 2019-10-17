@@ -1,9 +1,4 @@
-module ProjectJsonTest (
-    toParseJSON_calculation_same,
-    toParseJSON_project_same,
-    toParseJSON_allProjects_same,
-    toParseJSON_user_same,
-    toParseJSON_view_same) where
+module ProjectJsonTest (tests) where
 
 import Data.Aeson
 import Test.HUnit
@@ -85,3 +80,11 @@ makeProjectName = ProjectName . T.pack
 encodeTrace :: ToJSON a => a -> B.ByteString
 encodeTrace = traceJson . encode
     where traceJson json = trace ("json" ++ show json) json
+
+tests = [
+          toParseJSON_calculation_same,
+          toParseJSON_project_same,
+          toParseJSON_allProjects_same,
+          toParseJSON_user_same,
+          toParseJSON_view_same
+        ]

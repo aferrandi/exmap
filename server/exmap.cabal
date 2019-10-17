@@ -147,6 +147,7 @@ test-suite exmap-test
                      , AssocList
                      , AssocListTest
                      , OperationsTest
+                     , OperationsTestUtils
 
 
 

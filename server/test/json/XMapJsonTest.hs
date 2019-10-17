@@ -1,6 +1,5 @@
-module XMapJsonTest (
-                        toParseJSON_doublemap_same,
-                        toParseJSON_stringmap_same) where
+module XMapJsonTest (tests) where
+
 import Data.Aeson
 import Test.HUnit
 import Test.Framework
@@ -10,12 +9,9 @@ import Control.Monad
 import qualified Data.ByteString.Lazy as B
 import Debug.Trace
 
-
 import XMapTypes
 import TestTypes
 import XMapJson
-
-
 
 toParseJSON_doublemap_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
     where original =  XNamedMap {
@@ -33,3 +29,8 @@ toParseJSON_stringmap_same = TestCase (assertEqual "map -> json -> map" (Just or
 encodeTrace :: ToJSON a => a -> B.ByteString
 encodeTrace = traceJson . encode
     where traceJson json = trace ("json" ++ show json) json
+
+tests = [
+            toParseJSON_doublemap_same,
+            toParseJSON_stringmap_same
+        ]

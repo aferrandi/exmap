@@ -1,7 +1,4 @@
-module AssocListTest (
-    groupAssocListByKey_lookup_gets_list,
-    groupAssocListByKey_final_list_expected
-    ) where
+module AssocListTest (tests) where
 
 import Test.HUnit
 import Test.Framework
@@ -15,3 +12,5 @@ groupAssocListByKey_lookup_gets_list = TestCase (assertEqual "can find a letter 
 
 groupAssocListByKey_final_list_expected = TestCase (assertEqual "can find a letter with 2 numbers" [("a", [1, 3]), ("b", [2])]  numbersByLetter)
     where numbersByLetter = groupAssocListByKey [("a", 1), ("b", 2), ("a", 3)]
+
+tests = [groupAssocListByKey_lookup_gets_list, groupAssocListByKey_final_list_expected]

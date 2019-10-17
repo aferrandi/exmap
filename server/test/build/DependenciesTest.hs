@@ -1,11 +1,4 @@
-module DependenciesTest (
-    formulaDependencies_trivialFormula_originalMap,
-    formulaDependencies_complexFormula_maps,
-    formulaDependencies_duplicates_onlyOnce,
-    viewDependencies_complex_maps,
-    viewDependencies_empty_empty,
-    calculationDependencies_simpleCalculation_originalMap
-    ) where
+module DependenciesTest (tests) where
 
 import Test.HUnit
 import Test.Framework
@@ -64,3 +57,12 @@ calculationDependencies_simpleCalculation_originalMap = TestCase (assertEqual "d
                 formula = XFMap ka,
                 operationMode = Intersection
           }
+
+tests = [
+          formulaDependencies_trivialFormula_originalMap,
+          formulaDependencies_complexFormula_maps,
+          formulaDependencies_duplicates_onlyOnce,
+          viewDependencies_complex_maps,
+          viewDependencies_empty_empty,
+          calculationDependencies_simpleCalculation_originalMap
+        ]

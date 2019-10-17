@@ -1,4 +1,4 @@
-module OperationsTest (add_standard) where
+module OperationsTest (tests) where
 
 import Test.HUnit
 import Test.Framework
@@ -21,5 +21,11 @@ add_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Add) Union [testMapDoubleA, testMapDoubleB]
           expected = makeDoubleMap [("a", 2.6), ("b", 2.3), ("c", 5.9), ("d", 3.1)]
 
+subtract_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Subtract) Union [testMapDoubleA, testMapDoubleB]
+          expected = makeDoubleMap [("a", -0.2), ("b", 2.3), ("c", 1.1), ("d", -3.1)]
+
+
+tests = [add_standard, subtract_standard]
 
 

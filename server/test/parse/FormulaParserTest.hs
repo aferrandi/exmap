@@ -1,4 +1,4 @@
-module FormulaParserTest where
+module FormulaParserTest(tests) where
 
 import Test.HUnit
 import Test.Framework
@@ -39,3 +39,12 @@ parseFormula_complex_operation = TestCase (assertEqual "parse operation" (Right 
 parseFormula_formulaWithSpaces_map = TestCase (assertEqual "parse formula with spaces" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "  negate  one/map  ")
           res = XFOperation Negate [XFMap (mapName ["one", "map"])]
+
+tests = [
+          parseFormula_formulaWithMap_map,
+          parseFormula_formulaOperation_negate,
+          parseFormula_formulaWrongOperationName_error,
+          parseFormula_formulaOperation_operation,
+          parseFormula_complex_operation,
+          parseFormula_formulaWithSpaces_map
+        ]
