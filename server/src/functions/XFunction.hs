@@ -26,7 +26,6 @@ operate om f (a:b:_) = do
                                            Union -> unionWith3 f ea eb
 
 apply :: (XValue a, XValue r) => UnaryXMapFun a r-> [XMap] -> XMapErr
-apply f ms = do
-    em  <- extractMapByFun (head ms) f
+apply f (a:_) = do
+    em  <- extractMapByFun a f
     return (buildMap $ M.map f em)
-

@@ -1,13 +1,14 @@
 {-# LANGUAGE OverloadedStrings   #-}
 
 module XValues(XValue, defaultValue, extractMapByFun,
-extractMapFirstByFun, extractMapSecondByFun, mapMapKeys,
+extractMapFirstByFun, extractMapSecondByFun, mapMapKeys, keysSetMap,
 toMapList, buildMap, UnaryXMapFun, BinaryXMapFun, size,
 extractMapDouble, extractMapInt, extractMapString, extractMapBool, checkMapsNumber) where
 
 import XMapTypes
 import qualified Data.Text as T
 import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import Errors (mkError)
 
 type UnaryXMapFun a r = a -> r
@@ -77,6 +78,13 @@ mapMapKeys f (XMapDouble m) = XMapDouble $  M.mapKeys f m
 mapMapKeys f (XMapInt m) = XMapInt $ M.mapKeys f m
 mapMapKeys f (XMapString m) = XMapString $ M.mapKeys f m
 mapMapKeys f (XMapBool m) = XMapBool $ M.mapKeys f m
+
+
+keysSetMap :: XMap -> S.Set XMapKey
+keysSetMap (XMapDouble m) = M.keysSet  m
+keysSetMap (XMapInt m) = M.keysSet m
+keysSetMap (XMapString m) = M.keysSet m
+keysSetMap (XMapBool m) = M.keysSet m
 
 mapToMapList :: XMap -> XMapList
 mapToMapList (XMapDouble x) = XMapDoubleList [x]

@@ -10,6 +10,7 @@ import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import qualified Data.Maybe as B
 import qualified Data.List as L
+import qualified Data.Set as S
 
 type OperationFun = OperationMode -> [XMap] -> XMapErr
 
@@ -53,22 +54,27 @@ fexp om = XFunction.apply expv
     where expv :: Double -> Double
           expv = Prelude.exp
 
-
 flog :: OperationMode -> [XMap] -> XMapErr
-flog om = XFunction.apply logv
-    where logv :: Double -> Double
-          logv = Prelude.log
+flog om xs = do
+          checkMapsNumber xs 1
+          ms <- extractMapDouble (head xs) "values"
+          let os = M.map Prelude.log (M.filter (\v -> v >= 0) ms)
+          return $ XMapDouble os
 
 keysTo :: OperationMode -> [XMap] -> XMapErr
-keysTo _ xs =
+keysTo om xs =
         do
               checkMapsNumber xs 2
+              let mv = (head (tail xs))
               mk <- extractMapString (head xs) "keys"
-              let mv = mapMapKeys (\k -> replaceKey mk k) (head (tail xs))
-              return mv
+              return $ replaceKeys mk mv
         where
-              replaceKey mk k = B.fromMaybe k (fmap XMapKey (M.lookup k mk))
-
+              replaceKey ks k = B.fromMaybe k $ fmap XMapKey (M.lookup k ks)
+              replaceKeysSimple ks vs = mapMapKeys (\k -> replaceKey ks k) vs
+              onlyKeys ks vs = M.filterWithKey (\k v -> S.member k (keysSetMap vs)) ks
+              replaceKeys ks vs = case om of
+                              Intersection -> replaceKeysSimple (onlyKeys ks vs) vs
+                              Union -> replaceKeysSimple ks vs
 
 merge :: OperationMode -> [XMap] -> XMapErr
 merge _ xs = do
@@ -97,4 +103,5 @@ operationRepository Tan = ftan
 operationRepository Exp = fexp
 operationRepository Log = flog
 operationRepository Sum = fsum
+operationRepository KeysTo = keysTo
 operationRepository Merge = merge
