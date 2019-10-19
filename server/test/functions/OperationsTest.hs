@@ -71,6 +71,11 @@ merge_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Merge) Union [testMapDoubleA, testMapDoubleB]
           expected = makeDoubleMap [("a", 1.2), ("b", 2.3), ("c", 3.5), ("d", 3.1)]
 
+sum_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Sum) Union [testMapDoubleA]
+          expected = makeDoubleMap [("sum", 7.0)]
+
+
 tests = [
           add_standard,
           subtract_standard,
@@ -84,7 +89,8 @@ tests = [
           log_minus,
           keysTo_union,
           keysTo_interesection,
-          merge_standard
+          merge_standard,
+          sum_standard
         ]
 
 
