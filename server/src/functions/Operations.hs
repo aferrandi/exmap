@@ -65,15 +65,15 @@ keysTo :: OperationMode -> [XMap] -> XMapErr
 keysTo om xs =
         do
               checkMapsNumber xs 2
-              let mv = (head (tail xs))
+              let xv = (head (tail xs))
               mk <- extractMapString (head xs) "keys"
-              return $ replaceKeys mk mv
+              return $ replaceKeys mk xv
         where
               replaceKey ks k = B.fromMaybe k $ fmap XMapKey (M.lookup k ks)
+              keysInBoth vs ks = restrictMapKeys (M.keysSet ks) vs
               replaceKeysSimple ks vs = mapMapKeys (\k -> replaceKey ks k) vs
-              onlyKeys ks vs = M.filterWithKey (\k v -> S.member k (keysSetMap vs)) ks
               replaceKeys ks vs = case om of
-                              Intersection -> replaceKeysSimple (onlyKeys ks vs) vs
+                              Intersection -> replaceKeysSimple ks (keysInBoth vs ks)
                               Union -> replaceKeysSimple ks vs
 
 merge :: OperationMode -> [XMap] -> XMapErr

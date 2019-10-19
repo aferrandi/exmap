@@ -57,11 +57,19 @@ log_minus  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Log) Union [testMapDoubleB]
           expected = makeDoubleMap [("a", 0.3364722366212129), ("d", 1.1314021114911006)]
 
-keysTo_standard  = TestCase $ assertXMapDoubleEqual expected actual
+keysTo_union  = TestCase $ assertXMapDoubleEqual expected actual
      where keyMap = makeStringXMap [("a", "e"), ("b", "f"), ("d", "g")]
            actual = (operationRepository KeysTo) Union [keyMap, testMapDoubleA]
            expected = makeDoubleMap [("c", 3.5), ("e", 1.2), ("f", 2.3)]
 
+keysTo_interesection  = TestCase $ assertXMapDoubleEqual expected actual
+     where keyMap = makeStringXMap [("a", "e"), ("b", "f"), ("d", "g")]
+           actual = (operationRepository KeysTo) Intersection [keyMap, testMapDoubleA]
+           expected = makeDoubleMap [("e", 1.2), ("f", 2.3)]
+
+merge_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Merge) Union [testMapDoubleA, testMapDoubleB]
+          expected = makeDoubleMap [("a", 1.2), ("b", 2.3), ("c", 3.5), ("d", 3.1)]
 
 tests = [
           add_standard,
@@ -74,7 +82,9 @@ tests = [
           exp_standard,
           log_standard,
           log_minus,
-          keysTo_standard
+          keysTo_union,
+          keysTo_interesection,
+          merge_standard
         ]
 
 
