@@ -126,7 +126,10 @@ sendToDependents rc cs vs rs = do
     calc <- readTVar $ calculation rc
     let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
     writeTVar (currentResult rc) (Just rsn)
+    let cn = calculationName calc
+    logDebug (logChan rc) "calc" $ "sending " ++ (show cn) ++ " calculation result to calculations:" ++ show (map ccName cs)
     sendToAll (map ccChannel cs) (CMMaps [rsn])
+    logDebug (logChan rc) "calc" $ "sending " ++ (show cn) ++ " calculation result to views:" ++ show (map vcName vs)
     sendToAll (map vcChannel vs) (VMMaps [rsn])
     return ()
 
