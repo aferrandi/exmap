@@ -16,7 +16,7 @@ import XMapTypes
 actorView :: ViewChan -> RuntimeView -> EventChan -> IO ()
 actorView chan rv evtChan = loop
     where loop = do
-            msg <- atomically $ readTChan chan
+            msg <- atomically $ readTChan (vcChannel chan)
             let vn = runtimeViewName rv
             case msg of
                 VMMaps ms -> do

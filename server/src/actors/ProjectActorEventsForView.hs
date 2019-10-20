@@ -29,12 +29,14 @@ viewForClientLoaded c rp v = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
 
+
+
 mapsForViewLoaded :: RuntimeProject -> WAClient -> ViewName -> [XNamedMap] -> STM ()
 mapsForViewLoaded rp c vn ms = do
     vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
-        Just vChan -> writeTChan vChan (VMMaps ms)
+        Just vchan -> writeTChan (vcChannel vchan) (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
 viewStored :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
@@ -48,7 +50,7 @@ viewStored chan rp c v = do
         sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
 
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
-sendSubscriptionToView vchan c = writeTChan vchan (VMSubscribeToView c)
+sendSubscriptionToView vchan c = writeTChan (vcChannel vchan) (VMSubscribeToView c)
 
 viewForProjectLoaded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
 viewForProjectLoaded chan rp c v = do
@@ -72,7 +74,7 @@ addView chan rp c v = do
     vch <- viewToChan (evtChan rp) (logChan $ chans rp) pn v
     atomically $ do
         addViewToProject rp vch v
-        writeTChan vch $ VMUpdate v
+        writeTChan (vcChannel vch) $ VMUpdate v
         sendDependedMapsToView chan rp c v
         listenToDependentCalculations rp vch v
 
@@ -83,7 +85,7 @@ updateView chan rp c p v = do
     case M.lookup vn vbn of
         Just vch -> do
             modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
-            writeTChan vch (VMUpdate v)
+            writeTChan (vcChannel vch) (VMUpdate v)
             sendDependedMapsToView chan rp c v
             listenToDependentCalculations rp vch v
         Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
@@ -95,7 +97,7 @@ listenToDependentCalculations rp vch v = do
     let cs = B.mapMaybe (\d -> M.lookup d cbr) deps
     cbn <- readTVar $ calculationChanByName rp
     let chs = B.mapMaybe (\c -> M.lookup c cbn) cs
-    mapM_ (\ch -> writeTChan ch (CMViewStarted vch)) chs
+    mapM_ (\ch -> writeTChan (ccChannel ch) (CMViewStarted vch)) chs
 
 sendDependedMapsToView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 sendDependedMapsToView chan rp c v = do

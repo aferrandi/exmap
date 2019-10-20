@@ -36,6 +36,10 @@ calculationToChan :: LogChan -> Calculation ->  IO CalculationChan
 calculationToChan lc c = do
     cr <- atomically $ calculationToRuntime lc c
     ch <- newTChanIO
-    _ <- forkIO $ actorCalculation ch cr
-    return ch
+    let cch = CalculationChan {
+          ccChannel = ch,
+          ccName = calculationName c
+    }
+    _ <- forkIO $ actorCalculation cch cr
+    return cch
 

@@ -68,12 +68,16 @@ mapStored chan rp c m = do
         sendToAllViews mn
         let pn = projectName p
         writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn (size $ xmap m))
-        where sendToAllCalculations mn = do
+        where sendToCalculations cs =
+                    sendToAll (map ccChannel cs) (CMMaps [m])
+              sendToAllCalculations mn = do
                     cbm <- readTVar $ calculationChanByMap rp
-                    mapM_ (flip sendToAll (CMMaps [m]) ) (M.lookup mn cbm)
+                    mapM_ sendToCalculations (M.lookup mn cbm)
+              sendToViews vs =
+                    sendToAll (map vcChannel vs) (VMMaps [m])
               sendToAllViews mn = do
                     vbm <- readTVar $ viewChanByMap rp
-                    mapM_ (flip sendToAll (VMMaps [m]) ) (M.lookup mn vbm)
+                    mapM_ sendToViews (M.lookup mn vbm)
 
 projectStored :: RuntimeProject -> Project -> STM()
 projectStored rp p = do

@@ -56,7 +56,7 @@ disconnectClient rp c = do
     disconnectAll
     where disconnectAll = do
            vs <- readTVar $ viewChanByName rp
-           mapM_ (\vc -> writeTChan vc (VMUnsubscribeFromView c)) (M.elems vs)
+           mapM_ (\vc -> writeTChan (vcChannel vc) (VMUnsubscribeFromView c)) (M.elems vs)
 
 subscribeToProject :: RuntimeProject -> WAClient -> STM()
 subscribeToProject rp c = do
@@ -81,7 +81,7 @@ subscribeToView chan rp c vn = do
     vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
-        Just vChan -> writeTChan vChan (VMSubscribeToView c)
+        Just vChan -> writeTChan (vcChannel vChan) (VMSubscribeToView c)
         Nothing -> writeTChan (loadChan $ chans rp) (LMLoadViewForProject chan c pn vn)
 
 unsubscribeFromView :: WAClient -> ViewName -> RuntimeProject -> STM ()
@@ -89,7 +89,7 @@ unsubscribeFromView c vn rp = do
     vs <- readTVar $ viewChanByName rp
     pn <- prjName rp
     case M.lookup vn vs of
-        Just vChan -> writeTChan vChan (VMUnsubscribeFromView c)
+        Just vChan -> writeTChan (vcChannel vChan) (VMUnsubscribeFromView c)
         Nothing -> sendStringError  (evtChan rp) [c] ("view " ++ show vn ++ " to unsubscribe from not found in project " ++ show pn)
 
 updateProject :: ProjectChan -> RuntimeProject -> WAClient -> Project -> STM ()

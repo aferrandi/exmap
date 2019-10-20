@@ -14,4 +14,7 @@ data CalculationMessage = CMMaps [XNamedMap]
                           | CMStop
     deriving (Eq)
 
-type CalculationChan = TChan CalculationMessage
+data CalculationChan = CalculationChan {
+    ccChannel :: TChan CalculationMessage,
+    ccName :: CalculationName
+} deriving (Eq)

@@ -21,7 +21,7 @@ import Errors (mkError)
 actorCalculation :: CalculationChan -> RuntimeCalculation -> IO ()
 actorCalculation chan rc = loop
     where loop = do
-            msg <- atomically $ readTChan chan
+            msg <- atomically $ readTChan (ccChannel chan)
             cn <- atomically $ runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
@@ -78,14 +78,14 @@ handleViewStarted :: RuntimeCalculation -> ViewChan -> STM ()
 handleViewStarted rc vc = do
     modifyTVar (viewsToNotify rc)  (L.union [vc])
     cr <- readTVar $ currentResult rc
-    mapM_ (\m -> writeTChan vc (VMMaps [m])) cr
+    mapM_ (\m -> writeTChan (vcChannel vc) (VMMaps [m])) cr
 
 errorToAll :: RuntimeCalculation -> Error -> STM ()
 errorToAll rc  e = do
     cs <- readTVar $ calculationsToNotify rc
     vs <- readTVar $ viewsToNotify rc
-    sendToAll cs (CMError e)
-    sendToAll vs (VMError e)
+    sendToAll (map ccChannel cs) (CMError e)
+    sendToAll (map vcChannel vs) (VMError e)
     logError (logChan rc) "calc" e
     return ()
 
@@ -126,7 +126,7 @@ sendToDependents rc cs vs rs = do
     calc <- readTVar $ calculation rc
     let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
     writeTVar (currentResult rc) (Just rsn)
-    sendToAll cs (CMMaps [rsn])
-    sendToAll vs (VMMaps [rsn])
+    sendToAll (map ccChannel cs) (CMMaps [rsn])
+    sendToAll (map vcChannel vs) (VMMaps [rsn])
     return ()
 

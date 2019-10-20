@@ -15,4 +15,7 @@ data ViewMessage = VMMaps [XNamedMap]
                       | VMStop
     deriving (Show, Eq)
 
-type ViewChan = TChan ViewMessage
+data ViewChan = ViewChan {
+    vcChannel :: TChan ViewMessage,
+    vcName :: ViewName
+} deriving (Eq)

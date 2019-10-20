@@ -17,8 +17,12 @@ viewToChan :: EventChan -> LogChan -> ProjectName -> View -> IO ViewChan
 viewToChan ec lc pn v = do
         rv <- atomically $ viewToRuntime lc pn v
         ch <- newTChanIO
-        _ <- forkIO $ actorView ch rv ec
-        return ch
+        let vch = ViewChan {
+              vcChannel = ch,
+              vcName = viewName v
+        }
+        _ <- forkIO $ actorView vch rv ec
+        return vch
 
 viewToRuntime :: LogChan -> ProjectName -> View -> STM RuntimeView
 viewToRuntime lc pn v = do

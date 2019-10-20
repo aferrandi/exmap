@@ -35,7 +35,7 @@ addCalculation chan rp c cc = do
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
                     modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch deps
-                    writeTChan cch (CMUpdateCalculation cc)
+                    writeTChan (ccChannel cch) (CMUpdateCalculation cc)
                     sendDependedMapsToCalculation chan rp c cc
     where logDbg t = atomically $ logDebug (logChan $ chans rp) "project" t
 
@@ -50,7 +50,7 @@ updateCalculation chan rp c cc = do
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
     where updateFoundCalculation cch =  do
                                        modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependencies cc)
-                                       writeTChan cch (CMUpdateCalculation cc)
+                                       writeTChan (ccChannel cch) (CMUpdateCalculation cc)
                                        sendDependedMapsToCalculation chan rp c cc
 
 mapsForCalculationLoaded :: RuntimeProject -> WAClient -> CalculationName -> [XNamedMap] -> STM ()
@@ -58,7 +58,7 @@ mapsForCalculationLoaded rp c cn ms = do
     cs <- readTVar $ calculationChanByName rp
     pn <- prjName rp
     case M.lookup cn cs of
-        Just cChan -> writeTChan cChan (CMMaps ms)
+        Just cChan -> writeTChan (ccChannel cChan) (CMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("calculation " ++ show cn ++ " to add the maps to not found in project " ++ show pn)
 
 mapsForCalculationsLoaded :: RuntimeProject -> WAClient -> [XNamedMap] -> STM ()
@@ -72,7 +72,7 @@ findCalculationsAndSendMap rp cbm m = do
     let cs = M.lookup mn cbm
     logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to " ++ (show $ length cs) ++ " calculations"
     mapM_ (sendMapToCalculations m) cs
-    where sendMapToCalculations m ch = mapM_ (\c -> writeTChan c (CMMaps [m])) ch
+    where sendMapToCalculations m ch = mapM_ (\c -> writeTChan (ccChannel c) (CMMaps [m])) ch
 
 calculationForClientLoaded :: RuntimeProject -> WAClient -> Calculation -> STM ()
 calculationForClientLoaded rp c cc = do
