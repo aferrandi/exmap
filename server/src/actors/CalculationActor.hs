@@ -102,7 +102,7 @@ execAndSendIfFull rc = do
             return $ Right ()
     where execAndSendCalc mbn = do
             cn <- runtimeCalcName rc
-            logDebug (logChan rc) "calc" $ "got maps to calculate formula" ++ show cn
+            logDebug (logChan rc) "calc" $ "got maps " ++ (show $ M.keys mbn) ++ " to calculate formula" ++ show cn
             chs <- readTVar $ calculationsToNotify rc
             vs <- readTVar $ viewsToNotify rc
             execAndSend rc chs vs mbn

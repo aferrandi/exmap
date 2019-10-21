@@ -49,9 +49,9 @@ updateCalculation chan rp c cc = do
         Just cch -> updateFoundCalculation cch
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
     where updateFoundCalculation cch =  do
-                                       modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependencies cc)
-                                       writeTChan (ccChannel cch) (CMUpdateCalculation cc)
-                                       sendDependedMapsToCalculation chan rp c cc
+             modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependencies cc)
+             writeTChan (ccChannel cch) (CMUpdateCalculation cc)
+             sendDependedMapsToCalculation chan rp c cc
 
 mapsForCalculationLoaded :: RuntimeProject -> WAClient -> CalculationName -> [XNamedMap] -> STM ()
 mapsForCalculationLoaded rp c cn ms = do
