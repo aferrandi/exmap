@@ -29,8 +29,6 @@ viewForClientLoaded c rp v = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewLoaded pn v)
 
-
-
 mapsForViewLoaded :: RuntimeProject -> WAClient -> ViewName -> [XNamedMap] -> STM ()
 mapsForViewLoaded rp c vn ms = do
     vs <- readTVar $ viewChanByName rp
@@ -64,7 +62,7 @@ viewForProjectLoaded chan rp c v = do
 addViewToProject ::  RuntimeProject -> ViewChan -> View -> STM ()
 addViewToProject rp vch v = do
     modifyTVar (viewChanByName rp) $ M.insert (viewName v) vch
-    modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
+    modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependenciesMaps v)
 
 addView :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO()
 addView chan rp c v = do
@@ -84,7 +82,7 @@ updateView chan rp c p v = do
     vbn <- readTVar $ viewChanByName rp
     case M.lookup vn vbn of
         Just vch -> do
-            modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependencies v)
+            modifyTVar (viewChanByMap rp) $ updateViewChanByMap vch (viewDependenciesMaps v)
             writeTChan (vcChannel vch) (VMUpdate v)
             sendDependedMapsToView chan rp c v
             listenToDependentCalculations rp vch v
@@ -92,7 +90,7 @@ updateView chan rp c p v = do
 
 listenToDependentCalculations :: RuntimeProject -> ViewChan -> View -> STM ()
 listenToDependentCalculations rp vch v = do
-    let deps = viewDependencies v
+    let deps = viewDependenciesMaps v
     cbr <- readTVar $ calculationByResult rp
     let cs = B.mapMaybe (\d -> M.lookup d cbr) deps
     cbn <- readTVar $ calculationChanByName rp
@@ -104,7 +102,7 @@ sendDependedMapsToView chan rp c v = do
      p <- readTVar $ project rp
      case sourcesOfTypeInProject FileSource p of
         Just fileSources -> do
-             let toLoad = L.intersect (viewDependencies v) fileSources
+             let toLoad = L.intersect (viewDependenciesMaps v) fileSources
              writeTChan (loadChan $ chans rp) $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
         Nothing -> return ()
 

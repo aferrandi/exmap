@@ -8,16 +8,16 @@ import View
 import XMapTypes
 import Calculation
 
-formulaDependencies :: XFormula -> [XMapName]
-formulaDependencies (XFMap n) = [n]
-formulaDependencies (XFOperation _ fs) = nub (concatMap formulaDependencies fs)
+formulaDependenciesMaps :: XFormula -> [XMapName]
+formulaDependenciesMaps (XFMap n) = [n]
+formulaDependenciesMaps (XFOperation _ fs) = nub (concatMap formulaDependenciesMaps fs)
 
-viewDependencies :: View -> [XMapName]
-viewDependencies (View _ rs)= concatMap rowDependencies rs
+viewDependenciesMaps :: View -> [XMapName]
+viewDependenciesMaps (View _ rs)= concatMap rowDependencies rs
     where rowDependencies (ViewRow items)  = mapMaybe itemDependencies items
           itemDependencies (MapItem m) = Just m
           itemDependencies (LabelItem _) = Nothing
 
-calculationDependencies :: Calculation -> [XMapName]
-calculationDependencies c = formulaDependencies $ formula c
+calculationDependenciesMaps :: Calculation -> [XMapName]
+calculationDependenciesMaps c = formulaDependenciesMaps $ formula c
 

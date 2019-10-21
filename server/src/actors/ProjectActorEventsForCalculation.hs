@@ -27,7 +27,7 @@ import FormulaText
 addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO()
 addCalculation chan rp c cc = do
     cch <- calculationToChan (logChan (chans rp)) cc
-    let deps = calculationDependencies cc
+    let deps = calculationDependenciesMaps cc
     let cn = calculationName cc
     logDbg $ "Calculation dependencies for " ++ (show cn) ++ ":" ++ (show deps)
     atomically $ do
@@ -49,7 +49,7 @@ updateCalculation chan rp c cc = do
         Just cch -> updateFoundCalculation cch
         Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
     where updateFoundCalculation cch =  do
-             modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependencies cc)
+             modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch (calculationDependenciesMaps cc)
              writeTChan (ccChannel cch) (CMUpdateCalculation cc)
              sendDependedMapsToCalculation chan rp c cc
 
@@ -112,7 +112,7 @@ sendDependedMapsToCalculation chan rp c cc = do
      p <- readTVar $ project rp
      case sourcesOfTypeInProject FileSource p of
         Just fileSources -> do
-             let toLoad = L.intersect (calculationDependencies cc) fileSources
+             let toLoad = L.intersect (calculationDependenciesMaps cc) fileSources
              writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
         Nothing -> return ()
 

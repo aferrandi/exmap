@@ -15,7 +15,7 @@ import LogMessages
 
 calculationToRuntime :: LogChan -> Calculation -> STM RuntimeCalculation
 calculationToRuntime lc c = do
-    rp <- newTVar (mapWithNothingValues deps)
+    mr <- newTVar (mapWithNothingValues deps)
     rc <- newTVar c
     cr <- newTVar Nothing
     vs <- newTVar []
@@ -23,13 +23,13 @@ calculationToRuntime lc c = do
     logDebug lc "calc" $ "Dependencies of calculation " ++ show (calculationName c) ++ ": " ++ (show deps)
     return RuntimeCalculation {
         calculation = rc,
-        repository = rp,
+        mapRepository = mr,
         currentResult = cr,
         calculationsToNotify = cs,
         viewsToNotify = vs,
         logChan = lc
     }
-    where deps = formulaDependencies (formula c)
+    where deps = calculationDependenciesMaps c
 
 
 calculationToChan :: LogChan -> Calculation ->  IO CalculationChan

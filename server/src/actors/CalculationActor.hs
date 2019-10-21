@@ -68,7 +68,7 @@ handleMaps rc ms = do
 
 handleMapsWithErrors :: RuntimeCalculation -> [XNamedMap] -> STM (Either Error ())
 handleMapsWithErrors rc ms = do
-       modifyTVar (repository rc) (updateMapsInCalculation ms)
+       modifyTVar (mapRepository rc) (updateMapsInCalculation ms)
        execAndSendIfFull rc
 
 updateMapsInCalculation :: [XNamedMap] -> MapRepository -> MapRepository
@@ -93,7 +93,7 @@ execAndSendIfFull :: RuntimeCalculation ->  STM (Either Error ())
 execAndSendIfFull rc = do
     cn <- runtimeCalcName rc
     logDebug (logChan rc) "calc" $ "ready to calculate formula " ++ show cn
-    rm <- readTVar $ repository rc
+    rm <- readTVar $ mapRepository rc
     let mmbn = repositoryIfFull rm
     case mmbn of
        Just mbn -> execAndSendCalc mbn

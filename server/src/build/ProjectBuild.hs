@@ -28,6 +28,7 @@ projectToRuntime chs p cs = do
         cbn <- calculationByName ccs
         let cbm = calculationChansByMaps ccs
         let cbr = calculationsByResults cs
+
         atomically $ buildRuntimeProject chs p cbn cbm cbr
     where name = calculationName . calculation
           calculationByName :: [CalculationWithChan] -> IO CalculationChanByName
@@ -64,7 +65,7 @@ calculationChansByMaps :: [CalculationWithChan] ->  CalculationChanByMap
 calculationChansByMaps ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
         -- return $ T.mapM sequence cs
     where deps :: CalculationWithChan -> [XMapName]
-          deps = calculationDependencies . calculation
+          deps = calculationDependenciesMaps . calculation
           chansByDep :: CalculationWithChan -> [(XMapName, CalculationChan)]
           chansByDep cc = map (\dep -> (dep, chan cc)) (deps cc)
           chanByDeps :: [CalculationWithChan] -> [(XMapName, CalculationChan)]
