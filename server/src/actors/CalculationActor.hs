@@ -36,6 +36,10 @@ actorCalculation chan rc = loop
                     logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
                     atomically $ handleCalculation rc c
                     loop
+                CMUpdateCalculationsToNotify cs -> do
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculationsToNotify " ++ show (map ccName cs)
+                    atomically $ handleCalculationsToNotify rc cs
+                    loop
                 CMViewStarted vc -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMViewStarted"
                     atomically $ handleViewStarted rc vc
@@ -51,6 +55,14 @@ runtimeCalcName rc = do
 handleCalculation :: RuntimeCalculation -> Calculation -> STM()
 handleCalculation rc c = do
     writeTVar (calculation rc) c
+    ers <- execAndSendIfFull rc
+    case ers of
+        Right () -> return ()
+        Left err -> errorToAll rc err
+
+handleCalculationsToNotify :: RuntimeCalculation -> [CalculationChan] -> STM()
+handleCalculationsToNotify rc chs = do
+    writeTVar (calculationsToNotify rc) chs
     ers <- execAndSendIfFull rc
     case ers of
         Right () -> return ()

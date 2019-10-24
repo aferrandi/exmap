@@ -42,4 +42,3 @@ calculationToChan lc c = do
     }
     _ <- forkIO $ actorCalculation cch cr
     return cch
-

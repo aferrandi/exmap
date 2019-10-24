@@ -10,6 +10,7 @@ import ViewMessages
 data CalculationMessage = CMMaps [XNamedMap]
                           | CMError Error
                           | CMUpdateCalculation Calculation
+                          | CMUpdateCalculationsToNotify [CalculationChan]
                           | CMViewStarted ViewChan
                           | CMStop
     deriving (Eq)
