@@ -5,6 +5,7 @@ import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 import qualified Data.List as L
 import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import Debug.Trace (trace)
 
 import ProjectState
@@ -26,18 +27,21 @@ import FormulaText
 
 addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO()
 addCalculation chan rp c cc = do
-    cch <- calculationToChan (logChan (chans rp)) cc
-    let deps = calculationDependenciesMaps cc
+    cbr <- readTVarIO $ calculationByResult rp
+    let rs = M.keysSet cbr
+    let ims = inputMapsNotProducedByCalculations rs
+    cch <- calculationToChan (logChan (chans rp)) (S.fromList ims) cc
     let cn = calculationName cc
-    logDbg $ "Calculation dependencies for " ++ (show cn) ++ ":" ++ (show deps)
+    logDbg $ "Maps used by calculation " ++ (show cn) ++ ":" ++ (show ims)
     atomically $ do
                     modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
-                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch deps
+                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch ims
                     writeTChan (ccChannel cch) (CMUpdateCalculation cc)
                     sendDependedMapsToCalculation chan rp c cc
     where logDbg t = atomically $ logDebug (logChan $ chans rp) "project" t
+          inputMapsNotProducedByCalculations rs = filter (\m -> S.notMember m rs) $ calculationDependenciesMaps cc
 
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()

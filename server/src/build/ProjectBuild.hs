@@ -2,6 +2,7 @@ module ProjectBuild (projectToRuntime) where
 
 import qualified Data.Traversable as T
 import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import Control.Concurrent.STM.TVar
 import Control.Concurrent.STM
 
@@ -28,7 +29,7 @@ type CalculationByResult = M.Map XMapName CalculationWithChan
 
 projectToRuntime :: CommonChans -> Project -> [Calculation]-> IO RuntimeProject
 projectToRuntime chs p cs = do
-        ccs <- T.mapM (buildCalculationChan (logChan chs)) cs
+        ccs <- T.mapM (buildCalculationChan (logChan chs) calculationResultMaps) cs
         cbn <- calculationByName ccs
         let cbm = calculationsByMap ccs
         let cbr = calculationsByResults ccs
@@ -36,6 +37,7 @@ projectToRuntime chs p cs = do
             updateCalculationsWithDependentCalculations cbr cbm
             buildRuntimeProject chs p cbn cbm cbr
     where name = calculationName . calculation
+          calculationResultMaps = S.fromList $ map resultName cs
 
 
 calculationByName :: [CalculationWithChan] -> IO CalculationByName
@@ -50,9 +52,9 @@ updateCalculationsWithDependentCalculations cbr cbm =
       allCalculationChannelsToNotifyForOneResult rs = fmap (\cs -> map chan cs) (M.lookup rs cbm)
       updateDependentCalculations rs c =  mapM_ (\e -> writeTChan (ccChannel $ chan c) $ CMUpdateCalculationsToNotify e) $ allCalculationChannelsToNotifyForOneResult rs
 
-buildCalculationChan :: LogChan -> Calculation -> IO CalculationWithChan
-buildCalculationChan lc c = do
-    cch <- calculationToChan lc c
+buildCalculationChan :: LogChan -> S.Set XMapName -> Calculation -> IO CalculationWithChan
+buildCalculationChan lc rs c = do
+    cch <- calculationToChan lc rs c
     return CalculationWithChan { calculation = c, chan = cch }
 
 calculationsByMap :: [CalculationWithChan] ->  CalculationsByMap
