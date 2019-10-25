@@ -29,19 +29,20 @@ addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO
 addCalculation chan rp c cc = do
     cbr <- readTVarIO $ calculationByResult rp
     let rs = M.keysSet cbr
-    let ims = inputMapsNotProducedByCalculations rs
-    cch <- calculationToChan (logChan (chans rp)) (S.fromList ims) cc
-    let cn = calculationName cc
-    logDbg $ "Maps used by calculation " ++ (show cn) ++ ":" ++ (show ims)
+    cch <- calculationToChan (logChan (chans rp)) rs cc
     atomically $ do
+                    let cn = calculationName cc
+                    let deps = calculationDependenciesMaps cc
+                    logDbg $ "Maps used by calculation " ++ (show cn) ++ ":" ++ (show deps)
                     modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
                     modifyTVar (calculationChanByName rp)  $ M.insert cn cch
                     modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
-                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch ims
+                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch deps
+                    -- mo need to send CMUpdateCalculationsToNotify since this is a new calculation and no other calculation
+                    -- changed the maps by which it is dependent
                     writeTChan (ccChannel cch) (CMUpdateCalculation cc)
                     sendDependedMapsToCalculation chan rp c cc
-    where logDbg t = atomically $ logDebug (logChan $ chans rp) "project" t
-          inputMapsNotProducedByCalculations rs = filter (\m -> S.notMember m rs) $ calculationDependenciesMaps cc
+    where logDbg t = logDebug (logChan $ chans rp) "project" t
 
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM()

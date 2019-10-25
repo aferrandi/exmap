@@ -45,7 +45,7 @@ calculationByName ccs = do
       let cbn = map (\cc -> ((calculationName . calculation) cc, cc)) ccs
       return $ M.fromList cbn
 
-updateCalculationsWithDependentCalculations :: CalculationByResult -> CalculationsByMap->  STM ()
+updateCalculationsWithDependentCalculations :: CalculationByResult -> CalculationsByMap ->  STM ()
 updateCalculationsWithDependentCalculations cbr cbm =
     mapM_ (\(rs, c) -> updateDependentCalculations rs c) $ M.toList cbr
     where

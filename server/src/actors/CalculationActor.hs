@@ -36,9 +36,9 @@ actorCalculation chan rc = loop
                     logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculation " ++ show c
                     atomically $ handleCalculation rc c
                     loop
-                CMUpdateCalculationsToNotify cs -> do
-                    logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculationsToNotify " ++ show (map ccName cs)
-                    atomically $ handleCalculationsToNotify rc cs
+                CMUpdateCalculationsToNotify chs -> do
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMUpdateCalculationsToNotify " ++ show (map ccName chs)
+                    atomically $ handleCalculationsToNotify rc chs
                     loop
                 CMViewStarted vc -> do
                     logDbg $ "Calculation " ++ show cn ++ " handling CMViewStarted"
