@@ -17,14 +17,16 @@ import CalculationBuild
 import XMapTypes
 import LogMessages
 
-data CalculationWithChan = CalculationWithChan {
-    calculation :: Calculation,
-    chan :: CalculationChan
-    }
+
 
 type CalculationByName = M.Map CalculationName CalculationWithChan
 type CalculationsByMap = M.Map XMapName [CalculationWithChan]
 type CalculationByResult = M.Map XMapName CalculationWithChan
+
+data CalculationWithChan = CalculationWithChan {
+    calculation :: Calculation,
+    chan :: CalculationChan
+    }
 
 
 projectToRuntime :: CommonChans -> Project -> [Calculation]-> IO RuntimeProject

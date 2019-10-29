@@ -7,8 +7,6 @@ import XMapTypes
 import XFunction
 import OperationTypes
 
-
-
 newtype CalculationName = CalculationName T.Text
     deriving (Show, Eq, Ord)
 
