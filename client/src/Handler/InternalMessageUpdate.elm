@@ -75,6 +75,8 @@ updateInternal msg model =
             ( handleAddRowToView model, Cmd.none )
         ChangeViewEditSelectedRow row ->
             ( handleChangeViewEditSelectedRow model row, Cmd.none )
+        ChangeViewEditCheckedItem index ->
+            ( handleChangeViewEditCheckedItem model index, Cmd.none )
         ShowDialog index ->
              ( handleShowDialog model index, Cmd.none)
         CloseDialog ->
@@ -247,6 +249,17 @@ handleAddOperationToCalculation model id =
                 |> Maybe.map operationTypeToText
     in
         appendToFormulaText model (Maybe.withDefault " " text)
+
+handleChangeViewEditCheckedItem : Model -> String -> Model
+handleChangeViewEditCheckedItem model index =
+    updateViewEditorModel model (\vm -> { vm | selectedViewCells = invertValue index vm.selectedViewCells })
+
+invertValue : String -> Dict.Dict String (Maybe Bool) -> Dict.Dict String (Maybe Bool)
+invertValue index dict =
+    let
+        inv existing = Maybe.map not (Maybe.withDefault (Just False) existing)
+    in
+        Dict.insert index (inv (Dict.get index dict)) dict
 
 
 appendToFormulaText : Model -> String -> Model

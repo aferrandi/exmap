@@ -3,6 +3,8 @@ module Editor.ViewEditor exposing (viewViewsEditor)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
+import Dict as Dict
+
 import Transform.MapsExtraction exposing (xmapNameToString)
 
 import Material.LayoutGrid as LayoutGrid
@@ -11,6 +13,7 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Material.RadioButton as RadioButton
+import Material.Checkbox as Checkbox
 import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Transform.NameParser exposing (..)
@@ -104,6 +107,7 @@ viewRows model v =
         DataTable.tbody [] rows
 
 
+viewChoice : Model -> Int -> Html Msg
 viewChoice model rowI =
     DataTable.td []
         [ RadioButton.view Mdc
@@ -115,16 +119,32 @@ viewChoice model rowI =
             []
         ]
 
-viewCell : ViewItem -> Html Msg
-viewCell i =
-    case i of
-        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ text (xmapNameToString mn) ]
-        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ text l ]
+viewCell : Model -> ViewItem -> Html Msg
+viewCell model item =
+    case item of
+        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ viewCellCheckbox model (xmapNameToString mn) ]
+        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ viewCellCheckbox model l ]
 
+
+viewCellCheckbox: Model -> String -> Html Msg
+viewCellCheckbox model txt =
+    let checked =
+            Dict.get index model.viewEditorModel.selectedViewCells
+                |> Maybe.withDefault Nothing
+                |> Maybe.map Checkbox.checked
+                |> Maybe.withDefault Options.nop
+        clickHandler = Options.onClick (Internal (ChangeViewEditCheckedItem index))
+        index = makeIndex viewEditorIdx txt
+    in
+        div []
+        [
+            Checkbox.view Mdc index model.mdc (checked :: clickHandler :: []) [],
+            text txt
+        ]
 
 viewRowToTableCells : Model -> ( Int, ViewRow ) -> List (Html Msg)
 viewRowToTableCells model ( rowIdx, ViewRow row ) =
-    viewChoice model rowIdx :: List.map viewCell row
+    viewChoice model rowIdx :: List.map (viewCell model) row
 
 
 viewEditorMapList : Model -> Html Msg

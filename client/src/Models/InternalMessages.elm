@@ -40,6 +40,7 @@ type InternalMsg
     | NewMapWithName XMapName XMapType
     | NewProjectWithName ProjectName
     | ChangeViewEditSelectedRow Int
+    | ChangeViewEditCheckedItem String
     | AddRowToView
     | ShowDialog String
     | CloseDialog

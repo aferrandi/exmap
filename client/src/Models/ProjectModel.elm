@@ -11,9 +11,7 @@ import Models.WebMessages exposing (WebRequest)
 import Types.XMapTypes exposing (..)
 
 
-type alias XMapByName =
-    Dict.Dict XMapName XMap
-
+type alias XMapByName = Dict.Dict XMapName XMap
 
 type alias OperationTypesByName =
     Dict.Dict (OperationCategory, OperationName) OperationType
@@ -55,6 +53,7 @@ type alias ViewEditorModel =
     , newViewName : ViewName
     , labelEditing : String
     , rowToAddTo : Int
+    , selectedViewCells: Dict.Dict String (Maybe Bool)
     }
 
 
@@ -85,7 +84,6 @@ type alias Model =
     , openDialog : Maybe String
     }
 
-
 type Msg
     = Receive String
     | Send WebRequest
@@ -95,29 +93,21 @@ type Msg
     | WebSocketConnected Bool
     | None
 
+mdlIdxProjects = 0
 
-mdlIdxProjects =
-    0
-
-
-mdlIdxViews =
-    1
-
+mdlIdxViews = 1
 
 openProjectWithName : Model -> ProjectName -> Maybe ProjectModel
 openProjectWithName model pn =
     ListX.find (\pm -> pm.project.projectName == pn) model.openProjects
 
-
 currentProjectModel : Model -> Maybe ProjectModel
 currentProjectModel model =
     Maybe.andThen (openProjectWithName model) model.currentProject
 
-
 openViewWithName : Model -> ViewName -> Maybe ViewModel
 openViewWithName model vn =
     let
-        findView ovs =
-            ListX.find (\vm -> vm.view.viewName == vn) ovs
+        findView ovs = ListX.find (\vm -> vm.view.viewName == vn) ovs
     in
-    Maybe.andThen (\pm -> findView pm.openViews) (currentProjectModel model)
+        Maybe.andThen (\pm -> findView pm.openViews) (currentProjectModel model)

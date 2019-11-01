@@ -7,19 +7,16 @@ import Material
 import Models.ProjectModel exposing (..)
 import Types.XMapTypes exposing (..)
 
-
 emptyTableConfiguration : TableConfiguration
 emptyTableConfiguration =
     { columnsWidths = []
     }
-
 
 emptyFunctionModel : FunctionsModel
 emptyFunctionModel =
     { idsByCategory = Dict.empty
     , typesById = Dict.empty
     }
-
 
 emptyViewEditorModel : ViewEditorModel
 emptyViewEditorModel =
@@ -28,8 +25,8 @@ emptyViewEditorModel =
     , newViewName = ""
     , labelEditing = ""
     , rowToAddTo = 0
+    , selectedViewCells = Dict.empty
     }
-
 
 emptyXMapEditorModel : XMapEditorModel
 emptyXMapEditorModel =
@@ -41,7 +38,6 @@ emptyXMapEditorModel =
     , tableConf = emptyTableConfiguration
     }
 
-
 emptyCalculationEditorModel : CalculationEditorModel
 emptyCalculationEditorModel =
     { calculationName = Nothing
@@ -50,7 +46,6 @@ emptyCalculationEditorModel =
     , newCalculationName = ""
     , operationMode = Union
     }
-
 
 emptyModel : Model
 emptyModel =
