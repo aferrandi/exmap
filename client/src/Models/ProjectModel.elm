@@ -12,6 +12,8 @@ import Types.XMapTypes exposing (..)
 
 
 type alias XMapByName = Dict.Dict XMapName XMap
+type alias ViewEditItemsChecked = Dict.Dict ViewEditItemId (Maybe Bool)
+
 
 type alias OperationTypesByName =
     Dict.Dict (OperationCategory, OperationName) OperationType
@@ -49,11 +51,12 @@ type alias XMapEditorModel =
 
 type alias ViewEditorModel =
     { viewName : Maybe ViewName
-    , viewToEdit : Maybe View
+    , viewToEdit : Maybe ViewEdit
     , newViewName : ViewName
     , labelEditing : String
     , rowToAddTo : Int
-    , selectedViewCells: Dict.Dict String (Maybe Bool)
+    , lastViewEditItemId : ViewEditItemId
+    , checkedViewEditItems: ViewEditItemsChecked
     }
 
 
@@ -111,3 +114,16 @@ openViewWithName model vn =
         findView ovs = ListX.find (\vm -> vm.view.viewName == vn) ovs
     in
         Maybe.andThen (\pm -> findView pm.openViews) (currentProjectModel model)
+
+closeDialog : Model ->  Model
+closeDialog model = { model | openDialog = Nothing }
+
+showDialog : Model -> String -> Model
+showDialog model index = { model | openDialog = Just index }
+
+newViewEditItemId: ViewEditorModel -> (ViewEditItemId, ViewEditorModel)
+newViewEditItemId vm =
+    let
+        updateModel = { vm | lastViewEditItemId = vm.lastViewEditItemId + 1}
+    in
+        (updateModel.lastViewEditItemId, updateModel)

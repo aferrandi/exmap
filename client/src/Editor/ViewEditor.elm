@@ -51,9 +51,10 @@ viewEditorForView model pm =
                     ]
                     -- Grid.noSpacing
                 , LayoutGrid.view [  ]
-                    [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] []
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ storeButton model pm ]
+                    [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span4Phone] []
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
+                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ storeButton model pm ]
                     ]
                 ]
         Nothing -> div [] []
@@ -64,16 +65,21 @@ storeButton model pm =
 
 storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm =
-    case vm.viewName of
-        Just vn ->
-            case vm.viewToEdit of
-                Just v ->Send (WRStoreView pm.project.projectName
-                                { viewName = vn
-                                , rows = v.rows
-                                }
-                            )
-                Nothing -> Internal (ShowMessage "Please fill the view")
-        Nothing -> Internal (ShowMessage "Please enter a view name")
+    let
+        viewEditRowToViewRow (ViewEditRow items) = List.map (\i -> i.content) items |> ViewRow
+        storeValidViewToEdit v vn =
+            Send (WRStoreView pm.project.projectName
+                     { viewName = vn
+                     , rows = List.map viewEditRowToViewRow v.rows
+                     }
+                 )
+        storeViewWithName vn = case vm.viewToEdit of
+            Just v -> storeValidViewToEdit v vn
+            Nothing -> Internal (ShowMessage "Please fill the view")
+    in
+        case vm.viewName of
+            Just vn -> storeViewWithName vn
+            Nothing -> Internal (ShowMessage "Please enter a view name")
 
 
 viewsList : Model -> Project -> Html Msg
@@ -92,17 +98,17 @@ viewsList model p =
             (List.map listItem p.viewNames)
 
 
-viewEditorTable : Model -> Maybe View -> Html Msg
+viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
 viewEditorTable model mv =
     case mv of
-        Just v -> DataTable.table [] [ viewRows model v ]
+        Just v -> DataTable.table [] [ viewEditRows model v ]
         Nothing -> DataTable.table [] [ DataTable.tbody [] [] ]
 
-viewRows : Model -> View -> Html Msg
-viewRows model v =
+viewEditRows : Model -> ViewEdit -> Html Msg
+viewEditRows model v =
     let
         rows =
-            ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewRowToTableCells model) |> List.map (DataTable.tr [])
+            ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewEditRowToTableCells model) |> List.map (DataTable.tr [])
     in
         DataTable.tbody [] rows
 
@@ -119,22 +125,22 @@ viewChoice model rowI =
             []
         ]
 
-viewCell : Model -> ViewItem -> Html Msg
-viewCell model item =
-    case item of
-        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ viewCellCheckbox model (xmapNameToString mn) ]
-        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ viewCellCheckbox model l ]
+viewEditItem : Model -> ViewEditItem -> Html Msg
+viewEditItem model item =
+    case item.content of
+        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ viewEditItemCheckbox model item.id (xmapNameToString mn) ]
+        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ viewEditItemCheckbox model item.id l ]
 
 
-viewCellCheckbox: Model -> String -> Html Msg
-viewCellCheckbox model txt =
+viewEditItemCheckbox: Model -> ViewEditItemId -> String -> Html Msg
+viewEditItemCheckbox model viewItemId txt=
     let checked =
-            Dict.get index model.viewEditorModel.selectedViewCells
+            Dict.get viewItemId model.viewEditorModel.checkedViewEditItems
                 |> Maybe.withDefault Nothing
                 |> Maybe.map Checkbox.checked
                 |> Maybe.withDefault Options.nop
-        clickHandler = Options.onClick (Internal (ChangeViewEditCheckedItem index))
-        index = makeIndex viewEditorIdx txt
+        clickHandler = Options.onClick (Internal (ChangeViewEditCheckedItem viewItemId))
+        index = makeIndex viewEditorIdx ("check" ++ (String.fromInt viewItemId))
     in
         div []
         [
@@ -142,9 +148,9 @@ viewCellCheckbox model txt =
             text txt
         ]
 
-viewRowToTableCells : Model -> ( Int, ViewRow ) -> List (Html Msg)
-viewRowToTableCells model ( rowIdx, ViewRow row ) =
-    viewChoice model rowIdx :: List.map (viewCell model) row
+viewEditRowToTableCells : Model -> ( Int, ViewEditRow ) -> List (Html Msg)
+viewEditRowToTableCells model ( rowIdx, ViewEditRow row ) =
+    viewChoice model rowIdx :: List.map (viewEditItem model) row
 
 
 viewEditorMapList : Model -> Html Msg
@@ -197,6 +203,16 @@ addLabelButton model =
             , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
             ]
 
+
 addRowButton : Model -> Html Msg
 addRowButton model =
     buttonClick model (makeIndex viewEditorIdx "btnAddRow") "Add row" (Internal AddRowToView)
+
+removeCellsButton : Model -> Html Msg
+removeCellsButton model =
+    let
+        itemsToDelete = Dict.toList model.viewEditorModel.checkedViewEditItems
+            |> List.filter (\(k, v)-> Maybe.withDefault False v)
+            |> List.map (\(k, v) -> k)
+    in
+        buttonClick model (makeIndex viewEditorIdx "btnRemoveCells") "Remove items" (Internal (RemoveItemsFromView itemsToDelete))

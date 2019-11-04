@@ -82,13 +82,26 @@ handleMapStored model pn mn sz =
 
 handleViewLoaded : Model -> View -> Model
 handleViewLoaded model v =
-    updateViewEditorModel model
-        (\vm ->
-            { vm
-                | viewName = Just v.viewName
-                , viewToEdit = Just v
-            }
-        )
+    let
+        buildViewEditItem : ViewItem -> (List ViewEditItem, ViewEditItemId) -> (List ViewEditItem, ViewEditItemId)
+        buildViewEditItem vi (ro, lastId) = ({ content = vi, id = lastId + 1} :: ro, lastId + 1)
+        buildViewEditRow : ViewRow -> (List ViewEditRow, ViewEditItemId) -> (List ViewEditRow, ViewEditItemId)
+        buildViewEditRow (ViewRow ri) (rso, lastId) =  (List.foldr buildViewEditItem ([], lastId)  ri) |> (\(ro, id) -> ((ViewEditRow ro) :: rso, id))
+        buildViewEditRows : List ViewRow -> ViewEditItemId -> (List ViewEditRow, ViewEditItemId)
+        buildViewEditRows rsi lastId =  (List.foldr buildViewEditRow ([], lastId)  rsi) |> (\(rso, id) -> (rso, id))
+        buildViewEditPair : (List ViewEditRow, ViewEditItemId) -> (ViewEdit, ViewEditItemId)
+        buildViewEditPair (rso, lastId) = ({ viewName = v.viewName, rows = rso  }, lastId)
+        buildViewEdit : ViewEditItemId -> (ViewEdit, ViewEditItemId)
+        buildViewEdit lastId = buildViewEditRows v.rows lastId |> buildViewEditPair
+    in
+        updateViewEditorModel model
+             (\vm ->
+                buildViewEdit vm.lastViewEditItemId |> (\(vo, lastId) -> { vm
+                    | viewName = Just v.viewName
+                    , viewToEdit = Just vo
+                    , lastViewEditItemId = lastId
+                }
+            ))
 
 
 handleCalculationLoaded : Model -> CalculationSource -> Model

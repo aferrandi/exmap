@@ -25,7 +25,8 @@ emptyViewEditorModel =
     , newViewName = ""
     , labelEditing = ""
     , rowToAddTo = 0
-    , selectedViewCells = Dict.empty
+    , lastViewEditItemId = 0
+    , checkedViewEditItems = Dict.empty
     }
 
 emptyXMapEditorModel : XMapEditorModel
