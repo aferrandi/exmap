@@ -29,7 +29,9 @@ server/index.html
 client/.idea
 client/elm-stuff
 client/index.html
-
+client/app.js
+client/elm-mdc
+client/node_modules/
 # OS-specific files
 .DS_Store
 .DS_Store?
