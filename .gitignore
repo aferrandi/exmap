@@ -31,7 +31,7 @@ client/elm-stuff
 client/index.html
 client/app.js
 client/elm-mdc
-client/node_modules/
+client/node_modules
 # OS-specific files
 .DS_Store
 .DS_Store?
@@ -40,3 +40,4 @@ client/node_modules/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
