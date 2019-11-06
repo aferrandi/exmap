@@ -1,6 +1,7 @@
 module Json.EncodeXMap exposing (..)
 
 import Dict exposing (..)
+import Iso8601
 import Json.Encode exposing (..)
 import String exposing (join)
 import Types.XMapTypes exposing (..)
@@ -44,7 +45,11 @@ encodeXMap m =
                 [ ( "type", string "bool" )
                 , ( "values", encodeMapContent bool v )
                 ]
-
+        XMapDate v ->
+            object
+                [ ( "type", string "date" )
+                , ( "values", encodeMapContent Iso8601.encode v )
+                ]
 
 encodeXNamedMap : XNamedMap -> Value
 encodeXNamedMap nm =

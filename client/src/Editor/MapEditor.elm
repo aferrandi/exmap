@@ -78,6 +78,7 @@ xmapTypeChoice model =
             , radio model (makeIndex mapEditorIdx "radInt") "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
             , radio model (makeIndex mapEditorIdx "radStr") "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
             , radio model (makeIndex mapEditorIdx "radBol") "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
+            , radio model (makeIndex mapEditorIdx "radDat") "Date" "mapType" (hasType TypeDate) (Internal (ChangeMapType TypeDate))
             ]
 
 
@@ -123,11 +124,9 @@ fileSourcesOfProject : Project -> List XMapName
 fileSourcesOfProject p =
     let
         maybeMaps : Maybe (List XMapName)
-        maybeMaps =
-            ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
+        maybeMaps = ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
     in
         Maybe.withDefault [] maybeMaps
-
 
 mapEditorTextArea : Model -> ProjectModel -> Html Msg
 mapEditorTextArea model pm =
@@ -144,14 +143,12 @@ mapEditorTextArea model pm =
         ]
         []
 
-
 mapEditorTableFull : XMap -> Html Msg
 mapEditorTableFull m =
     DataTable.table (scrollableTableStyle 50)
         [ mapHeader
         , mapRows m
         ]
-
 
 mapEditorTableEmpty : Html Msg
 mapEditorTableEmpty =
@@ -160,13 +157,11 @@ mapEditorTableEmpty =
         , DataTable.tbody [] []
         ]
 
-
 mapEditorTable : Maybe XMap -> Html Msg
 mapEditorTable mm =
     case mm of
         Just m -> mapEditorTableFull m
         Nothing -> mapEditorTableEmpty
-
 
 mapHeader : Html Msg
 mapHeader =
@@ -177,14 +172,12 @@ mapHeader =
             ]
         ]
 
-
 mapRows : XMap -> Html Msg
 mapRows m =
     let
         rows = List.map lineToTableRow (mapToTransposedMatrix m)
     in
         DataTable.tbody [] rows
-
 
 lineToTableRow : List String -> Html Msg
 lineToTableRow line =

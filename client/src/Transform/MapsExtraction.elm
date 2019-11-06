@@ -1,6 +1,7 @@
 module Transform.MapsExtraction exposing (..)
 
 import Dict as Dict
+import Iso8601
 import Regex as Regex exposing (..)
 import Types.XMapTypes exposing (..)
 
@@ -20,6 +21,8 @@ mapValues m =
             Dict.map (\_ v -> fromBool v) mapBool
         XMapDouble (MapValue mapDouble) ->
             Dict.map (\k v -> String.fromFloat v) mapDouble
+        XMapDate (MapValue mapDate) ->
+            Dict.map (\k v -> Iso8601.fromTime v) mapDate
 
 mapKeys : XMap -> List XMapKey
 mapKeys m =
@@ -28,6 +31,7 @@ mapKeys m =
         XMapString (MapValue mapString) -> Dict.keys mapString
         XMapBool (MapValue mapBool) -> Dict.keys mapBool
         XMapDouble (MapValue mapDouble) -> Dict.keys mapDouble
+        XMapDate (MapValue mapDate) -> Dict.keys mapDate
 
 xmapNameToString : XMapName -> String
 xmapNameToString mn =

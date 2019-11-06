@@ -1,6 +1,7 @@
 module Json.DecodeXMap exposing (..)
 
 import Dict exposing (Dict, fromList)
+import Iso8601
 import Json.Decode exposing (..)
 import String exposing (split)
 import Types.XMapTypes exposing (..)
@@ -33,6 +34,8 @@ xmapDecoder =
                     field "values" (keyValuePairs string) |> andThen (\s -> succeed (XMapString (buildMapContent s)))
                 "bool" ->
                     field "values" (keyValuePairs bool) |> andThen (\s -> succeed (XMapBool (buildMapContent s)))
+                "date" ->
+                    field "values" (keyValuePairs Iso8601.decoder) |> andThen (\s -> succeed (XMapDate (buildMapContent s)))
                 _ ->
                     fail ("map type " ++ d ++ " not recognized")
     in
@@ -55,6 +58,7 @@ xmapTypeDecoder =
                 "int" -> succeed TypeInt
                 "string" -> succeed TypeString
                 "bool" -> succeed TypeBool
+                "date" -> succeed TypeDate
                 otherwise -> fail ("xmap type " ++ t ++ " not recognized")
     in
         string |> andThen decodeFromType

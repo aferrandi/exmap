@@ -1,6 +1,7 @@
 module Types.XMapTypes exposing (..)
 
 import Dict exposing (Dict)
+import Time
 
 
 type alias XMapKey = String
@@ -16,12 +17,14 @@ type XMap
     | XMapInt (MapValue Int)
     | XMapString (MapValue String)
     | XMapBool (MapValue Bool)
+    | XMapDate (MapValue Time.Posix)
 
 type XMapType
     = TypeDouble
     | TypeInt
     | TypeString
     | TypeBool
+    | TypeDate
 
 type alias XNamedMap =
     { xmapName : XMapName
@@ -35,3 +38,4 @@ mapType m =
         XMapInt _ -> TypeInt
         XMapString _ -> TypeString
         XMapBool _ -> TypeBool
+        XMapDate _ -> TypeDate
