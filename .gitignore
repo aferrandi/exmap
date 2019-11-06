@@ -28,10 +28,13 @@ server/index.html
 *.iml
 client/.idea
 client/elm-stuff
-client/index.html
-client/app.js
 client/elm-mdc
 client/node_modules
+client/node_modules/*
+client/node_modules/**/*
+client/index.html
+client/*.js
+client/*.css
 # OS-specific files
 .DS_Store
 .DS_Store?
@@ -40,4 +43,3 @@ client/node_modules
 .Trashes
 ehthumbs.db
 Thumbs.db
-
