@@ -3,6 +3,7 @@ module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), XMap
 
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
+import qualified Data.Time.Clock as DT
 
 import Errors
 
@@ -15,7 +16,8 @@ newtype XMapName = XMapName [T.Text] deriving (Show, Eq, Ord)
 data XMapType = TypeDouble |
                 TypeInt |
                 TypeText |
-                TypeBool
+                TypeBool |
+                TypeDate
                 deriving (Show, Eq)
 
 type MapValue a = M.Map XMapKey a
@@ -24,7 +26,8 @@ type MapValue a = M.Map XMapKey a
 data XMap = XMapDouble (MapValue Double) |
             XMapInt (MapValue Int) |
             XMapString (MapValue T.Text) |
-            XMapBool (MapValue Bool)
+            XMapBool (MapValue Bool) |
+            XMapDate (MapValue DT.UTCTime)
             deriving (Show, Eq)
 
 data XNamedMap = XNamedMap {
@@ -40,7 +43,8 @@ type XMapByName = M.Map XMapName XMap
 data XMapList = XMapDoubleList [MapValue Double] |
             XMapIntList [MapValue Int] |
             XMapStringList [MapValue T.Text] |
-            XMapBoolList [MapValue Bool]
+            XMapBoolList [MapValue Bool] |
+            XMapDateList [MapValue DT.UTCTime]
             deriving (Show, Eq)
 
 

@@ -37,6 +37,7 @@ instance FromJSON XMap where
       Just (String "int") ->  XMapInt <$> v .: "values"
       Just (String "string") ->  XMapString <$> v .: "values"
       Just (String "bool") ->  XMapBool <$> v .: "values"
+      Just (String "date") ->  XMapDate <$> v .: "values"
 
 instance ToJSON XMap where
      toJSON (XMapDouble values) = object [ "type" .= T.pack "double"
@@ -51,7 +52,9 @@ instance ToJSON XMap where
      toJSON (XMapBool values) = object [ "type" .=  T.pack "bool"
                                           , "values" .= values
                                           ]
-
+     toJSON (XMapDate values) = object [ "type" .=  T.pack "date"
+                                          , "values" .= values
+                                          ]
 instance FromJSON XNamedMap where
    parseJSON (Object v) =
       XNamedMap <$> v .: "mapName"
