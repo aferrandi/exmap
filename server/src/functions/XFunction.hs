@@ -1,4 +1,4 @@
-module XFunction (XMapErr, OperationMode(..), operate, apply) where
+module XFunction (XMapErr, OperationMode(..), operate, apply, unionWith3) where
 
 import XMapTypes
 import XValues

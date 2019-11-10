@@ -13,10 +13,12 @@ data OperationName =
     | Sum
     | KeysTo
     | Merge
+    | Equals
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
       Math
+    | Text
     | System
     deriving (Bounded, Enum, Show, Eq, Read)
 
@@ -32,6 +34,7 @@ data ParameterType = ParameterDouble |
                      ParameterInt |
                      ParameterText |
                      ParameterBool |
+                     ParameterDate |
                      ParameterAny
                 deriving (Show, Eq)
 
@@ -60,5 +63,6 @@ allOperationTypes = [
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
-    newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny
+    newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
+    newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool
     ]

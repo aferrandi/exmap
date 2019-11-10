@@ -84,6 +84,7 @@ merge _ xs = do
           mergeList (XMapIntList xs) = XMapInt $ M.unions xs
           mergeList (XMapStringList xs) = XMapString $ M.unions xs
           mergeList (XMapBoolList xs) = XMapBool $ M.unions xs
+          mergeList (XMapDateList xs) = XMapDate $ M.unions xs
 
 fsum :: OperationMode -> [XMap] -> XMapErr
 fsum om xs = do
@@ -92,16 +93,31 @@ fsum om xs = do
               let sum = L.sum $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "sum") sum)
 
+equals :: OperationMode -> [XMap] -> XMapErr
+equals om xs = do
+     checkMapsNumber xs 2
+     ms <- toMapList xs
+     Right $ equalList ms
+     where
+          second l = (head $ tail l)
+          equalList (XMapDoubleList ms) = XMapBool $ unionWith3 (==) (head ms) (second ms)
+          equalList (XMapIntList ms) = XMapBool $ unionWith3 (==) (head ms) (second ms)
+          equalList (XMapStringList ms) = XMapBool $ unionWith3 (==) (head ms) (second ms)
+          equalList (XMapBoolList ms) = XMapBool $ unionWith3 (==) (head ms) (second ms)
+          equalList (XMapDateList ms) =XMapBool $ unionWith3 (==) (head ms) (second ms)
+
 operationRepository :: OperationName -> OperationFun
-operationRepository Add = add
-operationRepository Subtract = fsubtract
-operationRepository Times = times
-operationRepository Negate = fnegate
-operationRepository Sin = fsin
-operationRepository Cos = fcos
-operationRepository Tan = ftan
-operationRepository Exp = fexp
-operationRepository Log = flog
-operationRepository Sum = fsum
-operationRepository KeysTo = keysTo
-operationRepository Merge = merge
+operationRepository op = case op of
+    Add -> add
+    Subtract -> fsubtract
+    Times -> times
+    Negate -> fnegate
+    Sin -> fsin
+    Cos -> fcos
+    Tan -> ftan
+    Exp -> fexp
+    Log -> flog
+    Sum -> fsum
+    KeysTo -> keysTo
+    Merge -> merge
+    Equals -> equals

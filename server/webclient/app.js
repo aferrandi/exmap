@@ -2303,6 +2303,173 @@ function _Platform_mergeExportsDebug(moduleName, obj, exports)
 
 
 
+// STRINGS
+
+
+var _Parser_isSubString = F5(function(smallString, offset, row, col, bigString)
+{
+	var smallLength = smallString.length;
+	var isGood = offset + smallLength <= bigString.length;
+
+	for (var i = 0; isGood && i < smallLength; )
+	{
+		var code = bigString.charCodeAt(offset);
+		isGood =
+			smallString[i++] === bigString[offset++]
+			&& (
+				code === 0x000A /* \n */
+					? ( row++, col=1 )
+					: ( col++, (code & 0xF800) === 0xD800 ? smallString[i++] === bigString[offset++] : 1 )
+			)
+	}
+
+	return _Utils_Tuple3(isGood ? offset : -1, row, col);
+});
+
+
+
+// CHARS
+
+
+var _Parser_isSubChar = F3(function(predicate, offset, string)
+{
+	return (
+		string.length <= offset
+			? -1
+			:
+		(string.charCodeAt(offset) & 0xF800) === 0xD800
+			? (predicate(_Utils_chr(string.substr(offset, 2))) ? offset + 2 : -1)
+			:
+		(predicate(_Utils_chr(string[offset]))
+			? ((string[offset] === '\n') ? -2 : (offset + 1))
+			: -1
+		)
+	);
+});
+
+
+var _Parser_isAsciiCode = F3(function(code, offset, string)
+{
+	return string.charCodeAt(offset) === code;
+});
+
+
+
+// NUMBERS
+
+
+var _Parser_chompBase10 = F2(function(offset, string)
+{
+	for (; offset < string.length; offset++)
+	{
+		var code = string.charCodeAt(offset);
+		if (code < 0x30 || 0x39 < code)
+		{
+			return offset;
+		}
+	}
+	return offset;
+});
+
+
+var _Parser_consumeBase = F3(function(base, offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var digit = string.charCodeAt(offset) - 0x30;
+		if (digit < 0 || base <= digit) break;
+		total = base * total + digit;
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+var _Parser_consumeBase16 = F2(function(offset, string)
+{
+	for (var total = 0; offset < string.length; offset++)
+	{
+		var code = string.charCodeAt(offset);
+		if (0x30 <= code && code <= 0x39)
+		{
+			total = 16 * total + code - 0x30;
+		}
+		else if (0x41 <= code && code <= 0x46)
+		{
+			total = 16 * total + code - 55;
+		}
+		else if (0x61 <= code && code <= 0x66)
+		{
+			total = 16 * total + code - 87;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return _Utils_Tuple2(offset, total);
+});
+
+
+
+// FIND STRING
+
+
+var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString)
+{
+	var newOffset = bigString.indexOf(smallString, offset);
+	var target = newOffset < 0 ? bigString.length : newOffset + smallString.length;
+
+	while (offset < target)
+	{
+		var code = bigString.charCodeAt(offset++);
+		code === 0x000A /* \n */
+			? ( col=1, row++ )
+			: ( col++, (code & 0xF800) === 0xD800 && offset++ )
+	}
+
+	return _Utils_Tuple3(newOffset, row, col);
+});
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
+
 // HELPERS
 
 
@@ -4399,43 +4566,6 @@ var _Regex_splitAtMost = F3(function(n, re, str)
 });
 
 var _Regex_infinity = Infinity;
-
-
-
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
 var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
@@ -4921,7 +5051,7 @@ var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
 var author$project$Material$defaultModel = {button: elm$core$Dict$empty, checkbox: elm$core$Dict$empty, chip: elm$core$Dict$empty, dialog: elm$core$Dict$empty, drawer: elm$core$Dict$empty, fab: elm$core$Dict$empty, iconButton: elm$core$Dict$empty, list: elm$core$Dict$empty, menu: elm$core$Dict$empty, radio: elm$core$Dict$empty, ripple: elm$core$Dict$empty, select: elm$core$Dict$empty, slider: elm$core$Dict$empty, snackbar: elm$core$Dict$empty, _switch: elm$core$Dict$empty, tabbar: elm$core$Dict$empty, textfield: elm$core$Dict$empty, toolbar: elm$core$Dict$empty, topAppBar: elm$core$Dict$empty};
 var author$project$Types$Calculation$Union = {$: 'Union'};
 var author$project$Models$EmptyModel$emptyCalculationEditorModel = {calculationFormulaText: elm$core$Maybe$Nothing, calculationName: elm$core$Maybe$Nothing, newCalculationName: '', operationMode: author$project$Types$Calculation$Union, resultMapName: elm$core$Maybe$Nothing};
-var author$project$Models$EmptyModel$emptyViewEditorModel = {labelEditing: '', newViewName: '', rowToAddTo: 0, viewName: elm$core$Maybe$Nothing, viewToEdit: elm$core$Maybe$Nothing};
+var author$project$Models$EmptyModel$emptyViewEditorModel = {checkedViewEditItems: elm$core$Dict$empty, labelEditing: '', lastViewEditItemId: 0, newViewName: '', rowToAddTo: 0, viewName: elm$core$Maybe$Nothing, viewToEdit: elm$core$Maybe$Nothing};
 var author$project$Models$EmptyModel$emptyTableConfiguration = {columnsWidths: _List_Nil};
 var author$project$Types$XMapTypes$TypeDouble = {$: 'TypeDouble'};
 var author$project$Models$EmptyModel$emptyXMapEditorModel = {newXmapName: '', tableConf: author$project$Models$EmptyModel$emptyTableConfiguration, xmapEditing: elm$core$Maybe$Nothing, xmapName: elm$core$Maybe$Nothing, xmapToEdit: elm$core$Maybe$Nothing, xmapType: author$project$Types$XMapTypes$TypeDouble};
@@ -5011,7 +5141,7 @@ var elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var author$project$Handler$InternalMessageUpdate$appendToFormulaText = F2(
+var author$project$Handler$InternalCalculationMessageUpdate$appendToFormulaText = F2(
 	function (model, s) {
 		var updateFormulaText = function (cm) {
 			return A2(elm$core$Maybe$withDefault, '', cm.calculationFormulaText) + (' ' + s);
@@ -5028,22 +5158,25 @@ var author$project$Handler$InternalMessageUpdate$appendToFormulaText = F2(
 					});
 			});
 	});
-var author$project$Handler$InternalMessageUpdate$closeDialog = function (model) {
-	return _Utils_update(
-		model,
-		{openDialog: elm$core$Maybe$Nothing});
+var author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText = function (t) {
+	switch (t.$) {
+		case 'ParameterDouble':
+			return 'double';
+		case 'ParameterInt':
+			return 'int';
+		case 'ParameterString':
+			return 'string';
+		case 'ParameterBool':
+			return 'bool';
+		default:
+			return 'any';
+	}
 };
-var author$project$Handler$ModelUpdate$updateViewEditorModel = F2(
-	function (model, update) {
-		return _Utils_update(
-			model,
-			{
-				viewEditorModel: update(model.viewEditorModel)
-			});
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
 	});
-var author$project$Types$Views$ViewRow = function (a) {
-	return {$: 'ViewRow', a: a};
-};
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5099,248 +5232,6 @@ var elm$core$List$foldr = F3(
 	function (fn, acc, ls) {
 		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
 	});
-var elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
-		}
-	});
-var elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return elm$core$Maybe$Nothing;
-		}
-	});
-var elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
-			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
-			}
-		}
-	});
-var elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2(elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return elm$core$List$reverse(
-			A3(elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _n0 = _Utils_Tuple2(n, list);
-			_n0$1:
-			while (true) {
-				_n0$5:
-				while (true) {
-					if (!_n0.b.b) {
-						return list;
-					} else {
-						if (_n0.b.b.b) {
-							switch (_n0.a) {
-								case 1:
-									break _n0$1;
-								case 2:
-									var _n2 = _n0.b;
-									var x = _n2.a;
-									var _n3 = _n2.b;
-									var y = _n3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_n0.b.b.b.b) {
-										var _n4 = _n0.b;
-										var x = _n4.a;
-										var _n5 = _n4.b;
-										var y = _n5.a;
-										var _n6 = _n5.b;
-										var z = _n6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _n0$5;
-									}
-								default:
-									if (_n0.b.b.b.b && _n0.b.b.b.b.b) {
-										var _n7 = _n0.b;
-										var x = _n7.a;
-										var _n8 = _n7.b;
-										var y = _n8.a;
-										var _n9 = _n8.b;
-										var z = _n9.a;
-										var _n10 = _n9.b;
-										var w = _n10.a;
-										var tl = _n10.b;
-										return (ctr > 1000) ? A2(
-											elm$core$List$cons,
-											x,
-											A2(
-												elm$core$List$cons,
-												y,
-												A2(
-													elm$core$List$cons,
-													z,
-													A2(
-														elm$core$List$cons,
-														w,
-														A2(elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											elm$core$List$cons,
-											x,
-											A2(
-												elm$core$List$cons,
-												y,
-												A2(
-													elm$core$List$cons,
-													z,
-													A2(
-														elm$core$List$cons,
-														w,
-														A3(elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _n0$5;
-									}
-							}
-						} else {
-							if (_n0.a === 1) {
-								break _n0$1;
-							} else {
-								break _n0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _n1 = _n0.b;
-			var x = _n1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var elm$core$List$take = F2(
-	function (n, list) {
-		return A3(elm$core$List$takeFast, 0, n, list);
-	});
-var elm_community$list_extra$List$Extra$updateAt = F3(
-	function (index, fn, list) {
-		if (index < 0) {
-			return list;
-		} else {
-			var tail = A2(elm$core$List$drop, index, list);
-			var head = A2(elm$core$List$take, index, list);
-			if (tail.b) {
-				var x = tail.a;
-				var xs = tail.b;
-				return _Utils_ap(
-					head,
-					A2(
-						elm$core$List$cons,
-						fn(x),
-						xs));
-			} else {
-				return list;
-			}
-		}
-	});
-var author$project$Handler$InternalMessageUpdate$handleAddItemToView = F3(
-	function (model, ri, it) {
-		var updateRow = function (_n0) {
-			var r = _n0.a;
-			return author$project$Types$Views$ViewRow(
-				A2(
-					elm$core$List$append,
-					r,
-					_List_fromArray(
-						[it])));
-		};
-		var updateRows = function (rs) {
-			return A3(elm_community$list_extra$List$Extra$updateAt, ri, updateRow, rs);
-		};
-		var updateView = function (mv) {
-			return A2(
-				elm$core$Maybe$map,
-				function (v) {
-					return _Utils_update(
-						v,
-						{
-							rows: updateRows(v.rows)
-						});
-				},
-				mv);
-		};
-		return A2(
-			author$project$Handler$ModelUpdate$updateViewEditorModel,
-			model,
-			function (vm) {
-				return _Utils_update(
-					vm,
-					{
-						viewToEdit: updateView(vm.viewToEdit)
-					});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$parameterTypeToText = function (t) {
-	switch (t.$) {
-		case 'ParameterDouble':
-			return 'double';
-		case 'ParameterInt':
-			return 'int';
-		case 'ParameterString':
-			return 'string';
-		case 'ParameterBool':
-			return 'bool';
-		default:
-			return 'any';
-	}
-};
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
 var elm$core$List$map = F2(
 	function (f, xs) {
 		return A3(
@@ -5355,7 +5246,7 @@ var elm$core$List$map = F2(
 			_List_Nil,
 			xs);
 	});
-var author$project$Handler$InternalMessageUpdate$operationTypeToText = function (ot) {
+var author$project$Handler$InternalCalculationMessageUpdate$operationTypeToText = function (ot) {
 	var insidePars = function (s) {
 		return '[' + (s + ']');
 	};
@@ -5364,7 +5255,7 @@ var author$project$Handler$InternalMessageUpdate$operationTypeToText = function 
 		' ',
 		A2(
 			elm$core$List$map,
-			A2(elm$core$Basics$composeR, author$project$Handler$InternalMessageUpdate$parameterTypeToText, insidePars),
+			A2(elm$core$Basics$composeR, author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText, insidePars),
 			ot.parametersTypes)));
 };
 var author$project$Types$Calculation$operationIdToTuple = function (id) {
@@ -5411,11 +5302,21 @@ var elm$core$Maybe$andThen = F2(
 			return elm$core$Maybe$Nothing;
 		}
 	});
-var author$project$Handler$InternalMessageUpdate$handleAddOperationToCalculation = F2(
+var elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleAddOperationToCalculation = F2(
 	function (model, id) {
 		var text = A2(
 			elm$core$Maybe$map,
-			author$project$Handler$InternalMessageUpdate$operationTypeToText,
+			author$project$Handler$InternalCalculationMessageUpdate$operationTypeToText,
 			A2(
 				elm$core$Maybe$andThen,
 				function (fm) {
@@ -5426,63 +5327,11 @@ var author$project$Handler$InternalMessageUpdate$handleAddOperationToCalculation
 				},
 				model.functions));
 		return A2(
-			author$project$Handler$InternalMessageUpdate$appendToFormulaText,
+			author$project$Handler$InternalCalculationMessageUpdate$appendToFormulaText,
 			model,
 			A2(elm$core$Maybe$withDefault, ' ', text));
 	});
-var author$project$Handler$InternalMessageUpdate$emptyRow = author$project$Types$Views$ViewRow(_List_Nil);
-var author$project$Handler$InternalMessageUpdate$handleAddRowToView = function (model) {
-	var updateView = function (mv) {
-		if (mv.$ === 'Just') {
-			var v = mv.a;
-			return _Utils_update(
-				v,
-				{
-					rows: _Utils_ap(
-						v.rows,
-						_List_fromArray(
-							[author$project$Handler$InternalMessageUpdate$emptyRow]))
-				});
-		} else {
-			return {
-				rows: _List_fromArray(
-					[author$project$Handler$InternalMessageUpdate$emptyRow]),
-				viewName: ''
-			};
-		}
-	};
-	return A2(
-		author$project$Handler$ModelUpdate$updateViewEditorModel,
-		model,
-		function (vm) {
-			return _Utils_update(
-				vm,
-				{
-					viewToEdit: elm$core$Maybe$Just(
-						updateView(vm.viewToEdit))
-				});
-		});
-};
-var author$project$Handler$ModelUpdate$updateXMapEditorModel = F2(
-	function (model, update) {
-		return _Utils_update(
-			model,
-			{
-				xmapEditorModel: update(model.xmapEditorModel)
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleChangeMapType = F2(
-	function (model, mt) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateXMapEditorModel,
-			model,
-			function (xm) {
-				return _Utils_update(
-					xm,
-					{xmapType: mt});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleChangeOperationMode = F2(
+var author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperationMode = F2(
 	function (model, om) {
 		return A2(
 			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
@@ -5493,18 +5342,75 @@ var author$project$Handler$InternalMessageUpdate$handleChangeOperationMode = F2(
 					{operationMode: om});
 			});
 	});
-var author$project$Handler$InternalMessageUpdate$handleChangeViewEditSelectedRow = F2(
-	function (model, ri) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateViewEditorModel,
+var author$project$Models$ProjectModel$closeDialog = function (model) {
+	return _Utils_update(
+		model,
+		{openDialog: elm$core$Maybe$Nothing});
+};
+var author$project$Handler$InternalCalculationMessageUpdate$handleNewCalculationWithName = F2(
+	function (model, cn) {
+		return author$project$Models$ProjectModel$closeDialog(
+			_Utils_update(
+				model,
+				{
+					calculationEditorModel: _Utils_update(
+						author$project$Models$EmptyModel$emptyCalculationEditorModel,
+						{
+							calculationName: elm$core$Maybe$Just(cn)
+						})
+				}));
+	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleSwitchCategoryTo = F2(
+	function (model, ct) {
+		return _Utils_update(
 			model,
-			function (vm) {
-				return _Utils_update(
-					vm,
-					{rowToAddTo: ri});
+			{
+				currentCategory: elm$core$Maybe$Just(ct)
 			});
 	});
-var author$project$Handler$InternalMessageUpdate$handleCloseDialog = author$project$Handler$InternalMessageUpdate$closeDialog;
+var author$project$Handler$InternalCalculationMessageUpdate$handleTextToResultNameText = F2(
+	function (model, mn) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{
+						resultMapName: elm$core$Maybe$Just(mn)
+					});
+			});
+	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleUpdateCalculationName = F2(
+	function (model, s) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{newCalculationName: s});
+			});
+	});
+var author$project$Handler$ModelUpdate$updateXMapEditorModel = F2(
+	function (model, update) {
+		return _Utils_update(
+			model,
+			{
+				xmapEditorModel: update(model.xmapEditorModel)
+			});
+	});
+var author$project$Handler$InternalMapMessageUpdate$handleChangeMapType = F2(
+	function (model, mt) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateXMapEditorModel,
+			model,
+			function (xm) {
+				return _Utils_update(
+					xm,
+					{xmapType: mt});
+			});
+	});
 var author$project$Handler$ModelUpdate$showMessage = F2(
 	function (model, msg) {
 		return _Utils_update(
@@ -5528,6 +5434,9 @@ var author$project$Types$XMapTypes$MapValue = function (a) {
 };
 var author$project$Types$XMapTypes$XMapBool = function (a) {
 	return {$: 'XMapBool', a: a};
+};
+var author$project$Types$XMapTypes$XMapDate = function (a) {
+	return {$: 'XMapDate', a: a};
 };
 var author$project$Types$XMapTypes$XMapDouble = function (a) {
 	return {$: 'XMapDouble', a: a};
@@ -5704,6 +5613,17 @@ var elm$core$Result$map2 = F3(
 			}
 		}
 	});
+var elm$core$Result$mapError = F2(
+	function (f, result) {
+		if (result.$ === 'Ok') {
+			var v = result.a;
+			return elm$core$Result$Ok(v);
+		} else {
+			var e = result.a;
+			return elm$core$Result$Err(
+				f(e));
+		}
+	});
 var elm$core$String$toFloat = _String_toFloat;
 var elm$core$String$toInt = _String_toInt;
 var elm_community$list_extra$List$Extra$last = function (items) {
@@ -5729,6 +5649,777 @@ var elm$core$Tuple$pair = F2(
 		return _Utils_Tuple2(a, b);
 	});
 var elm_community$list_extra$List$Extra$zip = elm$core$List$map2(elm$core$Tuple$pair);
+var elm$parser$Parser$DeadEnd = F3(
+	function (row, col, problem) {
+		return {col: col, problem: problem, row: row};
+	});
+var elm$parser$Parser$problemToDeadEnd = function (p) {
+	return A3(elm$parser$Parser$DeadEnd, p.row, p.col, p.problem);
+};
+var elm$parser$Parser$Advanced$bagToList = F2(
+	function (bag, list) {
+		bagToList:
+		while (true) {
+			switch (bag.$) {
+				case 'Empty':
+					return list;
+				case 'AddRight':
+					var bag1 = bag.a;
+					var x = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2(elm$core$List$cons, x, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+				default:
+					var bag1 = bag.a;
+					var bag2 = bag.b;
+					var $temp$bag = bag1,
+						$temp$list = A2(elm$parser$Parser$Advanced$bagToList, bag2, list);
+					bag = $temp$bag;
+					list = $temp$list;
+					continue bagToList;
+			}
+		}
+	});
+var elm$parser$Parser$Advanced$run = F2(
+	function (_n0, src) {
+		var parse = _n0.a;
+		var _n1 = parse(
+			{col: 1, context: _List_Nil, indent: 1, offset: 0, row: 1, src: src});
+		if (_n1.$ === 'Good') {
+			var value = _n1.b;
+			return elm$core$Result$Ok(value);
+		} else {
+			var bag = _n1.b;
+			return elm$core$Result$Err(
+				A2(elm$parser$Parser$Advanced$bagToList, bag, _List_Nil));
+		}
+	});
+var elm$parser$Parser$run = F2(
+	function (parser, source) {
+		var _n0 = A2(elm$parser$Parser$Advanced$run, parser, source);
+		if (_n0.$ === 'Ok') {
+			var a = _n0.a;
+			return elm$core$Result$Ok(a);
+		} else {
+			var problems = _n0.a;
+			return elm$core$Result$Err(
+				A2(elm$core$List$map, elm$parser$Parser$problemToDeadEnd, problems));
+		}
+	});
+var elm$parser$Parser$Advanced$Bad = F2(
+	function (a, b) {
+		return {$: 'Bad', a: a, b: b};
+	});
+var elm$parser$Parser$Advanced$Good = F3(
+	function (a, b, c) {
+		return {$: 'Good', a: a, b: b, c: c};
+	});
+var elm$parser$Parser$Advanced$Parser = function (a) {
+	return {$: 'Parser', a: a};
+};
+var elm$parser$Parser$Advanced$andThen = F2(
+	function (callback, _n0) {
+		var parseA = _n0.a;
+		return elm$parser$Parser$Advanced$Parser(
+			function (s0) {
+				var _n1 = parseA(s0);
+				if (_n1.$ === 'Bad') {
+					var p = _n1.a;
+					var x = _n1.b;
+					return A2(elm$parser$Parser$Advanced$Bad, p, x);
+				} else {
+					var p1 = _n1.a;
+					var a = _n1.b;
+					var s1 = _n1.c;
+					var _n2 = callback(a);
+					var parseB = _n2.a;
+					var _n3 = parseB(s1);
+					if (_n3.$ === 'Bad') {
+						var p2 = _n3.a;
+						var x = _n3.b;
+						return A2(elm$parser$Parser$Advanced$Bad, p1 || p2, x);
+					} else {
+						var p2 = _n3.a;
+						var b = _n3.b;
+						var s2 = _n3.c;
+						return A3(elm$parser$Parser$Advanced$Good, p1 || p2, b, s2);
+					}
+				}
+			});
+	});
+var elm$parser$Parser$andThen = elm$parser$Parser$Advanced$andThen;
+var elm$parser$Parser$ExpectingEnd = {$: 'ExpectingEnd'};
+var elm$core$String$length = _String_length;
+var elm$parser$Parser$Advanced$AddRight = F2(
+	function (a, b) {
+		return {$: 'AddRight', a: a, b: b};
+	});
+var elm$parser$Parser$Advanced$DeadEnd = F4(
+	function (row, col, problem, contextStack) {
+		return {col: col, contextStack: contextStack, problem: problem, row: row};
+	});
+var elm$parser$Parser$Advanced$Empty = {$: 'Empty'};
+var elm$parser$Parser$Advanced$fromState = F2(
+	function (s, x) {
+		return A2(
+			elm$parser$Parser$Advanced$AddRight,
+			elm$parser$Parser$Advanced$Empty,
+			A4(elm$parser$Parser$Advanced$DeadEnd, s.row, s.col, x, s.context));
+	});
+var elm$parser$Parser$Advanced$end = function (x) {
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return _Utils_eq(
+				elm$core$String$length(s.src),
+				s.offset) ? A3(elm$parser$Parser$Advanced$Good, false, _Utils_Tuple0, s) : A2(
+				elm$parser$Parser$Advanced$Bad,
+				false,
+				A2(elm$parser$Parser$Advanced$fromState, s, x));
+		});
+};
+var elm$parser$Parser$end = elm$parser$Parser$Advanced$end(elm$parser$Parser$ExpectingEnd);
+var elm$core$Basics$always = F2(
+	function (a, _n0) {
+		return a;
+	});
+var elm$parser$Parser$Advanced$map2 = F3(
+	function (func, _n0, _n1) {
+		var parseA = _n0.a;
+		var parseB = _n1.a;
+		return elm$parser$Parser$Advanced$Parser(
+			function (s0) {
+				var _n2 = parseA(s0);
+				if (_n2.$ === 'Bad') {
+					var p = _n2.a;
+					var x = _n2.b;
+					return A2(elm$parser$Parser$Advanced$Bad, p, x);
+				} else {
+					var p1 = _n2.a;
+					var a = _n2.b;
+					var s1 = _n2.c;
+					var _n3 = parseB(s1);
+					if (_n3.$ === 'Bad') {
+						var p2 = _n3.a;
+						var x = _n3.b;
+						return A2(elm$parser$Parser$Advanced$Bad, p1 || p2, x);
+					} else {
+						var p2 = _n3.a;
+						var b = _n3.b;
+						var s2 = _n3.c;
+						return A3(
+							elm$parser$Parser$Advanced$Good,
+							p1 || p2,
+							A2(func, a, b),
+							s2);
+					}
+				}
+			});
+	});
+var elm$parser$Parser$Advanced$ignorer = F2(
+	function (keepParser, ignoreParser) {
+		return A3(elm$parser$Parser$Advanced$map2, elm$core$Basics$always, keepParser, ignoreParser);
+	});
+var elm$parser$Parser$ignorer = elm$parser$Parser$Advanced$ignorer;
+var elm$parser$Parser$Advanced$keeper = F2(
+	function (parseFunc, parseArg) {
+		return A3(elm$parser$Parser$Advanced$map2, elm$core$Basics$apL, parseFunc, parseArg);
+	});
+var elm$parser$Parser$keeper = elm$parser$Parser$Advanced$keeper;
+var elm$parser$Parser$Advanced$Append = F2(
+	function (a, b) {
+		return {$: 'Append', a: a, b: b};
+	});
+var elm$parser$Parser$Advanced$oneOfHelp = F3(
+	function (s0, bag, parsers) {
+		oneOfHelp:
+		while (true) {
+			if (!parsers.b) {
+				return A2(elm$parser$Parser$Advanced$Bad, false, bag);
+			} else {
+				var parse = parsers.a.a;
+				var remainingParsers = parsers.b;
+				var _n1 = parse(s0);
+				if (_n1.$ === 'Good') {
+					var step = _n1;
+					return step;
+				} else {
+					var step = _n1;
+					var p = step.a;
+					var x = step.b;
+					if (p) {
+						return step;
+					} else {
+						var $temp$s0 = s0,
+							$temp$bag = A2(elm$parser$Parser$Advanced$Append, bag, x),
+							$temp$parsers = remainingParsers;
+						s0 = $temp$s0;
+						bag = $temp$bag;
+						parsers = $temp$parsers;
+						continue oneOfHelp;
+					}
+				}
+			}
+		}
+	});
+var elm$parser$Parser$Advanced$oneOf = function (parsers) {
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return A3(elm$parser$Parser$Advanced$oneOfHelp, s, elm$parser$Parser$Advanced$Empty, parsers);
+		});
+};
+var elm$parser$Parser$oneOf = elm$parser$Parser$Advanced$oneOf;
+var elm$parser$Parser$Advanced$succeed = function (a) {
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return A3(elm$parser$Parser$Advanced$Good, false, a, s);
+		});
+};
+var elm$parser$Parser$succeed = elm$parser$Parser$Advanced$succeed;
+var elm$parser$Parser$ExpectingSymbol = function (a) {
+	return {$: 'ExpectingSymbol', a: a};
+};
+var elm$parser$Parser$Advanced$Token = F2(
+	function (a, b) {
+		return {$: 'Token', a: a, b: b};
+	});
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var elm$core$Basics$not = _Basics_not;
+var elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var elm$parser$Parser$Advanced$isSubString = _Parser_isSubString;
+var elm$parser$Parser$Advanced$token = function (_n0) {
+	var str = _n0.a;
+	var expecting = _n0.b;
+	var progress = !elm$core$String$isEmpty(str);
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			var _n1 = A5(elm$parser$Parser$Advanced$isSubString, str, s.offset, s.row, s.col, s.src);
+			var newOffset = _n1.a;
+			var newRow = _n1.b;
+			var newCol = _n1.c;
+			return _Utils_eq(newOffset, -1) ? A2(
+				elm$parser$Parser$Advanced$Bad,
+				false,
+				A2(elm$parser$Parser$Advanced$fromState, s, expecting)) : A3(
+				elm$parser$Parser$Advanced$Good,
+				progress,
+				_Utils_Tuple0,
+				{col: newCol, context: s.context, indent: s.indent, offset: newOffset, row: newRow, src: s.src});
+		});
+};
+var elm$parser$Parser$Advanced$symbol = elm$parser$Parser$Advanced$token;
+var elm$parser$Parser$symbol = function (str) {
+	return elm$parser$Parser$Advanced$symbol(
+		A2(
+			elm$parser$Parser$Advanced$Token,
+			str,
+			elm$parser$Parser$ExpectingSymbol(str)));
+};
+var elm$core$Basics$round = _Basics_round;
+var elm$parser$Parser$Advanced$isSubChar = _Parser_isSubChar;
+var elm$parser$Parser$Advanced$chompWhileHelp = F5(
+	function (isGood, offset, row, col, s0) {
+		chompWhileHelp:
+		while (true) {
+			var newOffset = A3(elm$parser$Parser$Advanced$isSubChar, isGood, offset, s0.src);
+			if (_Utils_eq(newOffset, -1)) {
+				return A3(
+					elm$parser$Parser$Advanced$Good,
+					_Utils_cmp(s0.offset, offset) < 0,
+					_Utils_Tuple0,
+					{col: col, context: s0.context, indent: s0.indent, offset: offset, row: row, src: s0.src});
+			} else {
+				if (_Utils_eq(newOffset, -2)) {
+					var $temp$isGood = isGood,
+						$temp$offset = offset + 1,
+						$temp$row = row + 1,
+						$temp$col = 1,
+						$temp$s0 = s0;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					s0 = $temp$s0;
+					continue chompWhileHelp;
+				} else {
+					var $temp$isGood = isGood,
+						$temp$offset = newOffset,
+						$temp$row = row,
+						$temp$col = col + 1,
+						$temp$s0 = s0;
+					isGood = $temp$isGood;
+					offset = $temp$offset;
+					row = $temp$row;
+					col = $temp$col;
+					s0 = $temp$s0;
+					continue chompWhileHelp;
+				}
+			}
+		}
+	});
+var elm$parser$Parser$Advanced$chompWhile = function (isGood) {
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return A5(elm$parser$Parser$Advanced$chompWhileHelp, isGood, s.offset, s.row, s.col, s);
+		});
+};
+var elm$parser$Parser$chompWhile = elm$parser$Parser$Advanced$chompWhile;
+var elm$core$String$slice = _String_slice;
+var elm$parser$Parser$Advanced$mapChompedString = F2(
+	function (func, _n0) {
+		var parse = _n0.a;
+		return elm$parser$Parser$Advanced$Parser(
+			function (s0) {
+				var _n1 = parse(s0);
+				if (_n1.$ === 'Bad') {
+					var p = _n1.a;
+					var x = _n1.b;
+					return A2(elm$parser$Parser$Advanced$Bad, p, x);
+				} else {
+					var p = _n1.a;
+					var a = _n1.b;
+					var s1 = _n1.c;
+					return A3(
+						elm$parser$Parser$Advanced$Good,
+						p,
+						A2(
+							func,
+							A3(elm$core$String$slice, s0.offset, s1.offset, s0.src),
+							a),
+						s1);
+				}
+			});
+	});
+var elm$parser$Parser$Advanced$getChompedString = function (parser) {
+	return A2(elm$parser$Parser$Advanced$mapChompedString, elm$core$Basics$always, parser);
+};
+var elm$parser$Parser$getChompedString = elm$parser$Parser$Advanced$getChompedString;
+var elm$parser$Parser$Problem = function (a) {
+	return {$: 'Problem', a: a};
+};
+var elm$parser$Parser$Advanced$problem = function (x) {
+	return elm$parser$Parser$Advanced$Parser(
+		function (s) {
+			return A2(
+				elm$parser$Parser$Advanced$Bad,
+				false,
+				A2(elm$parser$Parser$Advanced$fromState, s, x));
+		});
+};
+var elm$parser$Parser$problem = function (msg) {
+	return elm$parser$Parser$Advanced$problem(
+		elm$parser$Parser$Problem(msg));
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$fractionsOfASecondInMs = A2(
+	elm$parser$Parser$andThen,
+	function (str) {
+		if (elm$core$String$length(str) <= 9) {
+			var _n0 = elm$core$String$toFloat('0.' + str);
+			if (_n0.$ === 'Just') {
+				var floatVal = _n0.a;
+				return elm$parser$Parser$succeed(
+					elm$core$Basics$round(floatVal * 1000));
+			} else {
+				return elm$parser$Parser$problem('Invalid float: \"' + (str + '\"'));
+			}
+		} else {
+			return elm$parser$Parser$problem(
+				'Expected at most 9 digits, but got ' + elm$core$String$fromInt(
+					elm$core$String$length(str)));
+		}
+	},
+	elm$parser$Parser$getChompedString(
+		elm$parser$Parser$chompWhile(elm$core$Char$isDigit)));
+var elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var elm$time$Time$millisToPosix = elm$time$Time$Posix;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$fromParts = F6(
+	function (monthYearDayMs, hour, minute, second, ms, utcOffsetMinutes) {
+		return elm$time$Time$millisToPosix((((monthYearDayMs + (((hour * 60) * 60) * 1000)) + (((minute - utcOffsetMinutes) * 60) * 1000)) + (second * 1000)) + ms);
+	});
+var elm$core$String$append = _String_append;
+var elm$parser$Parser$Done = function (a) {
+	return {$: 'Done', a: a};
+};
+var elm$parser$Parser$Loop = function (a) {
+	return {$: 'Loop', a: a};
+};
+var elm$parser$Parser$UnexpectedChar = {$: 'UnexpectedChar'};
+var elm$parser$Parser$Advanced$chompIf = F2(
+	function (isGood, expecting) {
+		return elm$parser$Parser$Advanced$Parser(
+			function (s) {
+				var newOffset = A3(elm$parser$Parser$Advanced$isSubChar, isGood, s.offset, s.src);
+				return _Utils_eq(newOffset, -1) ? A2(
+					elm$parser$Parser$Advanced$Bad,
+					false,
+					A2(elm$parser$Parser$Advanced$fromState, s, expecting)) : (_Utils_eq(newOffset, -2) ? A3(
+					elm$parser$Parser$Advanced$Good,
+					true,
+					_Utils_Tuple0,
+					{col: 1, context: s.context, indent: s.indent, offset: s.offset + 1, row: s.row + 1, src: s.src}) : A3(
+					elm$parser$Parser$Advanced$Good,
+					true,
+					_Utils_Tuple0,
+					{col: s.col + 1, context: s.context, indent: s.indent, offset: newOffset, row: s.row, src: s.src}));
+			});
+	});
+var elm$parser$Parser$chompIf = function (isGood) {
+	return A2(elm$parser$Parser$Advanced$chompIf, isGood, elm$parser$Parser$UnexpectedChar);
+};
+var elm$parser$Parser$Advanced$map = F2(
+	function (func, _n0) {
+		var parse = _n0.a;
+		return elm$parser$Parser$Advanced$Parser(
+			function (s0) {
+				var _n1 = parse(s0);
+				if (_n1.$ === 'Good') {
+					var p = _n1.a;
+					var a = _n1.b;
+					var s1 = _n1.c;
+					return A3(
+						elm$parser$Parser$Advanced$Good,
+						p,
+						func(a),
+						s1);
+				} else {
+					var p = _n1.a;
+					var x = _n1.b;
+					return A2(elm$parser$Parser$Advanced$Bad, p, x);
+				}
+			});
+	});
+var elm$parser$Parser$map = elm$parser$Parser$Advanced$map;
+var elm$parser$Parser$Advanced$Done = function (a) {
+	return {$: 'Done', a: a};
+};
+var elm$parser$Parser$Advanced$Loop = function (a) {
+	return {$: 'Loop', a: a};
+};
+var elm$parser$Parser$toAdvancedStep = function (step) {
+	if (step.$ === 'Loop') {
+		var s = step.a;
+		return elm$parser$Parser$Advanced$Loop(s);
+	} else {
+		var a = step.a;
+		return elm$parser$Parser$Advanced$Done(a);
+	}
+};
+var elm$parser$Parser$Advanced$loopHelp = F4(
+	function (p, state, callback, s0) {
+		loopHelp:
+		while (true) {
+			var _n0 = callback(state);
+			var parse = _n0.a;
+			var _n1 = parse(s0);
+			if (_n1.$ === 'Good') {
+				var p1 = _n1.a;
+				var step = _n1.b;
+				var s1 = _n1.c;
+				if (step.$ === 'Loop') {
+					var newState = step.a;
+					var $temp$p = p || p1,
+						$temp$state = newState,
+						$temp$callback = callback,
+						$temp$s0 = s1;
+					p = $temp$p;
+					state = $temp$state;
+					callback = $temp$callback;
+					s0 = $temp$s0;
+					continue loopHelp;
+				} else {
+					var result = step.a;
+					return A3(elm$parser$Parser$Advanced$Good, p || p1, result, s1);
+				}
+			} else {
+				var p1 = _n1.a;
+				var x = _n1.b;
+				return A2(elm$parser$Parser$Advanced$Bad, p || p1, x);
+			}
+		}
+	});
+var elm$parser$Parser$Advanced$loop = F2(
+	function (state, callback) {
+		return elm$parser$Parser$Advanced$Parser(
+			function (s) {
+				return A4(elm$parser$Parser$Advanced$loopHelp, false, state, callback, s);
+			});
+	});
+var elm$parser$Parser$loop = F2(
+	function (state, callback) {
+		return A2(
+			elm$parser$Parser$Advanced$loop,
+			state,
+			function (s) {
+				return A2(
+					elm$parser$Parser$map,
+					elm$parser$Parser$toAdvancedStep,
+					callback(s));
+			});
+	});
+var rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt = function (quantity) {
+	var helper = function (str) {
+		if (_Utils_eq(
+			elm$core$String$length(str),
+			quantity)) {
+			var _n0 = elm$core$String$toInt(str);
+			if (_n0.$ === 'Just') {
+				var intVal = _n0.a;
+				return A2(
+					elm$parser$Parser$map,
+					elm$parser$Parser$Done,
+					elm$parser$Parser$succeed(intVal));
+			} else {
+				return elm$parser$Parser$problem('Invalid integer: \"' + (str + '\"'));
+			}
+		} else {
+			return A2(
+				elm$parser$Parser$map,
+				function (nextChar) {
+					return elm$parser$Parser$Loop(
+						A2(elm$core$String$append, str, nextChar));
+				},
+				elm$parser$Parser$getChompedString(
+					elm$parser$Parser$chompIf(elm$core$Char$isDigit)));
+		}
+	};
+	return A2(elm$parser$Parser$loop, '', helper);
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$epochYear = 1970;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay = function (day) {
+	return elm$parser$Parser$problem(
+		'Invalid day: ' + elm$core$String$fromInt(day));
+};
+var elm$core$Basics$modBy = _Basics_modBy;
+var elm$core$Basics$neq = _Utils_notEqual;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$isLeapYear = function (year) {
+	return (!A2(elm$core$Basics$modBy, 4, year)) && (A2(elm$core$Basics$modBy, 100, year) || (!A2(elm$core$Basics$modBy, 400, year)));
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$leapYearsBefore = function (y1) {
+	var y = y1 - 1;
+	return (((y / 4) | 0) - ((y / 100) | 0)) + ((y / 400) | 0);
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$msPerDay = 86400000;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$msPerYear = 31536000000;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$yearMonthDay = function (_n0) {
+	var year = _n0.a;
+	var month = _n0.b;
+	var dayInMonth = _n0.c;
+	if (dayInMonth < 0) {
+		return rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth);
+	} else {
+		var succeedWith = function (extraMs) {
+			var yearMs = rtfeldman$elm_iso8601_date_strings$Iso8601$msPerYear * (year - rtfeldman$elm_iso8601_date_strings$Iso8601$epochYear);
+			var days = ((month < 3) || (!rtfeldman$elm_iso8601_date_strings$Iso8601$isLeapYear(year))) ? (dayInMonth - 1) : dayInMonth;
+			var dayMs = rtfeldman$elm_iso8601_date_strings$Iso8601$msPerDay * (days + (rtfeldman$elm_iso8601_date_strings$Iso8601$leapYearsBefore(year) - rtfeldman$elm_iso8601_date_strings$Iso8601$leapYearsBefore(rtfeldman$elm_iso8601_date_strings$Iso8601$epochYear)));
+			return elm$parser$Parser$succeed((extraMs + yearMs) + dayMs);
+		};
+		switch (month) {
+			case 1:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(0);
+			case 2:
+				return ((dayInMonth > 29) || ((dayInMonth === 29) && (!rtfeldman$elm_iso8601_date_strings$Iso8601$isLeapYear(year)))) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(2678400000);
+			case 3:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(5097600000);
+			case 4:
+				return (dayInMonth > 30) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(7776000000);
+			case 5:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(10368000000);
+			case 6:
+				return (dayInMonth > 30) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(13046400000);
+			case 7:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(15638400000);
+			case 8:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(18316800000);
+			case 9:
+				return (dayInMonth > 30) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(20995200000);
+			case 10:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(23587200000);
+			case 11:
+				return (dayInMonth > 30) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(26265600000);
+			case 12:
+				return (dayInMonth > 31) ? rtfeldman$elm_iso8601_date_strings$Iso8601$invalidDay(dayInMonth) : succeedWith(28857600000);
+			default:
+				return elm$parser$Parser$problem(
+					'Invalid month: \"' + (elm$core$String$fromInt(month) + '\"'));
+		}
+	}
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$monthYearDayInMs = A2(
+	elm$parser$Parser$andThen,
+	rtfeldman$elm_iso8601_date_strings$Iso8601$yearMonthDay,
+	A2(
+		elm$parser$Parser$keeper,
+		A2(
+			elm$parser$Parser$keeper,
+			A2(
+				elm$parser$Parser$keeper,
+				elm$parser$Parser$succeed(
+					F3(
+						function (year, month, day) {
+							return _Utils_Tuple3(year, month, day);
+						})),
+				rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(4)),
+			elm$parser$Parser$oneOf(
+				_List_fromArray(
+					[
+						A2(
+						elm$parser$Parser$keeper,
+						A2(
+							elm$parser$Parser$ignorer,
+							elm$parser$Parser$succeed(elm$core$Basics$identity),
+							elm$parser$Parser$symbol('-')),
+						rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+						rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)
+					]))),
+		elm$parser$Parser$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					elm$parser$Parser$keeper,
+					A2(
+						elm$parser$Parser$ignorer,
+						elm$parser$Parser$succeed(elm$core$Basics$identity),
+						elm$parser$Parser$symbol('-')),
+					rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+					rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)
+				]))));
+var rtfeldman$elm_iso8601_date_strings$Iso8601$utcOffsetInMinutes = function () {
+	var utcOffsetMinutesFromParts = F3(
+		function (multiplier, hours, minutes) {
+			return (multiplier * (hours * 60)) + minutes;
+		});
+	return A2(
+		elm$parser$Parser$keeper,
+		elm$parser$Parser$succeed(elm$core$Basics$identity),
+		elm$parser$Parser$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					elm$parser$Parser$map,
+					function (_n0) {
+						return 0;
+					},
+					elm$parser$Parser$symbol('Z')),
+					A2(
+					elm$parser$Parser$keeper,
+					A2(
+						elm$parser$Parser$keeper,
+						A2(
+							elm$parser$Parser$keeper,
+							elm$parser$Parser$succeed(utcOffsetMinutesFromParts),
+							elm$parser$Parser$oneOf(
+								_List_fromArray(
+									[
+										A2(
+										elm$parser$Parser$map,
+										function (_n1) {
+											return 1;
+										},
+										elm$parser$Parser$symbol('+')),
+										A2(
+										elm$parser$Parser$map,
+										function (_n2) {
+											return -1;
+										},
+										elm$parser$Parser$symbol('-'))
+									]))),
+						rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+					elm$parser$Parser$oneOf(
+						_List_fromArray(
+							[
+								A2(
+								elm$parser$Parser$keeper,
+								A2(
+									elm$parser$Parser$ignorer,
+									elm$parser$Parser$succeed(elm$core$Basics$identity),
+									elm$parser$Parser$symbol(':')),
+								rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+								rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2),
+								elm$parser$Parser$succeed(0)
+							]))),
+					A2(
+					elm$parser$Parser$ignorer,
+					elm$parser$Parser$succeed(0),
+					elm$parser$Parser$end)
+				])));
+}();
+var rtfeldman$elm_iso8601_date_strings$Iso8601$iso8601 = A2(
+	elm$parser$Parser$andThen,
+	function (datePart) {
+		return elm$parser$Parser$oneOf(
+			_List_fromArray(
+				[
+					A2(
+					elm$parser$Parser$keeper,
+					A2(
+						elm$parser$Parser$keeper,
+						A2(
+							elm$parser$Parser$keeper,
+							A2(
+								elm$parser$Parser$keeper,
+								A2(
+									elm$parser$Parser$keeper,
+									A2(
+										elm$parser$Parser$ignorer,
+										elm$parser$Parser$succeed(
+											rtfeldman$elm_iso8601_date_strings$Iso8601$fromParts(datePart)),
+										elm$parser$Parser$symbol('T')),
+									rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+								elm$parser$Parser$oneOf(
+									_List_fromArray(
+										[
+											A2(
+											elm$parser$Parser$keeper,
+											A2(
+												elm$parser$Parser$ignorer,
+												elm$parser$Parser$succeed(elm$core$Basics$identity),
+												elm$parser$Parser$symbol(':')),
+											rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+											rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)
+										]))),
+							elm$parser$Parser$oneOf(
+								_List_fromArray(
+									[
+										A2(
+										elm$parser$Parser$keeper,
+										A2(
+											elm$parser$Parser$ignorer,
+											elm$parser$Parser$succeed(elm$core$Basics$identity),
+											elm$parser$Parser$symbol(':')),
+										rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)),
+										rtfeldman$elm_iso8601_date_strings$Iso8601$paddedInt(2)
+									]))),
+						elm$parser$Parser$oneOf(
+							_List_fromArray(
+								[
+									A2(
+									elm$parser$Parser$keeper,
+									A2(
+										elm$parser$Parser$ignorer,
+										elm$parser$Parser$succeed(elm$core$Basics$identity),
+										elm$parser$Parser$symbol('.')),
+									rtfeldman$elm_iso8601_date_strings$Iso8601$fractionsOfASecondInMs),
+									elm$parser$Parser$succeed(0)
+								]))),
+					A2(elm$parser$Parser$ignorer, rtfeldman$elm_iso8601_date_strings$Iso8601$utcOffsetInMinutes, elm$parser$Parser$end)),
+					A2(
+					elm$parser$Parser$ignorer,
+					elm$parser$Parser$succeed(
+						A6(rtfeldman$elm_iso8601_date_strings$Iso8601$fromParts, datePart, 0, 0, 0, 0, 0)),
+					elm$parser$Parser$end)
+				]));
+	},
+	rtfeldman$elm_iso8601_date_strings$Iso8601$monthYearDayInMs);
+var rtfeldman$elm_iso8601_date_strings$Iso8601$toTime = function (str) {
+	return A2(elm$parser$Parser$run, rtfeldman$elm_iso8601_date_strings$Iso8601$iso8601, str);
+};
 var author$project$Transform$XMapParse$matrixToMap = F2(
 	function (t, ll) {
 		var vs = A2(
@@ -5746,6 +6437,14 @@ var author$project$Transform$XMapParse$matrixToMap = F2(
 				elm$core$Result$fromMaybe,
 				v + ' is not a float',
 				elm$core$String$toFloat(v));
+		};
+		var toDate = function (v) {
+			return A2(
+				elm$core$Result$mapError,
+				function (e) {
+					return v + ' is not a date';
+				},
+				rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(v));
 		};
 		var ks = A2(
 			elm$core$Maybe$withDefault,
@@ -5782,13 +6481,20 @@ var author$project$Transform$XMapParse$matrixToMap = F2(
 					author$project$Types$XMapTypes$XMapString,
 					toDict(
 						elm$core$Result$Ok(vs)));
-			default:
+			case 'TypeBool':
 				return A2(
 					elm$core$Result$map,
 					author$project$Types$XMapTypes$XMapBool,
 					toDict(
 						compose(
 							A2(elm$core$List$map, author$project$Transform$XMapParse$toBool, vs))));
+			default:
+				return A2(
+					elm$core$Result$map,
+					author$project$Types$XMapTypes$XMapDate,
+					toDict(
+						compose(
+							A2(elm$core$List$map, toDate, vs))));
 		}
 	});
 var elm$core$String$lines = _String_lines;
@@ -5852,7 +6558,7 @@ var author$project$Transform$XMapParse$textToMap = F2(
 			elm_community$list_extra$List$Extra$transpose(
 				author$project$Transform$XMapParse$textToMatrix(s)));
 	});
-var author$project$Handler$InternalMessageUpdate$handleMapToTable = function (model) {
+var author$project$Handler$InternalMapMessageUpdate$handleMapToTable = function (model) {
 	var xmapEditorModel = model.xmapEditorModel;
 	var mm = A2(
 		elm$core$Maybe$map,
@@ -5907,6 +6613,246 @@ var elm$core$Dict$map = F2(
 		}
 	});
 var elm$core$String$fromFloat = _String_fromNumber;
+var elm$time$Time$flooredDiv = F2(
+	function (numerator, denominator) {
+		return elm$core$Basics$floor(numerator / denominator);
+	});
+var elm$time$Time$posixToMillis = function (_n0) {
+	var millis = _n0.a;
+	return millis;
+};
+var elm$time$Time$toAdjustedMinutesHelp = F3(
+	function (defaultOffset, posixMinutes, eras) {
+		toAdjustedMinutesHelp:
+		while (true) {
+			if (!eras.b) {
+				return posixMinutes + defaultOffset;
+			} else {
+				var era = eras.a;
+				var olderEras = eras.b;
+				if (_Utils_cmp(era.start, posixMinutes) < 0) {
+					return posixMinutes + era.offset;
+				} else {
+					var $temp$defaultOffset = defaultOffset,
+						$temp$posixMinutes = posixMinutes,
+						$temp$eras = olderEras;
+					defaultOffset = $temp$defaultOffset;
+					posixMinutes = $temp$posixMinutes;
+					eras = $temp$eras;
+					continue toAdjustedMinutesHelp;
+				}
+			}
+		}
+	});
+var elm$time$Time$toAdjustedMinutes = F2(
+	function (_n0, time) {
+		var defaultOffset = _n0.a;
+		var eras = _n0.b;
+		return A3(
+			elm$time$Time$toAdjustedMinutesHelp,
+			defaultOffset,
+			A2(
+				elm$time$Time$flooredDiv,
+				elm$time$Time$posixToMillis(time),
+				60000),
+			eras);
+	});
+var elm$core$Basics$ge = _Utils_ge;
+var elm$time$Time$toCivil = function (minutes) {
+	var rawDay = A2(elm$time$Time$flooredDiv, minutes, 60 * 24) + 719468;
+	var era = (((rawDay >= 0) ? rawDay : (rawDay - 146096)) / 146097) | 0;
+	var dayOfEra = rawDay - (era * 146097);
+	var yearOfEra = ((((dayOfEra - ((dayOfEra / 1460) | 0)) + ((dayOfEra / 36524) | 0)) - ((dayOfEra / 146096) | 0)) / 365) | 0;
+	var dayOfYear = dayOfEra - (((365 * yearOfEra) + ((yearOfEra / 4) | 0)) - ((yearOfEra / 100) | 0));
+	var mp = (((5 * dayOfYear) + 2) / 153) | 0;
+	var month = mp + ((mp < 10) ? 3 : (-9));
+	var year = yearOfEra + (era * 400);
+	return {
+		day: (dayOfYear - ((((153 * mp) + 2) / 5) | 0)) + 1,
+		month: month,
+		year: year + ((month <= 2) ? 1 : 0)
+	};
+};
+var elm$time$Time$toDay = F2(
+	function (zone, time) {
+		return elm$time$Time$toCivil(
+			A2(elm$time$Time$toAdjustedMinutes, zone, time)).day;
+	});
+var elm$time$Time$toHour = F2(
+	function (zone, time) {
+		return A2(
+			elm$core$Basics$modBy,
+			24,
+			A2(
+				elm$time$Time$flooredDiv,
+				A2(elm$time$Time$toAdjustedMinutes, zone, time),
+				60));
+	});
+var elm$time$Time$toMillis = F2(
+	function (_n0, time) {
+		return A2(
+			elm$core$Basics$modBy,
+			1000,
+			elm$time$Time$posixToMillis(time));
+	});
+var elm$time$Time$toMinute = F2(
+	function (zone, time) {
+		return A2(
+			elm$core$Basics$modBy,
+			60,
+			A2(elm$time$Time$toAdjustedMinutes, zone, time));
+	});
+var elm$time$Time$Apr = {$: 'Apr'};
+var elm$time$Time$Aug = {$: 'Aug'};
+var elm$time$Time$Dec = {$: 'Dec'};
+var elm$time$Time$Feb = {$: 'Feb'};
+var elm$time$Time$Jan = {$: 'Jan'};
+var elm$time$Time$Jul = {$: 'Jul'};
+var elm$time$Time$Jun = {$: 'Jun'};
+var elm$time$Time$Mar = {$: 'Mar'};
+var elm$time$Time$May = {$: 'May'};
+var elm$time$Time$Nov = {$: 'Nov'};
+var elm$time$Time$Oct = {$: 'Oct'};
+var elm$time$Time$Sep = {$: 'Sep'};
+var elm$time$Time$toMonth = F2(
+	function (zone, time) {
+		var _n0 = elm$time$Time$toCivil(
+			A2(elm$time$Time$toAdjustedMinutes, zone, time)).month;
+		switch (_n0) {
+			case 1:
+				return elm$time$Time$Jan;
+			case 2:
+				return elm$time$Time$Feb;
+			case 3:
+				return elm$time$Time$Mar;
+			case 4:
+				return elm$time$Time$Apr;
+			case 5:
+				return elm$time$Time$May;
+			case 6:
+				return elm$time$Time$Jun;
+			case 7:
+				return elm$time$Time$Jul;
+			case 8:
+				return elm$time$Time$Aug;
+			case 9:
+				return elm$time$Time$Sep;
+			case 10:
+				return elm$time$Time$Oct;
+			case 11:
+				return elm$time$Time$Nov;
+			default:
+				return elm$time$Time$Dec;
+		}
+	});
+var elm$time$Time$toSecond = F2(
+	function (_n0, time) {
+		return A2(
+			elm$core$Basics$modBy,
+			60,
+			A2(
+				elm$time$Time$flooredDiv,
+				elm$time$Time$posixToMillis(time),
+				1000));
+	});
+var elm$time$Time$toYear = F2(
+	function (zone, time) {
+		return elm$time$Time$toCivil(
+			A2(elm$time$Time$toAdjustedMinutes, zone, time)).year;
+	});
+var elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var elm$time$Time$utc = A2(elm$time$Time$Zone, 0, _List_Nil);
+var rtfeldman$elm_iso8601_date_strings$Iso8601$fromMonth = function (month) {
+	switch (month.$) {
+		case 'Jan':
+			return 1;
+		case 'Feb':
+			return 2;
+		case 'Mar':
+			return 3;
+		case 'Apr':
+			return 4;
+		case 'May':
+			return 5;
+		case 'Jun':
+			return 6;
+		case 'Jul':
+			return 7;
+		case 'Aug':
+			return 8;
+		case 'Sep':
+			return 9;
+		case 'Oct':
+			return 10;
+		case 'Nov':
+			return 11;
+		default:
+			return 12;
+	}
+};
+var elm$core$String$cons = _String_cons;
+var elm$core$String$fromChar = function (_char) {
+	return A2(elm$core$String$cons, _char, '');
+};
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3(elm$core$String$repeatHelp, n, chunk, '');
+	});
+var elm$core$String$padLeft = F3(
+	function (n, _char, string) {
+		return _Utils_ap(
+			A2(
+				elm$core$String$repeat,
+				n - elm$core$String$length(string),
+				elm$core$String$fromChar(_char)),
+			string);
+	});
+var rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString = F2(
+	function (digits, time) {
+		return A3(
+			elm$core$String$padLeft,
+			digits,
+			_Utils_chr('0'),
+			elm$core$String$fromInt(time));
+	});
+var rtfeldman$elm_iso8601_date_strings$Iso8601$fromTime = function (time) {
+	return A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		4,
+		A2(elm$time$Time$toYear, elm$time$Time$utc, time)) + ('-' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		2,
+		rtfeldman$elm_iso8601_date_strings$Iso8601$fromMonth(
+			A2(elm$time$Time$toMonth, elm$time$Time$utc, time))) + ('-' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		2,
+		A2(elm$time$Time$toDay, elm$time$Time$utc, time)) + ('T' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		2,
+		A2(elm$time$Time$toHour, elm$time$Time$utc, time)) + (':' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		2,
+		A2(elm$time$Time$toMinute, elm$time$Time$utc, time)) + (':' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		2,
+		A2(elm$time$Time$toSecond, elm$time$Time$utc, time)) + ('.' + (A2(
+		rtfeldman$elm_iso8601_date_strings$Iso8601$toPaddedString,
+		3,
+		A2(elm$time$Time$toMillis, elm$time$Time$utc, time)) + 'Z'))))))))))));
+};
 var author$project$Transform$MapsExtraction$mapValues = function (m) {
 	switch (m.$) {
 		case 'XMapInt':
@@ -5936,7 +6882,7 @@ var author$project$Transform$MapsExtraction$mapValues = function (m) {
 						return author$project$Transform$MapsExtraction$fromBool(v);
 					}),
 				mapBool);
-		default:
+		case 'XMapDouble':
 			var mapDouble = m.a.a;
 			return A2(
 				elm$core$Dict$map,
@@ -5945,6 +6891,15 @@ var author$project$Transform$MapsExtraction$mapValues = function (m) {
 						return elm$core$String$fromFloat(v);
 					}),
 				mapDouble);
+		default:
+			var mapDate = m.a.a;
+			return A2(
+				elm$core$Dict$map,
+				F2(
+					function (k, v) {
+						return rtfeldman$elm_iso8601_date_strings$Iso8601$fromTime(v);
+					}),
+				mapDate);
 	}
 };
 var elm$core$Dict$values = function (dict) {
@@ -5982,7 +6937,7 @@ var author$project$Transform$XMapText$mapToText = function (m) {
 			rowToText,
 			author$project$Transform$XMapText$mapToTransposedMatrix(m)));
 };
-var author$project$Handler$InternalMessageUpdate$handleMapToTextArea = function (model) {
+var author$project$Handler$InternalMapMessageUpdate$handleMapToTextArea = function (model) {
 	return A2(
 		author$project$Handler$ModelUpdate$updateXMapEditorModel,
 		model,
@@ -5994,22 +6949,9 @@ var author$project$Handler$InternalMessageUpdate$handleMapToTextArea = function 
 				});
 		});
 };
-var author$project$Handler$InternalMessageUpdate$handleNewCalculationWithName = F2(
-	function (model, cn) {
-		return author$project$Handler$InternalMessageUpdate$closeDialog(
-			_Utils_update(
-				model,
-				{
-					calculationEditorModel: _Utils_update(
-						author$project$Models$EmptyModel$emptyCalculationEditorModel,
-						{
-							calculationName: elm$core$Maybe$Just(cn)
-						})
-				}));
-	});
-var author$project$Handler$InternalMessageUpdate$handleNewMapWithName = F3(
+var author$project$Handler$InternalMapMessageUpdate$handleNewMapWithName = F3(
 	function (model, mn, mt) {
-		return author$project$Handler$InternalMessageUpdate$closeDialog(
+		return author$project$Models$ProjectModel$closeDialog(
 			_Utils_update(
 				model,
 				{
@@ -6021,9 +6963,10 @@ var author$project$Handler$InternalMessageUpdate$handleNewMapWithName = F3(
 						})
 				}));
 	});
-var author$project$Models$WebMessages$WRNewProject = function (a) {
-	return {$: 'WRNewProject', a: a};
-};
+var author$project$Models$WebMessages$WRLoadMap = F2(
+	function (a, b) {
+		return {$: 'WRLoadMap', a: a, b: b};
+	});
 var elm$json$Json$Encode$string = _Json_wrap;
 var author$project$Json$EncodeCalculation$encodeOperationMode = function (om) {
 	if (om.$ === 'Union') {
@@ -6220,6 +7163,7 @@ var author$project$Json$EncodeXMap$encodeMapContent = F2(
 	});
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$json$Json$Encode$float = _Json_wrap;
+var rtfeldman$elm_iso8601_date_strings$Iso8601$encode = A2(elm$core$Basics$composeR, rtfeldman$elm_iso8601_date_strings$Iso8601$fromTime, elm$json$Json$Encode$string);
 var author$project$Json$EncodeXMap$encodeXMap = function (m) {
 	switch (m.$) {
 		case 'XMapDouble':
@@ -6258,7 +7202,7 @@ var author$project$Json$EncodeXMap$encodeXMap = function (m) {
 						'values',
 						A2(author$project$Json$EncodeXMap$encodeMapContent, elm$json$Json$Encode$string, v))
 					]));
-		default:
+		case 'XMapBool':
 			var v = m.a;
 			return elm$json$Json$Encode$object(
 				_List_fromArray(
@@ -6269,6 +7213,18 @@ var author$project$Json$EncodeXMap$encodeXMap = function (m) {
 						_Utils_Tuple2(
 						'values',
 						A2(author$project$Json$EncodeXMap$encodeMapContent, elm$json$Json$Encode$bool, v))
+					]));
+		default:
+			var v = m.a;
+			return elm$json$Json$Encode$object(
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						'type',
+						elm$json$Json$Encode$string('date')),
+						_Utils_Tuple2(
+						'values',
+						A2(author$project$Json$EncodeXMap$encodeMapContent, rtfeldman$elm_iso8601_date_strings$Iso8601$encode, v))
 					]));
 	}
 };
@@ -6488,32 +7444,51 @@ var author$project$Server$ServerMessaging$sendToServer = function (req) {
 	return author$project$Ports$sendMessage(
 		author$project$Json$EncodeWebRequest$encodeWebRequest(req));
 };
-var author$project$Handler$InternalMessageUpdate$handleNewProjectWithName = F2(
+var author$project$Handler$InternalMapMessageUpdate$handleShowMapInEditor = F2(
+	function (model, mn) {
+		var command = function (pn) {
+			return author$project$Server$ServerMessaging$sendToServer(
+				A2(author$project$Models$WebMessages$WRLoadMap, pn, mn));
+		};
+		var cleanup = A2(
+			author$project$Handler$ModelUpdate$updateXMapEditorModel,
+			model,
+			function (mm) {
+				return _Utils_update(
+					mm,
+					{xmapEditing: elm$core$Maybe$Nothing});
+			});
+		var _n0 = model.currentProject;
+		if (_n0.$ === 'Just') {
+			var pn = _n0.a;
+			return _Utils_Tuple2(
+				cleanup,
+				command(pn));
+		} else {
+			return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+		}
+	});
+var author$project$Handler$InternalMapMessageUpdate$handleUpdateMapName = F2(
+	function (model, s) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateXMapEditorModel,
+			model,
+			function (xm) {
+				return _Utils_update(
+					xm,
+					{newXmapName: s});
+			});
+	});
+var author$project$Models$WebMessages$WRNewProject = function (a) {
+	return {$: 'WRNewProject', a: a};
+};
+var author$project$Handler$InternalProjectMessageUpdate$handleNewProjectWithName = F2(
 	function (model, pn) {
 		return _Utils_Tuple2(
-			author$project$Handler$InternalMessageUpdate$closeDialog(model),
+			author$project$Models$ProjectModel$closeDialog(model),
 			author$project$Server$ServerMessaging$sendToServer(
 				author$project$Models$WebMessages$WRNewProject(
 					{calculations: _List_Nil, projectName: model.newProjectName, sources: _List_Nil, viewNames: _List_Nil})));
-	});
-var author$project$Handler$InternalMessageUpdate$handleNewViewWithName = F2(
-	function (model, vn) {
-		return author$project$Handler$InternalMessageUpdate$closeDialog(
-			_Utils_update(
-				model,
-				{
-					viewEditorModel: _Utils_update(
-						author$project$Models$EmptyModel$emptyViewEditorModel,
-						{
-							viewName: elm$core$Maybe$Just(vn),
-							viewToEdit: elm$core$Maybe$Just(
-								{
-									rows: _List_fromArray(
-										[author$project$Handler$InternalMessageUpdate$emptyRow]),
-									viewName: vn
-								})
-						})
-				}));
 	});
 var elm_community$list_extra$List$Extra$find = F2(
 	function (predicate, list) {
@@ -6548,7 +7523,7 @@ var author$project$Models$ProjectModel$openProjectWithName = F2(
 var author$project$Models$WebMessages$WRSubscribeToProject = function (a) {
 	return {$: 'WRSubscribeToProject', a: a};
 };
-var author$project$Handler$InternalMessageUpdate$handleOpenProject = F2(
+var author$project$Handler$InternalProjectMessageUpdate$handleOpenProject = F2(
 	function (model, pn) {
 		var command = function () {
 			var _n0 = A2(author$project$Models$ProjectModel$openProjectWithName, model, pn);
@@ -6578,99 +7553,6 @@ var author$project$Models$ProjectModel$currentProjectModel = function (model) {
 		author$project$Models$ProjectModel$openProjectWithName(model),
 		model.currentProject);
 };
-var author$project$Models$ProjectModel$openViewWithName = F2(
-	function (model, vn) {
-		var findView = function (ovs) {
-			return A2(
-				elm_community$list_extra$List$Extra$find,
-				function (vm) {
-					return _Utils_eq(vm.view.viewName, vn);
-				},
-				ovs);
-		};
-		return A2(
-			elm$core$Maybe$andThen,
-			function (pm) {
-				return findView(pm.openViews);
-			},
-			author$project$Models$ProjectModel$currentProjectModel(model));
-	});
-var author$project$Models$WebMessages$WRSubscribeToView = F2(
-	function (a, b) {
-		return {$: 'WRSubscribeToView', a: a, b: b};
-	});
-var author$project$Handler$InternalMessageUpdate$handleOpenView = F2(
-	function (model, vn) {
-		var command = function () {
-			var _n0 = A2(author$project$Models$ProjectModel$openViewWithName, model, vn);
-			if (_n0.$ === 'Just') {
-				var v = _n0.a;
-				return elm$core$Platform$Cmd$none;
-			} else {
-				return A2(
-					elm$core$Maybe$withDefault,
-					elm$core$Platform$Cmd$none,
-					A2(
-						elm$core$Maybe$map,
-						function (pn) {
-							return author$project$Server$ServerMessaging$sendToServer(
-								A2(author$project$Models$WebMessages$WRSubscribeToView, pn, vn));
-						},
-						model.currentProject));
-			}
-		}();
-		return _Utils_Tuple2(
-			_Utils_update(
-				model,
-				{
-					currentView: elm$core$Maybe$Just(vn)
-				}),
-			command);
-	});
-var author$project$Handler$InternalMessageUpdate$handleShowDialog = F2(
-	function (model, index) {
-		return _Utils_update(
-			model,
-			{
-				openDialog: elm$core$Maybe$Just(index)
-			});
-	});
-var author$project$Models$WebMessages$WRLoadMap = F2(
-	function (a, b) {
-		return {$: 'WRLoadMap', a: a, b: b};
-	});
-var author$project$Handler$InternalMessageUpdate$handleShowMapInEditor = F2(
-	function (model, mn) {
-		var command = function (pn) {
-			return author$project$Server$ServerMessaging$sendToServer(
-				A2(author$project$Models$WebMessages$WRLoadMap, pn, mn));
-		};
-		var cleanup = A2(
-			author$project$Handler$ModelUpdate$updateXMapEditorModel,
-			model,
-			function (mm) {
-				return _Utils_update(
-					mm,
-					{xmapEditing: elm$core$Maybe$Nothing});
-			});
-		var _n0 = model.currentProject;
-		if (_n0.$ === 'Just') {
-			var pn = _n0.a;
-			return _Utils_Tuple2(
-				cleanup,
-				command(pn));
-		} else {
-			return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
-		}
-	});
-var author$project$Handler$InternalMessageUpdate$handleSwitchCategoryTo = F2(
-	function (model, ct) {
-		return _Utils_update(
-			model,
-			{
-				currentCategory: elm$core$Maybe$Just(ct)
-			});
-	});
 var author$project$Models$WebMessages$WRFunctions = {$: 'WRFunctions'};
 var author$project$Models$WebMessages$WRMapsInProject = function (a) {
 	return {$: 'WRMapsInProject', a: a};
@@ -6693,7 +7575,7 @@ var elm$core$List$filterMap = F2(
 			_List_Nil,
 			xs);
 	});
-var author$project$Handler$InternalMessageUpdate$handleSwitchProjectViewTo = F2(
+var author$project$Handler$InternalProjectMessageUpdate$handleSwitchProjectViewTo = F2(
 	function (model, vt) {
 		var mapsInProjectRequest = A2(
 			elm$core$Maybe$map,
@@ -6723,272 +7605,429 @@ var author$project$Handler$InternalMessageUpdate$handleSwitchProjectViewTo = F2(
 					_List_fromArray(
 						[functionRequest, mapsInProjectRequest]))));
 	});
-var author$project$Handler$InternalMessageUpdate$handleTextToResultNameText = F2(
-	function (model, mn) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
-			model,
-			function (cm) {
-				return _Utils_update(
-					cm,
-					{
-						resultMapName: elm$core$Maybe$Just(mn)
-					});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleUpdateCalculationName = F2(
-	function (model, s) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
-			model,
-			function (cm) {
-				return _Utils_update(
-					cm,
-					{newCalculationName: s});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleUpdateMapName = F2(
-	function (model, s) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateXMapEditorModel,
-			model,
-			function (xm) {
-				return _Utils_update(
-					xm,
-					{newXmapName: s});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleUpdateProjectName = F2(
+var author$project$Handler$InternalProjectMessageUpdate$handleUpdateProjectName = F2(
 	function (model, s) {
 		return _Utils_update(
 			model,
 			{newProjectName: s});
 	});
-var author$project$Handler$InternalMessageUpdate$handleUpdateViewLabel = F2(
-	function (model, s) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateViewEditorModel,
-			model,
-			function (vm) {
-				return _Utils_update(
-					vm,
-					{labelEditing: s});
-			});
-	});
-var author$project$Handler$InternalMessageUpdate$handleUpdateViewName = F2(
-	function (model, s) {
-		return A2(
-			author$project$Handler$ModelUpdate$updateViewEditorModel,
-			model,
-			function (vm) {
-				return _Utils_update(
-					vm,
-					{newViewName: s});
-			});
-	});
-var author$project$Transform$MapsExtraction$xmapNameToString = function (mn) {
-	return A2(elm$core$String$join, '/', mn);
-};
-var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
-	function (msg, model) {
-		switch (msg.$) {
-			case 'MapToTextArea':
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMessageUpdate$handleMapToTextArea(model),
-					elm$core$Platform$Cmd$none);
-			case 'MapToTable':
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMessageUpdate$handleMapToTable(model),
-					elm$core$Platform$Cmd$none);
-			case 'OpenProject':
-				var pn = msg.a;
-				return A2(author$project$Handler$InternalMessageUpdate$handleOpenProject, model, pn);
-			case 'OpenView':
-				var vn = msg.a;
-				return A2(author$project$Handler$InternalMessageUpdate$handleOpenView, model, vn);
-			case 'TextToMapTextArea':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(
-						author$project$Handler$ModelUpdate$updateXMapEditorModel,
-						model,
-						function (xm) {
-							return _Utils_update(
-								xm,
-								{
-									xmapEditing: elm$core$Maybe$Just(s)
-								});
-						}),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateMapName':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleUpdateMapName, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateCalculationName':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleUpdateCalculationName, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateViewName':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleUpdateViewName, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateProjectName':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleUpdateProjectName, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateViewLabel':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleUpdateViewLabel, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'NewCalculationWithName':
-				var cn = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleNewCalculationWithName, model, cn),
-					elm$core$Platform$Cmd$none);
-			case 'NewViewWithName':
-				var vn = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleNewViewWithName, model, vn),
-					elm$core$Platform$Cmd$none);
-			case 'NewMapWithName':
-				var mn = msg.a;
-				var mt = msg.b;
-				return _Utils_Tuple2(
-					A3(author$project$Handler$InternalMessageUpdate$handleNewMapWithName, model, mn, mt),
-					elm$core$Platform$Cmd$none);
-			case 'NewProjectWithName':
-				var pn = msg.a;
-				return A2(author$project$Handler$InternalMessageUpdate$handleNewProjectWithName, model, pn);
-			case 'ShowMessage':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, s),
-					elm$core$Platform$Cmd$none);
-			case 'ShowMapInEditor':
-				var mn = msg.a;
-				return A2(author$project$Handler$InternalMessageUpdate$handleShowMapInEditor, model, mn);
-			case 'SwitchProjectViewTo':
-				var vt = msg.a;
-				return A2(author$project$Handler$InternalMessageUpdate$handleSwitchProjectViewTo, model, vt);
-			case 'SwitchCategoryTo':
-				var ct = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleSwitchCategoryTo, model, ct),
-					elm$core$Platform$Cmd$none);
-			case 'TextToCalculationTextArea':
-				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(
-						author$project$Handler$ModelUpdate$updateCalculationEditorModel,
-						model,
-						function (cm) {
-							return _Utils_update(
-								cm,
-								{
-									calculationFormulaText: elm$core$Maybe$Just(s)
-								});
-						}),
-					elm$core$Platform$Cmd$none);
-			case 'TextToResultNameText':
-				var mn = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleTextToResultNameText, model, mn),
-					elm$core$Platform$Cmd$none);
-			case 'AddMapToCalculation':
-				var mn = msg.a;
-				return _Utils_Tuple2(
-					A2(
-						author$project$Handler$InternalMessageUpdate$appendToFormulaText,
-						model,
-						author$project$Transform$MapsExtraction$xmapNameToString(mn)),
-					elm$core$Platform$Cmd$none);
-			case 'AddOperationToCalculation':
-				var on = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleAddOperationToCalculation, model, on),
-					elm$core$Platform$Cmd$none);
-			case 'ChangeOperationMode':
-				var om = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleChangeOperationMode, model, om),
-					elm$core$Platform$Cmd$none);
-			case 'ChangeMapType':
-				var mt = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleChangeMapType, model, mt),
-					elm$core$Platform$Cmd$none);
-			case 'AddItemToView':
-				var row = msg.a;
-				var it = msg.b;
-				return _Utils_Tuple2(
-					A3(author$project$Handler$InternalMessageUpdate$handleAddItemToView, model, row, it),
-					elm$core$Platform$Cmd$none);
-			case 'AddRowToView':
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMessageUpdate$handleAddRowToView(model),
-					elm$core$Platform$Cmd$none);
-			case 'ChangeViewEditSelectedRow':
-				var row = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleChangeViewEditSelectedRow, model, row),
-					elm$core$Platform$Cmd$none);
-			case 'ShowDialog':
-				var index = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$InternalMessageUpdate$handleShowDialog, model, index),
-					elm$core$Platform$Cmd$none);
-			case 'CloseDialog':
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMessageUpdate$handleCloseDialog(model),
-					elm$core$Platform$Cmd$none);
-			default:
-				var err = msg.a;
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMessageUpdate$closeDialog(
-						A2(author$project$Handler$ModelUpdate$showMessage, model, err)),
-					elm$core$Platform$Cmd$none);
-		}
-	});
-var author$project$Handler$ModelUpdate$updateOpenProjects = F2(
+var author$project$Handler$ModelUpdate$updateViewEditorModel = F2(
 	function (model, update) {
 		return _Utils_update(
 			model,
 			{
-				openProjects: update(model.openProjects)
+				viewEditorModel: update(model.viewEditorModel)
 			});
 	});
-var author$project$Handler$WebMessageUpdate$handleCalculationLoaded = F2(
-	function (model, cs) {
+var author$project$Types$Views$ViewEditRow = function (a) {
+	return {$: 'ViewEditRow', a: a};
+};
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2(elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return elm$core$List$reverse(
+			A3(elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _n0 = _Utils_Tuple2(n, list);
+			_n0$1:
+			while (true) {
+				_n0$5:
+				while (true) {
+					if (!_n0.b.b) {
+						return list;
+					} else {
+						if (_n0.b.b.b) {
+							switch (_n0.a) {
+								case 1:
+									break _n0$1;
+								case 2:
+									var _n2 = _n0.b;
+									var x = _n2.a;
+									var _n3 = _n2.b;
+									var y = _n3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_n0.b.b.b.b) {
+										var _n4 = _n0.b;
+										var x = _n4.a;
+										var _n5 = _n4.b;
+										var y = _n5.a;
+										var _n6 = _n5.b;
+										var z = _n6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _n0$5;
+									}
+								default:
+									if (_n0.b.b.b.b && _n0.b.b.b.b.b) {
+										var _n7 = _n0.b;
+										var x = _n7.a;
+										var _n8 = _n7.b;
+										var y = _n8.a;
+										var _n9 = _n8.b;
+										var z = _n9.a;
+										var _n10 = _n9.b;
+										var w = _n10.a;
+										var tl = _n10.b;
+										return (ctr > 1000) ? A2(
+											elm$core$List$cons,
+											x,
+											A2(
+												elm$core$List$cons,
+												y,
+												A2(
+													elm$core$List$cons,
+													z,
+													A2(
+														elm$core$List$cons,
+														w,
+														A2(elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											elm$core$List$cons,
+											x,
+											A2(
+												elm$core$List$cons,
+												y,
+												A2(
+													elm$core$List$cons,
+													z,
+													A2(
+														elm$core$List$cons,
+														w,
+														A3(elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _n0$5;
+									}
+							}
+						} else {
+							if (_n0.a === 1) {
+								break _n0$1;
+							} else {
+								break _n0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _n1 = _n0.b;
+			var x = _n1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var elm$core$List$take = F2(
+	function (n, list) {
+		return A3(elm$core$List$takeFast, 0, n, list);
+	});
+var elm_community$list_extra$List$Extra$updateAt = F3(
+	function (index, fn, list) {
+		if (index < 0) {
+			return list;
+		} else {
+			var tail = A2(elm$core$List$drop, index, list);
+			var head = A2(elm$core$List$take, index, list);
+			if (tail.b) {
+				var x = tail.a;
+				var xs = tail.b;
+				return _Utils_ap(
+					head,
+					A2(
+						elm$core$List$cons,
+						fn(x),
+						xs));
+			} else {
+				return list;
+			}
+		}
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleAddItemToViewEdit = F3(
+	function (model, ri, it) {
+		var buildItem = function (id) {
+			return {content: it, id: id};
+		};
+		var updateRow = F2(
+			function (id, _n0) {
+				var r = _n0.a;
+				return author$project$Types$Views$ViewEditRow(
+					A2(
+						elm$core$List$append,
+						r,
+						_List_fromArray(
+							[
+								buildItem(id)
+							])));
+			});
+		var updateRows = F2(
+			function (rs, id) {
+				return A3(
+					elm_community$list_extra$List$Extra$updateAt,
+					ri,
+					updateRow(id),
+					rs);
+			});
+		var updateView = F2(
+			function (mv, id) {
+				return A2(
+					elm$core$Maybe$map,
+					function (v) {
+						return _Utils_update(
+							v,
+							{
+								rows: A2(updateRows, v.rows, id)
+							});
+					},
+					mv);
+			});
 		return A2(
-			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
 			model,
-			function (cm) {
+			function (vm) {
 				return _Utils_update(
-					cm,
+					vm,
 					{
-						calculationFormulaText: elm$core$Maybe$Just(cs.formulaText),
-						calculationName: elm$core$Maybe$Just(cs.calculationName),
-						resultMapName: elm$core$Maybe$Just(
-							author$project$Transform$MapsExtraction$xmapNameToString(cs.resultName))
+						lastViewEditItemId: vm.lastViewEditItemId + 1,
+						viewToEdit: A2(updateView, vm.viewToEdit, vm.lastViewEditItemId + 1)
 					});
 			});
 	});
-var author$project$Handler$WebMessageUpdate$handleCalculationStored = F3(
-	function (model, pn, cn) {
-		var mdlCleaned = A2(
-			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+var author$project$Handler$InternalVIewMessageUpdate$emptyRow = author$project$Types$Views$ViewEditRow(_List_Nil);
+var author$project$Handler$InternalVIewMessageUpdate$handleAddRowToViewEdit = function (model) {
+	var updateView = function (mv) {
+		if (mv.$ === 'Just') {
+			var v = mv.a;
+			return _Utils_update(
+				v,
+				{
+					rows: _Utils_ap(
+						v.rows,
+						_List_fromArray(
+							[author$project$Handler$InternalVIewMessageUpdate$emptyRow]))
+				});
+		} else {
+			return {
+				rows: _List_fromArray(
+					[author$project$Handler$InternalVIewMessageUpdate$emptyRow]),
+				viewName: ''
+			};
+		}
+	};
+	return A2(
+		author$project$Handler$ModelUpdate$updateViewEditorModel,
+		model,
+		function (vm) {
+			return _Utils_update(
+				vm,
+				{
+					viewToEdit: elm$core$Maybe$Just(
+						updateView(vm.viewToEdit))
+				});
+		});
+};
+var author$project$Handler$InternalVIewMessageUpdate$invertValue = F2(
+	function (index, dict) {
+		var inv = function (existing) {
+			return A2(
+				elm$core$Maybe$map,
+				elm$core$Basics$not,
+				A2(
+					elm$core$Maybe$withDefault,
+					elm$core$Maybe$Just(false),
+					existing));
+		};
+		return A3(
+			elm$core$Dict$insert,
+			index,
+			inv(
+				A2(elm$core$Dict$get, index, dict)),
+			dict);
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleChangeViewEditCheckedItem = F2(
+	function (model, id) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
 			model,
-			function (cm) {
+			function (vm) {
 				return _Utils_update(
-					cm,
-					{newCalculationName: ''});
+					vm,
+					{
+						checkedViewEditItems: A2(author$project$Handler$InternalVIewMessageUpdate$invertValue, id, vm.checkedViewEditItems)
+					});
 			});
-		return A2(author$project$Handler$ModelUpdate$showMessage, mdlCleaned, 'Calculation:' + (cn + (' of project:' + (pn + ' stored'))));
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleChangeViewEditSelectedRow = F2(
+	function (model, ri) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{rowToAddTo: ri});
+			});
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleNewViewWithName = F2(
+	function (model, vn) {
+		return author$project$Models$ProjectModel$closeDialog(
+			_Utils_update(
+				model,
+				{
+					viewEditorModel: _Utils_update(
+						author$project$Models$EmptyModel$emptyViewEditorModel,
+						{
+							viewName: elm$core$Maybe$Just(vn),
+							viewToEdit: elm$core$Maybe$Just(
+								{
+									rows: _List_fromArray(
+										[author$project$Handler$InternalVIewMessageUpdate$emptyRow]),
+									viewName: vn
+								})
+						})
+				}));
+	});
+var author$project$Models$ProjectModel$openViewWithName = F2(
+	function (model, vn) {
+		var findView = function (ovs) {
+			return A2(
+				elm_community$list_extra$List$Extra$find,
+				function (vm) {
+					return _Utils_eq(vm.view.viewName, vn);
+				},
+				ovs);
+		};
+		return A2(
+			elm$core$Maybe$andThen,
+			function (pm) {
+				return findView(pm.openViews);
+			},
+			author$project$Models$ProjectModel$currentProjectModel(model));
+	});
+var author$project$Models$WebMessages$WRSubscribeToView = F2(
+	function (a, b) {
+		return {$: 'WRSubscribeToView', a: a, b: b};
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleOpenView = F2(
+	function (model, vn) {
+		var command = function () {
+			var _n0 = A2(author$project$Models$ProjectModel$openViewWithName, model, vn);
+			if (_n0.$ === 'Just') {
+				var v = _n0.a;
+				return elm$core$Platform$Cmd$none;
+			} else {
+				return A2(
+					elm$core$Maybe$withDefault,
+					elm$core$Platform$Cmd$none,
+					A2(
+						elm$core$Maybe$map,
+						function (pn) {
+							return author$project$Server$ServerMessaging$sendToServer(
+								A2(author$project$Models$WebMessages$WRSubscribeToView, pn, vn));
+						},
+						model.currentProject));
+			}
+		}();
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{
+					currentView: elm$core$Maybe$Just(vn)
+				}),
+			command);
+	});
+var elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
+var elm$core$Set$empty = elm$core$Set$Set_elm_builtin(elm$core$Dict$empty);
+var elm$core$Set$insert = F2(
+	function (key, _n0) {
+		var dict = _n0.a;
+		return elm$core$Set$Set_elm_builtin(
+			A3(elm$core$Dict$insert, key, _Utils_Tuple0, dict));
+	});
+var elm$core$Set$fromList = function (list) {
+	return A3(elm$core$List$foldl, elm$core$Set$insert, elm$core$Set$empty, list);
+};
+var elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _n0 = A2(elm$core$Dict$get, key, dict);
+		if (_n0.$ === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var elm$core$Set$member = F2(
+	function (key, _n0) {
+		var dict = _n0.a;
+		return A2(elm$core$Dict$member, key, dict);
 	});
 var elm$core$Dict$getMin = function (dict) {
 	getMin:
@@ -7352,6 +8391,326 @@ var elm$core$Dict$remove = F2(
 			return x;
 		}
 	});
+var elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3(elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var elm$core$Set$foldl = F3(
+	function (func, initialState, _n0) {
+		var dict = _n0.a;
+		return A3(
+			elm$core$Dict$foldl,
+			F3(
+				function (key, _n1, state) {
+					return A2(func, key, state);
+				}),
+			initialState,
+			dict);
+	});
+var elm_community$dict_extra$Dict$Extra$removeMany = F2(
+	function (set, dict) {
+		return A3(elm$core$Set$foldl, elm$core$Dict$remove, dict, set);
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleRemoveItemsFromViewEdit = F2(
+	function (model, ids) {
+		var idsSet = elm$core$Set$fromList(ids);
+		var removeFromChecked = function (cks) {
+			return A2(elm_community$dict_extra$Dict$Extra$removeMany, idsSet, cks);
+		};
+		var updateRow = function (_n0) {
+			var vr = _n0.a;
+			return author$project$Types$Views$ViewEditRow(
+				A2(
+					elm$core$List$filter,
+					function (it) {
+						return !A2(elm$core$Set$member, it.id, idsSet);
+					},
+					vr));
+		};
+		var removeFromViews = function (v) {
+			return _Utils_update(
+				v,
+				{
+					rows: A2(elm$core$List$map, updateRow, v.rows)
+				});
+		};
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{
+						checkedViewEditItems: removeFromChecked(vm.checkedViewEditItems),
+						viewToEdit: A2(elm$core$Maybe$map, removeFromViews, vm.viewToEdit)
+					});
+			});
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleUpdateViewLabel = F2(
+	function (model, s) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{labelEditing: s});
+			});
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleUpdateViewName = F2(
+	function (model, s) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{newViewName: s});
+			});
+	});
+var author$project$Models$ProjectModel$showDialog = F2(
+	function (model, index) {
+		return _Utils_update(
+			model,
+			{
+				openDialog: elm$core$Maybe$Just(index)
+			});
+	});
+var author$project$Transform$MapsExtraction$xmapNameToString = function (mn) {
+	return A2(elm$core$String$join, '/', mn);
+};
+var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 'MapToTextArea':
+				return _Utils_Tuple2(
+					author$project$Handler$InternalMapMessageUpdate$handleMapToTextArea(model),
+					elm$core$Platform$Cmd$none);
+			case 'MapToTable':
+				return _Utils_Tuple2(
+					author$project$Handler$InternalMapMessageUpdate$handleMapToTable(model),
+					elm$core$Platform$Cmd$none);
+			case 'OpenProject':
+				var pn = msg.a;
+				return A2(author$project$Handler$InternalProjectMessageUpdate$handleOpenProject, model, pn);
+			case 'OpenView':
+				var vn = msg.a;
+				return A2(author$project$Handler$InternalVIewMessageUpdate$handleOpenView, model, vn);
+			case 'TextToMapTextArea':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						author$project$Handler$ModelUpdate$updateXMapEditorModel,
+						model,
+						function (xm) {
+							return _Utils_update(
+								xm,
+								{
+									xmapEditing: elm$core$Maybe$Just(s)
+								});
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'UpdateMapName':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalMapMessageUpdate$handleUpdateMapName, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'UpdateCalculationName':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleUpdateCalculationName, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'UpdateViewName':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleUpdateViewName, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'UpdateProjectName':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalProjectMessageUpdate$handleUpdateProjectName, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'UpdateViewLabel':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleUpdateViewLabel, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'NewCalculationWithName':
+				var cn = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleNewCalculationWithName, model, cn),
+					elm$core$Platform$Cmd$none);
+			case 'NewViewWithName':
+				var vn = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleNewViewWithName, model, vn),
+					elm$core$Platform$Cmd$none);
+			case 'NewMapWithName':
+				var mn = msg.a;
+				var mt = msg.b;
+				return _Utils_Tuple2(
+					A3(author$project$Handler$InternalMapMessageUpdate$handleNewMapWithName, model, mn, mt),
+					elm$core$Platform$Cmd$none);
+			case 'NewProjectWithName':
+				var pn = msg.a;
+				return A2(author$project$Handler$InternalProjectMessageUpdate$handleNewProjectWithName, model, pn);
+			case 'ShowMessage':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$ModelUpdate$showMessage, model, s),
+					elm$core$Platform$Cmd$none);
+			case 'ShowMapInEditor':
+				var mn = msg.a;
+				return A2(author$project$Handler$InternalMapMessageUpdate$handleShowMapInEditor, model, mn);
+			case 'SwitchProjectViewTo':
+				var vt = msg.a;
+				return A2(author$project$Handler$InternalProjectMessageUpdate$handleSwitchProjectViewTo, model, vt);
+			case 'SwitchCategoryTo':
+				var ct = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleSwitchCategoryTo, model, ct),
+					elm$core$Platform$Cmd$none);
+			case 'TextToCalculationTextArea':
+				var s = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+						model,
+						function (cm) {
+							return _Utils_update(
+								cm,
+								{
+									calculationFormulaText: elm$core$Maybe$Just(s)
+								});
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'TextToResultNameText':
+				var mn = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleTextToResultNameText, model, mn),
+					elm$core$Platform$Cmd$none);
+			case 'AddMapToCalculation':
+				var mn = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						author$project$Handler$InternalCalculationMessageUpdate$appendToFormulaText,
+						model,
+						author$project$Transform$MapsExtraction$xmapNameToString(mn)),
+					elm$core$Platform$Cmd$none);
+			case 'AddOperationToCalculation':
+				var on = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleAddOperationToCalculation, model, on),
+					elm$core$Platform$Cmd$none);
+			case 'ChangeOperationMode':
+				var om = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperationMode, model, om),
+					elm$core$Platform$Cmd$none);
+			case 'ChangeMapType':
+				var mt = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalMapMessageUpdate$handleChangeMapType, model, mt),
+					elm$core$Platform$Cmd$none);
+			case 'AddItemToView':
+				var row = msg.a;
+				var it = msg.b;
+				return _Utils_Tuple2(
+					A3(author$project$Handler$InternalVIewMessageUpdate$handleAddItemToViewEdit, model, row, it),
+					elm$core$Platform$Cmd$none);
+			case 'AddRowToView':
+				return _Utils_Tuple2(
+					author$project$Handler$InternalVIewMessageUpdate$handleAddRowToViewEdit(model),
+					elm$core$Platform$Cmd$none);
+			case 'RemoveItemsFromView':
+				var viewEditItemIds = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleRemoveItemsFromViewEdit, model, viewEditItemIds),
+					elm$core$Platform$Cmd$none);
+			case 'ChangeViewEditSelectedRow':
+				var row = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleChangeViewEditSelectedRow, model, row),
+					elm$core$Platform$Cmd$none);
+			case 'ChangeViewEditCheckedItem':
+				var viewEditItemId = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleChangeViewEditCheckedItem, model, viewEditItemId),
+					elm$core$Platform$Cmd$none);
+			case 'ShowDialog':
+				var index = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Models$ProjectModel$showDialog, model, index),
+					elm$core$Platform$Cmd$none);
+			case 'CloseDialog':
+				return _Utils_Tuple2(
+					author$project$Models$ProjectModel$closeDialog(model),
+					elm$core$Platform$Cmd$none);
+			default:
+				var err = msg.a;
+				return _Utils_Tuple2(
+					author$project$Models$ProjectModel$closeDialog(
+						A2(author$project$Handler$ModelUpdate$showMessage, model, err)),
+					elm$core$Platform$Cmd$none);
+		}
+	});
+var author$project$Handler$ModelUpdate$updateOpenProjects = F2(
+	function (model, update) {
+		return _Utils_update(
+			model,
+			{
+				openProjects: update(model.openProjects)
+			});
+	});
+var author$project$Handler$WebMessageUpdate$handleCalculationLoaded = F2(
+	function (model, cs) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{
+						calculationFormulaText: elm$core$Maybe$Just(cs.formulaText),
+						calculationName: elm$core$Maybe$Just(cs.calculationName),
+						resultMapName: elm$core$Maybe$Just(
+							author$project$Transform$MapsExtraction$xmapNameToString(cs.resultName))
+					});
+			});
+	});
+var author$project$Handler$WebMessageUpdate$handleCalculationStored = F3(
+	function (model, pn, cn) {
+		var mdlCleaned = A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{newCalculationName: ''});
+			});
+		return A2(author$project$Handler$ModelUpdate$showMessage, mdlCleaned, 'Calculation:' + (cn + (' of project:' + (pn + ' stored'))));
+	});
 var elm$core$Dict$update = F3(
 	function (targetKey, alter, dictionary) {
 		var _n0 = alter(
@@ -7419,6 +8778,7 @@ var author$project$Handler$WebMessageUpdate$handleFunctions = F2(
 			});
 	});
 var author$project$Types$XMapTypes$TypeBool = {$: 'TypeBool'};
+var author$project$Types$XMapTypes$TypeDate = {$: 'TypeDate'};
 var author$project$Types$XMapTypes$TypeInt = {$: 'TypeInt'};
 var author$project$Types$XMapTypes$TypeString = {$: 'TypeString'};
 var author$project$Types$XMapTypes$mapType = function (m) {
@@ -7429,8 +8789,10 @@ var author$project$Types$XMapTypes$mapType = function (m) {
 			return author$project$Types$XMapTypes$TypeInt;
 		case 'XMapString':
 			return author$project$Types$XMapTypes$TypeString;
-		default:
+		case 'XMapBool':
 			return author$project$Types$XMapTypes$TypeBool;
+		default:
+			return author$project$Types$XMapTypes$TypeDate;
 	}
 };
 var author$project$Handler$WebMessageUpdate$handleMapLoaded = F2(
@@ -7471,16 +8833,78 @@ var author$project$Handler$WebMessageUpdate$handleMapsInProject = F2(
 	});
 var author$project$Handler$WebMessageUpdate$handleViewLoaded = F2(
 	function (model, v) {
+		var buildViewEditPair = function (_n6) {
+			var rso = _n6.a;
+			var lastId = _n6.b;
+			return _Utils_Tuple2(
+				{rows: rso, viewName: v.viewName},
+				lastId);
+		};
+		var buildViewEditItem = F2(
+			function (vi, _n5) {
+				var ro = _n5.a;
+				var lastId = _n5.b;
+				return _Utils_Tuple2(
+					A2(
+						elm$core$List$cons,
+						{content: vi, id: lastId + 1},
+						ro),
+					lastId + 1);
+			});
+		var buildViewEditRow = F2(
+			function (_n3, _n4) {
+				var ri = _n3.a;
+				var rso = _n4.a;
+				var lastId = _n4.b;
+				return function (_n2) {
+					var ro = _n2.a;
+					var id = _n2.b;
+					return _Utils_Tuple2(
+						A2(
+							elm$core$List$cons,
+							author$project$Types$Views$ViewEditRow(ro),
+							rso),
+						id);
+				}(
+					A3(
+						elm$core$List$foldr,
+						buildViewEditItem,
+						_Utils_Tuple2(_List_Nil, lastId),
+						ri));
+			});
+		var buildViewEditRows = F2(
+			function (rsi, lastId) {
+				return function (_n1) {
+					var rso = _n1.a;
+					var id = _n1.b;
+					return _Utils_Tuple2(rso, id);
+				}(
+					A3(
+						elm$core$List$foldr,
+						buildViewEditRow,
+						_Utils_Tuple2(_List_Nil, lastId),
+						rsi));
+			});
+		var buildViewEdit = function (lastId) {
+			return buildViewEditPair(
+				A2(buildViewEditRows, v.rows, lastId));
+		};
 		return A2(
 			author$project$Handler$ModelUpdate$updateViewEditorModel,
 			model,
 			function (vm) {
-				return _Utils_update(
-					vm,
-					{
-						viewName: elm$core$Maybe$Just(v.viewName),
-						viewToEdit: elm$core$Maybe$Just(v)
-					});
+				return function (_n0) {
+					var vo = _n0.a;
+					var lastId = _n0.b;
+					return _Utils_update(
+						vm,
+						{
+							lastViewEditItemId: lastId,
+							viewName: elm$core$Maybe$Just(v.viewName),
+							viewToEdit: elm$core$Maybe$Just(vo)
+						});
+				}(
+					buildViewEdit(vm.lastViewEditItemId));
 			});
 	});
 var author$project$Handler$WebMessageUpdate$sameProjectName = F2(
@@ -7944,6 +9368,9 @@ var author$project$Json$DecodeView$viewItemDecoder = function () {
 	};
 	return author$project$Json$DecodeXMap$decodeType(decodeFromType);
 }();
+var author$project$Types$Views$ViewRow = function (a) {
+	return {$: 'ViewRow', a: a};
+};
 var author$project$Json$DecodeView$viewRowDecoder = A2(
 	elm$json$Json$Decode$andThen,
 	function (s) {
@@ -7973,6 +9400,23 @@ var author$project$Json$DecodeXMap$buildMapContent = function (l) {
 var elm$json$Json$Decode$float = _Json_decodeFloat;
 var elm$json$Json$Decode$int = _Json_decodeInt;
 var elm$json$Json$Decode$keyValuePairs = _Json_decodeKeyValuePairs;
+var elm$parser$Parser$deadEndsToString = function (deadEnds) {
+	return 'TODO deadEndsToString';
+};
+var rtfeldman$elm_iso8601_date_strings$Iso8601$decoder = A2(
+	elm$json$Json$Decode$andThen,
+	function (str) {
+		var _n0 = rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(str);
+		if (_n0.$ === 'Err') {
+			var deadEnds = _n0.a;
+			return elm$json$Json$Decode$fail(
+				elm$parser$Parser$deadEndsToString(deadEnds));
+		} else {
+			var time = _n0.a;
+			return elm$json$Json$Decode$succeed(time);
+		}
+	},
+	elm$json$Json$Decode$string);
 var author$project$Json$DecodeXMap$xmapDecoder = function () {
 	var decodeFromType = function (d) {
 		switch (d) {
@@ -8024,6 +9468,18 @@ var author$project$Json$DecodeXMap$xmapDecoder = function () {
 						elm$json$Json$Decode$field,
 						'values',
 						elm$json$Json$Decode$keyValuePairs(elm$json$Json$Decode$bool)));
+			case 'date':
+				return A2(
+					elm$json$Json$Decode$andThen,
+					function (s) {
+						return elm$json$Json$Decode$succeed(
+							author$project$Types$XMapTypes$XMapDate(
+								author$project$Json$DecodeXMap$buildMapContent(s)));
+					},
+					A2(
+						elm$json$Json$Decode$field,
+						'values',
+						elm$json$Json$Decode$keyValuePairs(rtfeldman$elm_iso8601_date_strings$Iso8601$decoder)));
 			default:
 				return elm$json$Json$Decode$fail('map type ' + (d + ' not recognized'));
 		}
@@ -8270,10 +9726,6 @@ var author$project$Internal$Button$Implementation$getSet = A3(
 var author$project$Internal$Button$Model$RippleMsg = function (a) {
 	return {$: 'RippleMsg', a: a};
 };
-var elm$core$Basics$always = F2(
-	function (a, _n0) {
-		return a;
-	});
 var elm$core$Process$sleep = _Process_sleep;
 var elm$core$Task$Perform = function (a) {
 	return {$: 'Perform', a: a};
@@ -8467,8 +9919,6 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
-var elm$core$String$length = _String_length;
-var elm$core$String$slice = _String_slice;
 var elm$core$String$dropLeft = F2(
 	function (n, string) {
 		return (n < 1) ? string : A3(
@@ -8481,9 +9931,6 @@ var elm$core$String$startsWith = _String_startsWith;
 var elm$url$Url$Http = {$: 'Http'};
 var elm$url$Url$Https = {$: 'Https'};
 var elm$core$String$indexes = _String_indexes;
-var elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
 var elm$core$String$left = F2(
 	function (n, string) {
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
@@ -9077,7 +10524,6 @@ var author$project$Internal$Dialog$Implementation$getSet = A3(
 				{dialog: x});
 		}),
 	author$project$Internal$Dialog$Model$defaultModel);
-var elm$core$Basics$neq = _Utils_notEqual;
 var author$project$Internal$Dialog$Implementation$update = F3(
 	function (_n0, msg, model) {
 		switch (msg.$) {
@@ -9128,7 +10574,6 @@ var author$project$Internal$Drawer$Implementation$getSet = A3(
 				{drawer: x});
 		}),
 	author$project$Internal$Drawer$Model$defaultModel);
-var elm$core$Basics$not = _Basics_not;
 var author$project$Internal$Drawer$Implementation$update = F3(
 	function (lift, msg, model) {
 		switch (msg.$) {
@@ -9817,9 +11262,6 @@ var author$project$Internal$Msg$SnackbarMsg = F2(
 		return {$: 'SnackbarMsg', a: a, b: b};
 	});
 var author$project$Internal$Snackbar$Model$Inert = {$: 'Inert'};
-var elm$core$Basics$negate = function (n) {
-	return -n;
-};
 var author$project$Internal$Snackbar$Model$defaultModel = {open: false, queue: _List_Nil, seq: -1, state: author$project$Internal$Snackbar$Model$Inert};
 var author$project$Internal$Snackbar$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
@@ -11418,7 +12860,6 @@ var author$project$Internal$GlobalEvents$onTouchEnd = author$project$Internal$Gl
 var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
 var author$project$Internal$Options$id = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$id);
 var author$project$Internal$Ripple$Model$strings = {varFgScale: '--mdc-ripple-fg-scale', varFgSize: '--mdc-ripple-fg-size', varFgTranslateEnd: '--mdc-ripple-fg-translate-end', varFgTranslateStart: '--mdc-ripple-fg-translate-start', varLeft: '--mdc-ripple-left', varTop: '--mdc-ripple-top'};
-var elm$core$Basics$round = _Basics_round;
 var author$project$Internal$Ripple$Implementation$cssVariables = F2(
 	function (isUnbounded, _n0) {
 		var fgScale = _n0.fgScale;
@@ -12751,7 +14192,6 @@ var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var elm$core$Array$tailIndex = function (len) {
 	return (len >>> 5) << 5;
 };
-var elm$core$Basics$ge = _Utils_ge;
 var elm$core$Array$sliceLeft = F2(
 	function (from, array) {
 		var len = array.a;
@@ -12816,7 +14256,6 @@ var elm$core$Array$sliceLeft = F2(
 		}
 	});
 var elm$core$Array$bitMask = 4294967295 >>> (32 - elm$core$Array$shiftStep);
-var elm$core$Bitwise$and = _Bitwise_and;
 var elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
 var elm$core$Array$fetchNewTail = F4(
 	function (shift, end, treeEnd, tree) {
@@ -13624,31 +15063,6 @@ var author$project$Display$ViewUI$rowLineToTableRow = function (line) {
 		_List_Nil,
 		A2(elm$core$List$map, cell, line));
 };
-var elm$core$Dict$foldl = F3(
-	function (func, acc, dict) {
-		foldl:
-		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
-				return acc;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var $temp$func = func,
-					$temp$acc = A3(
-					func,
-					key,
-					value,
-					A3(elm$core$Dict$foldl, func, acc, left)),
-					$temp$dict = right;
-				func = $temp$func;
-				acc = $temp$acc;
-				dict = $temp$dict;
-				continue foldl;
-			}
-		}
-	});
 var elm$core$Dict$union = F2(
 	function (t1, t2) {
 		return A3(elm$core$Dict$foldl, elm$core$Dict$insert, t2, t1);
@@ -13709,23 +15123,13 @@ var author$project$Transform$MapsExtraction$mapKeys = function (m) {
 		case 'XMapBool':
 			var mapBool = m.a.a;
 			return elm$core$Dict$keys(mapBool);
-		default:
+		case 'XMapDouble':
 			var mapDouble = m.a.a;
 			return elm$core$Dict$keys(mapDouble);
+		default:
+			var mapDate = m.a.a;
+			return elm$core$Dict$keys(mapDate);
 	}
-};
-var elm$core$Set$Set_elm_builtin = function (a) {
-	return {$: 'Set_elm_builtin', a: a};
-};
-var elm$core$Set$empty = elm$core$Set$Set_elm_builtin(elm$core$Dict$empty);
-var elm$core$Set$insert = F2(
-	function (key, _n0) {
-		var dict = _n0.a;
-		return elm$core$Set$Set_elm_builtin(
-			A3(elm$core$Dict$insert, key, _Utils_Tuple0, dict));
-	});
-var elm$core$Set$fromList = function (list) {
-	return A3(elm$core$List$foldl, elm$core$Set$insert, elm$core$Set$empty, list);
 };
 var elm$core$Set$union = F2(
 	function (_n0, _n1) {
@@ -15638,7 +17042,16 @@ var author$project$Editor$MapEditor$xmapTypeChoice = function (model) {
 				'mapType',
 				hasType(author$project$Types$XMapTypes$TypeBool),
 				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeBool)))
+					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeBool))),
+				A6(
+				author$project$Display$UIWrapper$radio,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radDat'),
+				'Date',
+				'mapType',
+				hasType(author$project$Types$XMapTypes$TypeDate),
+				author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeDate)))
 			]));
 };
 var author$project$Models$InternalMessages$NewMapWithName = F2(
@@ -15831,27 +17244,74 @@ var author$project$Editor$ViewEditor$addRowButton = function (model) {
 		'Add row',
 		author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$AddRowToView));
 };
+var author$project$Models$InternalMessages$RemoveItemsFromView = function (a) {
+	return {$: 'RemoveItemsFromView', a: a};
+};
+var author$project$Editor$ViewEditor$removeCellsButton = function (model) {
+	var itemsToDelete = A2(
+		elm$core$List$map,
+		function (_n1) {
+			var k = _n1.a;
+			var v = _n1.b;
+			return k;
+		},
+		A2(
+			elm$core$List$filter,
+			function (_n0) {
+				var k = _n0.a;
+				var v = _n0.b;
+				return A2(elm$core$Maybe$withDefault, false, v);
+			},
+			elm$core$Dict$toList(model.viewEditorModel.checkedViewEditItems)));
+	return A4(
+		author$project$Display$UIWrapper$buttonClick,
+		model,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnRemoveCells'),
+		'Remove items',
+		author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$RemoveItemsFromView(itemsToDelete)));
+};
 var author$project$Models$WebMessages$WRStoreView = F2(
 	function (a, b) {
 		return {$: 'WRStoreView', a: a, b: b};
 	});
 var author$project$Editor$ViewEditor$storeView = F2(
 	function (pm, vm) {
-		var _n0 = vm.viewName;
-		if (_n0.$ === 'Just') {
-			var vn = _n0.a;
-			var _n1 = vm.viewToEdit;
-			if (_n1.$ === 'Just') {
-				var v = _n1.a;
+		var viewEditRowToViewRow = function (_n2) {
+			var items = _n2.a;
+			return author$project$Types$Views$ViewRow(
+				A2(
+					elm$core$List$map,
+					function (i) {
+						return i.content;
+					},
+					items));
+		};
+		var storeValidViewToEdit = F2(
+			function (v, vn) {
 				return author$project$Models$ProjectModel$Send(
 					A2(
 						author$project$Models$WebMessages$WRStoreView,
 						pm.project.projectName,
-						{rows: v.rows, viewName: vn}));
+						{
+							rows: A2(elm$core$List$map, viewEditRowToViewRow, v.rows),
+							viewName: vn
+						}));
+			});
+		var storeViewWithName = function (vn) {
+			var _n1 = vm.viewToEdit;
+			if (_n1.$ === 'Just') {
+				var v = _n1.a;
+				return A2(storeValidViewToEdit, v, vn);
 			} else {
 				return author$project$Models$ProjectModel$Internal(
 					author$project$Models$InternalMessages$ShowMessage('Please fill the view'));
 			}
+		};
+		var _n0 = vm.viewName;
+		if (_n0.$ === 'Just') {
+			var vn = _n0.a;
+			return storeViewWithName(vn);
 		} else {
 			return author$project$Models$ProjectModel$Internal(
 				author$project$Models$InternalMessages$ShowMessage('Please enter a view name'));
@@ -15899,34 +17359,6 @@ var author$project$Editor$ViewEditor$viewEditorMapList = function (model) {
 			author$project$Display$UIWrapper$scrollableListStyle(40)),
 		A2(elm$core$List$map, listItem, model.mapsInProject));
 };
-var author$project$Editor$ViewEditor$viewCell = function (i) {
-	if (i.$ === 'MapItem') {
-		var mn = i.a;
-		return A2(
-			author$project$Material$DataTable$td,
-			_List_fromArray(
-				[
-					A2(author$project$Material$Options$css, 'background', 'Coral')
-				]),
-			_List_fromArray(
-				[
-					elm$html$Html$text(
-					author$project$Transform$MapsExtraction$xmapNameToString(mn))
-				]));
-	} else {
-		var l = i.a;
-		return A2(
-			author$project$Material$DataTable$td,
-			_List_fromArray(
-				[
-					A2(author$project$Material$Options$css, 'background', 'DarkTurquoise')
-				]),
-			_List_fromArray(
-				[
-					elm$html$Html$text(l)
-				]));
-	}
-};
 var author$project$Models$InternalMessages$ChangeViewEditSelectedRow = function (a) {
 	return {$: 'ChangeViewEditSelectedRow', a: a};
 };
@@ -15955,23 +17387,314 @@ var author$project$Editor$ViewEditor$viewChoice = F2(
 					_List_Nil)
 				]));
 	});
-var author$project$Editor$ViewEditor$viewRowToTableCells = F2(
+var author$project$Internal$Checkbox$Model$Checked = {$: 'Checked'};
+var author$project$Internal$Checkbox$Model$Unchecked = {$: 'Unchecked'};
+var author$project$Internal$Checkbox$Implementation$checked = function (value) {
+	var state = value ? author$project$Internal$Checkbox$Model$Checked : author$project$Internal$Checkbox$Model$Unchecked;
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					state: elm$core$Maybe$Just(state)
+				});
+		});
+};
+var author$project$Material$Checkbox$checked = author$project$Internal$Checkbox$Implementation$checked;
+var author$project$Internal$Checkbox$Implementation$defaultConfig = {disabled: false, id_: '', nativeControl: _List_Nil, state: elm$core$Maybe$Nothing};
+var author$project$Internal$Checkbox$Model$AnimationEnd = {$: 'AnimationEnd'};
+var author$project$Internal$Checkbox$Model$Init = F2(
+	function (a, b) {
+		return {$: 'Init', a: a, b: b};
+	});
+var author$project$Internal$Checkbox$Model$NoOp = {$: 'NoOp'};
+var author$project$Internal$Checkbox$Model$SetFocus = function (a) {
+	return {$: 'SetFocus', a: a};
+};
+var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var elm$svg$Svg$path = elm$svg$Svg$trustedNode('path');
+var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
+var elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
+var elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
+var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var author$project$Internal$Checkbox$Implementation$checkbox = F4(
+	function (lift, model, options, _n0) {
+		var animationClass = function (animation) {
+			if (animation.$ === 'Just') {
+				switch (animation.a.$) {
+					case 'UncheckedChecked':
+						var _n2 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-checked');
+					case 'UncheckedIndeterminate':
+						var _n3 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-indeterminate');
+					case 'CheckedUnchecked':
+						var _n4 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-unchecked');
+					case 'CheckedIndeterminate':
+						var _n5 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-indeterminate');
+					case 'IndeterminateChecked':
+						var _n6 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-checked');
+					default:
+						var _n7 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-unchecked');
+				}
+			} else {
+				return author$project$Internal$Options$nop;
+			}
+		};
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Checkbox$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var configState = config.state;
+		var currentState = A2(elm$core$Maybe$withDefault, configState, model.lastKnownState);
+		var stateChangedOrUninitialized = _Utils_eq(model.lastKnownState, elm$core$Maybe$Nothing) || (!_Utils_eq(currentState, configState));
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-checkbox mdc-checkbox--upgraded'),
+					A2(
+					author$project$Internal$Options$when,
+					_Utils_eq(currentState, elm$core$Maybe$Nothing),
+					author$project$Internal$Options$cs('mdc-checkbox--indeterminate')),
+					A2(
+					author$project$Internal$Options$when,
+					_Utils_eq(
+						currentState,
+						elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked)),
+					author$project$Internal$Options$cs('mdc-checkbox--checked')),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$cs('mdc-checkbox--disabled')),
+					animationClass(model.animation),
+					A2(
+					author$project$Internal$Options$when,
+					stateChangedOrUninitialized,
+					author$project$Internal$GlobalEvents$onTick(
+						elm$json$Json$Decode$succeed(
+							lift(
+								A2(author$project$Internal$Checkbox$Model$Init, model.lastKnownState, configState))))),
+					A2(
+					author$project$Internal$Options$when,
+					!_Utils_eq(model.animation, elm$core$Maybe$Nothing),
+					A2(
+						author$project$Internal$Options$on,
+						'animationend',
+						elm$json$Json$Decode$succeed(
+							lift(author$project$Internal$Checkbox$Model$AnimationEnd))))
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A4(
+					author$project$Internal$Options$applyNativeControl,
+					summary,
+					elm$html$Html$input,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-checkbox__native-control'),
+							A3(
+							elm$core$Basics$composeL,
+							author$project$Internal$Options$many,
+							elm$core$List$map(author$project$Internal$Options$attribute),
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$type_('checkbox'),
+									elm$html$Html$Attributes$id(config.id_),
+									A2(
+									elm$html$Html$Attributes$property,
+									'indeterminate',
+									elm$json$Json$Encode$bool(
+										_Utils_eq(currentState, elm$core$Maybe$Nothing))),
+									elm$html$Html$Attributes$checked(
+									_Utils_eq(
+										currentState,
+										elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked))),
+									elm$html$Html$Attributes$disabled(config.disabled)
+								])),
+							A2(
+							author$project$Internal$Options$onWithOptions,
+							'click',
+							elm$json$Json$Decode$succeed(
+								{
+									message: lift(author$project$Internal$Checkbox$Model$NoOp),
+									preventDefault: true,
+									stopPropagation: false
+								})),
+							A2(
+							author$project$Internal$Options$onWithOptions,
+							'change',
+							elm$json$Json$Decode$succeed(
+								{
+									message: lift(author$project$Internal$Checkbox$Model$NoOp),
+									preventDefault: true,
+									stopPropagation: false
+								})),
+							author$project$Internal$Options$onFocus(
+							lift(
+								author$project$Internal$Checkbox$Model$SetFocus(true))),
+							author$project$Internal$Options$onBlur(
+							lift(
+								author$project$Internal$Checkbox$Model$SetFocus(false)))
+						]),
+					_List_Nil),
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-checkbox__background')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm$svg$Svg$svg,
+							_List_fromArray(
+								[
+									elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark'),
+									elm$svg$Svg$Attributes$viewBox('0 0 24 24')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									elm$svg$Svg$path,
+									_List_fromArray(
+										[
+											elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark-path'),
+											elm$svg$Svg$Attributes$fill('none'),
+											elm$svg$Svg$Attributes$stroke('white'),
+											elm$svg$Svg$Attributes$d('M1.73,12.91 8.1,19.28 22.79,4.59')
+										]),
+									_List_Nil)
+								])),
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-checkbox__mixedmark')
+								]),
+							_List_Nil)
+						]))
+				]));
+	});
+var author$project$Internal$Checkbox$Implementation$view = F4(
+	function (lift, index, store, options) {
+		return A7(
+			author$project$Internal$Component$render,
+			author$project$Internal$Checkbox$Implementation$getSet.get,
+			author$project$Internal$Checkbox$Implementation$checkbox,
+			author$project$Internal$Msg$CheckboxMsg,
+			lift,
+			index,
+			store,
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$internalId(index),
+				options));
+	});
+var author$project$Material$Checkbox$view = author$project$Internal$Checkbox$Implementation$view;
+var author$project$Material$Options$nop = author$project$Internal$Options$nop;
+var author$project$Models$InternalMessages$ChangeViewEditCheckedItem = function (a) {
+	return {$: 'ChangeViewEditCheckedItem', a: a};
+};
+var author$project$Editor$ViewEditor$viewEditItemCheckbox = F3(
+	function (model, viewItemId, txt) {
+		var index = A2(
+			author$project$Display$MdcIndexes$makeIndex,
+			author$project$Display$MdcIndexes$viewEditorIdx,
+			'check' + elm$core$String$fromInt(viewItemId));
+		var clickHandler = author$project$Material$Options$onClick(
+			author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$ChangeViewEditCheckedItem(viewItemId)));
+		var checked = A2(
+			elm$core$Maybe$withDefault,
+			author$project$Material$Options$nop,
+			A2(
+				elm$core$Maybe$map,
+				author$project$Material$Checkbox$checked,
+				A2(
+					elm$core$Maybe$withDefault,
+					elm$core$Maybe$Nothing,
+					A2(elm$core$Dict$get, viewItemId, model.viewEditorModel.checkedViewEditItems))));
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A5(
+					author$project$Material$Checkbox$view,
+					author$project$Models$ProjectModel$Mdc,
+					index,
+					model.mdc,
+					A2(
+						elm$core$List$cons,
+						checked,
+						A2(elm$core$List$cons, clickHandler, _List_Nil)),
+					_List_Nil),
+					elm$html$Html$text(txt)
+				]));
+	});
+var author$project$Editor$ViewEditor$viewEditItem = F2(
+	function (model, item) {
+		var _n0 = item.content;
+		if (_n0.$ === 'MapItem') {
+			var mn = _n0.a;
+			return A2(
+				author$project$Material$DataTable$td,
+				_List_fromArray(
+					[
+						A2(author$project$Material$Options$css, 'background', 'Coral')
+					]),
+				_List_fromArray(
+					[
+						A3(
+						author$project$Editor$ViewEditor$viewEditItemCheckbox,
+						model,
+						item.id,
+						author$project$Transform$MapsExtraction$xmapNameToString(mn))
+					]));
+		} else {
+			var l = _n0.a;
+			return A2(
+				author$project$Material$DataTable$td,
+				_List_fromArray(
+					[
+						A2(author$project$Material$Options$css, 'background', 'DarkTurquoise')
+					]),
+				_List_fromArray(
+					[
+						A3(author$project$Editor$ViewEditor$viewEditItemCheckbox, model, item.id, l)
+					]));
+		}
+	});
+var author$project$Editor$ViewEditor$viewEditRowToTableCells = F2(
 	function (model, _n0) {
 		var rowIdx = _n0.a;
 		var row = _n0.b.a;
 		return A2(
 			elm$core$List$cons,
 			A2(author$project$Editor$ViewEditor$viewChoice, model, rowIdx),
-			A2(elm$core$List$map, author$project$Editor$ViewEditor$viewCell, row));
+			A2(
+				elm$core$List$map,
+				author$project$Editor$ViewEditor$viewEditItem(model),
+				row));
 	});
-var author$project$Editor$ViewEditor$viewRows = F2(
+var author$project$Editor$ViewEditor$viewEditRows = F2(
 	function (model, v) {
 		var rows = A2(
 			elm$core$List$map,
 			author$project$Material$DataTable$tr(_List_Nil),
 			A2(
 				elm$core$List$map,
-				author$project$Editor$ViewEditor$viewRowToTableCells(model),
+				author$project$Editor$ViewEditor$viewEditRowToTableCells(model),
 				A2(
 					elm_community$list_extra$List$Extra$zip,
 					A2(
@@ -15990,7 +17713,7 @@ var author$project$Editor$ViewEditor$viewEditorTable = F2(
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(author$project$Editor$ViewEditor$viewRows, model, v)
+						A2(author$project$Editor$ViewEditor$viewEditRows, model, v)
 					]));
 		} else {
 			return A2(
@@ -16051,12 +17774,12 @@ var author$project$Editor$ViewEditor$viewEditorForView = F2(
 								A2(
 								author$project$Material$LayoutGrid$cell,
 								_List_fromArray(
-									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span4Phone]),
+									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span4Phone]),
 								_List_Nil),
 								A2(
 								author$project$Material$LayoutGrid$cell,
 								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
+									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
 								_List_fromArray(
 									[
 										author$project$Editor$ViewEditor$addRowButton(model)
@@ -16064,7 +17787,15 @@ var author$project$Editor$ViewEditor$viewEditorForView = F2(
 								A2(
 								author$project$Material$LayoutGrid$cell,
 								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
+									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
+								_List_fromArray(
+									[
+										author$project$Editor$ViewEditor$removeCellsButton(model)
+									])),
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
 								_List_fromArray(
 									[
 										A2(author$project$Editor$ViewEditor$storeButton, model, pm)
