@@ -3,20 +3,22 @@ import qualified Data.Text as T
 import qualified Data.Map.Strict as M
 
 import XMapTypes
+import XValues
 
-makeDoubleMap :: [(String, Double)] -> MapValue Double
-makeDoubleMap l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), n)) l)
+makeMap :: XValue a => [(String, a)] -> MapValue a
+makeMap l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), n)) l)
 
-makeDoubleXMap :: [(String, Double)] -> XMap
-makeDoubleXMap l = XMapDouble $ makeDoubleMap l
-
-makeStringMap :: [(String, String)] -> MapValue T.Text
-makeStringMap l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), (T.pack n))) l)
-
-makeStringXMap :: [(String, String)] -> XMap
-makeStringXMap l = XMapString $ makeStringMap l
-
+makeXMap :: XValue a => [(String, a)] -> XMap
+makeXMap l = buildMap $ makeMap l
 
 mapName :: [String] -> XMapName
 mapName ss = XMapName $ map T.pack ss
 
+mapValuesToText :: [(String, String)] -> [(String, T.Text)]
+mapValuesToText = map (\(k, n) -> (k, T.pack n))
+
+makeStringXMap :: [(String, String)] -> XMap
+makeStringXMap = makeXMap . mapValuesToText
+
+makeDoubleXMap :: [(String, Double)] -> XMap
+makeDoubleXMap = makeXMap

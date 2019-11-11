@@ -14,16 +14,19 @@ import TestTypes
 import XMapJson
 
 toParseJSON_doublemap_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
-    where original =  XNamedMap {
-        xmapName = mapName ["map"],
-        xmap = makeDoubleXMap [("k1",13),("k2",24)]
-    }
+    where 
+      original =  XNamedMap {
+          xmapName = mapName ["map"],
+          xmap = makeXMap arr
+      }
+      arr :: [(String, Double)]
+      arr = [("k1",13.0),("k2",24.0)]
 
 
 toParseJSON_stringmap_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
     where original =  XNamedMap {
         xmapName = mapName ["map"],
-        xmap = makeStringXMap [("k1","a"),("k2","b")]
+        xmap = (makeXMap . mapValuesToText) [("k1","a"),("k2","b")]
     }
 
 encodeTrace :: ToJSON a => a -> B.ByteString
