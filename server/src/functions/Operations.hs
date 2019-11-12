@@ -111,6 +111,12 @@ len om = XFunction.apply lenv
     where lenv :: T.Text -> Int
           lenv = T.length
 
+toDecimal :: OperationMode -> [XMap] -> XMapErr
+toDecimal om = XFunction.apply toDecimalv
+    where toDecimalv :: Int -> Double
+          toDecimalv = fromIntegral
+
+
 
 operationRepository :: OperationName -> OperationFun
 operationRepository op = case op of
@@ -128,3 +134,4 @@ operationRepository op = case op of
     Merge -> merge
     Equals -> equals
     Len -> len
+    ToDecimal -> toDecimal

@@ -15,12 +15,14 @@ data OperationName =
     | Merge
     | Equals
     | Len
+    | ToDecimal
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
       Math
     | Text
     | System
+    | Conversion
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationId = OperationId {
@@ -66,5 +68,6 @@ allOperationTypes = [
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,
-    newOpType (newOpId Text Len) [ParameterText] ParameterInt
+    newOpType (newOpId Text Len) [ParameterText] ParameterInt,
+    newOpType (newOpId Text ToDecimal) [ParameterInt] ParameterDouble
     ]

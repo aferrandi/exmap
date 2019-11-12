@@ -26,6 +26,12 @@ testMapStringA = makeStringXMap  arr
   where arr :: [(String, String)]
         arr = [("a", "morning"), ("b", "day"), ("c", "night"), ("d", "")]
 
+testMapIntA :: XMap
+testMapIntA = makeXMap arr
+  where arr :: [(String, Int)]
+        arr = [("a", 1), ("b", -2), ("c", 3)]
+
+
 
 add_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Add) Union [testMapDoubleA, testMapDoubleB]
@@ -97,6 +103,11 @@ len_standard  = TestCase $ assertXMapIntEqual expected actual
     where actual = (operationRepository Len) Union [testMapStringA]
           expected = makeMap [("a", 7), ("b", 3), ("c", 5), ("d", 0)]
 
+toDecimal_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository ToDecimal) Union [testMapIntA]
+          expected = makeMap [("a", 1.0), ("b", -2.0), ("c", 3.0)]
+
+
 tests = [
           add_standard,
           subtract_standard,
@@ -114,7 +125,8 @@ tests = [
           sum_standard,
           equals_double,
           equals_string,
-          len_standard
+          len_standard,
+          toDecimal_standard
         ]
 
 
