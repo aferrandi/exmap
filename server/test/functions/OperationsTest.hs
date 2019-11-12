@@ -21,6 +21,11 @@ testMapDoubleB = makeXMap arr
   where arr :: [(String, Double)]
         arr = [("a", 1.4), ("c", -2.4), ("d", 3.1)]
 
+testMapStringA :: XMap
+testMapStringA = makeStringXMap  arr
+  where arr :: [(String, String)]
+        arr = [("a", "morning"), ("b", "day"), ("c", "night")]
+
 
 add_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Add) Union [testMapDoubleA, testMapDoubleB]
@@ -80,10 +85,13 @@ sum_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Sum) Union [testMapDoubleA]
           expected = makeMap [("sum", 7.0)]
 
-equals_standard  = TestCase $ assertXMapBoolEqual expected actual
+equals_double  = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Equals) Union [testMapDoubleA, makeDoubleXMap [("a", 1.2), ("b", 2.4), ("c", 3.5)]]
           expected = makeMap [("a", True), ("b", False), ("c", True)]
 
+equals_string  = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository Equals) Union [testMapStringA, makeStringXMap [("a", "Morning"), ("b", "dy"), ("c", "night")]]
+          expected = makeMap [("a", False), ("b", False), ("c", True)]
 
 
 tests = [
@@ -101,7 +109,8 @@ tests = [
           keysTo_interesection,
           merge_standard,
           sum_standard,
-          equals_standard
+          equals_double,
+          equals_string
         ]
 
 
