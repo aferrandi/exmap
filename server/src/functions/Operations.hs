@@ -106,6 +106,12 @@ equals om xs = do
           equalList (XMapBoolList ms) = XMapBool $ unionWith3 (==) (head ms) (second ms)
           equalList (XMapDateList ms) =XMapBool $ unionWith3 (==) (head ms) (second ms)
 
+len :: OperationMode -> [XMap] -> XMapErr
+len om = XFunction.apply lenv
+    where lenv :: T.Text -> Int
+          lenv = T.length
+
+
 operationRepository :: OperationName -> OperationFun
 operationRepository op = case op of
     Add -> add
@@ -121,3 +127,4 @@ operationRepository op = case op of
     KeysTo -> keysTo
     Merge -> merge
     Equals -> equals
+    Len -> len

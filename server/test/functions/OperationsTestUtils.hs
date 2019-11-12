@@ -1,4 +1,4 @@
-module OperationsTestUtils (assertXMapDoubleEqual, assertXMapBoolEqual) where
+module OperationsTestUtils (assertXMapDoubleEqual, assertXMapBoolEqual, assertXMapIntEqual) where
 
 import Test.HUnit
 
@@ -20,7 +20,7 @@ assertEqualDouble preface delta expected actual =
 assertXMapDoubleEqual :: MapValue Double -> XMapErr -> Assertion
 assertXMapDoubleEqual ms xs = case xs of
                           (Right (XMapDouble ds)) -> assertMapDoubleEqual ms ds
-                          err -> assertFailure $ "The result is not a matrix but " ++ show err
+                          err -> assertFailure $ "The result is not a map but " ++ show err
 
 assertMapDoubleEqual :: MapValue Double -> MapValue Double -> Assertion
 assertMapDoubleEqual as bs = do
@@ -36,4 +36,9 @@ assertMapEqual as bs = do
 assertXMapBoolEqual :: MapValue Bool -> XMapErr -> Assertion
 assertXMapBoolEqual ms xs = case xs of
                           (Right (XMapBool ds)) -> assertMapEqual ms ds
-                          err -> assertFailure $ "The result is not a matrix but " ++ show err
+                          err -> assertFailure $ "The result is not a map but " ++ show err
+
+assertXMapIntEqual :: MapValue Int -> XMapErr -> Assertion
+assertXMapIntEqual ms xs = case xs of
+                          (Right (XMapInt ds)) -> assertMapEqual ms ds
+                          err -> assertFailure $ "The result is not a map but " ++ show err

@@ -14,6 +14,7 @@ data OperationName =
     | KeysTo
     | Merge
     | Equals
+    | Len
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
@@ -64,5 +65,6 @@ allOperationTypes = [
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
-    newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool
+    newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,
+    newOpType (newOpId Text Len) [ParameterText] ParameterInt
     ]
