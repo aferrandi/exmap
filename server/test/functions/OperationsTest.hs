@@ -45,6 +45,10 @@ times_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Times) Union [testMapDoubleA, testMapDoubleB]
           expected = makeMap [("a", 1.68), ("b", 0), ("c", -8.4), ("d", 0)]
 
+divide_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Divide) Union [testMapDoubleA, testMapDoubleB]
+          expected = makeMap [("a", 0.85714285714), ("c", -1.45833333333), ("d", 0)]
+
 negate_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Negate) Union [testMapDoubleA]
           expected = makeMap [("a", -1.2), ("b", -2.3), ("c", -3.5)]
@@ -112,6 +116,7 @@ tests = [
           add_standard,
           subtract_standard,
           times_standard,
+          divide_standard,
           negate_standard,
           sin_standard,
           cos_standard,

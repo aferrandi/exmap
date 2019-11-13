@@ -4,6 +4,7 @@ data OperationName =
       Add
     | Subtract
     | Times
+    | Divide
     | Negate
     | Sin
     | Cos
@@ -58,6 +59,7 @@ allOperationTypes = [
     newOpType (newOpId Math Add) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Subtract) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Times) [ParameterDouble, ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Divide) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Negate) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sin) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Cos) [ParameterDouble] ParameterDouble,

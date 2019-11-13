@@ -29,6 +29,17 @@ times om = operate om timesv
     where timesv :: Double -> Double -> Double
           timesv = (*)
 
+divide :: OperationMode -> [XMap] -> XMapErr
+divide om xs = do
+    checkMapsNumber xs 2
+    ms1 <- extractMapDouble (head xs) "dividend"
+    ms2 <- extractMapDouble (head $ tail xs) "divisor"
+    let fs2 = M.filter (\v -> v /= 0) ms2
+    let fs1 = M.restrictKeys ms1 (M.keysSet ms2)
+    operate om dividev [XMapDouble fs1, XMapDouble fs2]
+    where dividev :: Double -> Double -> Double
+          dividev = (/)
+
 fnegate :: OperationMode -> [XMap] -> XMapErr
 fnegate om = XFunction.apply negatev
     where negatev :: Double -> Double
@@ -123,6 +134,7 @@ operationRepository op = case op of
     Add -> add
     Subtract -> fsubtract
     Times -> times
+    Divide -> divide
     Negate -> fnegate
     Sin -> fsin
     Cos -> fcos
