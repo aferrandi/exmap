@@ -69,9 +69,9 @@ allOperationTypes = [
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Conversion ToDecimal) [ParameterInt] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,
-    newOpType (newOpId Text Len) [ParameterText] ParameterInt,
-    newOpType (newOpId Text ToDecimal) [ParameterInt] ParameterDouble
+    newOpType (newOpId Text Len) [ParameterText] ParameterInt
     ]
