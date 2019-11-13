@@ -132,6 +132,7 @@ tests = [
           keysTo_interesection,
           merge_standard,
           sum_standard,
+          average_standard,
           equals_double,
           equals_string,
           len_standard,

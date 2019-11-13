@@ -5,7 +5,7 @@ RUN mkdir /opt/build
 WORKDIR /opt/build
 
 COPY . /opt/build
-RUN stack build --system-ghc
+RUN stack build --system-ghc --ghc-options='-optl-static -optl-pthread' --force-dirty
 RUN mv "$(stack path --local-install-root --system-ghc)/bin" /opt/build/bin
 
 # Base image for stack build so compiled artifact from previous
