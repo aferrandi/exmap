@@ -12,6 +12,7 @@ data OperationName =
     | Exp
     | Log
     | Sum
+    | Avg
     | KeysTo
     | Merge
     | Equals
@@ -67,6 +68,7 @@ allOperationTypes = [
     newOpType (newOpId Math Exp) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,

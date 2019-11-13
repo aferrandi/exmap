@@ -95,6 +95,10 @@ sum_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Sum) Union [testMapDoubleA]
           expected = makeMap [("sum", 7.0)]
 
+average_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Avg) Union [testMapDoubleA]
+          expected = makeMap [("avg", 2.33333333)]
+
 equals_double  = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Equals) Union [testMapDoubleA, makeDoubleXMap [("a", 1.2), ("b", 2.4), ("c", 3.5)]]
           expected = makeMap [("a", True), ("b", False), ("c", True)]

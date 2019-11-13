@@ -104,6 +104,15 @@ fsum om xs = do
               let sum = L.sum $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "sum") sum)
 
+average :: OperationMode -> [XMap] -> XMapErr
+average om xs = do
+              checkMapsNumber xs 1
+              vs <- extractMapDouble (head xs) "values"
+              let vsl = M.elems vs
+              return $ XMapDouble (M.singleton (XMapKey "avg") (avg vsl))
+      where avg vsl = if L.null vsl
+                        then 0
+                        else L.sum vsl / L.genericLength vsl
 equals :: OperationMode -> [XMap] -> XMapErr
 equals om xs = do
      checkMapsNumber xs 2
@@ -142,6 +151,7 @@ operationRepository op = case op of
     Exp -> fexp
     Log -> flog
     Sum -> fsum
+    Avg -> average
     KeysTo -> keysTo
     Merge -> merge
     Equals -> equals
