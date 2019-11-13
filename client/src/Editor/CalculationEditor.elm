@@ -50,7 +50,7 @@ viewEditorForCalculation model pm cn =
         , LayoutGrid.view [ heightInView 45 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
-            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
         , LayoutGrid.view [  ]
             [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span8Desktop, LayoutGrid.span4Phone]  []
