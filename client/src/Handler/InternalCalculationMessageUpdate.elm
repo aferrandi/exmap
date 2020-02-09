@@ -11,7 +11,7 @@ handleUpdateCalculationName model s =
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn =
-    closeDialog { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn } }
+    closeDialog { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn, resultMapName = Just cn } }
 
 handleChangeOperationMode : Model -> OperationMode -> Model
 handleChangeOperationMode model om =
