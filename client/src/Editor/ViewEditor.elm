@@ -169,7 +169,7 @@ viewEditorMapList model =
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 35))
+                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 37))
                     (List.map listItem model.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]
@@ -202,7 +202,8 @@ addLabelButton model =
                 model.mdc
                 [ TextField.label "Label name"
                 , TextField.value viewEditorModel.labelEditing
-                , Options.onInput (\s -> Internal (UpdateViewLabel s))
+                , Options.onInput (\s -> Internal (UpdateViewLabel s)),
+                Options.css "margin-top" "6px"
                 ]
                 []
             , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
