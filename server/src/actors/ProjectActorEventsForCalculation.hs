@@ -48,14 +48,21 @@ addCalculation chan rp c cc = do
                     let cn = calculationName cc
                     let deps = calculationDependenciesMaps cc
                     logDbg $ "Maps used by calculation " ++ (show cn) ++ ":" ++ (show deps)
-                    modifyTVar (project rp) (\p -> p { calculations = cn : calculations p} )
-                    modifyTVar (calculationChanByName rp)  $ M.insert cn cch
-                    modifyTVar (calculationByResult rp) $ M.insert (resultName cc) cn
-                    modifyTVar (calculationChanByMap rp) $ introduceChanToMap cch deps
-                    -- mo need to send CMUpdateCalculationsToNotify since this is a new calculation and no other calculation
-                    -- changed the maps by which it is dependent
+                    p <- readTVar $ project rp
+                    cbm <- readTVar $ calculationChanByMap rp
+                    cbr <- readTVar $ calculationByResult rp
+                    cbn <- readTVar $ calculationChanByName rp
+                    let mp = p { calculations = cn : calculations p}
+                    let mcbn = M.insert cn cch cbn
+                    let mcbr = M.insert (resultName cc) cn cbr
+                    let mcbm = introduceChanToMap cch deps cbm
+                    writeTVar (project rp) mp
+                    writeTVar (calculationChanByName rp) mcbn
+                    writeTVar (calculationByResult rp) mcbr
+                    writeTVar (calculationChanByMap rp) mcbm
                     writeTChan (ccChannel cch) (CMUpdateCalculation cc)
-                    sendDependedMapsToCalculation chan rp c cc
+                    sendDependedMapsToCalculation chan mp (chans rp) c cc
+                    sendAllCalculationsToNotify c cc mcbr mcbn mcbm (evtChan rp)
     where logDbg t = logDebug (logChan $ chans rp) "project" t
 
 
@@ -63,32 +70,37 @@ updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation ->
 updateCalculation chan rp c cc = do
     let cn = calculationName cc
     cbn <- readTVar $ calculationChanByName rp
-    pn <- prjName rp
     case M.lookup cn cbn of
         Just cch -> updateFoundCalculation chan rp c cc cch
-        Nothing -> sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
+        Nothing -> do
+            pn <- prjName rp
+            sendStringError (evtChan rp) [c] ("stored calculation " ++ show cn ++ " not found in project " ++ show pn)
 
 updateFoundCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> CalculationChan -> STM()
 updateFoundCalculation chan rp c cc cch =  do
     modifyTVar (calculationChanByMap rp) $ rebuildCalculationChanByMapForChan cch depsMaps
     writeTChan (ccChannel cch) (CMUpdateCalculation cc)
-    sendDependedMapsToCalculation chan rp c cc
+    p <- readTVar $ project rp
+    sendDependedMapsToCalculation chan p (chans rp) c cc
     cbm <- readTVar $ calculationChanByMap rp
     cbr <- readTVar $ calculationByResult rp
     cbn <- readTVar $ calculationChanByName rp
-    sendAllCalculationsToNotify cbr cbn cbm
+    sendAllCalculationsToNotify c cc cbr cbn cbm (evtChan rp)
     where depsMaps = calculationDependenciesMaps cc
-          calculationsToNotify cbm rch = M.lookup (rccResult rch) cbm
-          sendCalculationsToNotify ::  CalculationChanByMap -> CalculationResultWithChan -> STM ()
-          sendCalculationsToNotify cbm rch = case calculationsToNotify cbm rch of
-              Just cs ->  writeTChan (ccChannel $ rccChan rch) (CMUpdateCalculationsToNotify cs)
-              Nothing -> sendStringError (evtChan rp) [c] $ "No calculation found for " ++ (show $ rccResult rch)
-          sendAllCalculationsToNotify cbr cbn cbm = case calculationsWithResultMapsNeededBy cbr cbn cc of
-            Right crs -> mapM_ (sendCalculationsToNotify cbm) crs
-            Left err -> sendError (evtChan rp) [c] err
 
-calculationsWithResultMapsNeededBy :: CalculationNameByResult -> CalculationChanByName -> Calculation ->  Either Error [CalculationResultWithChan]
-calculationsWithResultMapsNeededBy cbr cbn cc =
+sendAllCalculationsToNotify :: WAClient -> Calculation -> CalculationNameByResult -> CalculationChanByName -> CalculationChanByMap-> EventChan -> STM()
+sendAllCalculationsToNotify c cc cbr cbn cbm ech =
+  case dependenciesCalculations cbr cbn cc of
+    Right crs -> mapM_ sendCalculationsToNotify crs
+    Left err -> sendError ech [c] err
+  where calculationsToNotify rch = M.lookup (rccResult rch) cbm
+        sendCalculationsToNotify ::  CalculationResultWithChan -> STM ()
+        sendCalculationsToNotify rch = case calculationsToNotify rch of
+            Just cs ->  writeTChan (ccChannel $ rccChan rch) (CMUpdateCalculationsToNotify cs)
+            Nothing -> sendStringError ech [c] $ "No calculation found for " ++ (show $ rccResult rch)
+
+dependenciesCalculations :: CalculationNameByResult -> CalculationChanByName -> Calculation ->  Either Error [CalculationResultWithChan]
+dependenciesCalculations cbr cbn cc =
     CM.sequence $ map buildCalculationResult origins
     where depsMaps = calculationDependenciesMaps cc
           origins =   map (\(r, n) -> CalculationResultWithName { crnResult = r, name = n }) $ M.toList (M.restrictKeys cbr (S.fromList depsMaps))
@@ -96,12 +108,11 @@ calculationsWithResultMapsNeededBy cbr cbn cc =
                                       Just ch -> Right CalculationResultWithChan { rccResult = crnResult rn, rccChan = ch }
                                       _ -> Left $ mkError ("No calculation with name " ++ (show $ name rn) ++ "found")
 
-
 mapsForCalculationLoaded :: RuntimeProject -> WAClient -> CalculationName -> [XNamedMap] -> STM ()
 mapsForCalculationLoaded rp c cn ms = do
-    cs <- readTVar $ calculationChanByName rp
+    cbn <- readTVar $ calculationChanByName rp
     pn <- prjName rp
-    case M.lookup cn cs of
+    case M.lookup cn cbn of
         Just cChan -> writeTChan (ccChannel cChan) (CMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("calculation " ++ show cn ++ " to add the maps to not found in project " ++ show pn)
 
@@ -151,13 +162,12 @@ introduceChanToMap cch mns ccbm = foldr addToMultimap ccbm mns
     where addToMultimap :: XMapName -> CalculationChanByMap -> CalculationChanByMap
           addToMultimap mn = M.insertWith (++) mn [cch]
 
-sendDependedMapsToCalculation :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> STM ()
-sendDependedMapsToCalculation chan rp c cc = do
-     p <- readTVar $ project rp
+sendDependedMapsToCalculation :: ProjectChan -> Project -> CommonChans -> WAClient -> Calculation -> STM ()
+sendDependedMapsToCalculation chan p chs c cc = do
      case sourcesOfTypeInProject FileSource p of
         Just fileSources -> do
              let toLoad = L.intersect (calculationDependenciesMaps cc) fileSources
-             writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
+             writeTChan (loadChan chs) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
         Nothing -> return ()
 
 storeProject :: ProjectChan -> RuntimeProject -> WAClient -> STM ()

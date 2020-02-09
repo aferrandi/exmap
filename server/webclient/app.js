@@ -16552,6 +16552,11 @@ var author$project$Internal$LayoutGrid$Implementation$span4Tablet = A2(
 	elm$core$Maybe$Just('tablet'),
 	4);
 var author$project$Material$LayoutGrid$span4Tablet = author$project$Internal$LayoutGrid$Implementation$span4Tablet;
+var author$project$Internal$LayoutGrid$Implementation$span5Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	5);
+var author$project$Material$LayoutGrid$span5Desktop = author$project$Internal$LayoutGrid$Implementation$span5Desktop;
 var author$project$Internal$LayoutGrid$Implementation$span8Desktop = A2(
 	author$project$Internal$LayoutGrid$Implementation$span,
 	elm$core$Maybe$Just('desktop'),
@@ -16613,7 +16618,7 @@ var author$project$Editor$CalculationEditor$viewEditorForCalculation = F3(
 							A2(
 							author$project$Material$LayoutGrid$cell,
 							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
+								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span1Phone]),
 							_List_fromArray(
 								[
 									author$project$Editor$FunctionChooser$viewFunctions(model)
@@ -16888,11 +16893,6 @@ var author$project$Editor$MapEditor$storeMap = F3(
 				pm.project.projectName,
 				{xmap: m, xmapName: n}));
 	});
-var author$project$Internal$LayoutGrid$Implementation$span5Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	5);
-var author$project$Material$LayoutGrid$span5Desktop = author$project$Internal$LayoutGrid$Implementation$span5Desktop;
 var author$project$Internal$LayoutGrid$Implementation$span5Tablet = A2(
 	author$project$Internal$LayoutGrid$Implementation$span,
 	elm$core$Maybe$Just('tablet'),
