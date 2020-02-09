@@ -101,10 +101,10 @@ sendAllCalculationsToNotify c cc cbr cbn cbm ech =
 
 dependenciesCalculations :: CalculationNameByResult -> CalculationChanByName -> Calculation ->  Either Error [CalculationResultWithChan]
 dependenciesCalculations cbr cbn cc =
-    CM.sequence $ map buildCalculationResult origins
+    CM.sequence $ map resultNameToResultChan dependenciesCalcResultNames
     where depsMaps = calculationDependenciesMaps cc
-          origins =   map (\(r, n) -> CalculationResultWithName { crnResult = r, name = n }) $ M.toList (M.restrictKeys cbr (S.fromList depsMaps))
-          buildCalculationResult rn = case M.lookup (name rn) cbn of
+          dependenciesCalcResultNames =   map (\(r, n) -> CalculationResultWithName { crnResult = r, name = n }) $ M.toList (M.restrictKeys cbr (S.fromList depsMaps))
+          resultNameToResultChan rn = case M.lookup (name rn) cbn of
                                       Just ch -> Right CalculationResultWithChan { rccResult = crnResult rn, rccChan = ch }
                                       _ -> Left $ mkError ("No calculation with name " ++ (show $ name rn) ++ "found")
 
