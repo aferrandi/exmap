@@ -156,18 +156,23 @@ viewEditRowToTableCells model ( rowIdx, ViewEditRow row ) =
 viewEditorMapList : Model -> Html Msg
 viewEditorMapList model =
     let
-        buildMsg mn = (Internal (AddItemToView model.viewEditorModel.rowToAddTo (MapItem mn)))
-        sendAddItem index = sendListMsg buildMsg model.mapsInProject index
+        buildMsg mn = Internal (AddItemToView model.viewEditorModel.rowToAddTo (MapItem mn))
+        selectItem index = Internal (SelectMapIndexForView index)
+        sendAddItem = Maybe.withDefault None (Maybe.map (\idx -> sendListMsg buildMsg model.mapsInProject idx) model.viewEditorModel.selectedMapIdx)
         listItem mn =
             Lists.li []
                 [
-                    Lists.graphicIcon []"list" ,
+                    Lists.graphicIcon [] "list" ,
                     text (xmapNameToString mn)
                 ]
     in
-        Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-            ((Lists.onSelectListItem sendAddItem) :: (scrollableListStyle 40))
-            (List.map listItem model.mapsInProject)
+        div []
+            [
+                Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
+                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 35))
+                    (List.map listItem model.mapsInProject)
+            , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
+            ]
 
 newViewButton : Model -> Html Msg
 newViewButton model =

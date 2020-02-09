@@ -53,6 +53,7 @@ type alias ViewEditorModel =
     { viewName : Maybe ViewName
     , viewToEdit : Maybe ViewEdit
     , newViewName : ViewName
+    , selectedMapIdx : Maybe Int
     , labelEditing : String
     , rowToAddTo : Int
     , lastViewEditItemId : ViewEditItemId

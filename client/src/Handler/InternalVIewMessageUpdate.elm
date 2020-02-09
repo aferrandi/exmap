@@ -47,6 +47,9 @@ handleAddRowToViewEdit model =
     in
         updateViewEditorModel model (\vm -> { vm | viewToEdit = Just (updateView vm.viewToEdit) })
 
+handleSelectMapIndexForViewEdit : Model -> Int  -> Model
+handleSelectMapIndexForViewEdit model idx =
+    updateViewEditorModel model (\vm -> { vm | selectedMapIdx = Just idx})
 
 handleAddItemToViewEdit : Model -> Int -> ViewItem -> Model
 handleAddItemToViewEdit model ri it =

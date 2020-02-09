@@ -23,6 +23,7 @@ emptyViewEditorModel =
     { viewName = Nothing
     , viewToEdit = Nothing
     , newViewName = ""
+    , selectedMapIdx = Nothing
     , labelEditing = ""
     , rowToAddTo = 0
     , lastViewEditItemId = 0

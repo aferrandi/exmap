@@ -3,7 +3,7 @@ module Handler.InternalMessageUpdate exposing (updateInternal)
 import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleNewCalculationWithName, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
 import Handler.InternalMapMessageUpdate exposing (handleChangeMapType, handleMapToTable, handleMapToTextArea, handleNewMapWithName, handleShowMapInEditor, handleUpdateMapName)
 import Handler.InternalProjectMessageUpdate exposing (handleNewProjectWithName, handleOpenProject, handleSwitchProjectViewTo, handleUpdateProjectName)
-import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleAddRowToViewEdit, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleUpdateViewLabel, handleUpdateViewName)
+import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleSelectMapIndexForViewEdit, handleAddRowToViewEdit, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleUpdateViewLabel, handleUpdateViewName)
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameToString)
 import Maybe
@@ -64,6 +64,8 @@ updateInternal msg model =
             ( handleChangeMapType model mt, Cmd.none )
         AddItemToView row it ->
             ( handleAddItemToViewEdit model row it, Cmd.none )
+        SelectMapIndexForView idx ->
+            ( handleSelectMapIndexForViewEdit model idx, Cmd.none )
         AddRowToView ->
             ( handleAddRowToViewEdit model, Cmd.none )
         RemoveItemsFromView viewEditItemIds ->
