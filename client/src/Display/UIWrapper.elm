@@ -76,12 +76,12 @@ sendListMsg toMsg list index =
 titleWithIcon : String -> String -> String -> Html Msg
 titleWithIcon txt iconName color =
     Options.styled Html.label
-        [ Typo.headline4 ]
+        [ Typo.headline6 ]
         [ Icon.view
             [
                 Options.css "margin" "4px",
                 Options.css "color" color,
-                Icon.size36
+                Icon.size24
             ] iconName,
             text txt ]
 

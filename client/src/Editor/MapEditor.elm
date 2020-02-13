@@ -22,23 +22,18 @@ import Types.XMapTypes exposing (..)
 
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
-    let
-        xmapEditorModel = model.xmapEditorModel
-        title =
-            case xmapEditorModel.xmapName of
-                Just xmapName -> "Editing map: " ++ xmapNameToString xmapName
-                Nothing -> "Map Editor"
-    in
-        div []
-            [ titleWithIcon title "layers" "DarkOrange"
-            , LayoutGrid.view [ heightInView 70 ]
+            LayoutGrid.view [ heightInView 70 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone]
                     [ mapEditorMapList model pm.project, newMapButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
                     [ mapEditorViewForMap model pm ]
                 ]
-            ]
--- Grid.noSpacing
+
+title : Model -> String
+title model =
+        case model.xmapEditorModel.xmapName of
+            Just xmapName -> "Editing: " ++ xmapNameToString xmapName
+            Nothing -> "Map Editor"
 
 mapEditorViewForMap : Model -> ProjectModel -> Html Msg
 mapEditorViewForMap model pm =
@@ -110,10 +105,13 @@ mapEditorMapList model p =
                     text (xmapNameToString mn)
                 ]
     in
-        Lists.ul Mdc (makeIndex mapEditorIdx "lstMap") model.mdc
-            ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 45))
-            (List.map listItem (fileSourcesOfProject p))
-
+        div []
+        [
+             titleWithIcon (title model) "layers" "DarkOrange",
+             Lists.ul Mdc (makeIndex mapEditorIdx "lstMap") model.mdc
+                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 45))
+                (List.map listItem (fileSourcesOfProject p))
+        ]
 
 storeMap : ProjectModel -> XMapName -> XMap -> Msg
 storeMap pm n m =

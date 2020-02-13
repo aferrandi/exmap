@@ -19,20 +19,16 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
-    let
-        title =
-            case model.calculationEditorModel.calculationName of
-                Just calculationName -> "Editing calculation: " ++ calculationName
-                Nothing -> "Calculation Editor"
-    in
-        div []
-            [ titleWithIcon title "functions" "Green"
-            , LayoutGrid.view [ heightInView 70 ]
+            LayoutGrid.view [ heightInView 70 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ div [] [ calculationsInProjectList model pm, newCalculationButton model ] ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCalculationEditor model pm ]
                 ]
-            ]
 
+title : Model -> String
+title model =
+            case model.calculationEditorModel.calculationName of
+                Just calculationName -> "Editing: " ++ calculationName
+                Nothing -> "Calculation Editor"
 
 viewCalculationEditor : Model -> ProjectModel -> Html Msg
 viewCalculationEditor model pm =
@@ -107,11 +103,14 @@ calculationsInProjectList model pm =
                     text cn
                 ]
     in
-        Lists.ul Mdc (makeIndex calcEditorIdx "lstClcInPrj")
-                model.mdc
-                 ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 55) )
-                 (List.map listItem pm.project.calculations)
-
+        div []
+        [
+            titleWithIcon (title model) "functions" "Green",
+            Lists.ul Mdc (makeIndex calcEditorIdx "lstClcInPrj")
+                    model.mdc
+                     ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 55) )
+                     (List.map listItem pm.project.calculations)
+        ]
 
 mapsInProjectList : Model -> Html Msg
 mapsInProjectList model =

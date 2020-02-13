@@ -25,19 +25,16 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
 viewViewsEditor model pm =
-    let
-        title =
-            case model.viewEditorModel.viewName of
-                Just viewName -> "Editing view: " ++ viewName
-                Nothing -> "View Editor"
-    in
-        div []
-            [ titleWithIcon title "view_module" "Pink"
-            , LayoutGrid.view [ heightInView 70 ]
+            LayoutGrid.view [ heightInView 70 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
                 ]
-            ]
+
+title : Model -> String
+title model =
+    case model.viewEditorModel.viewName of
+        Just viewName -> "Editing: " ++ viewName
+        Nothing -> "View Editor"
 
 viewEditorForView model pm =
     case model.viewEditorModel.viewName of
@@ -93,10 +90,13 @@ viewsList model p =
                     , text vn
                 ]
     in
-        Lists.ul Mdc (makeIndex viewEditorIdx "lstVew") model.mdc
-            ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
-            (List.map listItem p.viewNames)
-
+      div []
+        [
+            titleWithIcon (title model) "view_module" "Pink",
+            Lists.ul Mdc (makeIndex viewEditorIdx "lstVew") model.mdc
+                ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
+                (List.map listItem p.viewNames)
+        ]
 
 viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
 viewEditorTable model mv =
