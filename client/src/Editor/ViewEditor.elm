@@ -25,7 +25,7 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
 viewViewsEditor model pm =
-            LayoutGrid.view [ heightInView 70 ]
+            LayoutGrid.view [ heightInView 85 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
                 ]
@@ -40,7 +40,7 @@ viewEditorForView model pm =
     case model.viewEditorModel.viewName of
         Just vn ->
             div []
-                [ LayoutGrid.view [ heightInView 55 ]
+                [ LayoutGrid.view [ heightInView 65 ]
                     [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone]
                             [ viewEditorTable model model.viewEditorModel.viewToEdit ]
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
@@ -94,7 +94,7 @@ viewsList model p =
         [
             titleWithIcon (title model) "view_module" "Pink",
             Lists.ul Mdc (makeIndex viewEditorIdx "lstVew") model.mdc
-                ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 55))
+                ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 60))
                 (List.map listItem p.viewNames)
         ]
 
@@ -169,7 +169,7 @@ viewEditorMapList model =
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 37))
+                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 45))
                     (List.map listItem model.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]

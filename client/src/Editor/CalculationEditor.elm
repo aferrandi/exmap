@@ -19,9 +19,16 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
-            LayoutGrid.view [ heightInView 70 ]
-                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ div [] [ calculationsInProjectList model pm, newCalculationButton model ] ]
-                , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCalculationEditor model pm ]
+            LayoutGrid.view [ heightInView 80 ]
+                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [
+                div []
+                        [
+                            calculationsInProjectList model pm,
+                            newCalculationButton model
+                        ]
+                    ]
+                , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
+                    [ viewCalculationEditor model pm ]
                 ]
 
 title : Model -> String
@@ -39,18 +46,18 @@ viewCalculationEditor model pm =
 viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
-        [ LayoutGrid.view []
+        [ LayoutGrid.view [ heightInView 10 ]
             [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ resultMapNameText model ]
             , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ operationNameChoice model ]
             ]
-        , LayoutGrid.view [ heightInView 45 ]
+        , LayoutGrid.view [ heightInView 55 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
         , LayoutGrid.view [  ]
-            [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span8Desktop, LayoutGrid.span4Phone]  []
-            , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]  [ storeButton model pm ]
+            [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span12Desktop, LayoutGrid.span4Phone]
+                [ storeButton model pm ]
             ]
         ]
 
@@ -108,7 +115,7 @@ calculationsInProjectList model pm =
             titleWithIcon (title model) "functions" "Green",
             Lists.ul Mdc (makeIndex calcEditorIdx "lstClcInPrj")
                     model.mdc
-                     ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 55) )
+                     ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 60) )
                      (List.map listItem pm.project.calculations)
         ]
 
@@ -126,7 +133,7 @@ mapsInProjectList model =
         Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstMapInPrj")
                 model.mdc
-                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 40))
+                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 50))
                 (List.map listItem model.mapsInProject)
 
 
@@ -139,8 +146,8 @@ calculationTextArea model =
         model.mdc
         [ TextField.label "Enter the formula"
         , TextField.textarea
-        , heightInView 40
-        , TextField.rows 20
+        , heightInView 50
+        , TextField.rows 25
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
         , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
         , useWholeWidth

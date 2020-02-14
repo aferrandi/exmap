@@ -23,7 +23,7 @@ import Types.XMapTypes exposing (..)
 
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
-            LayoutGrid.view [ heightInView 70 ]
+            LayoutGrid.view [ heightInView 85 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone]
                     [ mapEditorMapList model pm.project, newMapButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
@@ -45,7 +45,7 @@ mapEditorViewForMap model pm =
     case model.xmapEditorModel.xmapName of
         Just mn ->
             div []
-                [ LayoutGrid.view [ heightInView 50 ]
+                [ LayoutGrid.view [ heightInView 65 ]
                     [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone]
                         [ mapEditorTextArea model pm ]
                     , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone]
@@ -85,6 +85,7 @@ xmapTypeChoice model =
             (makeIndex mapEditorIdx "selXmapType")
             model.mdc
             [ Select.label "Type"
+            , Options.css "margin" "1vw 1vh"
             , Options.onChange changeMapTypeFromText
              ]
                 [
@@ -106,9 +107,11 @@ newMapButton model =
         idxDialog = makeIndex mapEditorIdx "dlgNewMap"
     in
         div []
-            [ xmapTypeChoice model
-            , nameDialog idxDialog model "New map" (\s -> Internal (UpdateMapName s)) storeNewMap
-            , buttonClick model (makeIndex mapEditorIdx "btnNewMap") "New map" (Internal (ShowDialog idxDialog))
+            [
+            nameDialog idxDialog model "New map" (\s -> Internal (UpdateMapName s)) storeNewMap
+            , span [] [ xmapTypeChoice model
+            , buttonClick model (makeIndex mapEditorIdx "btnNewMap") "New" (Internal (ShowDialog idxDialog))
+            ]
             ]
 
 
@@ -127,7 +130,7 @@ mapEditorMapList model p =
         [
              titleWithIcon (title model) "layers" "DarkOrange",
              Lists.ul Mdc (makeIndex mapEditorIdx "lstMap") model.mdc
-                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 45))
+                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 60))
                 (List.map listItem (fileSourcesOfProject p))
         ]
 
@@ -151,8 +154,8 @@ mapEditorTextArea model pm =
         model.mdc
         [ TextField.label "Enter the map data"
         , TextField.textarea
-        , heightInView 50
-        , TextField.rows 20
+        , heightInView 65
+        , TextField.rows 25
         , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
         , Options.onInput (\s -> Internal (TextToMapTextArea s))
         , useWholeWidth
@@ -161,7 +164,7 @@ mapEditorTextArea model pm =
 
 mapEditorTableFull : XMap -> Html Msg
 mapEditorTableFull m =
-    DataTable.table (scrollableTableStyle 50)
+    DataTable.table (scrollableTableStyle 65)
         [ mapHeader
         , mapRows m
         ]

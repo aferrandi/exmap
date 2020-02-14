@@ -15,7 +15,7 @@ import Types.XMapTypes exposing (..)
 
 viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm =
-    DataTable.table (scrollableTableStyle 60) (List.concatMap (viewRow vm) vm.view.rows)
+    DataTable.table (scrollableTableStyle 75) (List.concatMap (viewRow vm) vm.view.rows)
 
 
 viewRow : ViewModel -> ViewRow -> List (Html Msg)

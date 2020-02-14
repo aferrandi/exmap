@@ -24,7 +24,7 @@ title model =
 viewProjects : Model -> Html Msg
 viewProjects model =
     div []
-        [ LayoutGrid.view [ heightInView 80 ]
+        [ LayoutGrid.view [ heightInView 90 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model ]
             , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCurrentProject model ]
             ]
@@ -40,7 +40,7 @@ viewAllProjectsList model =
         [
             Html.text (title model),
             Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
-                ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 65))
+                ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 75))
                 (List.map viewAllProjectsItem model.allProjects)
         ]
 

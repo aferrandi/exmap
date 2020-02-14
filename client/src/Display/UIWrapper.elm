@@ -19,7 +19,7 @@ buttonNoClick model index txt props =
         index
         model.mdc
         ([ Button.raised
-         , Options.css "margin" "4px"
+         , Options.css "margin" "1vw 1vh"
          ] ++ props
         )
         [ text txt ]

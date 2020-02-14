@@ -64,6 +64,6 @@ functionsNamesList model  =
         Lists.ul Mdc
             (makeIndex calcEditorIdx "lstFnc")
             model.mdc
-            (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 32))
+            (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle 45))
             operationList
 

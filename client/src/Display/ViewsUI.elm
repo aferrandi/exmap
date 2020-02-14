@@ -40,7 +40,7 @@ viewAllViewsList model pm =
         [
             titleWithIcon (title model) "view_comfy"  "Blue",
             Lists.ul Mdc (makeIndex viewsUIIdx "lstAllVew") model.mdc
-            ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 60))
+            ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 70))
             (List.map viewViewName pm.project.viewNames)
         ]
 
