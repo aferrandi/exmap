@@ -1,6 +1,7 @@
 module Editor.MapEditor exposing (mapEditorView)
 
 import Html exposing (..)
+import Material.Select as Select
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
 import Transform.MapsExtraction exposing (..)
@@ -63,19 +64,36 @@ mapEditorViewForMap model pm =
         Nothing -> div [] []
 
 
+
+
+
 xmapTypeChoice : Model -> Html Msg
 xmapTypeChoice model =
     let
         hasType t = model.xmapEditorModel.xmapType == t
+        fromTextToType txt = case txt of
+                                    "Double" -> TypeDouble
+                                    "Int" -> TypeInt
+                                    "String" -> TypeString
+                                    "Bool" -> TypeBool
+                                    "Date" -> TypeDate
+                                    otherwise -> TypeString
+        changeMapTypeFromText txt = Internal (ChangeMapType (fromTextToType txt))
+        selectOptions txt = if hasType (fromTextToType txt) then [Select.value txt, Select.selected] else [Select.value txt]
     in
-        div []
-            [ radio model (makeIndex mapEditorIdx "radDbl") "Double" "mapType" (hasType TypeDouble) (Internal (ChangeMapType TypeDouble))
-            , radio model (makeIndex mapEditorIdx "radInt") "Int" "mapType" (hasType TypeInt) (Internal (ChangeMapType TypeInt))
-            , radio model (makeIndex mapEditorIdx "radStr") "String" "mapType" (hasType TypeString) (Internal (ChangeMapType TypeString))
-            , radio model (makeIndex mapEditorIdx "radBol") "Bool" "mapType" (hasType TypeBool) (Internal (ChangeMapType TypeBool))
-            , radio model (makeIndex mapEditorIdx "radDat") "Date" "mapType" (hasType TypeDate) (Internal (ChangeMapType TypeDate))
-            ]
-
+        Select.view Mdc
+            (makeIndex mapEditorIdx "selXmapType")
+            model.mdc
+            [ Select.label "Type"
+            , Options.onChange changeMapTypeFromText
+             ]
+                [
+                Select.option (selectOptions "Double") [ text "Double" ]
+                , Select.option (selectOptions "Int") [ text "Int" ]
+                , Select.option (selectOptions "String") [ text "String" ]
+                , Select.option (selectOptions "Bool") [ text "Bool" ]
+                , Select.option (selectOptions "Date") [ text "Date" ]
+                ]
 
 newMapButton : Model -> Html Msg
 newMapButton model =
