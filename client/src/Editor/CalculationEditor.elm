@@ -1,6 +1,7 @@
 module Editor.CalculationEditor exposing (viewCalculationsEditor)
 
 import Editor.FunctionChooser exposing (viewFunctions)
+import Material.Select as Select
 import Types.Calculation exposing (..)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
@@ -168,14 +169,24 @@ resultMapNameText model =
 operationNameChoice : Model -> Html Msg
 operationNameChoice model =
     let
-        hasMode m =
-            model.calculationEditorModel.operationMode == m
+        hasMode m = model.calculationEditorModel.operationMode == m
+        fromTextToMode txt = case txt of
+                                    "Union" -> Union
+                                    "Intersection" -> Intersection
+                                    otherwise -> Union
+        changeMapTypeFromText txt = Internal (ChangeOperationMode (fromTextToMode txt))
+        selectOptions txt = if hasMode (fromTextToMode txt) then [Select.value txt, Select.selected] else [Select.value txt]
     in
-        div []
-            [ radio model (makeIndex calcEditorIdx "opeNamUni") "Union" "operationName" (hasMode Union) (Internal (ChangeOperationMode Union))
-            , radio model (makeIndex calcEditorIdx "opeNamInt") "Intersection" "operationName" (hasMode Intersection) (Internal (ChangeOperationMode Intersection))
-            ]
-
+        Select.view Mdc
+            (makeIndex mapEditorIdx "selOperationName")
+            model.mdc
+            [ Select.label "Mode"
+            , Options.onChange changeMapTypeFromText
+             ]
+                [
+                Select.option (selectOptions "Union") [ text "Union" ]
+                , Select.option (selectOptions "Intersection") [ text "Intersection" ]
+                ]
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =

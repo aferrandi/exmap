@@ -63,10 +63,6 @@ mapEditorViewForMap model pm =
                 ]
         Nothing -> div [] []
 
-
-
-
-
 xmapTypeChoice : Model -> Html Msg
 xmapTypeChoice model =
     let
