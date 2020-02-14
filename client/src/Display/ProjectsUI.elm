@@ -14,17 +14,6 @@ import Models.ProjectModel exposing (..)
 import Display.ProjectUI exposing (..)
 import Display.UIWrapper exposing (..)
 
-topAppBar : Model -> Html Msg
-topAppBar model  =
-    TopAppBar.view Mdc
-        (makeIndex projectsUIIdx "topAppBar")
-        model.mdc
-        []
-        [ TopAppBar.section
-            [TopAppBar.alignStart]
-            [TopAppBar.title [] [ text (title model) ]]
-        ]
-
 title : Model -> String
 title model =
     let
@@ -32,18 +21,8 @@ title model =
     in
         "EXMAP" ++ Maybe.withDefault "" titleWithProject
 
-
 viewProjects : Model -> Html Msg
 viewProjects model =
-    div []
-        [
-         div [] [topAppBar model]
-        ,  Options.styled div [ TopAppBar.fixedAdjust] [viewProjectsContent model ]
-        ]
-
-
-viewProjectsContent : Model -> Html Msg
-viewProjectsContent model =
     div []
         [ LayoutGrid.view [ heightInView 80 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model ]
@@ -57,9 +36,13 @@ viewAllProjectsList model =
     let
         sendOpenProject index = sendListMsg (\pn -> Internal (OpenProject pn)) model.allProjects index
     in
-        Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
-            ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 65))
-            (List.map viewAllProjectsItem model.allProjects)
+        div []
+        [
+            Html.text (title model),
+            Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
+                ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle 65))
+                (List.map viewAllProjectsItem model.allProjects)
+        ]
 
 viewAllProjectsItem : ProjectName -> Lists.ListItem Msg
 viewAllProjectsItem pn =
