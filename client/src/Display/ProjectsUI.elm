@@ -1,12 +1,11 @@
 module Display.ProjectsUI exposing (viewProjects)
 
+import Display.MessagesDialog exposing (messagesDialog)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 
 import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
-import Material.Options as Options
-import Material.TopAppBar as TopAppBar
 import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Types.Project exposing (Error, ProjectName)
@@ -23,13 +22,10 @@ title model =
 
 viewProjects : Model -> Html Msg
 viewProjects model =
-    div []
-        [ LayoutGrid.view [ heightInView model.ui.heights.viewProjects ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model ]
+        LayoutGrid.view [ heightInView model.ui.heights.viewProjects ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model, messagesButton model ]
             , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCurrentProject model ]
             ]
-        , viewMessages model
-        ]
 
 viewAllProjectsList : Model -> Html Msg
 viewAllProjectsList model =
@@ -59,16 +55,7 @@ viewCurrentProject model =
         Nothing -> div [] []
 
 
-viewMessagesItem : Error -> Lists.ListItem Msg
-viewMessagesItem msg =
-    Lists.li []
-        [ Lists.graphicIcon [] "inbox"
-        , text msg
-        ]
 
-viewMessages : Model -> Html Msg
-viewMessages model =
-    Lists.ul Mdc (makeIndex projectsUIIdx "lstMsg") model.mdc  (scrollableListStyle model.ui.heights.viewMessages) (List.map viewMessagesItem model.messages)
 
 newProjectButton : Model -> Html Msg
 newProjectButton model =
@@ -80,4 +67,15 @@ newProjectButton model =
         [
           nameDialog idxDialog model "Create and store project" (\s -> Internal (UpdateProjectName s)) newProjectMessage
         , buttonClick model (makeIndex projectsUIIdx "btnNewPrj") "Create and store project"  (Internal (ShowDialog idxDialog))
+        ]
+
+messagesButton : Model -> Html Msg
+messagesButton model =
+    let
+        idxDialog = makeIndex projectsUIIdx "dlgMsg"
+    in
+        div []
+        [
+          messagesDialog idxDialog model
+        , buttonClick model (makeIndex projectsUIIdx "btnMsgDlg") "Show messages"  (Internal (ShowDialog idxDialog))
         ]
