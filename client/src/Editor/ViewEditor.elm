@@ -9,7 +9,7 @@ import Transform.MapsExtraction exposing (xmapNameToString)
 
 import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
-import Material.Options as Options
+import Material.Options as Options exposing (styled)
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Material.RadioButton as RadioButton
@@ -25,7 +25,7 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
 viewViewsEditor model pm =
-            LayoutGrid.view [ heightInView 85 ]
+            LayoutGrid.view [ heightInView 80 ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
                 ]
@@ -169,7 +169,7 @@ viewEditorMapList model =
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 45))
+                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 40))
                     (List.map listItem model.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]
@@ -196,14 +196,13 @@ addLabelButton model =
         viewEditorModel = model.viewEditorModel
         newLabelMessage = Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing))
     in
-        div []
+        Options.styled Html.span [Options.css "margin-top" "6px"]
             [ TextField.view Mdc
                 (makeIndex viewEditorIdx "txtAddLbl")
                 model.mdc
-                [ TextField.label "Label name"
+                [ TextField.label "Label text"
                 , TextField.value viewEditorModel.labelEditing
-                , Options.onInput (\s -> Internal (UpdateViewLabel s)),
-                Options.css "margin-top" "6px"
+                , Options.onInput (\s -> Internal (UpdateViewLabel s))
                 ]
                 []
             , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage

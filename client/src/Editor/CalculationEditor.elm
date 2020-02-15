@@ -47,17 +47,15 @@ viewCalculationEditor model pm =
 viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
-        [ LayoutGrid.view [ heightInView 10 ]
-            [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ resultMapNameText model ]
-            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ operationNameChoice model ]
-            ]
-        , LayoutGrid.view [ heightInView 55 ]
+        [ LayoutGrid.view [ heightInView 65 ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
         , LayoutGrid.view [  ]
-            [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span12Desktop, LayoutGrid.span4Phone]
+            [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ resultMapNameText model ]
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ operationNameChoice model ]
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
                 [ storeButton model pm ]
             ]
         ]
@@ -134,11 +132,8 @@ mapsInProjectList model =
         Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstMapInPrj")
                 model.mdc
-                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 50))
+                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 60))
                 (List.map listItem model.mapsInProject)
-
-
-
 
 calculationTextArea : Model -> Html Msg
 calculationTextArea model =
@@ -147,7 +142,7 @@ calculationTextArea model =
         model.mdc
         [ TextField.label "Enter the formula"
         , TextField.textarea
-        , heightInView 50
+        , heightInView 60
         , TextField.rows 25
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
         , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
@@ -174,6 +169,9 @@ operationNameChoice model =
                                     "Union" -> Union
                                     "Intersection" -> Intersection
                                     otherwise -> Union
+        fromModeToText mode = case mode of
+                                    Union -> "Union"
+                                    Intersection -> "Intersection"
         changeMapTypeFromText txt = Internal (ChangeOperationMode (fromTextToMode txt))
         selectOptions txt = if hasMode (fromTextToMode txt) then [Select.value txt, Select.selected] else [Select.value txt]
     in
@@ -181,7 +179,8 @@ operationNameChoice model =
             (makeIndex mapEditorIdx "selOperationName")
             model.mdc
             [ Select.label "Mode"
-            , Options.onChange changeMapTypeFromText
+            , Select.selectedText (fromModeToText model.calculationEditorModel.operationMode)
+            , Select.onSelect changeMapTypeFromText
              ]
                 [
                 Select.option (selectOptions "Union") [ text "Union" ]

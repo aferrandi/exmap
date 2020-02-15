@@ -74,22 +74,27 @@ xmapTypeChoice model =
                                     "Bool" -> TypeBool
                                     "Date" -> TypeDate
                                     otherwise -> TypeString
+        fromTypeToText tpe = case tpe of
+                                     TypeDouble -> "Double"
+                                     TypeInt -> "Int"
+                                     TypeString -> "String"
+                                     TypeBool -> "Bool"
+                                     TypeDate -> "Date"
         changeMapTypeFromText txt = Internal (ChangeMapType (fromTextToType txt))
-        selectOptions txt = if hasType (fromTextToType txt) then [Select.value txt, Select.selected] else [Select.value txt]
     in
         Select.view Mdc
             (makeIndex mapEditorIdx "selXmapType")
             model.mdc
             [ Select.label "Type"
-            , Options.css "margin" "1vw 1vh"
-            , Options.onChange changeMapTypeFromText
+            , Select.selectedText (fromTypeToText model.xmapEditorModel.xmapType)
+            , Select.onSelect changeMapTypeFromText
              ]
                 [
-                Select.option (selectOptions "Double") [ text "Double" ]
-                , Select.option (selectOptions "Int") [ text "Int" ]
-                , Select.option (selectOptions "String") [ text "String" ]
-                , Select.option (selectOptions "Bool") [ text "Bool" ]
-                , Select.option (selectOptions "Date") [ text "Date" ]
+                Select.option [] [ text "Double" ]
+                , Select.option [] [ text "Int" ]
+                , Select.option [] [ text "String" ]
+                , Select.option [] [ text "Bool" ]
+                , Select.option [] [ text "Date" ]
                 ]
 
 newMapButton : Model -> Html Msg
