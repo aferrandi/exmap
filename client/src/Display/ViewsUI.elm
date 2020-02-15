@@ -15,7 +15,7 @@ import Types.Views exposing (ViewName)
 
 viewViews : Model -> ProjectModel -> Html Msg
 viewViews model pm =
-        LayoutGrid.view [ heightInView 70 ]
+        LayoutGrid.view [ heightInView model.ui.heights.viewProjects ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllViewsList model pm ]
             , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCurrentView model pm ]
             ]
@@ -40,7 +40,7 @@ viewAllViewsList model pm =
         [
             titleWithIcon (title model) "view_comfy"  "Blue",
             Lists.ul Mdc (makeIndex viewsUIIdx "lstAllVew") model.mdc
-            ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle 70))
+            ((Lists.onSelectListItem sendOpenView) :: (scrollableListStyle model.ui.heights.viewAllViewsList))
             (List.map viewViewName pm.project.viewNames)
         ]
 

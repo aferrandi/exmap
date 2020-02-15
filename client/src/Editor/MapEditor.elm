@@ -23,7 +23,7 @@ import Types.XMapTypes exposing (..)
 
 mapEditorView : Model -> ProjectModel -> Html Msg
 mapEditorView model pm =
-            LayoutGrid.view [ heightInView 85 ]
+            LayoutGrid.view [ heightInView model.ui.heights.mapEditorView ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone]
                     [ mapEditorMapList model pm.project, newMapButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
@@ -45,11 +45,11 @@ mapEditorViewForMap model pm =
     case model.xmapEditorModel.xmapName of
         Just mn ->
             div []
-                [ LayoutGrid.view [ heightInView 65 ]
+                [ LayoutGrid.view [ heightInView model.ui.heights.mapEditorViewForMap ]
                     [ LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone]
                         [ mapEditorTextArea model pm ]
                     , LayoutGrid.cell [LayoutGrid.span5Tablet, LayoutGrid.span7Desktop, LayoutGrid.span3Phone]
-                        [ mapEditorTable xmapEditorModel.xmapToEdit ]
+                        [ mapEditorTable model xmapEditorModel.xmapToEdit ]
                     ]
                 , LayoutGrid.view [  ]
                     [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
@@ -131,7 +131,7 @@ mapEditorMapList model p =
         [
              titleWithIcon (title model) "layers" "DarkOrange",
              Lists.ul Mdc (makeIndex mapEditorIdx "lstMap") model.mdc
-                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle 60))
+                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle model.ui.heights.mapEditorMapList))
                 (List.map listItem (fileSourcesOfProject p))
         ]
 
@@ -155,7 +155,7 @@ mapEditorTextArea model pm =
         model.mdc
         [ TextField.label "Enter the map data"
         , TextField.textarea
-        , heightInView 65
+        , heightInView model.ui.heights.mapEditorTextArea
         , TextField.rows 25
         , TextField.value (Maybe.withDefault "" model.xmapEditorModel.xmapEditing)
         , Options.onInput (\s -> Internal (TextToMapTextArea s))
@@ -163,9 +163,9 @@ mapEditorTextArea model pm =
         ]
         []
 
-mapEditorTableFull : XMap -> Html Msg
-mapEditorTableFull m =
-    DataTable.table (scrollableTableStyle 65)
+mapEditorTableFull : Model -> XMap -> Html Msg
+mapEditorTableFull model m =
+    DataTable.table (scrollableTableStyle model.ui.heights.mapEditorTableFull)
         [ mapHeader
         , mapRows m
         ]
@@ -177,10 +177,10 @@ mapEditorTableEmpty =
         , DataTable.tbody [] []
         ]
 
-mapEditorTable : Maybe XMap -> Html Msg
-mapEditorTable mm =
+mapEditorTable : Model -> Maybe XMap -> Html Msg
+mapEditorTable model mm =
     case mm of
-        Just m -> mapEditorTableFull m
+        Just m -> mapEditorTableFull model m
         Nothing -> mapEditorTableEmpty
 
 mapHeader : Html Msg

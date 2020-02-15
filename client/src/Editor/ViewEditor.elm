@@ -25,8 +25,8 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewViewsEditor : Model -> ProjectModel -> Html Msg
 viewViewsEditor model pm =
-            LayoutGrid.view [ heightInView 80 ]
-                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewsList model pm.project, newViewButton model ]
+            LayoutGrid.view [ heightInView model.ui.heights.viewViewsEditor ]
+                [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewEditorViewsList model pm.project, newViewButton model ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewEditorForView model pm ]
                 ]
 
@@ -40,7 +40,7 @@ viewEditorForView model pm =
     case model.viewEditorModel.viewName of
         Just vn ->
             div []
-                [ LayoutGrid.view [ heightInView 65 ]
+                [ LayoutGrid.view [ heightInView model.ui.heights.viewEditorForView ]
                     [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone]
                             [ viewEditorTable model model.viewEditorModel.viewToEdit ]
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
@@ -79,8 +79,8 @@ storeView pm vm =
             Nothing -> Internal (ShowMessage "Please enter a view name")
 
 
-viewsList : Model -> Project -> Html Msg
-viewsList model p =
+viewEditorViewsList : Model -> Project -> Html Msg
+viewEditorViewsList model p =
     let
         sendLoadView index = sendListMsg (\vn -> (Send (WRLoadView p.projectName vn))) p.viewNames index
         listItem vn =
@@ -94,7 +94,7 @@ viewsList model p =
         [
             titleWithIcon (title model) "view_module" "Pink",
             Lists.ul Mdc (makeIndex viewEditorIdx "lstVew") model.mdc
-                ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle 60))
+                ((Lists.onSelectListItem sendLoadView) :: (scrollableListStyle model.ui.heights.viewEditorViewsList))
                 (List.map listItem p.viewNames)
         ]
 
@@ -169,7 +169,7 @@ viewEditorMapList model =
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle 40))
+                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle model.ui.heights.viewEditorMapList))
                     (List.map listItem model.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]

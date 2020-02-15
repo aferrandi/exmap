@@ -49,9 +49,41 @@ emptyCalculationEditorModel =
     , operationMode = Union
     }
 
+emptyHeights: Heights
+emptyHeights =
+    { viewProjects = 90
+    , viewAllProjectsList = 75
+    , viewMessages = 10
+    , viewViews = 70
+    , viewAllViewsList = 70
+    , viewCalculationsEditor = 80
+    , viewEditorForCalculation = 65
+    , calculationTextArea = 60
+    , calculationsInProjectList = 60
+    , mapsInProjectList = 60
+    , functionsNamesList = 55
+    , mapEditorView = 85
+    , mapEditorViewForMap = 65
+    , mapEditorTextArea = 65
+    , mapEditorTableFull = 65
+    , mapEditorMapList = 60
+    , viewViewsEditor = 80
+    , viewEditorForView = 65
+    , viewEditorViewsList = 60
+    , viewEditorMapList = 40
+    , viewView = 75
+    }
+
+emptyUI: UI
+emptyUI = {
+    heights = emptyHeights
+    }
+
 emptyModel : Model
 emptyModel =
-    { openProjects = []
+    {
+    ui = emptyUI
+    , openProjects = []
     , allProjects = []
     , currentProject = Nothing
     , currentView = Nothing

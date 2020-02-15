@@ -69,9 +69,39 @@ type alias CalculationEditorModel =
     , newCalculationName : CalculationName
     }
 
+type alias Heights =
+    { viewProjects : Int
+    , viewAllProjectsList : Int
+    , viewMessages : Int
+    , viewViews: Int
+    , viewAllViewsList : Int
+    , viewCalculationsEditor : Int
+    , viewEditorForCalculation : Int
+    , calculationTextArea : Int
+    , calculationsInProjectList : Int
+    , mapsInProjectList : Int
+    , functionsNamesList : Int
+    , mapEditorView : Int
+    , mapEditorViewForMap : Int
+    , mapEditorTextArea : Int
+    , mapEditorTableFull : Int
+    , mapEditorMapList : Int
+    , viewViewsEditor : Int
+    , viewEditorForView : Int
+    , viewEditorViewsList : Int
+    , viewEditorMapList : Int
+    , viewView: Int
+    }
+
+type alias UI =
+    {
+    heights : Heights
+    }
+
 
 type alias Model =
     { mdc : Material.Model Msg
+    , ui: UI
     , openProjects : List ProjectModel
     , allProjects : List ProjectName
     , currentProject : Maybe ProjectName

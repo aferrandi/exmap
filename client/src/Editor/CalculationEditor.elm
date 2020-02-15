@@ -20,7 +20,7 @@ import Models.WebMessages exposing (WebRequest(..))
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
-            LayoutGrid.view [ heightInView 80 ]
+            LayoutGrid.view [ heightInView model.ui.heights.viewCalculationsEditor ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [
                 div []
                         [
@@ -47,7 +47,7 @@ viewCalculationEditor model pm =
 viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
-        [ LayoutGrid.view [ heightInView 65 ]
+        [ LayoutGrid.view [ heightInView model.ui.heights.viewEditorForCalculation ]
             [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
             , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span5Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
@@ -114,7 +114,7 @@ calculationsInProjectList model pm =
             titleWithIcon (title model) "functions" "Green",
             Lists.ul Mdc (makeIndex calcEditorIdx "lstClcInPrj")
                     model.mdc
-                     ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle 60) )
+                     ([ Lists.onSelectListItem sendCalculation ] ++(scrollableListStyle model.ui.heights.calculationsInProjectList) )
                      (List.map listItem pm.project.calculations)
         ]
 
@@ -132,7 +132,7 @@ mapsInProjectList model =
         Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstMapInPrj")
                 model.mdc
-                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle 60))
+                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle model.ui.heights.mapsInProjectList))
                 (List.map listItem model.mapsInProject)
 
 calculationTextArea : Model -> Html Msg
@@ -142,7 +142,7 @@ calculationTextArea model =
         model.mdc
         [ TextField.label "Enter the formula"
         , TextField.textarea
-        , heightInView 60
+        , heightInView model.ui.heights.calculationTextArea
         , TextField.rows 25
         , TextField.value (Maybe.withDefault "" model.calculationEditorModel.calculationFormulaText)
         , Options.onInput (\s -> Internal (TextToCalculationTextArea s))
