@@ -104,7 +104,7 @@ viewEditRows model v =
         rows = ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewEditRowToTableCells model) |> List.map (DataTable.tr [])
     in
         div []
-        [ Options.styled div [heightInView model.ui.heights.viewEditRows] [DataTable.tbody [] rows]
+        [ Options.styled div [heightInView model.ui.heights.viewEditRows, Options.css "background" "WhiteSmoke"] [DataTable.tbody [] rows]
           , LayoutGrid.view [  ]
             [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
             , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
