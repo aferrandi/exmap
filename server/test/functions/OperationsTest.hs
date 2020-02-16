@@ -21,6 +21,11 @@ testMapDoubleB = makeXMap arr
   where arr :: [(String, Double)]
         arr = [("a", 1.4), ("c", -2.4), ("d", 3.1)]
 
+testMapDoubleC :: XMap
+testMapDoubleC = makeXMap arr
+  where arr :: [(String, Double)]
+        arr = [("a", 1.4), ("b", -2.4), ("c", 0)]
+
 testMapStringA :: XMap
 testMapStringA = makeStringXMap  arr
   where arr :: [(String, String)]
@@ -30,6 +35,16 @@ testMapIntA :: XMap
 testMapIntA = makeXMap arr
   where arr :: [(String, Int)]
         arr = [("a", 1), ("b", -2), ("c", 3)]
+
+testMapBoolA :: XMap
+testMapBoolA = makeXMap arr
+  where arr :: [(String, Bool)]
+        arr = [("a", True), ("b", True), ("c", False), ("d", False)]
+
+testMapBoolB :: XMap
+testMapBoolB = makeXMap arr
+  where arr :: [(String, Bool)]
+        arr = [("a", True), ("b", False), ("c", True), ("d", False), ("e", False)]
 
 
 
@@ -52,6 +67,10 @@ divide_standard  = TestCase $ assertXMapDoubleEqual expected actual
 negate_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Negate) Union [testMapDoubleA]
           expected = makeMap [("a", -1.2), ("b", -2.3), ("c", -3.5)]
+
+abs_standard  = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Abs) Union [testMapDoubleC]
+          expected = makeMap [("a", 1.4), ("b", 2.4), ("c", 0)]
 
 sin_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Sin) Union [testMapDoubleA]
@@ -115,6 +134,13 @@ toDecimal_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository ToDecimal) Union [testMapIntA]
           expected = makeMap [("a", 1.0), ("b", -2.0), ("c", 3.0)]
 
+and_standard = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository And) Union [testMapBoolA, testMapBoolB]
+          expected = makeMap [("a", True), ("b", False), ("c", False), ("d", False), ("e", False)]
+
+or_standard = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository Or) Union [testMapBoolA, testMapBoolB]
+          expected = makeMap [("a", True), ("b", True), ("c", True), ("d", False), ("e", False)]
 
 tests = [
           add_standard,
@@ -122,6 +148,7 @@ tests = [
           times_standard,
           divide_standard,
           negate_standard,
+          abs_standard,
           sin_standard,
           cos_standard,
           tan_standard,
@@ -136,7 +163,9 @@ tests = [
           equals_double,
           equals_string,
           len_standard,
-          toDecimal_standard
+          toDecimal_standard,
+          and_standard,
+          or_standard
         ]
 
 
