@@ -1,7 +1,7 @@
 module Editor.MapEditor exposing (mapEditorView)
 
+import Display.NewMapDialog exposing (newMapDialog)
 import Html exposing (..)
-import Material.Select as Select
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
 import Transform.MapsExtraction exposing (..)
@@ -12,8 +12,6 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Display.MdcIndexes exposing (..)
-import Display.NameDialog exposing (nameDialog)
-import Transform.TypeConversion exposing (enumToText, textToEnum)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
@@ -64,42 +62,16 @@ mapEditorViewForMap model pm =
                 ]
         Nothing -> div [] []
 
-xmapTypeChoice : Model -> Html Msg
-xmapTypeChoice model =
-    let
-        hasType t = model.xmapEditorModel.xmapType == t
-        types = [TypeDouble, TypeInt, TypeString,  TypeBool, TypeDate]
-        texts = ["Double", "Int", "String", "Bool", "Date"]
-        changeMapTypeFromText txt = Internal (ChangeMapType (textToEnum types texts txt |> Maybe.withDefault TypeString))
-        selectOptions t = Select.value (enumToText types texts t |> Maybe.withDefault "") :: (if hasType t then [Select.selected] else [])
-    in
-        Select.view Mdc
-            (makeIndex mapEditorIdx "selXmapType")
-            model.mdc
-            [ Select.label "Type"
-            , Select.selectedText (enumToText types texts model.xmapEditorModel.xmapType |> Maybe.withDefault "")
-            , Select.onSelect changeMapTypeFromText
-             ]
-             (ListX.zip types texts |> List.map (\(t, txt) -> Select.option (selectOptions t) [ text txt]))
 
 newMapButton : Model -> Html Msg
 newMapButton model =
     let
-        xmapEditorModel = model.xmapEditorModel
-        storeNewMap =
-            case xmapNameFromString xmapEditorModel.newXmapName of
-                Ok mn -> Internal (NewMapWithName mn xmapEditorModel.xmapType)
-                Err e -> Internal (CloseDialogWithError e)
         idxDialog = makeIndex mapEditorIdx "dlgNewMap"
     in
         div []
-            [
-            nameDialog idxDialog model "New map" (\s -> Internal (UpdateMapName s)) storeNewMap
-            , span [] [ xmapTypeChoice model
-            , buttonClick model (makeIndex mapEditorIdx "btnNewMap") "New" (Internal (ShowDialog idxDialog))
+            [ newMapDialog idxDialog model
+            , buttonClick model (makeIndex mapEditorIdx "btnNewMap") "New Map" (Internal (ShowDialog idxDialog))
             ]
-            ]
-
 
 mapEditorMapList : Model -> Project -> Html Msg
 mapEditorMapList model p =
