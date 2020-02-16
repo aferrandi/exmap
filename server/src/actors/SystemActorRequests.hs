@@ -58,7 +58,7 @@ pipeToProject c pn sys msg = do
 
 sendFunctions :: RuntimeSystem -> WAClient -> STM()
 sendFunctions sys c = do
-    let fs = Functions { operationTypes = allOperationTypes }
+    let fs = Functions { operationTypes = L.sortOn (\o -> show $ name (operationId o)) allOperationTypes }
     writeTChan (evtChan sys) (EMWebEvent [c] $ WEFunctions fs)
 
 newProjectIfNotAlreadyRunning :: SystemChan -> RuntimeSystem -> WAClient -> Project -> STM ()

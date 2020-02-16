@@ -6,6 +6,7 @@ data OperationName =
     | Times
     | Divide
     | Negate
+    | Abs
     | Sin
     | Cos
     | Tan
@@ -13,6 +14,8 @@ data OperationName =
     | Log
     | Sum
     | Avg
+    | And
+    | Or
     | KeysTo
     | Merge
     | Equals
@@ -21,10 +24,11 @@ data OperationName =
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
-      Math
+      Math     
     | Text
     | System
     | Conversion
+    | Logical
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationId = OperationId {
@@ -62,6 +66,7 @@ allOperationTypes = [
     newOpType (newOpId Math Times) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Divide) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Negate) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Abs) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sin) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Cos) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Tan) [ParameterDouble] ParameterDouble,
@@ -69,6 +74,8 @@ allOperationTypes = [
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Logical And) [ParameterBool] ParameterBool,
+    newOpType (newOpId Logical Or) [ParameterBool] ParameterBool,
     newOpType (newOpId Conversion ToDecimal) [ParameterInt] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,

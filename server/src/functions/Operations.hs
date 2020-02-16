@@ -45,6 +45,11 @@ fnegate om = XFunction.apply negatev
     where negatev :: Double -> Double
           negatev = Prelude.negate
 
+fabs :: OperationMode -> [XMap] -> XMapErr
+fabs om = XFunction.apply absv
+    where absv :: Double -> Double
+          absv = Prelude.abs
+
 fsin :: OperationMode -> [XMap] -> XMapErr
 fsin om = XFunction.apply sinv
     where sinv :: Double -> Double
@@ -71,6 +76,12 @@ flog om xs = do
           ms <- extractMapDouble (head xs) "values"
           let os = M.map Prelude.log (M.filter (\v -> v >= 0) ms)
           return $ XMapDouble os
+
+fand :: OperationMode -> [XMap] -> XMapErr
+fand om = operate om (&&)
+
+for :: OperationMode -> [XMap] -> XMapErr
+for om = operate om (||)
 
 keysTo :: OperationMode -> [XMap] -> XMapErr
 keysTo om xs =
@@ -145,12 +156,15 @@ operationRepository op = case op of
     Times -> times
     Divide -> divide
     Negate -> fnegate
+    Abs -> fabs
     Sin -> fsin
     Cos -> fcos
     Tan -> ftan
     Exp -> fexp
     Log -> flog
     Sum -> fsum
+    And -> fand
+    Or -> for
     Avg -> average
     KeysTo -> keysTo
     Merge -> merge
