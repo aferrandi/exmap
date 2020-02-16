@@ -16,7 +16,7 @@ import Display.UIWrapper exposing (..)
 title : Model -> String
 title model =
     let
-        titleWithProject = Maybe.map (\p -> ". Project " ++ p) model.currentProject
+        titleWithProject = Maybe.map (\p -> " Project " ++ p) model.currentProject
     in
         "EXMAP" ++ Maybe.withDefault "" titleWithProject
 
@@ -33,11 +33,10 @@ viewAllProjectsList model =
         sendOpenProject index = sendListMsg (\pn -> Internal (OpenProject pn)) model.allProjects index
     in
         div []
-        [
-            Html.text (title model),
-            Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
-                ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle model.ui.heights.viewAllProjectsList))
-                (List.map viewAllProjectsItem model.allProjects)
+        [ titleWithIcon (title model) "work" "Red"
+        , Lists.ul Mdc (makeIndex projectsUIIdx "lstAllPrj") model.mdc
+            ([ Lists.onSelectListItem sendOpenProject ] ++ (scrollableListStyle model.ui.heights.viewAllProjectsList))
+            (List.map viewAllProjectsItem model.allProjects)
         ]
 
 viewAllProjectsItem : ProjectName -> Lists.ListItem Msg

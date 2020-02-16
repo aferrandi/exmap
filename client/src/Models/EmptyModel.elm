@@ -73,6 +73,7 @@ emptyHeights =
     , viewEditorMapList = 50
     , viewEditRows = 60
     , viewView = 85
+    , newMapDialog = 50
     }
 
 emptyUI: UI

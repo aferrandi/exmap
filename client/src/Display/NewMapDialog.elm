@@ -37,7 +37,7 @@ newMapDialog index model =
                 ]
                 [ text "New Map"
                 ]
-            , Dialog.content [heightInView 50] [
+            , Dialog.content [heightInView model.ui.heights.newMapDialog] [
                 TextField.view Mdc
                 (index ++ "-textfield")
                 model.mdc

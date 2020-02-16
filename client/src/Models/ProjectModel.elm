@@ -92,6 +92,7 @@ type alias Heights =
     , viewEditorMapList : Int
     , viewEditRows : Int
     , viewView: Int
+    , newMapDialog : Int
     }
 
 type alias UI =

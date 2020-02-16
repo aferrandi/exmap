@@ -12,6 +12,7 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Display.MdcIndexes exposing (..)
+import Transform.TypeConversion exposing (enumToText)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
@@ -31,8 +32,13 @@ mapEditorView model pm =
 
 title : Model -> String
 title model =
+    let
+        types = [TypeDouble, TypeInt, TypeString,  TypeBool, TypeDate]
+        texts = ["Double", "Int", "String", "Bool", "Date"]
+        mapTypeText = enumToText types texts model.xmapEditorModel.xmapType |> Maybe.withDefault ""
+    in
         case model.xmapEditorModel.xmapName of
-            Just xmapName -> "Editing: " ++ xmapNameToString xmapName
+            Just xmapName -> "Editing: " ++ xmapNameToString xmapName ++ " (" ++ mapTypeText ++ ")"
             Nothing -> "Map Editor"
 
 mapEditorViewForMap : Model -> ProjectModel -> Html Msg
