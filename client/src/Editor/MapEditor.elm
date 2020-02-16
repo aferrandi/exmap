@@ -13,6 +13,7 @@ import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
+import Transform.TypeConversion exposing (enumToText, textToEnum)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
@@ -67,35 +68,19 @@ xmapTypeChoice : Model -> Html Msg
 xmapTypeChoice model =
     let
         hasType t = model.xmapEditorModel.xmapType == t
-        fromTextToType txt = case txt of
-                                    "Double" -> TypeDouble
-                                    "Int" -> TypeInt
-                                    "String" -> TypeString
-                                    "Bool" -> TypeBool
-                                    "Date" -> TypeDate
-                                    otherwise -> TypeString
-        fromTypeToText tpe = case tpe of
-                                     TypeDouble -> "Double"
-                                     TypeInt -> "Int"
-                                     TypeString -> "String"
-                                     TypeBool -> "Bool"
-                                     TypeDate -> "Date"
-        changeMapTypeFromText txt = Internal (ChangeMapType (fromTextToType txt))
+        types = [TypeDouble, TypeInt, TypeString,  TypeBool, TypeDate]
+        texts = ["Double", "Int", "String", "Bool", "Date"]
+        changeMapTypeFromText txt = Internal (ChangeMapType (textToEnum types texts txt |> Maybe.withDefault TypeString))
+        selectOptions t = Select.value (enumToText types texts t |> Maybe.withDefault "") :: (if hasType t then [Select.selected] else [])
     in
         Select.view Mdc
             (makeIndex mapEditorIdx "selXmapType")
             model.mdc
             [ Select.label "Type"
-            , Select.selectedText (fromTypeToText model.xmapEditorModel.xmapType)
+            , Select.selectedText (enumToText types texts model.xmapEditorModel.xmapType |> Maybe.withDefault "")
             , Select.onSelect changeMapTypeFromText
              ]
-                [
-                Select.option [] [ text "Double" ]
-                , Select.option [] [ text "Int" ]
-                , Select.option [] [ text "String" ]
-                , Select.option [] [ text "Bool" ]
-                , Select.option [] [ text "Date" ]
-                ]
+             (ListX.zip types texts |> List.map (\(t, txt) -> Select.option (selectOptions t) [ text txt]))
 
 newMapButton : Model -> Html Msg
 newMapButton model =

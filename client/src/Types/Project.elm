@@ -4,7 +4,6 @@ import Types.Calculation exposing (..)
 import Types.Views exposing (..)
 import Types.XMapTypes exposing (..)
 
-
 type alias Error = String
 
 type alias ProjectName = String
@@ -14,22 +13,17 @@ type alias OdbcSourceType = {
     sqlQuery : String
  }
 
-
-type alias HttpSourceType =
-    { url : String }
-
+type alias HttpSourceType = { url : String }
 
 type SourceType
     = FileSource
     | OdbcSource OdbcSourceType
     | HttpSource HttpSourceType
 
-
 type alias Source =
     { sourceType : SourceType
     , sourceOfMaps : List XMapName
     }
-
 
 type alias Project =
     { projectName : ProjectName

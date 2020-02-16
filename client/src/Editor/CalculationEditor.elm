@@ -17,6 +17,8 @@ import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
 import Models.WebMessages exposing (WebRequest(..))
+import Transform.TypeConversion exposing (..)
+import List.Extra as ListX
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
@@ -165,27 +167,19 @@ operationNameChoice : Model -> Html Msg
 operationNameChoice model =
     let
         hasMode m = model.calculationEditorModel.operationMode == m
-        fromTextToMode txt = case txt of
-                                    "Union" -> Union
-                                    "Intersection" -> Intersection
-                                    otherwise -> Union
-        fromModeToText mode = case mode of
-                                    Union -> "Union"
-                                    Intersection -> "Intersection"
-        changeMapTypeFromText txt = Internal (ChangeOperationMode (fromTextToMode txt))
-        selectOptions txt = if hasMode (fromTextToMode txt) then [Select.value txt, Select.selected] else [Select.value txt]
+        modes = [Union, Intersection]
+        texts = ["Union", "Intersection"]
+        changeMapTypeFromText txt = Internal (ChangeOperationMode (textToEnum modes texts txt |> Maybe.withDefault Union))
+        selectOptions m = Select.value (enumToText modes texts m |> Maybe.withDefault "") :: (if hasMode m then [Select.selected] else [])
     in
         Select.view Mdc
             (makeIndex mapEditorIdx "selOperationName")
             model.mdc
             [ Select.label "Mode"
-            , Select.selectedText (fromModeToText model.calculationEditorModel.operationMode)
+            , Select.selectedText (enumToText modes texts model.calculationEditorModel.operationMode |> Maybe.withDefault "")
             , Select.onSelect changeMapTypeFromText
              ]
-                [
-                Select.option (selectOptions "Union") [ text "Union" ]
-                , Select.option (selectOptions "Intersection") [ text "Intersection" ]
-                ]
+             (ListX.zip modes texts |> List.map (\(m, txt) -> Select.option (selectOptions m) [ text txt]))
 
 newCalculationButton : Model -> Html Msg
 newCalculationButton model =
