@@ -77,5 +77,5 @@ messagesButton model =
         div []
         [
           messagesDialog idxDialog model
-        , buttonClick model (makeIndex projectsUIIdx "btnMsgDlg") "Show messages"  (Internal (ShowDialog idxDialog))
+        , buttonClick model (makeIndex projectsUIIdx "btnMsgDlg") "Show log messages"  (Internal (ShowDialog idxDialog))
         ]

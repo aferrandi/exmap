@@ -53,7 +53,7 @@ emptyHeights: Heights
 emptyHeights =
     { viewProjects = 90
     , viewAllProjectsList = 75
-    , viewMessages = 10
+    , viewMessages = 50
     , viewViews = 80
     , viewAllViewsList = 80
     , viewCalculationsEditor = 90
@@ -71,6 +71,7 @@ emptyHeights =
     , viewEditorForView = 75
     , viewEditorViewsList = 70
     , viewEditorMapList = 50
+    , viewEditRows = 60
     , viewView = 85
     }
 

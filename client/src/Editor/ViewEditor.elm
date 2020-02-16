@@ -46,13 +46,7 @@ viewEditorForView model pm =
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
                             [ viewEditorMapList model, addLabelButton model ]
                     ]
-                    -- Grid.noSpacing
-                , LayoutGrid.view [  ]
-                    [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span4Phone] []
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
-                    , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ storeButton model pm ]
-                    ]
+                    , storeButton model pm
                 ]
         Nothing -> div [] []
 
@@ -107,10 +101,16 @@ viewEditorTable model mv =
 viewEditRows : Model -> ViewEdit -> Html Msg
 viewEditRows model v =
     let
-        rows =
-            ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewEditRowToTableCells model) |> List.map (DataTable.tr [])
+        rows = ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewEditRowToTableCells model) |> List.map (DataTable.tr [])
     in
-        DataTable.tbody [] rows
+        div []
+        [ Options.styled div [heightInView model.ui.heights.viewEditRows] [DataTable.tbody [] rows]
+          , LayoutGrid.view [  ]
+            [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
+            , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] []
+            ]
+        ]
 
 
 viewChoice : Model -> Int -> Html Msg

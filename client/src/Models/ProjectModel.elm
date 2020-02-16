@@ -90,6 +90,7 @@ type alias Heights =
     , viewEditorForView : Int
     , viewEditorViewsList : Int
     , viewEditorMapList : Int
+    , viewEditRows : Int
     , viewView: Int
     }
 
