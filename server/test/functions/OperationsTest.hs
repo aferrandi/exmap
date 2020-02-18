@@ -142,6 +142,14 @@ or_standard = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Or) Union [testMapBoolA, testMapBoolB]
           expected = makeMap [("a", True), ("b", True), ("c", True), ("d", False), ("e", False)]
 
+ifThen_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository IfThen) Union [testMapBoolA, testMapDoubleA]
+          expected = makeMap [("a", 1.2), ("b", 2.3)]
+
+ifThenElse_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository IfThenElse) Union [testMapBoolA, testMapDoubleA, testMapDoubleB]
+          expected = makeMap [("a", 1.2), ("b", 2.3), ("c", -2.4), ("d", 3.1)]
+
 tests = [
           add_standard,
           subtract_standard,
@@ -165,7 +173,9 @@ tests = [
           len_standard,
           toDecimal_standard,
           and_standard,
-          or_standard
+          or_standard,
+          ifThen_standard,
+          ifThenElse_standard
         ]
 
 

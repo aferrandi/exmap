@@ -16,6 +16,7 @@ data OperationName =
     | Avg
     | And
     | Or
+    | IfThen
     | IfThenElse
     | KeysTo
     | Merge
@@ -77,6 +78,7 @@ allOperationTypes = [
     newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Logical And) [ParameterBool] ParameterBool,
     newOpType (newOpId Logical Or) [ParameterBool] ParameterBool,
+    newOpType (newOpId Logical IfThen) [ParameterBool, ParameterAny] ParameterAny,
     newOpType (newOpId Logical IfThenElse) [ParameterBool, ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId Conversion ToDecimal) [ParameterInt] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,

@@ -147,6 +147,21 @@ toDecimal om = XFunction.apply toDecimalv
     where toDecimalv :: Int -> Double
           toDecimalv = fromIntegral
 
+ifThen :: OperationMode -> [XMap] -> XMapErr
+ifThen om xs = do
+     checkMapsNumber xs 2
+     mb <- extractMapBool (head xs) "if"
+     ms <- toMapList (tail xs)
+     Right $ ifList mb ms
+     where
+          ifThenV :: Ord k => M.Map k Bool -> M.Map k a -> M.Map k a
+          ifThenV mb mv = M.restrictKeys mv (M.keysSet $ M.filterWithKey (\k b -> b) mb)
+          ifList mb (XMapDoubleList ms) = XMapDouble $ ifThenV mb (head ms)
+          ifList mb (XMapIntList ms) = XMapInt $  ifThenV mb (head ms)
+          ifList mb (XMapStringList ms) = XMapString $  ifThenV mb (head ms)
+          ifList mb (XMapBoolList ms) = XMapBool $  ifThenV mb (head ms)
+          ifList mb (XMapDateList ms) =XMapDate $  ifThenV mb (head ms)
+
 ifThenElse :: OperationMode -> [XMap] -> XMapErr
 ifThenElse om xs = do
      checkMapsNumber xs 3
@@ -162,7 +177,6 @@ ifThenElse om xs = do
           ifList mb (XMapStringList ms) = XMapString $  ifThenElseV mb (head ms) (second ms)
           ifList mb (XMapBoolList ms) = XMapBool $  ifThenElseV mb (head ms) (second ms)
           ifList mb (XMapDateList ms) =XMapDate $  ifThenElseV mb (head ms) (second ms)
-
 
 operationRepository :: OperationName -> OperationFun
 operationRepository op = case op of
@@ -180,6 +194,7 @@ operationRepository op = case op of
     Sum -> fsum
     And -> fand
     Or -> for
+    IfThen -> ifThen
     IfThenElse -> ifThenElse
     Avg -> average
     KeysTo -> keysTo
