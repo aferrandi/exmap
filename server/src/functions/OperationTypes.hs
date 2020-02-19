@@ -12,6 +12,10 @@ data OperationName =
     | Tan
     | Exp
     | Log
+    | GreaterThan
+    | LessThan
+    | GreaterOrEqual
+    | LessOrEqual
     | Sum
     | Avg
     | And
@@ -76,6 +80,10 @@ allOperationTypes = [
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math GreaterThan) [ParameterDouble] ParameterBool,
+    newOpType (newOpId Math LessThan) [ParameterDouble] ParameterBool,
+    newOpType (newOpId Math GreaterOrEqual) [ParameterDouble] ParameterBool,
+    newOpType (newOpId Math LessOrEqual) [ParameterDouble] ParameterBool,
     newOpType (newOpId Logical And) [ParameterBool] ParameterBool,
     newOpType (newOpId Logical Or) [ParameterBool] ParameterBool,
     newOpType (newOpId Logical IfThen) [ParameterBool, ParameterAny] ParameterAny,

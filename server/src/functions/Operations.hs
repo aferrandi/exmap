@@ -77,6 +77,26 @@ flog om xs = do
           let os = M.map Prelude.log (M.filter (\v -> v >= 0) ms)
           return $ XMapDouble os
 
+greaterThan :: OperationMode -> [XMap] -> XMapErr
+greaterThan om = operate om greaterv
+    where greaterv :: Double -> Double -> Bool
+          greaterv = (>)
+
+lessThan :: OperationMode -> [XMap] -> XMapErr
+lessThan om = operate om lessv
+    where lessv :: Double -> Double -> Bool
+          lessv = (<)
+
+greaterOrEqual :: OperationMode -> [XMap] -> XMapErr
+greaterOrEqual om = operate om greatereqv
+    where greatereqv :: Double -> Double -> Bool
+          greatereqv = (>=)
+
+lessOrEqual :: OperationMode -> [XMap] -> XMapErr
+lessOrEqual om = operate om lesseqv
+    where lesseqv :: Double -> Double -> Bool
+          lesseqv = (<=)
+
 fand :: OperationMode -> [XMap] -> XMapErr
 fand om = operate om (&&)
 
@@ -191,6 +211,10 @@ operationRepository op = case op of
     Tan -> ftan
     Exp -> fexp
     Log -> flog
+    GreaterThan -> greaterThan
+    LessThan -> lessThan
+    GreaterOrEqual -> greaterOrEqual
+    LessOrEqual -> lessOrEqual
     Sum -> fsum
     And -> fand
     Or -> for

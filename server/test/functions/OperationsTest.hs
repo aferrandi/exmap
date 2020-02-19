@@ -26,6 +26,11 @@ testMapDoubleC = makeXMap arr
   where arr :: [(String, Double)]
         arr = [("a", 1.4), ("b", -2.4), ("c", 0)]
 
+testMapDoubleD :: XMap
+testMapDoubleD = makeXMap arr
+  where arr :: [(String, Double)]
+        arr = [("a", 1.2), ("b", -1.3), ("c", 0), ("d", 11)]
+
 testMapStringA :: XMap
 testMapStringA = makeStringXMap  arr
   where arr :: [(String, String)]
@@ -91,6 +96,22 @@ exp_standard  = TestCase $ assertXMapDoubleEqual expected actual
 log_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Log) Union [testMapDoubleA]
           expected = makeMap [("a", 0.1823215567939546), ("b", 0.8329091229351039), ("c", 1.252762968495368)]
+
+greaterThan_standard  = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository GreaterThan) Union [testMapDoubleA, testMapDoubleD]
+          expected = makeMap [("a", False), ("b", True), ("c", True), ("d", False)]
+
+lessThan_standard  = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository LessThan) Union [testMapDoubleA, testMapDoubleD]
+          expected = makeMap [("a", False), ("b", False), ("c", False), ("d", True)]
+
+greaterOrEqual_standard  = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository GreaterOrEqual) Union [testMapDoubleA, testMapDoubleD]
+          expected = makeMap [("a", True), ("b", True), ("c", True), ("d", False)]
+
+lessOrEqual_standard  = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository LessOrEqual) Union [testMapDoubleA, testMapDoubleD]
+          expected = makeMap [("a", True), ("b", False), ("c", False), ("d", True)]
 
 log_minus  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Log) Union [testMapDoubleB]
@@ -163,6 +184,10 @@ tests = [
           exp_standard,
           log_standard,
           log_minus,
+          greaterThan_standard,
+          lessThan_standard,
+          greaterOrEqual_standard,
+          lessOrEqual_standard,
           keysTo_union,
           keysTo_interesection,
           merge_standard,

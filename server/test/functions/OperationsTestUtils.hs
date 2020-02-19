@@ -25,13 +25,13 @@ assertXMapDoubleEqual ms xs = case xs of
 assertMapDoubleEqual :: MapValue Double -> MapValue Double -> Assertion
 assertMapDoubleEqual as bs = do
     assertEqual "the map keys are not the same" ( M.keys as) (M.keys bs)
-    mapM_ (\(a, b) ->  assertEqualsValues a b) (L.zip (M.elems as) (M.elems bs))
-    where assertEqualsValues a b = assertEqualDouble "the map values are not the same" 0.0001 a b
+    mapM_ (\(a, b, k) ->  assertEqualsValues a b k) (L.zip3 (M.elems as) (M.elems bs) (M.keys as))
+    where assertEqualsValues a b k = assertEqualDouble ("the map values are not the same for " ++ (show k)) 0.0001 a b
 
 assertMapEqual :: (XValue a, Eq a, Show a) => MapValue a -> MapValue a -> Assertion
 assertMapEqual as bs = do
     assertEqual "the map keys are not the same" ( M.keys as) (M.keys bs)
-    mapM_ (\(a, b) ->  assertEqual "the map values are not the same" a b) (L.zip (M.elems as) (M.elems bs))
+    mapM_ (\(a, b, k) ->  assertEqual ("the map values are not the same for " ++ (show k)) a b) (L.zip3 (M.elems as) (M.elems bs) (M.keys as))
 
 assertXMapBoolEqual :: MapValue Bool -> XMapErr -> Assertion
 assertXMapBoolEqual ms xs = case xs of
