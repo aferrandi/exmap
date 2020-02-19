@@ -104,13 +104,25 @@ loadCalculation chan rp c cn = do
 
 storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 storeCalculation chan rp c cs = do
-    pn <- prjName rp
-    let ft = formulaText cs
-    case parseFormula ft of
-        Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
-        Right f -> do
-                let cc = calculationFromFormula cs f
-                writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
+    let rn = sourceResultName cs
+    fnd <- projectContainsAlreadyMapWithName rp rn
+    if not fnd then do
+      let ft = formulaText cs
+      case parseFormula ft of
+          Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+          Right f -> do
+              let cc = calculationFromFormula cs f
+              pn <- prjName rp
+              writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
+    else
+      sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show $ sourceCalculationName cs) ++ " already exists"
+
+projectContainsAlreadyMapWithName :: RuntimeProject -> XMapName -> STM (Bool)
+projectContainsAlreadyMapWithName rp mn = do
+  p <- readTVar $ project rp
+  cbr <- readTVar $ calculationByResult rp
+  let maps = L.concatMap sourceOfMaps (sources p)
+  return $ M.member mn cbr || L.elem mn maps
 
 storeView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 storeView chan rp c v = do
