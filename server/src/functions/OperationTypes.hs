@@ -17,6 +17,7 @@ data OperationName =
     | GreaterOrEqual
     | LessOrEqual
     | Sum
+    | Product
     | Avg
     | And
     | Or
@@ -79,6 +80,7 @@ allOperationTypes = [
     newOpType (newOpId Math Exp) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Product) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math GreaterThan) [ParameterDouble] ParameterBool,
     newOpType (newOpId Math LessThan) [ParameterDouble] ParameterBool,

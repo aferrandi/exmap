@@ -135,6 +135,13 @@ fsum om xs = do
               let sum = L.sum $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "sum") sum)
 
+fproduct :: OperationMode -> [XMap] -> XMapErr
+fproduct om xs = do
+              checkMapsNumber xs 1
+              vs <- extractMapDouble (head xs) "values"
+              let prod = L.product $ M.elems vs
+              return $ XMapDouble (M.singleton (XMapKey "product") prod)
+
 average :: OperationMode -> [XMap] -> XMapErr
 average om xs = do
               checkMapsNumber xs 1
@@ -216,6 +223,7 @@ operationRepository op = case op of
     GreaterOrEqual -> greaterOrEqual
     LessOrEqual -> lessOrEqual
     Sum -> fsum
+    Product -> fproduct
     And -> fand
     Or -> for
     IfThen -> ifThen

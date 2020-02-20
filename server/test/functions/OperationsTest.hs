@@ -122,28 +122,32 @@ keysTo_union  = TestCase $ assertXMapDoubleEqual expected actual
            actual = (operationRepository KeysTo) Union [keyMap, testMapDoubleA]
            expected = makeMap [("c", 3.5), ("e", 1.2), ("f", 2.3)]
 
-keysTo_interesection  = TestCase $ assertXMapDoubleEqual expected actual
+keysTo_interesection = TestCase $ assertXMapDoubleEqual expected actual
      where keyMap = makeStringXMap [("a", "e"), ("b", "f"), ("d", "g")]
            actual = (operationRepository KeysTo) Intersection [keyMap, testMapDoubleA]
            expected = makeMap [("e", 1.2), ("f", 2.3)]
 
-merge_standard  = TestCase $ assertXMapDoubleEqual expected actual
+merge_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Merge) Union [testMapDoubleA, testMapDoubleB]
           expected = makeMap [("a", 1.2), ("b", 2.3), ("c", 3.5), ("d", 3.1)]
 
-sum_standard  = TestCase $ assertXMapDoubleEqual expected actual
+sum_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Sum) Union [testMapDoubleA]
           expected = makeMap [("sum", 7.0)]
 
-average_standard  = TestCase $ assertXMapDoubleEqual expected actual
+product_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository Product) Union [testMapDoubleA]
+          expected = makeMap [("product", 9.66)]
+
+average_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Avg) Union [testMapDoubleA]
           expected = makeMap [("avg", 2.33333333)]
 
-equals_double  = TestCase $ assertXMapBoolEqual expected actual
+equals_double = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Equals) Union [testMapDoubleA, makeDoubleXMap [("a", 1.2), ("b", 2.4), ("c", 3.5)]]
           expected = makeMap [("a", True), ("b", False), ("c", True)]
 
-equals_string  = TestCase $ assertXMapBoolEqual expected actual
+equals_string = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Equals) Union [testMapStringA, makeStringXMap [("a", "Morning"), ("b", "dy"), ("c", "night")]]
           expected = makeMap [("a", False), ("b", False), ("c", True), ("d", True)]
 
@@ -192,6 +196,7 @@ tests = [
           keysTo_interesection,
           merge_standard,
           sum_standard,
+          product_standard,
           average_standard,
           equals_double,
           equals_string,
