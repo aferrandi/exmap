@@ -1,9 +1,11 @@
 module Editor.FunctionChooser exposing (viewFunctions)
 
+import Material.Select as Select
 import Material.TabBar as TabBar
+import Material.TextField as TextField
 import Types.Calculation exposing (..)
 import Models.EmptyModel exposing (emptyFunctionModel)
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, span, text)
 import Models.InternalMessages exposing (..)
 import Material.List as Lists
 import Material.Options as Options
@@ -16,7 +18,10 @@ import List.Extra as ListX
 viewFunctions : Model -> Html Msg
 viewFunctions model  =
     div []
-        [ functionsCategoriesTabs model
+        [ span []
+            [ categoryChoice model
+            , matchText model
+            ]
         , functionsNamesList model
         ]
 
@@ -26,40 +31,52 @@ functions model = Maybe.withDefault emptyFunctionModel model.functions
 categories : Model -> List OperationCategory
 categories model = Dict.keys (functions model).idsByCategory
 
-functionsCategoriesTabs : Model -> Html Msg
-functionsCategoriesTabs model =
+categoryChoice : Model -> Html Msg
+categoryChoice model =
     let
-        tab category =
-            TabBar.tab
-                [ Options.css "width" "2px"
-                , Options.onClick (Internal (SwitchCategoryTo category))
-                ]
-                [text category]
-        indexOfCategory ct = ListX.elemIndex ct (categories model)
-        categoryToTab ct = Maybe.withDefault 0 (Maybe.andThen indexOfCategory ct)
+        cats = categories model
+        selectOptions cat = Select.value cat :: (Maybe.andThen(\c -> if c == cat then Just [Select.selected] else Nothing) model.currentCategory |> Maybe.withDefault [])
     in
-        TabBar.view Mdc
-            (makeIndex calcEditorIdx "tbsCat")
-            model.mdc [ TabBar.activeTab (categoryToTab model.currentCategory) ]
-            (List.map tab (categories model))
+        Select.view Mdc
+            (makeIndex calcEditorIdx "selCategory")
+            model.mdc
+            [ Select.label "Category"
+            , Select.selectedText (Maybe.withDefault "" model.currentCategory)
+            , Select.onSelect (\cat -> (Internal (SwitchCategoryTo cat)))
+             ]
+            (List.map (\cat -> Select.option  (selectOptions cat) [text cat]) cats)
 
+matchText : Model -> Html Msg
+matchText model =
+    TextField.view Mdc
+        (makeIndex calcEditorIdx "txtMatch")
+        model.mdc
+        [ TextField.label "Functions matching"
+        , TextField.value model.calculationEditorModel.operationsMatch
+        , Options.onInput (\s -> Internal (ChangeOperationsMatch s))
+        ]
+        []
 
 functionsNamesList : Model -> Html Msg
 functionsNamesList model  =
     let
-        currentOrFirstCategory = case model.currentCategory of
-                Nothing -> List.head (categories model)
-                _ ->  model.currentCategory
-        operationIdsForCategoryMaybe = Maybe.andThen (\c -> Dict.get c (functions model).idsByCategory) currentOrFirstCategory
-        operationIdsForCategory = Maybe.withDefault [] operationIdsForCategoryMaybe
-        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationIdsForCategory index
+        allOperations = Dict.values (functions model).idsByCategory |> List.concat |> List.sortBy (\o -> o.name)
+        operationsSelected =
+            case model.currentCategory of
+                Nothing -> allOperations
+                Just currentCategory -> Dict.get currentCategory (functions model).idsByCategory |> Maybe.withDefault allOperations
+        toMatch = String.trim model.calculationEditorModel.operationsMatch |> String.toLower
+        operationToShow = case toMatch of
+            "" -> operationsSelected
+            _ -> List.filter (\o -> String.toLower o.name |> String.contains toMatch) operationsSelected
+        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationToShow index
         operationListItem on =
             Lists.li []
                 [
                   Lists.graphicIcon  [] "play_arrow",
                   text on.name
                 ]
-        operationList = List.map operationListItem operationIdsForCategory
+        operationList = List.map operationListItem operationToShow
     in
         Lists.ul Mdc
             (makeIndex calcEditorIdx "lstFnc")

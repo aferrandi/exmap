@@ -17,6 +17,10 @@ handleChangeOperationMode : Model -> OperationMode -> Model
 handleChangeOperationMode model om =
     updateCalculationEditorModel model (\cm -> { cm | operationMode = om })
 
+handleChangeOperationsMatch: Model -> String -> Model
+handleChangeOperationsMatch model om =
+    updateCalculationEditorModel model (\cm -> { cm | operationsMatch = om })
+
 handleSwitchCategoryTo : Model -> OperationCategory -> Model
 handleSwitchCategoryTo model ct = { model | currentCategory = Just ct }
 

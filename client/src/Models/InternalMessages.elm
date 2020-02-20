@@ -33,6 +33,7 @@ type InternalMsg
     | AddMapToCalculation XMapName
     | AddOperationToCalculation OperationId
     | ChangeOperationMode OperationMode
+    | ChangeOperationsMatch String
     | ChangeMapType XMapType
     | AddItemToView Int ViewItem
     | SelectMapIndexForView Int

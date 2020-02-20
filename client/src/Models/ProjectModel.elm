@@ -67,6 +67,7 @@ type alias CalculationEditorModel =
     , operationMode : OperationMode
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
+    , operationsMatch : String
     }
 
 type alias Heights =

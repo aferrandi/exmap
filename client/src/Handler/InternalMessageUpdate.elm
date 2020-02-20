@@ -1,6 +1,6 @@
 module Handler.InternalMessageUpdate exposing (updateInternal)
 
-import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleNewCalculationWithName, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
+import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleChangeOperationsMatch, handleNewCalculationWithName, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
 import Handler.InternalMapMessageUpdate exposing (handleChangeMapType, handleMapToTable, handleMapToTextArea, handleNewMapWithName, handleShowMapInEditor, handleUpdateMapName)
 import Handler.InternalProjectMessageUpdate exposing (handleNewProjectWithName, handleOpenProject, handleSwitchProjectViewTo, handleUpdateProjectName)
 import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleSelectMapIndexForViewEdit, handleAddRowToViewEdit, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleUpdateViewLabel, handleUpdateViewName)
@@ -60,6 +60,8 @@ updateInternal msg model =
             ( handleAddOperationToCalculation model on, Cmd.none )
         ChangeOperationMode om ->
             ( handleChangeOperationMode model om, Cmd.none )
+        ChangeOperationsMatch om ->
+            ( handleChangeOperationsMatch model om, Cmd.none )
         ChangeMapType mt ->
             ( handleChangeMapType model mt, Cmd.none )
         AddItemToView row it ->

@@ -47,6 +47,7 @@ emptyCalculationEditorModel =
     , calculationFormulaText = Nothing
     , newCalculationName = ""
     , operationMode = Union
+    , operationsMatch = ""
     }
 
 emptyHeights: Heights
