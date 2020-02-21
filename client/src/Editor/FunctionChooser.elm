@@ -1,11 +1,11 @@
 module Editor.FunctionChooser exposing (viewFunctions)
 
+import Material.LayoutGrid as LayoutGrid
 import Material.Select as Select
-import Material.TabBar as TabBar
 import Material.TextField as TextField
 import Types.Calculation exposing (..)
 import Models.EmptyModel exposing (emptyFunctionModel)
-import Html exposing (Html, div, span, text)
+import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 import Material.List as Lists
 import Material.Options as Options
@@ -13,15 +13,15 @@ import Display.MdcIndexes exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
 import Dict as Dict
-import List.Extra as ListX
 
 viewFunctions : Model -> Html Msg
 viewFunctions model  =
     div []
-        [ span []
-            [ categoryChoice model
-            , matchText model
-            ]
+        [
+            LayoutGrid.inner [ ]
+                [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span6Desktop, LayoutGrid.span2Phone] [ categoryChoice model ]
+                , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span6Desktop, LayoutGrid.span2Phone] [ matchText model ]
+                ]
         , functionsNamesList model
         ]
 
@@ -51,7 +51,7 @@ matchText model =
     TextField.view Mdc
         (makeIndex calcEditorIdx "txtMatch")
         model.mdc
-        [ TextField.label "Functions matching"
+        [ TextField.label "Search"
         , TextField.value model.calculationEditorModel.operationsMatch
         , Options.onInput (\s -> Internal (ChangeOperationsMatch s))
         ]
