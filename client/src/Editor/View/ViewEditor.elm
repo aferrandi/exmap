@@ -43,7 +43,7 @@ viewEditorForView model pm =
 
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
-    storeView pm model.viewEditorModel |> buttonClick model (makeIndex viewEditorIdx "btnStr") "Store"
+    storeView pm model.viewEditorModel |> buttonClick model (makeIndex viewEditorIdx "btnStr") "Store View"
 
 storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm =

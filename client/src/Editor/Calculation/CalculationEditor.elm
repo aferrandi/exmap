@@ -25,9 +25,8 @@ viewCalculationsEditor model pm =
             LayoutGrid.view [ heightInView model.ui.heights.viewCalculationsEditor ]
                 [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [
                 div []
-                        [
-                            calculationsInProjectList model pm,
-                            newCalculationButton model
+                        [ calculationsInProjectList model pm
+                        , newCalculationButton model
                         ]
                     ]
                 , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone]
@@ -64,7 +63,7 @@ viewEditorForCalculation model pm cn =
 
 storeButton : Model -> ProjectModel -> Html Msg
 storeButton model pm =
-    storeCalculation pm model.calculationEditorModel |> buttonClick model (makeIndex calcEditorIdx "btnStr") "Store"
+    storeCalculation pm model.calculationEditorModel |> buttonClick model (makeIndex calcEditorIdx "btnStr") "Store Calculation"
 
 
 storeCalculation : ProjectModel -> CalculationEditorModel -> Msg

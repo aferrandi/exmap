@@ -62,7 +62,7 @@ mapEditorViewForMap model pm =
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span3Phone]
                     [ buttonClick model (makeIndex mapEditorIdx "btnToTxt") "< To Text" (Internal MapToTextArea) ]
                     , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]
-                    [ buttonMaybe model (makeIndex mapEditorIdx "btnToStr") "Store"
+                    [ buttonMaybe model (makeIndex mapEditorIdx "btnToStr") "Store Map"
                         (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
