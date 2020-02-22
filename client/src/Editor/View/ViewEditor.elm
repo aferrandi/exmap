@@ -33,15 +33,12 @@ title model =
 viewEditorForView model pm =
     case model.viewEditorModel.viewName of
         Just vn ->
-            div []
-                [ LayoutGrid.view [ heightInView model.ui.heights.viewEditorForView ]
+            LayoutGrid.view [ heightInView model.ui.heights.viewEditorForView ]
                     [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone]
                             [ viewEditorTable model model.viewEditorModel.viewToEdit ]
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
-                            [ viewEditorMapList model, addLabelButton model ]
+                            [ viewEditorMapList model, addLabelButton model, storeButton model pm]
                     ]
-                    , storeButton model pm
-                ]
         Nothing -> div [] []
 
 storeButton : Model -> ProjectModel -> Html Msg
@@ -129,7 +126,7 @@ addLabelButton model =
         viewEditorModel = model.viewEditorModel
         newLabelMessage = Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing))
     in
-        Options.styled Html.span [Options.css "margin-top" "6px"]
+        Options.styled Html.div [Options.css "margin-top" "6px"]
             [ TextField.view Mdc
                 (makeIndex viewEditorIdx "txtAddLbl")
                 model.mdc

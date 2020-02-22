@@ -62,7 +62,7 @@ emptyHeights =
     , calculationTextArea = 70
     , calculationsInProjectList = 70
     , mapsInProjectList = 70
-    , functionsNamesList = 65
+    , functionsNamesList = 60
     , mapEditorView = 90
     , mapEditorViewForMap = 75
     , mapEditorTextArea = 75
@@ -72,7 +72,7 @@ emptyHeights =
     , viewEditorForView = 75
     , viewEditorViewsList = 70
     , viewEditorMapList = 50
-    , viewEditRows = 60
+    , viewEditRows = 70
     , viewView = 85
     , newMapDialog = 50
     }
