@@ -1,6 +1,6 @@
-module Editor.CalculationEditor exposing (viewCalculationsEditor)
+module Editor.Calculation.CalculationEditor exposing (viewCalculationsEditor)
 
-import Editor.FunctionChooser exposing (viewFunctions)
+import Editor.Calculation.FunctionChooser exposing (viewFunctions)
 import Material.Select as Select
 import Types.Calculation exposing (..)
 import Html exposing (Html, div, text)

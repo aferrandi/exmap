@@ -1,6 +1,7 @@
 module Display.ProjectUI exposing (viewProject)
 
-import Editor.CalculationEditor exposing (..)
+import Editor.Calculation.CalculationEditor exposing (viewCalculationsEditor)
+import Editor.View.ViewEditor exposing (viewViewsEditor)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
@@ -10,7 +11,6 @@ import Material.Options as Options
 import Material.TabBar as TabBar
 import Display.MdcIndexes exposing (..)
 import Models.ProjectModel exposing (..)
-import Editor.ViewEditor exposing (..)
 import Display.ViewsUI exposing (..)
 
 

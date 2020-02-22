@@ -1,4 +1,4 @@
-module Editor.FunctionChooser exposing (viewFunctions)
+module Editor.Calculation.FunctionChooser exposing (viewFunctions)
 
 import Material.LayoutGrid as LayoutGrid
 import Material.Select as Select

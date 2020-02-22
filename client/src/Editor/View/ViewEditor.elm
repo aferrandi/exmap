@@ -1,19 +1,13 @@
-module Editor.ViewEditor exposing (viewViewsEditor)
+module Editor.View.ViewEditor exposing (viewViewsEditor)
 
+import Editor.View.ViewEditorTable exposing (viewEditorTable)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
-import List.Extra as ListX
-import Dict as Dict
-
 import Transform.MapsExtraction exposing (xmapNameToString)
-
 import Material.LayoutGrid as LayoutGrid
 import Material.List as Lists
 import Material.Options as Options exposing (styled)
-import Material.DataTable as DataTable
 import Material.TextField as TextField
-import Material.RadioButton as RadioButton
-import Material.Checkbox as Checkbox
 import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Transform.NameParser exposing (..)
@@ -92,67 +86,6 @@ viewEditorViewsList model p =
                 (List.map listItem p.viewNames)
         ]
 
-viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
-viewEditorTable model mv =
-    case mv of
-        Just v -> DataTable.table [] [ viewEditRows model v ]
-        Nothing -> DataTable.table [] [ DataTable.tbody [] [] ]
-
-viewEditRows : Model -> ViewEdit -> Html Msg
-viewEditRows model v =
-    let
-        rows = ListX.zip (List.range 0 (List.length v.rows)) v.rows |> List.map (viewEditRowToTableCells model) |> List.map (DataTable.tr [])
-    in
-        div []
-        [ Options.styled div [heightInView model.ui.heights.viewEditRows, Options.css "background" "WhiteSmoke"] [DataTable.tbody [] rows]
-          , LayoutGrid.view [  ]
-            [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
-            , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
-            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] []
-            ]
-        ]
-
-
-viewChoice : Model -> Int -> Html Msg
-viewChoice model rowI =
-    DataTable.td []
-        [ RadioButton.view Mdc
-            (makeIndex viewEditorIdx "radChc")
-            model.mdc
-            [ RadioButton.selected |> Options.when (model.viewEditorModel.rowToAddTo == rowI)
-            , Options.onClick (Internal (ChangeViewEditSelectedRow rowI))
-            ]
-            []
-        ]
-
-viewEditItem : Model -> ViewEditItem -> Html Msg
-viewEditItem model item =
-    case item.content of
-        MapItem mn -> DataTable.td [ Options.css "background" "Coral"] [ viewEditItemCheckbox model item.id (xmapNameToString mn) ]
-        LabelItem l -> DataTable.td [ Options.css "background" "DarkTurquoise"] [ viewEditItemCheckbox model item.id l ]
-
-
-viewEditItemCheckbox: Model -> ViewEditItemId -> String -> Html Msg
-viewEditItemCheckbox model viewItemId txt=
-    let checked =
-            Dict.get viewItemId model.viewEditorModel.checkedViewEditItems
-                |> Maybe.withDefault Nothing
-                |> Maybe.map Checkbox.checked
-                |> Maybe.withDefault Options.nop
-        clickHandler = Options.onClick (Internal (ChangeViewEditCheckedItem viewItemId))
-        index = makeIndex viewEditorIdx ("check" ++ (String.fromInt viewItemId))
-    in
-        div []
-        [
-            Checkbox.view Mdc index model.mdc (checked :: clickHandler :: []) [],
-            text txt
-        ]
-
-viewEditRowToTableCells : Model -> ( Int, ViewEditRow ) -> List (Html Msg)
-viewEditRowToTableCells model ( rowIdx, ViewEditRow row ) =
-    viewChoice model rowIdx :: List.map (viewEditItem model) row
-
-
 viewEditorMapList : Model -> Html Msg
 viewEditorMapList model =
     let
@@ -209,15 +142,3 @@ addLabelButton model =
             ]
 
 
-addRowButton : Model -> Html Msg
-addRowButton model =
-    buttonClick model (makeIndex viewEditorIdx "btnAddRow") "Add row" (Internal AddRowToView)
-
-removeCellsButton : Model -> Html Msg
-removeCellsButton model =
-    let
-        itemsToDelete = Dict.toList model.viewEditorModel.checkedViewEditItems
-            |> List.filter (\(k, v)-> Maybe.withDefault False v)
-            |> List.map (\(k, v) -> k)
-    in
-        buttonClick model (makeIndex viewEditorIdx "btnRemoveCells") "Remove items" (Internal (RemoveItemsFromView itemsToDelete))
