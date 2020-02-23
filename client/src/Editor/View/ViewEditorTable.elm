@@ -31,7 +31,7 @@ viewEditRows model v =
           , LayoutGrid.view [  ]
             [ LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ addRowButton model ]
             , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span3Desktop, LayoutGrid.span2Phone] [ removeCellsButton model ]
-            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] []
+            , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span4Phone] [ removeRowButton model]
             ]
         ]
 
@@ -51,6 +51,10 @@ removeCellsButton model =
             |> List.map (\(k, v) -> k)
     in
         buttonClick model (makeIndex viewEditorIdx "btnRemoveCells") "Remove items" (Internal (RemoveItemsFromView itemsToDelete))
+
+removeRowButton : Model -> Html Msg
+removeRowButton model =
+    buttonClick model (makeIndex viewEditorIdx "btnRemoveRow") "Remove row" (Internal (RemoveRowFromView model.viewEditorModel.rowToAddTo))
 
 viewChoice : Model -> Int -> Html Msg
 viewChoice model rowI =

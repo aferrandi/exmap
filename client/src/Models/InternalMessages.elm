@@ -45,6 +45,7 @@ type InternalMsg
     | ChangeViewEditCheckedItem ViewEditItemId
     | AddRowToView
     | RemoveItemsFromView (List ViewEditItemId)
+    | RemoveRowFromView Int
     | ShowDialog String
     | CloseDialog
     | CloseDialogWithError String

@@ -74,6 +74,23 @@ handleRemoveItemsFromViewEdit model ids =
     in
         updateViewEditorModel model (\vm -> { vm | viewToEdit = Maybe.map removeFromViews vm.viewToEdit, checkedViewEditItems = removeFromChecked vm.checkedViewEditItems})
 
+handleRemoveRowFromView : Model -> Int -> Model
+handleRemoveRowFromView model idx =
+    let
+        removeRowFromView: ViewEdit -> ViewEdit
+        removeRowFromView v = { v | rows = ListX.removeAt idx v.rows }
+        itemsFromRow: ViewEditRow -> List ViewEditItemId
+        itemsFromRow (ViewEditRow items) = List.map (\i -> i.id) items
+        itemsFromRowIndex: ViewEdit -> List ViewEditItemId
+        itemsFromRowIndex v = ListX.getAt idx v.rows |> Maybe.map itemsFromRow |> Maybe.withDefault []
+        removeFromChecked: Maybe ViewEdit -> ViewEditItemsChecked -> ViewEditItemsChecked
+        removeFromChecked mv cks = case mv of
+                Just v -> DictX.removeMany (itemsFromRowIndex v |> Set.fromList) cks
+                Nothing -> cks
+    in
+        updateViewEditorModel model (\vm -> { vm | viewToEdit = Maybe.map removeRowFromView vm.viewToEdit, checkedViewEditItems = removeFromChecked vm.viewToEdit vm.checkedViewEditItems, rowToAddTo = 0 })
+
+
 handleChangeViewEditCheckedItem : Model -> ViewEditItemId -> Model
 handleChangeViewEditCheckedItem model id =
     updateViewEditorModel model (\vm -> { vm | checkedViewEditItems = invertValue id vm.checkedViewEditItems })
