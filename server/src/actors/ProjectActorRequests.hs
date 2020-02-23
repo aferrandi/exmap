@@ -48,7 +48,12 @@ loadMapForClient c chan rp mn = do
 storeMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 storeMap c chan rp m = do
     pn <- prjName rp
-    writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn  m
+    let mn = xmapName m 
+    fnd <- projectContainsAlreadyMapWithName rp mn
+    if not fnd then do    
+      writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn m
+    else
+      sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " already exists"
 
 disconnectClient :: RuntimeProject -> WAClient -> STM()
 disconnectClient rp c = do
