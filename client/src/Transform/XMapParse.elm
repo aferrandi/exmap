@@ -15,7 +15,9 @@ toBool : String -> Result String Bool
 toBool b =
     case b of
         "true" -> Ok True
+        "True" -> Ok True
         "false" -> Ok False
+        "False" -> Ok False
         _ -> Err (b ++ " is not a bool")
 
 

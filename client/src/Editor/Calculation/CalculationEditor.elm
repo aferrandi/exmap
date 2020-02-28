@@ -48,14 +48,20 @@ viewCalculationEditor model pm =
 viewEditorForCalculation : Model -> ProjectModel -> CalculationName -> Html Msg
 viewEditorForCalculation model pm cn =
     div []
-        [ LayoutGrid.view [ heightInView model.ui.heights.viewEditorForCalculation ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectList model ]
+        [ LayoutGrid.inner [  ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ resultMapNameText model ]
+            , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [ operationNameChoice model ]
+            , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone]
+                [  ]
+            ]
+        , LayoutGrid.view [ heightInView model.ui.heights.viewEditorForCalculation ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectListForCalculation model ]
             , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
         , LayoutGrid.view [  ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ resultMapNameText model ]
-            , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [ operationNameChoice model ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ ]
+            , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [  ]
             , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone]
                 [ storeButton model pm ]
             ]
@@ -119,8 +125,8 @@ calculationsInProjectList model pm =
                      (List.map listItem pm.project.calculations)
         ]
 
-mapsInProjectList : Model -> Html Msg
-mapsInProjectList model =
+mapsInProjectListForCalculation : Model -> Html Msg
+mapsInProjectListForCalculation model =
     let
         sendAddMap index = sendListMsg (\mn -> (Internal (AddMapToCalculation mn))) model.mapsInProject index
         listItem mn =
@@ -133,7 +139,7 @@ mapsInProjectList model =
         Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstMapInPrj")
                 model.mdc
-                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle model.ui.heights.mapsInProjectList))
+                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
                 (List.map listItem model.mapsInProject)
 
 calculationTextArea : Model -> Html Msg

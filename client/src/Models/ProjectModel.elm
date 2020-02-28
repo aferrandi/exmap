@@ -80,7 +80,7 @@ type alias Heights =
     , viewEditorForCalculation : Int
     , calculationTextArea : Int
     , calculationsInProjectList : Int
-    , mapsInProjectList : Int
+    , mapsInProjectListForCalculation : Int
     , functionsNamesList : Int
     , mapEditorView : Int
     , mapEditorViewForMap : Int
