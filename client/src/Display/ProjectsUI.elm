@@ -2,6 +2,7 @@ module Display.ProjectsUI exposing (viewProjects)
 
 import Display.MessagesDialog exposing (messagesDialog)
 import Html exposing (Html, div, text)
+import Material.Snackbar as Snackbar
 import Models.InternalMessages exposing (..)
 
 import Material.LayoutGrid as LayoutGrid
@@ -22,10 +23,14 @@ title model =
 
 viewProjects : Model -> Html Msg
 viewProjects model =
+    div []
+    [
         LayoutGrid.view [ heightInView model.ui.heights.viewProjects ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model, messagesButton model ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span2Desktop, LayoutGrid.span1Phone] [ viewAllProjectsList model, newProjectButton model, messageSnackbar model ]
             , LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span10Desktop, LayoutGrid.span3Phone] [ viewCurrentProject model ]
             ]
+        , messagesDialog (makeIndex projectsUIIdx "dlgMsg") model
+    ]
 
 viewAllProjectsList : Model -> Html Msg
 viewAllProjectsList model =
@@ -68,13 +73,6 @@ newProjectButton model =
         , buttonClick model (makeIndex projectsUIIdx "btnNewPrj") "Create and store project"  (Internal (ShowDialog idxDialog))
         ]
 
-messagesButton : Model -> Html Msg
-messagesButton model =
-    let
-        idxDialog = makeIndex projectsUIIdx "dlgMsg"
-    in
-        div []
-        [
-          messagesDialog idxDialog model
-        , buttonClick model (makeIndex projectsUIIdx "btnMsgDlg") "Show log messages"  (Internal (ShowDialog idxDialog))
-        ]
+messageSnackbar: Model -> Html Msg
+messageSnackbar  model = Snackbar.view Mdc "snackMessage" model.mdc [] []
+

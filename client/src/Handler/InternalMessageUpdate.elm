@@ -17,7 +17,7 @@ updateInternal msg model =
         MapToTextArea ->
             ( handleMapToTextArea model, Cmd.none )
         MapToTable ->
-            ( handleMapToTable model, Cmd.none )
+            handleMapToTable model
         OpenProject pn ->
             handleOpenProject model pn
         OpenView vn ->
@@ -43,7 +43,7 @@ updateInternal msg model =
         NewProjectWithName pn ->
             handleNewProjectWithName model pn
         ShowMessage s ->
-            ( showMessage model s, Cmd.none )
+            showMessage model s
         ShowMapInEditor mn ->
             handleShowMapInEditor model mn
         SwitchProjectViewTo vt ->
@@ -83,4 +83,5 @@ updateInternal msg model =
         CloseDialog ->
              ( closeDialog model, Cmd.none)
         CloseDialogWithError err ->
-            ( showMessage model err |> closeDialog, Cmd.none )
+             let (mdl, effect) = showMessage model err
+             in  (closeDialog mdl, effect)

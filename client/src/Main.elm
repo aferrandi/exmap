@@ -37,8 +37,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of
     Receive json -> updateWithWebEvent (Debug.log "Web received:" json) model
     WebSocketConnected isConnected -> if isConnected
-                                        then (showMessage model "Connected", sendToServer WRAllProjects)
-                                        else (showMessage model "Disconnected", Cmd.none)
+                                        then let (mdl, effect) = showMessage model "Connected"
+                                             in (mdl, Cmd.batch [effect, sendToServer WRAllProjects])
+                                        else showMessage model "Disconnected"
     Send req -> (model, batch [ sendToServer req ])
     SendMany reqs -> (model, batch (List.map sendToServer reqs))
     Mdc msg_ -> Material.update Mdc msg_ model

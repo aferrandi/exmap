@@ -31,16 +31,16 @@ handleShowMapInEditor model mn =
             Just pn -> ( cleanup, command pn )
             Nothing -> ( model, Cmd.none )
 
-handleMapToTable : Model -> Model
+handleMapToTable : Model -> (Model, Cmd Msg)
 handleMapToTable model =
     let
         xmapEditorModel = model.xmapEditorModel
         mm = Maybe.map (textToMap xmapEditorModel.xmapType) xmapEditorModel.xmapEditing
     in
         case mm of
-            Just (Ok m) -> updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing })
+            Just (Ok m) -> (updateXMapEditorModel model (\xm -> { xm | xmapToEdit = Just m, xmapEditing = Nothing }), Cmd.none)
             Just (Err e) -> showMessage model e
-            Nothing -> model
+            Nothing -> (model, Cmd.none)
 
 
 handleMapToTextArea : Model -> Model

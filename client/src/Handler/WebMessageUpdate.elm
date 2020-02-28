@@ -21,9 +21,9 @@ updateEvent evt model =
         WEAllProjects ap ->
             ( { model | allProjects = ap }, Cmd.none )
         WEError e ->
-            ( showMessage model ("Server Error: " ++ e), Cmd.none )
+            showMessage model ("Server Error: " ++ e)
         WEInfo i ->
-            ( showMessage model ("Server Info: " ++ i), Cmd.none )
+            showMessage model ("Server Info: " ++ i)
         WEProjectContent p ->
             ( updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none )
         WEProjectStored p ->
@@ -37,17 +37,17 @@ updateEvent evt model =
         WEMapLoaded pn m ->
             ( handleMapLoaded model m, Cmd.none )
         WEMapStored pn mn sz ->
-            ( handleMapStored model pn mn sz, Cmd.none )
+            handleMapStored model pn mn sz
         WEViewLoaded pn v ->
             ( handleViewLoaded model v, Cmd.none )
         WECalculationLoaded pn cs ->
             ( handleCalculationLoaded model cs, Cmd.none )
         WECalculationStored pn cn ->
-            ( handleCalculationStored model pn cn, Cmd.none )
+            handleCalculationStored model pn cn
         WEFunctions fs ->
             ( handleFunctions model fs, Cmd.none )
         _ ->
-            ( showMessage model ("Message from server " ++ Debug.toString evt ++ " not recognized"), Cmd.none )
+            showMessage model ("Message from server " ++ Debug.toString evt ++ " not recognized")
 
 
 handleMapLoaded : Model -> XNamedMap -> Model
@@ -62,22 +62,22 @@ handleMapLoaded model m =
         )
 
 
-handleCalculationStored : Model -> ProjectName -> CalculationName -> Model
+handleCalculationStored : Model -> ProjectName -> CalculationName -> (Model, Cmd Msg )
 handleCalculationStored model pn cn =
     let
         mdlCleaned =
             updateCalculationEditorModel model (\cm -> { cm | newCalculationName = "" })
     in
-    showMessage mdlCleaned ("Calculation:" ++ cn ++ " of project:" ++ pn ++ " stored")
+        showMessage mdlCleaned ("Calculation:" ++ cn ++ " of project:" ++ pn ++ " stored")
 
 
-handleMapStored : Model -> ProjectName -> XMapName -> Int -> Model
+handleMapStored : Model -> ProjectName -> XMapName -> Int -> (Model, Cmd Msg )
 handleMapStored model pn mn sz =
     let
         mdlCleaned =
             updateXMapEditorModel model (\mm -> { mm | newXmapName = "" })
     in
-    showMessage mdlCleaned ("Map:" ++ xmapNameToString mn ++ " of project:" ++ pn ++ " with size " ++ String.fromInt sz ++ " stored")
+        showMessage mdlCleaned ("Map:" ++ xmapNameToString mn ++ " of project:" ++ pn ++ " with size " ++ String.fromInt sz ++ " stored")
 
 
 handleViewLoaded : Model -> View -> Model
@@ -195,7 +195,7 @@ updateWithWebEvent json model =
     in
         case decodeString webEventDecoder json of
             Ok evt -> updateEvent evt model
-            Err err -> ( showMessage model ("Error: " ++ Debug.toString err ++ " decoding Json " ++ json), Cmd.none )
+            Err err -> showMessage model ("Error: " ++ Debug.toString err ++ " decoding Json " ++ json)
 
 
 updateIfProjectHasSameName : ProjectName -> (ProjectModel -> ProjectModel) -> List ProjectModel -> List ProjectModel

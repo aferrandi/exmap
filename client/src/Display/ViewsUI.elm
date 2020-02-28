@@ -1,6 +1,7 @@
 module Display.ViewsUI exposing (viewViews)
 
 import Html exposing (Html, div, text)
+import Material.Snackbar as Snackbar exposing (..)
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
 
@@ -55,3 +56,4 @@ viewCurrentView model pm =
     case model.currentView of
         Just cvn -> currentViewWithName cvn
         Nothing -> div [] []
+

@@ -1,12 +1,27 @@
 module Handler.ModelUpdate exposing (..)
 
+import Display.MdcIndexes exposing (makeIndex, projectsUIIdx)
+import Material.Snackbar as Snackbar
+import Models.InternalMessages exposing (InternalMsg(..))
 import Models.ProjectModel exposing (..)
 
 
-showMessage : Model -> String -> Model
+showMessage : Model -> String -> ( Model, Cmd Msg )
 showMessage model msg =
-    { model | messages = msg :: model.messages }
+    let
+        ( updatedModel, effects ) = showMessageAsSnackbar model msg
+    in
+        ({ updatedModel | messages = msg :: model.messages }, effects)
 
+showMessageAsSnackbar : Model -> String ->  ( Model, Cmd Msg )
+showMessageAsSnackbar model msg =
+    let
+        idxDialog = makeIndex projectsUIIdx "dlgMsg"
+        command = Just (Internal (ShowDialog idxDialog))
+        content = Snackbar.snack command msg  "Show all"
+        ( mdc, effects ) = Snackbar.add Mdc "snackMessage" content model.mdc
+    in
+         ( { model | mdc = mdc }, effects )
 
 updateXMapEditorModel : Model -> (XMapEditorModel -> XMapEditorModel) -> Model
 updateXMapEditorModel model update =
