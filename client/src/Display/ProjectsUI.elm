@@ -74,5 +74,5 @@ newProjectButton model =
         ]
 
 messageSnackbar: Model -> Html Msg
-messageSnackbar  model = Snackbar.view Mdc "snackMessage" model.mdc [] []
+messageSnackbar  model = Snackbar.view Mdc "snackMessage" model.mdc [Snackbar.dismissible] []
 

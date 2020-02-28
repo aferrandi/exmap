@@ -53,7 +53,7 @@ emptyCalculationEditorModel =
 emptyHeights: Heights
 emptyHeights =
     { viewProjects = 90
-    , viewAllProjectsList = 75
+    , viewAllProjectsList = 80
     , viewMessages = 50
     , viewViews = 80
     , viewAllViewsList = 80
