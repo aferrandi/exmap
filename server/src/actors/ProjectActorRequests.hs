@@ -8,6 +8,7 @@ import qualified Data.List as L
 import qualified Data.Map.Strict as M
 
 import ProjectState
+import CheckProjectContent
 import ProjectMessages
 import ViewMessages
 import EventMessages
@@ -52,8 +53,9 @@ addMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 addMap c chan rp m = do
     pn <- prjName rp
     let mn = xmapName m 
-    fnd <- projectContainsAlreadyMapWithName rp mn
-    if not fnd then do    
+    fndMap <- projectContainsMapWithName rp mn
+    fndResult <- projectContainsResultWithName rp mn
+    if not (fndMap || fndResult) then do
       writeTChan (storeChan $ chans rp)  $ StMStoreNewMap chan c pn m
     else
       sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " already exists"
@@ -62,11 +64,11 @@ updateMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 updateMap c chan rp m = do
     pn <- prjName rp
     let mn = xmapName m
-    fnd <- projectContainsAlreadyMapWithName rp mn
-    if not fnd then do
+    fnd <- projectContainsMapWithName rp mn
+    if fnd then do
       writeTChan (storeChan $ chans rp)  $ StMStoreExistingMap chan c pn m
     else
-      sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " already exists"
+      sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " to update does'nt exists"
 
 disconnectClient :: RuntimeProject -> WAClient -> STM()
 disconnectClient rp c = do
@@ -123,50 +125,58 @@ loadCalculation chan rp c cn = do
 addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 addCalculation chan rp c cs = do
     let rn = sourceResultName cs
-    fnd <- projectContainsAlreadyMapWithName rp rn
-    if not fnd then do
-      let ft = formulaText cs
-      case parseFormula ft of
-          Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
-          Right f -> do
-              let cc = calculationFromFormula cs f
-              pn <- prjName rp
-              writeTChan (storeChan $ chans rp)  $ StMStoreNewCalculation chan c pn cc
+    let cn = sourceCalculationName cs
+    pn <- prjName rp
+    fndMap <- projectContainsMapWithName rp rn
+    fndResult <- projectContainsResultWithName rp rn
+    if not (fndMap || fndResult) then do
+      fndCalculation <- projectContainsCalculationWithName rp cn
+      if not fndCalculation then do
+        let ft = formulaText cs
+        case parseFormula ft of
+            Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+            Right f -> do
+                let cc = calculationFromFormula cs f
+                writeTChan (storeChan $ chans rp)  $ StMStoreNewCalculation chan c pn cc
+      else
+        sendStringError  (evtChan rp) [c] $ "A calculation with name" ++ (show cn) ++ " already exists in the project" ++ (show pn)
     else
-      sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show $ sourceCalculationName cs) ++ " already exists"
+      sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show cn) ++ " already exists in the project" ++ (show pn)
 
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 updateCalculation chan rp c cs = do
-    let rn = sourceResultName cs
-    fnd <- projectContainsAlreadyMapWithName rp rn
-    if not fnd then do
+    let cn = sourceCalculationName cs
+    pn <- prjName rp
+    fnd <- projectContainsCalculationWithName rp cn
+    if fnd then do
       let ft = formulaText cs
       case parseFormula ft of
           Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
           Right f -> do
               let cc = calculationFromFormula cs f
-              pn <- prjName rp
               writeTChan (storeChan $ chans rp)  $ StMStoreExistingCalculation chan c pn cc
     else
-      sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show $ sourceCalculationName cs) ++ " already exists"
+      sendStringError  (evtChan rp) [c] $ "The calculation with name " ++ (show cn) ++ " to update does not exist in the project" ++ (show pn)
 
 
-projectContainsAlreadyMapWithName :: RuntimeProject -> XMapName -> STM (Bool)
-projectContainsAlreadyMapWithName rp mn = do
-  p <- readTVar $ project rp
-  cbr <- readTVar $ calculationByResult rp
-  let maps = L.concatMap sourceOfMaps (sources p)
-  return $ M.member mn cbr || L.elem mn maps
 
 addView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 addView chan rp c v = do
     pn <- prjName rp
-    writeTChan (storeChan $ chans rp)  $ StMStoreNewView chan c pn v
+    fnd <- projectContainsViewWithName rp (viewName v)
+    if not fnd then do
+      writeTChan (storeChan $ chans rp)  $ StMStoreNewView chan c pn v
+    else
+      sendStringError  (evtChan rp) [c] $ "A view with name " ++ (show $ viewName v) ++ " already exists in the project" ++ (show pn)
 
 updateView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
 updateView chan rp c v = do
     pn <- prjName rp
-    writeTChan (storeChan $ chans rp)  $ StMStoreExistingView chan c pn v
+    fnd <- projectContainsViewWithName rp (viewName v)
+    if fnd then do
+      writeTChan (storeChan $ chans rp)  $ StMStoreExistingView chan c pn v
+    else
+      sendStringError  (evtChan rp) [c] $ "The view with name " ++ (show $ viewName v) ++ " to update does not exist in the project" ++ (show pn)
 
 loadView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
 loadView chan rp c vn = do
