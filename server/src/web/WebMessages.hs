@@ -13,14 +13,17 @@ data WebRequest =
     | WRNewProject Project
     | WRUpdateProject Project
     | WRLoadMap ProjectName XMapName
-    | WRStoreMap ProjectName XNamedMap
+    | WRAddMap ProjectName XNamedMap
+    | WRUpdateMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
     | WRMapsInProject ProjectName
     | WRLoadView ProjectName ViewName
-    | WRStoreView ProjectName View
+    | WRAddView ProjectName View
+    | WRUpdateView ProjectName View
     | WRLoadCalculation ProjectName CalculationName
-    | WRStoreCalculation ProjectName CalculationSource
+    | WRAddCalculation ProjectName CalculationSource
+    | WRUpdateCalculation ProjectName CalculationSource
     | WRFunctions
     deriving (Show, Eq)
 
@@ -30,14 +33,17 @@ data WebEvent =
     | WEProjectContent Project
     | WEProjectStored Project
     | WEMapLoaded ProjectName XNamedMap
-    | WEMapStored ProjectName XMapName Int
+    | WEMapAdded ProjectName XMapName Int
+    | WEMapUpdated ProjectName XMapName Int
     | WEUnsubscribedFromView ProjectName ViewName
     | WEMapsInProject ProjectName [XMapName]
     | WEViewStatus ProjectName View [XNamedMap]
     | WEViewLoaded ProjectName View
-    | WEViewStored ProjectName ViewName
+    | WEViewAdded ProjectName ViewName
+    | WEViewUpdated ProjectName ViewName
     | WECalculationLoaded ProjectName CalculationSource
-    | WECalculationStored ProjectName CalculationName
+    | WECalculationAdded ProjectName CalculationName
+    | WECalculationUpdated ProjectName CalculationName
     | WEFunctions Functions
     | WEInfo T.Text
     | WEError Error

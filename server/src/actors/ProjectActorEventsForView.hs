@@ -37,15 +37,22 @@ mapsForViewLoaded rp c vn ms = do
         Just vchan -> writeTChan (vcChannel vchan) (VMMaps ms)
         Nothing -> sendStringError (evtChan rp) [c] ("view " ++ show vn ++ " to add the maps to not found in project " ++ show pn)
 
-viewStored :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
-viewStored chan rp c v = do
+viewAdded :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
+viewAdded chan rp c v = do
     p <- readTVarIO $ project rp
-    if elem (viewName v) (views p)
-        then atomically $ updateView chan rp c p v
-        else addView chan rp c v
+    addView chan rp c v
     atomically $ do
         storeProject chan rp c
-        sendInfo (evtChan rp) [c] ("The view " ++ show (viewName v) ++ " has been stored")
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewAdded (projectName p) (viewName v))
+
+viewUpdated :: ProjectChan -> RuntimeProject -> WAClient -> View -> IO ()
+viewUpdated chan rp c v = do
+    p <- readTVarIO $ project rp
+    atomically $ do
+        updateView chan rp c p v
+        storeProject chan rp c
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WEViewUpdated (projectName p) (viewName v))
+
 
 sendSubscriptionToView :: ViewChan -> WAClient -> STM ()
 sendSubscriptionToView vchan c = writeTChan (vcChannel vchan) (VMSubscribeToView c)

@@ -28,8 +28,10 @@ handleEvent :: ProjectChan -> RuntimeProject -> ProjectEvent -> IO ()
 handleEvent chan rp e = case e of
     PECalculationForClientLoaded c cc -> atomically $ calculationForClientLoaded rp c cc
     PECalculationForClientLoadError c _ err -> atomically $ sendError ec [c] err
-    PECalculationStored c cc -> calculationStored chan rp c cc
-    PECalculationStoreError c _ err -> atomically $ sendError ec [c] err
+    PECalculationAdded c cc -> calculationAdded chan rp c cc
+    PECalculationAddError c _ err -> atomically $ sendError ec [c] err
+    PECalculationUpdated c cc -> calculationUpdated chan rp c cc
+    PECalculationUpdateError c _ err -> atomically $ sendError ec [c] err
     PEMapForClientLoaded c m -> atomically $ mapForClientLoaded rp c m
     PEMapForClientLoadError c _ err -> atomically $ sendError ec [c] err
     PEMapsForViewLoaded c vn ms -> atomically $ mapsForViewLoaded rp c vn ms
@@ -38,14 +40,18 @@ handleEvent chan rp e = case e of
     PEMapsForCalculationsLoadError c  _ err -> atomically $ sendError ec [c] err
     PEMapsForCalculationLoaded c cn ms -> atomically $ mapsForCalculationLoaded rp c cn ms
     PEMapsForCalculationLoadError c _  _ err -> atomically $ sendError ec [c] err
-    PEMapStored c m -> atomically $ mapStored chan rp c m
-    PEMapStoreError c _ err -> atomically $ sendError ec [c] err
+    PEMapAdded c m -> atomically $ mapAdded chan rp c m
+    PEMapAddError c _ err -> atomically $ sendError ec [c] err
+    PEMapUpdated c m -> atomically $ mapUpdated chan rp c m
+    PEMapUpdateError c _ err -> atomically $ sendError ec [c] err
     PEProjectStored _ p -> atomically $ projectStored rp p
     PEProjectStoreError c _ err -> atomically $ sendError ec [c] err
     PEViewForClientLoaded c v -> atomically $ viewForClientLoaded c rp v
     PEViewForClientLoadError c _ err -> atomically $ sendError ec [c] err
-    PEViewStored c v -> viewStored chan rp c v
-    PEViewStoreError c _ err -> atomically $ sendError ec [c] err
+    PEViewAdded c v -> viewAdded chan rp c v
+    PEViewAddError c _ err -> atomically $ sendError ec [c] err
+    PEViewUpdated c v -> viewUpdated chan rp c v
+    PEViewUpdateError c _ err -> atomically $ sendError ec [c] err
     PEViewForProjectLoaded c v -> viewForProjectLoaded chan rp c v
     PEViewForProjectLoadError c _ err -> atomically $ sendError ec [c] err
     where ec = evtChan rp
@@ -58,6 +64,7 @@ mapForClientLoaded rp c m = do
 newSource :: SourceType -> [XMapName] -> Source
 newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
 
+
 mapStored :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored chan rp c m = do
         let mn = xmapName m
@@ -66,8 +73,6 @@ mapStored chan rp c m = do
         writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
         sendToAllCalculations mn
         sendToAllViews mn
-        let pn = projectName p
-        writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapStored pn mn (size $ xmap m))
         where sendToCalculations cs =
                     sendToAll (map ccChannel cs) (CMMaps [m])
               sendToAllCalculations mn = do
@@ -78,6 +83,20 @@ mapStored chan rp c m = do
               sendToAllViews mn = do
                     vbm <- readTVar $ viewChanByMap rp
                     mapM_ sendToViews (M.lookup mn vbm)
+
+
+mapAdded :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapAdded chan rp c m = do
+    mapStored chan rp c m
+    pn <- prjName rp
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapAdded pn (xmapName m) (size $ xmap m))
+
+
+mapUpdated :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
+mapUpdated chan rp c m = do
+    mapStored chan rp c m
+    pn <- prjName rp
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapUpdated pn (xmapName m) (size $ xmap m))
 
 projectStored :: RuntimeProject -> Project -> STM()
 projectStored rp p = do

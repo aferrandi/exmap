@@ -32,17 +32,29 @@ actorStore root chan lch = loop
                     logDbg $ "handling StMStoreAllProjects " ++ show ap
                     storeAllProjectsInActor root source c ap
                     loop
-                StMStoreMap source c pn m -> do
+                StMStoreNewMap source c pn m -> do
                     logDbg $ "handling StMStoreMap " ++ show (xmapName m) ++ " for project " ++ show pn
-                    storeMapInActor root source c pn m
+                    storeNewMapInActor root source c pn m
                     loop
-                StMStoreCalculation source c pn clc -> do
+                StMStoreExistingMap source c pn m -> do
+                    logDbg $ "handling StMStoreMap " ++ show (xmapName m) ++ " for project " ++ show pn
+                    storeExistingMapInActor root source c pn m
+                    loop
+                StMStoreNewCalculation source c pn clc -> do
                     logDbg $ "handling StMStoreCalculation " ++ show (calculationName clc) ++ " for project " ++ show pn
-                    storeCalculationInActor root source c pn clc
+                    storeExistingCalculationInActor root source c pn clc
                     loop
-                StMStoreView source c pn v -> do
+                StMStoreExistingCalculation source c pn clc -> do
+                    logDbg $ "handling StMStoreCalculation " ++ show (calculationName clc) ++ " for project " ++ show pn
+                    storeExistingCalculationInActor root source c pn clc
+                    loop
+                StMStoreNewView source c pn v -> do
                     logDbg $ "handling StMStoreView " ++ show (viewName v) ++ " for project " ++ show pn
-                    storeViewInActor root source c pn v
+                    storeNewViewInActor root source c pn v
+                    loop
+                StMStoreExistingView source c pn v -> do
+                    logDbg $ "handling StMStoreView " ++ show (viewName v) ++ " for project " ++ show pn
+                    storeExistingViewInActor root source c pn v
                     loop
                 StMStop -> return ()
           logDbg t = atomically $ logDebug lch "store" t
@@ -69,23 +81,46 @@ storeExistingProjectInActor root source c p = do
        Just err -> atomically $ writeTChan source (PMEvent $ PEProjectStoreError c p err)
 
 
-storeMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XNamedMap ->  IO ()
-storeMapInActor root source c pn m = do
+storeNewMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XNamedMap ->  IO ()
+storeNewMapInActor root source c pn m = do
        mp <- storeXMap root pn m
        case mp of
-           Nothing -> atomically $ writeTChan source (PMEvent $ PEMapStored c m)
-           Just err -> atomically $ writeTChan source (PMEvent $ PEMapStoreError c m err)
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEMapAdded c m)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEMapAddError c m err)
 
-storeCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> Calculation ->  IO ()
-storeCalculationInActor root source c pn clc = do
+storeExistingMapInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> XNamedMap ->  IO ()
+storeExistingMapInActor root source c pn m = do
+       mp <- storeXMap root pn m
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEMapUpdated c m)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEMapUpdateError c m err)
+
+
+storeNewCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> Calculation ->  IO ()
+storeNewCalculationInActor root source c pn clc = do
        mp <- storeCalculation root pn clc
        case mp of
-           Nothing -> atomically $ writeTChan source (PMEvent $ PECalculationStored c clc)
-           Just err -> atomically $ writeTChan source (PMEvent $ PECalculationStoreError c clc err)
+           Nothing -> atomically $ writeTChan source (PMEvent $ PECalculationAdded c clc)
+           Just err -> atomically $ writeTChan source (PMEvent $ PECalculationAddError c clc err)
 
-storeViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> View ->  IO ()
-storeViewInActor root source c pn v = do
+storeExistingCalculationInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> Calculation ->  IO ()
+storeExistingCalculationInActor root source c pn clc = do
+       mp <- storeCalculation root pn clc
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PECalculationUpdated c clc)
+           Just err -> atomically $ writeTChan source (PMEvent $ PECalculationUpdateError c clc err)
+
+
+storeNewViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> View ->  IO ()
+storeNewViewInActor root source c pn v = do
        mp <- storeView root pn v
        case mp of
-           Nothing -> atomically $ writeTChan source (PMEvent $ PEViewStored c v)
-           Just err -> atomically $ writeTChan source (PMEvent $ PEViewStoreError c v err)
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEViewAdded c v)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEViewAddError c v err)
+
+storeExistingViewInActor :: FilePath -> ProjectChan -> WAClient -> ProjectName -> View ->  IO ()
+storeExistingViewInActor root source c pn v = do
+       mp <- storeView root pn v
+       case mp of
+           Nothing -> atomically $ writeTChan source (PMEvent $ PEViewUpdated c v)
+           Just err -> atomically $ writeTChan source (PMEvent $ PEViewUpdateError c v err)

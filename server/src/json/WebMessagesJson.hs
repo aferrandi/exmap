@@ -33,7 +33,12 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "map" .= m
                                         ]
-     toJSON (WEMapStored pn mn sz) = object [ "type" .=  T.pack "mapStored"
+     toJSON (WEMapAdded pn mn sz) = object [ "type" .=  T.pack "mapAdded"
+                                        , "projectName" .= pn
+                                        , "mapName" .= mn
+                                        , "size" .= sz
+                                        ]
+     toJSON (WEMapUpdated pn mn sz) = object [ "type" .=  T.pack "mapUpdated"
                                         , "projectName" .= pn
                                         , "mapName" .= mn
                                         , "size" .= sz
@@ -55,7 +60,11 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "view" .= v
                                         ]
-     toJSON (WEViewStored pn vn) = object [ "type" .=  T.pack "viewStored"
+     toJSON (WEViewAdded pn vn) = object [ "type" .=  T.pack "viewAdded"
+                                        , "projectName" .= pn
+                                        , "viewName" .= vn
+                                        ]
+     toJSON (WEViewUpdated pn vn) = object [ "type" .=  T.pack "viewUpdated"
                                         , "projectName" .= pn
                                         , "viewName" .= vn
                                         ]
@@ -69,7 +78,11 @@ instance ToJSON WebEvent where
                                         , "projectName" .= pn
                                         , "calculationSource" .= cs
                                         ]
-     toJSON (WECalculationStored pn cn) = object [ "type" .=  T.pack "calculationStored"
+     toJSON (WECalculationAdded pn cn) = object [ "type" .=  T.pack "calculationAdded"
+                                        , "projectName" .= pn
+                                        , "calculationName" .= cn
+                                        ]
+     toJSON (WECalculationUpdated pn cn) = object [ "type" .=  T.pack "calculationUpdated"
                                         , "projectName" .= pn
                                         , "calculationName" .= cn
                                         ]
@@ -84,14 +97,17 @@ instance FromJSON WebRequest where
       Just (String "newProject") -> WRNewProject <$> v .: "project"
       Just (String "updateProject") -> WRUpdateProject <$> v .: "project"
       Just (String "loadMap") ->  WRLoadMap <$> v .: "projectName" <*> v .: "mapName"
-      Just (String "storeMap") ->  WRStoreMap <$> v .: "projectName" <*> v .: "map"
+      Just (String "addMap") ->  WRAddMap <$> v .: "projectName" <*> v .: "map"
+      Just (String "updateMap") ->  WRUpdateMap <$> v .: "projectName" <*> v .: "map"
       Just (String "subscribeToView") -> WRSubscribeToView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "unsubscribeFromView") ->  WRUnsubscribeFromView <$> v .: "projectName" <*> v .: "viewName"
       Just (String "mapsInProject") ->  WRMapsInProject <$> v .: "projectName"
       Just (String "loadView") ->  WRLoadView <$> v .: "projectName" <*> v .: "viewName"
-      Just (String "storeView") ->  WRStoreView <$> v .: "projectName" <*> v .: "view"
+      Just (String "addView") ->  WRAddView <$> v .: "projectName" <*> v .: "view"
+      Just (String "updateView") ->  WRUpdateView <$> v .: "projectName" <*> v .: "view"
       Just (String "loadCalculation") ->  WRLoadCalculation <$> v .: "projectName" <*> v .: "calculationName"
-      Just (String "storeCalculation") ->  WRStoreCalculation <$> v .: "projectName" <*> v .: "calculationSource"
+      Just (String "addCalculation") ->  WRAddCalculation <$> v .: "projectName" <*> v .: "calculationSource"
+      Just (String "updateCalculation") ->  WRUpdateCalculation <$> v .: "projectName" <*> v .: "calculationSource"
       Just (String "functions") ->  return WRFunctions
       _ -> mempty
    parseJSON _ = mempty

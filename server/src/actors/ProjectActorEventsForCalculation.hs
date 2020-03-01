@@ -140,15 +140,21 @@ calculationForClientLoaded rp c cc = do
     pn <- prjName rp
     writeTChan (evtChan rp) (EMWebEvent [c] $ WECalculationLoaded pn cs)
 
-calculationStored :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
-calculationStored chan rp c cc = do
+calculationUpdated :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
+calculationUpdated chan rp c cc = do
     p <- readTVarIO $ project rp
-    if elem (calculationName cc) (calculations p)
-        then atomically $ updateCalculation chan rp c cc
-        else addCalculation chan rp c cc
+    atomically $ do
+        updateCalculation chan rp c cc
+        storeProject chan rp c
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WECalculationUpdated (projectName p) (calculationName cc))
+
+calculationAdded :: ProjectChan -> RuntimeProject -> WAClient -> Calculation -> IO ()
+calculationAdded chan rp c cc = do
+    p <- readTVarIO $ project rp
+    addCalculation chan rp c cc
     atomically $ do
         storeProject chan rp c
-        sendInfo (evtChan rp) [c] ("The calculation " ++ show (calculationName cc) ++ " has been stored")
+        writeTChan (evtChan rp) (EMWebEvent [c] $ WECalculationAdded (projectName p) (calculationName cc))
 
 rebuildCalculationChanByMapForChan :: CalculationChan -> [XMapName] -> CalculationChanByMap -> CalculationChanByMap
 rebuildCalculationChanByMapForChan cch mns = trace ("updateCalculation:" ++ show mns) $ reintroduceChanToMap . removeChanFromMap

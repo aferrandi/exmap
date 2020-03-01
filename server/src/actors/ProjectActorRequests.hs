@@ -32,11 +32,14 @@ handleRequests chan rp r= case r of
     PRMapsInProject c -> mapsInProject rp c
     PRUpdateProject c p -> updateProject chan rp c p
     PRLoadMapForClient c mn -> loadMapForClient c chan rp mn
-    PRStoreMap c m -> storeMap c chan rp m
+    PRAddMap c m -> addMap c chan rp m
+    PRUpdateMap c m -> updateMap c chan rp m
     PRLoadCalculationForClient c cn -> loadCalculation chan rp c cn
-    PRStoreCalculation c cs-> storeCalculation chan rp c cs
+    PRAddCalculation c cs-> addCalculation chan rp c cs
+    PRUpdateCalculation c cs -> updateCalculation chan rp c cs
     PRLoadViewForClient c vn -> loadView chan rp c vn
-    PRStoreView c v -> storeView chan rp c v
+    PRAddView c v -> addView chan rp c v
+    PRUpdateView c v -> updateView chan rp c v
     PRStartCalculations c -> startCalculations chan rp c
     PRDisconnect c -> disconnectClient rp c
 
@@ -45,13 +48,23 @@ loadMapForClient c chan rp mn = do
      pn <- prjName rp
      writeTChan (loadChan $ chans rp)  $ LMLoadMapForClient chan c pn mn
 
-storeMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
-storeMap c chan rp m = do
+addMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
+addMap c chan rp m = do
     pn <- prjName rp
     let mn = xmapName m 
     fnd <- projectContainsAlreadyMapWithName rp mn
     if not fnd then do    
-      writeTChan (storeChan $ chans rp)  $ StMStoreMap chan c pn m
+      writeTChan (storeChan $ chans rp)  $ StMStoreNewMap chan c pn m
+    else
+      sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " already exists"
+
+updateMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
+updateMap c chan rp m = do
+    pn <- prjName rp
+    let mn = xmapName m
+    fnd <- projectContainsAlreadyMapWithName rp mn
+    if not fnd then do
+      writeTChan (storeChan $ chans rp)  $ StMStoreExistingMap chan c pn m
     else
       sendStringError  (evtChan rp) [c] $ "A map with name " ++ (show mn) ++ " already exists"
 
@@ -107,8 +120,8 @@ loadCalculation chan rp c cn = do
      pn <- prjName rp
      writeTChan (loadChan $ chans rp)  $ LMLoadCalculation chan c pn cn
 
-storeCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
-storeCalculation chan rp c cs = do
+addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
+addCalculation chan rp c cs = do
     let rn = sourceResultName cs
     fnd <- projectContainsAlreadyMapWithName rp rn
     if not fnd then do
@@ -118,9 +131,25 @@ storeCalculation chan rp c cs = do
           Right f -> do
               let cc = calculationFromFormula cs f
               pn <- prjName rp
-              writeTChan (storeChan $ chans rp)  $ StMStoreCalculation chan c pn cc
+              writeTChan (storeChan $ chans rp)  $ StMStoreNewCalculation chan c pn cc
     else
       sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show $ sourceCalculationName cs) ++ " already exists"
+
+updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
+updateCalculation chan rp c cs = do
+    let rn = sourceResultName cs
+    fnd <- projectContainsAlreadyMapWithName rp rn
+    if not fnd then do
+      let ft = formulaText cs
+      case parseFormula ft of
+          Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+          Right f -> do
+              let cc = calculationFromFormula cs f
+              pn <- prjName rp
+              writeTChan (storeChan $ chans rp)  $ StMStoreExistingCalculation chan c pn cc
+    else
+      sendStringError  (evtChan rp) [c] $ "A map with the name of the result " ++ (show rn) ++ " of the calculation " ++ (show $ sourceCalculationName cs) ++ " already exists"
+
 
 projectContainsAlreadyMapWithName :: RuntimeProject -> XMapName -> STM (Bool)
 projectContainsAlreadyMapWithName rp mn = do
@@ -129,10 +158,15 @@ projectContainsAlreadyMapWithName rp mn = do
   let maps = L.concatMap sourceOfMaps (sources p)
   return $ M.member mn cbr || L.elem mn maps
 
-storeView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
-storeView chan rp c v = do
+addView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
+addView chan rp c v = do
     pn <- prjName rp
-    writeTChan (storeChan $ chans rp)  $ StMStoreView chan c pn v
+    writeTChan (storeChan $ chans rp)  $ StMStoreNewView chan c pn v
+
+updateView :: ProjectChan -> RuntimeProject -> WAClient -> View -> STM ()
+updateView chan rp c v = do
+    pn <- prjName rp
+    writeTChan (storeChan $ chans rp)  $ StMStoreExistingView chan c pn v
 
 loadView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
 loadView chan rp c vn = do

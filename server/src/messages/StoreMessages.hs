@@ -14,9 +14,12 @@ data StoreMessage =
                   StMStoreNewProject SystemChan WAClient Project
                   | StMStoreExistingProject ProjectChan WAClient Project
                   | StMStoreAllProjects SystemChan WAClient AllProjects
-                  | StMStoreMap ProjectChan WAClient ProjectName XNamedMap
-                  | StMStoreCalculation ProjectChan WAClient ProjectName Calculation
-                  | StMStoreView ProjectChan WAClient ProjectName View
+                  | StMStoreNewMap ProjectChan WAClient ProjectName XNamedMap
+                  | StMStoreExistingMap ProjectChan WAClient ProjectName XNamedMap
+                  | StMStoreNewCalculation ProjectChan WAClient ProjectName Calculation
+                  | StMStoreExistingCalculation ProjectChan WAClient ProjectName Calculation
+                  | StMStoreNewView ProjectChan WAClient ProjectName View
+                  | StMStoreExistingView ProjectChan WAClient ProjectName View
                   | StMStop
 
 type StoreChan = TChan StoreMessage

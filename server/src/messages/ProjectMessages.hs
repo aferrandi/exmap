@@ -15,11 +15,14 @@ data ProjectRequest =     PRSubscribeToProject WAClient
                         | PRUnsubscribeFromView WAClient ViewName
                         | PRMapsInProject WAClient
                         | PRLoadMapForClient WAClient XMapName
-                        | PRStoreMap WAClient XNamedMap
+                        | PRAddMap WAClient XNamedMap
+                        | PRUpdateMap WAClient XNamedMap
                         | PRLoadCalculationForClient WAClient CalculationName
-                        | PRStoreCalculation WAClient CalculationSource
+                        | PRAddCalculation WAClient CalculationSource
+                        | PRUpdateCalculation WAClient CalculationSource
                         | PRLoadViewForClient WAClient ViewName
-                        | PRStoreView WAClient View
+                        | PRAddView WAClient View
+                        | PRUpdateView WAClient View
                         | PRStartCalculations WAClient
                         | PRDisconnect WAClient
 
@@ -36,14 +39,20 @@ data ProjectEvent = PEViewForClientLoaded WAClient View
                     | PEMapsForCalculationsLoadError WAClient [XMapName] Error
                     | PEMapsForCalculationLoaded WAClient CalculationName [XNamedMap]
                     | PEMapsForCalculationLoadError WAClient CalculationName [XMapName] Error
-                    | PEMapStored WAClient XNamedMap
-                    | PEMapStoreError WAClient XNamedMap Error
-                    | PECalculationStored WAClient Calculation
-                    | PECalculationStoreError WAClient Calculation Error
+                    | PEMapAdded WAClient XNamedMap
+                    | PEMapAddError WAClient XNamedMap Error
+                    | PEMapUpdated WAClient XNamedMap
+                    | PEMapUpdateError WAClient XNamedMap Error
+                    | PECalculationAdded WAClient Calculation
+                    | PECalculationAddError WAClient Calculation Error
+                    | PECalculationUpdated WAClient Calculation
+                    | PECalculationUpdateError WAClient Calculation Error
                     | PECalculationForClientLoadError WAClient CalculationName Error
                     | PECalculationForClientLoaded WAClient Calculation
-                    | PEViewStored WAClient View
-                    | PEViewStoreError WAClient View Error
+                    | PEViewAdded WAClient View
+                    | PEViewAddError WAClient View Error
+                    | PEViewUpdated WAClient View
+                    | PEViewUpdateError WAClient View Error
                     | PEProjectStored WAClient Project
                     | PEProjectStoreError WAClient Project Error
                     | PEViewForProjectLoaded WAClient View

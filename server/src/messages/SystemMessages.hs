@@ -15,14 +15,17 @@ data SystemRequest = SRSubscribeToProject WAClient ProjectName
                     | SRUpdateProject WAClient Project
                     | SRAllProjects WAClient
                     | SRLoadMap WAClient ProjectName XMapName
-                    | SRStoreMap WAClient ProjectName XNamedMap
+                    | SRAddMap WAClient ProjectName XNamedMap
+                    | SRUpdateMap WAClient ProjectName XNamedMap
                     | SRSubscribeToView WAClient ProjectName ViewName
                     | SRUnsubscribeFromView WAClient ProjectName ViewName
                     | SRMapsInProject WAClient ProjectName
                     | SRLoadView WAClient ProjectName ViewName
-                    | SRStoreView WAClient ProjectName View
+                    | SRAddView WAClient ProjectName View
+                    | SRUpdateView WAClient ProjectName View
                     | SRLoadCalculation WAClient ProjectName CalculationName
-                    | SRStoreCalculation WAClient ProjectName CalculationSource
+                    | SRAddCalculation WAClient ProjectName CalculationSource
+                    | SRUpdateCalculation WAClient ProjectName CalculationSource
                     | SRFunctions WAClient
                     | SRDisconnect WAClient
 

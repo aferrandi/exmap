@@ -31,12 +31,15 @@ handleRequest chan sys r = case r of
         SRMapsInProject c pn -> pipeToProject c pn sys (PMRequest $ PRMapsInProject c)
         SRNewProject c p -> newProjectIfNotAlreadyRunning chan sys c p
         SRUpdateProject c p -> pipeToProject c (projectName p) sys (PMRequest $ PRUpdateProject c p)
-        SRStoreMap c pn m -> pipeToProject c pn sys (PMRequest $ PRStoreMap c m)
+        SRAddMap c pn m -> pipeToProject c pn sys (PMRequest $ PRAddMap c m)
+        SRUpdateMap c pn m -> pipeToProject c pn sys (PMRequest $ PRUpdateMap c m)
         SRLoadMap c pn mn -> pipeToProject c pn sys (PMRequest $ PRLoadMapForClient c mn)
         SRLoadView c pn vn -> pipeToProject c pn sys (PMRequest $ PRLoadViewForClient c vn)
-        SRStoreView c pn v -> pipeToProject c pn sys (PMRequest $ PRStoreView c v)
+        SRAddView c pn v -> pipeToProject c pn sys (PMRequest $ PRAddView c v)
+        SRUpdateView c pn v -> pipeToProject c pn sys (PMRequest $ PRUpdateView c v)
         SRLoadCalculation c pn cn -> pipeToProject c pn sys (PMRequest $ PRLoadCalculationForClient c cn)
-        SRStoreCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRStoreCalculation c cs)
+        SRAddCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRAddCalculation c cs)
+        SRUpdateCalculation c pn cs -> pipeToProject c pn sys (PMRequest $ PRUpdateCalculation c cs)
         SRFunctions c -> sendFunctions sys c
         SRDisconnect c -> disconnectClient sys c
 
