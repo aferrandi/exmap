@@ -49,12 +49,14 @@ storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm =
     let
         viewEditRowToViewRow (ViewEditRow items) = List.map (\i -> i.content) items |> ViewRow
+        viewToStore v vn  = { viewName = vn
+                            , rows = List.map viewEditRowToViewRow v.rows
+                            }
         storeValidViewToEdit v vn =
-            Send (WRStoreView pm.project.projectName
-                     { viewName = vn
-                     , rows = List.map viewEditRowToViewRow v.rows
-                     }
-                 )
+                if vm.isNew then
+                    Send (WRAddView pm.project.projectName (viewToStore v vn))
+                else
+                    Send (WRUpdateView pm.project.projectName (viewToStore v vn))
         storeViewWithName vn = case vm.viewToEdit of
             Just v -> storeValidViewToEdit v vn
             Nothing -> Internal (ShowMessage "Please fill the view")

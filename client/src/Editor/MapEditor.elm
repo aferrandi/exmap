@@ -4,6 +4,7 @@ import Display.NewMapDialog exposing (newMapDialog)
 import Html exposing (..)
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
+import Models.WebMessages exposing (WebRequest(..))
 import Transform.MapsExtraction exposing (..)
 
 import Material.LayoutGrid as LayoutGrid
@@ -16,7 +17,6 @@ import Transform.TypeConversion exposing (enumToText)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
-import Models.WebMessages exposing (WebRequest(..))
 import Transform.XMapText exposing (..)
 import Types.XMapTypes exposing (..)
 
@@ -44,8 +44,7 @@ title model =
 mapEditorViewForMap : Model -> ProjectModel -> Html Msg
 mapEditorViewForMap model pm =
     let
-        xmapEditorModel =
-            model.xmapEditorModel
+        xmapEditorModel = model.xmapEditorModel
     in
     case model.xmapEditorModel.xmapName of
         Just mn ->
@@ -63,7 +62,7 @@ mapEditorViewForMap model pm =
                     [ buttonClick model (makeIndex mapEditorIdx "btnToTxt") "< To Text" (Internal MapToTextArea) ]
                     , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]
                     [ buttonMaybe model (makeIndex mapEditorIdx "btnToStr") "Store Map"
-                        (Maybe.map2 (storeMap pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
+                        (Maybe.map2 (storeMap model pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
         Nothing -> div [] []
@@ -98,10 +97,12 @@ mapEditorMapList model p =
                 (List.map listItem (fileSourcesOfProject p))
         ]
 
-storeMap : ProjectModel -> XMapName -> XMap -> Msg
-storeMap pm n m =
-    WRStoreMap pm.project.projectName { xmapName = n, xmap = m } |> Send
-
+storeMap : Model -> ProjectModel -> XMapName -> XMap -> Msg
+storeMap model pm n m =
+    if model.xmapEditorModel.isNew then
+        WRAddMap pm.project.projectName { xmapName = n, xmap = m } |> Send
+    else
+        WRUpdateMap pm.project.projectName { xmapName = n, xmap = m } |> Send
 
 fileSourcesOfProject : Project -> List XMapName
 fileSourcesOfProject p =

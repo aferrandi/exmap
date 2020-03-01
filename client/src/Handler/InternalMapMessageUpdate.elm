@@ -15,7 +15,7 @@ handleUpdateMapName model s =
 
 handleNewMapWithName : Model -> XMapName -> XMapType -> Model
 handleNewMapWithName model mn mt =
-    closeDialog { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt } }
+    closeDialog { model | xmapEditorModel = { emptyXMapEditorModel | xmapName = Just mn, xmapType = mt, isNew = True } }
 
 handleChangeMapType : Model -> XMapType -> Model
 handleChangeMapType model mt =
@@ -24,7 +24,7 @@ handleChangeMapType model mt =
 handleShowMapInEditor : Model -> XMapName -> ( Model, Cmd Msg )
 handleShowMapInEditor model mn =
     let
-        cleanup = updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing })
+        cleanup = updateXMapEditorModel model (\mm -> { mm | xmapEditing = Nothing, isNew = False })
         command pn = sendToServer (WRLoadMap pn mn)
     in
         case model.currentProject of

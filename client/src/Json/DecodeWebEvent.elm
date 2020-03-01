@@ -31,8 +31,13 @@ webEventDecoder =
                     map2 WEMapLoaded
                         (field "projectName" string)
                         (field "map" xNamedMapDecoder)
-                "mapStored" ->
-                    map3 WEMapStored
+                "mapAdded" ->
+                    map3 WEMapAdded
+                        (field "projectName" string)
+                        (field "mapName" xmapNameDecoder)
+                        (field "size" int)
+                "mapUpdated" ->
+                    map3 WEMapUpdated
                         (field "projectName" string)
                         (field "mapName" xmapNameDecoder)
                         (field "size" int)
@@ -53,16 +58,24 @@ webEventDecoder =
                     map2 WEViewLoaded
                         (field "projectName" string)
                         (field "view" viewDecoder)
-                "viewStored" ->
-                    map2 WEViewStored
+                "viewAdded" ->
+                    map2 WEViewAdded
+                        (field "projectName" string)
+                        (field "viewName" string)
+                "viewUpdated" ->
+                    map2 WEViewUpdated
                         (field "projectName" string)
                         (field "viewName" string)
                 "calculationLoaded" ->
                     map2 WECalculationLoaded
                         (field "projectName" string)
                         (field "calculationSource" calculationSourceDecoder)
-                "calculationStored" ->
-                    map2 WECalculationStored
+                "calculationAdded" ->
+                    map2 WECalculationAdded
+                        (field "projectName" string)
+                        (field "calculationName" string)
+                "calculationUpdated" ->
+                    map2 WECalculationUpdated
                         (field "projectName" string)
                         (field "calculationName" string)
                 "functions" ->

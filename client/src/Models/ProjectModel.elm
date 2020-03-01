@@ -47,6 +47,7 @@ type alias XMapEditorModel =
     , xmapEditing : Maybe String
     , newXmapName : String
     , tableConf : TableConfiguration
+    , isNew : Bool
     }
 
 type alias ViewEditorModel =
@@ -58,6 +59,7 @@ type alias ViewEditorModel =
     , rowToAddTo : Int
     , lastViewEditItemId : ViewEditItemId
     , checkedViewEditItems: ViewEditItemsChecked
+    , isNew : Bool
     }
 
 
@@ -68,6 +70,7 @@ type alias CalculationEditorModel =
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
     , operationsMatch : String
+    , isNew : Bool
     }
 
 type alias Heights =

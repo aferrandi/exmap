@@ -19,6 +19,7 @@ import Display.UIWrapper exposing (..)
 import Models.WebMessages exposing (WebRequest(..))
 import Transform.TypeConversion exposing (..)
 import List.Extra as ListX
+import Types.XMapTypes exposing (XMapName)
 
 viewCalculationsEditor : Model -> ProjectModel -> Html Msg
 viewCalculationsEditor model pm =
@@ -75,34 +76,27 @@ storeButton model pm =
 storeCalculation : ProjectModel -> CalculationEditorModel -> Msg
 storeCalculation pm cm =
     case cm.calculationName of
-        Just cn ->
-            case cm.calculationFormulaText of
-                Just ft ->
-                    case cm.resultMapName of
-                        Just rns ->
-                            case xmapNameFromString rns of
-                                Ok rn ->
-                                    Send
-                                        (WRStoreCalculation pm.project.projectName
-                                            { calculationName = cn
-                                            , resultName = rn
-                                            , formulaText = ft
-                                            , operationMode = cm.operationMode
-                                            }
-                                        )
+        Just cn -> case cm.calculationFormulaText of
+                Just ft -> case cm.resultMapName of
+                        Just rns -> case xmapNameFromString rns of
+                                Ok rn -> storeCalculationWithData pm.project.projectName cm cn rn ft
+                                Err e -> Internal (ShowMessage e)
+                        Nothing -> Internal (ShowMessage "Please enter a result map name")
+                Nothing -> Internal (ShowMessage "Please enter a formula")
+        Nothing -> Internal (ShowMessage "Please enter a calculation name")
 
-                                Err e ->
-                                    Internal (ShowMessage e)
-
-                        Nothing ->
-                            Internal (ShowMessage "Please enter a result map name")
-
-                Nothing ->
-                    Internal (ShowMessage "Please enter a formula")
-
-        Nothing ->
-            Internal (ShowMessage "Please enter a calculation name")
-
+storeCalculationWithData : ProjectName -> CalculationEditorModel -> CalculationName -> XMapName -> CalculationFormulaText -> Msg
+storeCalculationWithData pn cm cn rn ft =
+        let cs =  { calculationName = cn
+                    , resultName = rn
+                    , formulaText = ft
+                    , operationMode = cm.operationMode
+                    }
+        in
+            if cm.isNew then
+                WRAddCalculation pn cs |> Send
+            else
+                WRUpdateCalculation pn cs |> Send
 
 calculationsInProjectList : Model -> ProjectModel -> Html Msg
 calculationsInProjectList model pm =

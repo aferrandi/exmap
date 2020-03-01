@@ -28,6 +28,7 @@ emptyViewEditorModel =
     , rowToAddTo = 0
     , lastViewEditItemId = 0
     , checkedViewEditItems = Dict.empty
+    , isNew = False
     }
 
 emptyXMapEditorModel : XMapEditorModel
@@ -38,6 +39,7 @@ emptyXMapEditorModel =
     , xmapEditing = Nothing
     , newXmapName = ""
     , tableConf = emptyTableConfiguration
+    , isNew = False
     }
 
 emptyCalculationEditorModel : CalculationEditorModel
@@ -48,6 +50,7 @@ emptyCalculationEditorModel =
     , newCalculationName = ""
     , operationMode = Union
     , operationsMatch = ""
+    , isNew = False
     }
 
 emptyHeights: Heights

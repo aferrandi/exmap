@@ -35,9 +35,15 @@ encodeWebRequest ev =
                 , ( "projectName", string pn )
                 , ( "mapName", encodeXmapName mn )
                 ]
-        WRStoreMap pn m ->
+        WRAddMap pn m ->
             object
-                [ ( "type", string "storeMap" )
+                [ ( "type", string "addMap" )
+                , ( "projectName", string pn )
+                , ( "map", encodeXNamedMap m )
+                ]
+        WRUpdateMap pn m ->
+            object
+                [ ( "type", string "updateMap" )
                 , ( "projectName", string pn )
                 , ( "map", encodeXNamedMap m )
                 ]
@@ -64,9 +70,15 @@ encodeWebRequest ev =
                 , ( "projectName", string pn )
                 , ( "viewName", string vn )
                 ]
-        WRStoreView pn v ->
+        WRAddView pn v ->
             object
-                [ ( "type", string "storeView" )
+                [ ( "type", string "addView" )
+                , ( "projectName", string pn )
+                , ( "view", encodeView v )
+                ]
+        WRUpdateView pn v ->
+            object
+                [ ( "type", string "updateView" )
                 , ( "projectName", string pn )
                 , ( "view", encodeView v )
                 ]
@@ -76,9 +88,15 @@ encodeWebRequest ev =
                 , ( "projectName", string pn )
                 , ( "calculationName", string cn )
                 ]
-        WRStoreCalculation pn cs ->
+        WRAddCalculation pn cs ->
             object
-                [ ( "type", string "storeCalculation" )
+                [ ( "type", string "addCalculation" )
+                , ( "projectName", string pn )
+                , ( "calculationSource", encodeCalculationSource cs )
+                ]
+        WRUpdateCalculation pn cs ->
+            object
+                [ ( "type", string "updateCalculation" )
                 , ( "projectName", string pn )
                 , ( "calculationSource", encodeCalculationSource cs )
                 ]

@@ -12,14 +12,17 @@ type WebRequest
     | WRNewProject Project
     | WRUpdateProject Project
     | WRLoadMap ProjectName XMapName
-    | WRStoreMap ProjectName XNamedMap
+    | WRAddMap ProjectName XNamedMap
+    | WRUpdateMap ProjectName XNamedMap
     | WRSubscribeToView ProjectName ViewName
     | WRUnsubscribeFromView ProjectName ViewName
     | WRMapsInProject ProjectName
     | WRLoadView ProjectName ViewName
-    | WRStoreView ProjectName View
+    | WRAddView ProjectName View
+    | WRUpdateView ProjectName View
     | WRLoadCalculation ProjectName CalculationName
-    | WRStoreCalculation ProjectName CalculationSource
+    | WRAddCalculation ProjectName CalculationSource
+    | WRUpdateCalculation ProjectName CalculationSource
     | WRFunctions
 
 
@@ -29,14 +32,17 @@ type WebEvent
     | WEProjectContent Project
     | WEProjectStored Project
     | WEMapLoaded ProjectName XNamedMap
-    | WEMapStored ProjectName XMapName Int
+    | WEMapAdded ProjectName XMapName Int
+    | WEMapUpdated ProjectName XMapName Int
     | WEUnsubscribedFromView ProjectName ViewName
     | WEMapsInProject ProjectName (List XMapName)
     | WEViewStatus ProjectName View (List XNamedMap)
     | WEViewLoaded ProjectName View
-    | WEViewStored ProjectName ViewName
+    | WEViewAdded ProjectName ViewName
+    | WEViewUpdated ProjectName ViewName
     | WECalculationLoaded ProjectName CalculationSource
-    | WECalculationStored ProjectName CalculationName
+    | WECalculationAdded ProjectName CalculationName
+    | WECalculationUpdated ProjectName CalculationName
     | WEFunctions Functions
     | WEInfo String
     | WEError Error

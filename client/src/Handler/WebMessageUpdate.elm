@@ -36,14 +36,22 @@ updateEvent evt model =
             ( updateOpenProjects model (updateOpenViewMaps pn vn ms), Cmd.none )
         WEMapLoaded pn m ->
             ( handleMapLoaded model m, Cmd.none )
-        WEMapStored pn mn sz ->
-            handleMapStored model pn mn sz
+        WEMapAdded pn mn sz ->
+            handleMapAdded model pn mn sz
+        WEMapUpdated pn mn sz ->
+            handleMapUpdated model pn mn sz
         WEViewLoaded pn v ->
             ( handleViewLoaded model v, Cmd.none )
+        WEViewAdded pn vn ->
+            handleViewAdded model pn vn
+        WEViewUpdated pn vn  ->
+            handleViewUpdated model pn vn
         WECalculationLoaded pn cs ->
             ( handleCalculationLoaded model cs, Cmd.none )
-        WECalculationStored pn cn ->
-            handleCalculationStored model pn cn
+        WECalculationAdded pn cn ->
+            handleCalculationAdded model pn cn
+        WECalculationUpdated pn cn ->
+            handleCalculationUpdated model pn cn
         WEFunctions fs ->
             ( handleFunctions model fs, Cmd.none )
         _ ->
@@ -58,26 +66,31 @@ handleMapLoaded model m =
                 | xmapToEdit = Just m.xmap
                 , xmapName = Just m.xmapName
                 , xmapType = mapType m.xmap
+                , isNew = False
             }
         )
 
+cleanCalculationModel : Model ->  Model
+cleanCalculationModel model = updateCalculationEditorModel model (\cm -> { cm | newCalculationName = "", isNew = False  })
 
-handleCalculationStored : Model -> ProjectName -> CalculationName -> (Model, Cmd Msg )
-handleCalculationStored model pn cn =
-    let
-        mdlCleaned =
-            updateCalculationEditorModel model (\cm -> { cm | newCalculationName = "" })
-    in
-        showMessage mdlCleaned ("Calculation:" ++ cn ++ " of project:" ++ pn ++ " stored")
+handleCalculationAdded : Model -> ProjectName -> CalculationName -> (Model, Cmd Msg )
+handleCalculationAdded model pn cn =
+        showMessage (cleanCalculationModel model) ("Calculation:" ++ cn ++ " of project:" ++ pn ++ " added")
 
+handleCalculationUpdated : Model -> ProjectName -> CalculationName -> (Model, Cmd Msg )
+handleCalculationUpdated model pn cn =
+        showMessage (cleanCalculationModel model) ("Calculation:" ++ cn ++ " of project:" ++ pn ++ " updated")
 
-handleMapStored : Model -> ProjectName -> XMapName -> Int -> (Model, Cmd Msg )
-handleMapStored model pn mn sz =
-    let
-        mdlCleaned =
-            updateXMapEditorModel model (\mm -> { mm | newXmapName = "" })
-    in
-        showMessage mdlCleaned ("Map:" ++ xmapNameToString mn ++ " of project:" ++ pn ++ " with size " ++ String.fromInt sz ++ " stored")
+cleanMapModel : Model ->  Model
+cleanMapModel model = updateXMapEditorModel model (\mm -> { mm | newXmapName = "", isNew = False })
+
+handleMapAdded : Model -> ProjectName -> XMapName -> Int -> (Model, Cmd Msg )
+handleMapAdded model pn mn sz =
+    showMessage (cleanMapModel model) ("Map:" ++ xmapNameToString mn ++ " of project:" ++ pn ++ " with size " ++ String.fromInt sz ++ " added")
+
+handleMapUpdated : Model -> ProjectName -> XMapName -> Int -> (Model, Cmd Msg )
+handleMapUpdated model pn mn sz =
+    showMessage (cleanMapModel model) ("Map:" ++ xmapNameToString mn ++ " of project:" ++ pn ++ " with size " ++ String.fromInt sz ++ " updated")
 
 
 handleViewLoaded : Model -> View -> Model
@@ -102,6 +115,17 @@ handleViewLoaded model v =
                     , lastViewEditItemId = lastId
                 }
             ))
+
+cleanViewModel : Model -> Model
+cleanViewModel model = updateViewEditorModel model (\cm -> { cm | isNew = False  })
+
+handleViewAdded : Model -> ProjectName -> ViewName -> (Model, Cmd Msg )
+handleViewAdded model pn vn =
+    showMessage (cleanViewModel model) ("View:" ++ vn ++ " of project:" ++ pn ++ " added")
+
+handleViewUpdated : Model -> ProjectName -> ViewName -> (Model, Cmd Msg )
+handleViewUpdated model pn vn =
+    showMessage (cleanViewModel model) ("View:" ++ vn ++ " of project:" ++ pn ++ " updated")
 
 
 handleCalculationLoaded : Model -> CalculationSource -> Model

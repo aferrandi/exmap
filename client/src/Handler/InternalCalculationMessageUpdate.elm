@@ -5,13 +5,14 @@ import Handler.ModelUpdate exposing (updateCalculationEditorModel)
 import Models.EmptyModel exposing (emptyCalculationEditorModel)
 import Models.ProjectModel exposing (Model, closeDialog)
 import Types.Calculation exposing (CalculationName, OperationCategory, OperationId, OperationMode, OperationType, ParameterType(..), operationIdToTuple)
+
 handleUpdateCalculationName : Model -> String -> Model
 handleUpdateCalculationName model s =
     updateCalculationEditorModel model (\cm -> { cm | newCalculationName = s })
 
 handleNewCalculationWithName : Model -> CalculationName -> Model
 handleNewCalculationWithName model cn =
-    closeDialog { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn, resultMapName = Just cn } }
+    closeDialog { model | calculationEditorModel = { emptyCalculationEditorModel | calculationName = Just cn, resultMapName = Just cn, isNew = True } }
 
 handleChangeOperationMode : Model -> OperationMode -> Model
 handleChangeOperationMode model om =

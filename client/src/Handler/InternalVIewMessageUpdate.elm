@@ -36,7 +36,7 @@ handleOpenView model vn =
 
 handleNewViewWithName : Model -> CalculationName -> Model
 handleNewViewWithName model vn =
-    closeDialog { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [ emptyRow ] } } }
+    closeDialog { model | viewEditorModel = { emptyViewEditorModel | viewName = Just vn, viewToEdit = Just { viewName = vn, rows = [ emptyRow ] }, isNew = True } }
 
 handleAddRowToViewEdit : Model -> Model
 handleAddRowToViewEdit model =
