@@ -14,6 +14,7 @@ import ViewMessages
 import EventMessages
 import WebMessages
 import LoadMessages
+import LogMessages
 import StoreMessages
 import CommonChannels
 import CalculationMessages
@@ -93,7 +94,8 @@ updateView chan rp c p v = do
             writeTChan (vcChannel vch) (VMUpdate v)
             sendDependedMapsToView chan rp c v
             listenToDependentCalculations rp vch v
-        Nothing -> sendStringError (evtChan rp) [c] ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
+        -- it can be that the view is not active, just stored, so no need for an error
+        Nothing -> logDebug (logChan $ chans rp) "view" ("stored view " ++ show vn ++ " not found in project " ++ show (projectName p))
 
 listenToDependentCalculations :: RuntimeProject -> ViewChan -> View -> STM ()
 listenToDependentCalculations rp vch v = do
