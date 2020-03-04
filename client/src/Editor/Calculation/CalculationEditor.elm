@@ -139,7 +139,7 @@ mapsInProjectListForCalculation model =
                 Lists.ul Mdc
                         (makeIndex calcEditorIdx "lstMapInPrj")
                         model.mdc
-                        ((Lists.onSelectListItem selectItem) :: (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
+                        ([Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
                         (List.map listItem model.mapsInProject)
                 , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]

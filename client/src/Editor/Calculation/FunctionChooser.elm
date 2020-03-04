@@ -85,7 +85,7 @@ functionsNamesList model  =
             Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstFnc")
                 model.mdc
-                (( Lists.onSelectListItem selectItem) :: (scrollableListStyle model.ui.heights.functionsNamesList))
+                ([ Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.functionsNamesList))
                 operationList
             , buttonClick model (makeIndex viewEditorIdx "btnAddFunction") "Add function"  sendAddItem
         ]
