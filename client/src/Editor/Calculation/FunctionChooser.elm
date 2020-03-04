@@ -71,7 +71,7 @@ functionsNamesList model  =
             _ -> List.filter (\o -> String.toLower o.name |> String.contains toMatch) operationsSelected
         selectItem index = Internal (SelectFunctionIndexForCalculation index)
         buildMsg index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationToShow index
-        sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedMapIdx)
+        sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedFunctionIdx)
         operationListItem on =
             Lists.li []
                 [
