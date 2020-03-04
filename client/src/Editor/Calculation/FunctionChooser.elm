@@ -69,7 +69,9 @@ functionsNamesList model  =
         operationToShow = case toMatch of
             "" -> operationsSelected
             _ -> List.filter (\o -> String.toLower o.name |> String.contains toMatch) operationsSelected
-        sendAddOperation index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationToShow index
+        selectItem index = Internal (SelectFunctionIndexForCalculation index)
+        buildMsg index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationToShow index
+        sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedMapIdx)
         operationListItem on =
             Lists.li []
                 [
@@ -78,9 +80,12 @@ functionsNamesList model  =
                 ]
         operationList = List.map operationListItem operationToShow
     in
-        Lists.ul Mdc
-            (makeIndex calcEditorIdx "lstFnc")
-            model.mdc
-            (( Lists.onSelectListItem sendAddOperation) :: (scrollableListStyle model.ui.heights.functionsNamesList))
-            operationList
-
+        div []
+        [
+            Lists.ul Mdc
+                (makeIndex calcEditorIdx "lstFnc")
+                model.mdc
+                (( Lists.onSelectListItem selectItem) :: (scrollableListStyle model.ui.heights.functionsNamesList))
+                operationList
+            , buttonClick model (makeIndex viewEditorIdx "btnAddFunction") "Add function"  sendAddItem
+        ]

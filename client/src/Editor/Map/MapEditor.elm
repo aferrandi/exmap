@@ -1,4 +1,4 @@
-module Editor.MapEditor exposing (mapEditorView)
+module Editor.Map.MapEditor exposing (mapEditorView)
 
 import Display.NewMapDialog exposing (newMapDialog)
 import Html exposing (..)

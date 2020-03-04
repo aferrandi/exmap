@@ -5,7 +5,7 @@ import Editor.View.ViewEditor exposing (viewViewsEditor)
 import Html exposing (Html, div, text)
 import Models.InternalMessages exposing (..)
 import List.Extra as ListX
-import Editor.MapEditor exposing (..)
+import Editor.Map.MapEditor exposing (..)
 
 import Material.Options as Options
 import Material.TabBar as TabBar

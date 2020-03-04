@@ -50,6 +50,8 @@ emptyCalculationEditorModel =
     , newCalculationName = ""
     , operationMode = Union
     , operationsMatch = ""
+    , selectedMapIdx = Nothing
+    , selectedFunctionIdx = Nothing
     , isNew = False
     }
 
@@ -64,8 +66,8 @@ emptyHeights =
     , viewEditorForCalculation = 65
     , calculationTextArea = 65
     , calculationsInProjectList = 70
-    , mapsInProjectListForCalculation = 63
-    , functionsNamesList = 55
+    , mapsInProjectListForCalculation = 58
+    , functionsNamesList = 52
     , mapEditorView = 90
     , mapEditorViewForMap = 75
     , mapEditorTextArea = 75
