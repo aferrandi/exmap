@@ -17,7 +17,7 @@ handleOpenProject model pn =
     let
         command =
             case openProjectWithName model pn of
-                Just pm -> Cmd.none
+                Just pm -> sendToServer (WRMapsInProject pn)
                 Nothing -> sendToServer (WRSubscribeToProject pn)
     in
         ( { model
