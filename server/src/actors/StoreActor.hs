@@ -42,7 +42,7 @@ actorStore root chan lch = loop
                     loop
                 StMStoreNewCalculation source c pn clc -> do
                     logDbg $ "handling StMStoreCalculation " ++ show (calculationName clc) ++ " for project " ++ show pn
-                    storeExistingCalculationInActor root source c pn clc
+                    storeNewCalculationInActor root source c pn clc
                     loop
                 StMStoreExistingCalculation source c pn clc -> do
                     logDbg $ "handling StMStoreCalculation " ++ show (calculationName clc) ++ " for project " ++ show pn
