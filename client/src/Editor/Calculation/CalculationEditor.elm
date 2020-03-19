@@ -119,10 +119,14 @@ calculationsInProjectList model pm =
                      (List.map listItem pm.project.calculations)
         ]
 
+
+
 mapsInProjectListForCalculation : Model -> Html Msg
 mapsInProjectListForCalculation model =
     let
-        sendAddMap index = sendListMsg (\mn -> (Internal (AddMapToCalculation mn))) model.mapsInProject index
+        selectItem index = Internal (SelectMapIndexForCalculation index)
+        buildMsg index = sendListMsg (\mn -> (Internal (AddMapToCalculation mn))) model.mapsInProject index
+        sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedMapIdx)
         listItem mn =
             Lists.li []
                 [
@@ -130,11 +134,15 @@ mapsInProjectListForCalculation model =
                     text (xmapNameToString mn)
                 ]
     in
-        Lists.ul Mdc
-                (makeIndex calcEditorIdx "lstMapInPrj")
-                model.mdc
-                ((Lists.onSelectListItem sendAddMap) :: (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
-                (List.map listItem model.mapsInProject)
+        div []
+            [
+                Lists.ul Mdc
+                        (makeIndex calcEditorIdx "lstMapInPrj")
+                        model.mdc
+                        ([Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
+                        (List.map listItem model.mapsInProject)
+                , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
+            ]
 
 calculationTextArea : Model -> Html Msg
 calculationTextArea model =

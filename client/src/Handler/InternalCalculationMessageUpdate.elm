@@ -39,6 +39,15 @@ handleAddOperationToCalculation model id =
     in
         appendToFormulaText model (Maybe.withDefault " " text)
 
+
+handleSelectMapIndexForCalculationEdit : Model -> Int  -> Model
+handleSelectMapIndexForCalculationEdit model idx =
+    updateCalculationEditorModel model (\cm -> { cm | selectedMapIdx = Just idx})
+
+handleSelectFunctionIndexForCalculationEdit : Model -> Int  -> Model
+handleSelectFunctionIndexForCalculationEdit model idx =
+   updateCalculationEditorModel model (\cm -> { cm | selectedFunctionIdx = Just idx})
+
 appendToFormulaText : Model -> String -> Model
 appendToFormulaText model s =
     let

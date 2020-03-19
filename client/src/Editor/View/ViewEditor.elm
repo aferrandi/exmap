@@ -34,9 +34,9 @@ viewEditorForView model pm =
     case model.viewEditorModel.viewName of
         Just vn ->
             LayoutGrid.view [ heightInView model.ui.heights.viewEditorForView ]
-                    [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span9Desktop, LayoutGrid.span3Phone]
+                    [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span8Desktop, LayoutGrid.span3Phone]
                             [ viewEditorTable model model.viewEditorModel.viewToEdit ]
-                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone]
+                    , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone]
                             [ viewEditorMapList model, addLabelButton model, storeButton model pm]
                     ]
         Nothing -> div [] []
@@ -101,7 +101,7 @@ viewEditorMapList model =
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
-                    ((Lists.onSelectListItem selectItem) :: (scrollableListStyle model.ui.heights.viewEditorMapList))
+                    ([Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.viewEditorMapList))
                     (List.map listItem model.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]
@@ -128,16 +128,20 @@ addLabelButton model =
         viewEditorModel = model.viewEditorModel
         newLabelMessage = Internal (AddItemToView viewEditorModel.rowToAddTo (LabelItem viewEditorModel.labelEditing))
     in
-        Options.styled Html.div [Options.css "margin-top" "6px"]
-            [ TextField.view Mdc
-                (makeIndex viewEditorIdx "txtAddLbl")
-                model.mdc
-                [ TextField.label "Label text"
-                , TextField.value viewEditorModel.labelEditing
-                , Options.onInput (\s -> Internal (UpdateViewLabel s))
-                ]
-                []
-            , buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
+        LayoutGrid.inner []
+                    [ LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span7Desktop, LayoutGrid.span2Phone]
+                        [ TextField.view Mdc
+                            (makeIndex viewEditorIdx "txtAddLbl")
+                            model.mdc
+                            [ TextField.label "Label text"
+                            , TextField.value viewEditorModel.labelEditing
+                            , Options.onInput (\s -> Internal (UpdateViewLabel s))
+                            ]
+                            []
+                            ]
+                    , LayoutGrid.cell [LayoutGrid.span4Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [
+                        buttonClick model (makeIndex viewEditorIdx "btnAddLbl") "Add label" newLabelMessage
+                     ]
             ]
 
 

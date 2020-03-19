@@ -70,6 +70,8 @@ type alias CalculationEditorModel =
     , calculationFormulaText : Maybe CalculationFormulaText
     , newCalculationName : CalculationName
     , operationsMatch : String
+    , selectedMapIdx : Maybe Int
+    , selectedFunctionIdx : Maybe Int
     , isNew : Bool
     }
 

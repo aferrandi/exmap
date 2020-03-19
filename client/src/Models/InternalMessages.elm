@@ -37,6 +37,8 @@ type InternalMsg
     | ChangeMapType XMapType
     | AddItemToView Int ViewItem
     | SelectMapIndexForView Int
+    | SelectMapIndexForCalculation Int
+    | SelectFunctionIndexForCalculation Int
     | NewCalculationWithName CalculationName
     | NewViewWithName ViewName
     | NewMapWithName XMapName XMapType
