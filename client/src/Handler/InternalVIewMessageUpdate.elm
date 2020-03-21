@@ -95,6 +95,15 @@ handleChangeViewEditCheckedItem : Model -> ViewEditItemId -> Model
 handleChangeViewEditCheckedItem model id =
     updateViewEditorModel model (\vm -> { vm | checkedViewEditItems = invertValue id vm.checkedViewEditItems })
 
+handleChangeIdsType : Model -> Int -> ViewRowIdsType -> Model
+handleChangeIdsType model ri rt =
+    let
+        updateRow r  = { r | idsType = rt }
+        updateRows rs = ListX.updateAt ri updateRow rs
+        updateView mv = Maybe.map (\v -> { v | rows = updateRows v.rows }) mv
+    in
+        updateViewEditorModel model (\vm -> { vm | viewToEdit = updateView vm.viewToEdit})
+
 invertValue : ViewEditItemId -> ViewEditItemsChecked -> ViewEditItemsChecked
 invertValue index dict =
     let

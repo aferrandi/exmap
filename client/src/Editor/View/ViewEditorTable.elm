@@ -10,9 +10,11 @@ import Material.LayoutGrid as LayoutGrid
 import Material.Options as Options
 import List.Extra as ListX
 import Material.RadioButton as RadioButton
+import Material.Select as Select
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameToString)
-import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow, ViewItem(..))
+import Transform.TypeConversion exposing (enumToText, textToEnum)
+import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow, ViewItem(..), ViewRowIdsType(..))
 import Models.ProjectModel exposing (..)
 
 viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
@@ -37,7 +39,7 @@ viewEditRows model v =
 
 viewEditRowToTableCells : Model -> ( Int, ViewEditRow ) -> List (Html Msg)
 viewEditRowToTableCells model ( rowIdx, row ) =
-    viewChoice model rowIdx :: List.map (viewEditItem model) row.items
+    viewChoice model rowIdx :: idsTypeChoice model row rowIdx :: List.map (viewEditItem model) row.items
 
 addRowButton : Model -> Html Msg
 addRowButton model =
@@ -67,6 +69,25 @@ viewChoice model rowI =
             ]
             []
         ]
+
+idsTypeChoice : Model -> ViewEditRow -> Int -> Html Msg
+idsTypeChoice model row rowI =
+    let
+        hasType : ViewRowIdsType -> Bool
+        hasType t = row.idsType == t
+        types = [RowHasIds, RowNoIds]
+        texts = ["Has Ids", "No Ids"]
+        changeIdsTypeFromText txt = textToEnum types texts txt |> Maybe.map (\idsType -> Internal (ChangeIdsType rowI idsType)) |> Maybe.withDefault None
+        selectTypes t = Select.value (enumToText types texts t |> Maybe.withDefault "") :: (if hasType t then [Select.selected] else [])
+    in
+        Select.view Mdc
+            (makeIndex viewEditorIdx ("selIdsType" ++ String.fromInt rowI))
+            model.mdc
+            [ Select.label "Ids Type"
+            , Select.selectedText (enumToText types texts row.idsType |> Maybe.withDefault "")
+            , Select.onSelect changeIdsTypeFromText
+             ]
+             (ListX.zip types texts |> List.map (\(t, txt) -> Select.option (selectTypes t) [ text txt]))
 
 viewEditItem : Model -> ViewEditItem -> Html Msg
 viewEditItem model item =

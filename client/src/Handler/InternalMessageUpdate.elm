@@ -3,7 +3,7 @@ module Handler.InternalMessageUpdate exposing (updateInternal)
 import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleChangeOperationsMatch, handleNewCalculationWithName, handleSelectFunctionIndexForCalculationEdit, handleSelectMapIndexForCalculationEdit, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
 import Handler.InternalMapMessageUpdate exposing (handleChangeMapType, handleMapToTable, handleMapToTextArea, handleNewMapWithName, handleShowMapInEditor, handleUpdateMapName)
 import Handler.InternalProjectMessageUpdate exposing (handleNewProjectWithName, handleOpenProject, handleSwitchProjectViewTo, handleUpdateProjectName)
-import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleAddRowToViewEdit, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleRemoveRowFromView, handleSelectMapIndexForViewEdit, handleUpdateViewLabel, handleUpdateViewName)
+import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleAddRowToViewEdit, handleChangeIdsType, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleRemoveRowFromView, handleSelectMapIndexForViewEdit, handleUpdateViewLabel, handleUpdateViewName)
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameToString)
 import Maybe
@@ -64,6 +64,8 @@ updateInternal msg model =
             ( handleChangeOperationsMatch model om, Cmd.none )
         ChangeMapType mt ->
             ( handleChangeMapType model mt, Cmd.none )
+        ChangeIdsType ri rt ->
+            ( handleChangeIdsType model ri rt, Cmd.none )
         AddItemToView row it ->
             ( handleAddItemToViewEdit model row it, Cmd.none )
         SelectMapIndexForView idx ->

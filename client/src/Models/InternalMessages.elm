@@ -35,6 +35,7 @@ type InternalMsg
     | ChangeOperationMode OperationMode
     | ChangeOperationsMatch String
     | ChangeMapType XMapType
+    | ChangeIdsType Int ViewRowIdsType
     | AddItemToView Int ViewItem
     | SelectMapIndexForView Int
     | SelectMapIndexForCalculation Int
