@@ -1,12 +1,15 @@
 module Display.NameDialog exposing (nameDialog)
 
+import Display.UIWrapper exposing (onEnterKey)
 import Html exposing (Html, text)
+import Html.Events exposing (keyCode, targetValue)
+import Json.Decode as Decode
 import Models.InternalMessages exposing (InternalMsg(..))
 import Material
 import Material.Button as Button
 
 import Material.Dialog as Dialog
-import Material.Options as Options
+import Material.Options as Options exposing (Property)
 import Material.TextField as TextField
 import Models.ProjectModel exposing (..)
 
@@ -29,6 +32,7 @@ nameDialog index model title onInput onOk =
             model.mdc
             [ TextField.label "Name"
             , Options.onInput onInput
+            , onEnterKey onOk
             ]
             []
             ]
@@ -53,3 +57,4 @@ nameDialog index model title onInput onOk =
                 ]
             ]
         ]
+

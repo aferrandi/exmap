@@ -52,16 +52,16 @@ rowLineToTableRow line =
 
 
 rowToTable : ViewRow -> ViewModel -> List (List String)
-rowToTable row vm =
+rowToTable vr vm =
     let
-        ids = rowIds row vm.maps
-        values (ViewRow items) = List.map (itemToTable vm.maps ids) items
+        ids = rowIds vr vm.maps
+        values row = List.map (itemToTable vm.maps ids) row.items
     in
-        Set.toList ids :: values row
+        Set.toList ids :: values vr
 
 
 rowIds : ViewRow -> XMapByName -> Set.Set XMapKey
-rowIds (ViewRow items) ms =
+rowIds row ms =
     let
         keysForMap item = case item of
                 MapItem xmapName ->
@@ -70,17 +70,17 @@ rowIds (ViewRow items) ms =
                         Nothing -> Set.empty
                 LabelItem _ -> Set.empty
     in
-        List.map keysForMap items |> List.foldr Set.union Set.empty
+        List.map keysForMap row.items |> List.foldr Set.union Set.empty
 
 
 rowNames : ViewRow -> List String
-rowNames (ViewRow items) =
+rowNames row =
     let
         name item = case item of
                 MapItem xmapName -> xmapNameToString xmapName
                 LabelItem label -> label
     in
-        List.map name items
+        List.map name row.items
 
 
 itemToTable : XMapByName -> Set.Set XMapKey -> ViewItem -> List String

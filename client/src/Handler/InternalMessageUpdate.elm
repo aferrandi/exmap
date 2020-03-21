@@ -1,6 +1,6 @@
 module Handler.InternalMessageUpdate exposing (updateInternal)
 
-import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleChangeOperationsMatch, handleNewCalculationWithName, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
+import Handler.InternalCalculationMessageUpdate exposing (appendToFormulaText, handleAddOperationToCalculation, handleChangeOperationMode, handleChangeOperationsMatch, handleNewCalculationWithName, handleSelectFunctionIndexForCalculationEdit, handleSelectMapIndexForCalculationEdit, handleSwitchCategoryTo, handleTextToResultNameText, handleUpdateCalculationName)
 import Handler.InternalMapMessageUpdate exposing (handleChangeMapType, handleMapToTable, handleMapToTextArea, handleNewMapWithName, handleShowMapInEditor, handleUpdateMapName)
 import Handler.InternalProjectMessageUpdate exposing (handleNewProjectWithName, handleOpenProject, handleSwitchProjectViewTo, handleUpdateProjectName)
 import Handler.InternalVIewMessageUpdate exposing (handleAddItemToViewEdit, handleAddRowToViewEdit, handleChangeViewEditCheckedItem, handleChangeViewEditSelectedRow, handleNewViewWithName, handleOpenView, handleRemoveItemsFromViewEdit, handleRemoveRowFromView, handleSelectMapIndexForViewEdit, handleUpdateViewLabel, handleUpdateViewName)
@@ -68,6 +68,10 @@ updateInternal msg model =
             ( handleAddItemToViewEdit model row it, Cmd.none )
         SelectMapIndexForView idx ->
             ( handleSelectMapIndexForViewEdit model idx, Cmd.none )
+        SelectMapIndexForCalculation idx ->
+            ( handleSelectMapIndexForCalculationEdit model idx, Cmd.none )
+        SelectFunctionIndexForCalculation idx ->
+            ( handleSelectFunctionIndexForCalculationEdit model idx, Cmd.none )
         AddRowToView ->
             ( handleAddRowToViewEdit model, Cmd.none )
         RemoveItemsFromView viewEditItemIds ->

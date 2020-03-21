@@ -55,7 +55,7 @@ handleAddItemToViewEdit : Model -> Int -> ViewItem -> Model
 handleAddItemToViewEdit model ri it =
     let
         buildItem id= { id = id, content = it }
-        updateRow id (ViewEditRow r)  = List.append r [ buildItem id ] |> ViewEditRow
+        updateRow id r  = { r | items = List.append r.items [ buildItem id ] }
         updateRows rs id = ListX.updateAt ri (updateRow id) rs
         updateView mv id  = Maybe.map (\v -> { v | rows = updateRows v.rows id }) mv
     in
@@ -66,7 +66,7 @@ handleRemoveItemsFromViewEdit model ids =
     let
         idsSet = Set.fromList ids
         updateRow : ViewEditRow -> ViewEditRow
-        updateRow (ViewEditRow vr) = List.filter (\it -> not (Set.member it.id idsSet)) vr |> ViewEditRow
+        updateRow vr = { vr | items = List.filter (\it -> not (Set.member it.id idsSet)) vr.items }
         removeFromViews: ViewEdit -> ViewEdit
         removeFromViews v = { v | rows = List.map updateRow v.rows }
         removeFromChecked: ViewEditItemsChecked -> ViewEditItemsChecked
@@ -80,7 +80,7 @@ handleRemoveRowFromView model idx =
         removeRowFromView: ViewEdit -> ViewEdit
         removeRowFromView v = { v | rows = ListX.removeAt idx v.rows }
         itemsFromRow: ViewEditRow -> List ViewEditItemId
-        itemsFromRow (ViewEditRow items) = List.map (\i -> i.id) items
+        itemsFromRow r = List.map (\i -> i.id) r.items
         itemsFromRowIndex: ViewEdit -> List ViewEditItemId
         itemsFromRowIndex v = ListX.getAt idx v.rows |> Maybe.map itemsFromRow |> Maybe.withDefault []
         removeFromChecked: Maybe ViewEdit -> ViewEditItemsChecked -> ViewEditItemsChecked
@@ -103,4 +103,4 @@ invertValue index dict =
         Dict.insert index (inv (Dict.get index dict)) dict
 
 emptyRow : ViewEditRow
-emptyRow = ViewEditRow []
+emptyRow = ViewEditRow [] RowHasIds

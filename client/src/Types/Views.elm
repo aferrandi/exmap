@@ -17,10 +17,18 @@ type alias ViewEditItem =
     }
 
 
-type ViewRow = ViewRow (List ViewItem)
+type ViewRowIdsType = RowHasIds | RowNoIds
+
+type alias ViewRow =
+    { items : List ViewItem
+    , idsType : ViewRowIdsType
+    }
 
 -- horizontal on the screen
-type ViewEditRow = ViewEditRow (List ViewEditItem)
+type alias ViewEditRow =
+    { items : List ViewEditItem
+    , idsType : ViewRowIdsType
+    }
 
 type alias ViewName = String
 

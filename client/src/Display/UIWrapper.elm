@@ -2,13 +2,15 @@ module Display.UIWrapper exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html.Events exposing (keyCode, targetValue)
+import Json.Decode as Decode
 import List.Extra as ListX
 import Material.Button as Button
 
 import Material.FormField as FormField
 import Material.Icon as Icon
 import Material.List as List
-import Material.Options as Options
+import Material.Options as Options exposing (Property)
 import Material.RadioButton as RadioButton
 import Material.Typography as Typo
 import Models.ProjectModel exposing (..)
@@ -98,3 +100,15 @@ radio model idx txt gp val msg =
         , Html.label [ Html.for idx ] [ text txt ]
         ]
 
+onEnterKey : msg -> Property c msg
+onEnterKey tagger =
+    let
+        isEnter code =
+            if code == 13 then
+                Decode.succeed ""
+            else
+                Decode.fail ""
+        decodeEnter =
+            Decode.andThen isEnter keyCode
+    in
+        Options.on "keydown" <| Decode.map2 (\key value -> tagger) decodeEnter targetValue

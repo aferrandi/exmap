@@ -12,7 +12,7 @@ import List.Extra as ListX
 import Material.RadioButton as RadioButton
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameToString)
-import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow(..), ViewItem(..))
+import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow, ViewItem(..))
 import Models.ProjectModel exposing (..)
 
 viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
@@ -36,8 +36,8 @@ viewEditRows model v =
         ]
 
 viewEditRowToTableCells : Model -> ( Int, ViewEditRow ) -> List (Html Msg)
-viewEditRowToTableCells model ( rowIdx, ViewEditRow row ) =
-    viewChoice model rowIdx :: List.map (viewEditItem model) row
+viewEditRowToTableCells model ( rowIdx, row ) =
+    viewChoice model rowIdx :: List.map (viewEditItem model) row.items
 
 addRowButton : Model -> Html Msg
 addRowButton model =
