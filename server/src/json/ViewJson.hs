@@ -40,12 +40,21 @@ instance ToJSON ViewItem where
                                         , "label" .= label
                                         ]
 
+instance FromJSON ViewRowIdsType where
+   parseJSON (String v) = readT <$> pure v
+   parseJSON _ = mempty
+
+instance ToJSON ViewRowIdsType where
+   toJSON v = String $ showT v
+
 instance FromJSON ViewRow where
-   parseJSON (Object v) = ViewRow <$> v .: "items"
+   parseJSON (Object v) = ViewRow <$> v .: "items" <*> v .: "idsType"
    parseJSON _ = mempty
 
 instance ToJSON ViewRow where
-    toJSON (ViewRow is) = object [ "items" .= is]
+    toJSON (ViewRow is id) = object [ "items" .= is
+                                    , "idsType" .= id
+                                    ]
 
 instance FromJSON ViewName where
    parseJSON (String v) = return $ ViewName v

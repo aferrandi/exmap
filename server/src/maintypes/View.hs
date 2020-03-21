@@ -3,6 +3,9 @@ module View where
 import qualified Data.Text as T
 import XMapTypes
 
+data ViewRowIdsType = RowHasIds | RowNoIds
+    deriving (Show, Eq, Read)
+
 newtype ViewLabel = ViewLabel T.Text
     deriving (Show, Eq)
 
@@ -11,7 +14,10 @@ data ViewItem = MapItem XMapName|
     deriving (Show, Eq)
 
 -- horizontal on the screen
-newtype ViewRow = ViewRow [ViewItem]
+data ViewRow = ViewRow {
+    items :: [ViewItem],
+    idsType :: ViewRowIdsType
+    }
     deriving (Show, Eq)
 
 newtype ViewName = ViewName T.Text

@@ -14,7 +14,7 @@ formulaDependenciesMaps (XFOperation _ fs) = nub (concatMap formulaDependenciesM
 
 viewDependenciesMaps :: View -> [XMapName]
 viewDependenciesMaps (View _ rs)= concatMap rowDependencies rs
-    where rowDependencies (ViewRow items)  = mapMaybe itemDependencies items
+    where rowDependencies (ViewRow items _)  = mapMaybe itemDependencies items
           itemDependencies (MapItem m) = Just m
           itemDependencies (LabelItem _) = Nothing
 
