@@ -14,7 +14,7 @@ import Material.Select as Select
 import Models.InternalMessages exposing (..)
 import Transform.MapsExtraction exposing (xmapNameToString)
 import Transform.TypeConversion exposing (enumToText, textToEnum)
-import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow, ViewItem(..), ViewRowIdsType(..))
+import Types.Views exposing (ViewEdit, ViewEditItem, ViewEditItemId, ViewEditRow, ViewItem(..), ViewRowHedersType(..))
 import Models.ProjectModel exposing (..)
 
 viewEditorTable : Model -> Maybe ViewEdit -> Html Msg
@@ -73,18 +73,18 @@ viewChoice model rowI =
 idsTypeChoice : Model -> ViewEditRow -> Int -> Html Msg
 idsTypeChoice model row rowI =
     let
-        hasType : ViewRowIdsType -> Bool
-        hasType t = row.idsType == t
-        types = [RowHasIds, RowNoIds]
+        hasType : ViewRowHedersType -> Bool
+        hasType t = row.headerType == t
+        types = [RowHasHeader, RowNoHeader]
         texts = ["Has Ids", "No Ids"]
         changeIdsTypeFromText txt = textToEnum types texts txt |> Maybe.map (\idsType -> Internal (ChangeIdsType rowI idsType)) |> Maybe.withDefault None
         selectTypes t = Select.value (enumToText types texts t |> Maybe.withDefault "") :: (if hasType t then [Select.selected] else [])
     in
         Select.view Mdc
-            (makeIndex viewEditorIdx ("selIdsType" ++ String.fromInt rowI))
+            (makeIndex viewEditorIdx ("selIHeaderType" ++ String.fromInt rowI))
             model.mdc
-            [ Select.label "Ids Type"
-            , Select.selectedText (enumToText types texts row.idsType |> Maybe.withDefault "")
+            [ Select.label "Headers"
+            , Select.selectedText (enumToText types texts row.headerType |> Maybe.withDefault "")
             , Select.onSelect changeIdsTypeFromText
              ]
              (ListX.zip types texts |> List.map (\(t, txt) -> Select.option (selectTypes t) [ text txt]))

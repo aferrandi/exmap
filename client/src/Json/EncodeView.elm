@@ -18,18 +18,18 @@ encodeViewItem i =
                 , ( "label", string l )
                 ]
 
-encodeViewRowidsType : ViewRowIdsType -> Value
-encodeViewRowidsType idt =
+encodeViewRowHeaderType : ViewRowHedersType -> Value
+encodeViewRowHeaderType idt =
     case idt of
-        RowHasIds -> string "RowHasIds"
-        RowNoIds-> string "RowNoIds"
+        RowHasHeader -> string "RowHasHeader"
+        RowNoHeader-> string "RowNoHeader"
 
 
 encodeViewRow : ViewRow -> Value
 encodeViewRow r =
         object [
             ( "items", list encodeViewItem r.items ),
-            ( "idsType", encodeViewRowidsType r.idsType)
+            ( "headerType", encodeViewRowHeaderType r.headerType)
         ]
 
 encodeView : View -> Value

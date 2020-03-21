@@ -17,11 +17,11 @@ viewView : Model -> ProjectModel -> ViewModel -> Html Msg
 viewView model pm vm =
     DataTable.table (scrollableTableStyle model.ui.heights.viewView) (List.concatMap (viewRow vm) vm.view.rows)
 
-
 viewRow : ViewModel -> ViewRow -> List (Html Msg)
 viewRow vm row =
-    [ viewRowHeader row, viewRowBody vm row ]
-
+    case row.headerType of
+        RowHasHeader -> [viewRowHeader row, viewRowBody vm row]
+        RowNoHeader -> [viewRowBody vm row]
 
 viewRowHeader : ViewRow -> Html Msg
 viewRowHeader row =
@@ -32,7 +32,6 @@ viewRowHeader row =
             [ DataTable.tr []
                 (List.map cell ("Ids" :: rowNames row))
             ]
-
 
 viewRowBody : ViewModel -> ViewRow -> Html Msg
 viewRowBody vm row =

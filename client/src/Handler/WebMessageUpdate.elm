@@ -99,7 +99,7 @@ handleViewLoaded model v =
         buildViewEditItem : ViewItem -> (List ViewEditItem, ViewEditItemId) -> (List ViewEditItem, ViewEditItemId)
         buildViewEditItem vi (ro, lastId) = ({ content = vi, id = lastId + 1} :: ro, lastId + 1)
         buildViewEditRow : ViewRow -> (List ViewEditRow, ViewEditItemId) -> (List ViewEditRow, ViewEditItemId)
-        buildViewEditRow r (rso, lastId) =  (List.foldr buildViewEditItem ([], lastId)  r.items) |> (\(ro, id) -> ((ViewEditRow ro r.idsType) :: rso, id))
+        buildViewEditRow r (rso, lastId) =  (List.foldr buildViewEditItem ([], lastId)  r.items) |> (\(ro, id) -> ((ViewEditRow ro r.headerType) :: rso, id))
         buildViewEditRows : List ViewRow -> ViewEditItemId -> (List ViewEditRow, ViewEditItemId)
         buildViewEditRows rsi lastId =  (List.foldr buildViewEditRow ([], lastId)  rsi) |> (\(rso, id) -> (rso, id))
         buildViewEditPair : (List ViewEditRow, ViewEditItemId) -> (ViewEdit, ViewEditItemId)

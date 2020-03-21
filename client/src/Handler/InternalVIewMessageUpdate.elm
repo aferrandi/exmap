@@ -95,10 +95,10 @@ handleChangeViewEditCheckedItem : Model -> ViewEditItemId -> Model
 handleChangeViewEditCheckedItem model id =
     updateViewEditorModel model (\vm -> { vm | checkedViewEditItems = invertValue id vm.checkedViewEditItems })
 
-handleChangeIdsType : Model -> Int -> ViewRowIdsType -> Model
+handleChangeIdsType : Model -> Int -> ViewRowHedersType -> Model
 handleChangeIdsType model ri rt =
     let
-        updateRow r  = { r | idsType = rt }
+        updateRow r  = { r | headerType = rt }
         updateRows rs = ListX.updateAt ri updateRow rs
         updateView mv = Maybe.map (\v -> { v | rows = updateRows v.rows }) mv
     in
@@ -112,4 +112,4 @@ invertValue index dict =
         Dict.insert index (inv (Dict.get index dict)) dict
 
 emptyRow : ViewEditRow
-emptyRow = ViewEditRow [] RowHasIds
+emptyRow = ViewEditRow [] RowHasHeader

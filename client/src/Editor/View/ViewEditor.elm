@@ -48,7 +48,7 @@ storeButton model pm =
 storeView : ProjectModel -> ViewEditorModel -> Msg
 storeView pm vm =
     let
-        viewEditRowToViewRow vr = ViewRow (List.map (\i -> i.content) vr.items) vr.idsType
+        viewEditRowToViewRow vr = ViewRow (List.map (\i -> i.content) vr.items) vr.headerType
         viewToStore v vn  = { viewName = vn
                             , rows = List.map viewEditRowToViewRow v.rows
                             }

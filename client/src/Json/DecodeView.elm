@@ -6,10 +6,10 @@ import Json.Decode exposing (..)
 import Json.EnumToString exposing (stringToEnum)
 import Types.Views exposing (..)
 
-viewRowidsTypeDecoder : Decoder ViewRowIdsType
-viewRowidsTypeDecoder =
+viewRowHeaderTypeDecoder : Decoder ViewRowHedersType
+viewRowHeaderTypeDecoder =
     let
-        m = fromList [ ( "RowHasIds", RowHasIds ), ( "RowNoIds", RowNoIds ) ]
+        m = fromList [ ( "RowHasHeader", RowHasHeader ), ( "RowNoHeader", RowNoHeader ) ]
     in
         string |> andThen (stringToEnum m)
 
@@ -31,7 +31,7 @@ viewRowDecoder : Decoder ViewRow
 viewRowDecoder =
     map2 ViewRow
         (field "items" (list viewItemDecoder))
-        (field "idsType" viewRowidsTypeDecoder)
+        (field "headerType" viewRowHeaderTypeDecoder)
 
 -- vertical on the screen
 viewDecoder : Decoder View
