@@ -43,8 +43,8 @@ viewDependenciesMaps_complex_maps = TestCase (assertEqual "dependencies complex 
           v = View {
                 viewName = ViewName (T.pack "v"),
                 rows = [
-                    ViewRow [ MapItem ka, MapItem kb] RowHasIds ,
-                    ViewRow [ LabelItem (label "l1"), LabelItem (label "l2")] RowNoIds
+                    ViewRow [ MapItem ka, MapItem kb] RowHasHeader ,
+                    ViewRow [ LabelItem (label "l1"), LabelItem (label "l2")] RowNoHeader
                 ]
             }
 

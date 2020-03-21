@@ -3,7 +3,7 @@ module View where
 import qualified Data.Text as T
 import XMapTypes
 
-data ViewRowIdsType = RowHasIds | RowNoIds
+data ViewRowHeaderType = RowHasHeader | RowNoHeader
     deriving (Show, Eq, Read)
 
 newtype ViewLabel = ViewLabel T.Text
@@ -16,7 +16,7 @@ data ViewItem = MapItem XMapName|
 -- horizontal on the screen
 data ViewRow = ViewRow {
     items :: [ViewItem],
-    idsType :: ViewRowIdsType
+    headerType :: ViewRowHeaderType
     }
     deriving (Show, Eq)
 

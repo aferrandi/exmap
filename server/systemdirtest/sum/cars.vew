@@ -1,1 +1,1 @@
-{"viewName":"cars","rows":[{"items":[{"mapName":"km_liter","type":"map"},{"mapName":"kms","type":"map"},{"mapName":"liters","type":"map"}]}]}
+{"viewName":"cars","rows":[{"headerType":"RowHasHeader","items":[{"mapName":"km_liter","type":"map"},{"mapName":"kms","type":"map"},{"mapName":"liters","type":"map"}]},{"headerType":"RowNoHeader","items":[{"type":"label","label":""},{"type":"label","label":""},{"mapName":"calcsumliters","type":"map"}]}]}

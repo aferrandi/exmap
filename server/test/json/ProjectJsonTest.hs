@@ -39,7 +39,7 @@ toParseJSON_view_same = TestCase (assertEqual "view -> json -> view" (Just origi
                                ViewRow [
                                    MapItem (mapName ["one"]),
                                    LabelItem (ViewLabel (T.pack "label"))
-                                   ] RowHasIds
+                                   ] RowHasHeader
                            ]
                      }
 

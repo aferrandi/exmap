@@ -1,1 +1,1 @@
-{"viewName":"gappol","rows":[{"items":[{"type":"label","label":"babbalone"},{"mapName":"kasparov","type":"map"}]}]}
+{"viewName":"gappol","rows":[{"items":[{"type":"label","label":"babbalone"},{"mapName":"kasparov","type":"map"}], "headerType":"RowHasHeader"}]}

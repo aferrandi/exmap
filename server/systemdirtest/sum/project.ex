@@ -1,1 +1,1 @@
-{"calculations":["calc_liters"],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["km_liter","kms"]}],"views":["cars"],"projectName":"sum"}
+{"calculations":["calcsumliters","calc_liters"],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["km_liter","kms"]}],"views":["cars"],"projectName":"sum"}

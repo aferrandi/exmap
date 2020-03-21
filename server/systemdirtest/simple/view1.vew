@@ -1,1 +1,1 @@
-{"viewName":"view1","rows":[{"items":[{"type":"label","label":"firstView"},{"mapName":"map1","type":"map"},{"mapName":"zuzzo","type":"map"}]}]}
+{"viewName":"view1","rows":[{"items":[{"type":"label","label":"firstView"},{"mapName":"map1","type":"map"},{"mapName":"zuzzo","type":"map"}], "headerType":"RowHasHeader"}]}
