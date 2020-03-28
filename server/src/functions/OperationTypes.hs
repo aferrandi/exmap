@@ -30,6 +30,9 @@ data OperationName =
     | Len
     | ToDecimal
     | ToString
+    | Trim
+    | TrimLeft
+    | TrimRight    
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
@@ -98,5 +101,8 @@ allOperationTypes = [
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,
     newOpType (newOpId Text Len) [ParameterText] ParameterInt,
-    newOpType (newOpId Text ToString) [ParameterAny] ParameterText
+    newOpType (newOpId Text ToString) [ParameterAny] ParameterText,
+    newOpType (newOpId Text Trim) [ParameterText] ParameterText,
+    newOpType (newOpId Text TrimLeft) [ParameterText] ParameterText,
+    newOpType (newOpId Text TrimRight) [ParameterText] ParameterText
     ]

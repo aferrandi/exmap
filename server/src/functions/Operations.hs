@@ -188,6 +188,15 @@ toString om xs = Right $ toStringv (head xs)
           toStringv (XMapBool ms) = XMapString $ M.map showT ms
           toStringv (XMapDate ms) = XMapString $ M.map ((T.dropEnd 4) . showT) ms
 
+trim :: OperationMode -> [XMap] -> XMapErr
+trim om = XFunction.apply T.strip
+
+trimLeft :: OperationMode -> [XMap] -> XMapErr
+trimLeft om = XFunction.apply T.stripStart
+
+trimRight :: OperationMode -> [XMap] -> XMapErr
+trimRight om = XFunction.apply T.stripEnd
+
 ifThen :: OperationMode -> [XMap] -> XMapErr
 ifThen om xs = do
      checkMapsNumber xs 2
@@ -250,4 +259,7 @@ operationRepository op = case op of
     Len -> len
     ToDecimal -> toDecimal
     ToString -> toString
+    Trim -> trim
+    TrimLeft -> trimLeft
+    TrimRight -> trimRight
 

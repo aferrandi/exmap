@@ -39,6 +39,11 @@ testMapStringA = makeStringXMap  arr
   where arr :: [(String, String)]
         arr = [("a", "morning"), ("b", "day"), ("c", "night"), ("d", "")]
 
+testMapStringB :: XMap
+testMapStringB = makeStringXMap  arr
+  where arr :: [(String, String)]
+        arr = [("a", "  a dog  "), ("b", "good day ")]
+
 testMapIntA :: XMap
 testMapIntA = makeXMap arr
   where arr :: [(String, Int)]
@@ -186,6 +191,17 @@ toString_date_standard  = TestCase $ assertXMapStringEqual expected actual
     where actual = (operationRepository ToString) Union [testMapDateA]
           expected = makeMapString [("a", "2014-03-21 13:56:01"), ("b", "2015-11-12 00:00:00")]
 
+trim_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository Trim) Union [testMapStringB]
+          expected = makeMapString [("a", "a dog"), ("b", "good day")]
+
+trimLeft_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository TrimLeft) Union [testMapStringB]
+          expected = makeMapString [("a", "a dog  "), ("b", "good day ")]
+
+trimRight_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository TrimRight) Union [testMapStringB]
+          expected = makeMapString [("a", "  a dog"), ("b", "good day")]
 
 and_standard = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository And) Union [testMapBoolA, testMapBoolB]
@@ -239,6 +255,9 @@ tests = [
           toString_bool_standard,
           toString_string_standard,
           toString_date_standard,
+          trim_standard,
+          trimLeft_standard,
+          trimRight_standard,
           and_standard,
           or_standard,
           not_standard,
