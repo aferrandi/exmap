@@ -1,5 +1,6 @@
 module Editor.Calculation.FunctionChooser exposing (viewFunctions)
 
+import Handler.InternalCalculationMessageUpdate exposing (operationSignatureToText)
 import Material.LayoutGrid as LayoutGrid
 import Material.Select as Select
 import Material.TextField as TextField
@@ -72,11 +73,18 @@ functionsNamesList model  =
         selectItem index = Internal (SelectFunctionIndexForCalculation index)
         buildMsg index = sendListMsg (\on -> (Internal (AddOperationToCalculation on))) operationToShow index
         sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedFunctionIdx)
+        typeForId : OperationId -> String
+        typeForId id = case Dict.get (operationIdToTuple id) (functions model).typesById of
+                            Nothing -> ""
+                            Just types -> operationSignatureToText types
         operationListItem on =
             Lists.li []
                 [
                   Lists.graphicIcon  [] "play_arrow",
-                  text on.name
+                  Lists.text []
+                    [ Lists.primaryText [] [ text on.name ]
+                    , Lists.secondaryText [] [ text (typeForId on) ]
+                    ]
                 ]
         operationList = List.map operationListItem operationToShow
     in
@@ -85,7 +93,7 @@ functionsNamesList model  =
             Lists.ul Mdc
                 (makeIndex calcEditorIdx "lstFnc")
                 model.mdc
-                ([ Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.functionsNamesList))
+                ([ Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem, Lists.twoLine] ++ (scrollableListStyle model.ui.heights.functionsNamesList))
                 operationList
             , buttonClick model (makeIndex viewEditorIdx "btnAddFunction") "Add function"  sendAddItem
         ]

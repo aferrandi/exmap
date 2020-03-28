@@ -35,7 +35,7 @@ handleAddOperationToCalculation model id =
     let
         text = model.functions
                 |> Maybe.andThen (\fm -> Dict.get (operationIdToTuple id) fm.typesById)
-                |> Maybe.map operationTypeToText
+                |> Maybe.map (\o -> o.operationId.name)
     in
         appendToFormulaText model (Maybe.withDefault " " text)
 
@@ -55,13 +55,9 @@ appendToFormulaText model s =
     in
         updateCalculationEditorModel model (\cm -> { cm | calculationFormulaText = Just (updateFormulaText cm) })
 
-
-operationTypeToText : OperationType -> String
-operationTypeToText ot =
-    let
-        insidePars s = "[" ++ s ++ "]"
-    in
-        ot.operationId.name ++ " " ++ String.join " " (List.map (parameterTypeToText >> insidePars) ot.parametersTypes)
+operationSignatureToText : OperationType -> String
+operationSignatureToText ot =
+        String.join ", " (List.map (parameterTypeToText) ot.parametersTypes) ++ " -> " ++ parameterTypeToText ot.returnType
 
 
 parameterTypeToText t =
