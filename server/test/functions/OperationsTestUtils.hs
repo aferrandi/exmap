@@ -1,10 +1,11 @@
-module OperationsTestUtils (assertXMapDoubleEqual, assertXMapBoolEqual, assertXMapIntEqual) where
+module OperationsTestUtils (assertXMapDoubleEqual, assertXMapBoolEqual, assertXMapIntEqual, assertXMapStringEqual) where
 
 import Test.HUnit
 
 import qualified Data.Map.Strict as M
 import qualified Data.List as L
 import qualified Data.Time.Clock as DT
+import qualified Data.Text as T
 import Control.Monad (unless)
 
 import XMapTypes
@@ -41,4 +42,9 @@ assertXMapBoolEqual ms xs = case xs of
 assertXMapIntEqual :: MapValue Int -> XMapErr -> Assertion
 assertXMapIntEqual ms xs = case xs of
                           (Right (XMapInt ds)) -> assertMapEqual ms ds
+                          err -> assertFailure $ "The result is not a map but " ++ show err
+
+assertXMapStringEqual :: MapValue T.Text -> XMapErr -> Assertion
+assertXMapStringEqual ms xs = case xs of
+                          (Right (XMapString ds)) -> assertMapEqual ms ds
                           err -> assertFailure $ "The result is not a map but " ++ show err

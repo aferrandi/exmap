@@ -126,6 +126,7 @@ test-suite exmap-test
                      , XFunction
                      , FormulaText
                      , XMapTypes
+                     , DateValue
                      , OperationTypes
                      , XValues
                      , FormulaParser

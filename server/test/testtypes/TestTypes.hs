@@ -8,6 +8,9 @@ import XValues
 makeMap :: XValue a => [(String, a)] -> MapValue a
 makeMap l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), n)) l)
 
+makeMapString :: [(String, String)] -> MapValue T.Text
+makeMapString l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), T.pack n)) l)
+
 makeXMap :: XValue a => [(String, a)] -> XMap
 makeXMap l = buildMap $ makeMap l
 

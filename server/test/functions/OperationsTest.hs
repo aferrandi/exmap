@@ -3,13 +3,16 @@ module OperationsTest (tests) where
 import Test.HUnit
 import Test.Framework
 import Test.Framework.Providers.HUnit
+import qualified Data.Text as T
 import qualified Data.Map.Strict as M
+import qualified Data.Time.Clock as DT
 
 import OperationsTestUtils
 import Operations
 import TestTypes
 import XMapTypes
 import XFunction
+import DateValue
 
 testMapDoubleA :: XMap
 testMapDoubleA = makeXMap arr
@@ -51,6 +54,10 @@ testMapBoolB = makeXMap arr
   where arr :: [(String, Bool)]
         arr = [("a", True), ("b", False), ("c", True), ("d", False), ("e", False)]
 
+testMapDateA :: XMap
+testMapDateA = makeXMap arr
+  where arr :: [(String, DT.UTCTime)]
+        arr = [("a", mkUTCTime (2014, 3, 21) (13, 56, 1)), ("b", mkUTCDate (2015, 11, 12))]
 
 
 add_standard = TestCase $ assertXMapDoubleEqual expected actual
@@ -159,6 +166,27 @@ toDecimal_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository ToDecimal) Union [testMapIntA]
           expected = makeMap [("a", 1.0), ("b", -2.0), ("c", 3.0)]
 
+toString_double_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository ToString) Union [testMapDoubleA]
+          expected = makeMapString [("a", "1.2"), ("b", "2.3"), ("c", "3.5")]
+
+toString_int_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository ToString) Union [testMapIntA]
+          expected = makeMapString [("a", "1"), ("b", "-2"), ("c", "3")]
+
+toString_bool_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository ToString) Union [testMapBoolA]
+          expected = makeMapString [("a", "True"), ("b", "True"), ("c", "False"), ("d", "False")]
+
+toString_string_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository ToString) Union [testMapStringA]
+          expected = makeMapString [("a", "morning"), ("b", "day"), ("c", "night"), ("d", "")]
+
+toString_date_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository ToString) Union [testMapDateA]
+          expected = makeMapString [("a", "2014-03-21 13:56:01"), ("b", "2015-11-12 00:00:00")]
+
+
 and_standard = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository And) Union [testMapBoolA, testMapBoolB]
           expected = makeMap [("a", True), ("b", False), ("c", False), ("d", False), ("e", False)]
@@ -166,6 +194,10 @@ and_standard = TestCase $ assertXMapBoolEqual expected actual
 or_standard = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Or) Union [testMapBoolA, testMapBoolB]
           expected = makeMap [("a", True), ("b", True), ("c", True), ("d", False), ("e", False)]
+
+not_standard = TestCase $ assertXMapBoolEqual expected actual
+    where actual = (operationRepository Not) Union [testMapBoolA]
+          expected = makeMap [("a", False), ("b", False), ("c", True), ("d", True)]
 
 ifThen_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository IfThen) Union [testMapBoolA, testMapDoubleA]
@@ -202,8 +234,14 @@ tests = [
           equals_string,
           len_standard,
           toDecimal_standard,
+          toString_double_standard,
+          toString_int_standard,
+          toString_bool_standard,
+          toString_string_standard,
+          toString_date_standard,
           and_standard,
           or_standard,
+          not_standard,
           ifThen_standard,
           ifThenElse_standard
         ]

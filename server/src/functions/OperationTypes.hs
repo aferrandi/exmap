@@ -21,6 +21,7 @@ data OperationName =
     | Avg
     | And
     | Or
+    | Not
     | IfThen
     | IfThenElse
     | KeysTo
@@ -28,6 +29,7 @@ data OperationName =
     | Equals
     | Len
     | ToDecimal
+    | ToString
     deriving (Bounded, Enum, Show, Eq, Read)
 
 data OperationCategory =
@@ -88,11 +90,13 @@ allOperationTypes = [
     newOpType (newOpId Math LessOrEqual) [ParameterDouble] ParameterBool,
     newOpType (newOpId Logical And) [ParameterBool] ParameterBool,
     newOpType (newOpId Logical Or) [ParameterBool] ParameterBool,
+    newOpType (newOpId Logical Not) [ParameterBool] ParameterBool,
     newOpType (newOpId Logical IfThen) [ParameterBool, ParameterAny] ParameterAny,
     newOpType (newOpId Logical IfThenElse) [ParameterBool, ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId Conversion ToDecimal) [ParameterInt] ParameterDouble,
     newOpType (newOpId System KeysTo) [ParameterText, ParameterAny] ParameterAny,
     newOpType (newOpId System Merge) [ParameterAny, ParameterAny] ParameterAny,
     newOpType (newOpId System Equals) [ParameterAny, ParameterAny] ParameterBool,
-    newOpType (newOpId Text Len) [ParameterText] ParameterInt
+    newOpType (newOpId Text Len) [ParameterText] ParameterInt,
+    newOpType (newOpId Text ToString) [ParameterAny] ParameterText
     ]

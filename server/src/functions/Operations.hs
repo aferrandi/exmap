@@ -11,6 +11,7 @@ import qualified Data.Text as T
 import qualified Data.Maybe as B
 import qualified Data.List as L
 import qualified Data.Set as S
+import ShowText
 
 type OperationFun = OperationMode -> [XMap] -> XMapErr
 
@@ -103,6 +104,11 @@ fand om = operate om (&&)
 for :: OperationMode -> [XMap] -> XMapErr
 for om = operate om (||)
 
+fnot :: OperationMode -> [XMap] -> XMapErr
+fnot om = XFunction.apply notv
+    where notv ::Bool -> Bool
+          notv = not
+          
 keysTo :: OperationMode -> [XMap] -> XMapErr
 keysTo om xs =
         do
@@ -174,6 +180,14 @@ toDecimal om = XFunction.apply toDecimalv
     where toDecimalv :: Int -> Double
           toDecimalv = fromIntegral
 
+toString ::  OperationMode -> [XMap] -> XMapErr
+toString om xs = Right $ toStringv (head xs)
+    where toStringv (XMapDouble ms) = XMapString $ M.map showT ms
+          toStringv (XMapInt ms) = XMapString $ M.map showT ms
+          toStringv (XMapString ms) = head xs
+          toStringv (XMapBool ms) = XMapString $ M.map showT ms
+          toStringv (XMapDate ms) = XMapString $ M.map ((T.dropEnd 4) . showT) ms
+
 ifThen :: OperationMode -> [XMap] -> XMapErr
 ifThen om xs = do
      checkMapsNumber xs 2
@@ -226,6 +240,7 @@ operationRepository op = case op of
     Product -> fproduct
     And -> fand
     Or -> for
+    Not -> fnot
     IfThen -> ifThen
     IfThenElse -> ifThenElse
     Avg -> average
@@ -234,3 +249,5 @@ operationRepository op = case op of
     Equals -> equals
     Len -> len
     ToDecimal -> toDecimal
+    ToString -> toString
+
