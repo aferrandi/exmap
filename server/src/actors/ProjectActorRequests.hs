@@ -52,7 +52,7 @@ loadMapForClient c chan rp mn = do
 addMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 addMap c chan rp m = do
     pn <- prjName rp
-    let mn = xmapName m 
+    let mn = mapName m
     fndMap <- projectContainsMapWithName rp mn
     fndResult <- projectContainsResultWithName rp mn
     if not (fndMap || fndResult) then do
@@ -63,7 +63,7 @@ addMap c chan rp m = do
 updateMap :: WAClient -> ProjectChan -> RuntimeProject -> XNamedMap -> STM ()
 updateMap c chan rp m = do
     pn <- prjName rp
-    let mn = xmapName m
+    let mn = mapName m
     fnd <- projectContainsMapWithName rp mn
     if fnd then do
       writeTChan (storeChan $ chans rp)  $ StMStoreExistingMap chan c pn m

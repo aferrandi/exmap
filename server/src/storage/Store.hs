@@ -36,7 +36,7 @@ storeProject root pr = do
 
 storeXMap :: FilePath -> ProjectName -> XNamedMap -> IO (Maybe Error)
 storeXMap root pn m = do
-    let path = xMapPath root pn (xmapName m)
+    let path = xMapPath root pn (mapName m)
     tryWriteFile path (encode m)
 
 storeView :: FilePath -> ProjectName -> View -> IO (Maybe Error)

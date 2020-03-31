@@ -24,6 +24,7 @@ instance ToJSON ParameterType where
         ParameterInt -> "int"
         ParameterText -> "string"
         ParameterBool -> "bool"
+        ParameterDate -> "date"        
         ParameterAny -> "any"
 
 instance FromJSON XFormula where

@@ -33,11 +33,11 @@ actorStore root chan lch = loop
                     storeAllProjectsInActor root source c ap
                     loop
                 StMStoreNewMap source c pn m -> do
-                    logDbg $ "handling StMStoreMap " ++ show (xmapName m) ++ " for project " ++ show pn
+                    logDbg $ "handling StMStoreMap " ++ show (mapName m) ++ " for project " ++ show pn
                     storeNewMapInActor root source c pn m
                     loop
                 StMStoreExistingMap source c pn m -> do
-                    logDbg $ "handling StMStoreMap " ++ show (xmapName m) ++ " for project " ++ show pn
+                    logDbg $ "handling StMStoreMap " ++ show (mapName m) ++ " for project " ++ show pn
                     storeExistingMapInActor root source c pn m
                     loop
                 StMStoreNewCalculation source c pn clc -> do

@@ -20,7 +20,7 @@ actorView chan rv evtChan = loop
             let vn = runtimeViewName rv
             case msg of
                 VMMaps ms -> do
-                    logDbg $ "View " ++ show vn ++ " handling VMMaps " ++ show (map xmapName ms)
+                    logDbg $ "View " ++ show vn ++ " handling VMMaps " ++ show (map mapName ms)
                     atomically $ handleMaps rv evtChan ms
                     loop
                 VMSubscribeToView c -> do
@@ -60,7 +60,7 @@ handleMaps rv evtChan ms = do
     writeTChan evtChan (EMWebEvent cs $ WEViewChanged (ownerProjectName rv) (runtimeViewName rv) ms)
 
 updateMapsInView :: [XNamedMap] -> XMapByName -> XMapByName
-updateMapsInView ms msbn = foldr  (\m msbni -> M.insert (xmapName m) (xmap m) msbni) msbn ms
+updateMapsInView ms msbn = foldr  (\m msbni -> M.insert (mapName m) (xmap m) msbni) msbn ms
 
 handleView :: RuntimeView -> EventChan -> View -> STM ()
 handleView rv evtChan v = do
@@ -72,7 +72,7 @@ sendStatus :: RuntimeView -> EventChan -> [WAClient] -> STM ()
 sendStatus rv evtChan cs = do
     v <- readTVar $ view rv
     ms <- readTVar $ mapsInView rv
-    let nms = map (\(k,a) -> XNamedMap { xmapName = k ,xmap = a }) $ M.toList ms
+    let nms = map (\(k,a) -> XNamedMap { xmapDef = XMapDefinition { xmapName = k ,xmapType = mapType a }, xmap = a }) $ M.toList ms
     writeTChan evtChan (EMWebEvent cs $ WEViewStatus (ownerProjectName rv)  v nms)
 
 

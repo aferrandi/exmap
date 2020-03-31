@@ -177,12 +177,6 @@ function _Utils_eq(x, y)
 
 function _Utils_eqHelp(x, y, depth, stack)
 {
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
-	}
-
 	if (x === y)
 	{
 		return true;
@@ -192,6 +186,12 @@ function _Utils_eqHelp(x, y, depth, stack)
 	{
 		typeof x === 'function' && _Debug_crash(5);
 		return false;
+	}
+
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
 	}
 
 	/**/
@@ -252,7 +252,7 @@ function _Utils_cmp(x, y, ord)
 	//*/
 
 	/**_UNUSED/
-	if (!x.$)
+	if (typeof x.$ === 'undefined')
 	//*/
 	/**/
 	if (x.$[0] === '#')
@@ -633,6 +633,16 @@ function _Debug_toAnsiString(ansi, value)
 		return _Debug_ctorColor(ansi, tag) + output;
 	}
 
+	if (typeof DataView === 'function' && value instanceof DataView)
+	{
+		return _Debug_stringColor(ansi, '<' + value.byteLength + ' bytes>');
+	}
+
+	if (typeof File !== 'undefined' && value instanceof File)
+	{
+		return _Debug_internalColor(ansi, '<' + value.name + '>');
+	}
+
 	if (typeof value === 'object')
 	{
 		var output = [];
@@ -698,9 +708,13 @@ function _Debug_fadeColor(ansi, string)
 
 function _Debug_internalColor(ansi, string)
 {
-	return ansi ? '\x1b[94m' + string + '\x1b[0m' : string;
+	return ansi ? '\x1b[36m' + string + '\x1b[0m' : string;
 }
 
+function _Debug_toHexDigit(n)
+{
+	return String.fromCharCode(n < 10 ? 48 + n : 55 + n);
+}
 
 
 // CRASH
@@ -859,9 +873,7 @@ function _Char_fromCode(code)
 			? String.fromCharCode(code)
 			:
 		(code -= 0x10000,
-			String.fromCharCode(Math.floor(code / 0x400) + 0xD800)
-			+
-			String.fromCharCode(code % 0x400 + 0xDC00)
+			String.fromCharCode(Math.floor(code / 0x400) + 0xD800, code % 0x400 + 0xDC00)
 		)
 	);
 }
@@ -896,7 +908,7 @@ var _String_cons = F2(function(chr, str)
 function _String_uncons(string)
 {
 	var word = string.charCodeAt(0);
-	return word
+	return !isNaN(word)
 		? elm$core$Maybe$Just(
 			0xD800 <= word && word <= 0xDBFF
 				? _Utils_Tuple2(_Utils_chr(string[0] + string[1]), string.slice(2))
@@ -1871,10 +1883,10 @@ function _Platform_initialize(flagDecoder, args, init, update, subscriptions, st
 	{
 		result = A2(update, msg, model);
 		stepper(model = result.a, viewMetadata);
-		_Platform_dispatchEffects(managers, result.b, subscriptions(model));
+		_Platform_enqueueEffects(managers, result.b, subscriptions(model));
 	}
 
-	_Platform_dispatchEffects(managers, result.b, subscriptions(model));
+	_Platform_enqueueEffects(managers, result.b, subscriptions(model));
 
 	return ports ? { ports: ports } : {};
 }
@@ -2032,6 +2044,51 @@ var _Platform_map = F2(function(tagger, bag)
 
 
 // PIPE BAGS INTO EFFECT MANAGERS
+//
+// Effects must be queued!
+//
+// Say your init contains a synchronous command, like Time.now or Time.here
+//
+//   - This will produce a batch of effects (FX_1)
+//   - The synchronous task triggers the subsequent `update` call
+//   - This will produce a batch of effects (FX_2)
+//
+// If we just start dispatching FX_2, subscriptions from FX_2 can be processed
+// before subscriptions from FX_1. No good! Earlier versions of this code had
+// this problem, leading to these reports:
+//
+//   https://github.com/elm/core/issues/980
+//   https://github.com/elm/core/pull/981
+//   https://github.com/elm/compiler/issues/1776
+//
+// The queue is necessary to avoid ordering issues for synchronous commands.
+
+
+// Why use true/false here? Why not just check the length of the queue?
+// The goal is to detect "are we currently dispatching effects?" If we
+// are, we need to bail and let the ongoing while loop handle things.
+//
+// Now say the queue has 1 element. When we dequeue the final element,
+// the queue will be empty, but we are still actively dispatching effects.
+// So you could get queue jumping in a really tricky category of cases.
+//
+var _Platform_effectsQueue = [];
+var _Platform_effectsActive = false;
+
+
+function _Platform_enqueueEffects(managers, cmdBag, subBag)
+{
+	_Platform_effectsQueue.push({ p: managers, q: cmdBag, r: subBag });
+
+	if (_Platform_effectsActive) return;
+
+	_Platform_effectsActive = true;
+	for (var fx; fx = _Platform_effectsQueue.shift(); )
+	{
+		_Platform_dispatchEffects(fx.p, fx.q, fx.r);
+	}
+	_Platform_effectsActive = false;
+}
 
 
 function _Platform_dispatchEffects(managers, cmdBag, subBag)
@@ -2069,8 +2126,8 @@ function _Platform_gatherEffects(isCmd, bag, effectsDict, taggers)
 
 		case 3:
 			_Platform_gatherEffects(isCmd, bag.o, effectsDict, {
-				p: bag.n,
-				q: taggers
+				s: bag.n,
+				t: taggers
 			});
 			return;
 	}
@@ -2081,9 +2138,9 @@ function _Platform_toEffect(isCmd, home, taggers, value)
 {
 	function applyTaggers(x)
 	{
-		for (var temp = taggers; temp; temp = temp.q)
+		for (var temp = taggers; temp; temp = temp.t)
 		{
-			x = temp.p(x);
+			x = temp.s(x);
 		}
 		return x;
 	}
@@ -2130,7 +2187,7 @@ function _Platform_outgoingPort(name, converter)
 	_Platform_checkPortName(name);
 	_Platform_effectManagers[name] = {
 		e: _Platform_outgoingPortMap,
-		r: converter,
+		u: converter,
 		a: _Platform_setupOutgoingPort
 	};
 	return _Platform_leaf(name);
@@ -2143,7 +2200,7 @@ var _Platform_outgoingPortMap = F2(function(tagger, value) { return value; });
 function _Platform_setupOutgoingPort(name)
 {
 	var subs = [];
-	var converter = _Platform_effectManagers[name].r;
+	var converter = _Platform_effectManagers[name].u;
 
 	// CREATE MANAGER
 
@@ -2200,7 +2257,7 @@ function _Platform_incomingPort(name, converter)
 	_Platform_checkPortName(name);
 	_Platform_effectManagers[name] = {
 		f: _Platform_incomingPortMap,
-		r: converter,
+		u: converter,
 		a: _Platform_setupIncomingPort
 	};
 	return _Platform_leaf(name);
@@ -2219,7 +2276,7 @@ var _Platform_incomingPortMap = F2(function(tagger, finalTagger)
 function _Platform_setupIncomingPort(name, sendToApp)
 {
 	var subs = _List_Nil;
-	var converter = _Platform_effectManagers[name].r;
+	var converter = _Platform_effectManagers[name].u;
 
 	// CREATE MANAGER
 
@@ -5048,13 +5105,15 @@ var author$project$Material$init = function (_n0) {
 };
 var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
-var author$project$Material$defaultModel = {button: elm$core$Dict$empty, checkbox: elm$core$Dict$empty, chip: elm$core$Dict$empty, dialog: elm$core$Dict$empty, drawer: elm$core$Dict$empty, fab: elm$core$Dict$empty, iconButton: elm$core$Dict$empty, list: elm$core$Dict$empty, menu: elm$core$Dict$empty, radio: elm$core$Dict$empty, ripple: elm$core$Dict$empty, select: elm$core$Dict$empty, slider: elm$core$Dict$empty, snackbar: elm$core$Dict$empty, _switch: elm$core$Dict$empty, tabbar: elm$core$Dict$empty, textfield: elm$core$Dict$empty, toolbar: elm$core$Dict$empty, topAppBar: elm$core$Dict$empty};
+var author$project$Material$defaultModel = {button: elm$core$Dict$empty, checkbox: elm$core$Dict$empty, chip: elm$core$Dict$empty, dialog: elm$core$Dict$empty, drawer: elm$core$Dict$empty, fab: elm$core$Dict$empty, iconButton: elm$core$Dict$empty, list: elm$core$Dict$empty, menu: elm$core$Dict$empty, radio: elm$core$Dict$empty, ripple: elm$core$Dict$empty, select: elm$core$Dict$empty, slider: elm$core$Dict$empty, snackbar: elm$core$Dict$empty, _switch: elm$core$Dict$empty, tabbar: elm$core$Dict$empty, textfield: elm$core$Dict$empty, topAppBar: elm$core$Dict$empty};
 var author$project$Types$Calculation$Union = {$: 'Union'};
-var author$project$Models$EmptyModel$emptyCalculationEditorModel = {calculationFormulaText: elm$core$Maybe$Nothing, calculationName: elm$core$Maybe$Nothing, newCalculationName: '', operationMode: author$project$Types$Calculation$Union, resultMapName: elm$core$Maybe$Nothing};
-var author$project$Models$EmptyModel$emptyViewEditorModel = {checkedViewEditItems: elm$core$Dict$empty, labelEditing: '', lastViewEditItemId: 0, newViewName: '', rowToAddTo: 0, viewName: elm$core$Maybe$Nothing, viewToEdit: elm$core$Maybe$Nothing};
+var author$project$Models$EmptyModel$emptyCalculationEditorModel = {calculationFormulaText: elm$core$Maybe$Nothing, calculationName: elm$core$Maybe$Nothing, isNew: false, newCalculationName: '', operationMode: author$project$Types$Calculation$Union, operationsMatch: '', resultMapName: elm$core$Maybe$Nothing, selectedFunctionIdx: elm$core$Maybe$Nothing, selectedMapIdx: elm$core$Maybe$Nothing};
+var author$project$Models$EmptyModel$emptyHeights = {calculationTextArea: 65, calculationsInProjectList: 70, functionsNamesList: 52, mapEditorMapList: 70, mapEditorTableFull: 75, mapEditorTextArea: 75, mapEditorView: 90, mapEditorViewForMap: 75, mapsInProjectListForCalculation: 58, newMapDialog: 50, viewAllProjectsList: 80, viewAllViewsList: 80, viewCalculationsEditor: 90, viewEditRows: 70, viewEditorForCalculation: 67, viewEditorForView: 75, viewEditorMapList: 55, viewEditorViewsList: 70, viewMessages: 50, viewProjects: 90, viewView: 85, viewViews: 80, viewViewsEditor: 90};
+var author$project$Models$EmptyModel$emptyUI = {heights: author$project$Models$EmptyModel$emptyHeights};
+var author$project$Models$EmptyModel$emptyViewEditorModel = {checkedViewEditItems: elm$core$Dict$empty, isNew: false, labelEditing: '', lastViewEditItemId: 0, newViewName: '', rowToAddTo: 0, selectedMapIdx: elm$core$Maybe$Nothing, viewName: elm$core$Maybe$Nothing, viewToEdit: elm$core$Maybe$Nothing};
 var author$project$Models$EmptyModel$emptyTableConfiguration = {columnsWidths: _List_Nil};
 var author$project$Types$XMapTypes$TypeDouble = {$: 'TypeDouble'};
-var author$project$Models$EmptyModel$emptyXMapEditorModel = {newXmapName: '', tableConf: author$project$Models$EmptyModel$emptyTableConfiguration, xmapEditing: elm$core$Maybe$Nothing, xmapName: elm$core$Maybe$Nothing, xmapToEdit: elm$core$Maybe$Nothing, xmapType: author$project$Types$XMapTypes$TypeDouble};
+var author$project$Models$EmptyModel$emptyXMapEditorModel = {isNew: false, newXmapName: '', tableConf: author$project$Models$EmptyModel$emptyTableConfiguration, xmapEditing: elm$core$Maybe$Nothing, xmapName: elm$core$Maybe$Nothing, xmapToEdit: elm$core$Maybe$Nothing, xmapType: author$project$Types$XMapTypes$TypeDouble};
 var author$project$Models$InternalMessages$ViewsForm = {$: 'ViewsForm'};
 var author$project$Models$EmptyModel$emptyModel = {
 	allProjects: _List_Nil,
@@ -5071,6 +5130,7 @@ var author$project$Models$EmptyModel$emptyModel = {
 	newProjectName: '',
 	openDialog: elm$core$Maybe$Nothing,
 	openProjects: _List_Nil,
+	ui: author$project$Models$EmptyModel$emptyUI,
 	viewEditorModel: author$project$Models$EmptyModel$emptyViewEditorModel,
 	xmapEditorModel: author$project$Models$EmptyModel$emptyXMapEditorModel
 };
@@ -5158,106 +5218,6 @@ var author$project$Handler$InternalCalculationMessageUpdate$appendToFormulaText 
 					});
 			});
 	});
-var author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText = function (t) {
-	switch (t.$) {
-		case 'ParameterDouble':
-			return 'double';
-		case 'ParameterInt':
-			return 'int';
-		case 'ParameterString':
-			return 'string';
-		case 'ParameterBool':
-			return 'bool';
-		default:
-			return 'any';
-	}
-};
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var elm$core$List$foldrHelper = F4(
-	function (fn, acc, ctr, ls) {
-		if (!ls.b) {
-			return acc;
-		} else {
-			var a = ls.a;
-			var r1 = ls.b;
-			if (!r1.b) {
-				return A2(fn, a, acc);
-			} else {
-				var b = r1.a;
-				var r2 = r1.b;
-				if (!r2.b) {
-					return A2(
-						fn,
-						a,
-						A2(fn, b, acc));
-				} else {
-					var c = r2.a;
-					var r3 = r2.b;
-					if (!r3.b) {
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(fn, c, acc)));
-					} else {
-						var d = r3.a;
-						var r4 = r3.b;
-						var res = (ctr > 500) ? A3(
-							elm$core$List$foldl,
-							fn,
-							acc,
-							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(
-									fn,
-									c,
-									A2(fn, d, res))));
-					}
-				}
-			}
-		}
-	});
-var elm$core$List$foldr = F3(
-	function (fn, acc, ls) {
-		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
-	});
-var elm$core$List$map = F2(
-	function (f, xs) {
-		return A3(
-			elm$core$List$foldr,
-			F2(
-				function (x, acc) {
-					return A2(
-						elm$core$List$cons,
-						f(x),
-						acc);
-				}),
-			_List_Nil,
-			xs);
-	});
-var author$project$Handler$InternalCalculationMessageUpdate$operationTypeToText = function (ot) {
-	var insidePars = function (s) {
-		return '[' + (s + ']');
-	};
-	return ot.operationId.name + (' ' + A2(
-		elm$core$String$join,
-		' ',
-		A2(
-			elm$core$List$map,
-			A2(elm$core$Basics$composeR, author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText, insidePars),
-			ot.parametersTypes)));
-};
 var author$project$Types$Calculation$operationIdToTuple = function (id) {
 	return _Utils_Tuple2(id.category, id.name);
 };
@@ -5316,7 +5276,9 @@ var author$project$Handler$InternalCalculationMessageUpdate$handleAddOperationTo
 	function (model, id) {
 		var text = A2(
 			elm$core$Maybe$map,
-			author$project$Handler$InternalCalculationMessageUpdate$operationTypeToText,
+			function (o) {
+				return o.operationId.name;
+			},
 			A2(
 				elm$core$Maybe$andThen,
 				function (fm) {
@@ -5342,6 +5304,17 @@ var author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperatio
 					{operationMode: om});
 			});
 	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperationsMatch = F2(
+	function (model, om) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{operationsMatch: om});
+			});
+	});
 var author$project$Models$ProjectModel$closeDialog = function (model) {
 	return _Utils_update(
 		model,
@@ -5356,9 +5329,37 @@ var author$project$Handler$InternalCalculationMessageUpdate$handleNewCalculation
 					calculationEditorModel: _Utils_update(
 						author$project$Models$EmptyModel$emptyCalculationEditorModel,
 						{
-							calculationName: elm$core$Maybe$Just(cn)
+							calculationName: elm$core$Maybe$Just(cn),
+							isNew: true,
+							resultMapName: elm$core$Maybe$Just(cn)
 						})
 				}));
+	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleSelectFunctionIndexForCalculationEdit = F2(
+	function (model, idx) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{
+						selectedFunctionIdx: elm$core$Maybe$Just(idx)
+					});
+			});
+	});
+var author$project$Handler$InternalCalculationMessageUpdate$handleSelectMapIndexForCalculationEdit = F2(
+	function (model, idx) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+			model,
+			function (cm) {
+				return _Utils_update(
+					cm,
+					{
+						selectedMapIdx: elm$core$Maybe$Just(idx)
+					});
+			});
 	});
 var author$project$Handler$InternalCalculationMessageUpdate$handleSwitchCategoryTo = F2(
 	function (model, ct) {
@@ -5411,42 +5412,238 @@ var author$project$Handler$InternalMapMessageUpdate$handleChangeMapType = F2(
 					{xmapType: mt});
 			});
 	});
-var author$project$Handler$ModelUpdate$showMessage = F2(
-	function (model, msg) {
+var author$project$Display$MdcIndexes$makeIndex = F2(
+	function (viewIdx, compIdx) {
+		return viewIdx + ('.' + compIdx);
+	});
+var author$project$Display$MdcIndexes$projectsUIIdx = 'prjs';
+var author$project$Internal$Msg$SnackbarMsg = F2(
+	function (a, b) {
+		return {$: 'SnackbarMsg', a: a, b: b};
+	});
+var elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							elm$core$List$foldl,
+							fn,
+							acc,
+							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var author$project$Internal$Snackbar$Implementation$enqueue = F2(
+	function (contents, model) {
 		return _Utils_update(
 			model,
 			{
-				messages: A2(elm$core$List$cons, msg, model.messages)
+				queue: A2(
+					elm$core$List$append,
+					model.queue,
+					_List_fromArray(
+						[contents]))
 			});
 	});
-var author$project$Transform$XMapParse$toBool = function (b) {
-	switch (b) {
-		case 'true':
-			return elm$core$Result$Ok(true);
-		case 'false':
-			return elm$core$Result$Ok(false);
-		default:
-			return elm$core$Result$Err(b + ' is not a bool');
+var elm$core$Basics$always = F2(
+	function (a, _n0) {
+		return a;
+	});
+var elm$core$Process$sleep = _Process_sleep;
+var elm$core$Task$Perform = function (a) {
+	return {$: 'Perform', a: a};
+};
+var elm$core$Task$succeed = _Scheduler_succeed;
+var elm$core$Task$init = elm$core$Task$succeed(_Utils_Tuple0);
+var elm$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return A2(
+						elm$core$List$cons,
+						f(x),
+						acc);
+				}),
+			_List_Nil,
+			xs);
+	});
+var elm$core$Task$andThen = _Scheduler_andThen;
+var elm$core$Task$map = F2(
+	function (func, taskA) {
+		return A2(
+			elm$core$Task$andThen,
+			function (a) {
+				return elm$core$Task$succeed(
+					func(a));
+			},
+			taskA);
+	});
+var elm$core$Task$map2 = F3(
+	function (func, taskA, taskB) {
+		return A2(
+			elm$core$Task$andThen,
+			function (a) {
+				return A2(
+					elm$core$Task$andThen,
+					function (b) {
+						return elm$core$Task$succeed(
+							A2(func, a, b));
+					},
+					taskB);
+			},
+			taskA);
+	});
+var elm$core$Task$sequence = function (tasks) {
+	return A3(
+		elm$core$List$foldr,
+		elm$core$Task$map2(elm$core$List$cons),
+		elm$core$Task$succeed(_List_Nil),
+		tasks);
+};
+var elm$core$Platform$sendToApp = _Platform_sendToApp;
+var elm$core$Task$spawnCmd = F2(
+	function (router, _n0) {
+		var task = _n0.a;
+		return _Scheduler_spawn(
+			A2(
+				elm$core$Task$andThen,
+				elm$core$Platform$sendToApp(router),
+				task));
+	});
+var elm$core$Task$onEffects = F3(
+	function (router, commands, state) {
+		return A2(
+			elm$core$Task$map,
+			function (_n0) {
+				return _Utils_Tuple0;
+			},
+			elm$core$Task$sequence(
+				A2(
+					elm$core$List$map,
+					elm$core$Task$spawnCmd(router),
+					commands)));
+	});
+var elm$core$Task$onSelfMsg = F3(
+	function (_n0, _n1, _n2) {
+		return elm$core$Task$succeed(_Utils_Tuple0);
+	});
+var elm$core$Task$cmdMap = F2(
+	function (tagger, _n0) {
+		var task = _n0.a;
+		return elm$core$Task$Perform(
+			A2(elm$core$Task$map, tagger, task));
+	});
+_Platform_effectManagers['Task'] = _Platform_createManager(elm$core$Task$init, elm$core$Task$onEffects, elm$core$Task$onSelfMsg, elm$core$Task$cmdMap);
+var elm$core$Task$command = _Platform_leaf('Task');
+var elm$core$Task$perform = F2(
+	function (toMessage, task) {
+		return elm$core$Task$command(
+			elm$core$Task$Perform(
+				A2(elm$core$Task$map, toMessage, task)));
+	});
+var author$project$Internal$Helpers$delayedCmd = F2(
+	function (time, msg) {
+		return A2(
+			elm$core$Task$perform,
+			elm$core$Basics$always(msg),
+			elm$core$Process$sleep(time));
+	});
+var author$project$Internal$Snackbar$Model$Active = function (a) {
+	return {$: 'Active', a: a};
+};
+var author$project$Internal$Snackbar$Model$Move = F2(
+	function (a, b) {
+		return {$: 'Move', a: a, b: b};
+	});
+var author$project$Internal$Snackbar$Model$Timeout = {$: 'Timeout'};
+var elm$core$Platform$Cmd$map = _Platform_map;
+var author$project$Internal$Snackbar$Implementation$tryDequeue = function (model) {
+	var _n0 = _Utils_Tuple2(model.state, model.queue);
+	if ((_n0.a.$ === 'Inert') && _n0.b.b) {
+		var _n1 = _n0.a;
+		var _n2 = _n0.b;
+		var c = _n2.a;
+		var cs = _n2.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{
+					open: false,
+					queue: cs,
+					seq: model.seq + 1,
+					state: author$project$Internal$Snackbar$Model$Active(c)
+				}),
+			A2(
+				elm$core$Platform$Cmd$map,
+				author$project$Internal$Snackbar$Model$Move(model.seq + 1),
+				A2(author$project$Internal$Helpers$delayedCmd, c.timeout, author$project$Internal$Snackbar$Model$Timeout)));
+	} else {
+		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 	}
 };
-var author$project$Types$XMapTypes$MapValue = function (a) {
-	return {$: 'MapValue', a: a};
+var author$project$Internal$Snackbar$Model$Inert = {$: 'Inert'};
+var elm$core$Basics$negate = function (n) {
+	return -n;
 };
-var author$project$Types$XMapTypes$XMapBool = function (a) {
-	return {$: 'XMapBool', a: a};
-};
-var author$project$Types$XMapTypes$XMapDate = function (a) {
-	return {$: 'XMapDate', a: a};
-};
-var author$project$Types$XMapTypes$XMapDouble = function (a) {
-	return {$: 'XMapDouble', a: a};
-};
-var author$project$Types$XMapTypes$XMapInt = function (a) {
-	return {$: 'XMapInt', a: a};
-};
-var author$project$Types$XMapTypes$XMapString = function (a) {
-	return {$: 'XMapString', a: a};
-};
+var author$project$Internal$Snackbar$Model$defaultModel = {open: false, queue: _List_Nil, seq: -1, state: author$project$Internal$Snackbar$Model$Inert};
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
 var elm$core$Dict$Black = {$: 'Black'};
 var elm$core$Dict$RBNode_elm_builtin = F5(
 	function (a, b, c, d, e) {
@@ -5555,6 +5752,119 @@ var elm$core$Dict$insert = F3(
 			return x;
 		}
 	});
+var elm$core$Tuple$mapSecond = F2(
+	function (func, _n0) {
+		var x = _n0.a;
+		var y = _n0.b;
+		return _Utils_Tuple2(
+			x,
+			func(y));
+	});
+var author$project$Internal$Snackbar$Implementation$add = F4(
+	function (lift, idx, contents, store) {
+		var component_ = A2(
+			elm$core$Maybe$withDefault,
+			author$project$Internal$Snackbar$Model$defaultModel,
+			A2(elm$core$Dict$get, idx, store.snackbar));
+		var _n0 = A2(
+			elm$core$Tuple$mapSecond,
+			elm$core$Platform$Cmd$map(
+				A2(
+					elm$core$Basics$composeL,
+					lift,
+					author$project$Internal$Msg$SnackbarMsg(idx))),
+			author$project$Internal$Snackbar$Implementation$tryDequeue(
+				A2(author$project$Internal$Snackbar$Implementation$enqueue, contents, component_)));
+		var component = _n0.a;
+		var effects = _n0.b;
+		var updatedStore = _Utils_update(
+			store,
+			{
+				snackbar: A3(elm$core$Dict$insert, idx, component, store.snackbar)
+			});
+		return _Utils_Tuple2(updatedStore, effects);
+	});
+var author$project$Material$Snackbar$add = author$project$Internal$Snackbar$Implementation$add;
+var author$project$Internal$Snackbar$Implementation$snack = F3(
+	function (onDismiss, message, label) {
+		return {
+			action: elm$core$Maybe$Just(label),
+			dismissOnAction: true,
+			fade: 250,
+			message: message,
+			onDismiss: onDismiss,
+			stacked: true,
+			timeout: 5000
+		};
+	});
+var author$project$Material$Snackbar$snack = author$project$Internal$Snackbar$Implementation$snack;
+var author$project$Models$InternalMessages$ShowDialog = function (a) {
+	return {$: 'ShowDialog', a: a};
+};
+var author$project$Models$ProjectModel$Internal = function (a) {
+	return {$: 'Internal', a: a};
+};
+var author$project$Handler$ModelUpdate$showMessageAsSnackbar = F2(
+	function (model, msg) {
+		var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'dlgMsg');
+		var command = elm$core$Maybe$Just(
+			author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$ShowDialog(idxDialog)));
+		var content = A3(author$project$Material$Snackbar$snack, command, msg, 'Show all');
+		var _n0 = A4(author$project$Material$Snackbar$add, author$project$Models$ProjectModel$Mdc, 'snackMessage', content, model.mdc);
+		var mdc = _n0.a;
+		var effects = _n0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{mdc: mdc}),
+			effects);
+	});
+var author$project$Handler$ModelUpdate$showMessage = F2(
+	function (model, msg) {
+		var _n0 = A2(author$project$Handler$ModelUpdate$showMessageAsSnackbar, model, msg);
+		var updatedModel = _n0.a;
+		var effects = _n0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				updatedModel,
+				{
+					messages: A2(elm$core$List$cons, msg, model.messages)
+				}),
+			effects);
+	});
+var author$project$Transform$XMapParse$toBool = function (b) {
+	switch (b) {
+		case 'true':
+			return elm$core$Result$Ok(true);
+		case 'True':
+			return elm$core$Result$Ok(true);
+		case 'false':
+			return elm$core$Result$Ok(false);
+		case 'False':
+			return elm$core$Result$Ok(false);
+		default:
+			return elm$core$Result$Err(b + ' is not a bool');
+	}
+};
+var author$project$Types$XMapTypes$MapValue = function (a) {
+	return {$: 'MapValue', a: a};
+};
+var author$project$Types$XMapTypes$XMapBool = function (a) {
+	return {$: 'XMapBool', a: a};
+};
+var author$project$Types$XMapTypes$XMapDate = function (a) {
+	return {$: 'XMapDate', a: a};
+};
+var author$project$Types$XMapTypes$XMapDouble = function (a) {
+	return {$: 'XMapDouble', a: a};
+};
+var author$project$Types$XMapTypes$XMapInt = function (a) {
+	return {$: 'XMapInt', a: a};
+};
+var author$project$Types$XMapTypes$XMapString = function (a) {
+	return {$: 'XMapString', a: a};
+};
 var elm$core$Dict$fromList = function (assocs) {
 	return A3(
 		elm$core$List$foldl,
@@ -5780,10 +6090,6 @@ var elm$parser$Parser$Advanced$end = function (x) {
 		});
 };
 var elm$parser$Parser$end = elm$parser$Parser$Advanced$end(elm$parser$Parser$ExpectingEnd);
-var elm$core$Basics$always = F2(
-	function (a, _n0) {
-		return a;
-	});
 var elm$parser$Parser$Advanced$map2 = F3(
 	function (func, _n0, _n1) {
 		var parseA = _n0.a;
@@ -5884,9 +6190,6 @@ var elm$parser$Parser$Advanced$Token = F2(
 	function (a, b) {
 		return {$: 'Token', a: a, b: b};
 	});
-var elm$core$Basics$negate = function (n) {
-	return -n;
-};
 var elm$core$Basics$not = _Basics_not;
 var elm$core$String$isEmpty = function (string) {
 	return string === '';
@@ -6567,23 +6870,25 @@ var author$project$Handler$InternalMapMessageUpdate$handleMapToTable = function 
 	if (mm.$ === 'Just') {
 		if (mm.a.$ === 'Ok') {
 			var m = mm.a.a;
-			return A2(
-				author$project$Handler$ModelUpdate$updateXMapEditorModel,
-				model,
-				function (xm) {
-					return _Utils_update(
-						xm,
-						{
-							xmapEditing: elm$core$Maybe$Nothing,
-							xmapToEdit: elm$core$Maybe$Just(m)
-						});
-				});
+			return _Utils_Tuple2(
+				A2(
+					author$project$Handler$ModelUpdate$updateXMapEditorModel,
+					model,
+					function (xm) {
+						return _Utils_update(
+							xm,
+							{
+								xmapEditing: elm$core$Maybe$Nothing,
+								xmapToEdit: elm$core$Maybe$Just(m)
+							});
+					}),
+				elm$core$Platform$Cmd$none);
 		} else {
 			var e = mm.a.a;
 			return A2(author$project$Handler$ModelUpdate$showMessage, model, e);
 		}
 	} else {
-		return model;
+		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 	}
 };
 var author$project$Transform$MapsExtraction$fromBool = function (b) {
@@ -6958,6 +7263,7 @@ var author$project$Handler$InternalMapMessageUpdate$handleNewMapWithName = F3(
 					xmapEditorModel: _Utils_update(
 						author$project$Models$EmptyModel$emptyXMapEditorModel,
 						{
+							isNew: true,
 							xmapName: elm$core$Maybe$Just(mn),
 							xmapType: mt
 						})
@@ -7122,20 +7428,23 @@ var author$project$Json$EncodeView$encodeViewItem = function (i) {
 				]));
 	}
 };
+var author$project$Json$EncodeView$encodeViewRowHeaderType = function (idt) {
+	if (idt.$ === 'RowHasHeader') {
+		return elm$json$Json$Encode$string('RowHasHeader');
+	} else {
+		return elm$json$Json$Encode$string('RowNoHeader');
+	}
+};
 var author$project$Json$EncodeView$encodeViewRow = function (r) {
-	var items = function (_n0) {
-		var is = _n0.a;
-		return is;
-	};
 	return elm$json$Json$Encode$object(
 		_List_fromArray(
 			[
 				_Utils_Tuple2(
 				'items',
-				A2(
-					elm$json$Json$Encode$list,
-					author$project$Json$EncodeView$encodeViewItem,
-					items(r)))
+				A2(elm$json$Json$Encode$list, author$project$Json$EncodeView$encodeViewItem, r.items)),
+				_Utils_Tuple2(
+				'headerType',
+				author$project$Json$EncodeView$encodeViewRowHeaderType(r.headerType))
 			]));
 };
 var author$project$Json$EncodeView$encodeView = function (v) {
@@ -7163,6 +7472,11 @@ var author$project$Json$EncodeXMap$encodeMapContent = F2(
 	});
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$json$Json$Encode$float = _Json_wrap;
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
 var rtfeldman$elm_iso8601_date_strings$Iso8601$encode = A2(elm$core$Basics$composeR, rtfeldman$elm_iso8601_date_strings$Iso8601$fromTime, elm$json$Json$Encode$string);
 var author$project$Json$EncodeXMap$encodeXMap = function (m) {
 	switch (m.$) {
@@ -7302,7 +7616,7 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 						'mapName',
 						author$project$Json$EncodeXMap$encodeXmapName(mn))
 					]));
-		case 'WRStoreMap':
+		case 'WRAddMap':
 			var pn = ev.a;
 			var m = ev.b;
 			return elm$json$Json$Encode$object(
@@ -7310,7 +7624,23 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 					[
 						_Utils_Tuple2(
 						'type',
-						elm$json$Json$Encode$string('storeMap')),
+						elm$json$Json$Encode$string('addMap')),
+						_Utils_Tuple2(
+						'projectName',
+						elm$json$Json$Encode$string(pn)),
+						_Utils_Tuple2(
+						'map',
+						author$project$Json$EncodeXMap$encodeXNamedMap(m))
+					]));
+		case 'WRUpdateMap':
+			var pn = ev.a;
+			var m = ev.b;
+			return elm$json$Json$Encode$object(
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						'type',
+						elm$json$Json$Encode$string('updateMap')),
 						_Utils_Tuple2(
 						'projectName',
 						elm$json$Json$Encode$string(pn)),
@@ -7378,7 +7708,7 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 						'viewName',
 						elm$json$Json$Encode$string(vn))
 					]));
-		case 'WRStoreView':
+		case 'WRAddView':
 			var pn = ev.a;
 			var v = ev.b;
 			return elm$json$Json$Encode$object(
@@ -7386,7 +7716,23 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 					[
 						_Utils_Tuple2(
 						'type',
-						elm$json$Json$Encode$string('storeView')),
+						elm$json$Json$Encode$string('addView')),
+						_Utils_Tuple2(
+						'projectName',
+						elm$json$Json$Encode$string(pn)),
+						_Utils_Tuple2(
+						'view',
+						author$project$Json$EncodeView$encodeView(v))
+					]));
+		case 'WRUpdateView':
+			var pn = ev.a;
+			var v = ev.b;
+			return elm$json$Json$Encode$object(
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						'type',
+						elm$json$Json$Encode$string('updateView')),
 						_Utils_Tuple2(
 						'projectName',
 						elm$json$Json$Encode$string(pn)),
@@ -7410,7 +7756,7 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 						'calculationName',
 						elm$json$Json$Encode$string(cn))
 					]));
-		case 'WRStoreCalculation':
+		case 'WRAddCalculation':
 			var pn = ev.a;
 			var cs = ev.b;
 			return elm$json$Json$Encode$object(
@@ -7418,7 +7764,23 @@ var author$project$Json$EncodeWebRequest$encodeWebRequest = function (ev) {
 					[
 						_Utils_Tuple2(
 						'type',
-						elm$json$Json$Encode$string('storeCalculation')),
+						elm$json$Json$Encode$string('addCalculation')),
+						_Utils_Tuple2(
+						'projectName',
+						elm$json$Json$Encode$string(pn)),
+						_Utils_Tuple2(
+						'calculationSource',
+						author$project$Json$EncodeCalculation$encodeCalculationSource(cs))
+					]));
+		case 'WRUpdateCalculation':
+			var pn = ev.a;
+			var cs = ev.b;
+			return elm$json$Json$Encode$object(
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						'type',
+						elm$json$Json$Encode$string('updateCalculation')),
 						_Utils_Tuple2(
 						'projectName',
 						elm$json$Json$Encode$string(pn)),
@@ -7456,7 +7818,7 @@ var author$project$Handler$InternalMapMessageUpdate$handleShowMapInEditor = F2(
 			function (mm) {
 				return _Utils_update(
 					mm,
-					{xmapEditing: elm$core$Maybe$Nothing});
+					{isNew: false, xmapEditing: elm$core$Maybe$Nothing});
 			});
 		var _n0 = model.currentProject;
 		if (_n0.$ === 'Just') {
@@ -7520,6 +7882,9 @@ var author$project$Models$ProjectModel$openProjectWithName = F2(
 			},
 			model.openProjects);
 	});
+var author$project$Models$WebMessages$WRMapsInProject = function (a) {
+	return {$: 'WRMapsInProject', a: a};
+};
 var author$project$Models$WebMessages$WRSubscribeToProject = function (a) {
 	return {$: 'WRSubscribeToProject', a: a};
 };
@@ -7529,7 +7894,8 @@ var author$project$Handler$InternalProjectMessageUpdate$handleOpenProject = F2(
 			var _n0 = A2(author$project$Models$ProjectModel$openProjectWithName, model, pn);
 			if (_n0.$ === 'Just') {
 				var pm = _n0.a;
-				return elm$core$Platform$Cmd$none;
+				return author$project$Server$ServerMessaging$sendToServer(
+					author$project$Models$WebMessages$WRMapsInProject(pn));
 			} else {
 				return author$project$Server$ServerMessaging$sendToServer(
 					author$project$Models$WebMessages$WRSubscribeToProject(pn));
@@ -7554,9 +7920,6 @@ var author$project$Models$ProjectModel$currentProjectModel = function (model) {
 		model.currentProject);
 };
 var author$project$Models$WebMessages$WRFunctions = {$: 'WRFunctions'};
-var author$project$Models$WebMessages$WRMapsInProject = function (a) {
-	return {$: 'WRMapsInProject', a: a};
-};
 var elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
 		var _n0 = f(mx);
@@ -7618,17 +7981,6 @@ var author$project$Handler$ModelUpdate$updateViewEditorModel = F2(
 			{
 				viewEditorModel: update(model.viewEditorModel)
 			});
-	});
-var author$project$Types$Views$ViewEditRow = function (a) {
-	return {$: 'ViewEditRow', a: a};
-};
-var elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
-		}
 	});
 var elm$core$List$drop = F2(
 	function (n, list) {
@@ -7804,16 +8156,18 @@ var author$project$Handler$InternalVIewMessageUpdate$handleAddItemToViewEdit = F
 			return {content: it, id: id};
 		};
 		var updateRow = F2(
-			function (id, _n0) {
-				var r = _n0.a;
-				return author$project$Types$Views$ViewEditRow(
-					A2(
-						elm$core$List$append,
-						r,
-						_List_fromArray(
-							[
-								buildItem(id)
-							])));
+			function (id, r) {
+				return _Utils_update(
+					r,
+					{
+						items: A2(
+							elm$core$List$append,
+							r.items,
+							_List_fromArray(
+								[
+									buildItem(id)
+								]))
+					});
 			});
 		var updateRows = F2(
 			function (rs, id) {
@@ -7848,7 +8202,12 @@ var author$project$Handler$InternalVIewMessageUpdate$handleAddItemToViewEdit = F
 					});
 			});
 	});
-var author$project$Handler$InternalVIewMessageUpdate$emptyRow = author$project$Types$Views$ViewEditRow(_List_Nil);
+var author$project$Types$Views$RowHasHeader = {$: 'RowHasHeader'};
+var author$project$Types$Views$ViewEditRow = F2(
+	function (items, headerType) {
+		return {headerType: headerType, items: items};
+	});
+var author$project$Handler$InternalVIewMessageUpdate$emptyRow = A2(author$project$Types$Views$ViewEditRow, _List_Nil, author$project$Types$Views$RowHasHeader);
 var author$project$Handler$InternalVIewMessageUpdate$handleAddRowToViewEdit = function (model) {
 	var updateView = function (mv) {
 		if (mv.$ === 'Just') {
@@ -7881,6 +8240,39 @@ var author$project$Handler$InternalVIewMessageUpdate$handleAddRowToViewEdit = fu
 				});
 		});
 };
+var author$project$Handler$InternalVIewMessageUpdate$handleChangeIdsType = F3(
+	function (model, ri, rt) {
+		var updateRow = function (r) {
+			return _Utils_update(
+				r,
+				{headerType: rt});
+		};
+		var updateRows = function (rs) {
+			return A3(elm_community$list_extra$List$Extra$updateAt, ri, updateRow, rs);
+		};
+		var updateView = function (mv) {
+			return A2(
+				elm$core$Maybe$map,
+				function (v) {
+					return _Utils_update(
+						v,
+						{
+							rows: updateRows(v.rows)
+						});
+				},
+				mv);
+		};
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{
+						viewToEdit: updateView(vm.viewToEdit)
+					});
+			});
+	});
 var author$project$Handler$InternalVIewMessageUpdate$invertValue = F2(
 	function (index, dict) {
 		var inv = function (existing) {
@@ -7932,6 +8324,7 @@ var author$project$Handler$InternalVIewMessageUpdate$handleNewViewWithName = F2(
 					viewEditorModel: _Utils_update(
 						author$project$Models$EmptyModel$emptyViewEditorModel,
 						{
+							isNew: true,
 							viewName: elm$core$Maybe$Just(vn),
 							viewToEdit: elm$core$Maybe$Just(
 								{
@@ -8438,15 +8831,17 @@ var author$project$Handler$InternalVIewMessageUpdate$handleRemoveItemsFromViewEd
 		var removeFromChecked = function (cks) {
 			return A2(elm_community$dict_extra$Dict$Extra$removeMany, idsSet, cks);
 		};
-		var updateRow = function (_n0) {
-			var vr = _n0.a;
-			return author$project$Types$Views$ViewEditRow(
-				A2(
-					elm$core$List$filter,
-					function (it) {
-						return !A2(elm$core$Set$member, it.id, idsSet);
-					},
-					vr));
+		var updateRow = function (vr) {
+			return _Utils_update(
+				vr,
+				{
+					items: A2(
+						elm$core$List$filter,
+						function (it) {
+							return !A2(elm$core$Set$member, it.id, idsSet);
+						},
+						vr.items)
+				});
 		};
 		var removeFromViews = function (v) {
 			return _Utils_update(
@@ -8464,6 +8859,101 @@ var author$project$Handler$InternalVIewMessageUpdate$handleRemoveItemsFromViewEd
 					{
 						checkedViewEditItems: removeFromChecked(vm.checkedViewEditItems),
 						viewToEdit: A2(elm$core$Maybe$map, removeFromViews, vm.viewToEdit)
+					});
+			});
+	});
+var elm_community$list_extra$List$Extra$getAt = F2(
+	function (idx, xs) {
+		return (idx < 0) ? elm$core$Maybe$Nothing : elm$core$List$head(
+			A2(elm$core$List$drop, idx, xs));
+	});
+var elm$core$List$tail = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(xs);
+	} else {
+		return elm$core$Maybe$Nothing;
+	}
+};
+var elm_community$list_extra$List$Extra$removeAt = F2(
+	function (index, l) {
+		if (index < 0) {
+			return l;
+		} else {
+			var tail = elm$core$List$tail(
+				A2(elm$core$List$drop, index, l));
+			var head = A2(elm$core$List$take, index, l);
+			if (tail.$ === 'Nothing') {
+				return l;
+			} else {
+				var t = tail.a;
+				return A2(elm$core$List$append, head, t);
+			}
+		}
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleRemoveRowFromView = F2(
+	function (model, idx) {
+		var removeRowFromView = function (v) {
+			return _Utils_update(
+				v,
+				{
+					rows: A2(elm_community$list_extra$List$Extra$removeAt, idx, v.rows)
+				});
+		};
+		var itemsFromRow = function (r) {
+			return A2(
+				elm$core$List$map,
+				function (i) {
+					return i.id;
+				},
+				r.items);
+		};
+		var itemsFromRowIndex = function (v) {
+			return A2(
+				elm$core$Maybe$withDefault,
+				_List_Nil,
+				A2(
+					elm$core$Maybe$map,
+					itemsFromRow,
+					A2(elm_community$list_extra$List$Extra$getAt, idx, v.rows)));
+		};
+		var removeFromChecked = F2(
+			function (mv, cks) {
+				if (mv.$ === 'Just') {
+					var v = mv.a;
+					return A2(
+						elm_community$dict_extra$Dict$Extra$removeMany,
+						elm$core$Set$fromList(
+							itemsFromRowIndex(v)),
+						cks);
+				} else {
+					return cks;
+				}
+			});
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{
+						checkedViewEditItems: A2(removeFromChecked, vm.viewToEdit, vm.checkedViewEditItems),
+						rowToAddTo: 0,
+						viewToEdit: A2(elm$core$Maybe$map, removeRowFromView, vm.viewToEdit)
+					});
+			});
+	});
+var author$project$Handler$InternalVIewMessageUpdate$handleSelectMapIndexForViewEdit = F2(
+	function (model, idx) {
+		return A2(
+			author$project$Handler$ModelUpdate$updateViewEditorModel,
+			model,
+			function (vm) {
+				return _Utils_update(
+					vm,
+					{
+						selectedMapIdx: elm$core$Maybe$Just(idx)
 					});
 			});
 	});
@@ -8508,9 +8998,7 @@ var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
 					author$project$Handler$InternalMapMessageUpdate$handleMapToTextArea(model),
 					elm$core$Platform$Cmd$none);
 			case 'MapToTable':
-				return _Utils_Tuple2(
-					author$project$Handler$InternalMapMessageUpdate$handleMapToTable(model),
-					elm$core$Platform$Cmd$none);
+				return author$project$Handler$InternalMapMessageUpdate$handleMapToTable(model);
 			case 'OpenProject':
 				var pn = msg.a;
 				return A2(author$project$Handler$InternalProjectMessageUpdate$handleOpenProject, model, pn);
@@ -8577,9 +9065,7 @@ var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
 				return A2(author$project$Handler$InternalProjectMessageUpdate$handleNewProjectWithName, model, pn);
 			case 'ShowMessage':
 				var s = msg.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, s),
-					elm$core$Platform$Cmd$none);
+				return A2(author$project$Handler$ModelUpdate$showMessage, model, s);
 			case 'ShowMapInEditor':
 				var mn = msg.a;
 				return A2(author$project$Handler$InternalMapMessageUpdate$handleShowMapInEditor, model, mn);
@@ -8628,16 +9114,42 @@ var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
 				return _Utils_Tuple2(
 					A2(author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperationMode, model, om),
 					elm$core$Platform$Cmd$none);
+			case 'ChangeOperationsMatch':
+				var om = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleChangeOperationsMatch, model, om),
+					elm$core$Platform$Cmd$none);
 			case 'ChangeMapType':
 				var mt = msg.a;
 				return _Utils_Tuple2(
 					A2(author$project$Handler$InternalMapMessageUpdate$handleChangeMapType, model, mt),
+					elm$core$Platform$Cmd$none);
+			case 'ChangeIdsType':
+				var ri = msg.a;
+				var rt = msg.b;
+				return _Utils_Tuple2(
+					A3(author$project$Handler$InternalVIewMessageUpdate$handleChangeIdsType, model, ri, rt),
 					elm$core$Platform$Cmd$none);
 			case 'AddItemToView':
 				var row = msg.a;
 				var it = msg.b;
 				return _Utils_Tuple2(
 					A3(author$project$Handler$InternalVIewMessageUpdate$handleAddItemToViewEdit, model, row, it),
+					elm$core$Platform$Cmd$none);
+			case 'SelectMapIndexForView':
+				var idx = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleSelectMapIndexForViewEdit, model, idx),
+					elm$core$Platform$Cmd$none);
+			case 'SelectMapIndexForCalculation':
+				var idx = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleSelectMapIndexForCalculationEdit, model, idx),
+					elm$core$Platform$Cmd$none);
+			case 'SelectFunctionIndexForCalculation':
+				var idx = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalCalculationMessageUpdate$handleSelectFunctionIndexForCalculationEdit, model, idx),
 					elm$core$Platform$Cmd$none);
 			case 'AddRowToView':
 				return _Utils_Tuple2(
@@ -8647,6 +9159,11 @@ var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
 				var viewEditItemIds = msg.a;
 				return _Utils_Tuple2(
 					A2(author$project$Handler$InternalVIewMessageUpdate$handleRemoveItemsFromViewEdit, model, viewEditItemIds),
+					elm$core$Platform$Cmd$none);
+			case 'RemoveRowFromView':
+				var idx = msg.a;
+				return _Utils_Tuple2(
+					A2(author$project$Handler$InternalVIewMessageUpdate$handleRemoveRowFromView, model, idx),
 					elm$core$Platform$Cmd$none);
 			case 'ChangeViewEditSelectedRow':
 				var row = msg.a;
@@ -8669,10 +9186,12 @@ var author$project$Handler$InternalMessageUpdate$updateInternal = F2(
 					elm$core$Platform$Cmd$none);
 			default:
 				var err = msg.a;
+				var _n1 = A2(author$project$Handler$ModelUpdate$showMessage, model, err);
+				var mdl = _n1.a;
+				var effect = _n1.b;
 				return _Utils_Tuple2(
-					author$project$Models$ProjectModel$closeDialog(
-						A2(author$project$Handler$ModelUpdate$showMessage, model, err)),
-					elm$core$Platform$Cmd$none);
+					author$project$Models$ProjectModel$closeDialog(mdl),
+					effect);
 		}
 	});
 var author$project$Handler$ModelUpdate$updateOpenProjects = F2(
@@ -8682,6 +9201,23 @@ var author$project$Handler$ModelUpdate$updateOpenProjects = F2(
 			{
 				openProjects: update(model.openProjects)
 			});
+	});
+var author$project$Handler$WebMessageUpdate$cleanCalculationModel = function (model) {
+	return A2(
+		author$project$Handler$ModelUpdate$updateCalculationEditorModel,
+		model,
+		function (cm) {
+			return _Utils_update(
+				cm,
+				{isNew: false, newCalculationName: ''});
+		});
+};
+var author$project$Handler$WebMessageUpdate$handleCalculationAdded = F3(
+	function (model, pn, cn) {
+		return A2(
+			author$project$Handler$ModelUpdate$showMessage,
+			author$project$Handler$WebMessageUpdate$cleanCalculationModel(model),
+			'Calculation:' + (cn + (' of project:' + (pn + ' added'))));
 	});
 var author$project$Handler$WebMessageUpdate$handleCalculationLoaded = F2(
 	function (model, cs) {
@@ -8699,17 +9235,12 @@ var author$project$Handler$WebMessageUpdate$handleCalculationLoaded = F2(
 					});
 			});
 	});
-var author$project$Handler$WebMessageUpdate$handleCalculationStored = F3(
+var author$project$Handler$WebMessageUpdate$handleCalculationUpdated = F3(
 	function (model, pn, cn) {
-		var mdlCleaned = A2(
-			author$project$Handler$ModelUpdate$updateCalculationEditorModel,
-			model,
-			function (cm) {
-				return _Utils_update(
-					cm,
-					{newCalculationName: ''});
-			});
-		return A2(author$project$Handler$ModelUpdate$showMessage, mdlCleaned, 'Calculation:' + (cn + (' of project:' + (pn + ' stored'))));
+		return A2(
+			author$project$Handler$ModelUpdate$showMessage,
+			author$project$Handler$WebMessageUpdate$cleanCalculationModel(model),
+			'Calculation:' + (cn + (' of project:' + (pn + ' updated'))));
 	});
 var elm$core$Dict$update = F3(
 	function (targetKey, alter, dictionary) {
@@ -8777,6 +9308,23 @@ var author$project$Handler$WebMessageUpdate$handleFunctions = F2(
 					})
 			});
 	});
+var author$project$Handler$WebMessageUpdate$cleanMapModel = function (model) {
+	return A2(
+		author$project$Handler$ModelUpdate$updateXMapEditorModel,
+		model,
+		function (mm) {
+			return _Utils_update(
+				mm,
+				{isNew: false, newXmapName: ''});
+		});
+};
+var author$project$Handler$WebMessageUpdate$handleMapAdded = F4(
+	function (model, pn, mn, sz) {
+		return A2(
+			author$project$Handler$ModelUpdate$showMessage,
+			author$project$Handler$WebMessageUpdate$cleanMapModel(model),
+			'Map:' + (author$project$Transform$MapsExtraction$xmapNameToString(mn) + (' of project:' + (pn + (' with size ' + (elm$core$String$fromInt(sz) + ' added'))))));
+	});
 var author$project$Types$XMapTypes$TypeBool = {$: 'TypeBool'};
 var author$project$Types$XMapTypes$TypeDate = {$: 'TypeDate'};
 var author$project$Types$XMapTypes$TypeInt = {$: 'TypeInt'};
@@ -8804,26 +9352,19 @@ var author$project$Handler$WebMessageUpdate$handleMapLoaded = F2(
 				return _Utils_update(
 					xm,
 					{
+						isNew: false,
 						xmapName: elm$core$Maybe$Just(m.xmapName),
 						xmapToEdit: elm$core$Maybe$Just(m.xmap),
 						xmapType: author$project$Types$XMapTypes$mapType(m.xmap)
 					});
 			});
 	});
-var author$project$Handler$WebMessageUpdate$handleMapStored = F4(
+var author$project$Handler$WebMessageUpdate$handleMapUpdated = F4(
 	function (model, pn, mn, sz) {
-		var mdlCleaned = A2(
-			author$project$Handler$ModelUpdate$updateXMapEditorModel,
-			model,
-			function (mm) {
-				return _Utils_update(
-					mm,
-					{newXmapName: ''});
-			});
 		return A2(
 			author$project$Handler$ModelUpdate$showMessage,
-			mdlCleaned,
-			'Map:' + (author$project$Transform$MapsExtraction$xmapNameToString(mn) + (' of project:' + (pn + (' with size ' + (elm$core$String$fromInt(sz) + ' stored'))))));
+			author$project$Handler$WebMessageUpdate$cleanMapModel(model),
+			'Map:' + (author$project$Transform$MapsExtraction$xmapNameToString(mn) + (' of project:' + (pn + (' with size ' + (elm$core$String$fromInt(sz) + ' updated'))))));
 	});
 var author$project$Handler$WebMessageUpdate$handleMapsInProject = F2(
 	function (model, mns) {
@@ -8831,19 +9372,36 @@ var author$project$Handler$WebMessageUpdate$handleMapsInProject = F2(
 			model,
 			{mapsInProject: mns});
 	});
+var author$project$Handler$WebMessageUpdate$cleanViewModel = function (model) {
+	return A2(
+		author$project$Handler$ModelUpdate$updateViewEditorModel,
+		model,
+		function (cm) {
+			return _Utils_update(
+				cm,
+				{isNew: false});
+		});
+};
+var author$project$Handler$WebMessageUpdate$handleViewAdded = F3(
+	function (model, pn, vn) {
+		return A2(
+			author$project$Handler$ModelUpdate$showMessage,
+			author$project$Handler$WebMessageUpdate$cleanViewModel(model),
+			'View:' + (vn + (' of project:' + (pn + ' added'))));
+	});
 var author$project$Handler$WebMessageUpdate$handleViewLoaded = F2(
 	function (model, v) {
-		var buildViewEditPair = function (_n6) {
-			var rso = _n6.a;
-			var lastId = _n6.b;
+		var buildViewEditPair = function (_n5) {
+			var rso = _n5.a;
+			var lastId = _n5.b;
 			return _Utils_Tuple2(
 				{rows: rso, viewName: v.viewName},
 				lastId);
 		};
 		var buildViewEditItem = F2(
-			function (vi, _n5) {
-				var ro = _n5.a;
-				var lastId = _n5.b;
+			function (vi, _n4) {
+				var ro = _n4.a;
+				var lastId = _n4.b;
 				return _Utils_Tuple2(
 					A2(
 						elm$core$List$cons,
@@ -8852,17 +9410,16 @@ var author$project$Handler$WebMessageUpdate$handleViewLoaded = F2(
 					lastId + 1);
 			});
 		var buildViewEditRow = F2(
-			function (_n3, _n4) {
-				var ri = _n3.a;
-				var rso = _n4.a;
-				var lastId = _n4.b;
+			function (r, _n3) {
+				var rso = _n3.a;
+				var lastId = _n3.b;
 				return function (_n2) {
 					var ro = _n2.a;
 					var id = _n2.b;
 					return _Utils_Tuple2(
 						A2(
 							elm$core$List$cons,
-							author$project$Types$Views$ViewEditRow(ro),
+							A2(author$project$Types$Views$ViewEditRow, ro, r.headerType),
 							rso),
 						id);
 				}(
@@ -8870,7 +9427,7 @@ var author$project$Handler$WebMessageUpdate$handleViewLoaded = F2(
 						elm$core$List$foldr,
 						buildViewEditItem,
 						_Utils_Tuple2(_List_Nil, lastId),
-						ri));
+						r.items));
 			});
 		var buildViewEditRows = F2(
 			function (rsi, lastId) {
@@ -8906,6 +9463,13 @@ var author$project$Handler$WebMessageUpdate$handleViewLoaded = F2(
 				}(
 					buildViewEdit(vm.lastViewEditItemId));
 			});
+	});
+var author$project$Handler$WebMessageUpdate$handleViewUpdated = F3(
+	function (model, pn, vn) {
+		return A2(
+			author$project$Handler$ModelUpdate$showMessage,
+			author$project$Handler$WebMessageUpdate$cleanViewModel(model),
+			'View:' + (vn + (' of project:' + (pn + ' updated'))));
 	});
 var author$project$Handler$WebMessageUpdate$sameProjectName = F2(
 	function (pn, pm) {
@@ -9051,14 +9615,10 @@ var author$project$Handler$WebMessageUpdate$updateEvent = F2(
 					elm$core$Platform$Cmd$none);
 			case 'WEError':
 				var e = evt.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, 'Server Error: ' + e),
-					elm$core$Platform$Cmd$none);
+				return A2(author$project$Handler$ModelUpdate$showMessage, model, 'Server Error: ' + e);
 			case 'WEInfo':
 				var i = evt.a;
-				return _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, 'Server Info: ' + i),
-					elm$core$Platform$Cmd$none);
+				return A2(author$project$Handler$ModelUpdate$showMessage, model, 'Server Info: ' + i);
 			case 'WEProjectContent':
 				var p = evt.a;
 				return _Utils_Tuple2(
@@ -9107,43 +9667,54 @@ var author$project$Handler$WebMessageUpdate$updateEvent = F2(
 				return _Utils_Tuple2(
 					A2(author$project$Handler$WebMessageUpdate$handleMapLoaded, model, m),
 					elm$core$Platform$Cmd$none);
-			case 'WEMapStored':
+			case 'WEMapAdded':
 				var pn = evt.a;
 				var mn = evt.b;
 				var sz = evt.c;
-				return _Utils_Tuple2(
-					A4(author$project$Handler$WebMessageUpdate$handleMapStored, model, pn, mn, sz),
-					elm$core$Platform$Cmd$none);
+				return A4(author$project$Handler$WebMessageUpdate$handleMapAdded, model, pn, mn, sz);
+			case 'WEMapUpdated':
+				var pn = evt.a;
+				var mn = evt.b;
+				var sz = evt.c;
+				return A4(author$project$Handler$WebMessageUpdate$handleMapUpdated, model, pn, mn, sz);
 			case 'WEViewLoaded':
 				var pn = evt.a;
 				var v = evt.b;
 				return _Utils_Tuple2(
 					A2(author$project$Handler$WebMessageUpdate$handleViewLoaded, model, v),
 					elm$core$Platform$Cmd$none);
+			case 'WEViewAdded':
+				var pn = evt.a;
+				var vn = evt.b;
+				return A3(author$project$Handler$WebMessageUpdate$handleViewAdded, model, pn, vn);
+			case 'WEViewUpdated':
+				var pn = evt.a;
+				var vn = evt.b;
+				return A3(author$project$Handler$WebMessageUpdate$handleViewUpdated, model, pn, vn);
 			case 'WECalculationLoaded':
 				var pn = evt.a;
 				var cs = evt.b;
 				return _Utils_Tuple2(
 					A2(author$project$Handler$WebMessageUpdate$handleCalculationLoaded, model, cs),
 					elm$core$Platform$Cmd$none);
-			case 'WECalculationStored':
+			case 'WECalculationAdded':
 				var pn = evt.a;
 				var cn = evt.b;
-				return _Utils_Tuple2(
-					A3(author$project$Handler$WebMessageUpdate$handleCalculationStored, model, pn, cn),
-					elm$core$Platform$Cmd$none);
+				return A3(author$project$Handler$WebMessageUpdate$handleCalculationAdded, model, pn, cn);
+			case 'WECalculationUpdated':
+				var pn = evt.a;
+				var cn = evt.b;
+				return A3(author$project$Handler$WebMessageUpdate$handleCalculationUpdated, model, pn, cn);
 			case 'WEFunctions':
 				var fs = evt.a;
 				return _Utils_Tuple2(
 					A2(author$project$Handler$WebMessageUpdate$handleFunctions, model, fs),
 					elm$core$Platform$Cmd$none);
 			default:
-				return _Utils_Tuple2(
-					A2(
-						author$project$Handler$ModelUpdate$showMessage,
-						model,
-						'Message from server ' + (elm$core$Debug$toString(evt) + ' not recognized')),
-					elm$core$Platform$Cmd$none);
+				return A2(
+					author$project$Handler$ModelUpdate$showMessage,
+					model,
+					'Message from server ' + (elm$core$Debug$toString(evt) + ' not recognized'));
 		}
 	});
 var elm$json$Json$Decode$fail = _Json_fail;
@@ -9368,19 +9939,31 @@ var author$project$Json$DecodeView$viewItemDecoder = function () {
 	};
 	return author$project$Json$DecodeXMap$decodeType(decodeFromType);
 }();
-var author$project$Types$Views$ViewRow = function (a) {
-	return {$: 'ViewRow', a: a};
-};
-var author$project$Json$DecodeView$viewRowDecoder = A2(
-	elm$json$Json$Decode$andThen,
-	function (s) {
-		return elm$json$Json$Decode$succeed(
-			author$project$Types$Views$ViewRow(s));
-	},
+var author$project$Types$Views$RowNoHeader = {$: 'RowNoHeader'};
+var author$project$Json$DecodeView$viewRowHeaderTypeDecoder = function () {
+	var m = elm$core$Dict$fromList(
+		_List_fromArray(
+			[
+				_Utils_Tuple2('RowHasHeader', author$project$Types$Views$RowHasHeader),
+				_Utils_Tuple2('RowNoHeader', author$project$Types$Views$RowNoHeader)
+			]));
+	return A2(
+		elm$json$Json$Decode$andThen,
+		author$project$Json$EnumToString$stringToEnum(m),
+		elm$json$Json$Decode$string);
+}();
+var author$project$Types$Views$ViewRow = F2(
+	function (items, headerType) {
+		return {headerType: headerType, items: items};
+	});
+var author$project$Json$DecodeView$viewRowDecoder = A3(
+	elm$json$Json$Decode$map2,
+	author$project$Types$Views$ViewRow,
 	A2(
 		elm$json$Json$Decode$field,
 		'items',
-		elm$json$Json$Decode$list(author$project$Json$DecodeView$viewItemDecoder)));
+		elm$json$Json$Decode$list(author$project$Json$DecodeView$viewItemDecoder)),
+	A2(elm$json$Json$Decode$field, 'headerType', author$project$Json$DecodeView$viewRowHeaderTypeDecoder));
 var author$project$Types$Views$View = F2(
 	function (viewName, rows) {
 		return {rows: rows, viewName: viewName};
@@ -9498,13 +10081,17 @@ var author$project$Json$DecodeXMap$xNamedMapDecoder = A3(
 var author$project$Models$WebMessages$WEAllProjects = function (a) {
 	return {$: 'WEAllProjects', a: a};
 };
+var author$project$Models$WebMessages$WECalculationAdded = F2(
+	function (a, b) {
+		return {$: 'WECalculationAdded', a: a, b: b};
+	});
 var author$project$Models$WebMessages$WECalculationLoaded = F2(
 	function (a, b) {
 		return {$: 'WECalculationLoaded', a: a, b: b};
 	});
-var author$project$Models$WebMessages$WECalculationStored = F2(
+var author$project$Models$WebMessages$WECalculationUpdated = F2(
 	function (a, b) {
-		return {$: 'WECalculationStored', a: a, b: b};
+		return {$: 'WECalculationUpdated', a: a, b: b};
 	});
 var author$project$Models$WebMessages$WEError = function (a) {
 	return {$: 'WEError', a: a};
@@ -9515,13 +10102,17 @@ var author$project$Models$WebMessages$WEFunctions = function (a) {
 var author$project$Models$WebMessages$WEInfo = function (a) {
 	return {$: 'WEInfo', a: a};
 };
+var author$project$Models$WebMessages$WEMapAdded = F3(
+	function (a, b, c) {
+		return {$: 'WEMapAdded', a: a, b: b, c: c};
+	});
 var author$project$Models$WebMessages$WEMapLoaded = F2(
 	function (a, b) {
 		return {$: 'WEMapLoaded', a: a, b: b};
 	});
-var author$project$Models$WebMessages$WEMapStored = F3(
+var author$project$Models$WebMessages$WEMapUpdated = F3(
 	function (a, b, c) {
-		return {$: 'WEMapStored', a: a, b: b, c: c};
+		return {$: 'WEMapUpdated', a: a, b: b, c: c};
 	});
 var author$project$Models$WebMessages$WEMapsInProject = F2(
 	function (a, b) {
@@ -9537,6 +10128,10 @@ var author$project$Models$WebMessages$WEUnsubscribedFromView = F2(
 	function (a, b) {
 		return {$: 'WEUnsubscribedFromView', a: a, b: b};
 	});
+var author$project$Models$WebMessages$WEViewAdded = F2(
+	function (a, b) {
+		return {$: 'WEViewAdded', a: a, b: b};
+	});
 var author$project$Models$WebMessages$WEViewChanged = F3(
 	function (a, b, c) {
 		return {$: 'WEViewChanged', a: a, b: b, c: c};
@@ -9549,9 +10144,9 @@ var author$project$Models$WebMessages$WEViewStatus = F3(
 	function (a, b, c) {
 		return {$: 'WEViewStatus', a: a, b: b, c: c};
 	});
-var author$project$Models$WebMessages$WEViewStored = F2(
+var author$project$Models$WebMessages$WEViewUpdated = F2(
 	function (a, b) {
-		return {$: 'WEViewStored', a: a, b: b};
+		return {$: 'WEViewUpdated', a: a, b: b};
 	});
 var author$project$Json$DecodeWebEvent$webEventDecoder = function () {
 	var decodeFromType = function (t) {
@@ -9587,10 +10182,17 @@ var author$project$Json$DecodeWebEvent$webEventDecoder = function () {
 					author$project$Models$WebMessages$WEMapLoaded,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'map', author$project$Json$DecodeXMap$xNamedMapDecoder));
-			case 'mapStored':
+			case 'mapAdded':
 				return A4(
 					elm$json$Json$Decode$map3,
-					author$project$Models$WebMessages$WEMapStored,
+					author$project$Models$WebMessages$WEMapAdded,
+					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
+					A2(elm$json$Json$Decode$field, 'mapName', author$project$Json$DecodeXMap$xmapNameDecoder),
+					A2(elm$json$Json$Decode$field, 'size', elm$json$Json$Decode$int));
+			case 'mapUpdated':
+				return A4(
+					elm$json$Json$Decode$map3,
+					author$project$Models$WebMessages$WEMapUpdated,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'mapName', author$project$Json$DecodeXMap$xmapNameDecoder),
 					A2(elm$json$Json$Decode$field, 'size', elm$json$Json$Decode$int));
@@ -9625,10 +10227,16 @@ var author$project$Json$DecodeWebEvent$webEventDecoder = function () {
 					author$project$Models$WebMessages$WEViewLoaded,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'view', author$project$Json$DecodeView$viewDecoder));
-			case 'viewStored':
+			case 'viewAdded':
 				return A3(
 					elm$json$Json$Decode$map2,
-					author$project$Models$WebMessages$WEViewStored,
+					author$project$Models$WebMessages$WEViewAdded,
+					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
+					A2(elm$json$Json$Decode$field, 'viewName', elm$json$Json$Decode$string));
+			case 'viewUpdated':
+				return A3(
+					elm$json$Json$Decode$map2,
+					author$project$Models$WebMessages$WEViewUpdated,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'viewName', elm$json$Json$Decode$string));
 			case 'calculationLoaded':
@@ -9637,10 +10245,16 @@ var author$project$Json$DecodeWebEvent$webEventDecoder = function () {
 					author$project$Models$WebMessages$WECalculationLoaded,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'calculationSource', author$project$Json$DecodeCalculation$calculationSourceDecoder));
-			case 'calculationStored':
+			case 'calculationAdded':
 				return A3(
 					elm$json$Json$Decode$map2,
-					author$project$Models$WebMessages$WECalculationStored,
+					author$project$Models$WebMessages$WECalculationAdded,
+					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
+					A2(elm$json$Json$Decode$field, 'calculationName', elm$json$Json$Decode$string));
+			case 'calculationUpdated':
+				return A3(
+					elm$json$Json$Decode$map2,
+					author$project$Models$WebMessages$WECalculationUpdated,
 					A2(elm$json$Json$Decode$field, 'projectName', elm$json$Json$Decode$string),
 					A2(elm$json$Json$Decode$field, 'calculationName', elm$json$Json$Decode$string));
 			case 'functions':
@@ -9675,12 +10289,10 @@ var author$project$Handler$WebMessageUpdate$updateWithWebEvent = F2(
 			return A2(author$project$Handler$WebMessageUpdate$updateEvent, evt, model);
 		} else {
 			var err = _n1.a;
-			return _Utils_Tuple2(
-				A2(
-					author$project$Handler$ModelUpdate$showMessage,
-					model,
-					'Error: ' + (elm$core$Debug$toString(err) + (' decoding Json ' + json))),
-				elm$core$Platform$Cmd$none);
+			return A2(
+				author$project$Handler$ModelUpdate$showMessage,
+				model,
+				'Error: ' + (elm$core$Debug$toString(err) + (' decoding Json ' + json)));
 		}
 	});
 var author$project$Internal$Ripple$Model$Idle = {$: 'Idle'};
@@ -9726,93 +10338,6 @@ var author$project$Internal$Button$Implementation$getSet = A3(
 var author$project$Internal$Button$Model$RippleMsg = function (a) {
 	return {$: 'RippleMsg', a: a};
 };
-var elm$core$Process$sleep = _Process_sleep;
-var elm$core$Task$Perform = function (a) {
-	return {$: 'Perform', a: a};
-};
-var elm$core$Task$succeed = _Scheduler_succeed;
-var elm$core$Task$init = elm$core$Task$succeed(_Utils_Tuple0);
-var elm$core$Task$andThen = _Scheduler_andThen;
-var elm$core$Task$map = F2(
-	function (func, taskA) {
-		return A2(
-			elm$core$Task$andThen,
-			function (a) {
-				return elm$core$Task$succeed(
-					func(a));
-			},
-			taskA);
-	});
-var elm$core$Task$map2 = F3(
-	function (func, taskA, taskB) {
-		return A2(
-			elm$core$Task$andThen,
-			function (a) {
-				return A2(
-					elm$core$Task$andThen,
-					function (b) {
-						return elm$core$Task$succeed(
-							A2(func, a, b));
-					},
-					taskB);
-			},
-			taskA);
-	});
-var elm$core$Task$sequence = function (tasks) {
-	return A3(
-		elm$core$List$foldr,
-		elm$core$Task$map2(elm$core$List$cons),
-		elm$core$Task$succeed(_List_Nil),
-		tasks);
-};
-var elm$core$Platform$sendToApp = _Platform_sendToApp;
-var elm$core$Task$spawnCmd = F2(
-	function (router, _n0) {
-		var task = _n0.a;
-		return _Scheduler_spawn(
-			A2(
-				elm$core$Task$andThen,
-				elm$core$Platform$sendToApp(router),
-				task));
-	});
-var elm$core$Task$onEffects = F3(
-	function (router, commands, state) {
-		return A2(
-			elm$core$Task$map,
-			function (_n0) {
-				return _Utils_Tuple0;
-			},
-			elm$core$Task$sequence(
-				A2(
-					elm$core$List$map,
-					elm$core$Task$spawnCmd(router),
-					commands)));
-	});
-var elm$core$Task$onSelfMsg = F3(
-	function (_n0, _n1, _n2) {
-		return elm$core$Task$succeed(_Utils_Tuple0);
-	});
-var elm$core$Task$cmdMap = F2(
-	function (tagger, _n0) {
-		var task = _n0.a;
-		return elm$core$Task$Perform(
-			A2(elm$core$Task$map, tagger, task));
-	});
-_Platform_effectManagers['Task'] = _Platform_createManager(elm$core$Task$init, elm$core$Task$onEffects, elm$core$Task$onSelfMsg, elm$core$Task$cmdMap);
-var elm$core$Task$command = _Platform_leaf('Task');
-var elm$core$Task$perform = F2(
-	function (toMessage, task) {
-		return elm$core$Task$command(
-			elm$core$Task$Perform(
-				A2(elm$core$Task$map, toMessage, task)));
-	});
-var author$project$Internal$Helpers$delayedCmd = F2(
-	function (time, msg) {
-		return A2(
-			elm$core$Task$perform,
-			elm$core$Basics$always(msg),
-			elm$core$Process$sleep(time));
-	});
 var author$project$Internal$Ripple$Implementation$normalizedEventCoords = F3(
 	function (event, pageOffset, clientRect) {
 		var _n0 = pageOffset;
@@ -10043,11 +10568,6 @@ var elm$url$Url$fromString = function (str) {
 		A2(elm$core$String$dropLeft, 8, str)) : elm$core$Maybe$Nothing);
 };
 var elm$browser$Browser$Dom$getElement = _Browser_getElement;
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var elm$core$Task$onError = _Scheduler_onError;
 var elm$core$Task$attempt = F2(
 	function (resultToMessage, task) {
@@ -10294,7 +10814,6 @@ var author$project$Internal$Ripple$Implementation$update = F2(
 		}
 		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 	});
-var elm$core$Platform$Cmd$map = _Platform_map;
 var author$project$Internal$Button$Implementation$update = F3(
 	function (lift, msg, model) {
 		if (msg.$ === 'RippleMsg') {
@@ -10605,14 +11124,6 @@ var author$project$Internal$Msg$DrawerMsg = F2(
 		return {$: 'DrawerMsg', a: a, b: b};
 	});
 var author$project$Internal$Drawer$Implementation$react = A4(author$project$Internal$Component$react, author$project$Internal$Drawer$Implementation$getSet.get, author$project$Internal$Drawer$Implementation$getSet.set, author$project$Internal$Msg$DrawerMsg, author$project$Internal$Drawer$Implementation$update);
-var elm$core$Tuple$mapSecond = F2(
-	function (func, _n0) {
-		var x = _n0.a;
-		var y = _n0.b;
-		return _Utils_Tuple2(
-			x,
-			func(y));
-	});
 var author$project$Internal$Component$generalise = F4(
 	function (update, lift, msg, model) {
 		return A2(
@@ -11044,7 +11555,7 @@ var author$project$Internal$Msg$SelectMsg = F2(
 	function (a, b) {
 		return {$: 'SelectMsg', a: a, b: b};
 	});
-var author$project$Internal$Select$Model$defaultModel = {focused: false, isDirty: false, ripple: author$project$Internal$Ripple$Model$defaultModel};
+var author$project$Internal$Select$Model$defaultModel = {focused: false, isDirty: false, menu: author$project$Internal$Menu$Model$defaultModel, ripple: author$project$Internal$Ripple$Model$defaultModel};
 var author$project$Internal$Select$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -11057,49 +11568,135 @@ var author$project$Internal$Select$Implementation$getSet = A3(
 				{select: x});
 		}),
 	author$project$Internal$Select$Model$defaultModel);
+var author$project$Internal$Helpers$cmd = function (msg) {
+	return A2(
+		elm$core$Task$perform,
+		elm$core$Basics$identity,
+		elm$core$Task$succeed(msg));
+};
+var author$project$Internal$Menu$Model$Toggle = {$: 'Toggle'};
+var author$project$Internal$Select$Model$MenuMsg = function (a) {
+	return {$: 'MenuMsg', a: a};
+};
+var author$project$Internal$Select$Model$NoOp = {$: 'NoOp'};
+var author$project$Internal$Select$Model$OpenMenu = function (a) {
+	return {$: 'OpenMenu', a: a};
+};
 var author$project$Internal$Select$Model$RippleMsg = function (a) {
 	return {$: 'RippleMsg', a: a};
 };
 var author$project$Internal$Select$Implementation$update = F3(
 	function (lift, msg, model) {
-		switch (msg.$) {
-			case 'Change':
-				var changedValue = msg.a;
-				var dirty = changedValue !== '';
-				return _Utils_Tuple2(
-					elm$core$Maybe$Just(
-						_Utils_update(
-							model,
-							{isDirty: dirty})),
-					elm$core$Platform$Cmd$none);
-			case 'Blur':
-				return _Utils_Tuple2(
-					elm$core$Maybe$Just(
-						_Utils_update(
-							model,
-							{focused: false})),
-					elm$core$Platform$Cmd$none);
-			case 'Focus':
-				return _Utils_Tuple2(
-					elm$core$Maybe$Just(
-						_Utils_update(
-							model,
-							{focused: true})),
-					elm$core$Platform$Cmd$none);
-			default:
-				var msg_ = msg.a;
-				var _n1 = A2(author$project$Internal$Ripple$Implementation$update, msg_, model.ripple);
-				var ripple = _n1.a;
-				var effects = _n1.b;
-				return _Utils_Tuple2(
-					elm$core$Maybe$Just(
-						_Utils_update(
-							model,
-							{ripple: ripple})),
-					A2(
-						elm$core$Platform$Cmd$map,
-						A2(elm$core$Basics$composeL, lift, author$project$Internal$Select$Model$RippleMsg),
-						effects));
+		update:
+		while (true) {
+			switch (msg.$) {
+				case 'NoOp':
+					return _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
+				case 'Change':
+					var changedValue = msg.a;
+					var dirty = changedValue !== '';
+					return _Utils_Tuple2(
+						elm$core$Maybe$Just(
+							_Utils_update(
+								model,
+								{isDirty: dirty})),
+						elm$core$Platform$Cmd$none);
+				case 'Blur':
+					return _Utils_Tuple2(
+						elm$core$Maybe$Just(
+							_Utils_update(
+								model,
+								{focused: false})),
+						elm$core$Platform$Cmd$none);
+				case 'Focus':
+					return _Utils_Tuple2(
+						elm$core$Maybe$Just(
+							_Utils_update(
+								model,
+								{focused: true})),
+						elm$core$Platform$Cmd$none);
+				case 'RippleMsg':
+					var msg_ = msg.a;
+					var _n1 = A2(author$project$Internal$Ripple$Implementation$update, msg_, model.ripple);
+					var ripple = _n1.a;
+					var effects = _n1.b;
+					return _Utils_Tuple2(
+						elm$core$Maybe$Just(
+							_Utils_update(
+								model,
+								{ripple: ripple})),
+						A2(
+							elm$core$Platform$Cmd$map,
+							A2(elm$core$Basics$composeL, lift, author$project$Internal$Select$Model$RippleMsg),
+							effects));
+				case 'KeyDown':
+					var menuIndex = msg.a;
+					var key = msg.b;
+					var keyCode = msg.c;
+					var isSpace = (key === 'Space') || (keyCode === 32);
+					var isEscape = (key === 'Escape') || (keyCode === 27);
+					var isEnter = (key === 'Enter') || (keyCode === 13);
+					return (isEscape || (isSpace || isEnter)) ? _Utils_Tuple2(
+						elm$core$Maybe$Nothing,
+						A2(
+							author$project$Internal$Helpers$delayedCmd,
+							16,
+							lift(
+								author$project$Internal$Select$Model$OpenMenu(menuIndex)))) : _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
+				case 'OpenMenu':
+					var menuIndex = msg.a;
+					return _Utils_Tuple2(
+						elm$core$Maybe$Nothing,
+						author$project$Internal$Helpers$cmd(
+							lift(
+								author$project$Internal$Select$Model$MenuMsg(author$project$Internal$Menu$Model$Open))));
+				case 'ToggleMenu':
+					var $temp$lift = lift,
+						$temp$msg = author$project$Internal$Select$Model$MenuMsg(author$project$Internal$Menu$Model$Toggle),
+						$temp$model = model;
+					lift = $temp$lift;
+					msg = $temp$msg;
+					model = $temp$model;
+					continue update;
+				case 'MenuSelection':
+					var index = msg.a;
+					var onSelect_ = msg.b;
+					var v = msg.c;
+					return _Utils_Tuple2(
+						elm$core$Maybe$Nothing,
+						elm$core$Platform$Cmd$batch(
+							_List_fromArray(
+								[
+									author$project$Internal$Helpers$cmd(
+									onSelect_(v)),
+									A2(
+									elm$core$Task$attempt,
+									function (_n2) {
+										return lift(author$project$Internal$Select$Model$NoOp);
+									},
+									elm$browser$Browser$Dom$focus(index))
+								])));
+				default:
+					var msg_ = msg.a;
+					return A2(
+						elm$core$Tuple$mapFirst,
+						function (maybeNewMenu) {
+							if (maybeNewMenu.$ === 'Just') {
+								var newMenu = maybeNewMenu.a;
+								return elm$core$Maybe$Just(
+									_Utils_update(
+										model,
+										{menu: newMenu}));
+							} else {
+								return elm$core$Maybe$Nothing;
+							}
+						},
+						A3(
+							author$project$Internal$Menu$Implementation$update,
+							A2(elm$core$Basics$composeL, lift, author$project$Internal$Select$Model$MenuMsg),
+							msg_,
+							model.menu));
+			}
 		}
 	});
 var author$project$Internal$Select$Implementation$react = A4(author$project$Internal$Component$react, author$project$Internal$Select$Implementation$getSet.get, author$project$Internal$Select$Implementation$getSet.set, author$project$Internal$Msg$SelectMsg, author$project$Internal$Select$Implementation$update);
@@ -11257,12 +11854,6 @@ var author$project$Internal$Slider$Implementation$update = F3(
 		}
 	});
 var author$project$Internal$Slider$Implementation$react = A4(author$project$Internal$Component$react, author$project$Internal$Slider$Implementation$getSet.get, author$project$Internal$Slider$Implementation$getSet.set, author$project$Internal$Msg$SliderMsg, author$project$Internal$Slider$Implementation$update);
-var author$project$Internal$Msg$SnackbarMsg = F2(
-	function (a, b) {
-		return {$: 'SnackbarMsg', a: a, b: b};
-	});
-var author$project$Internal$Snackbar$Model$Inert = {$: 'Inert'};
-var author$project$Internal$Snackbar$Model$defaultModel = {open: false, queue: _List_Nil, seq: -1, state: author$project$Internal$Snackbar$Model$Inert};
 var author$project$Internal$Snackbar$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -11275,47 +11866,9 @@ var author$project$Internal$Snackbar$Implementation$getSet = A3(
 				{snackbar: x});
 		}),
 	author$project$Internal$Snackbar$Model$defaultModel);
-var author$project$Internal$Helpers$cmd = function (msg) {
-	return A2(
-		elm$core$Task$perform,
-		elm$core$Basics$identity,
-		elm$core$Task$succeed(msg));
-};
-var author$project$Internal$Snackbar$Model$Move = F2(
-	function (a, b) {
-		return {$: 'Move', a: a, b: b};
-	});
 var author$project$Internal$Snackbar$Implementation$next = function (model) {
 	return elm$core$Platform$Cmd$map(
 		author$project$Internal$Snackbar$Model$Move(model.seq));
-};
-var author$project$Internal$Snackbar$Model$Active = function (a) {
-	return {$: 'Active', a: a};
-};
-var author$project$Internal$Snackbar$Model$Timeout = {$: 'Timeout'};
-var author$project$Internal$Snackbar$Implementation$tryDequeue = function (model) {
-	var _n0 = _Utils_Tuple2(model.state, model.queue);
-	if ((_n0.a.$ === 'Inert') && _n0.b.b) {
-		var _n1 = _n0.a;
-		var _n2 = _n0.b;
-		var c = _n2.a;
-		var cs = _n2.b;
-		return _Utils_Tuple2(
-			_Utils_update(
-				model,
-				{
-					open: false,
-					queue: cs,
-					seq: model.seq + 1,
-					state: author$project$Internal$Snackbar$Model$Active(c)
-				}),
-			A2(
-				elm$core$Platform$Cmd$map,
-				author$project$Internal$Snackbar$Model$Move(model.seq + 1),
-				A2(author$project$Internal$Helpers$delayedCmd, c.timeout, author$project$Internal$Snackbar$Model$Timeout)));
-	} else {
-		return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
-	}
 };
 var author$project$Internal$Snackbar$Model$Fading = function (a) {
 	return {$: 'Fading', a: a};
@@ -11695,101 +12248,6 @@ var author$project$Internal$TextField$Implementation$update = F3(
 		}
 	});
 var author$project$Internal$TextField$Implementation$react = A4(author$project$Internal$Component$react, author$project$Internal$TextField$Implementation$getSet.get, author$project$Internal$TextField$Implementation$getSet.set, author$project$Internal$Msg$TextFieldMsg, author$project$Internal$TextField$Implementation$update);
-var author$project$Internal$Msg$ToolbarMsg = F2(
-	function (a, b) {
-		return {$: 'ToolbarMsg', a: a, b: b};
-	});
-var author$project$Internal$Toolbar$Model$defaultModel = {calculations: elm$core$Maybe$Nothing, config: elm$core$Maybe$Nothing, geometry: elm$core$Maybe$Nothing, scrollTop: 0};
-var author$project$Internal$Toolbar$Implementation$getSet = A3(
-	author$project$Internal$Component$indexed,
-	function ($) {
-		return $.toolbar;
-	},
-	F2(
-		function (x, y) {
-			return _Utils_update(
-				y,
-				{toolbar: x});
-		}),
-	author$project$Internal$Toolbar$Model$defaultModel);
-var author$project$Internal$Toolbar$Model$defaultCalculations = {flexibleExpansionHeight: 0, flexibleExpansionRatio: 0, maxTranslateYDistance: 0, maxTranslateYRatio: 0, scrollThreshold: 0, scrollThresholdRatio: 0, toolbarHeight: 0, toolbarRatio: 0, toolbarRowHeight: 0};
-var author$project$Internal$Toolbar$Implementation$initKeyRatio = F2(
-	function (config, geometry) {
-		var toolbarRowHeight = geometry.getRowHeight;
-		var toolbarRatio = (!toolbarRowHeight) ? 0 : (geometry.getOffsetHeight / toolbarRowHeight);
-		var firstRowMaxRatio = (!toolbarRowHeight) ? 0 : (geometry.getFirstRowElementOffsetHeight / toolbarRowHeight);
-		var flexibleExpansionRatio_ = firstRowMaxRatio - 1;
-		var maxTranslateYRatio = config.fixedLastrow ? (toolbarRatio - firstRowMaxRatio) : 0;
-		var scrollThresholdRatio = config.fixedLastrow ? (toolbarRatio - 1) : (firstRowMaxRatio - 1);
-		return _Utils_update(
-			author$project$Internal$Toolbar$Model$defaultCalculations,
-			{flexibleExpansionRatio: flexibleExpansionRatio_, maxTranslateYRatio: maxTranslateYRatio, scrollThresholdRatio: scrollThresholdRatio, toolbarRatio: toolbarRatio});
-	});
-var author$project$Internal$Toolbar$Implementation$setKeyHeights = F2(
-	function (geometry, calculations) {
-		var toolbarRowHeight = geometry.getRowHeight;
-		var toolbarHeight = calculations.toolbarRatio * toolbarRowHeight;
-		var scrollThreshold = calculations.scrollThresholdRatio * toolbarRowHeight;
-		var maxTranslateYDistance = calculations.maxTranslateYRatio * toolbarRowHeight;
-		var flexibleExpansionHeight = calculations.flexibleExpansionRatio * toolbarRowHeight;
-		return _Utils_update(
-			calculations,
-			{flexibleExpansionHeight: flexibleExpansionHeight, maxTranslateYDistance: maxTranslateYDistance, scrollThreshold: scrollThreshold, toolbarHeight: toolbarHeight, toolbarRowHeight: toolbarRowHeight});
-	});
-var author$project$Internal$Toolbar$Implementation$update = F2(
-	function (msg, model) {
-		switch (msg.$) {
-			case 'Init':
-				var config = msg.a;
-				var geometry = msg.b;
-				var calculations = A2(
-					author$project$Internal$Toolbar$Implementation$setKeyHeights,
-					geometry,
-					A2(author$project$Internal$Toolbar$Implementation$initKeyRatio, config, geometry));
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							calculations: elm$core$Maybe$Just(calculations),
-							config: elm$core$Maybe$Just(config),
-							geometry: elm$core$Maybe$Just(geometry)
-						}),
-					elm$core$Platform$Cmd$none);
-			case 'Resize':
-				var config = msg.a;
-				var geometry = msg.b;
-				var calculations = A2(
-					elm$core$Maybe$map,
-					author$project$Internal$Toolbar$Implementation$setKeyHeights(geometry),
-					model.calculations);
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							calculations: calculations,
-							config: elm$core$Maybe$Just(config),
-							geometry: elm$core$Maybe$Just(geometry)
-						}),
-					elm$core$Platform$Cmd$none);
-			default:
-				var config = msg.a;
-				var scrollTop = msg.b;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							config: elm$core$Maybe$Just(config),
-							scrollTop: scrollTop
-						}),
-					elm$core$Platform$Cmd$none);
-		}
-	});
-var author$project$Internal$Toolbar$Implementation$react = A4(
-	author$project$Internal$Component$react,
-	author$project$Internal$Toolbar$Implementation$getSet.get,
-	author$project$Internal$Toolbar$Implementation$getSet.set,
-	author$project$Internal$Msg$ToolbarMsg,
-	author$project$Internal$Component$generalise(author$project$Internal$Toolbar$Implementation$update));
 var author$project$Internal$Msg$TopAppBarMsg = F2(
 	function (a, b) {
 		return {$: 'TopAppBarMsg', a: a, b: b};
@@ -12063,10 +12521,6 @@ var author$project$Material$update_ = F3(
 				var idx = msg.a;
 				var msg_ = msg.b;
 				return A4(author$project$Internal$TextField$Implementation$react, lift, msg_, idx, store);
-			case 'ToolbarMsg':
-				var idx = msg.a;
-				var msg_ = msg.b;
-				return A4(author$project$Internal$Toolbar$Implementation$react, lift, msg_, idx, store);
 			default:
 				var idx = msg.a;
 				var msg_ = msg.b;
@@ -12106,11 +12560,21 @@ var author$project$Main$update = F2(
 					model);
 			case 'WebSocketConnected':
 				var isConnected = msg.a;
-				return isConnected ? _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, 'Connected'),
-					author$project$Server$ServerMessaging$sendToServer(author$project$Models$WebMessages$WRAllProjects)) : _Utils_Tuple2(
-					A2(author$project$Handler$ModelUpdate$showMessage, model, 'Disconnected'),
-					elm$core$Platform$Cmd$none);
+				if (isConnected) {
+					var _n1 = A2(author$project$Handler$ModelUpdate$showMessage, model, 'Connected');
+					var mdl = _n1.a;
+					var effect = _n1.b;
+					return _Utils_Tuple2(
+						mdl,
+						elm$core$Platform$Cmd$batch(
+							_List_fromArray(
+								[
+									effect,
+									author$project$Server$ServerMessaging$sendToServer(author$project$Models$WebMessages$WRAllProjects)
+								])));
+				} else {
+					return A2(author$project$Handler$ModelUpdate$showMessage, model, 'Disconnected');
+				}
 			case 'Send':
 				var req = msg.a;
 				return _Utils_Tuple2(
@@ -12139,28 +12603,7 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 		}
 	});
-var author$project$Display$MdcIndexes$makeIndex = F2(
-	function (viewIdx, compIdx) {
-		return viewIdx + ('.' + compIdx);
-	});
-var author$project$Display$MdcIndexes$projectsUIIdx = 'prjs';
-var author$project$Display$ProjectsUI$title = function (model) {
-	var titleWithProject = A2(
-		elm$core$Maybe$map,
-		function (p) {
-			return '. Project ' + p;
-		},
-		model.currentProject);
-	return 'EXMAP' + A2(elm$core$Maybe$withDefault, '', titleWithProject);
-};
-var author$project$Internal$Options$Class = function (a) {
-	return {$: 'Class', a: a};
-};
-var author$project$Internal$Options$cs = function (c) {
-	return author$project$Internal$Options$Class(c);
-};
-var author$project$Internal$TopAppBar$Implementation$alignStart = author$project$Internal$Options$cs('mdc-top-app-bar__section--align-start');
-var author$project$Material$TopAppBar$alignStart = author$project$Internal$TopAppBar$Implementation$alignStart;
+var author$project$Internal$Icon$Implementation$defaultConfig = {node: 'i'};
 var elm$core$Result$toMaybe = function (result) {
 	if (result.$ === 'Ok') {
 		var v = result.a;
@@ -12298,10 +12741,7 @@ var author$project$Internal$Options$addAttributes = F2(
 			_Utils_ap(
 				style,
 				_Utils_ap(
-					A2(
-						elm$core$List$map,
-						elm$html$Html$Attributes$class,
-						elm$core$List$reverse(summary.classes)),
+					A2(elm$core$List$map, elm$html$Html$Attributes$class, summary.classes),
 					_Utils_ap(
 						attrs,
 						_Utils_ap(
@@ -12312,12 +12752,6 @@ var author$project$Internal$Options$addAttributes = F2(
 var author$project$Internal$Dispatch$Config = function (a) {
 	return {$: 'Config', a: a};
 };
-var author$project$Internal$Dispatch$defaultConfig = author$project$Internal$Dispatch$Config(
-	{decoders: elm$core$Dict$empty, lift: elm$core$Maybe$Nothing});
-var author$project$Internal$Options$Summary = F6(
-	function (classes, css, attrs, internal, dispatch, config) {
-		return {attrs: attrs, classes: classes, config: config, css: css, dispatch: dispatch, internal: internal};
-	});
 var author$project$Internal$Dispatch$add = F3(
 	function (event, decoder, _n0) {
 		var config = _n0.a;
@@ -12350,176 +12784,6 @@ var author$project$Internal$Dispatch$setLift = F2(
 				lift: elm$core$Maybe$Just(lift)
 			});
 	});
-var author$project$Internal$Options$collect1_ = F2(
-	function (options, acc) {
-		switch (options.$) {
-			case 'Class':
-				var x = options.a;
-				return _Utils_update(
-					acc,
-					{
-						classes: A2(elm$core$List$cons, x, acc.classes)
-					});
-			case 'CSS':
-				var x = options.a;
-				return _Utils_update(
-					acc,
-					{
-						css: A2(elm$core$List$cons, x, acc.css)
-					});
-			case 'Attribute':
-				var x = options.a;
-				return _Utils_update(
-					acc,
-					{
-						attrs: A2(elm$core$List$cons, x, acc.attrs)
-					});
-			case 'Internal':
-				var x = options.a;
-				return _Utils_update(
-					acc,
-					{
-						internal: A2(elm$core$List$cons, x, acc.internal)
-					});
-			case 'Listener':
-				var event = options.a;
-				var decoder = options.b;
-				return _Utils_update(
-					acc,
-					{
-						dispatch: A3(author$project$Internal$Dispatch$add, event, decoder, acc.dispatch)
-					});
-			case 'Many':
-				var opts = options.a;
-				return A3(elm$core$List$foldl, author$project$Internal$Options$collect1_, acc, opts);
-			case 'Lift':
-				var lift = options.a;
-				return _Utils_update(
-					acc,
-					{
-						dispatch: A2(author$project$Internal$Dispatch$setLift, lift, acc.dispatch)
-					});
-			case 'Set':
-				return acc;
-			default:
-				return acc;
-		}
-	});
-var author$project$Internal$Options$collect_ = A2(
-	elm$core$List$foldl,
-	author$project$Internal$Options$collect1_,
-	A6(author$project$Internal$Options$Summary, _List_Nil, _List_Nil, _List_Nil, _List_Nil, author$project$Internal$Dispatch$defaultConfig, _Utils_Tuple0));
-var author$project$Internal$Options$styled = F2(
-	function (ctor, props) {
-		return ctor(
-			A2(
-				author$project$Internal$Options$addAttributes,
-				author$project$Internal$Options$collect_(props),
-				_List_Nil));
-	});
-var elm$html$Html$section = _VirtualDom_node('section');
-var author$project$Internal$TopAppBar$Implementation$section = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$section,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-top-app-bar__section'),
-			options));
-};
-var author$project$Material$TopAppBar$section = author$project$Internal$TopAppBar$Implementation$section;
-var elm$html$Html$span = _VirtualDom_node('span');
-var author$project$Internal$TopAppBar$Implementation$title = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$span,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-top-app-bar__title'),
-			options));
-};
-var author$project$Material$TopAppBar$title = author$project$Internal$TopAppBar$Implementation$title;
-var author$project$Internal$Msg$Dispatch = function (a) {
-	return {$: 'Dispatch', a: a};
-};
-var author$project$Internal$Options$Lift = function (a) {
-	return {$: 'Lift', a: a};
-};
-var author$project$Internal$Options$dispatch = function (lift) {
-	return author$project$Internal$Options$Lift(
-		elm$json$Json$Decode$map(
-			function (_n0) {
-				var message = _n0.message;
-				var stopPropagation = _n0.stopPropagation;
-				var preventDefault = _n0.preventDefault;
-				return {
-					message: lift(
-						author$project$Internal$Msg$Dispatch(message)),
-					preventDefault: preventDefault,
-					stopPropagation: stopPropagation
-				};
-			}));
-};
-var author$project$Internal$Component$render = F3(
-	function (get_model, view, ctor) {
-		return F4(
-			function (lift, idx, store, options) {
-				return A3(
-					view,
-					A2(
-						elm$core$Basics$composeL,
-						lift,
-						ctor(idx)),
-					A2(get_model, idx, store),
-					A2(
-						elm$core$List$cons,
-						author$project$Internal$Options$dispatch(lift),
-						options));
-			});
-	});
-var author$project$Internal$Options$Attribute = function (a) {
-	return {$: 'Attribute', a: a};
-};
-var author$project$Internal$Options$data = F2(
-	function (key, val) {
-		return author$project$Internal$Options$Attribute(
-			A2(elm$html$Html$Attributes$attribute, 'data-' + key, val));
-	});
-var author$project$Material$Options$data = author$project$Internal$Options$data;
-var author$project$Internal$Options$Many = function (a) {
-	return {$: 'Many', a: a};
-};
-var author$project$Internal$Options$many = author$project$Internal$Options$Many;
-var author$project$Material$Options$many = author$project$Internal$Options$many;
-var author$project$Internal$Options$Listener = F2(
-	function (a, b) {
-		return {$: 'Listener', a: a, b: b};
-	});
-var author$project$Internal$Options$on = F2(
-	function (event, decodeMessage) {
-		return A2(
-			author$project$Internal$Options$Listener,
-			event,
-			A2(
-				elm$json$Json$Decode$map,
-				function (message) {
-					return {message: message, preventDefault: false, stopPropagation: false};
-				},
-				decodeMessage));
-	});
-var author$project$Material$Options$on = author$project$Internal$Options$on;
-var author$project$Internal$GlobalEvents$listener = F2(
-	function (name, decoder) {
-		return author$project$Material$Options$many(
-			_List_fromArray(
-				[
-					A2(author$project$Material$Options$on, name, decoder),
-					A2(author$project$Material$Options$data, name, '{}')
-				]));
-	});
-var author$project$Internal$GlobalEvents$onResize = author$project$Internal$GlobalEvents$listener('globalresize');
-var author$project$Internal$GlobalEvents$onScroll = author$project$Internal$GlobalEvents$listener('globalscroll');
-var author$project$Internal$GlobalEvents$onTick = author$project$Internal$GlobalEvents$listener('globaltick');
 var author$project$Internal$Options$collect1 = F2(
 	function (opt, acc) {
 		switch (opt.$) {
@@ -12580,7 +12844,19 @@ var author$project$Internal$Options$collect1 = F2(
 				return acc;
 		}
 	});
-var author$project$Internal$Options$recollect = elm$core$List$foldl(author$project$Internal$Options$collect1);
+var author$project$Internal$Options$recollect = F2(
+	function (summary, properties) {
+		var reversed_summary = A3(elm$core$List$foldl, author$project$Internal$Options$collect1, summary, properties);
+		var new_summary = {
+			attrs: elm$core$List$reverse(reversed_summary.attrs),
+			classes: elm$core$List$reverse(reversed_summary.classes),
+			config: reversed_summary.config,
+			css: elm$core$List$reverse(reversed_summary.css),
+			dispatch: reversed_summary.dispatch,
+			internal: elm$core$List$reverse(reversed_summary.internal)
+		};
+		return new_summary;
+	});
 var author$project$Internal$Options$apply = F4(
 	function (summary, ctor, options, attrs) {
 		return ctor(
@@ -12589,240 +12865,37 @@ var author$project$Internal$Options$apply = F4(
 				A2(author$project$Internal$Options$recollect, summary, options),
 				attrs));
 	});
-var author$project$Internal$Options$collect = A2(
-	elm$core$Basics$composeR,
-	A5(author$project$Internal$Options$Summary, _List_Nil, _List_Nil, _List_Nil, _List_Nil, author$project$Internal$Dispatch$defaultConfig),
-	author$project$Internal$Options$recollect);
-var author$project$Internal$Options$CSS = function (a) {
-	return {$: 'CSS', a: a};
+var author$project$Internal$Options$Attribute = function (a) {
+	return {$: 'Attribute', a: a};
 };
-var author$project$Internal$Options$css = F2(
-	function (key, value) {
-		return author$project$Internal$Options$CSS(
-			_Utils_Tuple2(key, value));
-	});
-var author$project$Internal$Options$None = {$: 'None'};
-var author$project$Internal$Options$nop = author$project$Internal$Options$None;
-var author$project$Internal$Options$when = F2(
-	function (guard, prop) {
-		return guard ? prop : author$project$Internal$Options$nop;
-	});
-var author$project$Internal$TopAppBar$Implementation$cssClasses = {collapsed: 'mdc-top-app-bar--short-collapsed', dense: 'mdc-top-app-bar--dense', fixed: 'mdc-top-app-bar--fixed', prominent: 'mdc-top-app-bar--prominent', scrolled: 'mdc-top-app-bar--fixed-scrolled', _short: 'mdc-top-app-bar--short'};
-var elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
-	});
-var author$project$Internal$TopAppBar$Implementation$getAppBarHeight = A2(
-	elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'clientHeight']),
-	elm$json$Json$Decode$float);
-var debois$elm_dom$DOM$target = function (decoder) {
-	return A2(elm$json$Json$Decode$field, 'target', decoder);
-};
-var author$project$Internal$TopAppBar$Implementation$getViewportScrollY = debois$elm_dom$DOM$target(
-	A2(
-		elm$json$Json$Decode$at,
-		_List_fromArray(
-			['ownerDocument', 'defaultView', 'scrollY']),
-		elm$json$Json$Decode$float));
-var elm$html$Html$div = _VirtualDom_node('div');
-var author$project$Internal$TopAppBar$Implementation$row = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$div,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-top-app-bar__row'),
-			options));
-};
-var author$project$Internal$TopAppBar$Model$Init = function (a) {
-	return {$: 'Init', a: a};
-};
-var author$project$Internal$TopAppBar$Model$Resize = function (a) {
-	return {$: 'Resize', a: a};
-};
-var author$project$Internal$TopAppBar$Model$Scroll = function (a) {
-	return {$: 'Scroll', a: a};
-};
-var author$project$Internal$TopAppBar$Model$defaultConfig = {collapsed: false, dense: false, fixed: false, prominent: false, _short: false};
-var elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var elm$html$Html$header = _VirtualDom_node('header');
-var author$project$Internal$TopAppBar$Implementation$topAppBar = F4(
-	function (lift, model, options, sections) {
-		var top = A2(elm$core$Maybe$withDefault, 0, model.styleTop);
-		var lastScrollPosition = A2(elm$core$Maybe$withDefault, 0, model.lastScrollPosition);
-		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$TopAppBar$Model$defaultConfig, options);
-		var config = summary.config;
-		return A5(
-			author$project$Internal$Options$apply,
-			summary,
-			elm$html$Html$header,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-top-app-bar'),
-					A2(
-					author$project$Internal$Options$when,
-					config.dense,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.dense)),
-					A2(
-					author$project$Internal$Options$when,
-					config.fixed,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.fixed)),
-					A2(
-					author$project$Internal$Options$when,
-					config.fixed && (lastScrollPosition > 0),
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.scrolled)),
-					A2(
-					author$project$Internal$Options$when,
-					config.prominent,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.prominent)),
-					A2(
-					author$project$Internal$Options$when,
-					config._short,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses._short)),
-					A2(
-					author$project$Internal$Options$when,
-					config.collapsed || (config._short && (lastScrollPosition > 0)),
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.collapsed)),
-					A2(
-					author$project$Internal$Options$when,
-					(!config.fixed) && (!config._short),
-					A2(
-						author$project$Internal$Options$css,
-						'top',
-						elm$core$String$fromFloat(top) + 'px')),
-					author$project$Internal$GlobalEvents$onScroll(
-					A2(
-						elm$json$Json$Decode$map,
-						lift,
-						A2(
-							elm$json$Json$Decode$map,
-							function (scrollPosition) {
-								return author$project$Internal$TopAppBar$Model$Scroll(
-									{scrollPosition: scrollPosition});
-							},
-							author$project$Internal$TopAppBar$Implementation$getViewportScrollY))),
-					author$project$Internal$GlobalEvents$onResize(
-					A2(
-						elm$json$Json$Decode$map,
-						lift,
-						A3(
-							elm$json$Json$Decode$map2,
-							F2(
-								function (scrollPosition, topAppBarHeight) {
-									return author$project$Internal$TopAppBar$Model$Resize(
-										{scrollPosition: scrollPosition, topAppBarHeight: topAppBarHeight});
-								}),
-							author$project$Internal$TopAppBar$Implementation$getViewportScrollY,
-							author$project$Internal$TopAppBar$Implementation$getAppBarHeight))),
-					A2(
-					author$project$Internal$Options$when,
-					A2(
-						elm$core$List$any,
-						elm$core$Basics$identity,
-						_List_fromArray(
-							[
-								_Utils_eq(model.lastScrollPosition, elm$core$Maybe$Nothing),
-								_Utils_eq(model.topAppBarHeight, elm$core$Maybe$Nothing)
-							])),
-					author$project$Internal$GlobalEvents$onTick(
-						A2(
-							elm$json$Json$Decode$map,
-							lift,
-							A3(
-								elm$json$Json$Decode$map2,
-								F2(
-									function (scrollPosition, topAppBarHeight) {
-										return author$project$Internal$TopAppBar$Model$Init(
-											{scrollPosition: scrollPosition, topAppBarHeight: topAppBarHeight});
-									}),
-								author$project$Internal$TopAppBar$Implementation$getViewportScrollY,
-								author$project$Internal$TopAppBar$Implementation$getAppBarHeight))))
-				]),
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(author$project$Internal$TopAppBar$Implementation$row, _List_Nil, sections)
-				]));
-	});
-var author$project$Internal$TopAppBar$Implementation$view = A3(author$project$Internal$Component$render, author$project$Internal$TopAppBar$Implementation$getSet.get, author$project$Internal$TopAppBar$Implementation$topAppBar, author$project$Internal$Msg$TopAppBarMsg);
-var author$project$Material$TopAppBar$view = author$project$Internal$TopAppBar$Implementation$view;
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
-var author$project$Display$ProjectsUI$topAppBar = function (model) {
-	return A5(
-		author$project$Material$TopAppBar$view,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'topAppBar'),
-		model.mdc,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				author$project$Material$TopAppBar$section,
-				_List_fromArray(
-					[author$project$Material$TopAppBar$alignStart]),
-				_List_fromArray(
-					[
-						A2(
-						author$project$Material$TopAppBar$title,
-						_List_Nil,
-						_List_fromArray(
-							[
-								elm$html$Html$text(
-								author$project$Display$ProjectsUI$title(model))
-							]))
-					]))
-			]));
-};
-var author$project$Internal$Options$Set = function (a) {
-	return {$: 'Set', a: a};
-};
-var author$project$Internal$Options$option = author$project$Internal$Options$Set;
-var author$project$Internal$Button$Implementation$ripple = author$project$Internal$Options$option(
-	function (options) {
-		return _Utils_update(
-			options,
-			{ripple: true});
-	});
-var author$project$Material$Button$ripple = author$project$Internal$Button$Implementation$ripple;
-var author$project$Internal$Button$Implementation$defaultConfig = {disabled: false, icon: elm$core$Maybe$Nothing, link: elm$core$Maybe$Nothing, onClick: elm$core$Maybe$Nothing, ripple: false, trailingIcon: false};
-var author$project$Internal$Button$Model$Click = F2(
-	function (a, b) {
-		return {$: 'Click', a: a, b: b};
-	});
-var author$project$Internal$Icon$Implementation$defaultConfig = {node: 'i'};
 var author$project$Internal$Options$aria = F2(
 	function (key, val) {
 		return author$project$Internal$Options$Attribute(
 			A2(elm$html$Html$Attributes$attribute, 'aria-' + key, val));
 	});
+var author$project$Internal$Dispatch$defaultConfig = author$project$Internal$Dispatch$Config(
+	{decoders: elm$core$Dict$empty, lift: elm$core$Maybe$Nothing});
+var author$project$Internal$Options$Summary = F6(
+	function (classes, css, attrs, internal, dispatch, config) {
+		return {attrs: attrs, classes: classes, config: config, css: css, dispatch: dispatch, internal: internal};
+	});
+var author$project$Internal$Options$collect = A2(
+	elm$core$Basics$composeR,
+	A5(author$project$Internal$Options$Summary, _List_Nil, _List_Nil, _List_Nil, _List_Nil, author$project$Internal$Dispatch$defaultConfig),
+	author$project$Internal$Options$recollect);
+var author$project$Internal$Options$Class = function (a) {
+	return {$: 'Class', a: a};
+};
+var author$project$Internal$Options$cs = function (c) {
+	return author$project$Internal$Options$Class(c);
+};
 var elm$virtual_dom$VirtualDom$node = function (tag) {
 	return _VirtualDom_node(
 		_VirtualDom_noScript(tag));
 };
 var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var author$project$Internal$Icon$Implementation$view = F2(
 	function (options, name) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Icon$Implementation$defaultConfig, options);
@@ -12842,1307 +12915,17 @@ var author$project$Internal$Icon$Implementation$view = F2(
 					elm$html$Html$text(name)
 				]));
 	});
-var elm$virtual_dom$VirtualDom$mapAttribute = _VirtualDom_mapAttribute;
-var elm$html$Html$Attributes$map = elm$virtual_dom$VirtualDom$mapAttribute;
-var author$project$Internal$Options$attribute = A2(
-	elm$core$Basics$composeL,
-	author$project$Internal$Options$Attribute,
-	elm$html$Html$Attributes$map(elm$core$Basics$never));
-var author$project$Internal$Options$onClick = function (msg) {
-	return A2(
-		author$project$Internal$Options$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
-var author$project$Internal$GlobalEvents$onMouseUp = author$project$Internal$GlobalEvents$listener('globalmouseup');
-var author$project$Internal$GlobalEvents$onPointerUp = author$project$Internal$GlobalEvents$listener('globalpointerup');
-var author$project$Internal$GlobalEvents$onTouchEnd = author$project$Internal$GlobalEvents$listener('globaltouchend');
-var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
-var author$project$Internal$Options$id = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$id);
-var author$project$Internal$Ripple$Model$strings = {varFgScale: '--mdc-ripple-fg-scale', varFgSize: '--mdc-ripple-fg-size', varFgTranslateEnd: '--mdc-ripple-fg-translate-end', varFgTranslateStart: '--mdc-ripple-fg-translate-start', varLeft: '--mdc-ripple-left', varTop: '--mdc-ripple-top'};
-var author$project$Internal$Ripple$Implementation$cssVariables = F2(
-	function (isUnbounded, _n0) {
-		var fgScale = _n0.fgScale;
-		var translateStart = _n0.translateStart;
-		var translateEnd = _n0.translateEnd;
-		var initialSize = _n0.initialSize;
-		var frame = _n0.frame;
-		var unboundedCoords = isUnbounded ? {
-			left: elm$core$Basics$round((frame.width - initialSize) / 2),
-			top: elm$core$Basics$round((frame.height - initialSize) / 2)
-		} : {left: 0, top: 0};
-		var fgSize = elm$core$String$fromInt(initialSize) + 'px';
-		var variables = elm$core$List$concat(
-			_List_fromArray(
-				[
-					_List_fromArray(
-					[
-						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgSize, fgSize),
-						A2(
-						author$project$Internal$Options$css,
-						author$project$Internal$Ripple$Model$strings.varFgScale,
-						elm$core$String$fromFloat(fgScale))
-					]),
-					isUnbounded ? _List_fromArray(
-					[
-						A2(
-						author$project$Internal$Options$css,
-						author$project$Internal$Ripple$Model$strings.varTop,
-						elm$core$String$fromFloat(unboundedCoords.top) + 'px'),
-						A2(
-						author$project$Internal$Options$css,
-						author$project$Internal$Ripple$Model$strings.varLeft,
-						elm$core$String$fromFloat(unboundedCoords.left) + 'px')
-					]) : _List_fromArray(
-					[
-						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgTranslateStart, translateStart),
-						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgTranslateEnd, translateEnd)
-					])
-				]));
-		return variables;
-	});
-var author$project$Internal$Ripple$Model$Activate0 = F2(
-	function (a, b) {
-		return {$: 'Activate0', a: a, b: b};
-	});
-var author$project$Internal$Ripple$Model$Event = F2(
-	function (eventType, pagePoint) {
-		return {eventType: eventType, pagePoint: pagePoint};
-	});
-var elm$json$Json$Decode$oneOf = _Json_oneOf;
-var author$project$Internal$Ripple$Implementation$decodeActivate = function (_n0) {
-	var domId = _n0.domId;
-	var isUnbounded = _n0.isUnbounded;
-	var isActivated = _n0.isActivated;
-	var previousActivationEvent = _n0.previousActivationEvent;
-	var decodePagePoint = A3(
-		elm$json$Json$Decode$map2,
-		F2(
-			function (pageX, pageY) {
-				return {pageX: pageX, pageY: pageY};
-			}),
-		A2(
-			elm$json$Json$Decode$at,
-			_List_fromArray(
-				['pageX']),
-			elm$json$Json$Decode$float),
-		A2(
-			elm$json$Json$Decode$at,
-			_List_fromArray(
-				['pageY']),
-			elm$json$Json$Decode$float));
-	var firstChangedTouch = A2(
-		elm$json$Json$Decode$andThen,
-		function (changedTouches) {
-			var _n3 = elm$core$List$head(changedTouches);
-			if (_n3.$ === 'Just') {
-				var pagePoint = _n3.a;
-				return elm$json$Json$Decode$succeed(pagePoint);
-			} else {
-				return elm$json$Json$Decode$fail('');
-			}
-		},
-		A2(
-			elm$json$Json$Decode$at,
-			_List_fromArray(
-				['changedTouches']),
-			elm$json$Json$Decode$list(decodePagePoint)));
-	var decodeIsSurfaceDisabled = elm$json$Json$Decode$oneOf(
-		_List_fromArray(
-			[
-				A2(
-				elm$json$Json$Decode$map,
-				elm$core$Basics$always(true),
-				A2(
-					elm$json$Json$Decode$at,
-					_List_fromArray(
-						['disabled']),
-					elm$json$Json$Decode$string)),
-				elm$json$Json$Decode$succeed(false)
-			]));
-	var decodeEventType = A2(
-		elm$json$Json$Decode$at,
-		_List_fromArray(
-			['type']),
-		elm$json$Json$Decode$string);
-	var decodeIsSameInteraction = function () {
-		if (previousActivationEvent.$ === 'Nothing') {
-			return elm$json$Json$Decode$succeed(false);
-		} else {
-			var event = previousActivationEvent.a;
-			return A2(
-				elm$json$Json$Decode$map,
-				elm$core$Basics$eq(event.eventType),
-				decodeEventType);
-		}
-	}();
-	var decodeEvent = A2(
-		elm$json$Json$Decode$andThen,
-		function (eventType) {
-			if (eventType === 'touchstart') {
-				return A2(
-					elm$json$Json$Decode$map,
-					author$project$Internal$Ripple$Model$Event(eventType),
-					firstChangedTouch);
-			} else {
-				return A2(
-					elm$json$Json$Decode$map,
-					author$project$Internal$Ripple$Model$Event(eventType),
-					decodePagePoint);
-			}
-		},
-		decodeEventType);
-	return A2(
-		elm$json$Json$Decode$andThen,
-		A2(
-			elm$core$Basics$composeR,
-			elm$core$Maybe$map(elm$json$Json$Decode$succeed),
-			elm$core$Maybe$withDefault(
-				elm$json$Json$Decode$fail(''))),
-		A4(
-			elm$json$Json$Decode$map3,
-			F3(
-				function (isSurfaceDisabled, isSameInteraction, event) {
-					return (isActivated || (isSurfaceDisabled || isSameInteraction)) ? elm$core$Maybe$Nothing : elm$core$Maybe$Just(
-						A2(
-							author$project$Internal$Ripple$Model$Activate0,
-							domId,
-							{event: event, isSurfaceDisabled: false, isUnbounded: isUnbounded, wasElementMadeActive: false}));
-				}),
-			decodeIsSurfaceDisabled,
-			decodeIsSameInteraction,
-			decodeEvent));
-};
-var author$project$Internal$Ripple$Model$ClientRect = F4(
-	function (top, left, width, height) {
-		return {height: height, left: left, top: top, width: width};
-	});
-var debois$elm_dom$DOM$offsetHeight = A2(elm$json$Json$Decode$field, 'offsetHeight', elm$json$Json$Decode$float);
-var debois$elm_dom$DOM$offsetLeft = A2(elm$json$Json$Decode$field, 'offsetLeft', elm$json$Json$Decode$float);
-var debois$elm_dom$DOM$offsetTop = A2(elm$json$Json$Decode$field, 'offsetTop', elm$json$Json$Decode$float);
-var debois$elm_dom$DOM$offsetWidth = A2(elm$json$Json$Decode$field, 'offsetWidth', elm$json$Json$Decode$float);
-var author$project$Internal$Ripple$Implementation$decodeClientRect = debois$elm_dom$DOM$target(
-	A5(elm$json$Json$Decode$map4, author$project$Internal$Ripple$Model$ClientRect, debois$elm_dom$DOM$offsetTop, debois$elm_dom$DOM$offsetLeft, debois$elm_dom$DOM$offsetWidth, debois$elm_dom$DOM$offsetHeight));
-var author$project$Internal$Ripple$Model$Blur = {$: 'Blur'};
-var author$project$Internal$Ripple$Model$Deactivate = {$: 'Deactivate'};
-var author$project$Internal$Ripple$Model$Focus = {$: 'Focus'};
-var author$project$Internal$Ripple$Model$SetCssVariables = F2(
-	function (a, b) {
-		return {$: 'SetCssVariables', a: a, b: b};
-	});
-var author$project$Internal$Ripple$Model$activationEventTypes = _List_fromArray(
-	['touchstart', 'pointerdown', 'mousedown']);
-var author$project$Internal$Ripple$Model$cssClasses = {bgFocused: 'mdc-ripple-upgraded--background-focused', fgActivation: 'mdc-ripple-upgraded--foreground-activation', fgDeactivation: 'mdc-ripple-upgraded--foreground-deactivation', root: 'mdc-ripple-upgraded', unbounded: 'mdc-ripple-upgraded--unbounded'};
-var author$project$Internal$Ripple$Implementation$view = F5(
-	function (isUnbounded, domId, lift, model, options) {
-		var noStyle = elm$html$Html$text('');
-		var focusHandler = A2(
-			author$project$Internal$Options$on,
-			'focus',
-			elm$json$Json$Decode$succeed(
-				lift(author$project$Internal$Ripple$Model$Focus)));
-		var deactivateHandler = function (event) {
-			var deactivate = elm$json$Json$Decode$succeed(
-				lift(author$project$Internal$Ripple$Model$Deactivate));
-			return author$project$Internal$Options$many(
-				_List_fromArray(
-					[
-						author$project$Internal$GlobalEvents$onTouchEnd(deactivate),
-						author$project$Internal$GlobalEvents$onMouseUp(deactivate),
-						author$project$Internal$GlobalEvents$onPointerUp(deactivate)
-					]));
-		};
-		var blurHandler = A2(
-			author$project$Internal$Options$on,
-			'blur',
-			elm$json$Json$Decode$succeed(
-				lift(author$project$Internal$Ripple$Model$Blur)));
-		var baseProperties = author$project$Internal$Options$many(
-			_List_fromArray(
-				[
-					author$project$Internal$Options$id(domId),
-					author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.root),
-					A2(
-					author$project$Internal$Options$when,
-					isUnbounded,
-					author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.unbounded)),
-					model.focused ? author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.bgFocused) : author$project$Internal$Options$nop
-				]));
-		var baseInteractionHandler = author$project$Internal$Options$many(
-			_List_fromArray(
-				[focusHandler, blurHandler]));
-		var activateHandler = author$project$Internal$Options$many(
-			A2(
-				elm$core$List$map,
-				function (tipe) {
-					return A2(
-						author$project$Internal$Options$on,
-						tipe,
-						A2(
-							elm$json$Json$Decode$map,
-							lift,
-							author$project$Internal$Ripple$Implementation$decodeActivate(
-								{
-									domId: domId,
-									isActivated: function () {
-										var _n3 = model.animationState;
-										if (_n3.$ === 'Activated') {
-											var activationState = _n3.a;
-											return !activationState.deactivated;
-										} else {
-											return false;
-										}
-									}(),
-									isUnbounded: isUnbounded,
-									previousActivationEvent: function () {
-										var _n4 = model.animationState;
-										if (_n4.$ === 'Activated') {
-											var activationEvent = _n4.a.activationEvent;
-											return elm$core$Maybe$Just(activationEvent);
-										} else {
-											return elm$core$Maybe$Nothing;
-										}
-									}()
-								})));
-				},
-				author$project$Internal$Ripple$Model$activationEventTypes));
-		var _n0 = model.animationState;
-		switch (_n0.$) {
-			case 'Idle':
-				var interactionHandler = author$project$Internal$Options$many(
-					_List_fromArray(
-						[baseInteractionHandler, activateHandler]));
-				var cssVars = function () {
-					var _n1 = model.clientRect;
-					if (_n1.$ === 'Just') {
-						var clientRect = _n1.a;
-						var _n2 = A2(author$project$Internal$Ripple$Implementation$layoutInternal, isUnbounded, clientRect);
-						var fgScale = _n2.fgScale;
-						var initialSize = _n2.initialSize;
-						return A2(
-							author$project$Internal$Ripple$Implementation$cssVariables,
-							isUnbounded,
-							{fgScale: fgScale, frame: clientRect, initialSize: initialSize, translateEnd: '0px', translateStart: '0px'});
-					} else {
-						return _List_Nil;
-					}
-				}();
-				var properties = author$project$Internal$Options$many(
-					_List_fromArray(
-						[
-							baseProperties,
-							author$project$Internal$Options$many(cssVars),
-							A2(
-							author$project$Internal$Options$when,
-							_Utils_eq(model.clientRect, elm$core$Maybe$Nothing),
-							author$project$Internal$GlobalEvents$onTick(
-								A2(
-									elm$json$Json$Decode$map,
-									A2(
-										elm$core$Basics$composeL,
-										lift,
-										author$project$Internal$Ripple$Model$SetCssVariables(isUnbounded)),
-									author$project$Internal$Ripple$Implementation$decodeClientRect)))
-						]));
-				return {interactionHandler: interactionHandler, properties: properties, style: noStyle};
-			case 'Activated':
-				var activatedData = _n0.a;
-				var interactionHandler = author$project$Internal$Options$many(
-					_List_fromArray(
-						[
-							baseInteractionHandler,
-							activateHandler,
-							deactivateHandler(activatedData.activationEvent)
-						]));
-				var cssVars = A2(
-					author$project$Internal$Ripple$Implementation$cssVariables,
-					isUnbounded,
-					{fgScale: activatedData.fgScale, frame: activatedData.frame, initialSize: activatedData.initialSize, translateEnd: activatedData.translateEnd, translateStart: activatedData.translateStart});
-				var properties = author$project$Internal$Options$many(
-					_List_fromArray(
-						[
-							baseProperties,
-							author$project$Internal$Options$many(cssVars),
-							author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.fgActivation),
-							A2(
-							author$project$Internal$Options$when,
-							isUnbounded,
-							A2(author$project$Internal$Options$data, 'mdc-ripple-is-unbounded', '1'))
-						]));
-				return {interactionHandler: interactionHandler, properties: properties, style: noStyle};
-			default:
-				var activatedData = _n0.a;
-				var interactionHandler = author$project$Internal$Options$many(
-					_List_fromArray(
-						[baseInteractionHandler, activateHandler]));
-				var cssVars = A2(
-					author$project$Internal$Ripple$Implementation$cssVariables,
-					isUnbounded,
-					{fgScale: activatedData.fgScale, frame: activatedData.frame, initialSize: activatedData.initialSize, translateEnd: activatedData.translateEnd, translateStart: activatedData.translateStart});
-				var properties = author$project$Internal$Options$many(
-					_List_fromArray(
-						[
-							baseProperties,
-							author$project$Internal$Options$many(cssVars),
-							author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.fgDeactivation)
-						]));
-				return {interactionHandler: interactionHandler, properties: properties, style: noStyle};
-		}
-	});
-var elm$html$Html$a = _VirtualDom_node('a');
-var elm$html$Html$button = _VirtualDom_node('button');
-var elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$bool(bool));
-	});
-var elm$html$Html$Attributes$disabled = elm$html$Html$Attributes$boolProperty('disabled');
-var elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var author$project$Internal$Button$Implementation$button = F5(
-	function (domId, lift, model, options, nodes) {
-		var rippleInterface = A5(
-			author$project$Internal$Ripple$Implementation$view,
-			false,
-			domId,
-			A2(elm$core$Basics$composeL, lift, author$project$Internal$Button$Model$RippleMsg),
-			model.ripple,
-			_List_Nil);
-		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Button$Implementation$defaultConfig, options);
-		var config = summary.config;
-		return A5(
-			author$project$Internal$Options$apply,
-			summary,
-			(!_Utils_eq(config.link, elm$core$Maybe$Nothing)) ? elm$html$Html$a : elm$html$Html$button,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-button'),
-					author$project$Internal$Options$cs('mdc-js-button'),
-					A2(
-					author$project$Internal$Options$when,
-					summary.config.ripple,
-					author$project$Internal$Options$cs('mdc-js-ripple-effect')),
-					A2(
-					author$project$Internal$Options$when,
-					(!_Utils_eq(config.link, elm$core$Maybe$Nothing)) && (!config.disabled),
-					author$project$Internal$Options$attribute(
-						elm$html$Html$Attributes$href(
-							A2(elm$core$Maybe$withDefault, '', config.link)))),
-					A2(
-					author$project$Internal$Options$when,
-					config.disabled,
-					author$project$Internal$Options$attribute(
-						elm$html$Html$Attributes$disabled(true))),
-					A2(
-					author$project$Internal$Options$when,
-					config.disabled,
-					author$project$Internal$Options$cs('mdc-button--disabled')),
-					A3(
-					elm$core$Basics$composeL,
-					author$project$Internal$Options$when(config.ripple),
-					author$project$Internal$Options$many,
-					_List_fromArray(
-						[rippleInterface.interactionHandler, rippleInterface.properties])),
-					A2(
-					elm$core$Maybe$withDefault,
-					author$project$Internal$Options$nop,
-					A2(
-						elm$core$Maybe$map,
-						A2(
-							elm$core$Basics$composeL,
-							A2(elm$core$Basics$composeL, author$project$Internal$Options$onClick, lift),
-							author$project$Internal$Button$Model$Click(config.ripple)),
-						config.onClick))
-				]),
-			_List_Nil,
-			elm$core$List$concat(
-				_List_fromArray(
-					[
-						(!config.trailingIcon) ? A2(
-						elm$core$Maybe$withDefault,
-						_List_Nil,
-						A2(
-							elm$core$Maybe$map,
-							function (icon_) {
-								return _List_fromArray(
-									[
-										A2(
-										author$project$Internal$Icon$Implementation$view,
-										_List_fromArray(
-											[
-												author$project$Internal$Options$cs('mdc-button__icon')
-											]),
-										icon_)
-									]);
-							},
-							config.icon)) : _List_Nil,
-						nodes,
-						config.trailingIcon ? A2(
-						elm$core$Maybe$withDefault,
-						_List_Nil,
-						A2(
-							elm$core$Maybe$map,
-							function (icon_) {
-								return _List_fromArray(
-									[
-										A2(
-										author$project$Internal$Icon$Implementation$view,
-										_List_fromArray(
-											[
-												author$project$Internal$Options$cs('mdc-button__icon')
-											]),
-										icon_)
-									]);
-							},
-							config.icon)) : _List_Nil
-					])));
-	});
-var author$project$Internal$Button$Implementation$view = F2(
-	function (lift, index) {
-		return A5(
-			author$project$Internal$Component$render,
-			author$project$Internal$Button$Implementation$getSet.get,
-			author$project$Internal$Button$Implementation$button(index),
-			author$project$Internal$Msg$ButtonMsg,
-			lift,
-			index);
-	});
-var author$project$Material$Button$view = author$project$Internal$Button$Implementation$view;
-var author$project$Internal$Dialog$Implementation$accept = author$project$Internal$Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--accept');
-var author$project$Material$Dialog$accept = author$project$Internal$Dialog$Implementation$accept;
-var elm$html$Html$footer = _VirtualDom_node('footer');
-var author$project$Internal$Dialog$Implementation$actions = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$footer,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-dialog__actions'),
-			options));
-};
-var author$project$Material$Dialog$actions = author$project$Internal$Dialog$Implementation$actions;
-var author$project$Internal$Dialog$Implementation$cancel = author$project$Internal$Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--cancel');
-var author$project$Material$Dialog$cancel = author$project$Internal$Dialog$Implementation$cancel;
-var author$project$Internal$Dialog$Implementation$content = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$section,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-dialog__content'),
-			options));
-};
-var author$project$Material$Dialog$content = author$project$Internal$Dialog$Implementation$content;
-var author$project$Internal$Dialog$Implementation$onClose = function (handler) {
-	return author$project$Internal$Options$option(
-		function (config) {
-			return _Utils_update(
-				config,
-				{
-					onClose: elm$core$Maybe$Just(handler)
-				});
-		});
-};
-var author$project$Material$Dialog$onClose = author$project$Internal$Dialog$Implementation$onClose;
-var author$project$Internal$Dialog$Implementation$open = author$project$Internal$Options$option(
-	function (config) {
-		return _Utils_update(
-			config,
-			{open: true});
-	});
-var author$project$Material$Dialog$open = author$project$Internal$Dialog$Implementation$open;
-var author$project$Internal$Dialog$Implementation$title = author$project$Internal$Options$cs('mdc-dialog__title');
-var author$project$Material$Dialog$title = author$project$Internal$Dialog$Implementation$title;
-var author$project$Internal$Dialog$Implementation$checkScrimClick = debois$elm_dom$DOM$target(
-	A2(
-		elm$json$Json$Decode$map,
-		function (className) {
-			var hasClass = function (_class) {
-				return A2(elm$core$String$contains, ' ' + (_class + ' '), ' ' + (className + ' '));
-			};
-			return hasClass('mdc-dialog__scrim') ? true : false;
-		},
-		A2(
-			elm$json$Json$Decode$at,
-			_List_fromArray(
-				['className']),
-			elm$json$Json$Decode$string)));
-var author$project$Internal$Dialog$Implementation$container = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$div,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-dialog__container'),
-			options));
-};
-var author$project$Internal$Dialog$Implementation$defaultConfig = {noScrim: false, onClose: elm$core$Maybe$Nothing, open: false};
-var author$project$Internal$Dialog$Implementation$scrim = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$div,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-dialog__scrim'),
-			options));
-};
-var author$project$Internal$Dialog$Implementation$surface = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$div,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-dialog__surface'),
-			options));
-};
-var author$project$Internal$Dialog$Model$EndAnimation = {$: 'EndAnimation'};
-var author$project$Internal$Dialog$Model$NoOp = {$: 'NoOp'};
-var author$project$Internal$Dialog$Model$StartAnimation = function (a) {
-	return {$: 'StartAnimation', a: a};
-};
-var author$project$Internal$Options$role = function (value) {
-	return author$project$Internal$Options$Attribute(
-		A2(elm$html$Html$Attributes$attribute, 'role', value));
-};
-var author$project$Internal$Dialog$Implementation$dialog = F4(
-	function (lift, model, options, nodes) {
-		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Dialog$Implementation$defaultConfig, options);
-		var config = summary.config;
-		var stateChanged = !_Utils_eq(config.open, model.open);
-		return A5(
-			author$project$Internal$Options$apply,
-			summary,
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-dialog'),
-					author$project$Internal$Options$role('alertdialog'),
-					A2(author$project$Internal$Options$aria, 'modal', 'true'),
-					A2(
-					author$project$Internal$Options$when,
-					stateChanged,
-					author$project$Internal$GlobalEvents$onTick(
-						elm$json$Json$Decode$succeed(
-							lift(
-								author$project$Internal$Dialog$Model$StartAnimation(config.open))))),
-					A2(
-					author$project$Internal$Options$when,
-					model.open && config.open,
-					author$project$Internal$Options$cs('mdc-dialog--open')),
-					A2(
-					author$project$Internal$Options$when,
-					(config.open && stateChanged) || (config.open && model.animating),
-					author$project$Internal$Options$cs('mdc-dialog--opening')),
-					A2(
-					author$project$Internal$Options$when,
-					((!config.open) && stateChanged) || ((!config.open) && model.animating),
-					author$project$Internal$Options$cs('mdc-dialog--closing')),
-					A2(
-					author$project$Internal$Options$when,
-					model.animating,
-					A2(
-						author$project$Internal$Options$on,
-						'transitionend',
-						elm$json$Json$Decode$succeed(
-							lift(author$project$Internal$Dialog$Model$EndAnimation)))),
-					A3(
-					elm$core$Basics$composeL,
-					author$project$Internal$Options$when(model.open && (config.open && (!config.noScrim))),
-					author$project$Internal$Options$many,
-					_List_fromArray(
-						[
-							A2(author$project$Internal$Options$data, 'focustrap', '{}'),
-							A2(
-							author$project$Internal$Options$on,
-							'keydown',
-							A3(
-								elm$json$Json$Decode$map2,
-								F2(
-									function (key, keyCode) {
-										return (_Utils_eq(
-											key,
-											elm$core$Maybe$Just('Escape')) || (keyCode === 27)) ? A2(
-											elm$core$Maybe$withDefault,
-											lift(author$project$Internal$Dialog$Model$NoOp),
-											config.onClose) : lift(author$project$Internal$Dialog$Model$NoOp);
-									}),
-								elm$json$Json$Decode$oneOf(
-									_List_fromArray(
-										[
-											A2(
-											elm$json$Json$Decode$map,
-											elm$core$Maybe$Just,
-											A2(
-												elm$json$Json$Decode$at,
-												_List_fromArray(
-													['key']),
-												elm$json$Json$Decode$string)),
-											elm$json$Json$Decode$succeed(elm$core$Maybe$Nothing)
-										])),
-								A2(
-									elm$json$Json$Decode$at,
-									_List_fromArray(
-										['keyCode']),
-									elm$json$Json$Decode$int)))
-						]))
-				]),
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					author$project$Internal$Dialog$Implementation$container,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(author$project$Internal$Dialog$Implementation$surface, _List_Nil, nodes)
-						])),
-					config.noScrim ? elm$html$Html$text('') : A2(
-					author$project$Internal$Dialog$Implementation$scrim,
-					_List_fromArray(
-						[
-							A2(
-							author$project$Internal$Options$on,
-							'click',
-							A2(
-								elm$json$Json$Decode$map,
-								function (isScrimClick) {
-									return isScrimClick ? A2(
-										elm$core$Maybe$withDefault,
-										lift(author$project$Internal$Dialog$Model$NoOp),
-										config.onClose) : lift(author$project$Internal$Dialog$Model$NoOp);
-								},
-								author$project$Internal$Dialog$Implementation$checkScrimClick))
-						]),
-					_List_Nil)
-				]));
-	});
-var author$project$Internal$Dialog$Implementation$view = A3(author$project$Internal$Component$render, author$project$Internal$Dialog$Implementation$getSet.get, author$project$Internal$Dialog$Implementation$dialog, author$project$Internal$Msg$DialogMsg);
-var author$project$Material$Dialog$view = author$project$Internal$Dialog$Implementation$view;
-var author$project$Material$Options$onClick = author$project$Internal$Options$onClick;
-var elm$html$Html$Events$targetValue = A2(
-	elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	elm$json$Json$Decode$string);
-var author$project$Internal$Options$onInput = function (f) {
-	return A2(
-		author$project$Internal$Options$on,
-		'input',
-		A2(elm$json$Json$Decode$map, f, elm$html$Html$Events$targetValue));
-};
-var author$project$Material$Options$onInput = author$project$Internal$Options$onInput;
-var author$project$Material$Options$styled = author$project$Internal$Options$styled;
-var author$project$Material$Options$when = author$project$Internal$Options$when;
-var author$project$Internal$TextField$Implementation$label = A2(
-	elm$core$Basics$composeL,
-	author$project$Internal$Options$option,
-	F2(
-		function (str, config) {
-			return _Utils_update(
-				config,
-				{
-					labelText: elm$core$Maybe$Just(str)
-				});
-		}));
-var author$project$Material$TextField$label = author$project$Internal$TextField$Implementation$label;
-var author$project$Internal$Options$internalId = function (id_) {
-	return author$project$Internal$Options$option(
-		function (config) {
-			return _Utils_update(
-				config,
-				{id_: id_});
-		});
-};
-var author$project$Internal$Dispatch$clear = function (_n0) {
-	var config = _n0.a;
-	return author$project$Internal$Dispatch$Config(
-		_Utils_update(
-			config,
-			{decoders: elm$core$Dict$empty}));
-};
-var author$project$Internal$Options$applyNativeControl = F3(
-	function (summary, ctor, options) {
-		return ctor(
-			A2(
-				author$project$Internal$Options$addAttributes,
-				A2(
-					author$project$Internal$Options$recollect,
-					{
-						attrs: _List_Nil,
-						classes: _List_Nil,
-						config: _Utils_Tuple0,
-						css: _List_Nil,
-						dispatch: author$project$Internal$Dispatch$clear(summary.dispatch),
-						internal: _List_Nil
-					},
-					_Utils_ap(summary.config.nativeControl, options)),
-				_List_Nil));
-	});
-var elm$html$Html$Attributes$for = elm$html$Html$Attributes$stringProperty('htmlFor');
-var author$project$Internal$Options$for = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$for);
-var author$project$Internal$Options$onBlur = function (msg) {
-	return A2(
-		author$project$Internal$Options$on,
-		'blur',
-		elm$json$Json$Decode$succeed(msg));
-};
-var author$project$Internal$TextField$Model$Geometry = F3(
-	function (width, height, labelWidth) {
-		return {height: height, labelWidth: labelWidth, width: width};
-	});
-var debois$elm_dom$DOM$childNode = function (idx) {
-	return elm$json$Json$Decode$at(
-		_List_fromArray(
-			[
-				'childNodes',
-				elm$core$String$fromInt(idx)
-			]));
-};
-var debois$elm_dom$DOM$parentElement = function (decoder) {
-	return A2(elm$json$Json$Decode$field, 'parentElement', decoder);
-};
-var author$project$Internal$TextField$Implementation$decodeGeometry = debois$elm_dom$DOM$target(
-	debois$elm_dom$DOM$parentElement(
-		A4(
-			elm$json$Json$Decode$map3,
-			author$project$Internal$TextField$Model$Geometry,
-			A2(debois$elm_dom$DOM$childNode, 2, debois$elm_dom$DOM$offsetWidth),
-			A2(debois$elm_dom$DOM$childNode, 2, debois$elm_dom$DOM$offsetHeight),
-			A2(debois$elm_dom$DOM$childNode, 1, debois$elm_dom$DOM$offsetWidth))));
-var author$project$Internal$TextField$Implementation$defaultConfig = {
-	cols: elm$core$Maybe$Nothing,
-	defaultValue: elm$core$Maybe$Nothing,
-	disabled: false,
-	fullWidth: false,
-	id_: '',
-	invalid: false,
-	labelFloat: false,
-	labelText: elm$core$Maybe$Nothing,
-	leadingIcon: elm$core$Maybe$Nothing,
-	nativeControl: _List_Nil,
-	onLeadingIconClick: elm$core$Maybe$Nothing,
-	onTrailingIconClick: elm$core$Maybe$Nothing,
-	outlined: false,
-	pattern: elm$core$Maybe$Nothing,
-	placeholder: elm$core$Maybe$Nothing,
-	required: false,
-	rows: elm$core$Maybe$Nothing,
-	textarea: false,
-	trailingIcon: elm$core$Maybe$Nothing,
-	type_: elm$core$Maybe$Just('text'),
-	value: elm$core$Maybe$Nothing
-};
-var elm$html$Html$Attributes$tabindex = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'tabIndex',
-		elm$core$String$fromInt(n));
-};
-var author$project$Internal$Options$tabindex = function (value) {
-	return author$project$Internal$Options$Attribute(
-		elm$html$Html$Attributes$tabindex(value));
-};
-var elm$html$Html$i = _VirtualDom_node('i');
-var author$project$Internal$TextField$Implementation$iconView = F3(
-	function (lift, icon, handler) {
-		if (icon.$ === 'Just') {
-			var name = icon.a;
-			return A3(
-				author$project$Internal$Options$styled,
-				elm$html$Html$i,
-				_List_fromArray(
-					[
-						author$project$Internal$Options$cs('material-icons mdc-text-field__icon'),
-						A2(
-						author$project$Internal$Options$when,
-						!_Utils_eq(handler, elm$core$Maybe$Nothing),
-						author$project$Internal$Options$tabindex(0)),
-						A2(
-						author$project$Internal$Options$when,
-						!_Utils_eq(handler, elm$core$Maybe$Nothing),
-						author$project$Internal$Options$role('button')),
-						A2(
-						elm$core$Maybe$withDefault,
-						author$project$Internal$Options$nop,
-						A2(elm$core$Maybe$map, author$project$Internal$Options$onClick, handler))
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text(name)
-					]));
-		} else {
-			return elm$html$Html$text('');
-		}
-	});
-var author$project$Internal$TextField$Model$Blur = {$: 'Blur'};
-var author$project$Internal$TextField$Model$Focus = function (a) {
-	return {$: 'Focus', a: a};
-};
-var author$project$Internal$TextField$Model$Input = function (a) {
-	return {$: 'Input', a: a};
-};
-var author$project$Internal$TextField$Model$defaultGeometry = {height: 0, labelWidth: 0, width: 0};
-var elm$html$Html$input = _VirtualDom_node('input');
-var elm$html$Html$label = _VirtualDom_node('label');
-var elm$html$Html$textarea = _VirtualDom_node('textarea');
-var elm$html$Html$Attributes$cols = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'cols',
-		elm$core$String$fromInt(n));
-};
-var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
-var elm$virtual_dom$VirtualDom$property = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_property,
-			_VirtualDom_noInnerHtmlOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var elm$html$Html$Attributes$property = elm$virtual_dom$VirtualDom$property;
-var elm$html$Html$Attributes$rows = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'rows',
-		elm$core$String$fromInt(n));
-};
-var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
-var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
-var elm$regex$Regex$Match = F4(
-	function (match, index, number, submatches) {
-		return {index: index, match: match, number: number, submatches: submatches};
-	});
-var elm$regex$Regex$contains = _Regex_contains;
-var elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
-var elm$regex$Regex$fromString = function (string) {
-	return A2(
-		elm$regex$Regex$fromStringWith,
-		{caseInsensitive: false, multiline: false},
-		string);
-};
-var author$project$Internal$TextField$Implementation$textField = F5(
-	function (domId, lift, model, options, list) {
-		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$TextField$Implementation$defaultConfig, options);
-		var config = summary.config;
-		var focused = model.focused && (!config.disabled);
-		var isDirty = model.isDirty || A2(
-			elm$core$Maybe$withDefault,
-			false,
-			A2(
-				elm$core$Maybe$map,
-				elm$core$Basics$neq(''),
-				config.value));
-		var htmlLabel = A3(
-			author$project$Internal$Options$styled,
-			elm$html$Html$label,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-floating-label'),
-					A2(
-					author$project$Internal$Options$when,
-					focused || isDirty,
-					author$project$Internal$Options$cs('mdc-floating-label--float-above')),
-					author$project$Internal$Options$for(config.id_)
-				]),
-			function () {
-				var _n1 = config.labelText;
-				if (_n1.$ === 'Just') {
-					var str = _n1.a;
-					return _List_fromArray(
-						[
-							elm$html$Html$text(str)
-						]);
-				} else {
-					return _List_Nil;
-				}
-			}());
-		var isInvalid = config.invalid || function () {
-			var _n0 = config.pattern;
-			if (_n0.$ === 'Just') {
-				var pattern_ = _n0.a;
-				return A2(
-					elm$core$Maybe$withDefault,
-					false,
-					A3(
-						elm$core$Maybe$map2,
-						function (regex) {
-							return A2(
-								elm$core$Basics$composeL,
-								elm$core$Basics$not,
-								elm$regex$Regex$contains(regex));
-						},
-						elm$regex$Regex$fromString('^' + (pattern_ + '$')),
-						model.value));
-			} else {
-				return false;
-			}
-		}();
-		var leadingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.leadingIcon, config.onLeadingIconClick);
-		var trailingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.trailingIcon, config.onTrailingIconClick);
-		return A5(
-			author$project$Internal$Options$apply,
-			summary,
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-text-field'),
-					A2(
-					author$project$Internal$Options$when,
-					focused,
-					author$project$Internal$Options$cs('mdc-text-field--focused')),
-					A2(
-					author$project$Internal$Options$when,
-					config.disabled,
-					author$project$Internal$Options$cs('mdc-text-field--disabled')),
-					A2(
-					author$project$Internal$Options$when,
-					config.fullWidth,
-					author$project$Internal$Options$cs('mdc-text-field--fullwidth')),
-					A2(
-					author$project$Internal$Options$when,
-					isInvalid,
-					author$project$Internal$Options$cs('mdc-text-field--invalid')),
-					A2(
-					author$project$Internal$Options$when,
-					config.textarea,
-					author$project$Internal$Options$cs('mdc-text-field--textarea')),
-					A2(
-					author$project$Internal$Options$when,
-					config.outlined && (!config.textarea),
-					author$project$Internal$Options$cs('mdc-text-field--outlined')),
-					A2(
-					author$project$Internal$Options$when,
-					!_Utils_eq(config.leadingIcon, elm$core$Maybe$Nothing),
-					author$project$Internal$Options$cs('mdc-text-field--with-leading-icon')),
-					A2(
-					author$project$Internal$Options$when,
-					!_Utils_eq(config.trailingIcon, elm$core$Maybe$Nothing),
-					author$project$Internal$Options$cs('mdc-text-field--with-trailing-icon'))
-				]),
-			_List_Nil,
-			_Utils_ap(
-				list,
-				_List_fromArray(
-					[
-						leadingIcon_,
-						A4(
-						author$project$Internal$Options$applyNativeControl,
-						summary,
-						config.textarea ? elm$html$Html$textarea : elm$html$Html$input,
-						_List_fromArray(
-							[
-								author$project$Internal$Options$cs('mdc-text-field__input'),
-								author$project$Internal$Options$id(config.id_),
-								(config.outlined && (!config.textarea)) ? A2(
-								author$project$Internal$Options$on,
-								'focus',
-								A2(
-									elm$json$Json$Decode$map,
-									A2(elm$core$Basics$composeL, lift, author$project$Internal$TextField$Model$Focus),
-									author$project$Internal$TextField$Implementation$decodeGeometry)) : A2(
-								author$project$Internal$Options$on,
-								'focus',
-								elm$json$Json$Decode$succeed(
-									lift(
-										author$project$Internal$TextField$Model$Focus(author$project$Internal$TextField$Model$defaultGeometry)))),
-								author$project$Internal$Options$onBlur(
-								lift(author$project$Internal$TextField$Model$Blur)),
-								author$project$Internal$Options$onInput(
-								A2(elm$core$Basics$composeL, lift, author$project$Internal$TextField$Model$Input)),
-								A3(
-								elm$core$Basics$composeL,
-								A2(
-									elm$core$Basics$composeL,
-									author$project$Internal$Options$many,
-									elm$core$List$map(author$project$Internal$Options$attribute)),
-								elm$core$List$filterMap(elm$core$Basics$identity),
-								_List_fromArray(
-									[
-										((!config.textarea) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
-										elm$html$Html$Attributes$type_(
-											A2(elm$core$Maybe$withDefault, 'text', config.type_))),
-										(config.disabled ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
-										elm$html$Html$Attributes$disabled(true)),
-										(config.required ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
-										A2(
-											elm$html$Html$Attributes$property,
-											'required',
-											elm$json$Json$Encode$bool(true))),
-										((!_Utils_eq(config.pattern, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
-										A2(
-											elm$html$Html$Attributes$property,
-											'pattern',
-											elm$json$Json$Encode$string(
-												A2(elm$core$Maybe$withDefault, '', config.pattern)))),
-										((!_Utils_eq(config.value, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
-										elm$html$Html$Attributes$value(
-											A2(elm$core$Maybe$withDefault, '', config.value)))
-									])),
-								A2(
-								author$project$Internal$Options$when,
-								!_Utils_eq(config.placeholder, elm$core$Maybe$Nothing),
-								author$project$Internal$Options$attribute(
-									elm$html$Html$Attributes$placeholder(
-										A2(elm$core$Maybe$withDefault, '', config.placeholder)))),
-								A2(
-								author$project$Internal$Options$when,
-								config.textarea && (!_Utils_eq(config.rows, elm$core$Maybe$Nothing)),
-								author$project$Internal$Options$attribute(
-									elm$html$Html$Attributes$rows(
-										A2(elm$core$Maybe$withDefault, 0, config.rows)))),
-								A2(
-								author$project$Internal$Options$when,
-								config.textarea && (!_Utils_eq(config.cols, elm$core$Maybe$Nothing)),
-								author$project$Internal$Options$attribute(
-									elm$html$Html$Attributes$cols(
-										A2(elm$core$Maybe$withDefault, 0, config.cols))))
-							]),
-						_List_Nil),
-						((!config.fullWidth) && ((!config.outlined) && (!config.textarea))) ? htmlLabel : elm$html$Html$text(''),
-						trailingIcon_,
-						((!config.outlined) && (!config.textarea)) ? A3(
-						author$project$Internal$Options$styled,
-						elm$html$Html$div,
-						_List_fromArray(
-							[
-								author$project$Internal$Options$cs('mdc-line-ripple'),
-								A2(
-								author$project$Internal$Options$when,
-								model.focused,
-								author$project$Internal$Options$cs('mdc-line-ripple--active'))
-							]),
-						_List_Nil) : elm$html$Html$text(''),
-						(config.outlined || config.textarea) ? A3(
-						author$project$Internal$Options$styled,
-						elm$html$Html$div,
-						_List_fromArray(
-							[
-								author$project$Internal$Options$cs('mdc-notched-outline'),
-								A2(
-								author$project$Internal$Options$when,
-								focused || isDirty,
-								author$project$Internal$Options$cs('mdc-notched-outline--notched'))
-							]),
-						_List_fromArray(
-							[
-								A3(
-								author$project$Internal$Options$styled,
-								elm$html$Html$div,
-								_List_fromArray(
-									[
-										author$project$Internal$Options$cs('mdc-notched-outline__leading')
-									]),
-								_List_Nil),
-								A3(
-								author$project$Internal$Options$styled,
-								elm$html$Html$div,
-								_List_fromArray(
-									[
-										author$project$Internal$Options$cs('mdc-notched-outline__notch')
-									]),
-								_List_fromArray(
-									[htmlLabel])),
-								A3(
-								author$project$Internal$Options$styled,
-								elm$html$Html$div,
-								_List_fromArray(
-									[
-										author$project$Internal$Options$cs('mdc-notched-outline__trailing')
-									]),
-								_List_Nil)
-							])) : elm$html$Html$text('')
-					])));
-	});
-var author$project$Internal$TextField$Implementation$view = F4(
-	function (lift, domId, store, options) {
-		return A7(
-			author$project$Internal$Component$render,
-			author$project$Internal$TextField$Implementation$getSet.get,
-			author$project$Internal$TextField$Implementation$textField(domId),
-			author$project$Internal$Msg$TextFieldMsg,
-			lift,
-			domId,
-			store,
-			A2(
-				elm$core$List$cons,
-				author$project$Internal$Options$internalId(domId),
-				options));
-	});
-var author$project$Material$TextField$view = author$project$Internal$TextField$Implementation$view;
-var author$project$Models$InternalMessages$CloseDialog = {$: 'CloseDialog'};
-var author$project$Models$ProjectModel$Internal = function (a) {
-	return {$: 'Internal', a: a};
-};
-var elm$html$Html$h2 = _VirtualDom_node('h2');
-var author$project$Display$NameDialog$nameDialog = F5(
-	function (index, model, title, onInput, onOk) {
-		return A5(
-			author$project$Material$Dialog$view,
-			author$project$Models$ProjectModel$Mdc,
-			index,
-			model.mdc,
-			_List_fromArray(
-				[
-					A2(
-					author$project$Material$Options$when,
-					_Utils_eq(
-						model.openDialog,
-						elm$core$Maybe$Just(index)),
-					author$project$Material$Dialog$open),
-					author$project$Material$Dialog$onClose(
-					author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
-				]),
-			_List_fromArray(
-				[
-					A3(
-					author$project$Material$Options$styled,
-					elm$html$Html$h2,
-					_List_fromArray(
-						[author$project$Material$Dialog$title]),
-					_List_fromArray(
-						[
-							elm$html$Html$text(title)
-						])),
-					A2(
-					author$project$Material$Dialog$content,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A5(
-							author$project$Material$TextField$view,
-							author$project$Models$ProjectModel$Mdc,
-							index + '-textfield',
-							model.mdc,
-							_List_fromArray(
-								[
-									author$project$Material$TextField$label('Name'),
-									author$project$Material$Options$onInput(onInput)
-								]),
-							_List_Nil)
-						])),
-					A2(
-					author$project$Material$Dialog$actions,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A5(
-							author$project$Material$Button$view,
-							author$project$Models$ProjectModel$Mdc,
-							index + '-button-cancel',
-							model.mdc,
-							_List_fromArray(
-								[
-									author$project$Material$Button$ripple,
-									author$project$Material$Dialog$cancel,
-									author$project$Material$Options$onClick(
-									author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('Cancel')
-								])),
-							A5(
-							author$project$Material$Button$view,
-							author$project$Models$ProjectModel$Mdc,
-							index + '-button-accept',
-							model.mdc,
-							_List_fromArray(
-								[
-									author$project$Material$Button$ripple,
-									author$project$Material$Dialog$accept,
-									author$project$Material$Options$onClick(onOk)
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('OK')
-								]))
-						]))
-				]));
-	});
-var author$project$Internal$Button$Implementation$raised = author$project$Internal$Options$cs('mdc-button--raised');
-var author$project$Material$Button$raised = author$project$Internal$Button$Implementation$raised;
-var author$project$Material$Options$css = author$project$Internal$Options$css;
-var author$project$Display$UIWrapper$buttonNoClick = F4(
-	function (model, index, txt, props) {
-		return A5(
-			author$project$Material$Button$view,
-			author$project$Models$ProjectModel$Mdc,
-			index,
-			model.mdc,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						author$project$Material$Button$raised,
-						A2(author$project$Material$Options$css, 'margin', '4px')
-					]),
-				props),
-			_List_fromArray(
-				[
-					elm$html$Html$text(txt)
-				]));
-	});
-var author$project$Display$UIWrapper$buttonClick = F4(
-	function (model, index, txt, msg) {
-		return A4(
-			author$project$Display$UIWrapper$buttonNoClick,
-			model,
-			index,
-			txt,
-			_List_fromArray(
-				[
-					author$project$Material$Options$onClick(msg)
-				]));
-	});
-var author$project$Models$InternalMessages$NewProjectWithName = function (a) {
-	return {$: 'NewProjectWithName', a: a};
-};
-var author$project$Models$InternalMessages$ShowDialog = function (a) {
-	return {$: 'ShowDialog', a: a};
-};
-var author$project$Models$InternalMessages$UpdateProjectName = function (a) {
-	return {$: 'UpdateProjectName', a: a};
-};
-var author$project$Display$ProjectsUI$newProjectButton = function (model) {
-	var newProjectMessage = author$project$Models$ProjectModel$Internal(
-		author$project$Models$InternalMessages$NewProjectWithName(model.newProjectName));
-	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'dlgNewPrj');
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A5(
-				author$project$Display$NameDialog$nameDialog,
-				idxDialog,
-				model,
-				'Create and store project',
-				function (s) {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$UpdateProjectName(s));
-				},
-				newProjectMessage),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'btnNewPrj'),
-				'Create and store project',
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
-			]));
-};
 var author$project$Internal$List$Implementation$graphicClass = author$project$Internal$Options$cs('mdc-list-item__graphic');
 var author$project$Internal$List$Implementation$graphicIcon = function (options) {
 	return author$project$Internal$Icon$Implementation$view(
 		A2(elm$core$List$cons, author$project$Internal$List$Implementation$graphicClass, options));
 };
 var author$project$Material$List$graphicIcon = author$project$Internal$List$Implementation$graphicIcon;
-var author$project$Internal$List$Implementation$defaultConfig = {activated: false, isRadioGroup: false, isSingleSelectionList: false, node: elm$core$Maybe$Nothing, onSelectListItem: elm$core$Maybe$Nothing, selectedIndex: elm$core$Maybe$Nothing, useActivated: false};
+var author$project$Internal$List$Implementation$HtmlList = function (a) {
+	return {$: 'HtmlList', a: a};
+};
+var author$project$Internal$List$Implementation$defaultConfig = {activated: false, dataValue: elm$core$Maybe$Nothing, disabled: false, isInteractive: true, isRadioGroup: false, isSingleSelectionList: false, node: elm$core$Maybe$Nothing, onSelectListItem: elm$core$Maybe$Nothing, ripple: true, selected: false, selectedIndex: elm$core$Maybe$Nothing, useActivated: false};
+var author$project$Internal$List$Implementation$disabledClass = author$project$Internal$Options$cs('mdc-list-item--disabled');
 var author$project$Internal$List$Implementation$find = F2(
 	function (predicate, list) {
 		find:
@@ -14440,7 +13223,6 @@ var author$project$Internal$List$Implementation$listItemDomId = F2(
 	function (domId, index) {
 		return domId + ('--' + elm$core$String$fromInt(index));
 	});
-var author$project$Internal$List$Implementation$selected = author$project$Internal$Options$cs('mdc-list-item--selected');
 var author$project$Internal$List$Model$FocusItem = F2(
 	function (a, b) {
 		return {$: 'FocusItem', a: a, b: b};
@@ -14449,9 +13231,423 @@ var author$project$Internal$List$Model$SelectItem = F2(
 	function (a, b) {
 		return {$: 'SelectItem', a: a, b: b};
 	});
+var author$project$Internal$Options$data = F2(
+	function (key, val) {
+		return author$project$Internal$Options$Attribute(
+			A2(elm$html$Html$Attributes$attribute, 'data-' + key, val));
+	});
+var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
+var author$project$Internal$Options$id = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$id);
+var author$project$Internal$Options$None = {$: 'None'};
+var author$project$Internal$Options$nop = author$project$Internal$Options$None;
+var author$project$Internal$Options$Listener = F2(
+	function (a, b) {
+		return {$: 'Listener', a: a, b: b};
+	});
+var author$project$Internal$Options$on = F2(
+	function (event, decodeMessage) {
+		return A2(
+			author$project$Internal$Options$Listener,
+			event,
+			A2(
+				elm$json$Json$Decode$map,
+				function (message) {
+					return {message: message, preventDefault: false, stopPropagation: false};
+				},
+				decodeMessage));
+	});
+var author$project$Internal$Options$onClick = function (msg) {
+	return A2(
+		author$project$Internal$Options$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
 var author$project$Internal$Options$onWithOptions = function (evt) {
 	return author$project$Internal$Options$Listener(evt);
 };
+var author$project$Internal$Options$role = function (value) {
+	return author$project$Internal$Options$Attribute(
+		A2(elm$html$Html$Attributes$attribute, 'role', value));
+};
+var elm$html$Html$Attributes$tabindex = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'tabIndex',
+		elm$core$String$fromInt(n));
+};
+var author$project$Internal$Options$tabindex = function (value) {
+	return author$project$Internal$Options$Attribute(
+		elm$html$Html$Attributes$tabindex(value));
+};
+var author$project$Internal$Options$when = F2(
+	function (guard, prop) {
+		return guard ? prop : author$project$Internal$Options$nop;
+	});
+var author$project$Internal$Ripple$Implementation$none = {interactionHandler: author$project$Internal$Options$nop, properties: author$project$Internal$Options$nop};
+var author$project$Material$Options$data = author$project$Internal$Options$data;
+var author$project$Internal$Options$Many = function (a) {
+	return {$: 'Many', a: a};
+};
+var author$project$Internal$Options$many = author$project$Internal$Options$Many;
+var author$project$Material$Options$many = author$project$Internal$Options$many;
+var author$project$Material$Options$on = author$project$Internal$Options$on;
+var author$project$Internal$GlobalEvents$listener = F2(
+	function (name, decoder) {
+		return author$project$Material$Options$many(
+			_List_fromArray(
+				[
+					A2(author$project$Material$Options$on, name, decoder),
+					A2(author$project$Material$Options$data, name, '{}')
+				]));
+	});
+var author$project$Internal$GlobalEvents$onMouseUp = author$project$Internal$GlobalEvents$listener('globalmouseup');
+var author$project$Internal$GlobalEvents$onPointerUp = author$project$Internal$GlobalEvents$listener('globalpointerup');
+var author$project$Internal$GlobalEvents$onTick = author$project$Internal$GlobalEvents$listener('globaltick');
+var author$project$Internal$GlobalEvents$onTouchEnd = author$project$Internal$GlobalEvents$listener('globaltouchend');
+var author$project$Internal$Options$CSS = function (a) {
+	return {$: 'CSS', a: a};
+};
+var author$project$Internal$Options$css = F2(
+	function (key, value) {
+		return author$project$Internal$Options$CSS(
+			_Utils_Tuple2(key, value));
+	});
+var author$project$Internal$Ripple$Model$strings = {varFgScale: '--mdc-ripple-fg-scale', varFgSize: '--mdc-ripple-fg-size', varFgTranslateEnd: '--mdc-ripple-fg-translate-end', varFgTranslateStart: '--mdc-ripple-fg-translate-start', varLeft: '--mdc-ripple-left', varTop: '--mdc-ripple-top'};
+var author$project$Internal$Ripple$Implementation$cssVariables = F2(
+	function (isUnbounded, _n0) {
+		var fgScale = _n0.fgScale;
+		var translateStart = _n0.translateStart;
+		var translateEnd = _n0.translateEnd;
+		var initialSize = _n0.initialSize;
+		var frame = _n0.frame;
+		var unboundedCoords = isUnbounded ? {
+			left: elm$core$Basics$round((frame.width - initialSize) / 2),
+			top: elm$core$Basics$round((frame.height - initialSize) / 2)
+		} : {left: 0, top: 0};
+		var fgSize = elm$core$String$fromInt(initialSize) + 'px';
+		var variables = elm$core$List$concat(
+			_List_fromArray(
+				[
+					_List_fromArray(
+					[
+						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgSize, fgSize),
+						A2(
+						author$project$Internal$Options$css,
+						author$project$Internal$Ripple$Model$strings.varFgScale,
+						elm$core$String$fromFloat(fgScale))
+					]),
+					isUnbounded ? _List_fromArray(
+					[
+						A2(
+						author$project$Internal$Options$css,
+						author$project$Internal$Ripple$Model$strings.varTop,
+						elm$core$String$fromFloat(unboundedCoords.top) + 'px'),
+						A2(
+						author$project$Internal$Options$css,
+						author$project$Internal$Ripple$Model$strings.varLeft,
+						elm$core$String$fromFloat(unboundedCoords.left) + 'px')
+					]) : _List_fromArray(
+					[
+						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgTranslateStart, translateStart),
+						A2(author$project$Internal$Options$css, author$project$Internal$Ripple$Model$strings.varFgTranslateEnd, translateEnd)
+					])
+				]));
+		return variables;
+	});
+var author$project$Internal$Ripple$Model$Activate0 = F2(
+	function (a, b) {
+		return {$: 'Activate0', a: a, b: b};
+	});
+var author$project$Internal$Ripple$Model$Event = F2(
+	function (eventType, pagePoint) {
+		return {eventType: eventType, pagePoint: pagePoint};
+	});
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
+var elm$json$Json$Decode$oneOf = _Json_oneOf;
+var author$project$Internal$Ripple$Implementation$decodeActivate = function (_n0) {
+	var domId = _n0.domId;
+	var isUnbounded = _n0.isUnbounded;
+	var isActivated = _n0.isActivated;
+	var previousActivationEvent = _n0.previousActivationEvent;
+	var decodePagePoint = A3(
+		elm$json$Json$Decode$map2,
+		F2(
+			function (pageX, pageY) {
+				return {pageX: pageX, pageY: pageY};
+			}),
+		A2(
+			elm$json$Json$Decode$at,
+			_List_fromArray(
+				['pageX']),
+			elm$json$Json$Decode$float),
+		A2(
+			elm$json$Json$Decode$at,
+			_List_fromArray(
+				['pageY']),
+			elm$json$Json$Decode$float));
+	var firstChangedTouch = A2(
+		elm$json$Json$Decode$andThen,
+		function (changedTouches) {
+			var _n3 = elm$core$List$head(changedTouches);
+			if (_n3.$ === 'Just') {
+				var pagePoint = _n3.a;
+				return elm$json$Json$Decode$succeed(pagePoint);
+			} else {
+				return elm$json$Json$Decode$fail('');
+			}
+		},
+		A2(
+			elm$json$Json$Decode$at,
+			_List_fromArray(
+				['changedTouches']),
+			elm$json$Json$Decode$list(decodePagePoint)));
+	var decodeIsSurfaceDisabled = elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2(
+				elm$json$Json$Decode$map,
+				elm$core$Basics$always(true),
+				A2(
+					elm$json$Json$Decode$at,
+					_List_fromArray(
+						['disabled']),
+					elm$json$Json$Decode$string)),
+				elm$json$Json$Decode$succeed(false)
+			]));
+	var decodeEventType = A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['type']),
+		elm$json$Json$Decode$string);
+	var decodeIsSameInteraction = function () {
+		if (previousActivationEvent.$ === 'Nothing') {
+			return elm$json$Json$Decode$succeed(false);
+		} else {
+			var event = previousActivationEvent.a;
+			return A2(
+				elm$json$Json$Decode$map,
+				elm$core$Basics$eq(event.eventType),
+				decodeEventType);
+		}
+	}();
+	var decodeEvent = A2(
+		elm$json$Json$Decode$andThen,
+		function (eventType) {
+			if (eventType === 'touchstart') {
+				return A2(
+					elm$json$Json$Decode$map,
+					author$project$Internal$Ripple$Model$Event(eventType),
+					firstChangedTouch);
+			} else {
+				return A2(
+					elm$json$Json$Decode$map,
+					author$project$Internal$Ripple$Model$Event(eventType),
+					decodePagePoint);
+			}
+		},
+		decodeEventType);
+	return A2(
+		elm$json$Json$Decode$andThen,
+		A2(
+			elm$core$Basics$composeR,
+			elm$core$Maybe$map(elm$json$Json$Decode$succeed),
+			elm$core$Maybe$withDefault(
+				elm$json$Json$Decode$fail(''))),
+		A4(
+			elm$json$Json$Decode$map3,
+			F3(
+				function (isSurfaceDisabled, isSameInteraction, event) {
+					return (isActivated || (isSurfaceDisabled || isSameInteraction)) ? elm$core$Maybe$Nothing : elm$core$Maybe$Just(
+						A2(
+							author$project$Internal$Ripple$Model$Activate0,
+							domId,
+							{event: event, isSurfaceDisabled: false, isUnbounded: isUnbounded, wasElementMadeActive: false}));
+				}),
+			decodeIsSurfaceDisabled,
+			decodeIsSameInteraction,
+			decodeEvent));
+};
+var author$project$Internal$Ripple$Model$ClientRect = F4(
+	function (top, left, width, height) {
+		return {height: height, left: left, top: top, width: width};
+	});
+var debois$elm_dom$DOM$offsetHeight = A2(elm$json$Json$Decode$field, 'offsetHeight', elm$json$Json$Decode$float);
+var debois$elm_dom$DOM$offsetLeft = A2(elm$json$Json$Decode$field, 'offsetLeft', elm$json$Json$Decode$float);
+var debois$elm_dom$DOM$offsetTop = A2(elm$json$Json$Decode$field, 'offsetTop', elm$json$Json$Decode$float);
+var debois$elm_dom$DOM$offsetWidth = A2(elm$json$Json$Decode$field, 'offsetWidth', elm$json$Json$Decode$float);
+var debois$elm_dom$DOM$target = function (decoder) {
+	return A2(elm$json$Json$Decode$field, 'target', decoder);
+};
+var author$project$Internal$Ripple$Implementation$decodeClientRect = debois$elm_dom$DOM$target(
+	A5(elm$json$Json$Decode$map4, author$project$Internal$Ripple$Model$ClientRect, debois$elm_dom$DOM$offsetTop, debois$elm_dom$DOM$offsetLeft, debois$elm_dom$DOM$offsetWidth, debois$elm_dom$DOM$offsetHeight));
+var author$project$Internal$Ripple$Model$Blur = {$: 'Blur'};
+var author$project$Internal$Ripple$Model$Deactivate = {$: 'Deactivate'};
+var author$project$Internal$Ripple$Model$Focus = {$: 'Focus'};
+var author$project$Internal$Ripple$Model$SetCssVariables = F2(
+	function (a, b) {
+		return {$: 'SetCssVariables', a: a, b: b};
+	});
+var author$project$Internal$Ripple$Model$activationEventTypes = _List_fromArray(
+	['touchstart', 'pointerdown', 'mousedown']);
+var author$project$Internal$Ripple$Model$cssClasses = {bgFocused: 'mdc-ripple-upgraded--background-focused', fgActivation: 'mdc-ripple-upgraded--foreground-activation', fgDeactivation: 'mdc-ripple-upgraded--foreground-deactivation', root: 'mdc-ripple-upgraded', unbounded: 'mdc-ripple-upgraded--unbounded'};
+var author$project$Internal$Ripple$Implementation$view = F5(
+	function (isUnbounded, domId, lift, model, options) {
+		var focusHandler = A2(
+			author$project$Internal$Options$on,
+			'focus',
+			elm$json$Json$Decode$succeed(
+				lift(author$project$Internal$Ripple$Model$Focus)));
+		var deactivateHandler = function (event) {
+			var deactivate = elm$json$Json$Decode$succeed(
+				lift(author$project$Internal$Ripple$Model$Deactivate));
+			return author$project$Internal$Options$many(
+				_List_fromArray(
+					[
+						author$project$Internal$GlobalEvents$onTouchEnd(deactivate),
+						author$project$Internal$GlobalEvents$onMouseUp(deactivate),
+						author$project$Internal$GlobalEvents$onPointerUp(deactivate)
+					]));
+		};
+		var blurHandler = A2(
+			author$project$Internal$Options$on,
+			'blur',
+			elm$json$Json$Decode$succeed(
+				lift(author$project$Internal$Ripple$Model$Blur)));
+		var baseProperties = author$project$Internal$Options$many(
+			_List_fromArray(
+				[
+					author$project$Internal$Options$id(domId),
+					author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.root),
+					A2(
+					author$project$Internal$Options$when,
+					isUnbounded,
+					author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.unbounded)),
+					model.focused ? author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.bgFocused) : author$project$Internal$Options$nop
+				]));
+		var baseInteractionHandler = author$project$Internal$Options$many(
+			_List_fromArray(
+				[focusHandler, blurHandler]));
+		var activateHandler = author$project$Internal$Options$many(
+			A2(
+				elm$core$List$map,
+				function (tipe) {
+					return A2(
+						author$project$Internal$Options$on,
+						tipe,
+						A2(
+							elm$json$Json$Decode$map,
+							lift,
+							author$project$Internal$Ripple$Implementation$decodeActivate(
+								{
+									domId: domId,
+									isActivated: function () {
+										var _n3 = model.animationState;
+										if (_n3.$ === 'Activated') {
+											var activationState = _n3.a;
+											return !activationState.deactivated;
+										} else {
+											return false;
+										}
+									}(),
+									isUnbounded: isUnbounded,
+									previousActivationEvent: function () {
+										var _n4 = model.animationState;
+										if (_n4.$ === 'Activated') {
+											var activationEvent = _n4.a.activationEvent;
+											return elm$core$Maybe$Just(activationEvent);
+										} else {
+											return elm$core$Maybe$Nothing;
+										}
+									}()
+								})));
+				},
+				author$project$Internal$Ripple$Model$activationEventTypes));
+		var _n0 = model.animationState;
+		switch (_n0.$) {
+			case 'Idle':
+				var interactionHandler = author$project$Internal$Options$many(
+					_List_fromArray(
+						[baseInteractionHandler, activateHandler]));
+				var cssVars = function () {
+					var _n1 = model.clientRect;
+					if (_n1.$ === 'Just') {
+						var clientRect = _n1.a;
+						var _n2 = A2(author$project$Internal$Ripple$Implementation$layoutInternal, isUnbounded, clientRect);
+						var fgScale = _n2.fgScale;
+						var initialSize = _n2.initialSize;
+						return A2(
+							author$project$Internal$Ripple$Implementation$cssVariables,
+							isUnbounded,
+							{fgScale: fgScale, frame: clientRect, initialSize: initialSize, translateEnd: '0px', translateStart: '0px'});
+					} else {
+						return _List_Nil;
+					}
+				}();
+				var properties = author$project$Internal$Options$many(
+					_List_fromArray(
+						[
+							baseProperties,
+							author$project$Internal$Options$many(cssVars),
+							A2(
+							author$project$Internal$Options$when,
+							_Utils_eq(model.clientRect, elm$core$Maybe$Nothing),
+							author$project$Internal$GlobalEvents$onTick(
+								A2(
+									elm$json$Json$Decode$map,
+									A2(
+										elm$core$Basics$composeL,
+										lift,
+										author$project$Internal$Ripple$Model$SetCssVariables(isUnbounded)),
+									author$project$Internal$Ripple$Implementation$decodeClientRect)))
+						]));
+				return {interactionHandler: interactionHandler, properties: properties};
+			case 'Activated':
+				var activatedData = _n0.a;
+				var interactionHandler = author$project$Internal$Options$many(
+					_List_fromArray(
+						[
+							baseInteractionHandler,
+							activateHandler,
+							deactivateHandler(activatedData.activationEvent)
+						]));
+				var cssVars = A2(
+					author$project$Internal$Ripple$Implementation$cssVariables,
+					isUnbounded,
+					{fgScale: activatedData.fgScale, frame: activatedData.frame, initialSize: activatedData.initialSize, translateEnd: activatedData.translateEnd, translateStart: activatedData.translateStart});
+				var properties = author$project$Internal$Options$many(
+					_List_fromArray(
+						[
+							baseProperties,
+							author$project$Internal$Options$many(cssVars),
+							author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.fgActivation),
+							A2(
+							author$project$Internal$Options$when,
+							isUnbounded,
+							A2(author$project$Internal$Options$data, 'mdc-ripple-is-unbounded', '1'))
+						]));
+				return {interactionHandler: interactionHandler, properties: properties};
+			default:
+				var activatedData = _n0.a;
+				var interactionHandler = author$project$Internal$Options$many(
+					_List_fromArray(
+						[baseInteractionHandler, activateHandler]));
+				var cssVars = A2(
+					author$project$Internal$Ripple$Implementation$cssVariables,
+					isUnbounded,
+					{fgScale: activatedData.fgScale, frame: activatedData.frame, initialSize: activatedData.initialSize, translateEnd: activatedData.translateEnd, translateStart: activatedData.translateStart});
+				var properties = author$project$Internal$Options$many(
+					_List_fromArray(
+						[
+							baseProperties,
+							author$project$Internal$Options$many(cssVars),
+							author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.fgDeactivation)
+						]));
+				return {interactionHandler: interactionHandler, properties: properties};
+		}
+	});
 var elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -14490,7 +13686,10 @@ var author$project$Internal$List$Implementation$liView = F9(
 	function (domId, lift, model, config, listItemIds, focusedIndex, index, options, children) {
 		var tab_index = _Utils_eq(focusedIndex, index) ? 0 : (-1);
 		var list_item_dom_id = A2(author$project$Internal$List$Implementation$listItemDomId, domId, index);
-		var ripple = A5(
+		var li_summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
+		var li_config = li_summary.config;
+		var rippled = li_config.ripple && config.isInteractive;
+		var ripple = rippled ? A5(
 			author$project$Internal$Ripple$Implementation$view,
 			false,
 			list_item_dom_id,
@@ -14502,16 +13701,14 @@ var author$project$Internal$List$Implementation$liView = F9(
 				elm$core$Maybe$withDefault,
 				author$project$Internal$Ripple$Model$defaultModel,
 				A2(elm$core$Dict$get, list_item_dom_id, model.ripples)),
-			_List_Nil);
-		var li_summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
-		var li_config = li_summary.config;
+			_List_Nil) : author$project$Internal$Ripple$Implementation$none;
 		var is_selected = function () {
-			var _n8 = config.selectedIndex;
-			if (_n8.$ === 'Just') {
-				var i = _n8.a;
+			var _n9 = config.selectedIndex;
+			if (_n9.$ === 'Just') {
+				var i = _n9.a;
 				return _Utils_eq(i, index);
 			} else {
-				return false;
+				return li_config.selected || li_config.activated;
 			}
 		}();
 		return A5(
@@ -14521,8 +13718,18 @@ var author$project$Internal$List$Implementation$liView = F9(
 			_List_fromArray(
 				[
 					author$project$Internal$List$Implementation$listItemClass,
-					author$project$Internal$Options$tabindex(tab_index),
-					A2(author$project$Internal$Options$when, config.isSingleSelectionList && (is_selected && (!config.useActivated)), author$project$Internal$List$Implementation$selected),
+					A2(
+					author$project$Internal$Options$when,
+					!rippled,
+					author$project$Internal$Options$id(list_item_dom_id)),
+					A2(
+					author$project$Internal$Options$when,
+					config.isInteractive,
+					author$project$Internal$Options$tabindex(tab_index)),
+					A2(
+					author$project$Internal$Options$when,
+					config.isSingleSelectionList && (is_selected && (!config.useActivated)),
+					author$project$Internal$Options$cs('mdc-list-item--selected')),
 					A2(
 					author$project$Internal$Options$when,
 					config.isSingleSelectionList && (is_selected && config.useActivated),
@@ -14533,7 +13740,14 @@ var author$project$Internal$List$Implementation$liView = F9(
 					A2(
 						author$project$Internal$Options$aria,
 						'checked',
-						is_selected ? 'True' : 'False')),
+						is_selected ? 'true' : 'false')),
+					A2(
+					author$project$Internal$Options$when,
+					(!config.isRadioGroup) && config.isInteractive,
+					A2(
+						author$project$Internal$Options$aria,
+						'selected',
+						is_selected ? 'true' : 'false')),
 					A2(
 					author$project$Internal$Options$when,
 					config.isSingleSelectionList,
@@ -14542,14 +13756,24 @@ var author$project$Internal$List$Implementation$liView = F9(
 					author$project$Internal$Options$when,
 					config.isRadioGroup,
 					author$project$Internal$Options$role('radio')),
-					ripple.interactionHandler,
-					ripple.properties,
+					A2(author$project$Internal$Options$when, li_config.disabled, author$project$Internal$List$Implementation$disabledClass),
 					function () {
-					var _n0 = config.onSelectListItem;
+					var _n0 = li_config.dataValue;
 					if (_n0.$ === 'Just') {
-						var onSelect = _n0.a;
-						return author$project$Internal$Options$onClick(
-							onSelect(index));
+						var v = _n0.a;
+						return A2(author$project$Internal$Options$data, 'value', v);
+					} else {
+						return author$project$Internal$Options$nop;
+					}
+				}(),
+					A2(author$project$Internal$Options$when, rippled, ripple.interactionHandler),
+					A2(author$project$Internal$Options$when, rippled, ripple.properties),
+					function () {
+					var _n1 = config.onSelectListItem;
+					if (_n1.$ === 'Just') {
+						var onSelect = _n1.a;
+						return (!li_config.disabled) ? author$project$Internal$Options$onClick(
+							onSelect(index)) : author$project$Internal$Options$nop;
 					} else {
 						return author$project$Internal$Options$nop;
 					}
@@ -14566,15 +13790,15 @@ var author$project$Internal$List$Implementation$liView = F9(
 									elm$core$Maybe$Just('Enter')) || ((keyCode === 13) || (_Utils_eq(
 									key,
 									elm$core$Maybe$Just('Space')) || (keyCode === 32)));
-								var _n1 = function () {
+								var _n2 = function () {
 									if (_Utils_eq(
 										key,
 										elm$core$Maybe$Just('ArrowDown')) || (keyCode === 40)) {
 										var focusable_element = A2(author$project$Internal$List$Implementation$firstNonEmptyId, index + 1, listItemIds);
 										if (focusable_element.$ === 'Just') {
-											var _n3 = focusable_element.a;
-											var next_index = _n3.a;
-											var next_item = _n3.b;
+											var _n4 = focusable_element.a;
+											var next_index = _n4.a;
+											var next_item = _n4.b;
 											return _Utils_Tuple2(
 												elm$core$Maybe$Just(next_index),
 												elm$core$Maybe$Just(next_item));
@@ -14589,9 +13813,9 @@ var author$project$Internal$List$Implementation$liView = F9(
 											elm$core$Maybe$Just('ArrowUp')) || (keyCode === 38)) {
 											var focusable_element = A2(author$project$Internal$List$Implementation$lastNonEmptyId, index, listItemIds);
 											if (focusable_element.$ === 'Just') {
-												var _n5 = focusable_element.a;
-												var previous_index = _n5.a;
-												var previous_item = _n5.b;
+												var _n6 = focusable_element.a;
+												var previous_index = _n6.a;
+												var previous_item = _n6.b;
 												return _Utils_Tuple2(
 													elm$core$Maybe$Just(previous_index),
 													elm$core$Maybe$Just(previous_item));
@@ -14622,22 +13846,22 @@ var author$project$Internal$List$Implementation$liView = F9(
 										}
 									}
 								}();
-								var index_to_focus = _n1.a;
-								var id_to_focus = _n1.b;
+								var index_to_focus = _n2.a;
+								var id_to_focus = _n2.b;
 								var msg = function () {
 									if (selectItem) {
-										var _n6 = config.onSelectListItem;
-										if (_n6.$ === 'Just') {
-											var onSelect = _n6.a;
+										var _n7 = config.onSelectListItem;
+										if (_n7.$ === 'Just') {
+											var onSelect = _n7.a;
 											return A2(author$project$Internal$List$Model$SelectItem, index, onSelect);
 										} else {
 											return author$project$Internal$List$Model$NoOp;
 										}
 									} else {
-										var _n7 = _Utils_Tuple2(index_to_focus, id_to_focus);
-										if ((_n7.a.$ === 'Just') && (_n7.b.$ === 'Just')) {
-											var idx = _n7.a.a;
-											var id = _n7.b.a;
+										var _n8 = _Utils_Tuple2(index_to_focus, id_to_focus);
+										if ((_n8.a.$ === 'Just') && (_n8.b.$ === 'Just')) {
+											var idx = _n8.a.a;
+											var id = _n8.b.a;
 											return A2(author$project$Internal$List$Model$FocusItem, idx, id);
 										} else {
 											return author$project$Internal$List$Model$NoOp;
@@ -14674,19 +13898,25 @@ var author$project$Internal$List$Implementation$liView = F9(
 	});
 var author$project$Internal$List$Implementation$li = F2(
 	function (options, children) {
-		return {children: children, focusable: true, options: options, view: author$project$Internal$List$Implementation$liView};
+		return {
+			children: author$project$Internal$List$Implementation$HtmlList(children),
+			focusable: true,
+			options: options,
+			view: author$project$Internal$List$Implementation$liView
+		};
 	});
 var author$project$Material$List$li = author$project$Internal$List$Implementation$li;
-var author$project$Display$ProjectsUI$viewAllProjectsItem = function (pn) {
+var author$project$Display$MessagesDialog$viewMessagesItem = function (msg) {
 	return A2(
 		author$project$Material$List$li,
 		_List_Nil,
 		_List_fromArray(
 			[
-				A2(author$project$Material$List$graphicIcon, _List_Nil, 'folder'),
-				elm$html$Html$text(pn)
+				A2(author$project$Material$List$graphicIcon, _List_Nil, 'inbox'),
+				elm$html$Html$text(msg)
 			]));
 };
+var author$project$Material$Options$css = author$project$Internal$Options$css;
 var author$project$Display$UIWrapper$heightInView = function (h) {
 	return A2(
 		author$project$Material$Options$css,
@@ -14702,33 +13932,44 @@ var author$project$Display$UIWrapper$scrollableListStyle = function (h) {
 			A2(author$project$Material$Options$css, 'background', 'WhiteSmoke')
 		]);
 };
-var author$project$Models$ProjectModel$None = {$: 'None'};
-var elm_community$list_extra$List$Extra$getAt = F2(
-	function (idx, xs) {
-		return (idx < 0) ? elm$core$Maybe$Nothing : elm$core$List$head(
-			A2(elm$core$List$drop, idx, xs));
-	});
-var author$project$Display$UIWrapper$sendListMsg = F3(
-	function (toMsg, list, index) {
-		var _n0 = A2(elm_community$list_extra$List$Extra$getAt, index, list);
-		if (_n0.$ === 'Just') {
-			var v = _n0.a;
-			return toMsg(v);
-		} else {
-			return author$project$Models$ProjectModel$None;
-		}
-	});
-var author$project$Internal$List$Implementation$onSelectListItem = function (handler) {
-	return author$project$Internal$Options$option(
-		function (config) {
-			return _Utils_update(
-				config,
-				{
-					onSelectListItem: elm$core$Maybe$Just(handler)
-				});
-		});
+var author$project$Internal$Msg$Dispatch = function (a) {
+	return {$: 'Dispatch', a: a};
 };
-var author$project$Material$List$onSelectListItem = author$project$Internal$List$Implementation$onSelectListItem;
+var author$project$Internal$Options$Lift = function (a) {
+	return {$: 'Lift', a: a};
+};
+var author$project$Internal$Options$dispatch = function (lift) {
+	return author$project$Internal$Options$Lift(
+		elm$json$Json$Decode$map(
+			function (_n0) {
+				var message = _n0.message;
+				var stopPropagation = _n0.stopPropagation;
+				var preventDefault = _n0.preventDefault;
+				return {
+					message: lift(
+						author$project$Internal$Msg$Dispatch(message)),
+					preventDefault: preventDefault,
+					stopPropagation: stopPropagation
+				};
+			}));
+};
+var author$project$Internal$Component$render = F3(
+	function (get_model, view, ctor) {
+		return F4(
+			function (lift, idx, store, options) {
+				return A3(
+					view,
+					A2(
+						elm$core$Basics$composeL,
+						lift,
+						ctor(idx)),
+					A2(get_model, idx, store),
+					A2(
+						elm$core$List$cons,
+						author$project$Internal$Options$dispatch(lift),
+						options));
+			});
+	});
 var author$project$Internal$List$Implementation$doListItemDomId = F3(
 	function (domId, index, listItem) {
 		return listItem.focusable ? A2(author$project$Internal$List$Implementation$listItemDomId, domId, index) : '';
@@ -14757,15 +13998,37 @@ var author$project$Internal$List$Implementation$findIndexHelp = F3(
 		}
 	});
 var author$project$Internal$List$Implementation$findIndex = author$project$Internal$List$Implementation$findIndexHelp(0);
-var author$project$Internal$List$Implementation$liIsActivated = function (li_) {
+var author$project$Internal$List$Implementation$liIsSelectedOrActivated = function (li_) {
 	var li_summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, li_.options);
 	var li_config = li_summary.config;
-	return li_config.activated;
+	return li_config.selected || li_config.activated;
 };
 var author$project$Internal$List$Implementation$listItemView = F8(
 	function (domId, lift, model, config, listItemsIds, focusedIndex, index, li_) {
-		return A9(li_.view, domId, lift, model, config, listItemsIds, focusedIndex, index, li_.options, li_.children);
+		var _n0 = li_.children;
+		if (_n0.$ === 'HtmlList') {
+			var children = _n0.a;
+			return A9(li_.view, domId, lift, model, config, listItemsIds, focusedIndex, index, li_.options, children);
+		} else {
+			var items = _n0.a;
+			var groupDomId = domId + ('-' + elm$core$String$fromInt(index));
+			return A9(
+				li_.view,
+				domId,
+				lift,
+				model,
+				config,
+				listItemsIds,
+				focusedIndex,
+				index,
+				li_.options,
+				A2(
+					elm$core$List$indexedMap,
+					A6(author$project$Internal$List$Implementation$listItemView, groupDomId, lift, model, config, listItemsIds, focusedIndex),
+					items));
+		}
 	});
+var author$project$Internal$List$Implementation$nonInteractiveClass = author$project$Internal$Options$cs('mdc-list--non-interactive');
 var elm$json$Json$Decode$maybe = function (decoder) {
 	return elm$json$Json$Decode$oneOf(
 		_List_fromArray(
@@ -14857,7 +14120,7 @@ var author$project$Internal$List$Implementation$ul = F5(
 					var index = _n1.a;
 					return index;
 				} else {
-					var _n2 = A2(author$project$Internal$List$Implementation$findIndex, author$project$Internal$List$Implementation$liIsActivated, items);
+					var _n2 = A2(author$project$Internal$List$Implementation$findIndex, author$project$Internal$List$Implementation$liIsSelectedOrActivated, items);
 					if (_n2.$ === 'Just') {
 						var i = _n2.a;
 						return i;
@@ -14878,6 +14141,7 @@ var author$project$Internal$List$Implementation$ul = F5(
 			_List_fromArray(
 				[
 					author$project$Internal$Options$cs('mdc-list'),
+					A2(author$project$Internal$Options$when, !config.isInteractive, author$project$Internal$List$Implementation$nonInteractiveClass),
 					A2(
 					author$project$Internal$Options$when,
 					config.isSingleSelectionList,
@@ -14910,6 +14174,1408 @@ var author$project$Internal$List$Implementation$view = F2(
 			domId);
 	});
 var author$project$Material$List$ul = author$project$Internal$List$Implementation$view;
+var author$project$Display$MessagesDialog$viewMessages = function (model) {
+	return A5(
+		author$project$Material$List$ul,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'lstMsg'),
+		model.mdc,
+		author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewMessages),
+		A2(elm$core$List$map, author$project$Display$MessagesDialog$viewMessagesItem, model.messages));
+};
+var author$project$Internal$Options$Set = function (a) {
+	return {$: 'Set', a: a};
+};
+var author$project$Internal$Options$option = author$project$Internal$Options$Set;
+var author$project$Internal$Button$Implementation$ripple = author$project$Internal$Options$option(
+	function (options) {
+		return _Utils_update(
+			options,
+			{ripple: true});
+	});
+var author$project$Material$Button$ripple = author$project$Internal$Button$Implementation$ripple;
+var author$project$Internal$Button$Implementation$defaultConfig = {disabled: false, icon: elm$core$Maybe$Nothing, link: elm$core$Maybe$Nothing, onClick: elm$core$Maybe$Nothing, ripple: false, trailingIcon: false};
+var author$project$Internal$Button$Model$Click = F2(
+	function (a, b) {
+		return {$: 'Click', a: a, b: b};
+	});
+var elm$virtual_dom$VirtualDom$mapAttribute = _VirtualDom_mapAttribute;
+var elm$html$Html$Attributes$map = elm$virtual_dom$VirtualDom$mapAttribute;
+var author$project$Internal$Options$attribute = A2(
+	elm$core$Basics$composeL,
+	author$project$Internal$Options$Attribute,
+	elm$html$Html$Attributes$map(elm$core$Basics$never));
+var author$project$Internal$Options$collect1_ = F2(
+	function (options, acc) {
+		switch (options.$) {
+			case 'Class':
+				var x = options.a;
+				return _Utils_update(
+					acc,
+					{
+						classes: A2(elm$core$List$cons, x, acc.classes)
+					});
+			case 'CSS':
+				var x = options.a;
+				return _Utils_update(
+					acc,
+					{
+						css: A2(elm$core$List$cons, x, acc.css)
+					});
+			case 'Attribute':
+				var x = options.a;
+				return _Utils_update(
+					acc,
+					{
+						attrs: A2(elm$core$List$cons, x, acc.attrs)
+					});
+			case 'Internal':
+				var x = options.a;
+				return _Utils_update(
+					acc,
+					{
+						internal: A2(elm$core$List$cons, x, acc.internal)
+					});
+			case 'Listener':
+				var event = options.a;
+				var decoder = options.b;
+				return _Utils_update(
+					acc,
+					{
+						dispatch: A3(author$project$Internal$Dispatch$add, event, decoder, acc.dispatch)
+					});
+			case 'Many':
+				var opts = options.a;
+				return A3(elm$core$List$foldl, author$project$Internal$Options$collect1_, acc, opts);
+			case 'Lift':
+				var lift = options.a;
+				return _Utils_update(
+					acc,
+					{
+						dispatch: A2(author$project$Internal$Dispatch$setLift, lift, acc.dispatch)
+					});
+			case 'Set':
+				return acc;
+			default:
+				return acc;
+		}
+	});
+var author$project$Internal$Options$collect_ = A2(
+	elm$core$List$foldl,
+	author$project$Internal$Options$collect1_,
+	A6(author$project$Internal$Options$Summary, _List_Nil, _List_Nil, _List_Nil, _List_Nil, author$project$Internal$Dispatch$defaultConfig, _Utils_Tuple0));
+var author$project$Internal$Options$styled = F2(
+	function (ctor, props) {
+		return ctor(
+			A2(
+				author$project$Internal$Options$addAttributes,
+				author$project$Internal$Options$collect_(props),
+				_List_Nil));
+	});
+var elm$html$Html$a = _VirtualDom_node('a');
+var elm$html$Html$button = _VirtualDom_node('button');
+var elm$html$Html$div = _VirtualDom_node('div');
+var elm$html$Html$span = _VirtualDom_node('span');
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$disabled = elm$html$Html$Attributes$boolProperty('disabled');
+var elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var author$project$Internal$Button$Implementation$button = F5(
+	function (domId, lift, model, options, nodes) {
+		var rippleInterface = A5(
+			author$project$Internal$Ripple$Implementation$view,
+			false,
+			domId,
+			A2(elm$core$Basics$composeL, lift, author$project$Internal$Button$Model$RippleMsg),
+			model.ripple,
+			_List_Nil);
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Button$Implementation$defaultConfig, options);
+		var config = summary.config;
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			(!_Utils_eq(config.link, elm$core$Maybe$Nothing)) ? elm$html$Html$a : elm$html$Html$button,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-button'),
+					A2(
+					author$project$Internal$Options$when,
+					(!_Utils_eq(config.link, elm$core$Maybe$Nothing)) && (!config.disabled),
+					author$project$Internal$Options$attribute(
+						elm$html$Html$Attributes$href(
+							A2(elm$core$Maybe$withDefault, '', config.link)))),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$attribute(
+						elm$html$Html$Attributes$disabled(true))),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$cs('mdc-button--disabled')),
+					A3(
+					elm$core$Basics$composeL,
+					author$project$Internal$Options$when(config.ripple),
+					author$project$Internal$Options$many,
+					_List_fromArray(
+						[rippleInterface.interactionHandler, rippleInterface.properties])),
+					A2(
+					elm$core$Maybe$withDefault,
+					author$project$Internal$Options$nop,
+					A2(
+						elm$core$Maybe$map,
+						A2(
+							elm$core$Basics$composeL,
+							A2(elm$core$Basics$composeL, author$project$Internal$Options$onClick, lift),
+							author$project$Internal$Button$Model$Click(config.ripple)),
+						config.onClick))
+				]),
+			_List_Nil,
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-button__ripple')
+								]),
+							_List_Nil)
+						]),
+						(!config.trailingIcon) ? A2(
+						elm$core$Maybe$withDefault,
+						_List_Nil,
+						A2(
+							elm$core$Maybe$map,
+							function (icon_) {
+								return _List_fromArray(
+									[
+										A2(
+										author$project$Internal$Icon$Implementation$view,
+										_List_fromArray(
+											[
+												author$project$Internal$Options$cs('mdc-button__icon')
+											]),
+										icon_)
+									]);
+							},
+							config.icon)) : _List_Nil,
+						_List_fromArray(
+						[
+							A2(
+							elm$html$Html$span,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$class('mdc-button__label')
+								]),
+							nodes)
+						]),
+						config.trailingIcon ? A2(
+						elm$core$Maybe$withDefault,
+						_List_Nil,
+						A2(
+							elm$core$Maybe$map,
+							function (icon_) {
+								return _List_fromArray(
+									[
+										A2(
+										author$project$Internal$Icon$Implementation$view,
+										_List_fromArray(
+											[
+												author$project$Internal$Options$cs('mdc-button__icon')
+											]),
+										icon_)
+									]);
+							},
+							config.icon)) : _List_Nil
+					])));
+	});
+var author$project$Internal$Button$Implementation$view = F2(
+	function (lift, index) {
+		return A5(
+			author$project$Internal$Component$render,
+			author$project$Internal$Button$Implementation$getSet.get,
+			author$project$Internal$Button$Implementation$button(index),
+			author$project$Internal$Msg$ButtonMsg,
+			lift,
+			index);
+	});
+var author$project$Material$Button$view = author$project$Internal$Button$Implementation$view;
+var elm$html$Html$footer = _VirtualDom_node('footer');
+var author$project$Internal$Dialog$Implementation$actions = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$footer,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-dialog__actions'),
+			options));
+};
+var author$project$Material$Dialog$actions = author$project$Internal$Dialog$Implementation$actions;
+var author$project$Internal$Dialog$Implementation$cancel = author$project$Internal$Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--cancel');
+var author$project$Material$Dialog$cancel = author$project$Internal$Dialog$Implementation$cancel;
+var elm$html$Html$section = _VirtualDom_node('section');
+var author$project$Internal$Dialog$Implementation$content = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$section,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-dialog__content'),
+			options));
+};
+var author$project$Material$Dialog$content = author$project$Internal$Dialog$Implementation$content;
+var author$project$Internal$Dialog$Implementation$onClose = function (handler) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					onClose: elm$core$Maybe$Just(handler)
+				});
+		});
+};
+var author$project$Material$Dialog$onClose = author$project$Internal$Dialog$Implementation$onClose;
+var author$project$Internal$Dialog$Implementation$open = author$project$Internal$Options$option(
+	function (config) {
+		return _Utils_update(
+			config,
+			{open: true});
+	});
+var author$project$Material$Dialog$open = author$project$Internal$Dialog$Implementation$open;
+var author$project$Internal$Dialog$Implementation$scrollable = author$project$Internal$Options$cs('mdc-dialog__body--scrollable');
+var author$project$Material$Dialog$scrollable = author$project$Internal$Dialog$Implementation$scrollable;
+var author$project$Internal$Dialog$Implementation$title = author$project$Internal$Options$cs('mdc-dialog__title');
+var author$project$Material$Dialog$title = author$project$Internal$Dialog$Implementation$title;
+var author$project$Internal$Dialog$Implementation$checkScrimClick = debois$elm_dom$DOM$target(
+	A2(
+		elm$json$Json$Decode$map,
+		function (className) {
+			var hasClass = function (_class) {
+				return A2(elm$core$String$contains, ' ' + (_class + ' '), ' ' + (className + ' '));
+			};
+			return hasClass('mdc-dialog__scrim') ? true : false;
+		},
+		A2(
+			elm$json$Json$Decode$at,
+			_List_fromArray(
+				['className']),
+			elm$json$Json$Decode$string)));
+var author$project$Internal$Dialog$Implementation$container = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$div,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-dialog__container'),
+			options));
+};
+var author$project$Internal$Dialog$Implementation$defaultConfig = {noScrim: false, onClose: elm$core$Maybe$Nothing, open: false};
+var author$project$Internal$Dialog$Implementation$scrim = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$div,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-dialog__scrim'),
+			options));
+};
+var author$project$Internal$Dialog$Implementation$surface = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$div,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-dialog__surface'),
+			options));
+};
+var author$project$Internal$Dialog$Model$EndAnimation = {$: 'EndAnimation'};
+var author$project$Internal$Dialog$Model$NoOp = {$: 'NoOp'};
+var author$project$Internal$Dialog$Model$StartAnimation = function (a) {
+	return {$: 'StartAnimation', a: a};
+};
+var author$project$Internal$Dialog$Implementation$dialog = F4(
+	function (lift, model, options, nodes) {
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Dialog$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var stateChanged = !_Utils_eq(config.open, model.open);
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-dialog'),
+					author$project$Internal$Options$role('alertdialog'),
+					A2(author$project$Internal$Options$aria, 'modal', 'true'),
+					A2(
+					author$project$Internal$Options$when,
+					stateChanged,
+					author$project$Internal$GlobalEvents$onTick(
+						elm$json$Json$Decode$succeed(
+							lift(
+								author$project$Internal$Dialog$Model$StartAnimation(config.open))))),
+					A2(
+					author$project$Internal$Options$when,
+					model.open && config.open,
+					author$project$Internal$Options$cs('mdc-dialog--open')),
+					A2(
+					author$project$Internal$Options$when,
+					(config.open && stateChanged) || (config.open && model.animating),
+					author$project$Internal$Options$cs('mdc-dialog--opening')),
+					A2(
+					author$project$Internal$Options$when,
+					((!config.open) && stateChanged) || ((!config.open) && model.animating),
+					author$project$Internal$Options$cs('mdc-dialog--closing')),
+					A2(
+					author$project$Internal$Options$when,
+					model.animating,
+					A2(
+						author$project$Internal$Options$on,
+						'transitionend',
+						elm$json$Json$Decode$succeed(
+							lift(author$project$Internal$Dialog$Model$EndAnimation)))),
+					A3(
+					elm$core$Basics$composeL,
+					author$project$Internal$Options$when(model.open && (config.open && (!config.noScrim))),
+					author$project$Internal$Options$many,
+					_List_fromArray(
+						[
+							A2(author$project$Internal$Options$data, 'focustrap', '{}'),
+							A2(
+							author$project$Internal$Options$on,
+							'keydown',
+							A3(
+								elm$json$Json$Decode$map2,
+								F2(
+									function (key, keyCode) {
+										return (_Utils_eq(
+											key,
+											elm$core$Maybe$Just('Escape')) || (keyCode === 27)) ? A2(
+											elm$core$Maybe$withDefault,
+											lift(author$project$Internal$Dialog$Model$NoOp),
+											config.onClose) : lift(author$project$Internal$Dialog$Model$NoOp);
+									}),
+								elm$json$Json$Decode$oneOf(
+									_List_fromArray(
+										[
+											A2(
+											elm$json$Json$Decode$map,
+											elm$core$Maybe$Just,
+											A2(
+												elm$json$Json$Decode$at,
+												_List_fromArray(
+													['key']),
+												elm$json$Json$Decode$string)),
+											elm$json$Json$Decode$succeed(elm$core$Maybe$Nothing)
+										])),
+								A2(
+									elm$json$Json$Decode$at,
+									_List_fromArray(
+										['keyCode']),
+									elm$json$Json$Decode$int)))
+						]))
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Internal$Dialog$Implementation$container,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(author$project$Internal$Dialog$Implementation$surface, _List_Nil, nodes)
+						])),
+					config.noScrim ? elm$html$Html$text('') : A2(
+					author$project$Internal$Dialog$Implementation$scrim,
+					_List_fromArray(
+						[
+							A2(
+							author$project$Internal$Options$on,
+							'click',
+							A2(
+								elm$json$Json$Decode$map,
+								function (isScrimClick) {
+									return isScrimClick ? A2(
+										elm$core$Maybe$withDefault,
+										lift(author$project$Internal$Dialog$Model$NoOp),
+										config.onClose) : lift(author$project$Internal$Dialog$Model$NoOp);
+								},
+								author$project$Internal$Dialog$Implementation$checkScrimClick))
+						]),
+					_List_Nil)
+				]));
+	});
+var author$project$Internal$Dialog$Implementation$view = A3(author$project$Internal$Component$render, author$project$Internal$Dialog$Implementation$getSet.get, author$project$Internal$Dialog$Implementation$dialog, author$project$Internal$Msg$DialogMsg);
+var author$project$Material$Dialog$view = author$project$Internal$Dialog$Implementation$view;
+var author$project$Material$Options$onClick = author$project$Internal$Options$onClick;
+var author$project$Material$Options$styled = author$project$Internal$Options$styled;
+var author$project$Material$Options$when = author$project$Internal$Options$when;
+var author$project$Models$InternalMessages$CloseDialog = {$: 'CloseDialog'};
+var elm$html$Html$h2 = _VirtualDom_node('h2');
+var author$project$Display$MessagesDialog$messagesDialog = F2(
+	function (index, model) {
+		return A5(
+			author$project$Material$Dialog$view,
+			author$project$Models$ProjectModel$Mdc,
+			index,
+			model.mdc,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$Options$when,
+					_Utils_eq(
+						model.openDialog,
+						elm$core$Maybe$Just(index)),
+					author$project$Material$Dialog$open),
+					author$project$Material$Dialog$onClose(
+					author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+				]),
+			_List_fromArray(
+				[
+					A3(
+					author$project$Material$Options$styled,
+					elm$html$Html$h2,
+					_List_fromArray(
+						[author$project$Material$Dialog$title]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('Messages')
+						])),
+					A2(
+					author$project$Material$Dialog$content,
+					_List_fromArray(
+						[author$project$Material$Dialog$scrollable]),
+					_List_fromArray(
+						[
+							author$project$Display$MessagesDialog$viewMessages(model)
+						])),
+					A2(
+					author$project$Material$Dialog$actions,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A5(
+							author$project$Material$Button$view,
+							author$project$Models$ProjectModel$Mdc,
+							A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'msgDlgClose'),
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$Button$ripple,
+									author$project$Material$Dialog$cancel,
+									author$project$Material$Options$onClick(
+									author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('Close')
+								]))
+						]))
+				]));
+	});
+var author$project$Internal$Snackbar$Implementation$dismissible = author$project$Internal$Options$option(
+	function (config) {
+		return _Utils_update(
+			config,
+			{dismissible: true});
+	});
+var author$project$Material$Snackbar$dismissible = author$project$Internal$Snackbar$Implementation$dismissible;
+var author$project$Internal$Snackbar$Implementation$defaultConfig = {dismissible: false};
+var author$project$Internal$Snackbar$Model$Dismiss = F2(
+	function (a, b) {
+		return {$: 'Dismiss', a: a, b: b};
+	});
+var author$project$Internal$Snackbar$Model$SetOpen = {$: 'SetOpen'};
+var elm$html$Html$Attributes$title = elm$html$Html$Attributes$stringProperty('title');
+var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
+var author$project$Internal$Snackbar$Implementation$snackbar = F4(
+	function (lift, model, options, _n0) {
+		var isOpening = function () {
+			var _n4 = model.state;
+			if (_n4.$ === 'Active') {
+				return !model.open;
+			} else {
+				return false;
+			}
+		}();
+		var isOpen = function () {
+			var _n3 = model.state;
+			if (_n3.$ === 'Active') {
+				return model.open;
+			} else {
+				return false;
+			}
+		}();
+		var isFading = function () {
+			var _n2 = model.state;
+			if (_n2.$ === 'Fading') {
+				return true;
+			} else {
+				return false;
+			}
+		}();
+		var contents = function () {
+			var _n1 = model.state;
+			switch (_n1.$) {
+				case 'Inert':
+					return elm$core$Maybe$Nothing;
+				case 'Active':
+					var c = _n1.a;
+					return elm$core$Maybe$Just(c);
+				default:
+					var c = _n1.a;
+					return elm$core$Maybe$Just(c);
+			}
+		}();
+		var onDismiss = A2(
+			elm$core$Maybe$andThen,
+			function ($) {
+				return $.onDismiss;
+			},
+			contents);
+		var stacked = _Utils_eq(
+			A2(
+				elm$core$Maybe$map,
+				function ($) {
+					return $.stacked;
+				},
+				contents),
+			elm$core$Maybe$Just(true));
+		var action = A2(
+			elm$core$Maybe$andThen,
+			function ($) {
+				return $.action;
+			},
+			contents);
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Snackbar$Implementation$defaultConfig, options);
+		var config = summary.config;
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-snackbar'),
+					A2(
+					author$project$Internal$Options$when,
+					isOpen,
+					author$project$Internal$Options$cs('mdc-snackbar--open')),
+					A2(
+					author$project$Internal$Options$when,
+					isOpening,
+					author$project$Internal$Options$cs('mdc-snackbar--opening')),
+					A2(
+					author$project$Internal$Options$when,
+					isFading,
+					author$project$Internal$Options$cs('mdc-snackbar--closing')),
+					A2(
+					author$project$Internal$Options$when,
+					isOpening,
+					author$project$Internal$GlobalEvents$onTick(
+						elm$json$Json$Decode$succeed(
+							lift(author$project$Internal$Snackbar$Model$SetOpen)))),
+					A2(
+					author$project$Internal$Options$when,
+					stacked,
+					author$project$Internal$Options$cs('mdc-snackbar--stacked'))
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-snackbar__surface')
+						]),
+					_List_fromArray(
+						[
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-snackbar__label'),
+									author$project$Internal$Options$role('status'),
+									A2(author$project$Internal$Options$aria, 'live', 'polite')
+								]),
+							A2(
+								elm$core$Maybe$withDefault,
+								_List_Nil,
+								A2(
+									elm$core$Maybe$map,
+									function (c) {
+										return _List_fromArray(
+											[
+												elm$html$Html$text(c.message)
+											]);
+									},
+									contents))),
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-snackbar__actions')
+								]),
+							_List_fromArray(
+								[
+									A3(
+									author$project$Internal$Options$styled,
+									elm$html$Html$button,
+									_List_fromArray(
+										[
+											author$project$Internal$Options$cs('mdc-button'),
+											author$project$Internal$Options$cs('mdc-snackbar__action'),
+											author$project$Internal$Options$attribute(
+											elm$html$Html$Attributes$type_('button')),
+											A2(
+											author$project$Internal$Options$on,
+											'click',
+											elm$json$Json$Decode$succeed(
+												lift(
+													A2(author$project$Internal$Snackbar$Model$Dismiss, true, onDismiss))))
+										]),
+									A2(
+										elm$core$Maybe$withDefault,
+										_List_Nil,
+										A2(
+											elm$core$Maybe$map,
+											function (actionString) {
+												return _List_fromArray(
+													[
+														elm$html$Html$text(actionString)
+													]);
+											},
+											action))),
+									config.dismissible ? A3(
+									author$project$Internal$Options$styled,
+									elm$html$Html$button,
+									_List_fromArray(
+										[
+											author$project$Internal$Options$cs('mdc-icon-button'),
+											author$project$Internal$Options$cs('mdc-snackbar__dismiss'),
+											author$project$Internal$Options$cs('material-icons'),
+											author$project$Internal$Options$attribute(
+											elm$html$Html$Attributes$title('Dismiss')),
+											A2(
+											author$project$Internal$Options$on,
+											'click',
+											elm$json$Json$Decode$succeed(
+												lift(
+													A2(author$project$Internal$Snackbar$Model$Dismiss, true, elm$core$Maybe$Nothing))))
+										]),
+									_List_fromArray(
+										[
+											elm$html$Html$text('close')
+										])) : elm$html$Html$text('')
+								]))
+						]))
+				]));
+	});
+var author$project$Internal$Snackbar$Implementation$view = A3(author$project$Internal$Component$render, author$project$Internal$Snackbar$Implementation$getSet.get, author$project$Internal$Snackbar$Implementation$snackbar, author$project$Internal$Msg$SnackbarMsg);
+var author$project$Material$Snackbar$view = author$project$Internal$Snackbar$Implementation$view;
+var author$project$Display$ProjectsUI$messageSnackbar = function (model) {
+	return A5(
+		author$project$Material$Snackbar$view,
+		author$project$Models$ProjectModel$Mdc,
+		'snackMessage',
+		model.mdc,
+		_List_fromArray(
+			[author$project$Material$Snackbar$dismissible]),
+		_List_Nil);
+};
+var elm$html$Html$Events$keyCode = A2(elm$json$Json$Decode$field, 'keyCode', elm$json$Json$Decode$int);
+var elm$html$Html$Events$targetValue = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	elm$json$Json$Decode$string);
+var author$project$Display$UIWrapper$onEnterKey = function (tagger) {
+	var isEnter = function (code) {
+		return (code === 13) ? elm$json$Json$Decode$succeed('') : elm$json$Json$Decode$fail('');
+	};
+	var decodeEnter = A2(elm$json$Json$Decode$andThen, isEnter, elm$html$Html$Events$keyCode);
+	return A2(
+		author$project$Material$Options$on,
+		'keydown',
+		A3(
+			elm$json$Json$Decode$map2,
+			F2(
+				function (key, value) {
+					return tagger;
+				}),
+			decodeEnter,
+			elm$html$Html$Events$targetValue));
+};
+var author$project$Internal$Dialog$Implementation$accept = author$project$Internal$Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--accept');
+var author$project$Material$Dialog$accept = author$project$Internal$Dialog$Implementation$accept;
+var author$project$Internal$Options$onInput = function (f) {
+	return A2(
+		author$project$Internal$Options$on,
+		'input',
+		A2(elm$json$Json$Decode$map, f, elm$html$Html$Events$targetValue));
+};
+var author$project$Material$Options$onInput = author$project$Internal$Options$onInput;
+var author$project$Internal$TextField$Implementation$label = A2(
+	elm$core$Basics$composeL,
+	author$project$Internal$Options$option,
+	F2(
+		function (str, config) {
+			return _Utils_update(
+				config,
+				{
+					labelText: elm$core$Maybe$Just(str)
+				});
+		}));
+var author$project$Material$TextField$label = author$project$Internal$TextField$Implementation$label;
+var author$project$Internal$Options$internalId = function (id_) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{id_: id_});
+		});
+};
+var author$project$Internal$Dispatch$clear = function (_n0) {
+	var config = _n0.a;
+	return author$project$Internal$Dispatch$Config(
+		_Utils_update(
+			config,
+			{decoders: elm$core$Dict$empty}));
+};
+var author$project$Internal$Options$applyNativeControl = F3(
+	function (summary, ctor, options) {
+		return ctor(
+			A2(
+				author$project$Internal$Options$addAttributes,
+				A2(
+					author$project$Internal$Options$recollect,
+					{
+						attrs: _List_Nil,
+						classes: _List_Nil,
+						config: _Utils_Tuple0,
+						css: _List_Nil,
+						dispatch: author$project$Internal$Dispatch$clear(summary.dispatch),
+						internal: _List_Nil
+					},
+					_Utils_ap(summary.config.nativeControl, options)),
+				_List_Nil));
+	});
+var elm$html$Html$Attributes$for = elm$html$Html$Attributes$stringProperty('htmlFor');
+var author$project$Internal$Options$for = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$for);
+var author$project$Internal$Options$onBlur = function (msg) {
+	return A2(
+		author$project$Internal$Options$on,
+		'blur',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$Internal$TextField$Model$Geometry = F3(
+	function (width, height, labelWidth) {
+		return {height: height, labelWidth: labelWidth, width: width};
+	});
+var debois$elm_dom$DOM$childNode = function (idx) {
+	return elm$json$Json$Decode$at(
+		_List_fromArray(
+			[
+				'childNodes',
+				elm$core$String$fromInt(idx)
+			]));
+};
+var debois$elm_dom$DOM$parentElement = function (decoder) {
+	return A2(elm$json$Json$Decode$field, 'parentElement', decoder);
+};
+var author$project$Internal$TextField$Implementation$decodeGeometry = debois$elm_dom$DOM$target(
+	debois$elm_dom$DOM$parentElement(
+		A4(
+			elm$json$Json$Decode$map3,
+			author$project$Internal$TextField$Model$Geometry,
+			A2(debois$elm_dom$DOM$childNode, 2, debois$elm_dom$DOM$offsetWidth),
+			A2(debois$elm_dom$DOM$childNode, 2, debois$elm_dom$DOM$offsetHeight),
+			A2(debois$elm_dom$DOM$childNode, 1, debois$elm_dom$DOM$offsetWidth))));
+var author$project$Internal$TextField$Implementation$defaultConfig = {
+	cols: elm$core$Maybe$Nothing,
+	defaultValue: elm$core$Maybe$Nothing,
+	disabled: false,
+	fullWidth: false,
+	id_: '',
+	invalid: false,
+	labelFloat: false,
+	labelText: elm$core$Maybe$Nothing,
+	leadingIcon: elm$core$Maybe$Nothing,
+	nativeControl: _List_Nil,
+	onLeadingIconClick: elm$core$Maybe$Nothing,
+	onTrailingIconClick: elm$core$Maybe$Nothing,
+	outlined: false,
+	pattern: elm$core$Maybe$Nothing,
+	placeholder: elm$core$Maybe$Nothing,
+	required: false,
+	rows: elm$core$Maybe$Nothing,
+	textarea: false,
+	trailingIcon: elm$core$Maybe$Nothing,
+	type_: elm$core$Maybe$Just('text'),
+	value: elm$core$Maybe$Nothing
+};
+var elm$html$Html$i = _VirtualDom_node('i');
+var author$project$Internal$TextField$Implementation$iconView = F3(
+	function (lift, icon, handler) {
+		if (icon.$ === 'Just') {
+			var name = icon.a;
+			return A3(
+				author$project$Internal$Options$styled,
+				elm$html$Html$i,
+				_List_fromArray(
+					[
+						author$project$Internal$Options$cs('material-icons mdc-text-field__icon'),
+						A2(
+						author$project$Internal$Options$when,
+						!_Utils_eq(handler, elm$core$Maybe$Nothing),
+						author$project$Internal$Options$tabindex(0)),
+						A2(
+						author$project$Internal$Options$when,
+						!_Utils_eq(handler, elm$core$Maybe$Nothing),
+						author$project$Internal$Options$role('button')),
+						A2(
+						elm$core$Maybe$withDefault,
+						author$project$Internal$Options$nop,
+						A2(elm$core$Maybe$map, author$project$Internal$Options$onClick, handler))
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text(name)
+					]));
+		} else {
+			return elm$html$Html$text('');
+		}
+	});
+var author$project$Internal$TextField$Model$Blur = {$: 'Blur'};
+var author$project$Internal$TextField$Model$Focus = function (a) {
+	return {$: 'Focus', a: a};
+};
+var author$project$Internal$TextField$Model$Input = function (a) {
+	return {$: 'Input', a: a};
+};
+var author$project$Internal$TextField$Model$defaultGeometry = {height: 0, labelWidth: 0, width: 0};
+var elm$html$Html$input = _VirtualDom_node('input');
+var elm$html$Html$label = _VirtualDom_node('label');
+var elm$html$Html$textarea = _VirtualDom_node('textarea');
+var elm$html$Html$Attributes$cols = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'cols',
+		elm$core$String$fromInt(n));
+};
+var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$virtual_dom$VirtualDom$property = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_property,
+			_VirtualDom_noInnerHtmlOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var elm$html$Html$Attributes$property = elm$virtual_dom$VirtualDom$property;
+var elm$html$Html$Attributes$rows = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'rows',
+		elm$core$String$fromInt(n));
+};
+var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
+var elm$regex$Regex$Match = F4(
+	function (match, index, number, submatches) {
+		return {index: index, match: match, number: number, submatches: submatches};
+	});
+var elm$regex$Regex$contains = _Regex_contains;
+var elm$regex$Regex$fromStringWith = _Regex_fromStringWith;
+var elm$regex$Regex$fromString = function (string) {
+	return A2(
+		elm$regex$Regex$fromStringWith,
+		{caseInsensitive: false, multiline: false},
+		string);
+};
+var author$project$Internal$TextField$Implementation$textField = F5(
+	function (domId, lift, model, options, list) {
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$TextField$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var focused = model.focused && (!config.disabled);
+		var isDirty = model.isDirty || A2(
+			elm$core$Maybe$withDefault,
+			false,
+			A2(
+				elm$core$Maybe$map,
+				elm$core$Basics$neq(''),
+				config.value));
+		var htmlLabel = A3(
+			author$project$Internal$Options$styled,
+			elm$html$Html$label,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-floating-label'),
+					A2(
+					author$project$Internal$Options$when,
+					focused || isDirty,
+					author$project$Internal$Options$cs('mdc-floating-label--float-above')),
+					author$project$Internal$Options$for(config.id_)
+				]),
+			function () {
+				var _n1 = config.labelText;
+				if (_n1.$ === 'Just') {
+					var str = _n1.a;
+					return _List_fromArray(
+						[
+							elm$html$Html$text(str)
+						]);
+				} else {
+					return _List_Nil;
+				}
+			}());
+		var isInvalid = config.invalid || function () {
+			var _n0 = config.pattern;
+			if (_n0.$ === 'Just') {
+				var pattern_ = _n0.a;
+				return A2(
+					elm$core$Maybe$withDefault,
+					false,
+					A3(
+						elm$core$Maybe$map2,
+						function (regex) {
+							return A2(
+								elm$core$Basics$composeL,
+								elm$core$Basics$not,
+								elm$regex$Regex$contains(regex));
+						},
+						elm$regex$Regex$fromString('^' + (pattern_ + '$')),
+						model.value));
+			} else {
+				return false;
+			}
+		}();
+		var leadingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.leadingIcon, config.onLeadingIconClick);
+		var trailingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.trailingIcon, config.onTrailingIconClick);
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-text-field'),
+					A2(
+					author$project$Internal$Options$when,
+					focused,
+					author$project$Internal$Options$cs('mdc-text-field--focused')),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$cs('mdc-text-field--disabled')),
+					A2(
+					author$project$Internal$Options$when,
+					config.fullWidth,
+					author$project$Internal$Options$cs('mdc-text-field--fullwidth')),
+					A2(
+					author$project$Internal$Options$when,
+					isInvalid,
+					author$project$Internal$Options$cs('mdc-text-field--invalid')),
+					A2(
+					author$project$Internal$Options$when,
+					config.textarea,
+					author$project$Internal$Options$cs('mdc-text-field--textarea')),
+					A2(
+					author$project$Internal$Options$when,
+					config.outlined && (!config.textarea),
+					author$project$Internal$Options$cs('mdc-text-field--outlined')),
+					A2(
+					author$project$Internal$Options$when,
+					!_Utils_eq(config.leadingIcon, elm$core$Maybe$Nothing),
+					author$project$Internal$Options$cs('mdc-text-field--with-leading-icon')),
+					A2(
+					author$project$Internal$Options$when,
+					!_Utils_eq(config.trailingIcon, elm$core$Maybe$Nothing),
+					author$project$Internal$Options$cs('mdc-text-field--with-trailing-icon'))
+				]),
+			_List_Nil,
+			_Utils_ap(
+				list,
+				_List_fromArray(
+					[
+						leadingIcon_,
+						A4(
+						author$project$Internal$Options$applyNativeControl,
+						summary,
+						config.textarea ? elm$html$Html$textarea : elm$html$Html$input,
+						_List_fromArray(
+							[
+								author$project$Internal$Options$cs('mdc-text-field__input'),
+								author$project$Internal$Options$id(config.id_),
+								(config.outlined && (!config.textarea)) ? A2(
+								author$project$Internal$Options$on,
+								'focus',
+								A2(
+									elm$json$Json$Decode$map,
+									A2(elm$core$Basics$composeL, lift, author$project$Internal$TextField$Model$Focus),
+									author$project$Internal$TextField$Implementation$decodeGeometry)) : A2(
+								author$project$Internal$Options$on,
+								'focus',
+								elm$json$Json$Decode$succeed(
+									lift(
+										author$project$Internal$TextField$Model$Focus(author$project$Internal$TextField$Model$defaultGeometry)))),
+								author$project$Internal$Options$onBlur(
+								lift(author$project$Internal$TextField$Model$Blur)),
+								author$project$Internal$Options$onInput(
+								A2(elm$core$Basics$composeL, lift, author$project$Internal$TextField$Model$Input)),
+								A3(
+								elm$core$Basics$composeL,
+								A2(
+									elm$core$Basics$composeL,
+									author$project$Internal$Options$many,
+									elm$core$List$map(author$project$Internal$Options$attribute)),
+								elm$core$List$filterMap(elm$core$Basics$identity),
+								_List_fromArray(
+									[
+										((!config.textarea) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										elm$html$Html$Attributes$type_(
+											A2(elm$core$Maybe$withDefault, 'text', config.type_))),
+										(config.disabled ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										elm$html$Html$Attributes$disabled(true)),
+										(config.required ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										A2(
+											elm$html$Html$Attributes$property,
+											'required',
+											elm$json$Json$Encode$bool(true))),
+										((!_Utils_eq(config.pattern, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										A2(
+											elm$html$Html$Attributes$property,
+											'pattern',
+											elm$json$Json$Encode$string(
+												A2(elm$core$Maybe$withDefault, '', config.pattern)))),
+										((!_Utils_eq(config.value, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										elm$html$Html$Attributes$value(
+											A2(elm$core$Maybe$withDefault, '', config.value)))
+									])),
+								A2(
+								author$project$Internal$Options$when,
+								!_Utils_eq(config.placeholder, elm$core$Maybe$Nothing),
+								author$project$Internal$Options$attribute(
+									elm$html$Html$Attributes$placeholder(
+										A2(elm$core$Maybe$withDefault, '', config.placeholder)))),
+								A2(
+								author$project$Internal$Options$when,
+								config.textarea && (!_Utils_eq(config.rows, elm$core$Maybe$Nothing)),
+								author$project$Internal$Options$attribute(
+									elm$html$Html$Attributes$rows(
+										A2(elm$core$Maybe$withDefault, 0, config.rows)))),
+								A2(
+								author$project$Internal$Options$when,
+								config.textarea && (!_Utils_eq(config.cols, elm$core$Maybe$Nothing)),
+								author$project$Internal$Options$attribute(
+									elm$html$Html$Attributes$cols(
+										A2(elm$core$Maybe$withDefault, 0, config.cols))))
+							]),
+						_List_Nil),
+						((!config.fullWidth) && ((!config.outlined) && (!config.textarea))) ? htmlLabel : elm$html$Html$text(''),
+						trailingIcon_,
+						((!config.outlined) && (!config.textarea)) ? A3(
+						author$project$Internal$Options$styled,
+						elm$html$Html$div,
+						_List_fromArray(
+							[
+								author$project$Internal$Options$cs('mdc-line-ripple'),
+								A2(
+								author$project$Internal$Options$when,
+								model.focused,
+								author$project$Internal$Options$cs('mdc-line-ripple--active'))
+							]),
+						_List_Nil) : elm$html$Html$text(''),
+						(config.outlined || config.textarea) ? A3(
+						author$project$Internal$Options$styled,
+						elm$html$Html$div,
+						_List_fromArray(
+							[
+								author$project$Internal$Options$cs('mdc-notched-outline'),
+								A2(
+								author$project$Internal$Options$when,
+								focused || isDirty,
+								author$project$Internal$Options$cs('mdc-notched-outline--notched'))
+							]),
+						_List_fromArray(
+							[
+								A3(
+								author$project$Internal$Options$styled,
+								elm$html$Html$div,
+								_List_fromArray(
+									[
+										author$project$Internal$Options$cs('mdc-notched-outline__leading')
+									]),
+								_List_Nil),
+								A3(
+								author$project$Internal$Options$styled,
+								elm$html$Html$div,
+								_List_fromArray(
+									[
+										author$project$Internal$Options$cs('mdc-notched-outline__notch')
+									]),
+								_List_fromArray(
+									[htmlLabel])),
+								A3(
+								author$project$Internal$Options$styled,
+								elm$html$Html$div,
+								_List_fromArray(
+									[
+										author$project$Internal$Options$cs('mdc-notched-outline__trailing')
+									]),
+								_List_Nil)
+							])) : elm$html$Html$text('')
+					])));
+	});
+var author$project$Internal$TextField$Implementation$view = F4(
+	function (lift, domId, store, options) {
+		return A7(
+			author$project$Internal$Component$render,
+			author$project$Internal$TextField$Implementation$getSet.get,
+			author$project$Internal$TextField$Implementation$textField(domId),
+			author$project$Internal$Msg$TextFieldMsg,
+			lift,
+			domId,
+			store,
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$internalId(domId),
+				options));
+	});
+var author$project$Material$TextField$view = author$project$Internal$TextField$Implementation$view;
+var author$project$Display$NameDialog$nameDialog = F5(
+	function (index, model, title, onInput, onOk) {
+		return A5(
+			author$project$Material$Dialog$view,
+			author$project$Models$ProjectModel$Mdc,
+			index,
+			model.mdc,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$Options$when,
+					_Utils_eq(
+						model.openDialog,
+						elm$core$Maybe$Just(index)),
+					author$project$Material$Dialog$open),
+					author$project$Material$Dialog$onClose(
+					author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+				]),
+			_List_fromArray(
+				[
+					A3(
+					author$project$Material$Options$styled,
+					elm$html$Html$h2,
+					_List_fromArray(
+						[author$project$Material$Dialog$title]),
+					_List_fromArray(
+						[
+							elm$html$Html$text(title)
+						])),
+					A2(
+					author$project$Material$Dialog$content,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A5(
+							author$project$Material$TextField$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-textfield',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$TextField$label('Name'),
+									author$project$Material$Options$onInput(onInput),
+									author$project$Display$UIWrapper$onEnterKey(onOk)
+								]),
+							_List_Nil)
+						])),
+					A2(
+					author$project$Material$Dialog$actions,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A5(
+							author$project$Material$Button$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-button-cancel',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$Button$ripple,
+									author$project$Material$Dialog$cancel,
+									author$project$Material$Options$onClick(
+									author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('Cancel')
+								])),
+							A5(
+							author$project$Material$Button$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-button-accept',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$Button$ripple,
+									author$project$Material$Dialog$accept,
+									author$project$Material$Options$onClick(onOk)
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('OK')
+								]))
+						]))
+				]));
+	});
+var author$project$Internal$Button$Implementation$raised = author$project$Internal$Options$cs('mdc-button--raised');
+var author$project$Material$Button$raised = author$project$Internal$Button$Implementation$raised;
+var author$project$Display$UIWrapper$buttonNoClick = F4(
+	function (model, index, txt, props) {
+		return A5(
+			author$project$Material$Button$view,
+			author$project$Models$ProjectModel$Mdc,
+			index,
+			model.mdc,
+			_Utils_ap(
+				_List_fromArray(
+					[
+						author$project$Material$Button$raised,
+						A2(author$project$Material$Options$css, 'margin', '1vw 1vh')
+					]),
+				props),
+			_List_fromArray(
+				[
+					elm$html$Html$text(txt)
+				]));
+	});
+var author$project$Display$UIWrapper$buttonClick = F4(
+	function (model, index, txt, msg) {
+		return A4(
+			author$project$Display$UIWrapper$buttonNoClick,
+			model,
+			index,
+			txt,
+			_List_fromArray(
+				[
+					author$project$Material$Options$onClick(msg)
+				]));
+	});
+var author$project$Models$InternalMessages$NewProjectWithName = function (a) {
+	return {$: 'NewProjectWithName', a: a};
+};
+var author$project$Models$InternalMessages$UpdateProjectName = function (a) {
+	return {$: 'UpdateProjectName', a: a};
+};
+var author$project$Display$ProjectsUI$newProjectButton = function (model) {
+	var newProjectMessage = author$project$Models$ProjectModel$Internal(
+		author$project$Models$InternalMessages$NewProjectWithName(model.newProjectName));
+	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'dlgNewPrj');
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A5(
+				author$project$Display$NameDialog$nameDialog,
+				idxDialog,
+				model,
+				'Create and store project',
+				function (s) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$UpdateProjectName(s));
+				},
+				newProjectMessage),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'btnNewPrj'),
+				'Create and store project',
+				author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
+			]));
+};
+var author$project$Display$ProjectsUI$title = function (model) {
+	var titleWithProject = A2(
+		elm$core$Maybe$map,
+		function (p) {
+			return ' Project ' + p;
+		},
+		model.currentProject);
+	return 'EXMAP' + A2(elm$core$Maybe$withDefault, '', titleWithProject);
+};
+var author$project$Display$ProjectsUI$viewAllProjectsItem = function (pn) {
+	return A2(
+		author$project$Material$List$li,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(author$project$Material$List$graphicIcon, _List_Nil, 'folder'),
+				elm$html$Html$text(pn)
+			]));
+};
+var author$project$Models$ProjectModel$None = {$: 'None'};
+var author$project$Display$UIWrapper$sendListMsg = F3(
+	function (toMsg, list, index) {
+		var _n0 = A2(elm_community$list_extra$List$Extra$getAt, index, list);
+		if (_n0.$ === 'Just') {
+			var v = _n0.a;
+			return toMsg(v);
+		} else {
+			return author$project$Models$ProjectModel$None;
+		}
+	});
+var author$project$Internal$Icon$Implementation$size18 = A2(author$project$Internal$Options$css, 'font-size', '18px');
+var author$project$Material$Icon$size18 = author$project$Internal$Icon$Implementation$size18;
+var author$project$Material$Icon$view = author$project$Internal$Icon$Implementation$view;
+var author$project$Internal$Typography$Implementation$overline = author$project$Internal$Options$cs('mdc-typography--overline');
+var author$project$Material$Typography$overline = author$project$Internal$Typography$Implementation$overline;
+var author$project$Display$UIWrapper$titleWithIcon = F3(
+	function (txt, iconName, color) {
+		return A3(
+			author$project$Material$Options$styled,
+			elm$html$Html$label,
+			_List_fromArray(
+				[author$project$Material$Typography$overline]),
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$Icon$view,
+					_List_fromArray(
+						[
+							A2(author$project$Material$Options$css, 'color', color),
+							author$project$Material$Icon$size18
+						]),
+					iconName),
+					elm$html$Html$text(txt)
+				]));
+	});
+var author$project$Internal$List$Implementation$onSelectListItem = function (handler) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					onSelectListItem: elm$core$Maybe$Just(handler)
+				});
+		});
+};
+var author$project$Material$List$onSelectListItem = author$project$Internal$List$Implementation$onSelectListItem;
 var author$project$Models$InternalMessages$OpenProject = function (a) {
 	return {$: 'OpenProject', a: a};
 };
@@ -14924,46 +15590,40 @@ var author$project$Display$ProjectsUI$viewAllProjectsList = function (model) {
 			model.allProjects,
 			index);
 	};
-	return A5(
-		author$project$Material$List$ul,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'lstAllPrj'),
-		model.mdc,
-		_Utils_ap(
-			_List_fromArray(
-				[
-					author$project$Material$List$onSelectListItem(sendOpenProject)
-				]),
-			author$project$Display$UIWrapper$scrollableListStyle(65)),
-		A2(elm$core$List$map, author$project$Display$ProjectsUI$viewAllProjectsItem, model.allProjects));
-};
-var author$project$Internal$Icon$Implementation$size36 = A2(author$project$Internal$Options$css, 'font-size', '36px');
-var author$project$Material$Icon$size36 = author$project$Internal$Icon$Implementation$size36;
-var author$project$Material$Icon$view = author$project$Internal$Icon$Implementation$view;
-var author$project$Internal$Typography$Implementation$headline4 = author$project$Internal$Options$cs('mdc-typography--headline4');
-var author$project$Material$Typography$headline4 = author$project$Internal$Typography$Implementation$headline4;
-var author$project$Display$UIWrapper$titleWithIcon = F3(
-	function (txt, iconName, color) {
-		return A3(
-			author$project$Material$Options$styled,
-			elm$html$Html$label,
-			_List_fromArray(
-				[author$project$Material$Typography$headline4]),
-			_List_fromArray(
-				[
-					A2(
-					author$project$Material$Icon$view,
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A3(
+				author$project$Display$UIWrapper$titleWithIcon,
+				author$project$Display$ProjectsUI$title(model),
+				'work',
+				'Red'),
+				A5(
+				author$project$Material$List$ul,
+				author$project$Models$ProjectModel$Mdc,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'lstAllPrj'),
+				model.mdc,
+				_Utils_ap(
 					_List_fromArray(
 						[
-							A2(author$project$Material$Options$css, 'margin', '4px'),
-							A2(author$project$Material$Options$css, 'color', color),
-							author$project$Material$Icon$size36
+							author$project$Material$List$onSelectListItem(sendOpenProject)
 						]),
-					iconName),
-					elm$html$Html$text(txt)
-				]));
-	});
+					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewAllProjectsList)),
+				A2(elm$core$List$map, author$project$Display$ProjectsUI$viewAllProjectsItem, model.allProjects))
+			]));
+};
 var author$project$Display$MdcIndexes$viewsUIIdx = 'vws';
+var author$project$Display$ViewsUI$title = function (model) {
+	var _n0 = model.currentView;
+	if (_n0.$ === 'Just') {
+		var viewName = _n0.a;
+		return 'View ' + viewName;
+	} else {
+		return 'Views';
+	}
+};
 var author$project$Models$InternalMessages$OpenView = function (a) {
 	return {$: 'OpenView', a: a};
 };
@@ -14989,16 +15649,27 @@ var author$project$Display$ViewsUI$viewAllViewsList = F2(
 				pm.project.viewNames,
 				index);
 		};
-		return A5(
-			author$project$Material$List$ul,
-			author$project$Models$ProjectModel$Mdc,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewsUIIdx, 'lstAllVew'),
-			model.mdc,
-			A2(
-				elm$core$List$cons,
-				author$project$Material$List$onSelectListItem(sendOpenView),
-				author$project$Display$UIWrapper$scrollableListStyle(60)),
-			A2(elm$core$List$map, viewViewName, pm.project.viewNames));
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Display$UIWrapper$titleWithIcon,
+					author$project$Display$ViewsUI$title(model),
+					'view_comfy',
+					'Blue'),
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewsUIIdx, 'lstAllVew'),
+					model.mdc,
+					A2(
+						elm$core$List$cons,
+						author$project$Material$List$onSelectListItem(sendOpenView),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewAllViewsList)),
+					A2(elm$core$List$map, viewViewName, pm.project.viewNames))
+				]));
 	});
 var author$project$Display$UIWrapper$scrollableTableStyle = function (h) {
 	return _List_fromArray(
@@ -15139,14 +15810,13 @@ var elm$core$Set$union = F2(
 			A2(elm$core$Dict$union, dict1, dict2));
 	});
 var author$project$Display$ViewUI$rowIds = F2(
-	function (_n0, ms) {
-		var items = _n0.a;
+	function (row, ms) {
 		var keysForMap = function (item) {
 			if (item.$ === 'MapItem') {
 				var xmapName = item.a;
-				var _n2 = A2(elm$core$Dict$get, xmapName, ms);
-				if (_n2.$ === 'Just') {
-					var m = _n2.a;
+				var _n1 = A2(elm$core$Dict$get, xmapName, ms);
+				if (_n1.$ === 'Just') {
+					var m = _n1.a;
 					return elm$core$Set$fromList(
 						author$project$Transform$MapsExtraction$mapKeys(m));
 				} else {
@@ -15160,22 +15830,21 @@ var author$project$Display$ViewUI$rowIds = F2(
 			elm$core$List$foldr,
 			elm$core$Set$union,
 			elm$core$Set$empty,
-			A2(elm$core$List$map, keysForMap, items));
+			A2(elm$core$List$map, keysForMap, row.items));
 	});
 var author$project$Display$ViewUI$rowToTable = F2(
-	function (row, vm) {
-		var ids = A2(author$project$Display$ViewUI$rowIds, row, vm.maps);
-		var values = function (_n0) {
-			var items = _n0.a;
+	function (vr, vm) {
+		var ids = A2(author$project$Display$ViewUI$rowIds, vr, vm.maps);
+		var values = function (row) {
 			return A2(
 				elm$core$List$map,
 				A2(author$project$Display$ViewUI$itemToTable, vm.maps, ids),
-				items);
+				row.items);
 		};
 		return A2(
 			elm$core$List$cons,
 			elm$core$Set$toList(ids),
-			values(row));
+			values(vr));
 	});
 var elm$html$Html$tbody = _VirtualDom_node('tbody');
 var author$project$Internal$DataTable$Implementation$tbody = F2(
@@ -15194,8 +15863,7 @@ var author$project$Display$UIWrapper$bold = _List_fromArray(
 	[
 		A2(author$project$Material$Options$css, 'font-weight', '1000')
 	]);
-var author$project$Display$ViewUI$rowNames = function (_n0) {
-	var items = _n0.a;
+var author$project$Display$ViewUI$rowNames = function (row) {
 	var name = function (item) {
 		if (item.$ === 'MapItem') {
 			var xmapName = item.a;
@@ -15205,7 +15873,7 @@ var author$project$Display$ViewUI$rowNames = function (_n0) {
 			return label;
 		}
 	};
-	return A2(elm$core$List$map, name, items);
+	return A2(elm$core$List$map, name, row.items);
 };
 var elm$html$Html$th = _VirtualDom_node('th');
 var author$project$Internal$DataTable$Implementation$th = F2(
@@ -15262,11 +15930,19 @@ var author$project$Display$ViewUI$viewRowHeader = function (row) {
 };
 var author$project$Display$ViewUI$viewRow = F2(
 	function (vm, row) {
-		return _List_fromArray(
-			[
-				author$project$Display$ViewUI$viewRowHeader(row),
-				A2(author$project$Display$ViewUI$viewRowBody, vm, row)
-			]);
+		var _n0 = row.headerType;
+		if (_n0.$ === 'RowHasHeader') {
+			return _List_fromArray(
+				[
+					author$project$Display$ViewUI$viewRowHeader(row),
+					A2(author$project$Display$ViewUI$viewRowBody, vm, row)
+				]);
+		} else {
+			return _List_fromArray(
+				[
+					A2(author$project$Display$ViewUI$viewRowBody, vm, row)
+				]);
+		}
 	});
 var elm$html$Html$table = _VirtualDom_node('table');
 var author$project$Internal$DataTable$Implementation$table = F2(
@@ -15291,7 +15967,7 @@ var author$project$Display$ViewUI$viewView = F3(
 	function (model, pm, vm) {
 		return A2(
 			author$project$Material$DataTable$table,
-			author$project$Display$UIWrapper$scrollableTableStyle(60),
+			author$project$Display$UIWrapper$scrollableTableStyle(model.ui.heights.viewView),
 			A2(
 				elm$core$List$concatMap,
 				author$project$Display$ViewUI$viewRow(vm),
@@ -15403,49 +16079,42 @@ var author$project$Internal$LayoutGrid$Implementation$view = function (options) 
 var author$project$Material$LayoutGrid$view = author$project$Internal$LayoutGrid$Implementation$view;
 var author$project$Display$ViewsUI$viewViews = F2(
 	function (model, pm) {
-		var title = function () {
-			var _n0 = model.currentView;
-			if (_n0.$ === 'Just') {
-				var viewName = _n0.a;
-				return 'View ' + viewName;
-			} else {
-				return 'Views';
-			}
-		}();
 		return A2(
-			elm$html$Html$div,
-			_List_Nil,
+			author$project$Material$LayoutGrid$view,
 			_List_fromArray(
 				[
-					A3(author$project$Display$UIWrapper$titleWithIcon, title, 'view_comfy', 'Blue'),
+					author$project$Display$UIWrapper$heightInView(model.ui.heights.viewProjects)
+				]),
+			_List_fromArray(
+				[
 					A2(
-					author$project$Material$LayoutGrid$view,
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
 					_List_fromArray(
 						[
-							author$project$Display$UIWrapper$heightInView(70)
-						]),
+							A2(author$project$Display$ViewsUI$viewAllViewsList, model, pm)
+						])),
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
 					_List_fromArray(
 						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Display$ViewsUI$viewAllViewsList, model, pm)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Display$ViewsUI$viewCurrentView, model, pm)
-								]))
+							A2(author$project$Display$ViewsUI$viewCurrentView, model, pm)
 						]))
 				]));
 	});
 var author$project$Display$MdcIndexes$calcEditorIdx = 'clce';
+var author$project$Editor$Calculation$CalculationEditor$title = function (model) {
+	var _n0 = model.calculationEditorModel.calculationName;
+	if (_n0.$ === 'Just') {
+		var calculationName = _n0.a;
+		return 'Editing: ' + calculationName;
+	} else {
+		return 'Calculation Editor';
+	}
+};
 var author$project$Models$ProjectModel$Send = function (a) {
 	return {$: 'Send', a: a};
 };
@@ -15453,7 +16122,7 @@ var author$project$Models$WebMessages$WRLoadCalculation = F2(
 	function (a, b) {
 		return {$: 'WRLoadCalculation', a: a, b: b};
 	});
-var author$project$Editor$CalculationEditor$calculationsInProjectList = F2(
+var author$project$Editor$Calculation$CalculationEditor$calculationsInProjectList = F2(
 	function (model, pm) {
 		var projectName = pm.project.projectName;
 		var sendCalculation = function (index) {
@@ -15476,18 +16145,29 @@ var author$project$Editor$CalculationEditor$calculationsInProjectList = F2(
 						elm$html$Html$text(cn)
 					]));
 		};
-		return A5(
-			author$project$Material$List$ul,
-			author$project$Models$ProjectModel$Mdc,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstClcInPrj'),
-			model.mdc,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						author$project$Material$List$onSelectListItem(sendCalculation)
-					]),
-				author$project$Display$UIWrapper$scrollableListStyle(55)),
-			A2(elm$core$List$map, listItem, pm.project.calculations));
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Display$UIWrapper$titleWithIcon,
+					author$project$Editor$Calculation$CalculationEditor$title(model),
+					'functions',
+					'Green'),
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstClcInPrj'),
+					model.mdc,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								author$project$Material$List$onSelectListItem(sendCalculation)
+							]),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.calculationsInProjectList)),
+					A2(elm$core$List$map, listItem, pm.project.calculations))
+				]));
 	});
 var author$project$Models$InternalMessages$CloseDialogWithError = function (a) {
 	return {$: 'CloseDialogWithError', a: a};
@@ -15508,7 +16188,7 @@ var author$project$Transform$NameParser$nameFromString = function (t) {
 			elm$regex$Regex$fromString('\\w[\\w\\d]*')),
 		t) ? elm$core$Result$Ok(t) : elm$core$Result$Err('The text must start with a letter and contain only letters and numbers');
 };
-var author$project$Editor$CalculationEditor$newCalculationButton = function (model) {
+var author$project$Editor$Calculation$CalculationEditor$newCalculationButton = function (model) {
 	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'dlgNewClc');
 	var calculationEditorModel = model.calculationEditorModel;
 	var newCalculationMessage = function () {
@@ -15580,7 +16260,7 @@ var author$project$Material$TextField$value = author$project$Internal$TextField$
 var author$project$Models$InternalMessages$TextToCalculationTextArea = function (a) {
 	return {$: 'TextToCalculationTextArea', a: a};
 };
-var author$project$Editor$CalculationEditor$calculationTextArea = function (model) {
+var author$project$Editor$Calculation$CalculationEditor$calculationTextArea = function (model) {
 	return A5(
 		author$project$Material$TextField$view,
 		author$project$Models$ProjectModel$Mdc,
@@ -15590,8 +16270,8 @@ var author$project$Editor$CalculationEditor$calculationTextArea = function (mode
 			[
 				author$project$Material$TextField$label('Enter the formula'),
 				author$project$Material$TextField$textarea,
-				author$project$Display$UIWrapper$heightInView(40),
-				author$project$Material$TextField$rows(20),
+				author$project$Display$UIWrapper$heightInView(model.ui.heights.calculationTextArea),
+				author$project$Material$TextField$rows(25),
 				author$project$Material$TextField$value(
 				A2(elm$core$Maybe$withDefault, '', model.calculationEditorModel.calculationFormulaText)),
 				author$project$Material$Options$onInput(
@@ -15603,19 +16283,24 @@ var author$project$Editor$CalculationEditor$calculationTextArea = function (mode
 			]),
 		_List_Nil);
 };
+var author$project$Display$MdcIndexes$viewEditorIdx = 'vwe';
+var author$project$Internal$Options$onDoubleClick = function (msg) {
+	return A2(
+		author$project$Internal$Options$on,
+		'dblclick',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$Material$Options$onDoubleClick = author$project$Internal$Options$onDoubleClick;
 var author$project$Models$InternalMessages$AddMapToCalculation = function (a) {
 	return {$: 'AddMapToCalculation', a: a};
 };
-var author$project$Editor$CalculationEditor$mapsInProjectList = function (model) {
-	var sendAddMap = function (index) {
-		return A3(
-			author$project$Display$UIWrapper$sendListMsg,
-			function (mn) {
-				return author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$AddMapToCalculation(mn));
-			},
-			model.mapsInProject,
-			index);
+var author$project$Models$InternalMessages$SelectMapIndexForCalculation = function (a) {
+	return {$: 'SelectMapIndexForCalculation', a: a};
+};
+var author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation = function (model) {
+	var selectItem = function (index) {
+		return author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$SelectMapIndexForCalculation(index));
 	};
 	var listItem = function (mn) {
 		return A2(
@@ -15628,27 +16313,2458 @@ var author$project$Editor$CalculationEditor$mapsInProjectList = function (model)
 					author$project$Transform$MapsExtraction$xmapNameToString(mn))
 				]));
 	};
-	return A5(
-		author$project$Material$List$ul,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstMapInPrj'),
-		model.mdc,
+	var buildMsg = function (index) {
+		return A3(
+			author$project$Display$UIWrapper$sendListMsg,
+			function (mn) {
+				return author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$AddMapToCalculation(mn));
+			},
+			model.mapsInProject,
+			index);
+	};
+	var sendAddItem = A2(
+		elm$core$Maybe$withDefault,
+		author$project$Models$ProjectModel$None,
+		A2(elm$core$Maybe$map, buildMsg, model.calculationEditorModel.selectedMapIdx));
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A5(
+				author$project$Material$List$ul,
+				author$project$Models$ProjectModel$Mdc,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstMapInPrj'),
+				model.mdc,
+				_Utils_ap(
+					_List_fromArray(
+						[
+							author$project$Material$List$onSelectListItem(selectItem),
+							author$project$Material$Options$onDoubleClick(sendAddItem)
+						]),
+					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.mapsInProjectListForCalculation)),
+				A2(elm$core$List$map, listItem, model.mapsInProject)),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
+				'Add map',
+				sendAddItem)
+			]));
+};
+var author$project$Display$MdcIndexes$mapEditorIdx = 'mape';
+var author$project$Internal$Select$Implementation$label = function (stringLabel) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{label: stringLabel});
+		});
+};
+var author$project$Material$Select$label = author$project$Internal$Select$Implementation$label;
+var author$project$Internal$Select$Implementation$onSelect = function (msg) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					onSelect: elm$core$Maybe$Just(msg)
+				});
+		});
+};
+var author$project$Material$Select$onSelect = author$project$Internal$Select$Implementation$onSelect;
+var author$project$Internal$List$Implementation$rippleDisabled = author$project$Internal$Options$option(
+	function (config) {
+		return _Utils_update(
+			config,
+			{ripple: false});
+	});
+var author$project$Internal$Menu$Implementation$ListItem = F2(
+	function (a, b) {
+		return {$: 'ListItem', a: a, b: b};
+	});
+var author$project$Internal$Menu$Implementation$li = F2(
+	function (options, children) {
+		return A2(
+			author$project$Internal$Menu$Implementation$ListItem,
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$role('menuitem'),
+				options),
+			children);
+	});
+var author$project$Internal$Select$Implementation$option = function (options) {
+	return author$project$Internal$Menu$Implementation$li(
+		A2(elm$core$List$cons, author$project$Internal$List$Implementation$rippleDisabled, options));
+};
+var author$project$Material$Select$option = author$project$Internal$Select$Implementation$option;
+var author$project$Internal$List$Implementation$selected = author$project$Internal$Options$option(
+	function (config) {
+		return _Utils_update(
+			config,
+			{selected: true});
+	});
+var author$project$Internal$Select$Implementation$selected = author$project$Internal$List$Implementation$selected;
+var author$project$Material$Select$selected = author$project$Internal$Select$Implementation$selected;
+var author$project$Internal$Select$Implementation$selectedText = function (v) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{selectedText: v});
+		});
+};
+var author$project$Material$Select$selectedText = author$project$Internal$Select$Implementation$selectedText;
+var author$project$Internal$Select$Implementation$value = function (v) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					dataValue: elm$core$Maybe$Just(v)
+				});
+		});
+};
+var author$project$Material$Select$value = author$project$Internal$Select$Implementation$value;
+var author$project$Internal$Keyboard$decodeKey = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['key']),
+	elm$json$Json$Decode$string);
+var author$project$Internal$Keyboard$decodeKeyCode = elm$html$Html$Events$keyCode;
+var author$project$Internal$List$Implementation$singleSelection = author$project$Internal$Options$option(
+	function (config) {
+		return _Utils_update(
+			config,
+			{isRadioGroup: false, isSingleSelectionList: true});
+	});
+var author$project$Internal$Menu$Implementation$anchorCorner = function (value) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{anchorCorner: value});
+		});
+};
+var author$project$Internal$Menu$Implementation$bottomLeftCorner = {bottom: true, center: false, flipRtl: false, right: false};
+var author$project$Internal$GlobalEvents$encodeTickConfig = function (tickConfig) {
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'targetRect',
+				elm$json$Json$Encode$bool(tickConfig.targetRect)),
+				_Utils_Tuple2(
+				'parentRect',
+				elm$json$Json$Encode$bool(tickConfig.parentRect))
+			]));
+};
+var author$project$Internal$GlobalEvents$listenerWithValue = F3(
+	function (name, value, decoder) {
+		return author$project$Material$Options$many(
+			_List_fromArray(
+				[
+					A2(author$project$Material$Options$on, name, decoder),
+					A2(
+					author$project$Material$Options$data,
+					name,
+					A2(elm$json$Json$Encode$encode, 0, value))
+				]));
+	});
+var author$project$Internal$GlobalEvents$onTickWith = function (config) {
+	return A2(
+		author$project$Internal$GlobalEvents$listenerWithValue,
+		'globaltick',
+		author$project$Internal$GlobalEvents$encodeTickConfig(config));
+};
+var author$project$Internal$Keyboard$decodeMeta = A5(
+	elm$json$Json$Decode$map4,
+	F4(
+		function (altKey, ctrlKey, metaKey, shiftKey) {
+			return {altKey: altKey, ctrlKey: ctrlKey, metaKey: metaKey, shiftKey: shiftKey};
+		}),
+	A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['altKey']),
+		elm$json$Json$Decode$bool),
+	A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['ctrlKey']),
+		elm$json$Json$Decode$bool),
+	A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['metaKey']),
+		elm$json$Json$Decode$bool),
+	A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['shiftKey']),
+		elm$json$Json$Decode$bool));
+var author$project$Internal$Menu$Implementation$horizontalOffset = F3(
+	function (config, corner, geometry) {
+		var isRightAligned = corner.right;
+		var avoidHorizontalOverlap = config.anchorCorner.right;
+		return isRightAligned ? (avoidHorizontalOverlap ? (geometry.anchor.width - config.anchorMargin.left) : config.anchorMargin.right) : (avoidHorizontalOverlap ? (geometry.anchor.width - config.anchorMargin.right) : config.anchorMargin.left);
+	});
+var author$project$Internal$Menu$Implementation$menuMaxHeight = F3(
+	function (config, corner, geometry) {
+		var isBottomAligned = corner.bottom;
+		return config.anchorCorner.bottom ? (isBottomAligned ? (geometry.viewportDistance.top + config.anchorMargin.top) : (geometry.viewportDistance.bottom - config.anchorMargin.bottom)) : 0;
+	});
+var author$project$Internal$Menu$Implementation$originCorner = F2(
+	function (config, geometry) {
+		var isRtl = false;
+		var isFlipRtl = config.anchorCorner.flipRtl;
+		var isBottomAligned = config.anchorCorner.bottom;
+		var flipRtl = false;
+		var center = false;
+		var avoidHorizontalOverlap = config.anchorCorner.right;
+		var isAlignedRight = (avoidHorizontalOverlap && (!isRtl)) || ((!avoidHorizontalOverlap) && (isFlipRtl && isRtl));
+		var availableTop = isBottomAligned ? ((geometry.viewportDistance.top + geometry.anchor.height) + config.anchorMargin.bottom) : (geometry.viewportDistance.top + config.anchorMargin.top);
+		var topOverflow = geometry.menu.height - availableTop;
+		var availableRight = isAlignedRight ? (geometry.viewportDistance.right - config.anchorMargin.right) : ((geometry.viewportDistance.right + geometry.anchor.width) - config.anchorMargin.left);
+		var rightOverflow = geometry.menu.width - availableRight;
+		var availableLeft = isAlignedRight ? ((geometry.viewportDistance.left + geometry.anchor.width) + config.anchorMargin.right) : (geometry.viewportDistance.left + config.anchorMargin.left);
+		var leftOverflow = geometry.menu.width - availableLeft;
+		var right = ((leftOverflow < 0) && (isAlignedRight && isRtl)) || ((avoidHorizontalOverlap && ((!isAlignedRight) && (leftOverflow < 0))) || ((rightOverflow > 0) && (_Utils_cmp(leftOverflow, rightOverflow) < 0)));
+		var availableBottom = isBottomAligned ? (geometry.viewportDistance.bottom - config.anchorMargin.bottom) : ((geometry.viewportDistance.bottom + geometry.anchor.height) + config.anchorMargin.top);
+		var bottomOverflow = geometry.menu.height - availableBottom;
+		var bottom = (bottomOverflow > 0) && (_Utils_cmp(topOverflow, bottomOverflow) < 0);
+		return {bottom: bottom, center: center, flipRtl: flipRtl, right: right};
+	});
+var author$project$Internal$Menu$Implementation$verticalOffset = F3(
+	function (config, corner, geometry) {
+		var marginToEdge = 32;
+		var isBottomAligned = corner.bottom;
+		var avoidVerticalOverlap = config.anchorCorner.bottom;
+		var canOverlapVertically = !avoidVerticalOverlap;
+		return isBottomAligned ? ((canOverlapVertically && (_Utils_cmp(geometry.menu.height, geometry.viewportDistance.top + geometry.anchor.height) > 0)) ? (-(A2(elm$core$Basics$min, geometry.menu.height, geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))) : (avoidVerticalOverlap ? (geometry.anchor.height - config.anchorMargin.top) : (-config.anchorMargin.bottom))) : ((canOverlapVertically && (_Utils_cmp(geometry.menu.height, geometry.viewportDistance.bottom + geometry.anchor.height) > 0)) ? (-(A2(elm$core$Basics$min, geometry.menu.height, geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))) : (avoidVerticalOverlap ? (geometry.anchor.height + config.anchorMargin.bottom) : config.anchorMargin.top));
+	});
+var author$project$Internal$Menu$Implementation$autoPosition = F2(
+	function (config, geometry) {
+		var corner = A2(author$project$Internal$Menu$Implementation$originCorner, config, geometry);
+		var horizontalAlignment = corner.right ? 'right' : 'left';
+		var horizontalAlignment_ = ((geometry.anchor.width / geometry.menu.width) > 0.67) ? 'center' : horizontalAlignment;
+		var horizontalOffset_ = A3(author$project$Internal$Menu$Implementation$horizontalOffset, config, corner, geometry);
+		var maxMenuHeight = A3(author$project$Internal$Menu$Implementation$menuMaxHeight, config, corner, geometry);
+		var verticalAlignment = corner.bottom ? 'bottom' : 'top';
+		var verticalOffset_ = A3(author$project$Internal$Menu$Implementation$verticalOffset, config, corner, geometry);
+		var position = {
+			bottom: (verticalAlignment === 'bottom') ? elm$core$Maybe$Just(
+				elm$core$String$fromFloat(verticalOffset_) + 'px') : elm$core$Maybe$Nothing,
+			left: (horizontalAlignment === 'left') ? elm$core$Maybe$Just(
+				elm$core$String$fromFloat(horizontalOffset_) + 'px') : elm$core$Maybe$Nothing,
+			right: (horizontalAlignment === 'right') ? elm$core$Maybe$Just(
+				elm$core$String$fromFloat(horizontalOffset_) + 'px') : elm$core$Maybe$Nothing,
+			top: (verticalAlignment === 'top') ? elm$core$Maybe$Just(
+				elm$core$String$fromFloat(verticalOffset_) + 'px') : elm$core$Maybe$Nothing
+		};
+		var verticalAlignment_ = function () {
+			if ((!config.anchorCorner.bottom) && (elm$core$Basics$abs(verticalOffset_ / geometry.menu.height) > 0.1)) {
+				var verticalOffsetPercent = elm$core$Basics$abs(verticalOffset_ / geometry.menu.height) * 100;
+				var originPercent = corner.bottom ? (100 - verticalOffsetPercent) : verticalOffsetPercent;
+				return elm$core$String$fromFloat(
+					elm$core$Basics$round(originPercent * 100) / 100) + '%';
+			} else {
+				return verticalAlignment;
+			}
+		}();
+		return {
+			maxHeight: maxMenuHeight ? (elm$core$String$fromFloat(maxMenuHeight) + 'px') : 'auto',
+			position: position,
+			transformOrigin: horizontalAlignment_ + (' ' + verticalAlignment_)
+		};
+	});
+var author$project$Internal$Menu$Model$Geometry = F4(
+	function (viewport, viewportDistance, anchor, menu) {
+		return {anchor: anchor, menu: menu, viewport: viewport, viewportDistance: viewportDistance};
+	});
+var author$project$Internal$Menu$Model$Viewport = F2(
+	function (width, height) {
+		return {height: height, width: width};
+	});
+var author$project$Internal$Menu$Implementation$decodeGeometry = function () {
+	var decodeViewportDistance = F2(
+		function (decodedViewport, decodedAnchorRect) {
+			return elm$json$Json$Decode$succeed(
+				{bottom: (decodedViewport.height - decodedAnchorRect.top) - decodedAnchorRect.height, left: decodedAnchorRect.left, right: (decodedViewport.width - decodedAnchorRect.left) - decodedAnchorRect.width, top: decodedAnchorRect.top});
+		});
+	var decodeViewport = debois$elm_dom$DOM$target(
+		A2(
+			elm$json$Json$Decode$at,
+			_List_fromArray(
+				['ownerDocument', 'defaultView']),
+			A3(
+				elm$json$Json$Decode$map2,
+				author$project$Internal$Menu$Model$Viewport,
+				A2(
+					elm$json$Json$Decode$at,
+					_List_fromArray(
+						['innerWidth']),
+					elm$json$Json$Decode$float),
+				A2(
+					elm$json$Json$Decode$at,
+					_List_fromArray(
+						['innerHeight']),
+					elm$json$Json$Decode$float))));
+	var decodeMenu = A3(
+		elm$json$Json$Decode$map2,
+		F2(
+			function (offsetWidth, offsetHeight) {
+				return {height: offsetHeight, width: offsetWidth};
+			}),
+		debois$elm_dom$DOM$offsetWidth,
+		debois$elm_dom$DOM$offsetHeight);
+	var anchorRect = A2(
+		elm$json$Json$Decode$at,
+		_List_fromArray(
+			['parentRect']),
+		A5(
+			elm$json$Json$Decode$map4,
+			F4(
+				function (top, left, width, height) {
+					return {height: height, left: left, top: top, width: width};
+				}),
+			A2(
+				elm$json$Json$Decode$at,
+				_List_fromArray(
+					['top']),
+				elm$json$Json$Decode$float),
+			A2(
+				elm$json$Json$Decode$at,
+				_List_fromArray(
+					['left']),
+				elm$json$Json$Decode$float),
+			A2(
+				elm$json$Json$Decode$at,
+				_List_fromArray(
+					['width']),
+				elm$json$Json$Decode$float),
+			A2(
+				elm$json$Json$Decode$at,
+				_List_fromArray(
+					['height']),
+				elm$json$Json$Decode$float)));
+	var anchor = function (_n1) {
+		var width = _n1.width;
+		var height = _n1.height;
+		return elm$json$Json$Decode$succeed(
+			{height: height, width: width});
+	};
+	return A2(
+		elm$json$Json$Decode$andThen,
+		function (_n0) {
+			var decodedViewport = _n0.a;
+			var decodedeAnchorRect = _n0.b;
+			return debois$elm_dom$DOM$target(
+				A4(
+					elm$json$Json$Decode$map3,
+					author$project$Internal$Menu$Model$Geometry(decodedViewport),
+					A2(decodeViewportDistance, decodedViewport, decodedeAnchorRect),
+					anchor(decodedeAnchorRect),
+					decodeMenu));
+		},
+		A3(
+			elm$json$Json$Decode$map2,
+			F2(
+				function (x, y) {
+					return _Utils_Tuple2(x, y);
+				}),
+			decodeViewport,
+			anchorRect));
+}();
+var author$project$Internal$Menu$Implementation$defaultMargin = {bottom: 0, left: 0, right: 0, top: 0};
+var author$project$Internal$Menu$Implementation$topLeftCorner = {bottom: false, center: false, flipRtl: false, right: false};
+var author$project$Internal$Menu$Implementation$defaultConfig = {anchorCorner: author$project$Internal$Menu$Implementation$topLeftCorner, anchorMargin: author$project$Internal$Menu$Implementation$defaultMargin, index: elm$core$Maybe$Nothing, open: false, quickOpen: false};
+var author$project$Internal$List$Implementation$asListItemView = F9(
+	function (domId, lift, model, config, listItemsIds, focusedIndex, index, options, children) {
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			A2(elm$core$Maybe$withDefault, elm$html$Html$div, summary.config.node),
+			_List_Nil,
+			_List_Nil,
+			children);
+	});
+var author$project$Internal$List$Implementation$node = function (nodeFunc) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					node: elm$core$Maybe$Just(nodeFunc)
+				});
+		});
+};
+var author$project$Internal$List$Implementation$asListItem = F3(
+	function (dom_node, options, children) {
+		return {
+			children: author$project$Internal$List$Implementation$HtmlList(children),
+			focusable: false,
+			options: A2(
+				elm$core$List$cons,
+				author$project$Internal$List$Implementation$node(dom_node),
+				options),
+			view: author$project$Internal$List$Implementation$asListItemView
+		};
+	});
+var author$project$Internal$List$Implementation$divider = function (options) {
+	return A2(
+		author$project$Internal$List$Implementation$asListItem,
+		elm$html$Html$li,
 		A2(
 			elm$core$List$cons,
-			author$project$Material$List$onSelectListItem(sendAddMap),
-			author$project$Display$UIWrapper$scrollableListStyle(40)),
-		A2(elm$core$List$map, listItem, model.mapsInProject));
+			author$project$Internal$Options$cs('mdc-list-divider'),
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$role('separator'),
+				options)));
 };
-var author$project$Internal$FormField$Implementation$view = function (options) {
+var author$project$Internal$List$Implementation$ListItemList = function (a) {
+	return {$: 'ListItemList', a: a};
+};
+var author$project$Internal$List$Implementation$nestedUl = F3(
+	function (a_view, options, children) {
+		return {
+			children: author$project$Internal$List$Implementation$ListItemList(children),
+			focusable: true,
+			options: options,
+			view: a_view
+		};
+	});
+var author$project$Internal$Menu$Implementation$selectionGroupView = F9(
+	function (domId, lift, model, config, listItemIds, focusedIndex, an_index, options, children) {
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			A2(elm$core$Maybe$withDefault, elm$html$Html$div, summary.config.node),
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-menu__selection-group')
+				]),
+			_List_Nil,
+			children);
+	});
+var author$project$Internal$Menu$Implementation$toListItem = function (items) {
+	return A2(
+		elm$core$List$indexedMap,
+		F2(
+			function (i, item) {
+				switch (item.$) {
+					case 'Divider':
+						var options = item.a;
+						var children = item.b;
+						return A2(author$project$Internal$List$Implementation$divider, options, children);
+					case 'ListItem':
+						var options = item.a;
+						var children = item.b;
+						return A2(author$project$Internal$List$Implementation$li, options, children);
+					default:
+						var options = item.a;
+						var children = item.b;
+						return A3(
+							author$project$Internal$List$Implementation$nestedUl,
+							author$project$Internal$Menu$Implementation$selectionGroupView,
+							options,
+							author$project$Internal$Menu$Implementation$toListItem(children));
+				}
+			}),
+		items);
+};
+var author$project$Internal$Menu$Model$CloseDelayed = {$: 'CloseDelayed'};
+var author$project$Internal$Menu$Model$Init = F2(
+	function (a, b) {
+		return {$: 'Init', a: a, b: b};
+	});
+var author$project$Internal$Menu$Model$KeyDown = F3(
+	function (a, b, c) {
+		return {$: 'KeyDown', a: a, b: b, c: c};
+	});
+var author$project$Internal$Menu$Model$KeyUp = F3(
+	function (a, b, c) {
+		return {$: 'KeyUp', a: a, b: b, c: c};
+	});
+var author$project$Internal$Menu$Model$defaultGeometry = {
+	anchor: {height: 0, width: 0},
+	menu: {height: 0, width: 0},
+	viewport: {height: 0, width: 0},
+	viewportDistance: {bottom: 0, left: 0, right: 0, top: 0}
+};
+var author$project$Internal$Menu$Implementation$menu = F5(
+	function (domId, lift, model, options, ulNode) {
+		var listId = domId + '__list';
+		var geometry = A2(elm$core$Maybe$withDefault, author$project$Internal$Menu$Model$defaultGeometry, model.geometry);
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Menu$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var _n0 = A2(author$project$Internal$Menu$Implementation$autoPosition, config, geometry);
+		var position = _n0.position;
+		var transformOrigin = _n0.transformOrigin;
+		var maxHeight = _n0.maxHeight;
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-menu mdc-menu-surface'),
+					A2(
+					author$project$Internal$Options$when,
+					model.animating && (!config.quickOpen),
+					model.open ? author$project$Internal$Options$cs('mdc-menu-surface--animating-open') : author$project$Internal$Options$cs('mdc-menu-surface--animating-closed')),
+					A2(
+					author$project$Internal$Options$when,
+					model.open && ((!_Utils_eq(model.geometry, elm$core$Maybe$Nothing)) || config.quickOpen),
+					author$project$Internal$Options$many(
+						_List_fromArray(
+							[
+								author$project$Internal$Options$cs('mdc-menu-surface--open'),
+								A2(
+								author$project$Internal$Options$onWithOptions,
+								'click',
+								elm$json$Json$Decode$succeed(
+									{
+										message: lift(author$project$Internal$Menu$Model$CloseDelayed),
+										preventDefault: false,
+										stopPropagation: true
+									}))
+							]))),
+					A3(
+					elm$core$Basics$composeL,
+					author$project$Internal$Options$when(
+						(model.open || model.animating) && (!_Utils_eq(model.geometry, elm$core$Maybe$Nothing))),
+					author$project$Internal$Options$many,
+					_List_fromArray(
+						[
+							A2(author$project$Internal$Options$css, 'transform-origin', transformOrigin),
+							A2(
+							author$project$Internal$Options$when,
+							!_Utils_eq(position.top, elm$core$Maybe$Nothing),
+							A2(
+								author$project$Internal$Options$css,
+								'top',
+								A2(elm$core$Maybe$withDefault, '', position.top))),
+							A2(
+							author$project$Internal$Options$when,
+							!_Utils_eq(position.left, elm$core$Maybe$Nothing),
+							A2(
+								author$project$Internal$Options$css,
+								'left',
+								A2(elm$core$Maybe$withDefault, '', position.left))),
+							A2(
+							author$project$Internal$Options$when,
+							!_Utils_eq(position.bottom, elm$core$Maybe$Nothing),
+							A2(
+								author$project$Internal$Options$css,
+								'bottom',
+								A2(elm$core$Maybe$withDefault, '', position.bottom))),
+							A2(
+							author$project$Internal$Options$when,
+							!_Utils_eq(position.right, elm$core$Maybe$Nothing),
+							A2(
+								author$project$Internal$Options$css,
+								'right',
+								A2(elm$core$Maybe$withDefault, '', position.right))),
+							A2(author$project$Internal$Options$css, 'max-height', maxHeight)
+						])),
+					A2(
+					author$project$Internal$Options$when,
+					(model.open || model.animating) && _Utils_eq(model.geometry, elm$core$Maybe$Nothing),
+					A2(
+						author$project$Internal$GlobalEvents$onTickWith,
+						{parentRect: true, targetRect: false},
+						A2(
+							elm$json$Json$Decode$map,
+							A2(
+								elm$core$Basics$composeL,
+								lift,
+								author$project$Internal$Menu$Model$Init(
+									{
+										focusedItemId: listId + ('--' + elm$core$String$fromInt(
+											A2(elm$core$Maybe$withDefault, 0, config.index))),
+										index: config.index,
+										quickOpen: config.quickOpen
+									})),
+							author$project$Internal$Menu$Implementation$decodeGeometry))),
+					A2(
+					author$project$Internal$Options$on,
+					'keyup',
+					A2(
+						elm$json$Json$Decode$map,
+						lift,
+						A4(elm$json$Json$Decode$map3, author$project$Internal$Menu$Model$KeyUp, author$project$Internal$Keyboard$decodeMeta, author$project$Internal$Keyboard$decodeKey, author$project$Internal$Keyboard$decodeKeyCode))),
+					A2(
+					author$project$Internal$Options$on,
+					'keydown',
+					A2(
+						elm$json$Json$Decode$map,
+						lift,
+						A4(elm$json$Json$Decode$map3, author$project$Internal$Menu$Model$KeyDown, author$project$Internal$Keyboard$decodeMeta, author$project$Internal$Keyboard$decodeKey, author$project$Internal$Keyboard$decodeKeyCode)))
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A5(
+					author$project$Internal$List$Implementation$ul,
+					listId,
+					A2(elm$core$Basics$composeL, lift, author$project$Internal$Menu$Model$ListMsg),
+					model.list,
+					_Utils_ap(
+						ulNode.options,
+						_List_fromArray(
+							[
+								author$project$Internal$Options$role('menu'),
+								A2(author$project$Internal$Options$aria, 'hidden', 'true'),
+								A2(author$project$Internal$Options$aria, 'orientation', 'vertical'),
+								author$project$Internal$Options$tabindex(-1)
+							])),
+					author$project$Internal$Menu$Implementation$toListItem(ulNode.items))
+				]));
+	});
+var author$project$Internal$Menu$Implementation$onSelect = function (msg) {
+	var trigger = F2(
+		function (key, keyCode) {
+			var isSpace = (key === 'Space') || (keyCode === 32);
+			var isEnter = (key === 'Enter') || (keyCode === 13);
+			return (isSpace || isEnter) ? elm$json$Json$Decode$succeed(msg) : elm$json$Json$Decode$fail('');
+		});
+	return author$project$Internal$Options$many(
+		_List_fromArray(
+			[
+				author$project$Internal$Options$onClick(msg),
+				A2(
+				author$project$Internal$Options$on,
+				'keyup',
+				A2(
+					elm$json$Json$Decode$andThen,
+					elm$core$Basics$identity,
+					A3(elm$json$Json$Decode$map2, trigger, author$project$Internal$Keyboard$decodeKey, author$project$Internal$Keyboard$decodeKeyCode)))
+			]));
+};
+var author$project$Internal$Menu$Implementation$ul = F2(
+	function (options, items) {
+		return {items: items, options: options};
+	});
+var author$project$Internal$Options$onFocus = function (msg) {
+	return A2(
+		author$project$Internal$Options$on,
+		'focus',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$Internal$Select$Implementation$dataValue = function (options) {
+	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
+	var config = summary.config;
+	return config.dataValue;
+};
+var author$project$Internal$Select$Implementation$defaultConfig = {disabled: false, id_: '', label: '', onSelect: elm$core$Maybe$Nothing, outlined: false, required: false, selectedText: ''};
+var author$project$Internal$Select$Model$Blur = {$: 'Blur'};
+var author$project$Internal$Select$Model$Focus = {$: 'Focus'};
+var author$project$Internal$Select$Model$KeyDown = F3(
+	function (a, b, c) {
+		return {$: 'KeyDown', a: a, b: b, c: c};
+	});
+var author$project$Internal$Select$Model$MenuSelection = F3(
+	function (a, b, c) {
+		return {$: 'MenuSelection', a: a, b: b, c: c};
+	});
+var author$project$Internal$Select$Model$ToggleMenu = {$: 'ToggleMenu'};
+var author$project$Internal$Select$Implementation$select = F5(
+	function (domId, lift, model, options, items_) {
+		var selectedTextDomId = domId + '__selected-text';
+		var selectable = function (msg) {
+			return elm$core$List$map(
+				function (item) {
+					if (item.$ === 'ListItem') {
+						var options_ = item.a;
+						var nodes = item.b;
+						var maybe_value = author$project$Internal$Select$Implementation$dataValue(options_);
+						if (maybe_value.$ === 'Just') {
+							var v = maybe_value.a;
+							return A2(
+								author$project$Internal$Menu$Implementation$ListItem,
+								A2(
+									elm$core$List$cons,
+									author$project$Internal$Menu$Implementation$onSelect(
+										lift(
+											A3(author$project$Internal$Select$Model$MenuSelection, selectedTextDomId, msg, v))),
+									options_),
+								nodes);
+						} else {
+							return item;
+						}
+					} else {
+						return item;
+					}
+				});
+		};
+		var menuIndex = domId + '__menu';
+		var isDirty = model.isDirty;
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Select$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var focused = (model.focused && (!config.disabled)) || model.menu.open;
+		var floatAbove = focused || (isDirty || (config.selectedText !== ''));
+		var htmlLabel = A3(
+			author$project$Internal$Options$styled,
+			elm$html$Html$span,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-floating-label'),
+					A2(
+					author$project$Internal$Options$when,
+					floatAbove,
+					author$project$Internal$Options$cs('mdc-floating-label--float-above'))
+				]),
+			_List_fromArray(
+				[
+					elm$html$Html$text(config.label)
+				]));
+		var items = config.required ? items_ : A2(
+			elm$core$List$cons,
+			A2(
+				author$project$Internal$Select$Implementation$option,
+				_List_fromArray(
+					[
+						author$project$Internal$Select$Implementation$value('')
+					]),
+				_List_Nil),
+			items_);
+		var ripple_or_outline = config.outlined ? A3(
+			author$project$Internal$Options$styled,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-notched-outline'),
+					A2(
+					author$project$Internal$Options$when,
+					floatAbove,
+					author$project$Internal$Options$cs('mdc-notched-outline--notched'))
+				]),
+			_List_fromArray(
+				[
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-notched-outline__leading')
+						]),
+					_List_Nil),
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-notched-outline__notch')
+						]),
+					_List_fromArray(
+						[htmlLabel])),
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-notched-outline__trailing')
+						]),
+					_List_Nil)
+				])) : A3(
+			author$project$Internal$Options$styled,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-line-ripple'),
+					A2(
+					author$project$Internal$Options$when,
+					focused,
+					author$project$Internal$Options$cs('mdc-line-ripple--active'))
+				]),
+			_List_Nil);
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-select'),
+					A2(
+					author$project$Internal$Options$when,
+					focused,
+					author$project$Internal$Options$cs('mdc-select--focused')),
+					A2(
+					author$project$Internal$Options$when,
+					model.menu.open,
+					author$project$Internal$Options$cs('mdc-select--activated')),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$cs('mdc-select--disabled')),
+					A2(
+					author$project$Internal$Options$when,
+					config.outlined,
+					author$project$Internal$Options$cs('mdc-select--outlined')),
+					author$project$Internal$Options$id(domId)
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-select__anchor'),
+							author$project$Internal$Options$onClick(
+							lift(author$project$Internal$Select$Model$ToggleMenu))
+						]),
+					_List_fromArray(
+						[
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$i,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-select__dropdown-icon'),
+									author$project$Internal$Options$onClick(
+									lift(author$project$Internal$Select$Model$ToggleMenu))
+								]),
+							_List_Nil),
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-select__selected-text'),
+									author$project$Internal$Options$id(selectedTextDomId),
+									author$project$Internal$Options$tabindex(0),
+									A2(
+									author$project$Internal$Options$aria,
+									'disabled',
+									config.disabled ? 'true' : 'false'),
+									A2(
+									author$project$Internal$Options$aria,
+									'expanded',
+									model.menu.open ? 'true' : 'false'),
+									author$project$Internal$Options$onFocus(
+									lift(author$project$Internal$Select$Model$Focus)),
+									author$project$Internal$Options$onBlur(
+									lift(author$project$Internal$Select$Model$Blur)),
+									A2(
+									author$project$Internal$Options$on,
+									'keydown',
+									A2(
+										elm$json$Json$Decode$map,
+										lift,
+										A3(
+											elm$json$Json$Decode$map2,
+											author$project$Internal$Select$Model$KeyDown(menuIndex),
+											author$project$Internal$Keyboard$decodeKey,
+											author$project$Internal$Keyboard$decodeKeyCode)))
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text(config.selectedText)
+								])),
+							(!config.outlined) ? htmlLabel : elm$html$Html$text(''),
+							ripple_or_outline
+						])),
+					A5(
+					author$project$Internal$Menu$Implementation$menu,
+					menuIndex,
+					A2(elm$core$Basics$composeL, lift, author$project$Internal$Select$Model$MenuMsg),
+					model.menu,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-select__menu'),
+							author$project$Internal$Menu$Implementation$anchorCorner(author$project$Internal$Menu$Implementation$bottomLeftCorner)
+						]),
+					A2(
+						author$project$Internal$Menu$Implementation$ul,
+						_List_fromArray(
+							[author$project$Internal$List$Implementation$singleSelection]),
+						function () {
+							var _n0 = config.onSelect;
+							if (_n0.$ === 'Just') {
+								var msg = _n0.a;
+								return A2(selectable, msg, items);
+							} else {
+								return items;
+							}
+						}()))
+				]));
+	});
+var author$project$Internal$Select$Implementation$view = F4(
+	function (lift, index, store, options) {
+		return A7(
+			author$project$Internal$Component$render,
+			author$project$Internal$Select$Implementation$getSet.get,
+			author$project$Internal$Select$Implementation$select(index),
+			author$project$Internal$Msg$SelectMsg,
+			lift,
+			index,
+			store,
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$internalId(index),
+				options));
+	});
+var author$project$Material$Select$view = author$project$Internal$Select$Implementation$view;
+var author$project$Models$InternalMessages$ChangeOperationMode = function (a) {
+	return {$: 'ChangeOperationMode', a: a};
+};
+var author$project$Transform$TypeConversion$enumToText = F3(
+	function (enums, texts, _enum) {
+		return A2(
+			elm$core$Maybe$map,
+			elm$core$Tuple$second,
+			A2(
+				elm_community$list_extra$List$Extra$find,
+				function (_n0) {
+					var e = _n0.a;
+					return _Utils_eq(e, _enum);
+				},
+				A2(elm_community$list_extra$List$Extra$zip, enums, texts)));
+	});
+var author$project$Transform$TypeConversion$textToEnum = F3(
+	function (enums, texts, text) {
+		return A2(
+			elm$core$Maybe$map,
+			elm$core$Tuple$first,
+			A2(
+				elm_community$list_extra$List$Extra$find,
+				function (_n0) {
+					var t = _n0.b;
+					return _Utils_eq(t, text);
+				},
+				A2(elm_community$list_extra$List$Extra$zip, enums, texts)));
+	});
+var author$project$Editor$Calculation$CalculationEditor$operationNameChoice = function (model) {
+	var texts = _List_fromArray(
+		['Union', 'Intersection']);
+	var modes = _List_fromArray(
+		[author$project$Types$Calculation$Union, author$project$Types$Calculation$Intersection]);
+	var hasMode = function (m) {
+		return _Utils_eq(model.calculationEditorModel.operationMode, m);
+	};
+	var selectOptions = function (m) {
+		return A2(
+			elm$core$List$cons,
+			author$project$Material$Select$value(
+				A2(
+					elm$core$Maybe$withDefault,
+					'',
+					A3(author$project$Transform$TypeConversion$enumToText, modes, texts, m))),
+			hasMode(m) ? _List_fromArray(
+				[author$project$Material$Select$selected]) : _List_Nil);
+	};
+	var changeMapTypeFromText = function (txt) {
+		return author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$ChangeOperationMode(
+				A2(
+					elm$core$Maybe$withDefault,
+					author$project$Types$Calculation$Union,
+					A3(author$project$Transform$TypeConversion$textToEnum, modes, texts, txt))));
+	};
+	return A5(
+		author$project$Material$Select$view,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'selOperationName'),
+		model.mdc,
+		_List_fromArray(
+			[
+				author$project$Material$Select$label('Mode'),
+				author$project$Material$Select$selectedText(
+				A2(
+					elm$core$Maybe$withDefault,
+					'',
+					A3(author$project$Transform$TypeConversion$enumToText, modes, texts, model.calculationEditorModel.operationMode))),
+				author$project$Material$Select$onSelect(changeMapTypeFromText)
+			]),
+		A2(
+			elm$core$List$map,
+			function (_n0) {
+				var m = _n0.a;
+				var txt = _n0.b;
+				return A2(
+					author$project$Material$Select$option,
+					selectOptions(m),
+					_List_fromArray(
+						[
+							elm$html$Html$text(txt)
+						]));
+			},
+			A2(elm_community$list_extra$List$Extra$zip, modes, texts)));
+};
+var author$project$Models$InternalMessages$TextToResultNameText = function (a) {
+	return {$: 'TextToResultNameText', a: a};
+};
+var author$project$Editor$Calculation$CalculationEditor$resultMapNameText = function (model) {
+	return A5(
+		author$project$Material$TextField$view,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'txtResMapNme'),
+		model.mdc,
+		_List_fromArray(
+			[
+				author$project$Material$TextField$label('Enter the result map name'),
+				author$project$Material$TextField$value(
+				A2(elm$core$Maybe$withDefault, '', model.calculationEditorModel.resultMapName)),
+				author$project$Material$Options$onInput(
+				function (s) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$TextToResultNameText(s));
+				})
+			]),
+		_List_Nil);
+};
+var author$project$Models$WebMessages$WRAddCalculation = F2(
+	function (a, b) {
+		return {$: 'WRAddCalculation', a: a, b: b};
+	});
+var author$project$Models$WebMessages$WRUpdateCalculation = F2(
+	function (a, b) {
+		return {$: 'WRUpdateCalculation', a: a, b: b};
+	});
+var author$project$Editor$Calculation$CalculationEditor$storeCalculationWithData = F5(
+	function (pn, cm, cn, rn, ft) {
+		var cs = {calculationName: cn, formulaText: ft, operationMode: cm.operationMode, resultName: rn};
+		return cm.isNew ? author$project$Models$ProjectModel$Send(
+			A2(author$project$Models$WebMessages$WRAddCalculation, pn, cs)) : author$project$Models$ProjectModel$Send(
+			A2(author$project$Models$WebMessages$WRUpdateCalculation, pn, cs));
+	});
+var author$project$Models$InternalMessages$ShowMessage = function (a) {
+	return {$: 'ShowMessage', a: a};
+};
+var author$project$Transform$MapsExtraction$xmapNameFromString = function (t) {
+	return A2(
+		elm$regex$Regex$contains,
+		A2(
+			elm$core$Maybe$withDefault,
+			elm$regex$Regex$never,
+			elm$regex$Regex$fromString('^[a-zA-Z]\\w*(\\/[a-zA-Z]\\w*)*$')),
+		t) ? elm$core$Result$Ok(
+		A2(
+			elm$core$List$map,
+			elm$core$String$trim,
+			A2(elm$core$String$split, '/', t))) : elm$core$Result$Err('The text must start with a letter and contain only letters, numbers and slashes');
+};
+var author$project$Editor$Calculation$CalculationEditor$storeCalculation = F2(
+	function (pm, cm) {
+		var _n0 = cm.calculationName;
+		if (_n0.$ === 'Just') {
+			var cn = _n0.a;
+			var _n1 = cm.calculationFormulaText;
+			if (_n1.$ === 'Just') {
+				var ft = _n1.a;
+				var _n2 = cm.resultMapName;
+				if (_n2.$ === 'Just') {
+					var rns = _n2.a;
+					var _n3 = author$project$Transform$MapsExtraction$xmapNameFromString(rns);
+					if (_n3.$ === 'Ok') {
+						var rn = _n3.a;
+						return A5(author$project$Editor$Calculation$CalculationEditor$storeCalculationWithData, pm.project.projectName, cm, cn, rn, ft);
+					} else {
+						var e = _n3.a;
+						return author$project$Models$ProjectModel$Internal(
+							author$project$Models$InternalMessages$ShowMessage(e));
+					}
+				} else {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$ShowMessage('Please enter a result map name'));
+				}
+			} else {
+				return author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ShowMessage('Please enter a formula'));
+			}
+		} else {
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$ShowMessage('Please enter a calculation name'));
+		}
+	});
+var author$project$Editor$Calculation$CalculationEditor$storeButton = F2(
+	function (model, pm) {
+		return A4(
+			author$project$Display$UIWrapper$buttonClick,
+			model,
+			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'btnStr'),
+			'Store Calculation',
+			A2(author$project$Editor$Calculation$CalculationEditor$storeCalculation, pm, model.calculationEditorModel));
+	});
+var author$project$Models$EmptyModel$emptyFunctionModel = {idsByCategory: elm$core$Dict$empty, typesById: elm$core$Dict$empty};
+var author$project$Editor$Calculation$FunctionChooser$functions = function (model) {
+	return A2(elm$core$Maybe$withDefault, author$project$Models$EmptyModel$emptyFunctionModel, model.functions);
+};
+var author$project$Editor$Calculation$FunctionChooser$categories = function (model) {
+	return elm$core$Dict$keys(
+		author$project$Editor$Calculation$FunctionChooser$functions(model).idsByCategory);
+};
+var author$project$Models$InternalMessages$SwitchCategoryTo = function (a) {
+	return {$: 'SwitchCategoryTo', a: a};
+};
+var author$project$Editor$Calculation$FunctionChooser$categoryChoice = function (model) {
+	var selectOptions = function (cat) {
+		return A2(
+			elm$core$List$cons,
+			author$project$Material$Select$value(cat),
+			A2(
+				elm$core$Maybe$withDefault,
+				_List_Nil,
+				A2(
+					elm$core$Maybe$andThen,
+					function (c) {
+						return _Utils_eq(c, cat) ? elm$core$Maybe$Just(
+							_List_fromArray(
+								[author$project$Material$Select$selected])) : elm$core$Maybe$Nothing;
+					},
+					model.currentCategory)));
+	};
+	var cats = author$project$Editor$Calculation$FunctionChooser$categories(model);
+	return A5(
+		author$project$Material$Select$view,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'selCategory'),
+		model.mdc,
+		_List_fromArray(
+			[
+				author$project$Material$Select$label('Category'),
+				author$project$Material$Select$selectedText(
+				A2(elm$core$Maybe$withDefault, '', model.currentCategory)),
+				author$project$Material$Select$onSelect(
+				function (cat) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$SwitchCategoryTo(cat));
+				})
+			]),
+		A2(
+			elm$core$List$map,
+			function (cat) {
+				return A2(
+					author$project$Material$Select$option,
+					selectOptions(cat),
+					_List_fromArray(
+						[
+							elm$html$Html$text(cat)
+						]));
+			},
+			cats));
+};
+var author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText = function (t) {
+	switch (t.$) {
+		case 'ParameterDouble':
+			return 'double';
+		case 'ParameterInt':
+			return 'int';
+		case 'ParameterString':
+			return 'string';
+		case 'ParameterBool':
+			return 'bool';
+		default:
+			return 'any';
+	}
+};
+var author$project$Handler$InternalCalculationMessageUpdate$operationSignatureToText = function (ot) {
+	return A2(
+		elm$core$String$join,
+		', ',
+		A2(elm$core$List$map, author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText, ot.parametersTypes)) + (' -> ' + author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText(ot.returnType));
+};
+var author$project$Internal$List$Implementation$dense = author$project$Internal$Options$cs('mdc-list--dense');
+var author$project$Material$List$dense = author$project$Internal$List$Implementation$dense;
+var author$project$Internal$List$Implementation$primaryText = function (options) {
 	return A2(
 		author$project$Internal$Options$styled,
-		elm$html$Html$div,
+		elm$html$Html$span,
 		A2(
 			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-form-field'),
+			author$project$Internal$Options$cs('mdc-list-item__primary-text'),
 			options));
 };
-var author$project$Material$FormField$view = author$project$Internal$FormField$Implementation$view;
+var author$project$Material$List$primaryText = author$project$Internal$List$Implementation$primaryText;
+var author$project$Internal$List$Implementation$secondaryText = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$span,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-list-item__secondary-text'),
+			options));
+};
+var author$project$Material$List$secondaryText = author$project$Internal$List$Implementation$secondaryText;
+var author$project$Internal$List$Implementation$text = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$span,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-list-item__text'),
+			options));
+};
+var author$project$Material$List$text = author$project$Internal$List$Implementation$text;
+var author$project$Internal$List$Implementation$twoLine = author$project$Internal$Options$cs('mdc-list--two-line');
+var author$project$Material$List$twoLine = author$project$Internal$List$Implementation$twoLine;
+var author$project$Models$InternalMessages$AddOperationToCalculation = function (a) {
+	return {$: 'AddOperationToCalculation', a: a};
+};
+var author$project$Models$InternalMessages$SelectFunctionIndexForCalculation = function (a) {
+	return {$: 'SelectFunctionIndexForCalculation', a: a};
+};
+var elm$core$List$sortBy = _List_sortBy;
+var elm$core$String$toLower = _String_toLower;
+var author$project$Editor$Calculation$FunctionChooser$functionsNamesList = function (model) {
+	var typeForId = function (id) {
+		var _n2 = A2(
+			elm$core$Dict$get,
+			author$project$Types$Calculation$operationIdToTuple(id),
+			author$project$Editor$Calculation$FunctionChooser$functions(model).typesById);
+		if (_n2.$ === 'Nothing') {
+			return '';
+		} else {
+			var types = _n2.a;
+			return author$project$Handler$InternalCalculationMessageUpdate$operationSignatureToText(types);
+		}
+	};
+	var toMatch = elm$core$String$toLower(
+		elm$core$String$trim(model.calculationEditorModel.operationsMatch));
+	var selectItem = function (index) {
+		return author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$SelectFunctionIndexForCalculation(index));
+	};
+	var operationListItem = function (on) {
+		return A2(
+			author$project$Material$List$li,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(author$project$Material$List$graphicIcon, _List_Nil, 'play_arrow'),
+					A2(
+					author$project$Material$List$text,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							author$project$Material$List$primaryText,
+							_List_Nil,
+							_List_fromArray(
+								[
+									elm$html$Html$text(on.name)
+								])),
+							A2(
+							author$project$Material$List$secondaryText,
+							_List_Nil,
+							_List_fromArray(
+								[
+									elm$html$Html$text(
+									typeForId(on))
+								]))
+						]))
+				]));
+	};
+	var allOperations = A2(
+		elm$core$List$sortBy,
+		function (o) {
+			return o.name;
+		},
+		elm$core$List$concat(
+			elm$core$Dict$values(
+				author$project$Editor$Calculation$FunctionChooser$functions(model).idsByCategory)));
+	var operationsSelected = function () {
+		var _n1 = model.currentCategory;
+		if (_n1.$ === 'Nothing') {
+			return allOperations;
+		} else {
+			var currentCategory = _n1.a;
+			return A2(
+				elm$core$Maybe$withDefault,
+				allOperations,
+				A2(
+					elm$core$Dict$get,
+					currentCategory,
+					author$project$Editor$Calculation$FunctionChooser$functions(model).idsByCategory));
+		}
+	}();
+	var operationToShow = function () {
+		if (toMatch === '') {
+			return operationsSelected;
+		} else {
+			return A2(
+				elm$core$List$filter,
+				function (o) {
+					return A2(
+						elm$core$String$contains,
+						toMatch,
+						elm$core$String$toLower(o.name));
+				},
+				operationsSelected);
+		}
+	}();
+	var buildMsg = function (index) {
+		return A3(
+			author$project$Display$UIWrapper$sendListMsg,
+			function (on) {
+				return author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$AddOperationToCalculation(on));
+			},
+			operationToShow,
+			index);
+	};
+	var sendAddItem = A2(
+		elm$core$Maybe$withDefault,
+		author$project$Models$ProjectModel$None,
+		A2(elm$core$Maybe$map, buildMsg, model.calculationEditorModel.selectedFunctionIdx));
+	var operationList = A2(elm$core$List$map, operationListItem, operationToShow);
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A5(
+				author$project$Material$List$ul,
+				author$project$Models$ProjectModel$Mdc,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstFnc'),
+				model.mdc,
+				_Utils_ap(
+					_List_fromArray(
+						[
+							author$project$Material$List$onSelectListItem(selectItem),
+							author$project$Material$Options$onDoubleClick(sendAddItem),
+							author$project$Material$List$twoLine,
+							author$project$Material$List$dense
+						]),
+					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.functionsNamesList)),
+				operationList),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddFunction'),
+				'Add function',
+				sendAddItem)
+			]));
+};
+var author$project$Models$InternalMessages$ChangeOperationsMatch = function (a) {
+	return {$: 'ChangeOperationsMatch', a: a};
+};
+var author$project$Editor$Calculation$FunctionChooser$matchText = function (model) {
+	return A5(
+		author$project$Material$TextField$view,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'txtMatch'),
+		model.mdc,
+		_List_fromArray(
+			[
+				author$project$Material$TextField$label('Search'),
+				author$project$Material$TextField$value(model.calculationEditorModel.operationsMatch),
+				author$project$Material$Options$onInput(
+				function (s) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$ChangeOperationsMatch(s));
+				})
+			]),
+		_List_Nil);
+};
+var author$project$Material$LayoutGrid$inner = author$project$Internal$LayoutGrid$Implementation$inner;
+var author$project$Internal$LayoutGrid$Implementation$span2Phone = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('phone'),
+	2);
+var author$project$Material$LayoutGrid$span2Phone = author$project$Internal$LayoutGrid$Implementation$span2Phone;
+var author$project$Internal$LayoutGrid$Implementation$span4Tablet = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('tablet'),
+	4);
+var author$project$Material$LayoutGrid$span4Tablet = author$project$Internal$LayoutGrid$Implementation$span4Tablet;
+var author$project$Internal$LayoutGrid$Implementation$span6Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	6);
+var author$project$Material$LayoutGrid$span6Desktop = author$project$Internal$LayoutGrid$Implementation$span6Desktop;
+var author$project$Editor$Calculation$FunctionChooser$viewFunctions = function (model) {
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				author$project$Material$LayoutGrid$inner,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						author$project$Material$LayoutGrid$cell,
+						_List_fromArray(
+							[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span6Desktop, author$project$Material$LayoutGrid$span2Phone]),
+						_List_fromArray(
+							[
+								author$project$Editor$Calculation$FunctionChooser$categoryChoice(model)
+							])),
+						A2(
+						author$project$Material$LayoutGrid$cell,
+						_List_fromArray(
+							[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span6Desktop, author$project$Material$LayoutGrid$span2Phone]),
+						_List_fromArray(
+							[
+								author$project$Editor$Calculation$FunctionChooser$matchText(model)
+							]))
+					])),
+				author$project$Editor$Calculation$FunctionChooser$functionsNamesList(model)
+			]));
+};
+var author$project$Internal$LayoutGrid$Implementation$span3Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	3);
+var author$project$Material$LayoutGrid$span3Desktop = author$project$Internal$LayoutGrid$Implementation$span3Desktop;
+var author$project$Internal$LayoutGrid$Implementation$span3Tablet = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('tablet'),
+	3);
+var author$project$Material$LayoutGrid$span3Tablet = author$project$Internal$LayoutGrid$Implementation$span3Tablet;
+var author$project$Internal$LayoutGrid$Implementation$span4Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	4);
+var author$project$Material$LayoutGrid$span4Desktop = author$project$Internal$LayoutGrid$Implementation$span4Desktop;
+var author$project$Internal$LayoutGrid$Implementation$span5Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	5);
+var author$project$Material$LayoutGrid$span5Desktop = author$project$Internal$LayoutGrid$Implementation$span5Desktop;
+var author$project$Editor$Calculation$CalculationEditor$viewEditorForCalculation = F3(
+	function (model, pm, cn) {
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$LayoutGrid$inner,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$Calculation$CalculationEditor$resultMapNameText(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span2Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$Calculation$CalculationEditor$operationNameChoice(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_Nil)
+						])),
+					A2(
+					author$project$Material$LayoutGrid$view,
+					_List_fromArray(
+						[
+							author$project$Display$UIWrapper$heightInView(model.ui.heights.viewEditorForCalculation)
+						]),
+					_List_fromArray(
+						[
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span2Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$Calculation$CalculationEditor$calculationTextArea(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$Calculation$FunctionChooser$viewFunctions(model)
+								]))
+						])),
+					A2(
+					author$project$Material$LayoutGrid$view,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_Nil),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span2Phone]),
+							_List_Nil),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span1Phone]),
+							_List_fromArray(
+								[
+									A2(author$project$Editor$Calculation$CalculationEditor$storeButton, model, pm)
+								]))
+						]))
+				]));
+	});
+var author$project$Editor$Calculation$CalculationEditor$viewCalculationEditor = F2(
+	function (model, pm) {
+		var _n0 = model.calculationEditorModel.calculationName;
+		if (_n0.$ === 'Just') {
+			var cn = _n0.a;
+			return A3(author$project$Editor$Calculation$CalculationEditor$viewEditorForCalculation, model, pm, cn);
+		} else {
+			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+		}
+	});
+var author$project$Editor$Calculation$CalculationEditor$viewCalculationsEditor = F2(
+	function (model, pm) {
+		return A2(
+			author$project$Material$LayoutGrid$view,
+			_List_fromArray(
+				[
+					author$project$Display$UIWrapper$heightInView(model.ui.heights.viewCalculationsEditor)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$div,
+							_List_Nil,
+							_List_fromArray(
+								[
+									A2(author$project$Editor$Calculation$CalculationEditor$calculationsInProjectList, model, pm),
+									author$project$Editor$Calculation$CalculationEditor$newCalculationButton(model)
+								]))
+						])),
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
+					_List_fromArray(
+						[
+							A2(author$project$Editor$Calculation$CalculationEditor$viewCalculationEditor, model, pm)
+						]))
+				]));
+	});
+var author$project$Editor$Map$MapEditor$fileSourcesOfProject = function (p) {
+	var maybeMaps = A2(
+		elm$core$Maybe$map,
+		function (s) {
+			return s.sourceOfMaps;
+		},
+		A2(
+			elm_community$list_extra$List$Extra$find,
+			function (s) {
+				return _Utils_eq(s.sourceType, author$project$Types$Project$FileSource);
+			},
+			p.sources));
+	return A2(elm$core$Maybe$withDefault, _List_Nil, maybeMaps);
+};
+var author$project$Editor$Map$MapEditor$title = function (model) {
+	var types = _List_fromArray(
+		[author$project$Types$XMapTypes$TypeDouble, author$project$Types$XMapTypes$TypeInt, author$project$Types$XMapTypes$TypeString, author$project$Types$XMapTypes$TypeBool, author$project$Types$XMapTypes$TypeDate]);
+	var texts = _List_fromArray(
+		['Double', 'Int', 'String', 'Bool', 'Date']);
+	var mapTypeText = A2(
+		elm$core$Maybe$withDefault,
+		'',
+		A3(author$project$Transform$TypeConversion$enumToText, types, texts, model.xmapEditorModel.xmapType));
+	var _n0 = model.xmapEditorModel.xmapName;
+	if (_n0.$ === 'Just') {
+		var xmapName = _n0.a;
+		return 'Editing: ' + (author$project$Transform$MapsExtraction$xmapNameToString(xmapName) + (' (' + (mapTypeText + ')')));
+	} else {
+		return 'Map Editor';
+	}
+};
+var author$project$Models$InternalMessages$ShowMapInEditor = function (a) {
+	return {$: 'ShowMapInEditor', a: a};
+};
+var author$project$Editor$Map$MapEditor$mapEditorMapList = F2(
+	function (model, p) {
+		var sendShowMap = function (index) {
+			return A3(
+				author$project$Display$UIWrapper$sendListMsg,
+				function (mn) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$ShowMapInEditor(mn));
+				},
+				author$project$Editor$Map$MapEditor$fileSourcesOfProject(p),
+				index);
+		};
+		var listItem = function (mn) {
+			return A2(
+				author$project$Material$List$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
+						elm$html$Html$text(
+						author$project$Transform$MapsExtraction$xmapNameToString(mn))
+					]));
+		};
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Display$UIWrapper$titleWithIcon,
+					author$project$Editor$Map$MapEditor$title(model),
+					'layers',
+					'DarkOrange'),
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'lstMap'),
+					model.mdc,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								author$project$Material$List$onSelectListItem(sendShowMap)
+							]),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.mapEditorMapList)),
+					A2(
+						elm$core$List$map,
+						listItem,
+						author$project$Editor$Map$MapEditor$fileSourcesOfProject(p)))
+				]));
+	});
+var author$project$Display$UIWrapper$buttonMaybe = F4(
+	function (model, index, txt, mmsg) {
+		var msgProp = function () {
+			if (mmsg.$ === 'Just') {
+				var msg = mmsg.a;
+				return _List_fromArray(
+					[
+						author$project$Material$Options$onClick(msg)
+					]);
+			} else {
+				return _List_Nil;
+			}
+		}();
+		return A4(author$project$Display$UIWrapper$buttonNoClick, model, index, txt, msgProp);
+	});
+var author$project$Editor$Map$MapEditor$mapHeader = A2(
+	author$project$Material$DataTable$thead,
+	_List_Nil,
+	_List_fromArray(
+		[
+			A2(
+			author$project$Material$DataTable$tr,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$DataTable$th,
+					author$project$Display$UIWrapper$bold,
+					_List_fromArray(
+						[
+							elm$html$Html$text('Ids')
+						])),
+					A2(
+					author$project$Material$DataTable$th,
+					author$project$Display$UIWrapper$bold,
+					_List_fromArray(
+						[
+							elm$html$Html$text('Values')
+						]))
+				]))
+		]));
+var author$project$Editor$Map$MapEditor$mapEditorTableEmpty = A2(
+	author$project$Material$DataTable$table,
+	_List_Nil,
+	_List_fromArray(
+		[
+			author$project$Editor$Map$MapEditor$mapHeader,
+			A2(author$project$Material$DataTable$tbody, _List_Nil, _List_Nil)
+		]));
+var author$project$Editor$Map$MapEditor$lineToTableRow = function (line) {
+	return A2(
+		author$project$Material$DataTable$tr,
+		_List_Nil,
+		A2(
+			elm$core$List$map,
+			function (v) {
+				return A2(
+					author$project$Material$DataTable$td,
+					_List_Nil,
+					_List_fromArray(
+						[
+							elm$html$Html$text(v)
+						]));
+			},
+			line));
+};
+var author$project$Editor$Map$MapEditor$mapRows = function (m) {
+	var rows = A2(
+		elm$core$List$map,
+		author$project$Editor$Map$MapEditor$lineToTableRow,
+		author$project$Transform$XMapText$mapToTransposedMatrix(m));
+	return A2(author$project$Material$DataTable$tbody, _List_Nil, rows);
+};
+var author$project$Editor$Map$MapEditor$mapEditorTableFull = F2(
+	function (model, m) {
+		return A2(
+			author$project$Material$DataTable$table,
+			author$project$Display$UIWrapper$scrollableTableStyle(model.ui.heights.mapEditorTableFull),
+			_List_fromArray(
+				[
+					author$project$Editor$Map$MapEditor$mapHeader,
+					author$project$Editor$Map$MapEditor$mapRows(m)
+				]));
+	});
+var author$project$Editor$Map$MapEditor$mapEditorTable = F2(
+	function (model, mm) {
+		if (mm.$ === 'Just') {
+			var m = mm.a;
+			return A2(author$project$Editor$Map$MapEditor$mapEditorTableFull, model, m);
+		} else {
+			return author$project$Editor$Map$MapEditor$mapEditorTableEmpty;
+		}
+	});
+var author$project$Models$InternalMessages$TextToMapTextArea = function (a) {
+	return {$: 'TextToMapTextArea', a: a};
+};
+var author$project$Editor$Map$MapEditor$mapEditorTextArea = F2(
+	function (model, pm) {
+		return A5(
+			author$project$Material$TextField$view,
+			author$project$Models$ProjectModel$Mdc,
+			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'txaMapDta'),
+			model.mdc,
+			_List_fromArray(
+				[
+					author$project$Material$TextField$label('Enter the map data'),
+					author$project$Material$TextField$textarea,
+					author$project$Display$UIWrapper$heightInView(model.ui.heights.mapEditorTextArea),
+					author$project$Material$TextField$rows(25),
+					author$project$Material$TextField$value(
+					A2(elm$core$Maybe$withDefault, '', model.xmapEditorModel.xmapEditing)),
+					author$project$Material$Options$onInput(
+					function (s) {
+						return author$project$Models$ProjectModel$Internal(
+							author$project$Models$InternalMessages$TextToMapTextArea(s));
+					}),
+					author$project$Display$UIWrapper$useWholeWidth
+				]),
+			_List_Nil);
+	});
+var author$project$Models$WebMessages$WRAddMap = F2(
+	function (a, b) {
+		return {$: 'WRAddMap', a: a, b: b};
+	});
+var author$project$Models$WebMessages$WRUpdateMap = F2(
+	function (a, b) {
+		return {$: 'WRUpdateMap', a: a, b: b};
+	});
+var author$project$Editor$Map$MapEditor$storeMap = F4(
+	function (model, pm, n, m) {
+		return model.xmapEditorModel.isNew ? author$project$Models$ProjectModel$Send(
+			A2(
+				author$project$Models$WebMessages$WRAddMap,
+				pm.project.projectName,
+				{xmap: m, xmapName: n})) : author$project$Models$ProjectModel$Send(
+			A2(
+				author$project$Models$WebMessages$WRUpdateMap,
+				pm.project.projectName,
+				{xmap: m, xmapName: n}));
+	});
+var author$project$Internal$LayoutGrid$Implementation$span1Tablet = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('tablet'),
+	1);
+var author$project$Material$LayoutGrid$span1Tablet = author$project$Internal$LayoutGrid$Implementation$span1Tablet;
+var author$project$Internal$LayoutGrid$Implementation$span5Tablet = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('tablet'),
+	5);
+var author$project$Material$LayoutGrid$span5Tablet = author$project$Internal$LayoutGrid$Implementation$span5Tablet;
+var author$project$Internal$LayoutGrid$Implementation$span7Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	7);
+var author$project$Material$LayoutGrid$span7Desktop = author$project$Internal$LayoutGrid$Implementation$span7Desktop;
+var author$project$Models$InternalMessages$MapToTable = {$: 'MapToTable'};
+var author$project$Models$InternalMessages$MapToTextArea = {$: 'MapToTextArea'};
+var author$project$Editor$Map$MapEditor$mapEditorViewForMap = F2(
+	function (model, pm) {
+		var xmapEditorModel = model.xmapEditorModel;
+		var _n0 = model.xmapEditorModel.xmapName;
+		if (_n0.$ === 'Just') {
+			var mn = _n0.a;
+			return A2(
+				elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						author$project$Material$LayoutGrid$view,
+						_List_fromArray(
+							[
+								author$project$Display$UIWrapper$heightInView(model.ui.heights.mapEditorViewForMap)
+							]),
+						_List_fromArray(
+							[
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span1Phone]),
+								_List_fromArray(
+									[
+										A2(author$project$Editor$Map$MapEditor$mapEditorTextArea, model, pm)
+									])),
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span5Tablet, author$project$Material$LayoutGrid$span7Desktop, author$project$Material$LayoutGrid$span3Phone]),
+								_List_fromArray(
+									[
+										A2(author$project$Editor$Map$MapEditor$mapEditorTable, model, xmapEditorModel.xmapToEdit)
+									]))
+							])),
+						A2(
+						author$project$Material$LayoutGrid$view,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span3Phone]),
+								_List_fromArray(
+									[
+										A4(
+										author$project$Display$UIWrapper$buttonClick,
+										model,
+										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToTbl'),
+										'To Table >',
+										author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$MapToTable))
+									])),
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span3Phone]),
+								_List_fromArray(
+									[
+										A4(
+										author$project$Display$UIWrapper$buttonClick,
+										model,
+										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToTxt'),
+										'< To Text',
+										author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$MapToTextArea))
+									])),
+								A2(
+								author$project$Material$LayoutGrid$cell,
+								_List_fromArray(
+									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
+								_List_fromArray(
+									[
+										A4(
+										author$project$Display$UIWrapper$buttonMaybe,
+										model,
+										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToStr'),
+										'Store Map',
+										A3(
+											elm$core$Maybe$map2,
+											A2(author$project$Editor$Map$MapEditor$storeMap, model, pm),
+											xmapEditorModel.xmapName,
+											xmapEditorModel.xmapToEdit))
+									]))
+							]))
+					]));
+		} else {
+			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+		}
+	});
+var author$project$Models$InternalMessages$ChangeMapType = function (a) {
+	return {$: 'ChangeMapType', a: a};
+};
+var author$project$Display$NewMapDialog$xmapTypeChoice = function (model) {
+	var types = _List_fromArray(
+		[author$project$Types$XMapTypes$TypeDouble, author$project$Types$XMapTypes$TypeInt, author$project$Types$XMapTypes$TypeString, author$project$Types$XMapTypes$TypeBool, author$project$Types$XMapTypes$TypeDate]);
+	var texts = _List_fromArray(
+		['Double', 'Int', 'String', 'Bool', 'Date']);
+	var hasType = function (t) {
+		return _Utils_eq(model.xmapEditorModel.xmapType, t);
+	};
+	var selectOptions = function (t) {
+		return A2(
+			elm$core$List$cons,
+			author$project$Material$Select$value(
+				A2(
+					elm$core$Maybe$withDefault,
+					'',
+					A3(author$project$Transform$TypeConversion$enumToText, types, texts, t))),
+			hasType(t) ? _List_fromArray(
+				[author$project$Material$Select$selected]) : _List_Nil);
+	};
+	var changeMapTypeFromText = function (txt) {
+		return author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$ChangeMapType(
+				A2(
+					elm$core$Maybe$withDefault,
+					author$project$Types$XMapTypes$TypeString,
+					A3(author$project$Transform$TypeConversion$textToEnum, types, texts, txt))));
+	};
+	return A5(
+		author$project$Material$Select$view,
+		author$project$Models$ProjectModel$Mdc,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'selXmapType'),
+		model.mdc,
+		_List_fromArray(
+			[
+				author$project$Material$Select$label('Type'),
+				author$project$Material$Select$selectedText(
+				A2(
+					elm$core$Maybe$withDefault,
+					'',
+					A3(author$project$Transform$TypeConversion$enumToText, types, texts, model.xmapEditorModel.xmapType))),
+				author$project$Material$Select$onSelect(changeMapTypeFromText)
+			]),
+		A2(
+			elm$core$List$map,
+			function (_n0) {
+				var t = _n0.a;
+				var txt = _n0.b;
+				return A2(
+					author$project$Material$Select$option,
+					selectOptions(t),
+					_List_fromArray(
+						[
+							elm$html$Html$text(txt)
+						]));
+			},
+			A2(elm_community$list_extra$List$Extra$zip, types, texts)));
+};
+var author$project$Models$InternalMessages$NewMapWithName = F2(
+	function (a, b) {
+		return {$: 'NewMapWithName', a: a, b: b};
+	});
+var author$project$Models$InternalMessages$UpdateMapName = function (a) {
+	return {$: 'UpdateMapName', a: a};
+};
+var author$project$Display$NewMapDialog$newMapDialog = F2(
+	function (index, model) {
+		var storeNewMap = function () {
+			var _n0 = author$project$Transform$MapsExtraction$xmapNameFromString(model.xmapEditorModel.newXmapName);
+			if (_n0.$ === 'Ok') {
+				var mn = _n0.a;
+				return author$project$Models$ProjectModel$Internal(
+					A2(author$project$Models$InternalMessages$NewMapWithName, mn, model.xmapEditorModel.xmapType));
+			} else {
+				var e = _n0.a;
+				return author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$CloseDialogWithError(e));
+			}
+		}();
+		return A5(
+			author$project$Material$Dialog$view,
+			author$project$Models$ProjectModel$Mdc,
+			index,
+			model.mdc,
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$Options$when,
+					_Utils_eq(
+						model.openDialog,
+						elm$core$Maybe$Just(index)),
+					author$project$Material$Dialog$open),
+					author$project$Material$Dialog$onClose(
+					author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+				]),
+			_List_fromArray(
+				[
+					A3(
+					author$project$Material$Options$styled,
+					elm$html$Html$h2,
+					_List_fromArray(
+						[author$project$Material$Dialog$title]),
+					_List_fromArray(
+						[
+							elm$html$Html$text('New Map')
+						])),
+					A2(
+					author$project$Material$Dialog$content,
+					_List_fromArray(
+						[
+							author$project$Display$UIWrapper$heightInView(model.ui.heights.newMapDialog)
+						]),
+					_List_fromArray(
+						[
+							A5(
+							author$project$Material$TextField$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-textfield',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$TextField$label('Name'),
+									author$project$Material$Options$onInput(
+									function (s) {
+										return author$project$Models$ProjectModel$Internal(
+											author$project$Models$InternalMessages$UpdateMapName(s));
+									})
+								]),
+							_List_Nil),
+							author$project$Display$NewMapDialog$xmapTypeChoice(model)
+						])),
+					A2(
+					author$project$Material$Dialog$actions,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A5(
+							author$project$Material$Button$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-button-cancel',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$Button$ripple,
+									author$project$Material$Dialog$cancel,
+									author$project$Material$Options$onClick(
+									author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$CloseDialog))
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('Cancel')
+								])),
+							A5(
+							author$project$Material$Button$view,
+							author$project$Models$ProjectModel$Mdc,
+							index + '-button-accept',
+							model.mdc,
+							_List_fromArray(
+								[
+									author$project$Material$Button$ripple,
+									author$project$Material$Dialog$accept,
+									author$project$Material$Options$onClick(storeNewMap)
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text('OK')
+								]))
+						]))
+				]));
+	});
+var author$project$Editor$Map$MapEditor$newMapButton = function (model) {
+	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'dlgNewMap');
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(author$project$Display$NewMapDialog$newMapDialog, idxDialog, model),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnNewMap'),
+				'New Map',
+				author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
+			]));
+};
+var author$project$Editor$Map$MapEditor$mapEditorView = F2(
+	function (model, pm) {
+		return A2(
+			author$project$Material$LayoutGrid$view,
+			_List_fromArray(
+				[
+					author$project$Display$UIWrapper$heightInView(model.ui.heights.mapEditorView)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
+					_List_fromArray(
+						[
+							A2(author$project$Editor$Map$MapEditor$mapEditorMapList, model, pm.project),
+							author$project$Editor$Map$MapEditor$newMapButton(model)
+						])),
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
+					_List_fromArray(
+						[
+							A2(author$project$Editor$Map$MapEditor$mapEditorViewForMap, model, pm)
+						]))
+				]));
+	});
+var author$project$Models$InternalMessages$NewViewWithName = function (a) {
+	return {$: 'NewViewWithName', a: a};
+};
+var author$project$Models$InternalMessages$UpdateViewName = function (a) {
+	return {$: 'UpdateViewName', a: a};
+};
+var author$project$Editor$View$ViewEditor$newViewButton = function (model) {
+	var newViewMessage = function () {
+		var _n0 = author$project$Transform$NameParser$nameFromString(model.viewEditorModel.newViewName);
+		if (_n0.$ === 'Ok') {
+			var newViewName = _n0.a;
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$NewViewWithName(newViewName));
+		} else {
+			var err = _n0.a;
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$CloseDialogWithError(err));
+		}
+	}();
+	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'dlgNewVew');
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A5(
+				author$project$Display$NameDialog$nameDialog,
+				idxDialog,
+				model,
+				'New view',
+				function (s) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$UpdateViewName(s));
+				},
+				newViewMessage),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnNewVew'),
+				'New view',
+				author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
+			]));
+};
+var author$project$Models$InternalMessages$AddItemToView = F2(
+	function (a, b) {
+		return {$: 'AddItemToView', a: a, b: b};
+	});
+var author$project$Models$InternalMessages$UpdateViewLabel = function (a) {
+	return {$: 'UpdateViewLabel', a: a};
+};
+var author$project$Editor$View$ViewEditor$addLabelButton = function (model) {
+	var viewEditorModel = model.viewEditorModel;
+	var newLabelMessage = author$project$Models$ProjectModel$Internal(
+		A2(
+			author$project$Models$InternalMessages$AddItemToView,
+			viewEditorModel.rowToAddTo,
+			author$project$Types$Views$LabelItem(viewEditorModel.labelEditing)));
+	return A2(
+		author$project$Material$LayoutGrid$inner,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				author$project$Material$LayoutGrid$cell,
+				_List_fromArray(
+					[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span7Desktop, author$project$Material$LayoutGrid$span2Phone]),
+				_List_fromArray(
+					[
+						A5(
+						author$project$Material$TextField$view,
+						author$project$Models$ProjectModel$Mdc,
+						A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'txtAddLbl'),
+						model.mdc,
+						_List_fromArray(
+							[
+								author$project$Material$TextField$label('Label text'),
+								author$project$Material$TextField$value(viewEditorModel.labelEditing),
+								author$project$Material$Options$onInput(
+								function (s) {
+									return author$project$Models$ProjectModel$Internal(
+										author$project$Models$InternalMessages$UpdateViewLabel(s));
+								})
+							]),
+						_List_Nil)
+					])),
+				A2(
+				author$project$Material$LayoutGrid$cell,
+				_List_fromArray(
+					[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span2Phone]),
+				_List_fromArray(
+					[
+						A4(
+						author$project$Display$UIWrapper$buttonClick,
+						model,
+						A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddLbl'),
+						'Add label',
+						newLabelMessage)
+					]))
+			]));
+};
+var author$project$Models$WebMessages$WRAddView = F2(
+	function (a, b) {
+		return {$: 'WRAddView', a: a, b: b};
+	});
+var author$project$Models$WebMessages$WRUpdateView = F2(
+	function (a, b) {
+		return {$: 'WRUpdateView', a: a, b: b};
+	});
+var author$project$Editor$View$ViewEditor$storeView = F2(
+	function (pm, vm) {
+		var viewEditRowToViewRow = function (vr) {
+			return A2(
+				author$project$Types$Views$ViewRow,
+				A2(
+					elm$core$List$map,
+					function (i) {
+						return i.content;
+					},
+					vr.items),
+				vr.headerType);
+		};
+		var viewToStore = F2(
+			function (v, vn) {
+				return {
+					rows: A2(elm$core$List$map, viewEditRowToViewRow, v.rows),
+					viewName: vn
+				};
+			});
+		var storeValidViewToEdit = F2(
+			function (v, vn) {
+				return vm.isNew ? author$project$Models$ProjectModel$Send(
+					A2(
+						author$project$Models$WebMessages$WRAddView,
+						pm.project.projectName,
+						A2(viewToStore, v, vn))) : author$project$Models$ProjectModel$Send(
+					A2(
+						author$project$Models$WebMessages$WRUpdateView,
+						pm.project.projectName,
+						A2(viewToStore, v, vn)));
+			});
+		var storeViewWithName = function (vn) {
+			var _n1 = vm.viewToEdit;
+			if (_n1.$ === 'Just') {
+				var v = _n1.a;
+				return A2(storeValidViewToEdit, v, vn);
+			} else {
+				return author$project$Models$ProjectModel$Internal(
+					author$project$Models$InternalMessages$ShowMessage('Please fill the view'));
+			}
+		};
+		var _n0 = vm.viewName;
+		if (_n0.$ === 'Just') {
+			var vn = _n0.a;
+			return storeViewWithName(vn);
+		} else {
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$ShowMessage('Please enter a view name'));
+		}
+	});
+var author$project$Editor$View$ViewEditor$storeButton = F2(
+	function (model, pm) {
+		return A4(
+			author$project$Display$UIWrapper$buttonClick,
+			model,
+			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnStr'),
+			'Store View',
+			A2(author$project$Editor$View$ViewEditor$storeView, pm, model.viewEditorModel));
+	});
+var author$project$Models$InternalMessages$SelectMapIndexForView = function (a) {
+	return {$: 'SelectMapIndexForView', a: a};
+};
+var author$project$Editor$View$ViewEditor$viewEditorMapList = function (model) {
+	var selectItem = function (index) {
+		return author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$SelectMapIndexForView(index));
+	};
+	var listItem = function (mn) {
+		return A2(
+			author$project$Material$List$li,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
+					elm$html$Html$text(
+					author$project$Transform$MapsExtraction$xmapNameToString(mn))
+				]));
+	};
+	var buildMsg = function (mn) {
+		return author$project$Models$ProjectModel$Internal(
+			A2(
+				author$project$Models$InternalMessages$AddItemToView,
+				model.viewEditorModel.rowToAddTo,
+				author$project$Types$Views$MapItem(mn)));
+	};
+	var sendAddItem = A2(
+		elm$core$Maybe$withDefault,
+		author$project$Models$ProjectModel$None,
+		A2(
+			elm$core$Maybe$map,
+			function (idx) {
+				return A3(author$project$Display$UIWrapper$sendListMsg, buildMsg, model.mapsInProject, idx);
+			},
+			model.viewEditorModel.selectedMapIdx));
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A5(
+				author$project$Material$List$ul,
+				author$project$Models$ProjectModel$Mdc,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstMap'),
+				model.mdc,
+				_Utils_ap(
+					_List_fromArray(
+						[
+							author$project$Material$List$onSelectListItem(selectItem),
+							author$project$Material$Options$onDoubleClick(sendAddItem)
+						]),
+					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewEditorMapList)),
+				A2(elm$core$List$map, listItem, model.mapsInProject)),
+				A4(
+				author$project$Display$UIWrapper$buttonClick,
+				model,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
+				'Add map',
+				sendAddItem)
+			]));
+};
+var author$project$Models$InternalMessages$AddRowToView = {$: 'AddRowToView'};
+var author$project$Editor$View$ViewEditorTable$addRowButton = function (model) {
+	return A4(
+		author$project$Display$UIWrapper$buttonClick,
+		model,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddRow'),
+		'Add row',
+		author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$AddRowToView));
+};
+var author$project$Models$InternalMessages$RemoveItemsFromView = function (a) {
+	return {$: 'RemoveItemsFromView', a: a};
+};
+var author$project$Editor$View$ViewEditorTable$removeCellsButton = function (model) {
+	var itemsToDelete = A2(
+		elm$core$List$map,
+		function (_n1) {
+			var k = _n1.a;
+			var v = _n1.b;
+			return k;
+		},
+		A2(
+			elm$core$List$filter,
+			function (_n0) {
+				var k = _n0.a;
+				var v = _n0.b;
+				return A2(elm$core$Maybe$withDefault, false, v);
+			},
+			elm$core$Dict$toList(model.viewEditorModel.checkedViewEditItems)));
+	return A4(
+		author$project$Display$UIWrapper$buttonClick,
+		model,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnRemoveCells'),
+		'Remove items',
+		author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$RemoveItemsFromView(itemsToDelete)));
+};
+var author$project$Models$InternalMessages$RemoveRowFromView = function (a) {
+	return {$: 'RemoveRowFromView', a: a};
+};
+var author$project$Editor$View$ViewEditorTable$removeRowButton = function (model) {
+	return A4(
+		author$project$Display$UIWrapper$buttonClick,
+		model,
+		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnRemoveRow'),
+		'Remove row',
+		author$project$Models$ProjectModel$Internal(
+			author$project$Models$InternalMessages$RemoveRowFromView(model.viewEditorModel.rowToAddTo)));
+};
+var author$project$Models$InternalMessages$ChangeIdsType = F2(
+	function (a, b) {
+		return {$: 'ChangeIdsType', a: a, b: b};
+	});
+var author$project$Editor$View$ViewEditorTable$idsTypeChoice = F3(
+	function (model, row, rowI) {
+		var types = _List_fromArray(
+			[author$project$Types$Views$RowHasHeader, author$project$Types$Views$RowNoHeader]);
+		var texts = _List_fromArray(
+			['Has Ids', 'No Ids']);
+		var hasType = function (t) {
+			return _Utils_eq(row.headerType, t);
+		};
+		var selectTypes = function (t) {
+			return A2(
+				elm$core$List$cons,
+				author$project$Material$Select$value(
+					A2(
+						elm$core$Maybe$withDefault,
+						'',
+						A3(author$project$Transform$TypeConversion$enumToText, types, texts, t))),
+				hasType(t) ? _List_fromArray(
+					[author$project$Material$Select$selected]) : _List_Nil);
+		};
+		var changeIdsTypeFromText = function (txt) {
+			return A2(
+				elm$core$Maybe$withDefault,
+				author$project$Models$ProjectModel$None,
+				A2(
+					elm$core$Maybe$map,
+					function (idsType) {
+						return author$project$Models$ProjectModel$Internal(
+							A2(author$project$Models$InternalMessages$ChangeIdsType, rowI, idsType));
+					},
+					A3(author$project$Transform$TypeConversion$textToEnum, types, texts, txt)));
+		};
+		return A5(
+			author$project$Material$Select$view,
+			author$project$Models$ProjectModel$Mdc,
+			A2(
+				author$project$Display$MdcIndexes$makeIndex,
+				author$project$Display$MdcIndexes$viewEditorIdx,
+				'selIHeaderType' + elm$core$String$fromInt(rowI)),
+			model.mdc,
+			_List_fromArray(
+				[
+					author$project$Material$Select$label('Headers'),
+					author$project$Material$Select$selectedText(
+					A2(
+						elm$core$Maybe$withDefault,
+						'',
+						A3(author$project$Transform$TypeConversion$enumToText, types, texts, row.headerType))),
+					author$project$Material$Select$onSelect(changeIdsTypeFromText)
+				]),
+			A2(
+				elm$core$List$map,
+				function (_n0) {
+					var t = _n0.a;
+					var txt = _n0.b;
+					return A2(
+						author$project$Material$Select$option,
+						selectTypes(t),
+						_List_fromArray(
+							[
+								elm$html$Html$text(txt)
+							]));
+				},
+				A2(elm_community$list_extra$List$Extra$zip, types, texts)));
+	});
 var author$project$Internal$RadioButton$Implementation$selected = author$project$Internal$Options$option(
 	function (config) {
 		return _Utils_update(
@@ -15656,12 +18772,6 @@ var author$project$Internal$RadioButton$Implementation$selected = author$project
 			{value: true});
 	});
 var author$project$Material$RadioButton$selected = author$project$Internal$RadioButton$Implementation$selected;
-var author$project$Internal$Options$onFocus = function (msg) {
-	return A2(
-		author$project$Internal$Options$on,
-		'focus',
-		elm$json$Json$Decode$succeed(msg));
-};
 var author$project$Internal$RadioButton$Implementation$defaultConfig = {disabled: false, id_: '', nativeControl: _List_Nil, value: false};
 var author$project$Internal$RadioButton$Model$NoOp = {$: 'NoOp'};
 var author$project$Internal$RadioButton$Model$SetFocus = function (a) {
@@ -15757,7 +18867,15 @@ var author$project$Internal$RadioButton$Implementation$radioButton = F5(
 									author$project$Internal$Options$cs('mdc-radio__outer-circle')
 								]),
 							_List_Nil)
-						]))
+						])),
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-radio__ripple')
+						]),
+					_List_Nil)
 				]));
 	});
 var author$project$Internal$RadioButton$Implementation$view = F4(
@@ -15776,166 +18894,615 @@ var author$project$Internal$RadioButton$Implementation$view = F4(
 				options));
 	});
 var author$project$Material$RadioButton$view = author$project$Internal$RadioButton$Implementation$view;
-var author$project$Display$UIWrapper$radio = F6(
-	function (model, idx, txt, gp, val, msg) {
+var author$project$Models$InternalMessages$ChangeViewEditSelectedRow = function (a) {
+	return {$: 'ChangeViewEditSelectedRow', a: a};
+};
+var author$project$Editor$View$ViewEditorTable$viewChoice = F2(
+	function (model, rowI) {
 		return A2(
-			author$project$Material$FormField$view,
-			_List_fromArray(
-				[
-					A2(author$project$Material$Options$css, 'margin', '0 10px')
-				]),
+			author$project$Material$DataTable$td,
+			_List_Nil,
 			_List_fromArray(
 				[
 					A5(
 					author$project$Material$RadioButton$view,
 					author$project$Models$ProjectModel$Mdc,
-					idx,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'radChc'),
 					model.mdc,
 					_List_fromArray(
 						[
-							A2(author$project$Material$Options$when, val, author$project$Material$RadioButton$selected),
-							author$project$Material$Options$onClick(msg)
+							A2(
+							author$project$Material$Options$when,
+							_Utils_eq(model.viewEditorModel.rowToAddTo, rowI),
+							author$project$Material$RadioButton$selected),
+							author$project$Material$Options$onClick(
+							author$project$Models$ProjectModel$Internal(
+								author$project$Models$InternalMessages$ChangeViewEditSelectedRow(rowI)))
+						]),
+					_List_Nil)
+				]));
+	});
+var author$project$Internal$Checkbox$Model$Checked = {$: 'Checked'};
+var author$project$Internal$Checkbox$Model$Unchecked = {$: 'Unchecked'};
+var author$project$Internal$Checkbox$Implementation$checked = function (value) {
+	var state = value ? author$project$Internal$Checkbox$Model$Checked : author$project$Internal$Checkbox$Model$Unchecked;
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					state: elm$core$Maybe$Just(state)
+				});
+		});
+};
+var author$project$Material$Checkbox$checked = author$project$Internal$Checkbox$Implementation$checked;
+var author$project$Internal$Checkbox$Implementation$defaultConfig = {disabled: false, id_: '', nativeControl: _List_Nil, state: elm$core$Maybe$Nothing};
+var author$project$Internal$Checkbox$Model$AnimationEnd = {$: 'AnimationEnd'};
+var author$project$Internal$Checkbox$Model$Init = F2(
+	function (a, b) {
+		return {$: 'Init', a: a, b: b};
+	});
+var author$project$Internal$Checkbox$Model$NoOp = {$: 'NoOp'};
+var author$project$Internal$Checkbox$Model$SetFocus = function (a) {
+	return {$: 'SetFocus', a: a};
+};
+var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var elm$svg$Svg$path = elm$svg$Svg$trustedNode('path');
+var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
+var elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
+var elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
+var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var author$project$Internal$Checkbox$Implementation$checkbox = F4(
+	function (lift, model, options, _n0) {
+		var animationClass = function (animation) {
+			if (animation.$ === 'Just') {
+				switch (animation.a.$) {
+					case 'UncheckedChecked':
+						var _n2 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-checked');
+					case 'UncheckedIndeterminate':
+						var _n3 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-indeterminate');
+					case 'CheckedUnchecked':
+						var _n4 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-unchecked');
+					case 'CheckedIndeterminate':
+						var _n5 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-indeterminate');
+					case 'IndeterminateChecked':
+						var _n6 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-checked');
+					default:
+						var _n7 = animation.a;
+						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-unchecked');
+				}
+			} else {
+				return author$project$Internal$Options$nop;
+			}
+		};
+		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Checkbox$Implementation$defaultConfig, options);
+		var config = summary.config;
+		var configState = config.state;
+		var currentState = A2(elm$core$Maybe$withDefault, configState, model.lastKnownState);
+		var stateChangedOrUninitialized = _Utils_eq(model.lastKnownState, elm$core$Maybe$Nothing) || (!_Utils_eq(currentState, configState));
+		return A5(
+			author$project$Internal$Options$apply,
+			summary,
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					author$project$Internal$Options$cs('mdc-checkbox mdc-checkbox--upgraded'),
+					A2(
+					author$project$Internal$Options$when,
+					_Utils_eq(currentState, elm$core$Maybe$Nothing),
+					author$project$Internal$Options$cs('mdc-checkbox--indeterminate')),
+					A2(
+					author$project$Internal$Options$when,
+					_Utils_eq(
+						currentState,
+						elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked)),
+					author$project$Internal$Options$cs('mdc-checkbox--checked')),
+					A2(
+					author$project$Internal$Options$when,
+					config.disabled,
+					author$project$Internal$Options$cs('mdc-checkbox--disabled')),
+					animationClass(model.animation),
+					A2(
+					author$project$Internal$Options$when,
+					stateChangedOrUninitialized,
+					author$project$Internal$GlobalEvents$onTick(
+						elm$json$Json$Decode$succeed(
+							lift(
+								A2(author$project$Internal$Checkbox$Model$Init, model.lastKnownState, configState))))),
+					A2(
+					author$project$Internal$Options$when,
+					!_Utils_eq(model.animation, elm$core$Maybe$Nothing),
+					A2(
+						author$project$Internal$Options$on,
+						'animationend',
+						elm$json$Json$Decode$succeed(
+							lift(author$project$Internal$Checkbox$Model$AnimationEnd))))
+				]),
+			_List_Nil,
+			_List_fromArray(
+				[
+					A4(
+					author$project$Internal$Options$applyNativeControl,
+					summary,
+					elm$html$Html$input,
+					_List_fromArray(
+						[
+							author$project$Internal$Options$cs('mdc-checkbox__native-control'),
+							A3(
+							elm$core$Basics$composeL,
+							author$project$Internal$Options$many,
+							elm$core$List$map(author$project$Internal$Options$attribute),
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$type_('checkbox'),
+									elm$html$Html$Attributes$id(config.id_),
+									A2(
+									elm$html$Html$Attributes$property,
+									'indeterminate',
+									elm$json$Json$Encode$bool(
+										_Utils_eq(currentState, elm$core$Maybe$Nothing))),
+									elm$html$Html$Attributes$checked(
+									_Utils_eq(
+										currentState,
+										elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked))),
+									elm$html$Html$Attributes$disabled(config.disabled)
+								])),
+							A2(
+							author$project$Internal$Options$onWithOptions,
+							'click',
+							elm$json$Json$Decode$succeed(
+								{
+									message: lift(author$project$Internal$Checkbox$Model$NoOp),
+									preventDefault: true,
+									stopPropagation: false
+								})),
+							A2(
+							author$project$Internal$Options$onWithOptions,
+							'change',
+							elm$json$Json$Decode$succeed(
+								{
+									message: lift(author$project$Internal$Checkbox$Model$NoOp),
+									preventDefault: true,
+									stopPropagation: false
+								})),
+							author$project$Internal$Options$onFocus(
+							lift(
+								author$project$Internal$Checkbox$Model$SetFocus(true))),
+							author$project$Internal$Options$onBlur(
+							lift(
+								author$project$Internal$Checkbox$Model$SetFocus(false)))
 						]),
 					_List_Nil),
-					A2(
-					elm$html$Html$label,
+					A3(
+					author$project$Internal$Options$styled,
+					elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$for(idx)
+							author$project$Internal$Options$cs('mdc-checkbox__background')
 						]),
 					_List_fromArray(
 						[
-							elm$html$Html$text(txt)
+							A2(
+							elm$svg$Svg$svg,
+							_List_fromArray(
+								[
+									elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark'),
+									elm$svg$Svg$Attributes$viewBox('0 0 24 24')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									elm$svg$Svg$path,
+									_List_fromArray(
+										[
+											elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark-path'),
+											elm$svg$Svg$Attributes$fill('none'),
+											elm$svg$Svg$Attributes$stroke('white'),
+											elm$svg$Svg$Attributes$d('M1.73,12.91 8.1,19.28 22.79,4.59')
+										]),
+									_List_Nil)
+								])),
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-checkbox__mixedmark')
+								]),
+							_List_Nil),
+							A3(
+							author$project$Internal$Options$styled,
+							elm$html$Html$div,
+							_List_fromArray(
+								[
+									author$project$Internal$Options$cs('mdc-checkbox__ripple')
+								]),
+							_List_Nil)
 						]))
 				]));
 	});
-var author$project$Models$InternalMessages$ChangeOperationMode = function (a) {
-	return {$: 'ChangeOperationMode', a: a};
-};
-var author$project$Editor$CalculationEditor$operationNameChoice = function (model) {
-	var hasMode = function (m) {
-		return _Utils_eq(model.calculationEditorModel.operationMode, m);
-	};
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'opeNamUni'),
-				'Union',
-				'operationName',
-				hasMode(author$project$Types$Calculation$Union),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeOperationMode(author$project$Types$Calculation$Union))),
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'opeNamInt'),
-				'Intersection',
-				'operationName',
-				hasMode(author$project$Types$Calculation$Intersection),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeOperationMode(author$project$Types$Calculation$Intersection)))
-			]));
-};
-var author$project$Models$InternalMessages$TextToResultNameText = function (a) {
-	return {$: 'TextToResultNameText', a: a};
-};
-var author$project$Editor$CalculationEditor$resultMapNameText = function (model) {
-	return A5(
-		author$project$Material$TextField$view,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'txtResMapNme'),
-		model.mdc,
-		_List_fromArray(
-			[
-				author$project$Material$TextField$label('Enter the result map name'),
-				author$project$Material$TextField$value(
-				A2(elm$core$Maybe$withDefault, '', model.calculationEditorModel.resultMapName)),
-				author$project$Material$Options$onInput(
-				function (s) {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$TextToResultNameText(s));
-				})
-			]),
-		_List_Nil);
-};
-var author$project$Models$InternalMessages$ShowMessage = function (a) {
-	return {$: 'ShowMessage', a: a};
-};
-var author$project$Models$WebMessages$WRStoreCalculation = F2(
-	function (a, b) {
-		return {$: 'WRStoreCalculation', a: a, b: b};
+var author$project$Internal$Checkbox$Implementation$view = F4(
+	function (lift, index, store, options) {
+		return A7(
+			author$project$Internal$Component$render,
+			author$project$Internal$Checkbox$Implementation$getSet.get,
+			author$project$Internal$Checkbox$Implementation$checkbox,
+			author$project$Internal$Msg$CheckboxMsg,
+			lift,
+			index,
+			store,
+			A2(
+				elm$core$List$cons,
+				author$project$Internal$Options$internalId(index),
+				options));
 	});
-var author$project$Transform$MapsExtraction$xmapNameFromString = function (t) {
-	return A2(
-		elm$regex$Regex$contains,
-		A2(
-			elm$core$Maybe$withDefault,
-			elm$regex$Regex$never,
-			elm$regex$Regex$fromString('^[a-zA-Z]\\w*(\\/[a-zA-Z]\\w*)*$')),
-		t) ? elm$core$Result$Ok(
-		A2(
-			elm$core$List$map,
-			elm$core$String$trim,
-			A2(elm$core$String$split, '/', t))) : elm$core$Result$Err('The text must start with a letter and contain only letters, numbers and slashes');
+var author$project$Material$Checkbox$view = author$project$Internal$Checkbox$Implementation$view;
+var author$project$Material$Options$nop = author$project$Internal$Options$nop;
+var author$project$Models$InternalMessages$ChangeViewEditCheckedItem = function (a) {
+	return {$: 'ChangeViewEditCheckedItem', a: a};
 };
-var author$project$Editor$CalculationEditor$storeCalculation = F2(
-	function (pm, cm) {
-		var _n0 = cm.calculationName;
-		if (_n0.$ === 'Just') {
-			var cn = _n0.a;
-			var _n1 = cm.calculationFormulaText;
-			if (_n1.$ === 'Just') {
-				var ft = _n1.a;
-				var _n2 = cm.resultMapName;
-				if (_n2.$ === 'Just') {
-					var rns = _n2.a;
-					var _n3 = author$project$Transform$MapsExtraction$xmapNameFromString(rns);
-					if (_n3.$ === 'Ok') {
-						var rn = _n3.a;
-						return author$project$Models$ProjectModel$Send(
-							A2(
-								author$project$Models$WebMessages$WRStoreCalculation,
-								pm.project.projectName,
-								{calculationName: cn, formulaText: ft, operationMode: cm.operationMode, resultName: rn}));
-					} else {
-						var e = _n3.a;
-						return author$project$Models$ProjectModel$Internal(
-							author$project$Models$InternalMessages$ShowMessage(e));
-					}
-				} else {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$ShowMessage('Please enter a result map name'));
-				}
-			} else {
-				return author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ShowMessage('Please enter a formula'));
-			}
+var author$project$Editor$View$ViewEditorTable$viewEditItemCheckbox = F3(
+	function (model, viewItemId, txt) {
+		var index = A2(
+			author$project$Display$MdcIndexes$makeIndex,
+			author$project$Display$MdcIndexes$viewEditorIdx,
+			'check' + elm$core$String$fromInt(viewItemId));
+		var clickHandler = author$project$Material$Options$onClick(
+			author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$ChangeViewEditCheckedItem(viewItemId)));
+		var checked = A2(
+			elm$core$Maybe$withDefault,
+			author$project$Material$Options$nop,
+			A2(
+				elm$core$Maybe$map,
+				author$project$Material$Checkbox$checked,
+				A2(
+					elm$core$Maybe$withDefault,
+					elm$core$Maybe$Nothing,
+					A2(elm$core$Dict$get, viewItemId, model.viewEditorModel.checkedViewEditItems))));
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A5(
+					author$project$Material$Checkbox$view,
+					author$project$Models$ProjectModel$Mdc,
+					index,
+					model.mdc,
+					A2(
+						elm$core$List$cons,
+						checked,
+						A2(elm$core$List$cons, clickHandler, _List_Nil)),
+					_List_Nil),
+					elm$html$Html$text(txt)
+				]));
+	});
+var author$project$Editor$View$ViewEditorTable$viewEditItem = F2(
+	function (model, item) {
+		var _n0 = item.content;
+		if (_n0.$ === 'MapItem') {
+			var mn = _n0.a;
+			return A2(
+				author$project$Material$DataTable$td,
+				_List_fromArray(
+					[
+						A2(author$project$Material$Options$css, 'background', 'Coral')
+					]),
+				_List_fromArray(
+					[
+						A3(
+						author$project$Editor$View$ViewEditorTable$viewEditItemCheckbox,
+						model,
+						item.id,
+						author$project$Transform$MapsExtraction$xmapNameToString(mn))
+					]));
 		} else {
-			return author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$ShowMessage('Please enter a calculation name'));
+			var l = _n0.a;
+			return A2(
+				author$project$Material$DataTable$td,
+				_List_fromArray(
+					[
+						A2(author$project$Material$Options$css, 'background', 'DarkTurquoise')
+					]),
+				_List_fromArray(
+					[
+						A3(author$project$Editor$View$ViewEditorTable$viewEditItemCheckbox, model, item.id, l)
+					]));
 		}
 	});
-var author$project$Editor$CalculationEditor$storeButton = F2(
-	function (model, pm) {
-		return A4(
-			author$project$Display$UIWrapper$buttonClick,
-			model,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'btnStr'),
-			'Store',
-			A2(author$project$Editor$CalculationEditor$storeCalculation, pm, model.calculationEditorModel));
+var author$project$Editor$View$ViewEditorTable$viewEditRowToTableCells = F2(
+	function (model, _n0) {
+		var rowIdx = _n0.a;
+		var row = _n0.b;
+		return A2(
+			elm$core$List$cons,
+			A2(author$project$Editor$View$ViewEditorTable$viewChoice, model, rowIdx),
+			A2(
+				elm$core$List$cons,
+				A3(author$project$Editor$View$ViewEditorTable$idsTypeChoice, model, row, rowIdx),
+				A2(
+					elm$core$List$map,
+					author$project$Editor$View$ViewEditorTable$viewEditItem(model),
+					row.items)));
 	});
-var author$project$Models$EmptyModel$emptyFunctionModel = {idsByCategory: elm$core$Dict$empty, typesById: elm$core$Dict$empty};
-var author$project$Editor$FunctionChooser$functions = function (model) {
-	return A2(elm$core$Maybe$withDefault, author$project$Models$EmptyModel$emptyFunctionModel, model.functions);
+var author$project$Internal$LayoutGrid$Implementation$span4Phone = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('phone'),
+	4);
+var author$project$Material$LayoutGrid$span4Phone = author$project$Internal$LayoutGrid$Implementation$span4Phone;
+var author$project$Editor$View$ViewEditorTable$viewEditRows = F2(
+	function (model, v) {
+		var rows = A2(
+			elm$core$List$map,
+			author$project$Material$DataTable$tr(_List_Nil),
+			A2(
+				elm$core$List$map,
+				author$project$Editor$View$ViewEditorTable$viewEditRowToTableCells(model),
+				A2(
+					elm_community$list_extra$List$Extra$zip,
+					A2(
+						elm$core$List$range,
+						0,
+						elm$core$List$length(v.rows)),
+					v.rows)));
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Material$Options$styled,
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							author$project$Display$UIWrapper$heightInView(model.ui.heights.viewEditRows),
+							A2(author$project$Material$Options$css, 'background', 'WhiteSmoke')
+						]),
+					_List_fromArray(
+						[
+							A2(author$project$Material$DataTable$tbody, _List_Nil, rows)
+						])),
+					A2(
+					author$project$Material$LayoutGrid$view,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$View$ViewEditorTable$addRowButton(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$View$ViewEditorTable$removeCellsButton(model)
+								])),
+							A2(
+							author$project$Material$LayoutGrid$cell,
+							_List_fromArray(
+								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span4Phone]),
+							_List_fromArray(
+								[
+									author$project$Editor$View$ViewEditorTable$removeRowButton(model)
+								]))
+						]))
+				]));
+	});
+var author$project$Editor$View$ViewEditorTable$viewEditorTable = F2(
+	function (model, mv) {
+		if (mv.$ === 'Just') {
+			var v = mv.a;
+			return A2(
+				author$project$Material$DataTable$table,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Editor$View$ViewEditorTable$viewEditRows, model, v)
+					]));
+		} else {
+			return A2(
+				author$project$Material$DataTable$table,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Material$DataTable$tbody, _List_Nil, _List_Nil)
+					]));
+		}
+	});
+var author$project$Internal$LayoutGrid$Implementation$span8Desktop = A2(
+	author$project$Internal$LayoutGrid$Implementation$span,
+	elm$core$Maybe$Just('desktop'),
+	8);
+var author$project$Material$LayoutGrid$span8Desktop = author$project$Internal$LayoutGrid$Implementation$span8Desktop;
+var author$project$Editor$View$ViewEditor$viewEditorForView = F2(
+	function (model, pm) {
+		var _n0 = model.viewEditorModel.viewName;
+		if (_n0.$ === 'Just') {
+			var vn = _n0.a;
+			return A2(
+				author$project$Material$LayoutGrid$view,
+				_List_fromArray(
+					[
+						author$project$Display$UIWrapper$heightInView(model.ui.heights.viewEditorForView)
+					]),
+				_List_fromArray(
+					[
+						A2(
+						author$project$Material$LayoutGrid$cell,
+						_List_fromArray(
+							[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span8Desktop, author$project$Material$LayoutGrid$span3Phone]),
+						_List_fromArray(
+							[
+								A2(author$project$Editor$View$ViewEditorTable$viewEditorTable, model, model.viewEditorModel.viewToEdit)
+							])),
+						A2(
+						author$project$Material$LayoutGrid$cell,
+						_List_fromArray(
+							[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span1Phone]),
+						_List_fromArray(
+							[
+								author$project$Editor$View$ViewEditor$viewEditorMapList(model),
+								author$project$Editor$View$ViewEditor$addLabelButton(model),
+								A2(author$project$Editor$View$ViewEditor$storeButton, model, pm)
+							]))
+					]));
+		} else {
+			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+		}
+	});
+var author$project$Editor$View$ViewEditor$title = function (model) {
+	var _n0 = model.viewEditorModel.viewName;
+	if (_n0.$ === 'Just') {
+		var viewName = _n0.a;
+		return 'Editing: ' + viewName;
+	} else {
+		return 'View Editor';
+	}
 };
-var author$project$Editor$FunctionChooser$categories = function (model) {
-	return elm$core$Dict$keys(
-		author$project$Editor$FunctionChooser$functions(model).idsByCategory);
+var author$project$Models$WebMessages$WRLoadView = F2(
+	function (a, b) {
+		return {$: 'WRLoadView', a: a, b: b};
+	});
+var author$project$Editor$View$ViewEditor$viewEditorViewsList = F2(
+	function (model, p) {
+		var sendLoadView = function (index) {
+			return A3(
+				author$project$Display$UIWrapper$sendListMsg,
+				function (vn) {
+					return author$project$Models$ProjectModel$Send(
+						A2(author$project$Models$WebMessages$WRLoadView, p.projectName, vn));
+				},
+				p.viewNames,
+				index);
+		};
+		var listItem = function (vn) {
+			return A2(
+				author$project$Material$List$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
+						elm$html$Html$text(vn)
+					]));
+		};
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					author$project$Display$UIWrapper$titleWithIcon,
+					author$project$Editor$View$ViewEditor$title(model),
+					'view_module',
+					'Pink'),
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstVew'),
+					model.mdc,
+					A2(
+						elm$core$List$cons,
+						author$project$Material$List$onSelectListItem(sendLoadView),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewEditorViewsList)),
+					A2(elm$core$List$map, listItem, p.viewNames))
+				]));
+	});
+var author$project$Editor$View$ViewEditor$viewViewsEditor = F2(
+	function (model, pm) {
+		return A2(
+			author$project$Material$LayoutGrid$view,
+			_List_fromArray(
+				[
+					author$project$Display$UIWrapper$heightInView(model.ui.heights.viewViewsEditor)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
+					_List_fromArray(
+						[
+							A2(author$project$Editor$View$ViewEditor$viewEditorViewsList, model, pm.project),
+							author$project$Editor$View$ViewEditor$newViewButton(model)
+						])),
+					A2(
+					author$project$Material$LayoutGrid$cell,
+					_List_fromArray(
+						[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
+					_List_fromArray(
+						[
+							A2(author$project$Editor$View$ViewEditor$viewEditorForView, model, pm)
+						]))
+				]));
+	});
+var author$project$Display$ProjectUI$viewProjectContent = F2(
+	function (model, pm) {
+		var _n0 = model.currentProjectForm;
+		switch (_n0.$) {
+			case 'ViewsForm':
+				return A2(author$project$Display$ViewsUI$viewViews, model, pm);
+			case 'MapEditorForm':
+				return A2(author$project$Editor$Map$MapEditor$mapEditorView, model, pm);
+			case 'ViewEditorForm':
+				return A2(author$project$Editor$View$ViewEditor$viewViewsEditor, model, pm);
+			default:
+				return A2(author$project$Editor$Calculation$CalculationEditor$viewCalculationsEditor, model, pm);
+		}
+	});
+var author$project$Display$MdcIndexes$projectUIIdx = 'prj';
+var author$project$Models$InternalMessages$CalculationEditorForm = {$: 'CalculationEditorForm'};
+var author$project$Models$InternalMessages$MapEditorForm = {$: 'MapEditorForm'};
+var author$project$Models$InternalMessages$ViewEditorForm = {$: 'ViewEditorForm'};
+var author$project$Display$ProjectUI$tabArray = _List_fromArray(
+	[author$project$Models$InternalMessages$ViewsForm, author$project$Models$InternalMessages$MapEditorForm, author$project$Models$InternalMessages$ViewEditorForm, author$project$Models$InternalMessages$CalculationEditorForm]);
+var elm_community$list_extra$List$Extra$findIndexHelp = F3(
+	function (index, predicate, list) {
+		findIndexHelp:
+		while (true) {
+			if (!list.b) {
+				return elm$core$Maybe$Nothing;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (predicate(x)) {
+					return elm$core$Maybe$Just(index);
+				} else {
+					var $temp$index = index + 1,
+						$temp$predicate = predicate,
+						$temp$list = xs;
+					index = $temp$index;
+					predicate = $temp$predicate;
+					list = $temp$list;
+					continue findIndexHelp;
+				}
+			}
+		}
+	});
+var elm_community$list_extra$List$Extra$findIndex = elm_community$list_extra$List$Extra$findIndexHelp(0);
+var elm_community$list_extra$List$Extra$elemIndex = function (x) {
+	return elm_community$list_extra$List$Extra$findIndex(
+		elm$core$Basics$eq(x));
+};
+var author$project$Display$ProjectUI$projectFormToTab = function (pf) {
+	return A2(
+		elm$core$Maybe$withDefault,
+		0,
+		A2(elm_community$list_extra$List$Extra$elemIndex, pf, author$project$Display$ProjectUI$tabArray));
 };
 var author$project$Internal$TabBar$Implementation$activeTab = function (value) {
 	return author$project$Internal$Options$option(
@@ -15946,6 +19513,17 @@ var author$project$Internal$TabBar$Implementation$activeTab = function (value) {
 		});
 };
 var author$project$Material$TabBar$activeTab = author$project$Internal$TabBar$Implementation$activeTab;
+var author$project$Internal$TabBar$Implementation$icon = function (value) {
+	return author$project$Internal$Options$option(
+		function (config) {
+			return _Utils_update(
+				config,
+				{
+					icon: elm$core$Maybe$Just(value)
+				});
+		});
+};
+var author$project$Material$TabBar$icon = author$project$Internal$TabBar$Implementation$icon;
 var author$project$Internal$TabBar$Implementation$tab = F2(
 	function (options, childs) {
 		return {childs: childs, options: options};
@@ -15966,6 +19544,7 @@ var author$project$Internal$TabBar$Implementation$decodeScrollLeft = debois$elm_
 				},
 				debois$elm_dom$DOM$scrollLeft))));
 var author$project$Internal$TabBar$Implementation$defaultConfig = {activeTab: 0, fadingIconIndicator: false, icon: elm$core$Maybe$Nothing, indicator: true, indicatorIcon: elm$core$Maybe$Nothing, smallIndicator: false};
+var author$project$Internal$GlobalEvents$onResize = author$project$Internal$GlobalEvents$listener('globalresize');
 var author$project$Internal$TabBar$Model$Geometry = F3(
 	function (tabs, scrollArea, tabBar) {
 		return {scrollArea: scrollArea, tabBar: tabBar, tabs: tabs};
@@ -16000,7 +19579,6 @@ var debois$elm_dom$DOM$childNodes = function (decoder) {
 			'childNodes',
 			A2(loop, 0, _List_Nil)));
 };
-var elm$core$String$toLower = _String_toLower;
 var author$project$Internal$TabBar$Implementation$decodeGeometry = A4(
 	elm$json$Json$Decode$map3,
 	author$project$Internal$TabBar$Model$Geometry,
@@ -16378,1553 +19956,6 @@ var author$project$Internal$TabBar$Implementation$view = F2(
 			domId);
 	});
 var author$project$Material$TabBar$view = author$project$Internal$TabBar$Implementation$view;
-var author$project$Models$InternalMessages$SwitchCategoryTo = function (a) {
-	return {$: 'SwitchCategoryTo', a: a};
-};
-var elm_community$list_extra$List$Extra$findIndexHelp = F3(
-	function (index, predicate, list) {
-		findIndexHelp:
-		while (true) {
-			if (!list.b) {
-				return elm$core$Maybe$Nothing;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (predicate(x)) {
-					return elm$core$Maybe$Just(index);
-				} else {
-					var $temp$index = index + 1,
-						$temp$predicate = predicate,
-						$temp$list = xs;
-					index = $temp$index;
-					predicate = $temp$predicate;
-					list = $temp$list;
-					continue findIndexHelp;
-				}
-			}
-		}
-	});
-var elm_community$list_extra$List$Extra$findIndex = elm_community$list_extra$List$Extra$findIndexHelp(0);
-var elm_community$list_extra$List$Extra$elemIndex = function (x) {
-	return elm_community$list_extra$List$Extra$findIndex(
-		elm$core$Basics$eq(x));
-};
-var author$project$Editor$FunctionChooser$functionsCategoriesTabs = function (model) {
-	var tab = function (category) {
-		return A2(
-			author$project$Material$TabBar$tab,
-			_List_fromArray(
-				[
-					A2(author$project$Material$Options$css, 'width', '2px'),
-					author$project$Material$Options$onClick(
-					author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$SwitchCategoryTo(category)))
-				]),
-			_List_fromArray(
-				[
-					elm$html$Html$text(category)
-				]));
-	};
-	var indexOfCategory = function (ct) {
-		return A2(
-			elm_community$list_extra$List$Extra$elemIndex,
-			ct,
-			author$project$Editor$FunctionChooser$categories(model));
-	};
-	var categoryToTab = function (ct) {
-		return A2(
-			elm$core$Maybe$withDefault,
-			0,
-			A2(elm$core$Maybe$andThen, indexOfCategory, ct));
-	};
-	return A5(
-		author$project$Material$TabBar$view,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'tbsCat'),
-		model.mdc,
-		_List_fromArray(
-			[
-				author$project$Material$TabBar$activeTab(
-				categoryToTab(model.currentCategory))
-			]),
-		A2(
-			elm$core$List$map,
-			tab,
-			author$project$Editor$FunctionChooser$categories(model)));
-};
-var author$project$Models$InternalMessages$AddOperationToCalculation = function (a) {
-	return {$: 'AddOperationToCalculation', a: a};
-};
-var author$project$Editor$FunctionChooser$functionsNamesList = function (model) {
-	var operationListItem = function (on) {
-		return A2(
-			author$project$Material$List$li,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(author$project$Material$List$graphicIcon, _List_Nil, 'play_arrow'),
-					elm$html$Html$text(on.name)
-				]));
-	};
-	var currentOrFirstCategory = function () {
-		var _n0 = model.currentCategory;
-		if (_n0.$ === 'Nothing') {
-			return elm$core$List$head(
-				author$project$Editor$FunctionChooser$categories(model));
-		} else {
-			return model.currentCategory;
-		}
-	}();
-	var operationIdsForCategoryMaybe = A2(
-		elm$core$Maybe$andThen,
-		function (c) {
-			return A2(
-				elm$core$Dict$get,
-				c,
-				author$project$Editor$FunctionChooser$functions(model).idsByCategory);
-		},
-		currentOrFirstCategory);
-	var operationIdsForCategory = A2(elm$core$Maybe$withDefault, _List_Nil, operationIdsForCategoryMaybe);
-	var operationList = A2(elm$core$List$map, operationListItem, operationIdsForCategory);
-	var sendAddOperation = function (index) {
-		return A3(
-			author$project$Display$UIWrapper$sendListMsg,
-			function (on) {
-				return author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$AddOperationToCalculation(on));
-			},
-			operationIdsForCategory,
-			index);
-	};
-	return A5(
-		author$project$Material$List$ul,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstFnc'),
-		model.mdc,
-		A2(
-			elm$core$List$cons,
-			author$project$Material$List$onSelectListItem(sendAddOperation),
-			author$project$Display$UIWrapper$scrollableListStyle(32)),
-		operationList);
-};
-var author$project$Editor$FunctionChooser$viewFunctions = function (model) {
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				author$project$Editor$FunctionChooser$functionsCategoriesTabs(model),
-				author$project$Editor$FunctionChooser$functionsNamesList(model)
-			]));
-};
-var author$project$Internal$LayoutGrid$Implementation$span1Tablet = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('tablet'),
-	1);
-var author$project$Material$LayoutGrid$span1Tablet = author$project$Internal$LayoutGrid$Implementation$span1Tablet;
-var author$project$Internal$LayoutGrid$Implementation$span2Phone = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('phone'),
-	2);
-var author$project$Material$LayoutGrid$span2Phone = author$project$Internal$LayoutGrid$Implementation$span2Phone;
-var author$project$Internal$LayoutGrid$Implementation$span3Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	3);
-var author$project$Material$LayoutGrid$span3Desktop = author$project$Internal$LayoutGrid$Implementation$span3Desktop;
-var author$project$Internal$LayoutGrid$Implementation$span3Tablet = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('tablet'),
-	3);
-var author$project$Material$LayoutGrid$span3Tablet = author$project$Internal$LayoutGrid$Implementation$span3Tablet;
-var author$project$Internal$LayoutGrid$Implementation$span4Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	4);
-var author$project$Material$LayoutGrid$span4Desktop = author$project$Internal$LayoutGrid$Implementation$span4Desktop;
-var author$project$Internal$LayoutGrid$Implementation$span4Phone = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('phone'),
-	4);
-var author$project$Material$LayoutGrid$span4Phone = author$project$Internal$LayoutGrid$Implementation$span4Phone;
-var author$project$Internal$LayoutGrid$Implementation$span4Tablet = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('tablet'),
-	4);
-var author$project$Material$LayoutGrid$span4Tablet = author$project$Internal$LayoutGrid$Implementation$span4Tablet;
-var author$project$Internal$LayoutGrid$Implementation$span5Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	5);
-var author$project$Material$LayoutGrid$span5Desktop = author$project$Internal$LayoutGrid$Implementation$span5Desktop;
-var author$project$Internal$LayoutGrid$Implementation$span8Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	8);
-var author$project$Material$LayoutGrid$span8Desktop = author$project$Internal$LayoutGrid$Implementation$span8Desktop;
-var author$project$Editor$CalculationEditor$viewEditorForCalculation = F3(
-	function (model, pm, cn) {
-		return A2(
-			elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
-							_List_fromArray(
-								[
-									author$project$Editor$CalculationEditor$resultMapNameText(model)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									author$project$Editor$CalculationEditor$operationNameChoice(model)
-								]))
-						])),
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_fromArray(
-						[
-							author$project$Display$UIWrapper$heightInView(45)
-						]),
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									author$project$Editor$CalculationEditor$mapsInProjectList(model)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span4Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
-							_List_fromArray(
-								[
-									author$project$Editor$CalculationEditor$calculationTextArea(model)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									author$project$Editor$FunctionChooser$viewFunctions(model)
-								]))
-						])),
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span8Desktop, author$project$Material$LayoutGrid$span4Phone]),
-							_List_Nil),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$CalculationEditor$storeButton, model, pm)
-								]))
-						]))
-				]));
-	});
-var author$project$Editor$CalculationEditor$viewCalculationEditor = F2(
-	function (model, pm) {
-		var _n0 = model.calculationEditorModel.calculationName;
-		if (_n0.$ === 'Just') {
-			var cn = _n0.a;
-			return A3(author$project$Editor$CalculationEditor$viewEditorForCalculation, model, pm, cn);
-		} else {
-			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
-		}
-	});
-var author$project$Editor$CalculationEditor$viewCalculationsEditor = F2(
-	function (model, pm) {
-		var title = function () {
-			var _n0 = model.calculationEditorModel.calculationName;
-			if (_n0.$ === 'Just') {
-				var calculationName = _n0.a;
-				return 'Editing calculation: ' + calculationName;
-			} else {
-				return 'Calculation Editor';
-			}
-		}();
-		return A2(
-			elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A3(author$project$Display$UIWrapper$titleWithIcon, title, 'functions', 'Green'),
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_fromArray(
-						[
-							author$project$Display$UIWrapper$heightInView(70)
-						]),
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									A2(
-									elm$html$Html$div,
-									_List_Nil,
-									_List_fromArray(
-										[
-											A2(author$project$Editor$CalculationEditor$calculationsInProjectList, model, pm),
-											author$project$Editor$CalculationEditor$newCalculationButton(model)
-										]))
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$CalculationEditor$viewCalculationEditor, model, pm)
-								]))
-						]))
-				]));
-	});
-var author$project$Display$MdcIndexes$mapEditorIdx = 'mape';
-var author$project$Editor$MapEditor$fileSourcesOfProject = function (p) {
-	var maybeMaps = A2(
-		elm$core$Maybe$map,
-		function (s) {
-			return s.sourceOfMaps;
-		},
-		A2(
-			elm_community$list_extra$List$Extra$find,
-			function (s) {
-				return _Utils_eq(s.sourceType, author$project$Types$Project$FileSource);
-			},
-			p.sources));
-	return A2(elm$core$Maybe$withDefault, _List_Nil, maybeMaps);
-};
-var author$project$Models$InternalMessages$ShowMapInEditor = function (a) {
-	return {$: 'ShowMapInEditor', a: a};
-};
-var author$project$Editor$MapEditor$mapEditorMapList = F2(
-	function (model, p) {
-		var sendShowMap = function (index) {
-			return A3(
-				author$project$Display$UIWrapper$sendListMsg,
-				function (mn) {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$ShowMapInEditor(mn));
-				},
-				author$project$Editor$MapEditor$fileSourcesOfProject(p),
-				index);
-		};
-		var listItem = function (mn) {
-			return A2(
-				author$project$Material$List$li,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-						elm$html$Html$text(
-						author$project$Transform$MapsExtraction$xmapNameToString(mn))
-					]));
-		};
-		return A5(
-			author$project$Material$List$ul,
-			author$project$Models$ProjectModel$Mdc,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'lstMap'),
-			model.mdc,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						author$project$Material$List$onSelectListItem(sendShowMap)
-					]),
-				author$project$Display$UIWrapper$scrollableListStyle(45)),
-			A2(
-				elm$core$List$map,
-				listItem,
-				author$project$Editor$MapEditor$fileSourcesOfProject(p)));
-	});
-var author$project$Display$UIWrapper$buttonMaybe = F4(
-	function (model, index, txt, mmsg) {
-		var msgProp = function () {
-			if (mmsg.$ === 'Just') {
-				var msg = mmsg.a;
-				return _List_fromArray(
-					[
-						author$project$Material$Options$onClick(msg)
-					]);
-			} else {
-				return _List_Nil;
-			}
-		}();
-		return A4(author$project$Display$UIWrapper$buttonNoClick, model, index, txt, msgProp);
-	});
-var author$project$Editor$MapEditor$mapHeader = A2(
-	author$project$Material$DataTable$thead,
-	_List_Nil,
-	_List_fromArray(
-		[
-			A2(
-			author$project$Material$DataTable$tr,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					author$project$Material$DataTable$th,
-					author$project$Display$UIWrapper$bold,
-					_List_fromArray(
-						[
-							elm$html$Html$text('Ids')
-						])),
-					A2(
-					author$project$Material$DataTable$th,
-					author$project$Display$UIWrapper$bold,
-					_List_fromArray(
-						[
-							elm$html$Html$text('Values')
-						]))
-				]))
-		]));
-var author$project$Editor$MapEditor$mapEditorTableEmpty = A2(
-	author$project$Material$DataTable$table,
-	_List_Nil,
-	_List_fromArray(
-		[
-			author$project$Editor$MapEditor$mapHeader,
-			A2(author$project$Material$DataTable$tbody, _List_Nil, _List_Nil)
-		]));
-var author$project$Editor$MapEditor$lineToTableRow = function (line) {
-	return A2(
-		author$project$Material$DataTable$tr,
-		_List_Nil,
-		A2(
-			elm$core$List$map,
-			function (v) {
-				return A2(
-					author$project$Material$DataTable$td,
-					_List_Nil,
-					_List_fromArray(
-						[
-							elm$html$Html$text(v)
-						]));
-			},
-			line));
-};
-var author$project$Editor$MapEditor$mapRows = function (m) {
-	var rows = A2(
-		elm$core$List$map,
-		author$project$Editor$MapEditor$lineToTableRow,
-		author$project$Transform$XMapText$mapToTransposedMatrix(m));
-	return A2(author$project$Material$DataTable$tbody, _List_Nil, rows);
-};
-var author$project$Editor$MapEditor$mapEditorTableFull = function (m) {
-	return A2(
-		author$project$Material$DataTable$table,
-		author$project$Display$UIWrapper$scrollableTableStyle(50),
-		_List_fromArray(
-			[
-				author$project$Editor$MapEditor$mapHeader,
-				author$project$Editor$MapEditor$mapRows(m)
-			]));
-};
-var author$project$Editor$MapEditor$mapEditorTable = function (mm) {
-	if (mm.$ === 'Just') {
-		var m = mm.a;
-		return author$project$Editor$MapEditor$mapEditorTableFull(m);
-	} else {
-		return author$project$Editor$MapEditor$mapEditorTableEmpty;
-	}
-};
-var author$project$Models$InternalMessages$TextToMapTextArea = function (a) {
-	return {$: 'TextToMapTextArea', a: a};
-};
-var author$project$Editor$MapEditor$mapEditorTextArea = F2(
-	function (model, pm) {
-		return A5(
-			author$project$Material$TextField$view,
-			author$project$Models$ProjectModel$Mdc,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'txaMapDta'),
-			model.mdc,
-			_List_fromArray(
-				[
-					author$project$Material$TextField$label('Enter the map data'),
-					author$project$Material$TextField$textarea,
-					author$project$Display$UIWrapper$heightInView(50),
-					author$project$Material$TextField$rows(20),
-					author$project$Material$TextField$value(
-					A2(elm$core$Maybe$withDefault, '', model.xmapEditorModel.xmapEditing)),
-					author$project$Material$Options$onInput(
-					function (s) {
-						return author$project$Models$ProjectModel$Internal(
-							author$project$Models$InternalMessages$TextToMapTextArea(s));
-					}),
-					author$project$Display$UIWrapper$useWholeWidth
-				]),
-			_List_Nil);
-	});
-var author$project$Models$WebMessages$WRStoreMap = F2(
-	function (a, b) {
-		return {$: 'WRStoreMap', a: a, b: b};
-	});
-var author$project$Editor$MapEditor$storeMap = F3(
-	function (pm, n, m) {
-		return author$project$Models$ProjectModel$Send(
-			A2(
-				author$project$Models$WebMessages$WRStoreMap,
-				pm.project.projectName,
-				{xmap: m, xmapName: n}));
-	});
-var author$project$Internal$LayoutGrid$Implementation$span5Tablet = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('tablet'),
-	5);
-var author$project$Material$LayoutGrid$span5Tablet = author$project$Internal$LayoutGrid$Implementation$span5Tablet;
-var author$project$Internal$LayoutGrid$Implementation$span7Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	7);
-var author$project$Material$LayoutGrid$span7Desktop = author$project$Internal$LayoutGrid$Implementation$span7Desktop;
-var author$project$Models$InternalMessages$MapToTable = {$: 'MapToTable'};
-var author$project$Models$InternalMessages$MapToTextArea = {$: 'MapToTextArea'};
-var author$project$Editor$MapEditor$mapEditorViewForMap = F2(
-	function (model, pm) {
-		var xmapEditorModel = model.xmapEditorModel;
-		var _n0 = model.xmapEditorModel.xmapName;
-		if (_n0.$ === 'Just') {
-			var mn = _n0.a;
-			return A2(
-				elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						author$project$Material$LayoutGrid$view,
-						_List_fromArray(
-							[
-								author$project$Display$UIWrapper$heightInView(50)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span3Tablet, author$project$Material$LayoutGrid$span5Desktop, author$project$Material$LayoutGrid$span1Phone]),
-								_List_fromArray(
-									[
-										A2(author$project$Editor$MapEditor$mapEditorTextArea, model, pm)
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span5Tablet, author$project$Material$LayoutGrid$span7Desktop, author$project$Material$LayoutGrid$span3Phone]),
-								_List_fromArray(
-									[
-										author$project$Editor$MapEditor$mapEditorTable(xmapEditorModel.xmapToEdit)
-									]))
-							])),
-						A2(
-						author$project$Material$LayoutGrid$view,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span3Phone]),
-								_List_fromArray(
-									[
-										A4(
-										author$project$Display$UIWrapper$buttonClick,
-										model,
-										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToTbl'),
-										'To Table >',
-										author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$MapToTable))
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span3Phone]),
-								_List_fromArray(
-									[
-										A4(
-										author$project$Display$UIWrapper$buttonClick,
-										model,
-										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToTxt'),
-										'< To Text',
-										author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$MapToTextArea))
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span2Phone]),
-								_List_fromArray(
-									[
-										A4(
-										author$project$Display$UIWrapper$buttonMaybe,
-										model,
-										A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnToStr'),
-										'Store',
-										A3(
-											elm$core$Maybe$map2,
-											author$project$Editor$MapEditor$storeMap(pm),
-											xmapEditorModel.xmapName,
-											xmapEditorModel.xmapToEdit))
-									]))
-							]))
-					]));
-		} else {
-			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
-		}
-	});
-var author$project$Models$InternalMessages$ChangeMapType = function (a) {
-	return {$: 'ChangeMapType', a: a};
-};
-var author$project$Editor$MapEditor$xmapTypeChoice = function (model) {
-	var hasType = function (t) {
-		return _Utils_eq(model.xmapEditorModel.xmapType, t);
-	};
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radDbl'),
-				'Double',
-				'mapType',
-				hasType(author$project$Types$XMapTypes$TypeDouble),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeDouble))),
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radInt'),
-				'Int',
-				'mapType',
-				hasType(author$project$Types$XMapTypes$TypeInt),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeInt))),
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radStr'),
-				'String',
-				'mapType',
-				hasType(author$project$Types$XMapTypes$TypeString),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeString))),
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radBol'),
-				'Bool',
-				'mapType',
-				hasType(author$project$Types$XMapTypes$TypeBool),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeBool))),
-				A6(
-				author$project$Display$UIWrapper$radio,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'radDat'),
-				'Date',
-				'mapType',
-				hasType(author$project$Types$XMapTypes$TypeDate),
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ChangeMapType(author$project$Types$XMapTypes$TypeDate)))
-			]));
-};
-var author$project$Models$InternalMessages$NewMapWithName = F2(
-	function (a, b) {
-		return {$: 'NewMapWithName', a: a, b: b};
-	});
-var author$project$Models$InternalMessages$UpdateMapName = function (a) {
-	return {$: 'UpdateMapName', a: a};
-};
-var author$project$Editor$MapEditor$newMapButton = function (model) {
-	var xmapEditorModel = model.xmapEditorModel;
-	var storeNewMap = function () {
-		var _n0 = author$project$Transform$MapsExtraction$xmapNameFromString(xmapEditorModel.newXmapName);
-		if (_n0.$ === 'Ok') {
-			var mn = _n0.a;
-			return author$project$Models$ProjectModel$Internal(
-				A2(author$project$Models$InternalMessages$NewMapWithName, mn, xmapEditorModel.xmapType));
-		} else {
-			var e = _n0.a;
-			return author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$CloseDialogWithError(e));
-		}
-	}();
-	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'dlgNewMap');
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				author$project$Editor$MapEditor$xmapTypeChoice(model),
-				A5(
-				author$project$Display$NameDialog$nameDialog,
-				idxDialog,
-				model,
-				'New map',
-				function (s) {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$UpdateMapName(s));
-				},
-				storeNewMap),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$mapEditorIdx, 'btnNewMap'),
-				'New map',
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
-			]));
-};
-var author$project$Editor$MapEditor$mapEditorView = F2(
-	function (model, pm) {
-		var xmapEditorModel = model.xmapEditorModel;
-		var title = function () {
-			var _n0 = xmapEditorModel.xmapName;
-			if (_n0.$ === 'Just') {
-				var xmapName = _n0.a;
-				return 'Editing map: ' + author$project$Transform$MapsExtraction$xmapNameToString(xmapName);
-			} else {
-				return 'Map Editor';
-			}
-		}();
-		return A2(
-			elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A3(author$project$Display$UIWrapper$titleWithIcon, title, 'layers', 'DarkOrange'),
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_fromArray(
-						[
-							author$project$Display$UIWrapper$heightInView(70)
-						]),
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$MapEditor$mapEditorMapList, model, pm.project),
-									author$project$Editor$MapEditor$newMapButton(model)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$MapEditor$mapEditorViewForMap, model, pm)
-								]))
-						]))
-				]));
-	});
-var author$project$Display$MdcIndexes$viewEditorIdx = 'vwe';
-var author$project$Models$InternalMessages$NewViewWithName = function (a) {
-	return {$: 'NewViewWithName', a: a};
-};
-var author$project$Models$InternalMessages$UpdateViewName = function (a) {
-	return {$: 'UpdateViewName', a: a};
-};
-var author$project$Editor$ViewEditor$newViewButton = function (model) {
-	var newViewMessage = function () {
-		var _n0 = author$project$Transform$NameParser$nameFromString(model.viewEditorModel.newViewName);
-		if (_n0.$ === 'Ok') {
-			var newViewName = _n0.a;
-			return author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$NewViewWithName(newViewName));
-		} else {
-			var err = _n0.a;
-			return author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$CloseDialogWithError(err));
-		}
-	}();
-	var idxDialog = A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'dlgNewVew');
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A5(
-				author$project$Display$NameDialog$nameDialog,
-				idxDialog,
-				model,
-				'New view',
-				function (s) {
-					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$UpdateViewName(s));
-				},
-				newViewMessage),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnNewVew'),
-				'New view',
-				author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ShowDialog(idxDialog)))
-			]));
-};
-var author$project$Models$InternalMessages$AddItemToView = F2(
-	function (a, b) {
-		return {$: 'AddItemToView', a: a, b: b};
-	});
-var author$project$Models$InternalMessages$UpdateViewLabel = function (a) {
-	return {$: 'UpdateViewLabel', a: a};
-};
-var author$project$Editor$ViewEditor$addLabelButton = function (model) {
-	var viewEditorModel = model.viewEditorModel;
-	var newLabelMessage = author$project$Models$ProjectModel$Internal(
-		A2(
-			author$project$Models$InternalMessages$AddItemToView,
-			viewEditorModel.rowToAddTo,
-			author$project$Types$Views$LabelItem(viewEditorModel.labelEditing)));
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A5(
-				author$project$Material$TextField$view,
-				author$project$Models$ProjectModel$Mdc,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'txtAddLbl'),
-				model.mdc,
-				_List_fromArray(
-					[
-						author$project$Material$TextField$label('Label name'),
-						author$project$Material$TextField$value(viewEditorModel.labelEditing),
-						author$project$Material$Options$onInput(
-						function (s) {
-							return author$project$Models$ProjectModel$Internal(
-								author$project$Models$InternalMessages$UpdateViewLabel(s));
-						})
-					]),
-				_List_Nil),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddLbl'),
-				'Add label',
-				newLabelMessage)
-			]));
-};
-var author$project$Models$InternalMessages$AddRowToView = {$: 'AddRowToView'};
-var author$project$Editor$ViewEditor$addRowButton = function (model) {
-	return A4(
-		author$project$Display$UIWrapper$buttonClick,
-		model,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddRow'),
-		'Add row',
-		author$project$Models$ProjectModel$Internal(author$project$Models$InternalMessages$AddRowToView));
-};
-var author$project$Models$InternalMessages$RemoveItemsFromView = function (a) {
-	return {$: 'RemoveItemsFromView', a: a};
-};
-var author$project$Editor$ViewEditor$removeCellsButton = function (model) {
-	var itemsToDelete = A2(
-		elm$core$List$map,
-		function (_n1) {
-			var k = _n1.a;
-			var v = _n1.b;
-			return k;
-		},
-		A2(
-			elm$core$List$filter,
-			function (_n0) {
-				var k = _n0.a;
-				var v = _n0.b;
-				return A2(elm$core$Maybe$withDefault, false, v);
-			},
-			elm$core$Dict$toList(model.viewEditorModel.checkedViewEditItems)));
-	return A4(
-		author$project$Display$UIWrapper$buttonClick,
-		model,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnRemoveCells'),
-		'Remove items',
-		author$project$Models$ProjectModel$Internal(
-			author$project$Models$InternalMessages$RemoveItemsFromView(itemsToDelete)));
-};
-var author$project$Models$WebMessages$WRStoreView = F2(
-	function (a, b) {
-		return {$: 'WRStoreView', a: a, b: b};
-	});
-var author$project$Editor$ViewEditor$storeView = F2(
-	function (pm, vm) {
-		var viewEditRowToViewRow = function (_n2) {
-			var items = _n2.a;
-			return author$project$Types$Views$ViewRow(
-				A2(
-					elm$core$List$map,
-					function (i) {
-						return i.content;
-					},
-					items));
-		};
-		var storeValidViewToEdit = F2(
-			function (v, vn) {
-				return author$project$Models$ProjectModel$Send(
-					A2(
-						author$project$Models$WebMessages$WRStoreView,
-						pm.project.projectName,
-						{
-							rows: A2(elm$core$List$map, viewEditRowToViewRow, v.rows),
-							viewName: vn
-						}));
-			});
-		var storeViewWithName = function (vn) {
-			var _n1 = vm.viewToEdit;
-			if (_n1.$ === 'Just') {
-				var v = _n1.a;
-				return A2(storeValidViewToEdit, v, vn);
-			} else {
-				return author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$ShowMessage('Please fill the view'));
-			}
-		};
-		var _n0 = vm.viewName;
-		if (_n0.$ === 'Just') {
-			var vn = _n0.a;
-			return storeViewWithName(vn);
-		} else {
-			return author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$ShowMessage('Please enter a view name'));
-		}
-	});
-var author$project$Editor$ViewEditor$storeButton = F2(
-	function (model, pm) {
-		return A4(
-			author$project$Display$UIWrapper$buttonClick,
-			model,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnStr'),
-			'Store',
-			A2(author$project$Editor$ViewEditor$storeView, pm, model.viewEditorModel));
-	});
-var author$project$Editor$ViewEditor$viewEditorMapList = function (model) {
-	var listItem = function (mn) {
-		return A2(
-			author$project$Material$List$li,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-					elm$html$Html$text(
-					author$project$Transform$MapsExtraction$xmapNameToString(mn))
-				]));
-	};
-	var buildMsg = function (mn) {
-		return author$project$Models$ProjectModel$Internal(
-			A2(
-				author$project$Models$InternalMessages$AddItemToView,
-				model.viewEditorModel.rowToAddTo,
-				author$project$Types$Views$MapItem(mn)));
-	};
-	var sendAddItem = function (index) {
-		return A3(author$project$Display$UIWrapper$sendListMsg, buildMsg, model.mapsInProject, index);
-	};
-	return A5(
-		author$project$Material$List$ul,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstMap'),
-		model.mdc,
-		A2(
-			elm$core$List$cons,
-			author$project$Material$List$onSelectListItem(sendAddItem),
-			author$project$Display$UIWrapper$scrollableListStyle(40)),
-		A2(elm$core$List$map, listItem, model.mapsInProject));
-};
-var author$project$Models$InternalMessages$ChangeViewEditSelectedRow = function (a) {
-	return {$: 'ChangeViewEditSelectedRow', a: a};
-};
-var author$project$Editor$ViewEditor$viewChoice = F2(
-	function (model, rowI) {
-		return A2(
-			author$project$Material$DataTable$td,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A5(
-					author$project$Material$RadioButton$view,
-					author$project$Models$ProjectModel$Mdc,
-					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'radChc'),
-					model.mdc,
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$Options$when,
-							_Utils_eq(model.viewEditorModel.rowToAddTo, rowI),
-							author$project$Material$RadioButton$selected),
-							author$project$Material$Options$onClick(
-							author$project$Models$ProjectModel$Internal(
-								author$project$Models$InternalMessages$ChangeViewEditSelectedRow(rowI)))
-						]),
-					_List_Nil)
-				]));
-	});
-var author$project$Internal$Checkbox$Model$Checked = {$: 'Checked'};
-var author$project$Internal$Checkbox$Model$Unchecked = {$: 'Unchecked'};
-var author$project$Internal$Checkbox$Implementation$checked = function (value) {
-	var state = value ? author$project$Internal$Checkbox$Model$Checked : author$project$Internal$Checkbox$Model$Unchecked;
-	return author$project$Internal$Options$option(
-		function (config) {
-			return _Utils_update(
-				config,
-				{
-					state: elm$core$Maybe$Just(state)
-				});
-		});
-};
-var author$project$Material$Checkbox$checked = author$project$Internal$Checkbox$Implementation$checked;
-var author$project$Internal$Checkbox$Implementation$defaultConfig = {disabled: false, id_: '', nativeControl: _List_Nil, state: elm$core$Maybe$Nothing};
-var author$project$Internal$Checkbox$Model$AnimationEnd = {$: 'AnimationEnd'};
-var author$project$Internal$Checkbox$Model$Init = F2(
-	function (a, b) {
-		return {$: 'Init', a: a, b: b};
-	});
-var author$project$Internal$Checkbox$Model$NoOp = {$: 'NoOp'};
-var author$project$Internal$Checkbox$Model$SetFocus = function (a) {
-	return {$: 'SetFocus', a: a};
-};
-var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var elm$svg$Svg$path = elm$svg$Svg$trustedNode('path');
-var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
-var elm$svg$Svg$Attributes$class = _VirtualDom_attribute('class');
-var elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
-var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
-var elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
-var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var author$project$Internal$Checkbox$Implementation$checkbox = F4(
-	function (lift, model, options, _n0) {
-		var animationClass = function (animation) {
-			if (animation.$ === 'Just') {
-				switch (animation.a.$) {
-					case 'UncheckedChecked':
-						var _n2 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-checked');
-					case 'UncheckedIndeterminate':
-						var _n3 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-unchecked-indeterminate');
-					case 'CheckedUnchecked':
-						var _n4 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-unchecked');
-					case 'CheckedIndeterminate':
-						var _n5 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-checked-indeterminate');
-					case 'IndeterminateChecked':
-						var _n6 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-checked');
-					default:
-						var _n7 = animation.a;
-						return author$project$Internal$Options$cs('mdc-checkbox--anim-indeterminate-unchecked');
-				}
-			} else {
-				return author$project$Internal$Options$nop;
-			}
-		};
-		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Checkbox$Implementation$defaultConfig, options);
-		var config = summary.config;
-		var configState = config.state;
-		var currentState = A2(elm$core$Maybe$withDefault, configState, model.lastKnownState);
-		var stateChangedOrUninitialized = _Utils_eq(model.lastKnownState, elm$core$Maybe$Nothing) || (!_Utils_eq(currentState, configState));
-		return A5(
-			author$project$Internal$Options$apply,
-			summary,
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					author$project$Internal$Options$cs('mdc-checkbox mdc-checkbox--upgraded'),
-					A2(
-					author$project$Internal$Options$when,
-					_Utils_eq(currentState, elm$core$Maybe$Nothing),
-					author$project$Internal$Options$cs('mdc-checkbox--indeterminate')),
-					A2(
-					author$project$Internal$Options$when,
-					_Utils_eq(
-						currentState,
-						elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked)),
-					author$project$Internal$Options$cs('mdc-checkbox--checked')),
-					A2(
-					author$project$Internal$Options$when,
-					config.disabled,
-					author$project$Internal$Options$cs('mdc-checkbox--disabled')),
-					animationClass(model.animation),
-					A2(
-					author$project$Internal$Options$when,
-					stateChangedOrUninitialized,
-					author$project$Internal$GlobalEvents$onTick(
-						elm$json$Json$Decode$succeed(
-							lift(
-								A2(author$project$Internal$Checkbox$Model$Init, model.lastKnownState, configState))))),
-					A2(
-					author$project$Internal$Options$when,
-					!_Utils_eq(model.animation, elm$core$Maybe$Nothing),
-					A2(
-						author$project$Internal$Options$on,
-						'animationend',
-						elm$json$Json$Decode$succeed(
-							lift(author$project$Internal$Checkbox$Model$AnimationEnd))))
-				]),
-			_List_Nil,
-			_List_fromArray(
-				[
-					A4(
-					author$project$Internal$Options$applyNativeControl,
-					summary,
-					elm$html$Html$input,
-					_List_fromArray(
-						[
-							author$project$Internal$Options$cs('mdc-checkbox__native-control'),
-							A3(
-							elm$core$Basics$composeL,
-							author$project$Internal$Options$many,
-							elm$core$List$map(author$project$Internal$Options$attribute),
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$type_('checkbox'),
-									elm$html$Html$Attributes$id(config.id_),
-									A2(
-									elm$html$Html$Attributes$property,
-									'indeterminate',
-									elm$json$Json$Encode$bool(
-										_Utils_eq(currentState, elm$core$Maybe$Nothing))),
-									elm$html$Html$Attributes$checked(
-									_Utils_eq(
-										currentState,
-										elm$core$Maybe$Just(author$project$Internal$Checkbox$Model$Checked))),
-									elm$html$Html$Attributes$disabled(config.disabled)
-								])),
-							A2(
-							author$project$Internal$Options$onWithOptions,
-							'click',
-							elm$json$Json$Decode$succeed(
-								{
-									message: lift(author$project$Internal$Checkbox$Model$NoOp),
-									preventDefault: true,
-									stopPropagation: false
-								})),
-							A2(
-							author$project$Internal$Options$onWithOptions,
-							'change',
-							elm$json$Json$Decode$succeed(
-								{
-									message: lift(author$project$Internal$Checkbox$Model$NoOp),
-									preventDefault: true,
-									stopPropagation: false
-								})),
-							author$project$Internal$Options$onFocus(
-							lift(
-								author$project$Internal$Checkbox$Model$SetFocus(true))),
-							author$project$Internal$Options$onBlur(
-							lift(
-								author$project$Internal$Checkbox$Model$SetFocus(false)))
-						]),
-					_List_Nil),
-					A3(
-					author$project$Internal$Options$styled,
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							author$project$Internal$Options$cs('mdc-checkbox__background')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$svg$Svg$svg,
-							_List_fromArray(
-								[
-									elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark'),
-									elm$svg$Svg$Attributes$viewBox('0 0 24 24')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									elm$svg$Svg$path,
-									_List_fromArray(
-										[
-											elm$svg$Svg$Attributes$class('mdc-checkbox__checkmark-path'),
-											elm$svg$Svg$Attributes$fill('none'),
-											elm$svg$Svg$Attributes$stroke('white'),
-											elm$svg$Svg$Attributes$d('M1.73,12.91 8.1,19.28 22.79,4.59')
-										]),
-									_List_Nil)
-								])),
-							A3(
-							author$project$Internal$Options$styled,
-							elm$html$Html$div,
-							_List_fromArray(
-								[
-									author$project$Internal$Options$cs('mdc-checkbox__mixedmark')
-								]),
-							_List_Nil)
-						]))
-				]));
-	});
-var author$project$Internal$Checkbox$Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			author$project$Internal$Component$render,
-			author$project$Internal$Checkbox$Implementation$getSet.get,
-			author$project$Internal$Checkbox$Implementation$checkbox,
-			author$project$Internal$Msg$CheckboxMsg,
-			lift,
-			index,
-			store,
-			A2(
-				elm$core$List$cons,
-				author$project$Internal$Options$internalId(index),
-				options));
-	});
-var author$project$Material$Checkbox$view = author$project$Internal$Checkbox$Implementation$view;
-var author$project$Material$Options$nop = author$project$Internal$Options$nop;
-var author$project$Models$InternalMessages$ChangeViewEditCheckedItem = function (a) {
-	return {$: 'ChangeViewEditCheckedItem', a: a};
-};
-var author$project$Editor$ViewEditor$viewEditItemCheckbox = F3(
-	function (model, viewItemId, txt) {
-		var index = A2(
-			author$project$Display$MdcIndexes$makeIndex,
-			author$project$Display$MdcIndexes$viewEditorIdx,
-			'check' + elm$core$String$fromInt(viewItemId));
-		var clickHandler = author$project$Material$Options$onClick(
-			author$project$Models$ProjectModel$Internal(
-				author$project$Models$InternalMessages$ChangeViewEditCheckedItem(viewItemId)));
-		var checked = A2(
-			elm$core$Maybe$withDefault,
-			author$project$Material$Options$nop,
-			A2(
-				elm$core$Maybe$map,
-				author$project$Material$Checkbox$checked,
-				A2(
-					elm$core$Maybe$withDefault,
-					elm$core$Maybe$Nothing,
-					A2(elm$core$Dict$get, viewItemId, model.viewEditorModel.checkedViewEditItems))));
-		return A2(
-			elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A5(
-					author$project$Material$Checkbox$view,
-					author$project$Models$ProjectModel$Mdc,
-					index,
-					model.mdc,
-					A2(
-						elm$core$List$cons,
-						checked,
-						A2(elm$core$List$cons, clickHandler, _List_Nil)),
-					_List_Nil),
-					elm$html$Html$text(txt)
-				]));
-	});
-var author$project$Editor$ViewEditor$viewEditItem = F2(
-	function (model, item) {
-		var _n0 = item.content;
-		if (_n0.$ === 'MapItem') {
-			var mn = _n0.a;
-			return A2(
-				author$project$Material$DataTable$td,
-				_List_fromArray(
-					[
-						A2(author$project$Material$Options$css, 'background', 'Coral')
-					]),
-				_List_fromArray(
-					[
-						A3(
-						author$project$Editor$ViewEditor$viewEditItemCheckbox,
-						model,
-						item.id,
-						author$project$Transform$MapsExtraction$xmapNameToString(mn))
-					]));
-		} else {
-			var l = _n0.a;
-			return A2(
-				author$project$Material$DataTable$td,
-				_List_fromArray(
-					[
-						A2(author$project$Material$Options$css, 'background', 'DarkTurquoise')
-					]),
-				_List_fromArray(
-					[
-						A3(author$project$Editor$ViewEditor$viewEditItemCheckbox, model, item.id, l)
-					]));
-		}
-	});
-var author$project$Editor$ViewEditor$viewEditRowToTableCells = F2(
-	function (model, _n0) {
-		var rowIdx = _n0.a;
-		var row = _n0.b.a;
-		return A2(
-			elm$core$List$cons,
-			A2(author$project$Editor$ViewEditor$viewChoice, model, rowIdx),
-			A2(
-				elm$core$List$map,
-				author$project$Editor$ViewEditor$viewEditItem(model),
-				row));
-	});
-var author$project$Editor$ViewEditor$viewEditRows = F2(
-	function (model, v) {
-		var rows = A2(
-			elm$core$List$map,
-			author$project$Material$DataTable$tr(_List_Nil),
-			A2(
-				elm$core$List$map,
-				author$project$Editor$ViewEditor$viewEditRowToTableCells(model),
-				A2(
-					elm_community$list_extra$List$Extra$zip,
-					A2(
-						elm$core$List$range,
-						0,
-						elm$core$List$length(v.rows)),
-					v.rows)));
-		return A2(author$project$Material$DataTable$tbody, _List_Nil, rows);
-	});
-var author$project$Editor$ViewEditor$viewEditorTable = F2(
-	function (model, mv) {
-		if (mv.$ === 'Just') {
-			var v = mv.a;
-			return A2(
-				author$project$Material$DataTable$table,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(author$project$Editor$ViewEditor$viewEditRows, model, v)
-					]));
-		} else {
-			return A2(
-				author$project$Material$DataTable$table,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(author$project$Material$DataTable$tbody, _List_Nil, _List_Nil)
-					]));
-		}
-	});
-var author$project$Internal$LayoutGrid$Implementation$span9Desktop = A2(
-	author$project$Internal$LayoutGrid$Implementation$span,
-	elm$core$Maybe$Just('desktop'),
-	9);
-var author$project$Material$LayoutGrid$span9Desktop = author$project$Internal$LayoutGrid$Implementation$span9Desktop;
-var author$project$Editor$ViewEditor$viewEditorForView = F2(
-	function (model, pm) {
-		var _n0 = model.viewEditorModel.viewName;
-		if (_n0.$ === 'Just') {
-			var vn = _n0.a;
-			return A2(
-				elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						author$project$Material$LayoutGrid$view,
-						_List_fromArray(
-							[
-								author$project$Display$UIWrapper$heightInView(55)
-							]),
-						_List_fromArray(
-							[
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span9Desktop, author$project$Material$LayoutGrid$span3Phone]),
-								_List_fromArray(
-									[
-										A2(author$project$Editor$ViewEditor$viewEditorTable, model, model.viewEditorModel.viewToEdit)
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
-								_List_fromArray(
-									[
-										author$project$Editor$ViewEditor$viewEditorMapList(model),
-										author$project$Editor$ViewEditor$addLabelButton(model)
-									]))
-							])),
-						A2(
-						author$project$Material$LayoutGrid$view,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span4Phone]),
-								_List_Nil),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
-								_List_fromArray(
-									[
-										author$project$Editor$ViewEditor$addRowButton(model)
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
-								_List_fromArray(
-									[
-										author$project$Editor$ViewEditor$removeCellsButton(model)
-									])),
-								A2(
-								author$project$Material$LayoutGrid$cell,
-								_List_fromArray(
-									[author$project$Material$LayoutGrid$span1Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span2Phone]),
-								_List_fromArray(
-									[
-										A2(author$project$Editor$ViewEditor$storeButton, model, pm)
-									]))
-							]))
-					]));
-		} else {
-			return A2(elm$html$Html$div, _List_Nil, _List_Nil);
-		}
-	});
-var author$project$Models$WebMessages$WRLoadView = F2(
-	function (a, b) {
-		return {$: 'WRLoadView', a: a, b: b};
-	});
-var author$project$Editor$ViewEditor$viewsList = F2(
-	function (model, p) {
-		var sendLoadView = function (index) {
-			return A3(
-				author$project$Display$UIWrapper$sendListMsg,
-				function (vn) {
-					return author$project$Models$ProjectModel$Send(
-						A2(author$project$Models$WebMessages$WRLoadView, p.projectName, vn));
-				},
-				p.viewNames,
-				index);
-		};
-		var listItem = function (vn) {
-			return A2(
-				author$project$Material$List$li,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-						elm$html$Html$text(vn)
-					]));
-		};
-		return A5(
-			author$project$Material$List$ul,
-			author$project$Models$ProjectModel$Mdc,
-			A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstVew'),
-			model.mdc,
-			A2(
-				elm$core$List$cons,
-				author$project$Material$List$onSelectListItem(sendLoadView),
-				author$project$Display$UIWrapper$scrollableListStyle(55)),
-			A2(elm$core$List$map, listItem, p.viewNames));
-	});
-var author$project$Editor$ViewEditor$viewViewsEditor = F2(
-	function (model, pm) {
-		var title = function () {
-			var _n0 = model.viewEditorModel.viewName;
-			if (_n0.$ === 'Just') {
-				var viewName = _n0.a;
-				return 'Editing view: ' + viewName;
-			} else {
-				return 'View Editor';
-			}
-		}();
-		return A2(
-			elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A3(author$project$Display$UIWrapper$titleWithIcon, title, 'view_module', 'Pink'),
-					A2(
-					author$project$Material$LayoutGrid$view,
-					_List_fromArray(
-						[
-							author$project$Display$UIWrapper$heightInView(70)
-						]),
-					_List_fromArray(
-						[
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span2Desktop, author$project$Material$LayoutGrid$span1Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$ViewEditor$viewsList, model, pm.project),
-									author$project$Editor$ViewEditor$newViewButton(model)
-								])),
-							A2(
-							author$project$Material$LayoutGrid$cell,
-							_List_fromArray(
-								[author$project$Material$LayoutGrid$span6Tablet, author$project$Material$LayoutGrid$span10Desktop, author$project$Material$LayoutGrid$span3Phone]),
-							_List_fromArray(
-								[
-									A2(author$project$Editor$ViewEditor$viewEditorForView, model, pm)
-								]))
-						]))
-				]));
-	});
-var author$project$Display$ProjectUI$viewProjectContent = F2(
-	function (model, pm) {
-		var _n0 = model.currentProjectForm;
-		switch (_n0.$) {
-			case 'ViewsForm':
-				return A2(author$project$Display$ViewsUI$viewViews, model, pm);
-			case 'MapEditorForm':
-				return A2(author$project$Editor$MapEditor$mapEditorView, model, pm);
-			case 'ViewEditorForm':
-				return A2(author$project$Editor$ViewEditor$viewViewsEditor, model, pm);
-			default:
-				return A2(author$project$Editor$CalculationEditor$viewCalculationsEditor, model, pm);
-		}
-	});
-var author$project$Display$MdcIndexes$projectUIIdx = 'prj';
-var author$project$Models$InternalMessages$CalculationEditorForm = {$: 'CalculationEditorForm'};
-var author$project$Models$InternalMessages$MapEditorForm = {$: 'MapEditorForm'};
-var author$project$Models$InternalMessages$ViewEditorForm = {$: 'ViewEditorForm'};
-var author$project$Display$ProjectUI$tabArray = _List_fromArray(
-	[author$project$Models$InternalMessages$ViewsForm, author$project$Models$InternalMessages$MapEditorForm, author$project$Models$InternalMessages$ViewEditorForm, author$project$Models$InternalMessages$CalculationEditorForm]);
-var author$project$Display$ProjectUI$projectFormToTab = function (pf) {
-	return A2(
-		elm$core$Maybe$withDefault,
-		0,
-		A2(elm_community$list_extra$List$Extra$elemIndex, pf, author$project$Display$ProjectUI$tabArray));
-};
-var author$project$Internal$TabBar$Implementation$icon = function (value) {
-	return author$project$Internal$Options$option(
-		function (config) {
-			return _Utils_update(
-				config,
-				{
-					icon: elm$core$Maybe$Just(value)
-				});
-		});
-};
-var author$project$Material$TabBar$icon = author$project$Internal$TabBar$Implementation$icon;
 var author$project$Models$InternalMessages$SwitchProjectViewTo = function (a) {
 	return {$: 'SwitchProjectViewTo', a: a};
 };
@@ -17984,26 +20015,7 @@ var author$project$Display$ProjectsUI$viewCurrentProject = function (model) {
 		return A2(elm$html$Html$div, _List_Nil, _List_Nil);
 	}
 };
-var author$project$Display$ProjectsUI$viewMessagesItem = function (msg) {
-	return A2(
-		author$project$Material$List$li,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(author$project$Material$List$graphicIcon, _List_Nil, 'inbox'),
-				elm$html$Html$text(msg)
-			]));
-};
-var author$project$Display$ProjectsUI$viewMessages = function (model) {
-	return A5(
-		author$project$Material$List$ul,
-		author$project$Models$ProjectModel$Mdc,
-		A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'lstMsg'),
-		model.mdc,
-		author$project$Display$UIWrapper$scrollableListStyle(10),
-		A2(elm$core$List$map, author$project$Display$ProjectsUI$viewMessagesItem, model.messages));
-};
-var author$project$Display$ProjectsUI$viewProjectsContent = function (model) {
+var author$project$Display$ProjectsUI$viewProjects = function (model) {
 	return A2(
 		elm$html$Html$div,
 		_List_Nil,
@@ -18013,7 +20025,7 @@ var author$project$Display$ProjectsUI$viewProjectsContent = function (model) {
 				author$project$Material$LayoutGrid$view,
 				_List_fromArray(
 					[
-						author$project$Display$UIWrapper$heightInView(80)
+						author$project$Display$UIWrapper$heightInView(model.ui.heights.viewProjects)
 					]),
 				_List_fromArray(
 					[
@@ -18024,7 +20036,8 @@ var author$project$Display$ProjectsUI$viewProjectsContent = function (model) {
 						_List_fromArray(
 							[
 								author$project$Display$ProjectsUI$viewAllProjectsList(model),
-								author$project$Display$ProjectsUI$newProjectButton(model)
+								author$project$Display$ProjectsUI$newProjectButton(model),
+								author$project$Display$ProjectsUI$messageSnackbar(model)
 							])),
 						A2(
 						author$project$Material$LayoutGrid$cell,
@@ -18035,33 +20048,10 @@ var author$project$Display$ProjectsUI$viewProjectsContent = function (model) {
 								author$project$Display$ProjectsUI$viewCurrentProject(model)
 							]))
 					])),
-				author$project$Display$ProjectsUI$viewMessages(model)
-			]));
-};
-var author$project$Internal$TopAppBar$Implementation$fixedAdjust = author$project$Internal$Options$cs('mdc-top-app-bar--fixed-adjust');
-var author$project$Material$TopAppBar$fixedAdjust = author$project$Internal$TopAppBar$Implementation$fixedAdjust;
-var author$project$Display$ProjectsUI$viewProjects = function (model) {
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
 				A2(
-				elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						author$project$Display$ProjectsUI$topAppBar(model)
-					])),
-				A3(
-				author$project$Material$Options$styled,
-				elm$html$Html$div,
-				_List_fromArray(
-					[author$project$Material$TopAppBar$fixedAdjust]),
-				_List_fromArray(
-					[
-						author$project$Display$ProjectsUI$viewProjectsContent(model)
-					]))
+				author$project$Display$MessagesDialog$messagesDialog,
+				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$projectsUIIdx, 'dlgMsg'),
+				model)
 			]));
 };
 var author$project$Main$view = function (model) {

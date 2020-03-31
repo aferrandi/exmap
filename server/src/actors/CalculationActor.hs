@@ -25,7 +25,7 @@ actorCalculation chan rc = loop
             cn <- atomically $ runtimeCalcName rc
             case msg of
                 CMMaps ms -> do
-                    logDbg $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map xmapName ms)
+                    logDbg $ "Calculation " ++ show cn ++ " handling CMMaps " ++ show (map mapName ms)
                     atomically $ handleMaps rc ms
                     loop
                 CMError e -> do
@@ -84,7 +84,7 @@ handleMapsWithErrors rc ms = do
        execAndSendIfFull rc
 
 updateMapsInCalculation :: [XNamedMap] -> MapRepository -> MapRepository
-updateMapsInCalculation ms msbn = foldr  (\m msbni -> M.insert (xmapName m) (Just $ xmap m) msbni) msbn ms
+updateMapsInCalculation ms msbn = foldr  (\m msbni -> M.insert (mapName m) (Just $ xmap m) msbni) msbn ms
 
 handleViewStarted :: RuntimeCalculation -> ViewChan -> STM ()
 handleViewStarted rc vc = do
@@ -136,7 +136,7 @@ execAndSend rc cs vs mbn = do
 sendToDependents :: RuntimeCalculation -> [CalculationChan] -> [ViewChan] -> XMap -> STM ()
 sendToDependents rc cs vs rs = do
     calc <- readTVar $ calculation rc
-    let rsn = XNamedMap { xmapName = resultName calc, xmap = rs }
+    let rsn = XNamedMap { xmapDef = XMapDefinition { xmapName = resultName calc, xmapType = mapType rs }, xmap = rs }
     writeTVar (currentResult rc) (Just rsn)
     let cn = calculationName calc
     logDebug (logChan rc) "calc" $ "sending " ++ (show cn) ++ " calculation result to calculations:" ++ show (map ccName cs)

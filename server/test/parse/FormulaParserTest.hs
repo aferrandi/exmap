@@ -19,26 +19,26 @@ import TestTypes
 
 parseFormula_formulaWithMap_map = TestCase (assertEqual "parse formula with map" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "one/map")
-          res = XFMap (mapName ["one", "map"])
+          res = XFMap (makeMapName ["one", "map"])
 
 parseFormula_formulaOperation_negate = TestCase (assertEqual "parse operation" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "negate one/map")
-          res = XFOperation Negate [XFMap (mapName ["one", "map"])]
+          res = XFOperation Negate [XFMap (makeMapName ["one", "map"])]
 
 parseFormula_formulaWrongOperationName_error = TestCase (assertEqual "parse operation with wrong name" (Left "endOfInput") parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "nogate one/map")
 
 parseFormula_formulaOperation_operation = TestCase (assertEqual "parse operation" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "subtract one/map two")
-          res = XFOperation Subtract [XFMap (mapName ["one", "map"]), XFMap (mapName["two"])]
+          res = XFOperation Subtract [XFMap (makeMapName ["one", "map"]), XFMap (makeMapName["two"])]
 
 parseFormula_complex_operation = TestCase (assertEqual "parse operation" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "subtract (negate one/map) two")
-          res = XFOperation Subtract [XFOperation Negate [XFMap (mapName ["one", "map"])],  XFMap (mapName ["two"]) ]
+          res = XFOperation Subtract [XFOperation Negate [XFMap (makeMapName ["one", "map"])],  XFMap (makeMapName ["two"]) ]
 
 parseFormula_formulaWithSpaces_map = TestCase (assertEqual "parse formula with spaces" (Right res) parsed)
     where parsed = parseFormula (Calc.CalculationFormulaText $ T.pack "  negate  one/map  ")
-          res = XFOperation Negate [XFMap (mapName ["one", "map"])]
+          res = XFOperation Negate [XFMap (makeMapName ["one", "map"])]
 
 tests = [
           parseFormula_formulaWithMap_map,

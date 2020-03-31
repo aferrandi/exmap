@@ -14,8 +14,8 @@ makeMapString l = M.fromList (map (\(k, n) -> (XMapKey (T.pack k), T.pack n)) l)
 makeXMap :: XValue a => [(String, a)] -> XMap
 makeXMap l = buildMap $ makeMap l
 
-mapName :: [String] -> XMapName
-mapName ss = XMapName $ map T.pack ss
+makeMapName :: [String] -> XMapName
+makeMapName ss = XMapName $ map T.pack ss
 
 mapValuesToText :: [(String, String)] -> [(String, T.Text)]
 mapValuesToText = map (\(k, n) -> (k, T.pack n))

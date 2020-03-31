@@ -1,4 +1,4 @@
-module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), XMapList(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName) where
+module XMapTypes (Error(Error), XMapName(XMapName), XMapType(..), XMap(..), XMapList(..), MapValue, XNamedMap(..), XMapKey(XMapKey), XMapErr, XMapByName, XMapDefinition(..), mapName, mapType) where
 
 
 import qualified Data.Map.Strict as M
@@ -22,6 +22,10 @@ data XMapType = TypeDouble |
 
 type MapValue a = M.Map XMapKey a
 
+data XMapDefinition = XMapDefinition {
+    xmapName :: XMapName,
+    xmapType :: XMapType
+} deriving (Show, Eq)
 
 data XMap = XMapDouble (MapValue Double) |
             XMapInt (MapValue Int) |
@@ -31,9 +35,10 @@ data XMap = XMapDouble (MapValue Double) |
             deriving (Show, Eq)
 
 data XNamedMap = XNamedMap {
-    xmapName :: XMapName,
+    xmapDef :: XMapDefinition,
     xmap :: XMap
 } deriving (Show, Eq)
+
 
 type XMapErr = Either Error XMap
 
@@ -47,5 +52,12 @@ data XMapList = XMapDoubleList [MapValue Double] |
             XMapDateList [MapValue DT.UTCTime]
             deriving (Show, Eq)
 
+mapName :: XNamedMap -> XMapName
+mapName = xmapName . xmapDef
 
-
+mapType :: XMap -> XMapType
+mapType (XMapDouble _) = TypeDouble
+mapType (XMapInt _) = TypeInt
+mapType (XMapString _) = TypeText
+mapType (XMapBool _) = TypeBool
+mapType (XMapDate _) = TypeDate

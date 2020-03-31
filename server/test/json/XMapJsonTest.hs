@@ -16,7 +16,7 @@ import XMapJson
 toParseJSON_doublemap_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
     where 
       original =  XNamedMap {
-          xmapName = mapName ["map"],
+          xmapDef = XMapDefinition { xmapName = makeMapName ["map"], xmapType = TypeText },
           xmap = makeXMap arr
       }
       arr :: [(String, Double)]
@@ -25,7 +25,7 @@ toParseJSON_doublemap_same = TestCase (assertEqual "map -> json -> map" (Just or
 
 toParseJSON_stringmap_same = TestCase (assertEqual "map -> json -> map" (Just original) (decode . encodeTrace $ original))
     where original =  XNamedMap {
-        xmapName = mapName ["map"],
+        xmapDef = XMapDefinition  { xmapName = makeMapName ["map"], xmapType = TypeText },
         xmap = (makeXMap . mapValuesToText) [("k1","a"),("k2","b")]
     }
 

@@ -123,7 +123,7 @@ mapsForCalculationsLoaded rp _ ms = do
 
 findCalculationsAndSendMap :: RuntimeProject -> CalculationChanByMap -> XNamedMap -> STM ()
 findCalculationsAndSendMap rp cbm m = do
-    let mn = xmapName m
+    let mn = mapName m
     let cs = M.lookup mn cbm
     logDebug (logChan $ chans rp) "project" $ "sending map " ++ show mn ++ " to " ++ (show $ length cs) ++ " calculations"
     mapM_ (sendMapToCalculations m) cs

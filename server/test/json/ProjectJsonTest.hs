@@ -37,7 +37,7 @@ toParseJSON_view_same = TestCase (assertEqual "view -> json -> view" (Just origi
                            viewName = viewNameExample,
                            rows = [
                                ViewRow [
-                                   MapItem (mapName ["one"]),
+                                   MapItem (makeMapName ["one"]),
                                    LabelItem (ViewLabel (T.pack "label"))
                                    ] RowHasHeader
                            ]
@@ -58,8 +58,8 @@ calculationNameExample = CalculationName (T.pack "calculation")
 
 calculationExample = Calculation {
         calculationName = calculationNameExample,
-        resultName = mapName ["res"],
-        formula = XFOperation Subtract [XFMap . mapName $ ["one"], XFMap . mapName $ ["two"]],
+        resultName = makeMapName ["res"],
+        formula = XFOperation Subtract [XFMap . makeMapName $ ["one"], XFMap . makeMapName $ ["two"]],
         operationMode = Intersection
         }
 
@@ -68,7 +68,7 @@ viewNameExample = ViewName (T.pack "view")
 
 sourceExample = Source {
                   sourceType = FileSource,
-                  sourceOfMaps = [mapName ["one"],mapName ["two"]]
+                  sourceOfMaps = [makeMapName ["one"],makeMapName ["two"]]
               }
 
 

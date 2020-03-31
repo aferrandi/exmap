@@ -55,6 +55,33 @@ instance ToJSON XMap where
      toJSON (XMapDate values) = object [ "type" .=  T.pack "date"
                                           , "values" .= values
                                           ]
+instance ToJSON XMapType where
+   toJSON v = String $ case v of
+        TypeDouble -> "double"
+        TypeInt -> "int"
+        TypeText -> "string"
+        TypeBool -> "bool"
+        TypeDate -> "date"
+
+instance FromJSON XMapType where
+   parseJSON (String v) = return $ case v of
+      "double" -> TypeDouble
+      "int" -> TypeInt
+      "string" ->  TypeText
+      "bool" ->  TypeBool
+      "date" ->  TypeDate
+
+instance FromJSON XMapDefinition where
+   parseJSON (Object v) =
+      XMapDefinition <$> v .: "mapName"
+             <*> v .: "mapType"
+
+instance ToJSON XMapDefinition where
+     toJSON (XMapDefinition mapName mapType) =
+        object [ "mapName"  .= mapName
+               , "mapType"   .= mapType
+                 ]
+
 instance FromJSON XNamedMap where
    parseJSON (Object v) =
       XNamedMap <$> v .: "mapName"
@@ -65,3 +92,4 @@ instance ToJSON XNamedMap where
         object [ "mapName"  .= mapName
                , "xmap"   .= xmap
                  ]
+

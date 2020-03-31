@@ -67,7 +67,7 @@ newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
 
 mapStored :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored chan rp c m = do
-        let mn = xmapName m
+        let mn = mapName m
         modifyTVar (project rp) (updateProjectWithFileMap mn)
         p <- readTVar (project rp)
         writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
@@ -89,14 +89,14 @@ mapAdded :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapAdded chan rp c m = do
     mapStored chan rp c m
     pn <- prjName rp
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapAdded pn (xmapName m) (size $ xmap m))
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapAdded pn (mapName m) (size $ xmap m))
 
 
 mapUpdated :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapUpdated chan rp c m = do
     mapStored chan rp c m
     pn <- prjName rp
-    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapUpdated pn (xmapName m) (size $ xmap m))
+    writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapUpdated pn (mapName m) (size $ xmap m))
 
 projectStored :: RuntimeProject -> Project -> STM()
 projectStored rp p = do
