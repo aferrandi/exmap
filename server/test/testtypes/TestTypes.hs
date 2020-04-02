@@ -17,6 +17,9 @@ makeXMap l = buildMap $ makeMap l
 makeMapName :: [String] -> XMapName
 makeMapName ss = XMapName $ map T.pack ss
 
+makeMapDef :: [String] -> XMapType -> XMapDefinition
+makeMapDef ss t = XMapDefinition { xmapName = makeMapName ss, xmapType = t }
+
 mapValuesToText :: [(String, String)] -> [(String, T.Text)]
 mapValuesToText = map (\(k, n) -> (k, T.pack n))
 

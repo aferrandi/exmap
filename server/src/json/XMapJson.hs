@@ -84,12 +84,12 @@ instance ToJSON XMapDefinition where
 
 instance FromJSON XNamedMap where
    parseJSON (Object v) =
-      XNamedMap <$> v .: "mapName"
+      XNamedMap <$> v .: "mapDef"
              <*> v .: "xmap"
 
 instance ToJSON XNamedMap where
-     toJSON (XNamedMap mapName xmap) =
-        object [ "mapName"  .= mapName
+     toJSON (XNamedMap mapDef xmap) =
+        object [ "mapDef"  .= mapDef
                , "xmap"   .= xmap
                  ]
 

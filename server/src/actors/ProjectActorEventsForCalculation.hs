@@ -172,7 +172,7 @@ sendDependedMapsToCalculation :: ProjectChan -> Project -> CommonChans -> WAClie
 sendDependedMapsToCalculation chan p chs c cc = do
      case sourcesOfTypeInProject FileSource p of
         Just fileSources -> do
-             let toLoad = L.intersect (calculationDependenciesMaps cc) fileSources
+             let toLoad = L.intersect (calculationDependenciesMaps cc) (L.map xmapName fileSources)
              writeTChan (loadChan chs) $ LMLoadMapsForCalculation chan c (projectName p) (calculationName cc) toLoad
         Nothing -> return ()
 

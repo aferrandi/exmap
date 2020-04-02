@@ -20,7 +20,7 @@ data SourceType = FileSource |
 
 data Source = Source {
     sourceType :: SourceType,
-    sourceOfMaps :: [XMapName]
+    sourceOfMaps :: [XMapDefinition]
 } deriving (Show, Eq)
 
 data Project = Project {
@@ -39,6 +39,9 @@ data User = User {
 newtype AllProjects = AllProjects [ProjectName]
     deriving (Show, Eq)
 
-sourcesOfTypeInProject :: SourceType -> Project -> Maybe [XMapName]
+sourcesOfTypeInProject :: SourceType -> Project -> Maybe [XMapDefinition]
 sourcesOfTypeInProject sc p = fmap sourceOfMaps fileSources
         where fileSources = L.find (\s -> sourceType s == sc) (sources p)
+        
+sourceOfMapsNames :: Source -> [XMapName]
+sourceOfMapsNames s = L.map xmapName (sourceOfMaps s) 

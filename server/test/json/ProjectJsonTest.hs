@@ -68,7 +68,7 @@ viewNameExample = ViewName (T.pack "view")
 
 sourceExample = Source {
                   sourceType = FileSource,
-                  sourceOfMaps = [makeMapName ["one"],makeMapName ["two"]]
+                  sourceOfMaps = [makeMapDef ["one"] TypeDouble ,makeMapDef ["two"] TypeText]
               }
 
 

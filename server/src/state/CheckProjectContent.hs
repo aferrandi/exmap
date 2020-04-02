@@ -3,6 +3,7 @@ module CheckProjectContent where
 import Control.Concurrent.STM
 import qualified Data.List as L
 import qualified Data.Map.Strict as M
+import qualified Data.Maybe as B
 import Project
 import ProjectState
 import Calculation
@@ -18,7 +19,7 @@ projectContainsMapWithName :: RuntimeProject -> XMapName -> STM (Bool)
 projectContainsMapWithName rp mn = do
   p <- readTVar $ project rp
   let maps = L.concatMap sourceOfMaps (sources p)
-  return $ L.elem mn maps
+  return $ B.isJust $ L.find (\md -> (xmapName md) == mn) maps
 
 projectContainsCalculationWithName :: RuntimeProject -> CalculationName -> STM (Bool)
 projectContainsCalculationWithName rp cn = do

@@ -93,7 +93,7 @@ mapsInProject rp c = do
     p <- readTVar (project rp)
     cbm <- readTVar $ calculationChanByMap rp
     cbr <- readTVar $ calculationByResult rp
-    let ss = L.nub (concatMap sourceOfMaps (sources p) ++ M.keys cbm ++ M.keys cbr)
+    let ss = L.nub (concatMap sourceOfMapsNames (sources p) ++ M.keys cbm ++ M.keys cbr)
     writeTChan (evtChan rp) $ EMWebEvent [c] (WEMapsInProject (projectName p) ss)
 
 subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
@@ -189,7 +189,7 @@ startCalculations chan rp c = do
     case L.find (\s -> sourceType s == FileSource) (sources p) of
         Just fileSources -> do
             cbm <- readTVar (calculationChanByMap rp)
-            let cms = L.intersect (M.keys cbm) (sourceOfMaps fileSources)
+            let cms = L.intersect (M.keys cbm) (sourceOfMapsNames fileSources)
             writeTChan (loadChan $ chans rp) $ LMLoadMapsForCalculations chan c (projectName p) cms
         Nothing -> return ()
 

@@ -61,14 +61,14 @@ mapForClientLoaded rp c m = do
      pn <- prjName rp
      writeTChan (evtChan rp) (EMWebEvent [c] $ WEMapLoaded pn m)
 
-newSource :: SourceType -> [XMapName] -> Source
+newSource :: SourceType -> [XMapDefinition] -> Source
 newSource st mns = Source { sourceType = st, sourceOfMaps = mns }
 
 
 mapStored :: ProjectChan -> RuntimeProject -> WAClient -> XNamedMap -> STM ()
 mapStored chan rp c m = do
         let mn = mapName m
-        modifyTVar (project rp) (updateProjectWithFileMap mn)
+        modifyTVar (project rp) (updateProjectWithFileMap (xmapDef m))
         p <- readTVar (project rp)
         writeTChan (storeChan $ chans rp) (StMStoreExistingProject chan c p)
         sendToAllCalculations mn
@@ -104,12 +104,12 @@ projectStored rp p = do
     cs <- readTVar $ subscribedClients rp
     writeTChan (evtChan rp) (EMWebEvent cs $ WEProjectStored p)
 
-updateProjectWithFileMap :: XMapName -> Project -> Project
-updateProjectWithFileMap mn p = p { sources = updateFileSources : notFileSources }
+updateProjectWithFileMap :: XMapDefinition -> Project -> Project
+updateProjectWithFileMap md p = p { sources = updateFileSources : notFileSources }
     where isFileSources s = sourceType s == FileSource
           notFileSources = filter (not . isFileSources) (sources p)
-          updateFileSources = B.maybe (newSource FileSource [mn]) updateFileSourcesContent findFileSources
+          updateFileSources = B.maybe (newSource FileSource [md]) updateFileSourcesContent findFileSources
           findFileSources = L.find isFileSources (sources p)
           updateFileSourcesContent s = s { sourceOfMaps = updateMaps (sourceOfMaps s)}
-          updateMaps mns = L.union mns [mn]
+          updateMaps mds = L.union mds [md]
 

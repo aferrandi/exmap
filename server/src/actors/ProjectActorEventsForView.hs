@@ -111,7 +111,7 @@ sendDependedMapsToView chan rp c v = do
      p <- readTVar $ project rp
      case sourcesOfTypeInProject FileSource p of
         Just fileSources -> do
-             let toLoad = L.intersect (viewDependenciesMaps v) fileSources
+             let toLoad = L.intersect (viewDependenciesMaps v) (L.map xmapName fileSources)
              writeTChan (loadChan $ chans rp) $ LMLoadMapsForView chan c (projectName p) (viewName v) toLoad
         Nothing -> return ()
 
