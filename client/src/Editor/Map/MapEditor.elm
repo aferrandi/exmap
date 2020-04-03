@@ -97,7 +97,7 @@ mapEditorMapList model p =
         [
              titleWithIcon (title model) "layers" "DarkOrange",
              Lists.ul Mdc (makeIndex mapEditorIdx "lstMap") model.mdc
-                ([ Lists.onSelectListItem sendShowMap ] ++ (scrollableListStyle model.ui.heights.mapEditorMapList))
+                ([ Lists.onSelectListItem sendShowMap, Lists.twoLine ] ++ (scrollableListStyle model.ui.heights.mapEditorMapList))
                 (List.map listItem (fileSourcesOfProject p))
         ]
 
