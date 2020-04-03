@@ -64,8 +64,8 @@ handleMapLoaded model m =
         (\xm ->
             { xm
                 | xmapToEdit = Just m.xmap
-                , xmapName = Just m.xmapName
-                , xmapType = mapType m.xmap
+                , xmapName = Just m.xmapDef.xmapName
+                , xmapType = m.xmapDef.xmapType
                 , isNew = False
             }
         )
@@ -176,7 +176,7 @@ updateOpenViews pn v ms ops =
 updateOpenViewsInProject : View -> List XNamedMap -> ProjectModel -> ProjectModel
 updateOpenViewsInProject v ms pm =
     let
-        msn = Dict.fromList (List.map (\m -> ( m.xmapName, m.xmap )) ms)
+        msn = Dict.fromList (List.map (\m -> ( m.xmapDef.xmapName, m.xmap )) ms)
         sameViewName vm = vm.view.viewName == v.viewName
         ovs = pm.openViews
         newOvs = case find sameViewName ovs of
@@ -207,7 +207,7 @@ updateOpenViewMapsInView : List XNamedMap -> ViewModel -> ViewModel
 updateOpenViewMapsInView ms vm =
     let
         updateMaps msn mss =
-            List.foldr (\m msni -> Dict.insert m.xmapName m.xmap msni) msn mss
+            List.foldr (\m msni -> Dict.insert m.xmapDef.xmapName m.xmap msni) msn mss
     in
         { vm | view = vm.view, maps = updateMaps vm.maps ms }
 

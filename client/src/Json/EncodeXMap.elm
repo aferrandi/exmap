@@ -51,9 +51,25 @@ encodeXMap m =
                 , ( "values", encodeMapContent Iso8601.encode v )
                 ]
 
+encodeXMapType : XMapType -> Value
+encodeXMapType mt =
+    case mt of
+        TypeDouble -> string "double"
+        TypeInt -> string "int"
+        TypeString -> string "string"
+        TypeBool -> string "bool"
+        TypeDate -> string "date"
+
+encodeXMapDefinition : XMapDefinition -> Value
+encodeXMapDefinition md =
+    object
+        [ ( "mapName", encodeXmapName md.xmapName )
+        , ( "mapType", encodeXMapType md.xmapType )
+        ]
+
 encodeXNamedMap : XNamedMap -> Value
 encodeXNamedMap nm =
     object
-        [ ( "mapName", encodeXmapName nm.xmapName )
+        [ ( "mapDef", encodeXMapDefinition nm.xmapDef )
         , ( "xmap", encodeXMap nm.xmap )
         ]

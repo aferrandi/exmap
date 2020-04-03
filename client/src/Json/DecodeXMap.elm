@@ -41,14 +41,6 @@ xmapDecoder =
     in
         decodeType decodeFromType
 
-
-xNamedMapDecoder : Decoder XNamedMap
-xNamedMapDecoder =
-    map2 XNamedMap
-        (field "mapName" xmapNameDecoder)
-        (field "xmap" xmapDecoder)
-
-
 xmapTypeDecoder : Decoder XMapType
 xmapTypeDecoder =
     let
@@ -62,3 +54,16 @@ xmapTypeDecoder =
                 otherwise -> fail ("xmap type " ++ t ++ " not recognized")
     in
         string |> andThen decodeFromType
+
+xmapDefinitionDecoder : Decoder XMapDefinition
+xmapDefinitionDecoder =
+    map2 XMapDefinition
+        (field "mapName" xmapNameDecoder)
+        (field "mapType" xmapTypeDecoder)
+
+xNamedMapDecoder : Decoder XNamedMap
+xNamedMapDecoder =
+    map2 XNamedMap
+        (field "mapDef" xmapDefinitionDecoder)
+        (field "xmap" xmapDecoder)
+

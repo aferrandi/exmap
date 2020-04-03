@@ -62,7 +62,7 @@ mapEditorViewForMap model pm =
                     [ buttonClick model (makeIndex mapEditorIdx "btnToTxt") "< To Text" (Internal MapToTextArea) ]
                     , LayoutGrid.cell [LayoutGrid.span1Tablet, LayoutGrid.span4Desktop, LayoutGrid.span2Phone]
                     [ buttonMaybe model (makeIndex mapEditorIdx "btnToStr") "Store Map"
-                        (Maybe.map2 (storeMap model pm) xmapEditorModel.xmapName xmapEditorModel.xmapToEdit) ]
+                        (Maybe.map2 (storeMap model pm) (Maybe.map (\n -> { xmapName = n, xmapType = model.xmapEditorModel.xmapType }) xmapEditorModel.xmapName) xmapEditorModel.xmapToEdit) ]
                     ]
                 ]
         Nothing -> div [] []
@@ -81,12 +81,16 @@ newMapButton model =
 mapEditorMapList : Model -> Project -> Html Msg
 mapEditorMapList model p =
     let
-        sendShowMap index = sendListMsg (\mn -> Internal (ShowMapInEditor mn)) (fileSourcesOfProject p) index
-        listItem mn =
+        xmapTypeToText t = enumToText [TypeDouble, TypeInt, TypeString, TypeBool, TypeDate] ["Double", "Int", "String", "Bool", "Date"] t
+        sendShowMap index = sendListMsg (\md -> Internal (ShowMapInEditor md.xmapName)) (fileSourcesOfProject p) index
+        listItem md =
             Lists.li []
                 [
                     Lists.graphicIcon [] "list",
-                    text (xmapNameToString mn)
+                    Lists.text []
+                    [ Lists.primaryText [] [ text (xmapNameToString md.xmapName) ]
+                    , Lists.secondaryText [] [ text (Maybe.withDefault "" (xmapTypeToText md.xmapType)) ]
+                    ]
                 ]
     in
         div []
@@ -97,17 +101,17 @@ mapEditorMapList model p =
                 (List.map listItem (fileSourcesOfProject p))
         ]
 
-storeMap : Model -> ProjectModel -> XMapName -> XMap -> Msg
-storeMap model pm n m =
+storeMap : Model -> ProjectModel -> XMapDefinition -> XMap -> Msg
+storeMap model pm d m =
     if model.xmapEditorModel.isNew then
-        WRAddMap pm.project.projectName { xmapName = n, xmap = m } |> Send
+        WRAddMap pm.project.projectName { xmapDef = d, xmap = m } |> Send
     else
-        WRUpdateMap pm.project.projectName { xmapName = n, xmap = m } |> Send
+        WRUpdateMap pm.project.projectName { xmapDef = d, xmap = m } |> Send
 
-fileSourcesOfProject : Project -> List XMapName
+fileSourcesOfProject : Project -> List XMapDefinition
 fileSourcesOfProject p =
     let
-        maybeMaps : Maybe (List XMapName)
+        maybeMaps : Maybe (List XMapDefinition)
         maybeMaps = ListX.find (\s -> s.sourceType == FileSource) p.sources |> Maybe.map (\s -> s.sourceOfMaps)
     in
         Maybe.withDefault [] maybeMaps

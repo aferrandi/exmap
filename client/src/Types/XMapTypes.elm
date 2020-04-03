@@ -26,8 +26,13 @@ type XMapType
     | TypeBool
     | TypeDate
 
-type alias XNamedMap =
+type alias XMapDefinition =
     { xmapName : XMapName
+    , xmapType : XMapType
+    }
+
+type alias XNamedMap =
+    { xmapDef : XMapDefinition
     , xmap : XMap
     }
 

@@ -35,7 +35,7 @@ sourceDecoder : Decoder Source
 sourceDecoder =
     map2 Source
         (field "sourceType" sourceTypeDecoder)
-        (field "sourceOfMaps" (list xmapNameDecoder))
+        (field "sourceOfMaps" (list xmapDefinitionDecoder))
 
 
 projectDecoder : Decoder Project

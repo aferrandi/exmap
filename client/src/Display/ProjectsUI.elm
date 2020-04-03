@@ -58,9 +58,6 @@ viewCurrentProject model =
         Just pm -> viewProject model pm
         Nothing -> div [] []
 
-
-
-
 newProjectButton : Model -> Html Msg
 newProjectButton model =
     let

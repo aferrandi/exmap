@@ -22,7 +22,7 @@ type SourceType
 
 type alias Source =
     { sourceType : SourceType
-    , sourceOfMaps : List XMapName
+    , sourceOfMaps : List XMapDefinition
     }
 
 type alias Project =

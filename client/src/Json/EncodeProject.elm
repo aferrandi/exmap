@@ -40,7 +40,7 @@ encodeSource : Source -> Value
 encodeSource s =
     object
         [ ( "sourceType", encodeSourceType s.sourceType )
-        , ( "sourceOfMaps", list encodeXmapName s.sourceOfMaps)
+        , ( "sourceOfMaps", list encodeXMapDefinition s.sourceOfMaps)
         ]
 
 
