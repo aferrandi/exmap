@@ -1,1 +1,1 @@
-{"xmap":{"values":{"mazda":18,"ferrari":10,"fiat":20,"mercedes":15},"type":"double"},"mapName":"km_liter"}
+{"xmap":{"values":{"mazda":18,"ferrari":10,"fiat":20,"mercedes":15},"type":"double"},"mapDef":{"mapName":"km_liter","mapType":"double"}}

@@ -1,1 +1,1 @@
-{"xmap":{"values":{"mazda":200,"fiat":300,"mercedes":1000},"type":"double"},"mapName":"kms"}
+{"xmap":{"values":{"mazda":200,"fiat":300,"mercedes":1000},"type":"double"},"mapDef":{"mapName":"kms","mapType":"double"}}

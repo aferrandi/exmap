@@ -13,5 +13,6 @@
   },
   "calculationName": "calc_liters",
   "resultName": "liters",
+  "resultType": "double",
   "operationMode": "Union"
 }
