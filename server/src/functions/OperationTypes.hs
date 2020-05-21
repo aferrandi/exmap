@@ -1,5 +1,8 @@
 module OperationTypes where
 
+import qualified Data.Map.Strict as M
+import qualified Data.List as L
+
 data OperationName =
       Add
     | Subtract
@@ -33,7 +36,7 @@ data OperationName =
     | Trim
     | TrimLeft
     | TrimRight    
-    deriving (Bounded, Enum, Show, Eq, Read)
+    deriving (Bounded, Enum, Show, Eq, Read, Ord)
 
 data OperationCategory =
       Math     
@@ -106,3 +109,8 @@ allOperationTypes = [
     newOpType (newOpId Text TrimLeft) [ParameterText] ParameterText,
     newOpType (newOpId Text TrimRight) [ParameterText] ParameterText
     ]
+
+type OperationTypeByName = M.Map OperationName OperationType
+
+operationTypeByName ::  OperationTypeByName
+operationTypeByName = M.fromList $ L.map (\ot -> ((name . operationId) ot, ot) ) allOperationTypes

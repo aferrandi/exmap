@@ -74,14 +74,16 @@ instance FromJSON Calculation  where
    parseJSON (Object v) =
       Calculation  <$> v .: "calculationName"
              <*> v .: "resultName"
+             <*> v .: "resultType"
              <*> v .: "formula"
              <*> v .: "operationMode"
    parseJSON _ = mempty
 
 instance ToJSON Calculation  where
-     toJSON (Calculation calculationName resultName formula operationMode) =
+     toJSON (Calculation calculationName resultName resultType formula operationMode) =
         object [ "calculationName" .= calculationName
                , "resultName" .= resultName
+               , "resultType" .= resultType
                , "formula" .= formula
                , "operationMode" .= operationMode
                  ]

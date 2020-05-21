@@ -37,4 +37,25 @@ execFormula_operationFormulaOneParameter_expectedMap = TestCase (assertEqual "ex
           r = makeDoubleXMap [("k",-13)]
           f = XFOperation Ops.Negate [XFMap ka]
 
-tests = [execFormula_trivialFormula_originalMap, execFormula_operationFormulaTwoParameters_expectedMap, execFormula_operationFormulaOneParameter_expectedMap]
+formulaResultType_double_double = TestCase (assertEqual "resul type double to touble" (Right TypeDouble) (formulaResultType f m))
+    where ka = makeMapName ["a"]
+          m = M.fromList [(ka ,TypeDouble)]
+          f = XFOperation Ops.Negate [XFMap ka]
+
+formulaResultType_any_string = TestCase (assertEqual "resul type any to string" (Right TypeText) (formulaResultType f m))
+    where ka = makeMapName ["a"]
+          m = M.fromList [(ka ,TypeDouble)]
+          f = XFOperation Ops.ToString [XFMap ka]
+
+formulaResultType_bool_any_any = TestCase (assertEqual "resul type bool + any to any" (Right TypeDouble) (formulaResultType f m))
+    where ka = makeMapName ["a"]
+          kb = makeMapName ["b"]
+          m = M.fromList [(ka ,TypeBool),(kb ,TypeDouble)]
+          f = XFOperation Ops.IfThen [XFMap ka, XFMap kb]
+
+tests = [execFormula_trivialFormula_originalMap,
+  execFormula_operationFormulaTwoParameters_expectedMap,
+  execFormula_operationFormulaOneParameter_expectedMap,
+  formulaResultType_double_double,
+  formulaResultType_any_string,
+  formulaResultType_bool_any_any]

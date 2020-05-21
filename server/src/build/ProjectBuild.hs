@@ -1,4 +1,4 @@
-module ProjectBuild (projectToRuntime) where
+module ProjectBuild (projectToRuntime, calculationToCalculationResult) where
 
 import qualified Data.Traversable as T
 import qualified Data.Map.Strict as M
@@ -16,8 +16,6 @@ import Dependencies
 import CalculationBuild
 import XMapTypes
 import LogMessages
-
-
 
 type CalculationByName = M.Map CalculationName CalculationWithChan
 type CalculationsByMap = M.Map XMapName [CalculationWithChan]
@@ -71,12 +69,21 @@ calculationsByMap ccs = M.fromList $ groupAssocListByKey (chanByDeps ccs)
 calculationsByResults :: [CalculationWithChan] -> CalculationByResult
 calculationsByResults cs = M.fromList $ map (\c -> (resultName $ calculation c, c)) cs
 
+calculationToCalculationResult :: Calculation -> CalculationResult
+calculationToCalculationResult c = CalculationResult {
+                                    calcName = calculationName c,
+                                    resultDef = XMapDefinition {
+                                      xmapName = resultName c,
+                                      xmapType = resultType c
+                                    }
+                                  }
+
 buildRuntimeProject :: CommonChans -> Project -> CalculationByName -> CalculationsByMap -> CalculationByResult -> STM RuntimeProject
 buildRuntimeProject chs p cbn cbm cbr = do
     tcbn <- newTVar (M.map chan cbn)
     tcbm <- newTVar (M.map (\cs -> map chan cs) cbm)
     trp <- newTVar p
-    tcbr <- newTVar (M.map (\c ->calculationName $ calculation c) cbr)
+    tcbr <- newTVar (M.map (\c -> calculationToCalculationResult $ calculation c) cbr)
     tvbm <- newTVar M.empty
     tvbn <- newTVar M.empty
     tsc <- newTVar []

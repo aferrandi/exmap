@@ -26,8 +26,7 @@ import Calculation
 import CalculationBuild
 import FormulaText
 import Errors
-
-
+import ProjectBuild (calculationToCalculationResult)
 
 data CalculationResultWithChan = CalculationResultWithChan {
     rccResult :: XMapName,
@@ -54,7 +53,7 @@ addCalculation chan rp c cc = do
                     cbn <- readTVar $ calculationChanByName rp
                     let mp = p { calculations = cn : calculations p}
                     let mcbn = M.insert cn cch cbn
-                    let mcbr = M.insert (resultName cc) cn cbr
+                    let mcbr = M.insert (resultName cc) (calculationToCalculationResult cc) cbr
                     let mcbm = introduceChanToMap cch deps cbm
                     writeTVar (project rp) mp
                     writeTVar (calculationChanByName rp) mcbn
@@ -88,7 +87,7 @@ updateFoundCalculation chan rp c cc cch =  do
     sendAllCalculationsToNotify c cc cbr cbn cbm (evtChan rp)
     where depsMaps = calculationDependenciesMaps cc
 
-sendAllCalculationsToNotify :: WAClient -> Calculation -> CalculationNameByResult -> CalculationChanByName -> CalculationChanByMap-> EventChan -> STM()
+sendAllCalculationsToNotify :: WAClient -> Calculation -> CalculationResultByResultName -> CalculationChanByName -> CalculationChanByMap-> EventChan -> STM()
 sendAllCalculationsToNotify c cc cbr cbn cbm ech =
   case dependenciesCalculations cbr cbn cc of
     Right crs -> mapM_ sendCalculationsToNotify crs
@@ -99,11 +98,11 @@ sendAllCalculationsToNotify c cc cbr cbn cbm ech =
             Just cs ->  writeTChan (ccChannel $ rccChan rch) (CMUpdateCalculationsToNotify cs)
             Nothing -> sendStringError ech [c] $ "No calculation found for " ++ (show $ rccResult rch)
 
-dependenciesCalculations :: CalculationNameByResult -> CalculationChanByName -> Calculation ->  Either Error [CalculationResultWithChan]
+dependenciesCalculations :: CalculationResultByResultName -> CalculationChanByName -> Calculation ->  Either Error [CalculationResultWithChan]
 dependenciesCalculations cbr cbn cc =
     CM.sequence $ map resultNameToResultChan dependenciesCalcResultNames
     where depsMaps = calculationDependenciesMaps cc
-          dependenciesCalcResultNames =   map (\(r, n) -> CalculationResultWithName { crnResult = r, name = n }) $ M.toList (M.restrictKeys cbr (S.fromList depsMaps))
+          dependenciesCalcResultNames = map (\(r, n) -> CalculationResultWithName { crnResult = r, name = calcName n }) $ M.toList (M.restrictKeys cbr (S.fromList depsMaps))
           resultNameToResultChan rn = case M.lookup (name rn) cbn of
                                       Just ch -> Right CalculationResultWithChan { rccResult = crnResult rn, rccChan = ch }
                                       _ -> Left $ mkError ("No calculation with name " ++ (show $ name rn) ++ "found")

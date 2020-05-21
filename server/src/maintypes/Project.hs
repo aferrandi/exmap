@@ -44,4 +44,7 @@ sourcesOfTypeInProject sc p = fmap sourceOfMaps fileSources
         where fileSources = L.find (\s -> sourceType s == sc) (sources p)
         
 sourceOfMapsNames :: Source -> [XMapName]
-sourceOfMapsNames s = L.map xmapName (sourceOfMaps s) 
+sourceOfMapsNames s = L.map xmapName (sourceOfMaps s)
+
+allMapsInProject:: Project -> [XMapDefinition]
+allMapsInProject p = concatMap sourceOfMaps (sources p)

@@ -22,7 +22,9 @@ import View
 import Project
 import Calculation
 import FormulaParser
+import ExecFormula
 import Formula
+import OperationTypes
 
 handleRequests:: ProjectChan -> RuntimeProject -> ProjectRequest -> STM ()
 handleRequests chan rp r= case r of
@@ -91,9 +93,10 @@ removeSubscriber rp c = modifyTVar (subscribedClients rp) (filter notSameClient)
 mapsInProject :: RuntimeProject -> WAClient -> STM ()
 mapsInProject rp c = do
     p <- readTVar (project rp)
-    cbm <- readTVar $ calculationChanByMap rp
     cbr <- readTVar $ calculationByResult rp
-    let ss = L.nub (concatMap sourceOfMapsNames (sources p) ++ M.keys cbm ++ M.keys cbr)
+    let sms = allMapsInProject p
+    let scs = L.map resultDef (M.elems cbr)
+    let ss = L.nub (sms ++ scs)
     writeTChan (evtChan rp) $ EMWebEvent [c] (WEMapsInProject (projectName p) ss)
 
 subscribeToView :: ProjectChan -> RuntimeProject -> WAClient -> ViewName -> STM ()
@@ -122,11 +125,15 @@ loadCalculation chan rp c cn = do
      pn <- prjName rp
      writeTChan (loadChan $ chans rp)  $ LMLoadCalculation chan c pn cn
 
+allMapsInProjectByName :: Project -> M.Map XMapName XMapType
+allMapsInProjectByName p = M.fromList $ L.map (\m -> (xmapName m, xmapType m)) (allMapsInProject p)
+
 addCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 addCalculation chan rp c cs = do
     let rn = sourceResultName cs
     let cn = sourceCalculationName cs
-    pn <- prjName rp
+    p <- readTVar (project rp)
+    let pn = projectName p
     fndMap <- projectContainsMapWithName rp rn
     fndResult <- projectContainsResultWithName rp rn
     if not (fndMap || fndResult) then do
@@ -134,10 +141,13 @@ addCalculation chan rp c cs = do
       if not fndCalculation then do
         let ft = formulaText cs
         case parseFormula ft of
-            Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+            Left errp -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show errp)
             Right f -> do
-                let cc = calculationFromFormula cs f
-                writeTChan (storeChan $ chans rp)  $ StMStoreNewCalculation chan c pn cc
+                case formulaResultType f (allMapsInProjectByName p) of
+                  Left errt -> sendStringError  (evtChan rp) [c] ("Extracting the result type of the formula " ++ show ft ++ " got " ++ show errt)
+                  Right rt -> do
+                    let cc = calculationFromFormula cs f rt
+                    writeTChan (storeChan $ chans rp)  $ StMStoreNewCalculation chan c pn cc
       else
         sendStringError  (evtChan rp) [c] $ "A calculation with name" ++ (show cn) ++ " already exists in the project" ++ (show pn)
     else
@@ -146,15 +156,19 @@ addCalculation chan rp c cs = do
 updateCalculation :: ProjectChan -> RuntimeProject -> WAClient -> CalculationSource -> STM ()
 updateCalculation chan rp c cs = do
     let cn = sourceCalculationName cs
-    pn <- prjName rp
+    p <- readTVar (project rp)
+    let pn = projectName p
     fnd <- projectContainsCalculationWithName rp cn
     if fnd then do
       let ft = formulaText cs
       case parseFormula ft of
-          Left err -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show err)
+          Left errp -> sendStringError  (evtChan rp) [c] ("Parsing the formula " ++ show ft ++ " got " ++ show errp)
           Right f -> do
-              let cc = calculationFromFormula cs f
-              writeTChan (storeChan $ chans rp)  $ StMStoreExistingCalculation chan c pn cc
+            case formulaResultType f (allMapsInProjectByName p) of
+              Left errt -> sendStringError  (evtChan rp) [c] ("Extracting the result type of the formula " ++ show ft ++ " got " ++ show errt)
+              Right rt -> do
+                let cc = calculationFromFormula cs f rt
+                writeTChan (storeChan $ chans rp)  $ StMStoreExistingCalculation chan c pn cc
     else
       sendStringError  (evtChan rp) [c] $ "The calculation with name " ++ (show cn) ++ " to update does not exist in the project" ++ (show pn)
 
@@ -196,10 +210,11 @@ startCalculations chan rp c = do
 addSubscriber ::RuntimeProject -> WAClient -> STM ()
 addSubscriber rp c= modifyTVar (subscribedClients rp) (\cs -> c : cs)
 
-calculationFromFormula :: CalculationSource -> XFormula -> Calculation
-calculationFromFormula cs f = Calculation {
+calculationFromFormula :: CalculationSource -> XFormula -> XMapType -> Calculation
+calculationFromFormula cs f rt = Calculation {
                                    calculationName = sourceCalculationName cs,
                                    resultName = sourceResultName cs,
+                                   resultType = rt,
                                    formula = f,
                                    operationMode = sourceOperationMode cs
                                }

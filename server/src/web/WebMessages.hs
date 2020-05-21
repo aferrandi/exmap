@@ -36,7 +36,7 @@ data WebEvent =
     | WEMapAdded ProjectName XMapName Int
     | WEMapUpdated ProjectName XMapName Int
     | WEUnsubscribedFromView ProjectName ViewName
-    | WEMapsInProject ProjectName [XMapName]
+    | WEMapsInProject ProjectName [XMapDefinition]
     | WEViewStatus ProjectName View [XNamedMap]
     | WEViewLoaded ProjectName View
     | WEViewAdded ProjectName ViewName

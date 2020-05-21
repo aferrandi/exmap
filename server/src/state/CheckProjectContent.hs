@@ -18,7 +18,7 @@ projectContainsResultWithName rp mn = do
 projectContainsMapWithName :: RuntimeProject -> XMapName -> STM (Bool)
 projectContainsMapWithName rp mn = do
   p <- readTVar $ project rp
-  let maps = L.concatMap sourceOfMaps (sources p)
+  let maps = allMapsInProject p
   return $ B.isJust $ L.find (\md -> (xmapName md) == mn) maps
 
 projectContainsCalculationWithName :: RuntimeProject -> CalculationName -> STM (Bool)

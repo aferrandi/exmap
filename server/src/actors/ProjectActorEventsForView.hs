@@ -101,7 +101,7 @@ listenToDependentCalculations :: RuntimeProject -> ViewChan -> View -> STM ()
 listenToDependentCalculations rp vch v = do
     let deps = viewDependenciesMaps v
     cbr <- readTVar $ calculationByResult rp
-    let cs = B.mapMaybe (\d -> M.lookup d cbr) deps
+    let cs = L.map calcName $ B.mapMaybe (\d -> M.lookup d cbr) deps
     cbn <- readTVar $ calculationChanByName rp
     let chs = B.mapMaybe (\c -> M.lookup c cbn) cs
     mapM_ (\ch -> writeTChan (ccChannel ch) (CMViewStarted vch)) chs

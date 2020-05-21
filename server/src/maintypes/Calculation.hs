@@ -16,6 +16,7 @@ newtype CalculationFormulaText = CalculationFormulaText T.Text
 data Calculation = Calculation {
     calculationName :: CalculationName,
     resultName :: XMapName,
+    resultType :: XMapType,
     formula :: XFormula,
     operationMode :: OperationMode
 } deriving (Show, Eq)
