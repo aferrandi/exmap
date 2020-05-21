@@ -38,6 +38,7 @@ type alias ViewModel =
 type alias ProjectModel =
     { project : Project
     , openViews : List ViewModel
+    , mapsInProject : List XMapDefinition
     }
 
 type alias XMapEditorModel =
@@ -121,7 +122,6 @@ type alias Model =
     , calculationEditorModel : CalculationEditorModel
     , currentProjectForm : ProjectFormType
     , currentCategory : Maybe OperationCategory
-    , mapsInProject : List XMapName
     , functions : Maybe FunctionsModel
     , openDialog : Maybe String
     }

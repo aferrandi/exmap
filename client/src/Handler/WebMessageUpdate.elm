@@ -30,8 +30,8 @@ updateEvent evt model =
             ( updateOpenProjects model (updateOpenProjectsWithProject p), Cmd.none )
         WEViewStatus pn v ms ->
             ( updateOpenProjects model (updateOpenViews pn v ms), Cmd.none )
-        WEMapsInProject pn mns ->
-            ( handleMapsInProject model mns, Cmd.none )
+        WEMapsInProject pn mds ->
+            ( updateOpenProjects model (updateMapsInProject pn mds), Cmd.none )
         WEViewChanged pn vn ms ->
             ( updateOpenProjects model (updateOpenViewMaps pn vn ms), Cmd.none )
         WEMapLoaded pn m ->
@@ -153,10 +153,11 @@ handleFunctions model fs =
         }
 
 
-handleMapsInProject : Model -> List XMapName -> Model
-handleMapsInProject model mns =
-    { model | mapsInProject = mns }
+updateMapsInProject :  ProjectName -> List XMapDefinition -> List ProjectModel -> List ProjectModel
+updateMapsInProject pn mds ops = updateIfProjectHasSameName pn (updateMapsInProjectInProject mds) ops
 
+updateMapsInProjectInProject : List XMapDefinition -> ProjectModel -> ProjectModel
+updateMapsInProjectInProject mds pm =  { pm | mapsInProject = mds }
 
 updateOpenProjectsWithProject : Project -> List ProjectModel -> List ProjectModel
 updateOpenProjectsWithProject p ops =
@@ -165,7 +166,7 @@ updateOpenProjectsWithProject p ops =
     in
         case find (sameProjectName pn) ops of
             Just _ -> updateIf (sameProjectName pn) (\pm -> { pm | project = p }) ops
-            Nothing -> { project = p, openViews = [] } :: ops
+            Nothing -> { project = p, openViews = [], mapsInProject = [] } :: ops
 
 
 updateOpenViews : ProjectName -> View -> List XNamedMap -> List ProjectModel -> List ProjectModel

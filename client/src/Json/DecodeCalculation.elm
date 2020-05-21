@@ -1,7 +1,7 @@
 module Json.DecodeCalculation exposing (..)
 
 import Types.Calculation exposing (..)
-import Json.DecodeXMap exposing (xmapNameDecoder)
+import Json.DecodeXMap exposing (xmapNameDecoder, xmapTypeDecoder)
 import Dict exposing (Dict, fromList)
 import Json.EnumToString exposing (..)
 import Json.Decode exposing (..)

@@ -35,7 +35,7 @@ type WebEvent
     | WEMapAdded ProjectName XMapName Int
     | WEMapUpdated ProjectName XMapName Int
     | WEUnsubscribedFromView ProjectName ViewName
-    | WEMapsInProject ProjectName (List XMapName)
+    | WEMapsInProject ProjectName (List XMapDefinition)
     | WEViewStatus ProjectName View (List XNamedMap)
     | WEViewLoaded ProjectName View
     | WEViewAdded ProjectName ViewName

@@ -56,7 +56,7 @@ viewEditorForCalculation model pm cn =
                 [  ]
             ]
         , LayoutGrid.view [ heightInView model.ui.heights.viewEditorForCalculation ]
-            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectListForCalculation model ]
+            [ LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span3Desktop, LayoutGrid.span1Phone] [ mapsInProjectListForCalculation model pm ]
             , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span5Desktop, LayoutGrid.span2Phone] [ calculationTextArea model ]
             , LayoutGrid.cell [LayoutGrid.span3Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone] [ viewFunctions model ]
             ]
@@ -121,17 +121,21 @@ calculationsInProjectList model pm =
 
 
 
-mapsInProjectListForCalculation : Model -> Html Msg
-mapsInProjectListForCalculation model =
+mapsInProjectListForCalculation : Model -> ProjectModel -> Html Msg
+mapsInProjectListForCalculation model pm =
     let
         selectItem index = Internal (SelectMapIndexForCalculation index)
-        buildMsg index = sendListMsg (\mn -> (Internal (AddMapToCalculation mn))) model.mapsInProject index
+        mapNames = List.map (\d -> d.xmapName) pm.mapsInProject
+        buildMsg index = sendListMsg (\mn -> (Internal (AddMapToCalculation mn))) mapNames index
         sendAddItem = Maybe.withDefault None (Maybe.map buildMsg model.calculationEditorModel.selectedMapIdx)
-        listItem mn =
+        listItem md =
             Lists.li []
                 [
                     Lists.graphicIcon  [] "list",
-                    text (xmapNameToString mn)
+                    Lists.text []
+                    [ Lists.primaryText [] [ text (xmapNameToString md.xmapName) ]
+                    , Lists.secondaryText [] [ text (Maybe.withDefault "" (xmapTypeToText md.xmapType))]
+                    ]
                 ]
     in
         div []
@@ -140,7 +144,7 @@ mapsInProjectListForCalculation model =
                         (makeIndex calcEditorIdx "lstMapInPrj")
                         model.mdc
                         ([Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.mapsInProjectListForCalculation))
-                        (List.map listItem model.mapsInProject)
+                        (List.map listItem pm.mapsInProject)
                 , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]
 

@@ -48,7 +48,7 @@ webEventDecoder =
                 "mapsInProject" ->
                     map2 WEMapsInProject
                         (field "projectName" string)
-                        (field "mapNames" (list xmapNameDecoder))
+                        (field "mapNames" (list xmapDefinitionDecoder))
                 "viewStatus" ->
                     map3 WEViewStatus
                         (field "projectName" string)

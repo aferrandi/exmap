@@ -13,7 +13,7 @@ import Material.Options as Options
 import Material.DataTable as DataTable
 import Material.TextField as TextField
 import Display.MdcIndexes exposing (..)
-import Transform.TypeConversion exposing (enumToText)
+import Transform.TypeConversion exposing (enumToText, xmapTypeToText)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
@@ -81,7 +81,6 @@ newMapButton model =
 mapEditorMapList : Model -> Project -> Html Msg
 mapEditorMapList model p =
     let
-        xmapTypeToText t = enumToText [TypeDouble, TypeInt, TypeString, TypeBool, TypeDate] ["Double", "Int", "String", "Bool", "Date"] t
         sendShowMap index = sendListMsg (\md -> Internal (ShowMapInEditor md.xmapName)) (fileSourcesOfProject p) index
         listItem md =
             Lists.li []

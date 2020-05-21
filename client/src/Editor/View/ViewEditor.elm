@@ -11,6 +11,7 @@ import Material.TextField as TextField
 import Display.MdcIndexes exposing (..)
 import Display.NameDialog exposing (nameDialog)
 import Transform.NameParser exposing (..)
+import Transform.TypeConversion exposing (xmapTypeToText)
 import Types.Project exposing (..)
 import Models.ProjectModel exposing (..)
 import Display.UIWrapper exposing (..)
@@ -37,7 +38,7 @@ viewEditorForView model pm =
                     [ LayoutGrid.cell [LayoutGrid.span6Tablet, LayoutGrid.span8Desktop, LayoutGrid.span3Phone]
                             [ viewEditorTable model model.viewEditorModel.viewToEdit ]
                     , LayoutGrid.cell [LayoutGrid.span2Tablet, LayoutGrid.span4Desktop, LayoutGrid.span1Phone]
-                            [ viewEditorMapList model, addLabelButton model, storeButton model pm]
+                            [ viewEditorMapList model pm, addLabelButton model, storeButton model pm]
                     ]
         Nothing -> div [] []
 
@@ -85,24 +86,28 @@ viewEditorViewsList model p =
                 (List.map listItem p.viewNames)
         ]
 
-viewEditorMapList : Model -> Html Msg
-viewEditorMapList model =
+viewEditorMapList : Model -> ProjectModel -> Html Msg
+viewEditorMapList model pm =
     let
         buildMsg mn = Internal (AddItemToView model.viewEditorModel.rowToAddTo (MapItem mn))
         selectItem index = Internal (SelectMapIndexForView index)
-        sendAddItem = Maybe.withDefault None (Maybe.map (\idx -> sendListMsg buildMsg model.mapsInProject idx) model.viewEditorModel.selectedMapIdx)
-        listItem mn =
+        mapNames = List.map (\d -> d.xmapName) pm.mapsInProject
+        sendAddItem = Maybe.withDefault None (Maybe.map (\idx -> sendListMsg buildMsg mapNames idx) model.viewEditorModel.selectedMapIdx)
+        listItem md =
             Lists.li []
                 [
-                    Lists.graphicIcon [] "list" ,
-                    text (xmapNameToString mn)
+                    Lists.graphicIcon [] "list",
+                    Lists.text []
+                    [ Lists.primaryText [] [ text (xmapNameToString md.xmapName) ]
+                    , Lists.secondaryText [] [ text (Maybe.withDefault "" (xmapTypeToText md.xmapType)) ]
+                    ]
                 ]
     in
         div []
             [
                 Lists.ul Mdc (makeIndex viewEditorIdx "lstMap") model.mdc
                     ([Lists.onSelectListItem selectItem, Options.onDoubleClick sendAddItem] ++ (scrollableListStyle model.ui.heights.viewEditorMapList))
-                    (List.map listItem model.mapsInProject)
+                    (List.map listItem pm.mapsInProject)
             , buttonClick model (makeIndex viewEditorIdx "btnAddMap") "Add map"  sendAddItem
             ]
 
