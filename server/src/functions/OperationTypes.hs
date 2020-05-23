@@ -8,6 +8,8 @@ data OperationName =
     | Subtract
     | Times
     | Divide
+    | Mod
+    | Div
     | Negate
     | Abs
     | Sin
@@ -83,6 +85,8 @@ allOperationTypes = [
     newOpType (newOpId Math Subtract) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Times) [ParameterDouble, ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Divide) [ParameterDouble, ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Mod) [ParameterInt, ParameterInt] ParameterInt,
+    newOpType (newOpId Math Div) [ParameterInt, ParameterInt] ParameterInt,
     newOpType (newOpId Math Negate) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Abs) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sin) [ParameterDouble] ParameterDouble,

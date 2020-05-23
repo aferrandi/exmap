@@ -59,6 +59,11 @@ testMapIntA = makeXMap arr
   where arr :: [(String, Int)]
         arr = [("a", 1), ("b", -2), ("c", 3)]
 
+testMapIntB :: XMap
+testMapIntB = makeXMap arr
+  where arr :: [(String, Int)]
+        arr = [("d", 4), ("b", 5), ("c", 0)]
+
 testMapBoolA :: XMap
 testMapBoolA = makeXMap arr
   where arr :: [(String, Bool)]
@@ -90,6 +95,14 @@ times_standard  = TestCase $ assertXMapDoubleEqual expected actual
 divide_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Divide) Union [testMapDoubleA, testMapDoubleB]
           expected = makeMap [("a", 0.85714285714), ("c", -1.45833333333), ("d", 0)]
+
+mod_standard  = TestCase $ assertXMapIntEqual expected actual
+    where actual = (operationRepository Mod) Union [testMapIntA, testMapIntB]
+          expected = makeMap [("b", 3),("d", 0)]
+
+div_standard  = TestCase $ assertXMapIntEqual expected actual
+    where actual = (operationRepository Div) Union [testMapIntA, testMapIntB]
+          expected = makeMap [("b", -1),("d", 0)]
 
 negate_standard  = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Negate) Union [testMapDoubleA]
@@ -258,6 +271,8 @@ tests = [
           subtract_standard,
           times_standard,
           divide_standard,
+          mod_standard,
+          div_standard,
           negate_standard,
           abs_standard,
           sin_standard,

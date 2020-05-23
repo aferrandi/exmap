@@ -12,6 +12,7 @@ import qualified Data.Maybe as B
 import qualified Data.List as L
 import qualified Data.Set as S
 import ShowText
+import Debug.Trace
 
 type OperationFun = OperationMode -> [XMap] -> XMapErr
 
@@ -36,10 +37,25 @@ divide om xs = do
     ms1 <- extractMapDouble (head xs) "dividend"
     ms2 <- extractMapDouble (head $ tail xs) "divisor"
     let fs2 = M.filter (\v -> v /= 0) ms2
-    let fs1 = M.restrictKeys ms1 (M.keysSet ms2)
+    let fs1 = M.restrictKeys ms1 (M.keysSet fs2)
     operate om dividev [XMapDouble fs1, XMapDouble fs2]
     where dividev :: Double -> Double -> Double
           dividev = (/)
+
+fintdiv :: OperationMode -> [XMap] -> (Int -> Int -> Int) -> XMapErr
+fintdiv om xs divv = do
+    checkMapsNumber xs 2
+    ms1 <- extractMapInt (head xs) "dividend"
+    ms2 <- extractMapInt (head $ tail xs) "divisor"
+    let fs2 = M.filter (\v -> v /= 0) ms2
+    let fs1 = M.restrictKeys ms1 (M.keysSet fs2)
+    trace ("fs2:" ++ show fs2 ++ " fs1:" ++ show fs1) $ operate om divv [XMapInt fs1, XMapInt fs2]
+
+fmod :: OperationMode -> [XMap] -> XMapErr
+fmod om xs = fintdiv om xs mod
+
+fdiv :: OperationMode -> [XMap] -> XMapErr
+fdiv om xs = fintdiv om xs div
 
 fnegate :: OperationMode -> [XMap] -> XMapErr
 fnegate om = XFunction.apply negatev
@@ -251,6 +267,8 @@ operationRepository op = case op of
     Subtract -> fsubtract
     Times -> times
     Divide -> divide
+    Mod -> fmod
+    Div -> fdiv
     Negate -> fnegate
     Abs -> fabs
     Sin -> fsin
