@@ -5123,7 +5123,6 @@ var author$project$Models$EmptyModel$emptyModel = {
 	currentProjectForm: author$project$Models$InternalMessages$ViewsForm,
 	currentView: elm$core$Maybe$Nothing,
 	functions: elm$core$Maybe$Nothing,
-	mapsInProject: _List_Nil,
 	mdc: author$project$Material$defaultModel,
 	messages: _List_fromArray(
 		['Client started']),
@@ -7362,6 +7361,32 @@ var author$project$Json$EncodeProject$encodeSourceType = function (st) {
 			return author$project$Json$EncodeProject$encodeOdbcSource(v);
 	}
 };
+var author$project$Json$EncodeXMap$encodeXMapType = function (mt) {
+	switch (mt.$) {
+		case 'TypeDouble':
+			return elm$json$Json$Encode$string('double');
+		case 'TypeInt':
+			return elm$json$Json$Encode$string('int');
+		case 'TypeString':
+			return elm$json$Json$Encode$string('string');
+		case 'TypeBool':
+			return elm$json$Json$Encode$string('bool');
+		default:
+			return elm$json$Json$Encode$string('date');
+	}
+};
+var author$project$Json$EncodeXMap$encodeXMapDefinition = function (md) {
+	return elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'mapName',
+				author$project$Json$EncodeXMap$encodeXmapName(md.xmapName)),
+				_Utils_Tuple2(
+				'mapType',
+				author$project$Json$EncodeXMap$encodeXMapType(md.xmapType))
+			]));
+};
 var elm$json$Json$Encode$list = F2(
 	function (func, entries) {
 		return _Json_wrap(
@@ -7380,7 +7405,7 @@ var author$project$Json$EncodeProject$encodeSource = function (s) {
 				author$project$Json$EncodeProject$encodeSourceType(s.sourceType)),
 				_Utils_Tuple2(
 				'sourceOfMaps',
-				A2(elm$json$Json$Encode$list, author$project$Json$EncodeXMap$encodeXmapName, s.sourceOfMaps))
+				A2(elm$json$Json$Encode$list, author$project$Json$EncodeXMap$encodeXMapDefinition, s.sourceOfMaps))
 			]));
 };
 var author$project$Json$EncodeProject$encodeProject = function (p) {
@@ -7547,8 +7572,8 @@ var author$project$Json$EncodeXMap$encodeXNamedMap = function (nm) {
 		_List_fromArray(
 			[
 				_Utils_Tuple2(
-				'mapName',
-				author$project$Json$EncodeXMap$encodeXmapName(nm.xmapName)),
+				'mapDef',
+				author$project$Json$EncodeXMap$encodeXMapDefinition(nm.xmapDef)),
 				_Utils_Tuple2(
 				'xmap',
 				author$project$Json$EncodeXMap$encodeXMap(nm.xmap))
@@ -9325,24 +9350,6 @@ var author$project$Handler$WebMessageUpdate$handleMapAdded = F4(
 			author$project$Handler$WebMessageUpdate$cleanMapModel(model),
 			'Map:' + (author$project$Transform$MapsExtraction$xmapNameToString(mn) + (' of project:' + (pn + (' with size ' + (elm$core$String$fromInt(sz) + ' added'))))));
 	});
-var author$project$Types$XMapTypes$TypeBool = {$: 'TypeBool'};
-var author$project$Types$XMapTypes$TypeDate = {$: 'TypeDate'};
-var author$project$Types$XMapTypes$TypeInt = {$: 'TypeInt'};
-var author$project$Types$XMapTypes$TypeString = {$: 'TypeString'};
-var author$project$Types$XMapTypes$mapType = function (m) {
-	switch (m.$) {
-		case 'XMapDouble':
-			return author$project$Types$XMapTypes$TypeDouble;
-		case 'XMapInt':
-			return author$project$Types$XMapTypes$TypeInt;
-		case 'XMapString':
-			return author$project$Types$XMapTypes$TypeString;
-		case 'XMapBool':
-			return author$project$Types$XMapTypes$TypeBool;
-		default:
-			return author$project$Types$XMapTypes$TypeDate;
-	}
-};
 var author$project$Handler$WebMessageUpdate$handleMapLoaded = F2(
 	function (model, m) {
 		return A2(
@@ -9353,9 +9360,9 @@ var author$project$Handler$WebMessageUpdate$handleMapLoaded = F2(
 					xm,
 					{
 						isNew: false,
-						xmapName: elm$core$Maybe$Just(m.xmapName),
+						xmapName: elm$core$Maybe$Just(m.xmapDef.xmapName),
 						xmapToEdit: elm$core$Maybe$Just(m.xmap),
-						xmapType: author$project$Types$XMapTypes$mapType(m.xmap)
+						xmapType: m.xmapDef.xmapType
 					});
 			});
 	});
@@ -9365,12 +9372,6 @@ var author$project$Handler$WebMessageUpdate$handleMapUpdated = F4(
 			author$project$Handler$ModelUpdate$showMessage,
 			author$project$Handler$WebMessageUpdate$cleanMapModel(model),
 			'Map:' + (author$project$Transform$MapsExtraction$xmapNameToString(mn) + (' of project:' + (pn + (' with size ' + (elm$core$String$fromInt(sz) + ' updated'))))));
-	});
-var author$project$Handler$WebMessageUpdate$handleMapsInProject = F2(
-	function (model, mns) {
-		return _Utils_update(
-			model,
-			{mapsInProject: mns});
 	});
 var author$project$Handler$WebMessageUpdate$cleanViewModel = function (model) {
 	return A2(
@@ -9484,6 +9485,28 @@ var elm_community$list_extra$List$Extra$updateIf = F3(
 			},
 			list);
 	});
+var author$project$Handler$WebMessageUpdate$updateIfProjectHasSameName = F3(
+	function (pn, m2m, ops) {
+		return A3(
+			elm_community$list_extra$List$Extra$updateIf,
+			author$project$Handler$WebMessageUpdate$sameProjectName(pn),
+			m2m,
+			ops);
+	});
+var author$project$Handler$WebMessageUpdate$updateMapsInProjectInProject = F2(
+	function (mds, pm) {
+		return _Utils_update(
+			pm,
+			{mapsInProject: mds});
+	});
+var author$project$Handler$WebMessageUpdate$updateMapsInProject = F3(
+	function (pn, mds, ops) {
+		return A3(
+			author$project$Handler$WebMessageUpdate$updateIfProjectHasSameName,
+			pn,
+			author$project$Handler$WebMessageUpdate$updateMapsInProjectInProject(mds),
+			ops);
+	});
 var author$project$Handler$WebMessageUpdate$updateOpenProjectsWithProject = F2(
 	function (p, ops) {
 		var pn = p.projectName;
@@ -9504,17 +9527,9 @@ var author$project$Handler$WebMessageUpdate$updateOpenProjectsWithProject = F2(
 		} else {
 			return A2(
 				elm$core$List$cons,
-				{openViews: _List_Nil, project: p},
+				{mapsInProject: _List_Nil, openViews: _List_Nil, project: p},
 				ops);
 		}
-	});
-var author$project$Handler$WebMessageUpdate$updateIfProjectHasSameName = F3(
-	function (pn, m2m, ops) {
-		return A3(
-			elm_community$list_extra$List$Extra$updateIf,
-			author$project$Handler$WebMessageUpdate$sameProjectName(pn),
-			m2m,
-			ops);
 	});
 var author$project$Handler$WebMessageUpdate$updateOpenViewMapsInView = F2(
 	function (ms, vm) {
@@ -9524,7 +9539,7 @@ var author$project$Handler$WebMessageUpdate$updateOpenViewMapsInView = F2(
 					elm$core$List$foldr,
 					F2(
 						function (m, msni) {
-							return A3(elm$core$Dict$insert, m.xmapName, m.xmap, msni);
+							return A3(elm$core$Dict$insert, m.xmapDef.xmapName, m.xmap, msni);
 						}),
 					msn,
 					mss);
@@ -9568,7 +9583,7 @@ var author$project$Handler$WebMessageUpdate$updateOpenViewsInProject = F3(
 			A2(
 				elm$core$List$map,
 				function (m) {
-					return _Utils_Tuple2(m.xmapName, m.xmap);
+					return _Utils_Tuple2(m.xmapDef.xmapName, m.xmap);
 				},
 				ms));
 		var newOvs = function () {
@@ -9647,9 +9662,12 @@ var author$project$Handler$WebMessageUpdate$updateEvent = F2(
 					elm$core$Platform$Cmd$none);
 			case 'WEMapsInProject':
 				var pn = evt.a;
-				var mns = evt.b;
+				var mds = evt.b;
 				return _Utils_Tuple2(
-					A2(author$project$Handler$WebMessageUpdate$handleMapsInProject, model, mns),
+					A2(
+						author$project$Handler$ModelUpdate$updateOpenProjects,
+						model,
+						A2(author$project$Handler$WebMessageUpdate$updateMapsInProject, pn, mds)),
 					elm$core$Platform$Cmd$none);
 			case 'WEViewChanged':
 				var pn = evt.a;
@@ -9882,6 +9900,39 @@ var author$project$Json$DecodeProject$sourceTypeDecoder = function () {
 	};
 	return author$project$Json$DecodeXMap$decodeType(decodeFromType);
 }();
+var author$project$Types$XMapTypes$TypeBool = {$: 'TypeBool'};
+var author$project$Types$XMapTypes$TypeDate = {$: 'TypeDate'};
+var author$project$Types$XMapTypes$TypeInt = {$: 'TypeInt'};
+var author$project$Types$XMapTypes$TypeString = {$: 'TypeString'};
+var author$project$Json$DecodeXMap$xmapTypeDecoder = function () {
+	var decodeFromType = function (t) {
+		switch (t) {
+			case 'double':
+				return elm$json$Json$Decode$succeed(author$project$Types$XMapTypes$TypeDouble);
+			case 'int':
+				return elm$json$Json$Decode$succeed(author$project$Types$XMapTypes$TypeInt);
+			case 'string':
+				return elm$json$Json$Decode$succeed(author$project$Types$XMapTypes$TypeString);
+			case 'bool':
+				return elm$json$Json$Decode$succeed(author$project$Types$XMapTypes$TypeBool);
+			case 'date':
+				return elm$json$Json$Decode$succeed(author$project$Types$XMapTypes$TypeDate);
+			default:
+				var otherwise = t;
+				return elm$json$Json$Decode$fail('xmap type ' + (t + ' not recognized'));
+		}
+	};
+	return A2(elm$json$Json$Decode$andThen, decodeFromType, elm$json$Json$Decode$string);
+}();
+var author$project$Types$XMapTypes$XMapDefinition = F2(
+	function (xmapName, xmapType) {
+		return {xmapName: xmapName, xmapType: xmapType};
+	});
+var author$project$Json$DecodeXMap$xmapDefinitionDecoder = A3(
+	elm$json$Json$Decode$map2,
+	author$project$Types$XMapTypes$XMapDefinition,
+	A2(elm$json$Json$Decode$field, 'mapName', author$project$Json$DecodeXMap$xmapNameDecoder),
+	A2(elm$json$Json$Decode$field, 'mapType', author$project$Json$DecodeXMap$xmapTypeDecoder));
 var author$project$Types$Project$Source = F2(
 	function (sourceType, sourceOfMaps) {
 		return {sourceOfMaps: sourceOfMaps, sourceType: sourceType};
@@ -9893,7 +9944,7 @@ var author$project$Json$DecodeProject$sourceDecoder = A3(
 	A2(
 		elm$json$Json$Decode$field,
 		'sourceOfMaps',
-		elm$json$Json$Decode$list(author$project$Json$DecodeXMap$xmapNameDecoder)));
+		elm$json$Json$Decode$list(author$project$Json$DecodeXMap$xmapDefinitionDecoder)));
 var author$project$Types$Project$Project = F4(
 	function (projectName, calculations, viewNames, sources) {
 		return {calculations: calculations, projectName: projectName, sources: sources, viewNames: viewNames};
@@ -10070,13 +10121,13 @@ var author$project$Json$DecodeXMap$xmapDecoder = function () {
 	return author$project$Json$DecodeXMap$decodeType(decodeFromType);
 }();
 var author$project$Types$XMapTypes$XNamedMap = F2(
-	function (xmapName, xmap) {
-		return {xmap: xmap, xmapName: xmapName};
+	function (xmapDef, xmap) {
+		return {xmap: xmap, xmapDef: xmapDef};
 	});
 var author$project$Json$DecodeXMap$xNamedMapDecoder = A3(
 	elm$json$Json$Decode$map2,
 	author$project$Types$XMapTypes$XNamedMap,
-	A2(elm$json$Json$Decode$field, 'mapName', author$project$Json$DecodeXMap$xmapNameDecoder),
+	A2(elm$json$Json$Decode$field, 'mapDef', author$project$Json$DecodeXMap$xmapDefinitionDecoder),
 	A2(elm$json$Json$Decode$field, 'xmap', author$project$Json$DecodeXMap$xmapDecoder));
 var author$project$Models$WebMessages$WEAllProjects = function (a) {
 	return {$: 'WEAllProjects', a: a};
@@ -10210,7 +10261,7 @@ var author$project$Json$DecodeWebEvent$webEventDecoder = function () {
 					A2(
 						elm$json$Json$Decode$field,
 						'mapNames',
-						elm$json$Json$Decode$list(author$project$Json$DecodeXMap$xmapNameDecoder)));
+						elm$json$Json$Decode$list(author$project$Json$DecodeXMap$xmapDefinitionDecoder)));
 			case 'viewStatus':
 				return A4(
 					elm$json$Json$Decode$map3,
@@ -16284,6 +16335,36 @@ var author$project$Editor$Calculation$CalculationEditor$calculationTextArea = fu
 		_List_Nil);
 };
 var author$project$Display$MdcIndexes$viewEditorIdx = 'vwe';
+var author$project$Internal$List$Implementation$primaryText = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$span,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-list-item__primary-text'),
+			options));
+};
+var author$project$Material$List$primaryText = author$project$Internal$List$Implementation$primaryText;
+var author$project$Internal$List$Implementation$secondaryText = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$span,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-list-item__secondary-text'),
+			options));
+};
+var author$project$Material$List$secondaryText = author$project$Internal$List$Implementation$secondaryText;
+var author$project$Internal$List$Implementation$text = function (options) {
+	return A2(
+		author$project$Internal$Options$styled,
+		elm$html$Html$span,
+		A2(
+			elm$core$List$cons,
+			author$project$Internal$Options$cs('mdc-list-item__text'),
+			options));
+};
+var author$project$Material$List$text = author$project$Internal$List$Implementation$text;
 var author$project$Internal$Options$onDoubleClick = function (msg) {
 	return A2(
 		author$project$Internal$Options$on,
@@ -16297,62 +16378,114 @@ var author$project$Models$InternalMessages$AddMapToCalculation = function (a) {
 var author$project$Models$InternalMessages$SelectMapIndexForCalculation = function (a) {
 	return {$: 'SelectMapIndexForCalculation', a: a};
 };
-var author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation = function (model) {
-	var selectItem = function (index) {
-		return author$project$Models$ProjectModel$Internal(
-			author$project$Models$InternalMessages$SelectMapIndexForCalculation(index));
-	};
-	var listItem = function (mn) {
+var author$project$Transform$TypeConversion$enumToText = F3(
+	function (enums, texts, _enum) {
 		return A2(
-			author$project$Material$List$li,
+			elm$core$Maybe$map,
+			elm$core$Tuple$second,
+			A2(
+				elm_community$list_extra$List$Extra$find,
+				function (_n0) {
+					var e = _n0.a;
+					return _Utils_eq(e, _enum);
+				},
+				A2(elm_community$list_extra$List$Extra$zip, enums, texts)));
+	});
+var author$project$Transform$TypeConversion$xmapTypeToText = function (t) {
+	return A3(
+		author$project$Transform$TypeConversion$enumToText,
+		_List_fromArray(
+			[author$project$Types$XMapTypes$TypeDouble, author$project$Types$XMapTypes$TypeInt, author$project$Types$XMapTypes$TypeString, author$project$Types$XMapTypes$TypeBool, author$project$Types$XMapTypes$TypeDate]),
+		_List_fromArray(
+			['Double', 'Int', 'String', 'Bool', 'Date']),
+		t);
+};
+var author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation = F2(
+	function (model, pm) {
+		var selectItem = function (index) {
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$SelectMapIndexForCalculation(index));
+		};
+		var mapNames = A2(
+			elm$core$List$map,
+			function (d) {
+				return d.xmapName;
+			},
+			pm.mapsInProject);
+		var listItem = function (md) {
+			return A2(
+				author$project$Material$List$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
+						A2(
+						author$project$Material$List$text,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								author$project$Material$List$primaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										author$project$Transform$MapsExtraction$xmapNameToString(md.xmapName))
+									])),
+								A2(
+								author$project$Material$List$secondaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										A2(
+											elm$core$Maybe$withDefault,
+											'',
+											author$project$Transform$TypeConversion$xmapTypeToText(md.xmapType)))
+									]))
+							]))
+					]));
+		};
+		var buildMsg = function (index) {
+			return A3(
+				author$project$Display$UIWrapper$sendListMsg,
+				function (mn) {
+					return author$project$Models$ProjectModel$Internal(
+						author$project$Models$InternalMessages$AddMapToCalculation(mn));
+				},
+				mapNames,
+				index);
+		};
+		var sendAddItem = A2(
+			elm$core$Maybe$withDefault,
+			author$project$Models$ProjectModel$None,
+			A2(elm$core$Maybe$map, buildMsg, model.calculationEditorModel.selectedMapIdx));
+		return A2(
+			elm$html$Html$div,
 			_List_Nil,
 			_List_fromArray(
 				[
-					A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-					elm$html$Html$text(
-					author$project$Transform$MapsExtraction$xmapNameToString(mn))
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstMapInPrj'),
+					model.mdc,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								author$project$Material$List$onSelectListItem(selectItem),
+								author$project$Material$Options$onDoubleClick(sendAddItem)
+							]),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.mapsInProjectListForCalculation)),
+					A2(elm$core$List$map, listItem, pm.mapsInProject)),
+					A4(
+					author$project$Display$UIWrapper$buttonClick,
+					model,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
+					'Add map',
+					sendAddItem)
 				]));
-	};
-	var buildMsg = function (index) {
-		return A3(
-			author$project$Display$UIWrapper$sendListMsg,
-			function (mn) {
-				return author$project$Models$ProjectModel$Internal(
-					author$project$Models$InternalMessages$AddMapToCalculation(mn));
-			},
-			model.mapsInProject,
-			index);
-	};
-	var sendAddItem = A2(
-		elm$core$Maybe$withDefault,
-		author$project$Models$ProjectModel$None,
-		A2(elm$core$Maybe$map, buildMsg, model.calculationEditorModel.selectedMapIdx));
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A5(
-				author$project$Material$List$ul,
-				author$project$Models$ProjectModel$Mdc,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$calcEditorIdx, 'lstMapInPrj'),
-				model.mdc,
-				_Utils_ap(
-					_List_fromArray(
-						[
-							author$project$Material$List$onSelectListItem(selectItem),
-							author$project$Material$Options$onDoubleClick(sendAddItem)
-						]),
-					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.mapsInProjectListForCalculation)),
-				A2(elm$core$List$map, listItem, model.mapsInProject)),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
-				'Add map',
-				sendAddItem)
-			]));
-};
+	});
 var author$project$Display$MdcIndexes$mapEditorIdx = 'mape';
 var author$project$Internal$Select$Implementation$label = function (stringLabel) {
 	return author$project$Internal$Options$option(
@@ -17215,19 +17348,6 @@ var author$project$Material$Select$view = author$project$Internal$Select$Impleme
 var author$project$Models$InternalMessages$ChangeOperationMode = function (a) {
 	return {$: 'ChangeOperationMode', a: a};
 };
-var author$project$Transform$TypeConversion$enumToText = F3(
-	function (enums, texts, _enum) {
-		return A2(
-			elm$core$Maybe$map,
-			elm$core$Tuple$second,
-			A2(
-				elm_community$list_extra$List$Extra$find,
-				function (_n0) {
-					var e = _n0.a;
-					return _Utils_eq(e, _enum);
-				},
-				A2(elm_community$list_extra$List$Extra$zip, enums, texts)));
-	});
 var author$project$Transform$TypeConversion$textToEnum = F3(
 	function (enums, texts, text) {
 		return A2(
@@ -17471,38 +17591,6 @@ var author$project$Handler$InternalCalculationMessageUpdate$operationSignatureTo
 		', ',
 		A2(elm$core$List$map, author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText, ot.parametersTypes)) + (' -> ' + author$project$Handler$InternalCalculationMessageUpdate$parameterTypeToText(ot.returnType));
 };
-var author$project$Internal$List$Implementation$dense = author$project$Internal$Options$cs('mdc-list--dense');
-var author$project$Material$List$dense = author$project$Internal$List$Implementation$dense;
-var author$project$Internal$List$Implementation$primaryText = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$span,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-list-item__primary-text'),
-			options));
-};
-var author$project$Material$List$primaryText = author$project$Internal$List$Implementation$primaryText;
-var author$project$Internal$List$Implementation$secondaryText = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$span,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-list-item__secondary-text'),
-			options));
-};
-var author$project$Material$List$secondaryText = author$project$Internal$List$Implementation$secondaryText;
-var author$project$Internal$List$Implementation$text = function (options) {
-	return A2(
-		author$project$Internal$Options$styled,
-		elm$html$Html$span,
-		A2(
-			elm$core$List$cons,
-			author$project$Internal$Options$cs('mdc-list-item__text'),
-			options));
-};
-var author$project$Material$List$text = author$project$Internal$List$Implementation$text;
 var author$project$Internal$List$Implementation$twoLine = author$project$Internal$Options$cs('mdc-list--two-line');
 var author$project$Material$List$twoLine = author$project$Internal$List$Implementation$twoLine;
 var author$project$Models$InternalMessages$AddOperationToCalculation = function (a) {
@@ -17630,8 +17718,7 @@ var author$project$Editor$Calculation$FunctionChooser$functionsNamesList = funct
 						[
 							author$project$Material$List$onSelectListItem(selectItem),
 							author$project$Material$Options$onDoubleClick(sendAddItem),
-							author$project$Material$List$twoLine,
-							author$project$Material$List$dense
+							author$project$Material$List$twoLine
 						]),
 					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.functionsNamesList)),
 				operationList),
@@ -17779,7 +17866,7 @@ var author$project$Editor$Calculation$CalculationEditor$viewEditorForCalculation
 								[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span3Desktop, author$project$Material$LayoutGrid$span1Phone]),
 							_List_fromArray(
 								[
-									author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation(model)
+									A2(author$project$Editor$Calculation$CalculationEditor$mapsInProjectListForCalculation, model, pm)
 								])),
 							A2(
 							author$project$Material$LayoutGrid$cell,
@@ -17908,22 +17995,45 @@ var author$project$Editor$Map$MapEditor$mapEditorMapList = F2(
 		var sendShowMap = function (index) {
 			return A3(
 				author$project$Display$UIWrapper$sendListMsg,
-				function (mn) {
+				function (md) {
 					return author$project$Models$ProjectModel$Internal(
-						author$project$Models$InternalMessages$ShowMapInEditor(mn));
+						author$project$Models$InternalMessages$ShowMapInEditor(md.xmapName));
 				},
 				author$project$Editor$Map$MapEditor$fileSourcesOfProject(p),
 				index);
 		};
-		var listItem = function (mn) {
+		var listItem = function (md) {
 			return A2(
 				author$project$Material$List$li,
 				_List_Nil,
 				_List_fromArray(
 					[
 						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-						elm$html$Html$text(
-						author$project$Transform$MapsExtraction$xmapNameToString(mn))
+						A2(
+						author$project$Material$List$text,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								author$project$Material$List$primaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										author$project$Transform$MapsExtraction$xmapNameToString(md.xmapName))
+									])),
+								A2(
+								author$project$Material$List$secondaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										A2(
+											elm$core$Maybe$withDefault,
+											'',
+											author$project$Transform$TypeConversion$xmapTypeToText(md.xmapType)))
+									]))
+							]))
 					]));
 		};
 		return A2(
@@ -17944,7 +18054,8 @@ var author$project$Editor$Map$MapEditor$mapEditorMapList = F2(
 					_Utils_ap(
 						_List_fromArray(
 							[
-								author$project$Material$List$onSelectListItem(sendShowMap)
+								author$project$Material$List$onSelectListItem(sendShowMap),
+								author$project$Material$List$twoLine
 							]),
 						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.mapEditorMapList)),
 					A2(
@@ -18082,16 +18193,16 @@ var author$project$Models$WebMessages$WRUpdateMap = F2(
 		return {$: 'WRUpdateMap', a: a, b: b};
 	});
 var author$project$Editor$Map$MapEditor$storeMap = F4(
-	function (model, pm, n, m) {
+	function (model, pm, d, m) {
 		return model.xmapEditorModel.isNew ? author$project$Models$ProjectModel$Send(
 			A2(
 				author$project$Models$WebMessages$WRAddMap,
 				pm.project.projectName,
-				{xmap: m, xmapName: n})) : author$project$Models$ProjectModel$Send(
+				{xmap: m, xmapDef: d})) : author$project$Models$ProjectModel$Send(
 			A2(
 				author$project$Models$WebMessages$WRUpdateMap,
 				pm.project.projectName,
-				{xmap: m, xmapName: n}));
+				{xmap: m, xmapDef: d}));
 	});
 var author$project$Internal$LayoutGrid$Implementation$span1Tablet = A2(
 	author$project$Internal$LayoutGrid$Implementation$span,
@@ -18191,7 +18302,12 @@ var author$project$Editor$Map$MapEditor$mapEditorViewForMap = F2(
 										A3(
 											elm$core$Maybe$map2,
 											A2(author$project$Editor$Map$MapEditor$storeMap, model, pm),
-											xmapEditorModel.xmapName,
+											A2(
+												elm$core$Maybe$map,
+												function (n) {
+													return {xmapName: n, xmapType: model.xmapEditorModel.xmapType};
+												},
+												xmapEditorModel.xmapName),
 											xmapEditorModel.xmapToEdit))
 									]))
 							]))
@@ -18590,64 +18706,94 @@ var author$project$Editor$View$ViewEditor$storeButton = F2(
 var author$project$Models$InternalMessages$SelectMapIndexForView = function (a) {
 	return {$: 'SelectMapIndexForView', a: a};
 };
-var author$project$Editor$View$ViewEditor$viewEditorMapList = function (model) {
-	var selectItem = function (index) {
-		return author$project$Models$ProjectModel$Internal(
-			author$project$Models$InternalMessages$SelectMapIndexForView(index));
-	};
-	var listItem = function (mn) {
+var author$project$Editor$View$ViewEditor$viewEditorMapList = F2(
+	function (model, pm) {
+		var selectItem = function (index) {
+			return author$project$Models$ProjectModel$Internal(
+				author$project$Models$InternalMessages$SelectMapIndexForView(index));
+		};
+		var mapNames = A2(
+			elm$core$List$map,
+			function (d) {
+				return d.xmapName;
+			},
+			pm.mapsInProject);
+		var listItem = function (md) {
+			return A2(
+				author$project$Material$List$li,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
+						A2(
+						author$project$Material$List$text,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								author$project$Material$List$primaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										author$project$Transform$MapsExtraction$xmapNameToString(md.xmapName))
+									])),
+								A2(
+								author$project$Material$List$secondaryText,
+								_List_Nil,
+								_List_fromArray(
+									[
+										elm$html$Html$text(
+										A2(
+											elm$core$Maybe$withDefault,
+											'',
+											author$project$Transform$TypeConversion$xmapTypeToText(md.xmapType)))
+									]))
+							]))
+					]));
+		};
+		var buildMsg = function (mn) {
+			return author$project$Models$ProjectModel$Internal(
+				A2(
+					author$project$Models$InternalMessages$AddItemToView,
+					model.viewEditorModel.rowToAddTo,
+					author$project$Types$Views$MapItem(mn)));
+		};
+		var sendAddItem = A2(
+			elm$core$Maybe$withDefault,
+			author$project$Models$ProjectModel$None,
+			A2(
+				elm$core$Maybe$map,
+				function (idx) {
+					return A3(author$project$Display$UIWrapper$sendListMsg, buildMsg, mapNames, idx);
+				},
+				model.viewEditorModel.selectedMapIdx));
 		return A2(
-			author$project$Material$List$li,
+			elm$html$Html$div,
 			_List_Nil,
 			_List_fromArray(
 				[
-					A2(author$project$Material$List$graphicIcon, _List_Nil, 'list'),
-					elm$html$Html$text(
-					author$project$Transform$MapsExtraction$xmapNameToString(mn))
+					A5(
+					author$project$Material$List$ul,
+					author$project$Models$ProjectModel$Mdc,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstMap'),
+					model.mdc,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								author$project$Material$List$onSelectListItem(selectItem),
+								author$project$Material$Options$onDoubleClick(sendAddItem)
+							]),
+						author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewEditorMapList)),
+					A2(elm$core$List$map, listItem, pm.mapsInProject)),
+					A4(
+					author$project$Display$UIWrapper$buttonClick,
+					model,
+					A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
+					'Add map',
+					sendAddItem)
 				]));
-	};
-	var buildMsg = function (mn) {
-		return author$project$Models$ProjectModel$Internal(
-			A2(
-				author$project$Models$InternalMessages$AddItemToView,
-				model.viewEditorModel.rowToAddTo,
-				author$project$Types$Views$MapItem(mn)));
-	};
-	var sendAddItem = A2(
-		elm$core$Maybe$withDefault,
-		author$project$Models$ProjectModel$None,
-		A2(
-			elm$core$Maybe$map,
-			function (idx) {
-				return A3(author$project$Display$UIWrapper$sendListMsg, buildMsg, model.mapsInProject, idx);
-			},
-			model.viewEditorModel.selectedMapIdx));
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A5(
-				author$project$Material$List$ul,
-				author$project$Models$ProjectModel$Mdc,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'lstMap'),
-				model.mdc,
-				_Utils_ap(
-					_List_fromArray(
-						[
-							author$project$Material$List$onSelectListItem(selectItem),
-							author$project$Material$Options$onDoubleClick(sendAddItem)
-						]),
-					author$project$Display$UIWrapper$scrollableListStyle(model.ui.heights.viewEditorMapList)),
-				A2(elm$core$List$map, listItem, model.mapsInProject)),
-				A4(
-				author$project$Display$UIWrapper$buttonClick,
-				model,
-				A2(author$project$Display$MdcIndexes$makeIndex, author$project$Display$MdcIndexes$viewEditorIdx, 'btnAddMap'),
-				'Add map',
-				sendAddItem)
-			]));
-};
+	});
 var author$project$Models$InternalMessages$AddRowToView = {$: 'AddRowToView'};
 var author$project$Editor$View$ViewEditorTable$addRowButton = function (model) {
 	return A4(
@@ -19355,7 +19501,7 @@ var author$project$Editor$View$ViewEditor$viewEditorForView = F2(
 							[author$project$Material$LayoutGrid$span2Tablet, author$project$Material$LayoutGrid$span4Desktop, author$project$Material$LayoutGrid$span1Phone]),
 						_List_fromArray(
 							[
-								author$project$Editor$View$ViewEditor$viewEditorMapList(model),
+								A2(author$project$Editor$View$ViewEditor$viewEditorMapList, model, pm),
 								author$project$Editor$View$ViewEditor$addLabelButton(model),
 								A2(author$project$Editor$View$ViewEditor$storeButton, model, pm)
 							]))

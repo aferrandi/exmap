@@ -148,15 +148,26 @@ fproduct om xs = do
               let prod = L.product $ M.elems vs
               return $ XMapDouble (M.singleton (XMapKey "product") prod)
 
-average :: OperationMode -> [XMap] -> XMapErr
-average om xs = do
+arithmeticMean :: OperationMode -> [XMap] -> XMapErr
+arithmeticMean om xs = do
               checkMapsNumber xs 1
               vs <- extractMapDouble (head xs) "values"
               let vsl = M.elems vs
-              return $ XMapDouble (M.singleton (XMapKey "avg") (avg vsl))
+              return $ XMapDouble (M.singleton (XMapKey "arithmeticMean") (avg vsl))
       where avg vsl = if L.null vsl
                         then 0
                         else L.sum vsl / L.genericLength vsl
+
+geometricMean :: OperationMode -> [XMap] -> XMapErr
+geometricMean om xs = do
+              checkMapsNumber xs 1
+              vs <- extractMapDouble (head xs) "values"
+              let vsl = M.elems vs
+              return $ XMapDouble (M.singleton (XMapKey "geometricMean") (avg vsl))
+      where avg vsl = if L.null vsl
+                        then 0
+                        else L.product vsl ** (1 / L.genericLength vsl)
+
 equals :: OperationMode -> [XMap] -> XMapErr
 equals om xs = do
      checkMapsNumber xs 2
@@ -196,6 +207,12 @@ trimLeft om = XFunction.apply T.stripStart
 
 trimRight :: OperationMode -> [XMap] -> XMapErr
 trimRight om = XFunction.apply T.stripEnd
+
+lowerCase :: OperationMode -> [XMap] -> XMapErr
+lowerCase om = XFunction.apply T.toLower
+
+upperCase :: OperationMode -> [XMap] -> XMapErr
+upperCase om = XFunction.apply T.toUpper
 
 ifThen :: OperationMode -> [XMap] -> XMapErr
 ifThen om xs = do
@@ -241,6 +258,8 @@ operationRepository op = case op of
     Tan -> ftan
     Exp -> fexp
     Log -> flog
+    ArithmeticMean -> arithmeticMean
+    GeometricMean -> geometricMean
     GreaterThan -> greaterThan
     LessThan -> lessThan
     GreaterOrEqual -> greaterOrEqual
@@ -252,7 +271,6 @@ operationRepository op = case op of
     Not -> fnot
     IfThen -> ifThen
     IfThenElse -> ifThenElse
-    Avg -> average
     KeysTo -> keysTo
     Merge -> merge
     Equals -> equals
@@ -262,4 +280,6 @@ operationRepository op = case op of
     Trim -> trim
     TrimLeft -> trimLeft
     TrimRight -> trimRight
+    LowerCase -> lowerCase
+    UpperCase -> upperCase
 

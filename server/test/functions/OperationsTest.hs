@@ -34,10 +34,20 @@ testMapDoubleD = makeXMap arr
   where arr :: [(String, Double)]
         arr = [("a", 1.2), ("b", -1.3), ("c", 0), ("d", 11)]
 
+testMapDoubleOne :: XMap
+testMapDoubleOne = makeXMap arr
+  where arr :: [(String, Double)]
+        arr = [("a", 1.2)]
+
 testMapStringA :: XMap
 testMapStringA = makeStringXMap  arr
   where arr :: [(String, String)]
         arr = [("a", "morning"), ("b", "day"), ("c", "night"), ("d", "")]
+
+testMapStringAUpper :: XMap
+testMapStringAUpper = makeStringXMap  arr
+  where arr :: [(String, String)]
+        arr = [("a", "MORNING"), ("b", "DAY"), ("c", "NIGHT"), ("d", "")]
 
 testMapStringB :: XMap
 testMapStringB = makeStringXMap  arr
@@ -151,9 +161,21 @@ product_standard = TestCase $ assertXMapDoubleEqual expected actual
     where actual = (operationRepository Product) Union [testMapDoubleA]
           expected = makeMap [("product", 9.66)]
 
-average_standard = TestCase $ assertXMapDoubleEqual expected actual
-    where actual = (operationRepository Avg) Union [testMapDoubleA]
-          expected = makeMap [("avg", 2.33333333)]
+arithmeticMean_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository ArithmeticMean) Union [testMapDoubleA]
+          expected = makeMap [("arithmeticMean", 2.33333333)]
+
+arithmeticMean_one = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository ArithmeticMean) Union [testMapDoubleOne]
+          expected = makeMap [("arithmeticMean", 1.2)]
+
+geometricMean_standard = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository GeometricMean) Union [testMapDoubleA]
+          expected = makeMap [("geometricMean", 2.129735689)]
+
+geometricMean_one = TestCase $ assertXMapDoubleEqual expected actual
+    where actual = (operationRepository GeometricMean) Union [testMapDoubleOne]
+          expected = makeMap [("geometricMean", 1.2)]
 
 equals_double = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository Equals) Union [testMapDoubleA, makeDoubleXMap [("a", 1.2), ("b", 2.4), ("c", 3.5)]]
@@ -203,6 +225,14 @@ trimRight_standard  = TestCase $ assertXMapStringEqual expected actual
     where actual = (operationRepository TrimRight) Union [testMapStringB]
           expected = makeMapString [("a", "  a dog"), ("b", "good day")]
 
+lowerCase_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository LowerCase) Union [testMapStringAUpper]
+          expected = makeMapString [("a", "morning"), ("b", "day"), ("c", "night"), ("d", "")]
+
+upperCase_standard  = TestCase $ assertXMapStringEqual expected actual
+    where actual = (operationRepository UpperCase) Union [testMapStringA]
+          expected = makeMapString [("a", "MORNING"), ("b", "DAY"), ("c", "NIGHT"), ("d", "")]
+
 and_standard = TestCase $ assertXMapBoolEqual expected actual
     where actual = (operationRepository And) Union [testMapBoolA, testMapBoolB]
           expected = makeMap [("a", True), ("b", False), ("c", False), ("d", False), ("e", False)]
@@ -245,7 +275,10 @@ tests = [
           merge_standard,
           sum_standard,
           product_standard,
-          average_standard,
+          arithmeticMean_standard,
+          arithmeticMean_one,
+          geometricMean_standard,
+          geometricMean_one,
           equals_double,
           equals_string,
           len_standard,
@@ -258,6 +291,8 @@ tests = [
           trim_standard,
           trimLeft_standard,
           trimRight_standard,
+          lowerCase_standard,
+          upperCase_standard,
           and_standard,
           or_standard,
           not_standard,

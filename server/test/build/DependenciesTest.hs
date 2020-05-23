@@ -54,6 +54,7 @@ calculationDependenciesMaps_simpleCalculation_originalMap = TestCase (assertEqua
           c = Calculation {
                 calculationName = CalculationName $ T.pack "calc",
                 resultName = kr,
+                resultType = TypeDouble, 
                 formula = XFMap ka,
                 operationMode = Intersection
           }

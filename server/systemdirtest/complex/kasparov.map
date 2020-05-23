@@ -1,1 +1,18 @@
-{"xmap":{"values":{"squares":2,"queen":3,"cards":7,"triangles":5,"dame":5,"chess":1,"circles":5},"type":"double"},"mapName":"kasparov"}
+{
+    "xmap": {
+        "values": {
+            "squares": 2,
+            "queen": 3,
+            "cards": 7,
+            "triangles": 5,
+            "dame": 5,
+            "chess": 1,
+            "circles": 5
+        },
+        "type": "double"
+    },
+    "mapDef": {
+        "mapName": "kasparov",
+        "mapType": "double"
+    }
+}

@@ -21,7 +21,8 @@ data OperationName =
     | LessOrEqual
     | Sum
     | Product
-    | Avg
+    | ArithmeticMean
+    | GeometricMean
     | And
     | Or
     | Not
@@ -35,7 +36,9 @@ data OperationName =
     | ToString
     | Trim
     | TrimLeft
-    | TrimRight    
+    | TrimRight
+    | LowerCase
+    | UpperCase
     deriving (Bounded, Enum, Show, Eq, Read, Ord)
 
 data OperationCategory =
@@ -88,8 +91,10 @@ allOperationTypes = [
     newOpType (newOpId Math Exp) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Log) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math Sum) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math Product) [ParameterDouble] ParameterDouble,
-    newOpType (newOpId Math Avg) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math ArithmeticMean) [ParameterDouble] ParameterDouble,
+    newOpType (newOpId Math GeometricMean) [ParameterDouble] ParameterDouble,
     newOpType (newOpId Math GreaterThan) [ParameterDouble] ParameterBool,
     newOpType (newOpId Math LessThan) [ParameterDouble] ParameterBool,
     newOpType (newOpId Math GreaterOrEqual) [ParameterDouble] ParameterBool,
@@ -107,7 +112,9 @@ allOperationTypes = [
     newOpType (newOpId Text ToString) [ParameterAny] ParameterText,
     newOpType (newOpId Text Trim) [ParameterText] ParameterText,
     newOpType (newOpId Text TrimLeft) [ParameterText] ParameterText,
-    newOpType (newOpId Text TrimRight) [ParameterText] ParameterText
+    newOpType (newOpId Text TrimRight) [ParameterText] ParameterText,
+    newOpType (newOpId Text LowerCase) [ParameterText] ParameterText,
+    newOpType (newOpId Text UpperCase) [ParameterText] ParameterText
     ]
 
 type OperationTypeByName = M.Map OperationName OperationType

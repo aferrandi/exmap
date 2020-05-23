@@ -1,1 +1,1 @@
-{"calculations":[],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":["kasparov"]}],"views":["","gappol"],"projectName":"complex"}
+{"calculations":["negatekasparov","iftestc"],"sources":[{"sourceType":{"type":"fileSource"},"sourceOfMaps":[{"mapType":"double","mapName":"kasparov"},{"mapType":"bool","mapName":"iftest"}]}],"views":["iftestv","gappol"],"projectName":"complex"}
